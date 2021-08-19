@@ -1,6 +1,7 @@
 import { contentModeCookieName, isSiteInShellCookieName } from "@insite/client-framework/Common/ContentMode";
 import { getCookie, setCookie } from "@insite/client-framework/Common/Cookies";
 import { getValueCaseInsensitive, SafeDictionary } from "@insite/client-framework/Common/Types";
+import { checkIsWebCrawler, setIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
 import { ShellContext } from "@insite/client-framework/Components/IsInShell";
 import PreviewLogin from "@insite/client-framework/Components/PreviewLogin";
 import SessionLoader from "@insite/client-framework/Components/SessionLoader";
@@ -75,6 +76,8 @@ async function renderApp(renderer: Renderer = render) {
             window.location.href = `/ContentAdmin/Page/SwitchTo${window.location.pathname}${window.location.search}`;
         }
         renderer(<></>, document.getElementById("react-app"));
+    } else {
+        setIsWebCrawler(checkIsWebCrawler(navigator.userAgent));
     }
 
     const theme = await fetchThenMergeTheme();

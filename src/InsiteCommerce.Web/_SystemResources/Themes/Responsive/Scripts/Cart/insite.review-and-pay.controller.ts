@@ -482,7 +482,7 @@ module insite.cart {
         protected tokenizeCardInfoIfNeeded(submitSuccessUri: string) {
             this.submitSuccessUri = submitSuccessUri;
 
-            if (this.useTokenExGateway && this.cart.showCreditCard && !this.cart.paymentOptions.isPayPal && !this.cart.paymentMethod.isECheck && !this.cart.requiresApproval) {
+            if (this.useTokenExGateway && this.cart.showCreditCard && !this.cart.paymentOptions.isPayPal && this.cart.paymentMethod && !this.cart.paymentMethod.isECheck && !this.cart.requiresApproval) {
                 if (this.cart.paymentMethod.isCreditCard) {
                     if (typeof this.isInvalidCardNumber !== 'undefined') {
                         this.tokenExIframe.tokenize();
@@ -501,7 +501,7 @@ module insite.cart {
                 }
             }
 
-            if (this.useECheckTokenExGateway && this.cart.showECheck && !this.cart.paymentOptions.isPayPal && this.cart.paymentMethod.isECheck && !this.cart.requiresApproval) {
+            if (this.useECheckTokenExGateway && this.cart.showECheck && !this.cart.paymentOptions.isPayPal && this.cart.paymentMethod && this.cart.paymentMethod.isECheck && !this.cart.requiresApproval) {
                 if (typeof this.isInvalidAccountNumber !== 'undefined' && typeof this.isInvalidRoutingNumber !== 'undefined') {
                     this.tokenExAccountNumberIframe.tokenize();
                 } else {
@@ -588,7 +588,7 @@ module insite.cart {
 
             this.spinnerService.show("mainLayout", true);
             this.cart.paymentOptions.isPayPal = true;
-            this.cart.paymentOptions.payPalPaymentUrl = this.$window.location.host + returnUri;
+            this.cart.paymentOptions.payPalPaymentUrl = this.$window.location.host + returnUri + this.cartIdParam;
             this.cart.paymentMethod = null;
             this.cart.status = "PaypalSetup";
             this.cartService.updateCart(this.cart, true).then(
@@ -1008,7 +1008,7 @@ module insite.cart {
          * Setup Paymetric Gateway
          * */
         setUpPaymetricGateway(): void {
-            if (!this.usePaymetricGateway || !this.cart.paymentMethod.isCreditCard) {
+            if (!this.usePaymetricGateway || !this.cart.paymentMethod || !this.cart.paymentMethod.isCreditCard) {
                 return;
             }
             // Reset the frame, Paymetric could init against an already existing iFrame.

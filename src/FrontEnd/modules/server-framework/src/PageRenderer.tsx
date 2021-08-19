@@ -1,5 +1,5 @@
 import { contentModeCookieName, isSiteInShellCookieName } from "@insite/client-framework/Common/ContentMode";
-import { decodeCookie, encodeCookie } from "@insite/client-framework/Common/Cookies";
+import { encodeCookie } from "@insite/client-framework/Common/Cookies";
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
 import { getHeadTrackingScript, getNoscriptTrackingScript } from "@insite/client-framework/Common/Utilities/tracking";
 import { ShellContext } from "@insite/client-framework/Components/IsInShell";
@@ -197,7 +197,8 @@ export async function pageRenderer(request: Request, response: Response) {
         }
 
         if (redirect) {
-            response.redirect(statusCode ?? 302, redirect);
+            const redirectStatusCode = statusCode && statusCode >= 300 && statusCode < 400 ? statusCode : 302;
+            response.redirect(redirectStatusCode, redirect);
             return;
         }
     }
@@ -335,6 +336,7 @@ async function renderUntilPromisesResolved(request: Request, renderRawAndStyles:
 }
 
 export interface GenerateDataResponse {
+    /** When true, the website is operating in "Classic" mode and can't be used with the Spire CMS. */
     websiteIsClassic?: true;
 }
 

@@ -107,7 +107,7 @@ export const addToListModalStyles: AddToListModalStyles = {
     },
 };
 
-const LastUpdatedListIdCookieName = "LastUpdatedListId";
+export const LastUpdatedListIdCookieName = "LastUpdatedListId";
 
 const AddToListModal = ({
     productInfos,
@@ -130,6 +130,7 @@ const AddToListModal = ({
     const isAuthenticated = session && (session.isAuthenticated || session.rememberMe) && !session.isGuest;
     const [selectedWishListId, setSelectedWishListId] = useState("new");
     const [newListName, setNewListName] = useState("");
+    const [selectListError, setSelectListError] = useState<React.ReactNode>("");
     const [newListNameError, setNewListNameError] = useState<React.ReactNode>("");
     const [options, setOptions] = useState<OptionObject[]>([]);
     const [inProgress, setInProgress] = useState(false);
@@ -163,6 +164,7 @@ const AddToListModal = ({
 
     const modalCloseHandler = () => {
         setNewListName("");
+        setSelectListError("");
         setNewListNameError("");
         setInProgress(false);
         setAddToListModalIsOpen({ modalIsOpen: false });
@@ -170,6 +172,7 @@ const AddToListModal = ({
 
     const listChangeHandler = (value?: string) => {
         setSelectedWishListId(value || "new");
+        setSelectListError("");
     };
 
     const debouncedUpdateParameter = debounce((value: string) => {
@@ -193,6 +196,12 @@ const AddToListModal = ({
     const addToListButtonClickHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         setNewListNameError("");
+        setSelectListError("");
+
+        if (!selectedWishListId || !options.some(o => o.optionValue === selectedWishListId)) {
+            setSelectListError(siteMessage("Lists_Enter_New_Wishlist_Name"));
+            return;
+        }
 
         const isNewList = selectedWishListId === "new";
         if (isNewList && !newListName) {
@@ -265,6 +274,7 @@ const AddToListModal = ({
                             onSelectionChange={listChangeHandler}
                             selected={selectedWishListId}
                             options={options}
+                            error={selectListError}
                             data-test-selector="productAddToListModal_listSelect"
                         />
                         {selectedWishListId === "new" && (

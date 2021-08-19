@@ -236,7 +236,7 @@ const ProductListTable: FC<Props> = ({
     };
 
     const visibleTableColumns = tableColumns?.filter(o => visibleColumnNames.indexOf(o.name) > -1) || [];
-    const productListRows = products.map(product => {
+    const productListRows = products.map((product, idx) => {
         const productInfo = productInfosByProductId[product.id];
         if (!productInfo) {
             return;
@@ -250,7 +250,7 @@ const ProductListTable: FC<Props> = ({
             o => o.unitOfMeasure === productContext.productInfo.unitOfMeasure,
         );
         return (
-            <ProductListProductContext product={product} key={product.id}>
+            <ProductListProductContext product={product} key={product.id} idx={idx}>
                 <DataTableRow key={product.id} data-test-selector={`productListProductCard${product.id}`}>
                     <DataTableCell {...styles.descriptionCell}>
                         <GridContainer {...styles.gridContainer}>

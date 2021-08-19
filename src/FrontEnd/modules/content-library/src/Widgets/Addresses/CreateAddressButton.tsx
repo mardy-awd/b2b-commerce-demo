@@ -1,8 +1,11 @@
+import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
+import setCurrentShipTo from "@insite/client-framework/Store/Context/Handlers/SetCurrentShipTo";
 import { getAddressFieldsDataView } from "@insite/client-framework/Store/Data/AddressFields/AddressFieldsSelector";
 import { getCurrentBillToState } from "@insite/client-framework/Store/Data/BillTos/BillTosSelectors";
 import { getCurrentCountries } from "@insite/client-framework/Store/Data/Countries/CountriesSelectors";
+import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import createShipTo from "@insite/client-framework/Store/Pages/Addresses/Handlers/CreateShipTo";
 import translate from "@insite/client-framework/Translate";
 import { ShipToModel } from "@insite/client-framework/Types/ApiModels";
@@ -17,11 +20,9 @@ import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Hidden from "@insite/mobius/Hidden";
 import Modal, { ModalPresentationProps } from "@insite/mobius/Modal";
 import OverflowMenu, { OverflowMenuPresentationProps } from "@insite/mobius/OverflowMenu";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
-
-interface OwnProps extends WidgetProps {}
 
 const mapStateToProps = (state: ApplicationState) => ({
     customerSettings: getSettingsCollection(state).customerSettings,
@@ -29,13 +30,15 @@ const mapStateToProps = (state: ApplicationState) => ({
     newShipTo: state.pages.addresses.newShipTo,
     countries: getCurrentCountries(state),
     billToAddressFields: getAddressFieldsDataView(state).value?.billToAddressFields,
+    location: getLocation(state),
 });
 
 const mapDispatchToProps = {
     createShipTo,
+    setCurrentShipTo,
 };
 
-type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
+type Props = WidgetProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
 export interface CreateAddressButtonStyles {
     gridContainer?: GridContainerProps;
@@ -57,10 +60,24 @@ export const createAddressButtonStyles: CreateAddressButtonStyles = {
 
 const styles = createAddressButtonStyles;
 
-const CreateAddressButton: React.FunctionComponent<Props> = (props: Props) => {
-    const [modalIsOpen, setModalIsOpen] = React.useState(false);
+const CreateAddressButton = ({
+    customerSettings,
+    currentBillTo,
+    newShipTo,
+    countries,
+    billToAddressFields,
+    location,
+    createShipTo,
+    setCurrentShipTo,
+}: Props) => {
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    useEffect(() => {
+        const parsedQuery = parseQueryString<{ isNewShipTo: string }>(location.search);
+        if (parsedQuery.isNewShipTo === "true") {
+            setModalIsOpen(true);
+        }
+    }, []);
 
-    const { customerSettings } = props;
     if (!customerSettings.allowCreateNewShipToAddress) {
         return null;
     }
@@ -79,22 +96,24 @@ const CreateAddressButton: React.FunctionComponent<Props> = (props: Props) => {
     };
 
     const formSubmitHandler = (_: React.FormEvent<HTMLFormElement>, address: ShipToModel) => {
-        const { currentBillTo, newShipTo } = props;
         if (!currentBillTo || !newShipTo) {
             return;
         }
 
-        props.createShipTo({
+        createShipTo({
             billToId: currentBillTo.id,
             shipTo: {
                 ...newShipTo,
                 ...address,
             },
+            onComplete: result => {
+                if (result.apiResult) {
+                    setCurrentShipTo({ shipToId: result.apiResult.id });
+                }
+            },
         });
         modalCloseHandler();
     };
-
-    const { newShipTo, countries, billToAddressFields } = props;
 
     return (
         <GridContainer {...styles.gridContainer}>

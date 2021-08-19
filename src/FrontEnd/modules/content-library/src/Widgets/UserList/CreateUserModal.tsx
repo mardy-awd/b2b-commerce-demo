@@ -183,7 +183,7 @@ class CreateUserModal extends PureComponent<
         const isLastNameValid = this.validateLastName();
         let isFormValid = isEmailValid && isFirstNameValid && isLastNameValid;
         if (this.props.showUserName) {
-            isFormValid = isFormValid && this.validateUserName();
+            isFormValid = this.validateUserName() && isFormValid;
         }
         return isFormValid;
     };

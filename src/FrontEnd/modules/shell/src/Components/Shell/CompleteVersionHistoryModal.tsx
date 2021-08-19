@@ -8,21 +8,28 @@ import getColor from "@insite/mobius/utilities/getColor";
 import {
     closeCompleteVersionHistoryModal,
     loadPublishedPageVersions,
-    restoreVersion,
+    setLeftVersion,
+    setRightVersion,
 } from "@insite/shell/Store/CompareModal/CompareModalActionCreators";
 import ShellState from "@insite/shell/Store/ShellState";
-import React, { ChangeEvent, useEffect } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled, { css } from "styled-components";
 
 const mapStateToProps = (state: ShellState) => {
     const {
-        compareModal: { showCompleteVersionHistory, publishedPageVersionsPaginated, compareVersions },
+        compareModal: {
+            showCompleteVersionHistory,
+            completeVersionHistorySide,
+            publishedPageVersionsPaginated,
+            compareVersions,
+        },
         shellContext: { currentLanguageId, currentPersonaId, currentDeviceType, languages, personas },
     } = state;
 
     return {
         visible: !!showCompleteVersionHistory,
+        side: completeVersionHistorySide,
         publishedPageVersionsPaginated,
         compareVersions,
         currentLanguage: languages?.find(o => o.id === currentLanguageId)?.description,
@@ -34,7 +41,8 @@ const mapStateToProps = (state: ShellState) => {
 const mapDispatchToProps = {
     closeCompleteVersionHistoryModal,
     loadPublishedPageVersions,
-    restoreVersion,
+    setLeftVersion,
+    setRightVersion,
 };
 
 interface CompleteVersionHistoryModalStyles {
@@ -59,7 +67,7 @@ const styles: CompleteVersionHistoryModalStyles = {
     pagination: {
         cssOverrides: {
             pagination: css`
-                justify-content: flex-start;
+                justify-content: center;
                 button:hover span,
                 span:hover {
                     color: #fff;
@@ -84,18 +92,20 @@ const styles: CompleteVersionHistoryModalStyles = {
 
 type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
-const CompleteVersionHistoryModal: React.FC<Props> = ({
+const CompleteVersionHistoryModal = ({
     visible,
+    side,
     publishedPageVersionsPaginated,
     closeCompleteVersionHistoryModal,
     loadPublishedPageVersions,
-    restoreVersion,
+    setLeftVersion,
+    setRightVersion,
     compareVersions,
     currentLanguage,
     currentPersona,
     currentDeviceType,
-}) => {
-    const [selectedVersion, setSelectedVersion] = React.useState<string>("");
+}: Props) => {
+    const [selectedVersionId, setSelectedVersionId] = useState("");
     const pageSize = 12;
 
     useEffect(() => {
@@ -106,23 +116,31 @@ const CompleteVersionHistoryModal: React.FC<Props> = ({
     }, [visible, compareVersions?.pageId]);
 
     const pageVersionChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setSelectedVersion(event.currentTarget.value);
+        setSelectedVersionId(event.currentTarget.value);
     };
 
     const changePage = (newPageIndex: number) => {
-        setSelectedVersion("");
+        setSelectedVersionId("");
         if (compareVersions) {
             loadPublishedPageVersions(compareVersions.pageId, newPageIndex, pageSize, true);
         }
     };
 
-    const restorePageVersionHandler = () => {
+    const viewVersionHandler = () => {
         closeCompleteVersionHistoryModal();
-        if (compareVersions && selectedVersion) {
-            const pageVersion = publishedPageVersionsPaginated?.pageVersions.find(o => o.versionId === selectedVersion);
-            if (pageVersion) {
-                restoreVersion(pageVersion, compareVersions.pageId);
-            }
+        if (!selectedVersionId) {
+            return;
+        }
+
+        const pageVersion = publishedPageVersionsPaginated?.pageVersions.find(o => o.versionId === selectedVersionId);
+        if (!pageVersion) {
+            return;
+        }
+
+        if (side === "left") {
+            setLeftVersion(pageVersion);
+        } else if (side === "right") {
+            setRightVersion(pageVersion);
         }
     };
 
@@ -130,7 +148,7 @@ const CompleteVersionHistoryModal: React.FC<Props> = ({
         <ModalStyle
             isCloseable={false}
             data-test-selector="completeVersionHistoryModal"
-            size={900}
+            size={700}
             isOpen={visible}
             handleClose={closeCompleteVersionHistoryModal}
             headline={`Complete history - ${compareVersions?.name}`}
@@ -150,13 +168,12 @@ const CompleteVersionHistoryModal: React.FC<Props> = ({
                                 <span>Device:</span> {currentDeviceType}
                             </ContextInfoWrapper>
                         </>
-                        <RadioGroup onChangeHandler={pageVersionChangeHandler} value={selectedVersion}>
+                        <RadioGroup onChangeHandler={pageVersionChangeHandler} value={selectedVersionId}>
                             <VersionHistoryTable cellSpacing={0}>
                                 <thead>
                                     <tr>
                                         <th>Published Version</th>
                                         <th>Published By</th>
-                                        <th>Notes</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -170,7 +187,6 @@ const CompleteVersionHistoryModal: React.FC<Props> = ({
                                                     </Radio>
                                                 </td>
                                                 <td>{modifiedBy}</td>
-                                                <td></td>
                                             </tr>
                                         );
                                     })}
@@ -197,7 +213,7 @@ const CompleteVersionHistoryModal: React.FC<Props> = ({
                         onChangeResultsPerPage={() => {}}
                     />
                 )}
-                <Button disabled={!selectedVersion} variant="primary" onClick={restorePageVersionHandler}>
+                <Button disabled={!selectedVersionId} variant="primary" onClick={viewVersionHandler}>
                     View
                 </Button>
                 <CancelButton variant="tertiary" onClick={closeCompleteVersionHistoryModal}>
@@ -209,6 +225,8 @@ const CompleteVersionHistoryModal: React.FC<Props> = ({
 };
 
 const ModalStyle = styled(Modal)`
+    text-align: right;
+
     &[data-hide="true"] > div {
         display: none;
     }
@@ -217,7 +235,6 @@ const ModalStyle = styled(Modal)`
 const VersionHistoryTable = styled.table`
     width: 100%;
     display: table;
-    padding-top: 10px;
 
     th {
         background: ${getColor("common.backgroundContrast")};
@@ -229,6 +246,7 @@ const VersionHistoryTable = styled.table`
         white-space: nowrap;
 
         &:first-child {
+            min-width: 200px;
             padding-top: 4px;
         }
 
@@ -257,12 +275,12 @@ const VersionHistoryTable = styled.table`
 `;
 
 const VersionHistoryTableWrapper = styled.div`
-    max-height: 450px;
+    max-height: 500px;
     overflow-y: auto;
+    text-align: left;
 `;
 
 const CancelButton = styled(Button)`
-    margin-top: 20px;
     margin-left: 10px;
 `;
 

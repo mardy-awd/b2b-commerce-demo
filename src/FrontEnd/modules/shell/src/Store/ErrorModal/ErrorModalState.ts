@@ -5,4 +5,5 @@ export default interface ErrorModalState {
     /** Optional, the raw error object; development users will see a JSON-formatted version of this object. */
     error?: any;
     onCloseAction?: "RedirectToAdmin";
+    title?: string;
 }

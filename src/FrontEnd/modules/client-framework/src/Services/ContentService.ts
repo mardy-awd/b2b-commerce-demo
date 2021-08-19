@@ -80,6 +80,7 @@ export interface RetrievePageResult {
     authorizationFailed?: boolean;
     bypassedAuthorization?: boolean;
     isAuthenticatedOnServer: boolean;
+    requiresAuthorization: boolean;
 }
 
 export interface BasicLanguageModel {

@@ -8,4 +8,7 @@ module.exports = {
         chunkFilename: "[name]_[contenthash].chunk.js",
         publicPath: "/dist/",
     },
+    node: {
+        fs: "empty",
+    },
 };

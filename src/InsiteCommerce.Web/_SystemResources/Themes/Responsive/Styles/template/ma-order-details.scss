@@ -289,3 +289,11 @@
         }
     }
 }
+
+@media print {
+    .ma-order-details {
+        .cart-items {
+            max-height: none;
+        }
+    }
+}

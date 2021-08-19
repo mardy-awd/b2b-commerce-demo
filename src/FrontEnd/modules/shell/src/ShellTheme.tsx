@@ -274,6 +274,11 @@ const shellTheme = {
         defaultProps: {
             cssOverrides: {
                 inputSelect: controlStyles(false),
+                datePicker: css`
+                    & .react-datetime-picker {
+                        font-size: 13px;
+                    }
+                `,
             },
         },
     },

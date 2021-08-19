@@ -5,12 +5,18 @@ import { Draft } from "immer";
 const reducer = {
     "ErrorModal/ShowModal": (
         draft: Draft<ErrorModalState>,
-        { message, error, onCloseAction }: Pick<ErrorModalState, "onCloseAction" | "message" | "error">,
+        {
+            message,
+            error,
+            onCloseAction,
+            title,
+        }: Pick<ErrorModalState, "onCloseAction" | "message" | "error" | "title">,
     ) => {
         draft.isOpen = true;
         draft.message = message;
         draft.error = error;
         draft.onCloseAction = onCloseAction;
+        draft.title = title;
     },
 
     "ErrorModal/HideModal": (draft: Draft<ErrorModalState>) => {

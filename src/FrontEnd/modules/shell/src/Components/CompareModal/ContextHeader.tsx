@@ -6,6 +6,7 @@ import FullWidth from "@insite/shell/Components/Icons/FullWidth";
 import SplitScreen from "@insite/shell/Components/Icons/SplitScreen";
 import { Spacer } from "@insite/shell/Components/Shell/HeaderBar";
 import ViewPortClicker from "@insite/shell/Components/Shell/ViewPortClicker";
+import shellTheme from "@insite/shell/ShellTheme";
 import {
     configureComparison,
     loadPublishedPageVersions,
@@ -144,7 +145,7 @@ class ContextHeader extends React.Component<Props> {
                             this.props.setIsSideBySide(true);
                         }}
                     >
-                        <SplitScreen /> Side by Side
+                        <SplitScreen color1={shellTheme.colors.text.main} /> Side by Side
                     </ViewButtonStyle>
                     <ViewButtonStyle
                         data-isclickable={isSideBySide}
@@ -152,7 +153,7 @@ class ContextHeader extends React.Component<Props> {
                             this.props.setIsSideBySide(false);
                         }}
                     >
-                        <FullWidth /> Full Width
+                        <FullWidth color1={shellTheme.colors.text.main} /> Full Width
                     </ViewButtonStyle>
                     <SwitchButton
                         variant="secondary"
@@ -164,11 +165,11 @@ class ContextHeader extends React.Component<Props> {
                     >
                         Switch Versions
                     </SwitchButton>
-                    <Icon src={Spacer} color="#999" />
+                    <Icon src={Spacer} color="custom.borderDividerColor" />
                     {clicker("Phone")}
                     {clicker("Tablet")}
                     {clicker("Desktop")}
-                    <Icon src={Spacer} color="#999" />
+                    <Icon src={Spacer} color="custom.borderDividerColor" />
                     <CloseButton
                         size={30}
                         data-test-selector="publishCompareModal_close"
@@ -184,6 +185,7 @@ class ContextHeader extends React.Component<Props> {
 
 const ContextHeaderStyle = styled.div`
     display: flex;
+    background: #fff;
 
     > * {
         width: 50%;
@@ -221,8 +223,8 @@ const CloseButton = styled(Button)`
 `;
 
 const ViewButtonStyle = styled.div`
-    color: white;
-    background-color: ${props => props.theme.colors.primary.main};
+    color: ${({ theme }) => theme.colors.primary.main};
+    background-color: ${props => props.theme.colors.custom.activeBackground};
     height: 100%;
     padding: 10px;
     display: flex;
@@ -231,7 +233,7 @@ const ViewButtonStyle = styled.div`
         margin-right: 4px;
     }
     svg path {
-        fill: white;
+        fill: ${({ theme }) => theme.colors.primary.main};
     }
 
     &[data-isclickable="true"] {
@@ -239,7 +241,11 @@ const ViewButtonStyle = styled.div`
         color: #999;
         cursor: pointer;
         &:hover {
-            background-color: #d4e0fd;
+            background-color: ${({ theme }) => theme.colors.custom.activeBackground};
+            color: ${({ theme }) => theme.colors.primary.main};
+            svg path {
+                fill: ${({ theme }) => theme.colors.primary.main};
+            }
         }
         svg path {
             fill: #999;

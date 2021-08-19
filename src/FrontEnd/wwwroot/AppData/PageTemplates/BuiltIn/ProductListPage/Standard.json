@@ -251,6 +251,40 @@
         "contextualFields": {}
     },
     {
+      "parentId": "0a47cd79-6a2b-43b6-900d-f2bee51fe8f5",
+      "type": "Basic/RichContent",
+      "zone": "Content00",
+      "isLayout": false,
+      "id": "a58d89b5-47f6-40d0-88e9-3936fa04b2eb",
+      "generalFields": {
+          "backgroundColor": "",
+          "padding": 0
+      },
+      "translatableFields": {},
+      "contextualFields": {
+          "content": {
+              "a26095ef-c714-e311-ba31-d43d7e4e88b2|Desktop|d06988c0-9358-4dbb-aa3d-b7be5b6a7fd9": "<p style=\"text-align: center;\"><span style=\"font-size: 24px;\"><strong>We&#39;re sorry, there were no results found.\n</strong></span></p>"
+          }
+      }
+    },
+    {
+      "parentId": "0a47cd79-6a2b-43b6-900d-f2bee51fe8f5",
+      "type": "Basic/RichContent",
+      "zone": "Content01",
+      "isLayout": false,
+      "id": "c64f9b73-b160-4a93-a487-3887f795285d",
+      "generalFields": {
+          "backgroundColor": "",
+          "padding": 0
+      },
+      "translatableFields": {},
+      "contextualFields": {
+          "content": {
+              "a26095ef-c714-e311-ba31-d43d7e4e88b2|Desktop|d06988c0-9358-4dbb-aa3d-b7be5b6a7fd9": "<p style=\"text-align: center;\"><span style=\"font-size: 24px;\"><strong>We&#39;re sorry, there were no products found.</strong></span></p>"
+          }
+      }
+    },
+    {
         "parentId": "75bea192-964d-48d1-aa18-8d8e277b038a",
         "type": "ProductList/ProductListPreviouslyPurchasedFilter",
         "zone": "Content",

@@ -10,6 +10,7 @@ import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSe
 type HandlerType = Handler<
     {
         shouldLoadFullCart?: boolean;
+        replaceCart?: boolean;
     } & HasOnSuccess,
     {
         apiParameter: GetCartApiParameter;
@@ -29,10 +30,11 @@ export const SetNeedFullCart: HandlerType = props => {
     const pageType = getCurrentPage(props.getState()).type;
     props.needFullCart =
         props.parameter.shouldLoadFullCart ||
-        pageType === "CheckoutShippingPage" ||
-        pageType === "CheckoutReviewAndSubmitPage" ||
-        pageType === "CartPage" ||
-        pageType === "RfqRequestQuotePage";
+        (props.parameter.shouldLoadFullCart !== false &&
+            (pageType === "CheckoutShippingPage" ||
+                pageType === "CheckoutReviewAndSubmitPage" ||
+                pageType === "CartPage" ||
+                pageType === "RfqRequestQuotePage"));
 };
 
 export const PopulateApiParameter: HandlerType = props => {
@@ -77,11 +79,16 @@ export const SetCarrier: HandlerType = props => {
 };
 
 export const DispatchCompleteLoadCart: HandlerType = props => {
+    let replaceCart = !props.needFullCart;
+    if (typeof props.parameter.replaceCart !== "undefined") {
+        replaceCart = props.parameter.replaceCart;
+    }
+
     props.dispatch({
         type: "Data/Carts/CompleteLoadCart",
         model: props.apiResult.cart,
         isCurrent: true,
-        replaceCart: !props.needFullCart,
+        replaceCart,
     });
 };
 

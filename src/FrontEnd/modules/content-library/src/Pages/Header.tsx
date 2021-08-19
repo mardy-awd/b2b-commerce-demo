@@ -1,3 +1,4 @@
+import { EagerLoadingLogoProvider } from "@insite/client-framework/Common/EagerLoadingLogo";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
@@ -68,7 +69,7 @@ export const headerStyles: HeaderStyles = {
                             null,
                             null,
                             css`
-                                max-width: 50px;
+                                max-width: 100px;
                             `,
                         ],
                         "max",
@@ -125,12 +126,14 @@ const Header = ({ id, siteName, session, toaster, history, myAccountPageUrl, dis
                     text={translate("Skip to main content")}
                     destination={afterHeader}
                 />
-                <Zone contentId={id} zoneName="SecondaryNavigation" fixed />
-                <StyledWrapper {...styles.container}>
-                    <Zone contentId={id} zoneName="MainNavigation" fixed />
-                    <Zone contentId={id} zoneName="Cart" fixed />
-                </StyledWrapper>
-                <Zone contentId={id} zoneName="Breadcrumb" />
+                <EagerLoadingLogoProvider value={true}>
+                    <Zone contentId={id} zoneName="SecondaryNavigation" fixed />
+                    <StyledWrapper {...styles.container}>
+                        <Zone contentId={id} zoneName="MainNavigation" fixed />
+                        <Zone contentId={id} zoneName="Cart" fixed />
+                    </StyledWrapper>
+                    <Zone contentId={id} zoneName="Breadcrumb" />
+                </EagerLoadingLogoProvider>
                 <span ref={afterHeader} tabIndex={-1} />
             </Page>
         </>

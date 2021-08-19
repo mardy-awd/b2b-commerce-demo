@@ -35,13 +35,16 @@ export function markForFocusLater() {
 
 export function returnFocus() {
     let toFocus = null;
-    try {
-        if (focusLaterElements.length !== 0) {
-            toFocus = focusLaterElements.pop();
-            toFocus?.focus();
+    let currentlyFocusedElement = null;
+    for (let i = focusLaterElements.length - 1; i >= 0; i--) {
+        toFocus = focusLaterElements.pop();
+        toFocus?.focus();
+        currentlyFocusedElement = document.activeElement;
+        if (currentlyFocusedElement === toFocus) {
+            return;
         }
-        return;
-    } catch (e) {
+    }
+    if (toFocus) {
         // eslint-disable-next-line no-console
         console.warn(["You tried to return focus to", toFocus, "but it is not in the DOM anymore"].join(" "));
     }

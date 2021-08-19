@@ -2,5 +2,5 @@
 
 module.exports = {
     /** Used in development mode only, production uses process.env.ISC_API_URL. */
-    apiUrl: "http://commerce.local.com", // HTTP URL is recommended to ensure all ISC cookies pass through.
+    apiUrl: "http://localhost:3010", // HTTP URL is recommended to ensure all ISC cookies pass through.
 };

@@ -1,10 +1,16 @@
-import { getCookie } from "@insite/client-framework/Common/Cookies";
 import { ApiHandler, createHandlerChainRunner } from "@insite/client-framework/HandlerCreator";
 import { fetch } from "@insite/client-framework/ServerSideRendering";
 import { API_URL_CURRENT_FRAGMENT } from "@insite/client-framework/Services/ApiService";
 import { getCart, GetCartApiParameter, updateCart } from "@insite/client-framework/Services/CartService";
-import { createSession, deleteSession, Session } from "@insite/client-framework/Services/SessionService";
+import {
+    createSession,
+    deleteSession,
+    Session,
+    stopWatchingForOtherTabSessionChange,
+    watchForOtherTabSessionChange,
+} from "@insite/client-framework/Services/SessionService";
 import { getCurrentUserIsGuest } from "@insite/client-framework/Store/Context/ContextSelectors";
+import loadSession from "@insite/client-framework/Store/Context/Handlers/LoadSession";
 import { getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import { getHomePageUrl, getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import { Draft } from "immer";
@@ -14,6 +20,7 @@ type HandlerType = ApiHandler<
     SignInParameter,
     SignInResult,
     {
+        tokenSuccessfullyRequested?: boolean;
         authenticatedSession?: Session;
     }
 >;
@@ -42,8 +49,7 @@ export const DispatchBeginSignIn: HandlerType = props => {
 export const UnassignCartFromGuest: HandlerType = async props => {
     const { value: cart } = getCurrentCartState(props.getState());
     const currentUserIsGuest = getCurrentUserIsGuest(props.getState());
-    const applicationCookie = getCookie(".AspNet.ApplicationCookie");
-    if (!currentUserIsGuest || !applicationCookie) {
+    if (!currentUserIsGuest) {
         return;
     }
     if (!cart) {
@@ -64,6 +70,9 @@ export const SignOutGuest: HandlerType = async props => {
     }
 
     await deleteSession();
+    props.dispatch({
+        type: "Context/DeleteSession",
+    });
 };
 
 export const RequestAccessToken: HandlerType = async props => {
@@ -89,21 +98,21 @@ export const RequestAccessToken: HandlerType = async props => {
         readonly error_description: string;
     }>);
 
+    props.tokenSuccessfullyRequested = response.ok;
+
     if (!response.ok) {
         props.parameter.onError?.(props.apiResult.error_description);
-
-        props.dispatch({
-            type: "Context/CompleteSignIn",
-            accessToken: props.apiResult.access_token,
-        });
-
-        return false;
     }
 };
 
 export const RequestSession: HandlerType = async props => {
+    if (!props.tokenSuccessfullyRequested) {
+        return;
+    }
+
     const { password, rememberMe, returnUrl, userName } = props.parameter;
 
+    stopWatchingForOtherTabSessionChange(); // Prevent detection of the change we're making here.
     const session = await createSession({
         password,
         rememberMe,
@@ -113,17 +122,30 @@ export const RequestSession: HandlerType = async props => {
     });
 
     if (!session.successful) {
+        watchForOtherTabSessionChange(); // This sign-in failed, but another tab might be successful later on.
         props.parameter.onError?.(session.errorMessage, session.statusCode);
-
-        props.dispatch({
-            type: "Context/CompleteSignIn",
-            accessToken: props.apiResult.access_token,
-        });
-
-        return false;
+        return;
     }
 
+    props.dispatch({
+        type: "Context/CompleteLoadSession",
+        session: session.result,
+    });
+
     props.authenticatedSession = session.result;
+};
+
+export const LoadSessionIfNeeded: HandlerType = props => {
+    if (props.authenticatedSession) {
+        return;
+    }
+
+    const sessionIsEmpty = Object.keys(props.getState().context.session).length === 0;
+    if (!sessionIsEmpty) {
+        return;
+    }
+
+    props.dispatch(loadSession());
 };
 
 export const DispatchCompleteSignIn: HandlerType = props => {
@@ -134,37 +156,39 @@ export const DispatchCompleteSignIn: HandlerType = props => {
 };
 
 export const RedirectToChangeCustomer: HandlerType = props => {
-    if (!props.authenticatedSession) {
+    if (!props.authenticatedSession?.redirectToChangeCustomerPageOnSignIn) {
+        watchForOtherTabSessionChange(); // This sign-in failed, but another tab might be successful later on.
         return;
     }
 
-    if (props.authenticatedSession.redirectToChangeCustomerPageOnSignIn) {
-        const homePageUrl = getPageLinkByPageType(props.getState(), "HomePage")?.url;
-        const dashboardPageUrl = getPageLinkByPageType(props.getState(), "MyAccountPage")?.url;
-        const changeCustomerPageUrl = getPageLinkByPageType(props.getState(), "ChangeCustomerPage")?.url;
-        if (homePageUrl && changeCustomerPageUrl) {
-            const shouldAddReturnUrl = props.parameter.returnUrl && props.parameter.returnUrl !== homePageUrl;
-            const returnUrl = shouldAddReturnUrl
-                ? props.parameter.returnUrl
-                : props.authenticatedSession?.dashboardIsHomepage
-                ? dashboardPageUrl!
-                : undefined;
+    const homePageUrl = getPageLinkByPageType(props.getState(), "HomePage")?.url;
+    const dashboardPageUrl = getPageLinkByPageType(props.getState(), "MyAccountPage")?.url;
+    const changeCustomerPageUrl = getPageLinkByPageType(props.getState(), "ChangeCustomerPage")?.url;
+    if (homePageUrl && changeCustomerPageUrl) {
+        const shouldAddReturnUrl = props.parameter.returnUrl && props.parameter.returnUrl !== homePageUrl;
+        const returnUrl = shouldAddReturnUrl
+            ? props.parameter.returnUrl
+            : props.authenticatedSession.dashboardIsHomepage
+            ? dashboardPageUrl!
+            : undefined;
 
-            window.location.href =
-                changeCustomerPageUrl + (returnUrl ? `?returnUrl=${encodeURIComponent(returnUrl)}` : "");
-            return false;
-        }
+        window.location.href = changeCustomerPageUrl + (returnUrl ? `?returnUrl=${encodeURIComponent(returnUrl)}` : "");
+        return false;
     }
 };
 
 export const NavigateToReturnUrl: HandlerType = async props => {
+    if (!props.authenticatedSession) {
+        return;
+    }
+
     const state = props.getState();
     let returnUrl = props.parameter.returnUrl;
     const dashboardPageUrl = getPageLinkByPageType(props.getState(), "MyAccountPage")?.url;
     const defaultUrl =
-        props.authenticatedSession?.dashboardIsHomepage && dashboardPageUrl
+        props.authenticatedSession.dashboardIsHomepage && dashboardPageUrl
             ? dashboardPageUrl
-            : props.authenticatedSession?.customLandingPage
+            : props.authenticatedSession.customLandingPage
             ? props.authenticatedSession.customLandingPage
             : getHomePageUrl(state);
     const checkoutShippingUrl = getPageLinkByPageType(state, "CheckoutShippingPage")?.url;
@@ -179,7 +203,7 @@ export const NavigateToReturnUrl: HandlerType = async props => {
         const checkoutReviewAndSubmitUrl = getPageLinkByPageType(state, "CheckoutReviewAndSubmitPage")?.url;
         const cartUrl = getPageLinkByPageType(state, "CartPage")?.url;
 
-        if (!canCheckOut || props.authenticatedSession?.isRestrictedProductExistInCart) {
+        if (!canCheckOut || props.authenticatedSession.isRestrictedProductExistInCart) {
             returnUrl = cartUrl;
         } else if (canBypassCheckoutAddress) {
             returnUrl = checkoutReviewAndSubmitUrl;
@@ -189,7 +213,10 @@ export const NavigateToReturnUrl: HandlerType = async props => {
     if (returnUrl?.includes("SwitchingLanguage")) {
         returnUrl = returnUrl.split("?")[0];
     }
-    if (returnUrl?.toLowerCase() === getHomePageUrl(state) && props.authenticatedSession?.customLandingPage) {
+    if (
+        returnUrl?.toLowerCase() === getHomePageUrl(state).toLowerCase() &&
+        props.authenticatedSession?.customLandingPage
+    ) {
         // need to send to custom landing page if the return URL is a language specific homepage
         if (returnUrl?.endsWith("/")) {
             returnUrl = returnUrl.substring(0, returnUrl.length - 1);
@@ -199,6 +226,13 @@ export const NavigateToReturnUrl: HandlerType = async props => {
         } else {
             returnUrl = `${returnUrl}/${props.authenticatedSession?.customLandingPage}`;
         }
+    } else if (
+        returnUrl?.toLowerCase() === getHomePageUrl(state).toLowerCase() &&
+        props.authenticatedSession.dashboardIsHomepage &&
+        dashboardPageUrl
+    ) {
+        // case where returnUrl is a language-specific homepage but we should redirect to the dashboard
+        returnUrl = defaultUrl;
     }
 
     window.location.href = returnUrl || defaultUrl;
@@ -210,6 +244,7 @@ export const chain = [
     SignOutGuest,
     RequestAccessToken,
     RequestSession,
+    LoadSessionIfNeeded,
     DispatchCompleteSignIn,
     RedirectToChangeCustomer,
     NavigateToReturnUrl,

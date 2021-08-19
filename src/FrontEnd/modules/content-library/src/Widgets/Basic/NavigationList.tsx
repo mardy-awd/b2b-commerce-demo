@@ -33,58 +33,71 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps) => ({
     displayChangeCustomerLink: state.context.session?.displayChangeCustomerLink || false,
 });
 
+interface ListStyleProp {
+    leftMargin: number;
+    marginBottom: number;
+}
+
+const ListStyle = styled.ul<ListStyleProp>`
+    margin-left: ${props => props.leftMargin}px;
+    li {
+        margin-bottom: ${props => props.marginBottom}px;
+    }
+`;
+
 const mapDispatchToProps = {};
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
-class NavigationList extends React.Component<Props> {
-    render() {
-        if (!this.props.rootPageLink || !this.props.rootPageLink.children) {
-            return null;
+export const NavigationList = (props: Props) => {
+    if (!props.rootPageLink || !props.rootPageLink.children) {
+        return null;
+    }
+
+    const renderLinks = (pageLinks: PageLinkModel[], currentDepth: number) => {
+        if (currentDepth > props.fields.depth) {
+            return;
         }
 
-        const ListStyle = styled.ul`
-            margin-left: ${this.props.fields.leftMargin}px;
-            li {
-                margin-bottom: ${this.props.fields.marginBottom}px;
-            }
-        `;
+        const nextDepth = currentDepth + 1;
 
-        const renderLinks = (pageLinks: PageLinkModel[], currentDepth: number) => {
-            if (currentDepth > this.props.fields.depth) {
-                return;
-            }
+        return pageLinks
+            .filter(pageLink => {
+                return (
+                    !pageLink.excludeFromNavigation &&
+                    !(pageLink.type === ChangeCustomerPageContext && !props.displayChangeCustomerLink)
+                );
+            })
+            .map(pageLink => {
+                return (
+                    <li key={pageLink.id}>
+                        <Link data-test-selector={`navigationList-${pageLink.title}`} href={pageLink.url}>
+                            {pageLink.title}
+                        </Link>
+                        {pageLink.children && pageLink.children.length > 0 && (
+                            <ListStyle
+                                marginBottom={props.fields.marginBottom}
+                                leftMargin={props.fields.leftMargin}
+                                key={pageLink.id}
+                            >
+                                {renderLinks(pageLink.children, nextDepth)}
+                            </ListStyle>
+                        )}
+                    </li>
+                );
+            });
+    };
 
-            const nextDepth = currentDepth + 1;
-
-            return pageLinks
-                .filter(pageLink => {
-                    return (
-                        !pageLink.excludeFromNavigation &&
-                        !(pageLink.type === ChangeCustomerPageContext && !this.props.displayChangeCustomerLink)
-                    );
-                })
-                .map(pageLink => {
-                    return (
-                        <li key={pageLink.id}>
-                            <Link data-test-selector={`navigationList-${pageLink.title}`} href={pageLink.url}>
-                                {pageLink.title}
-                            </Link>
-                            {pageLink.children && pageLink.children.length > 0 && (
-                                <ListStyle key={pageLink.id}>{renderLinks(pageLink.children, nextDepth)}</ListStyle>
-                            )}
-                        </li>
-                    );
-                });
-        };
-
-        return (
-            <ListStyle data-test-selector="navigationList">
-                {renderLinks(this.props.rootPageLink.children, 1)}
-            </ListStyle>
-        );
-    }
-}
+    return (
+        <ListStyle
+            marginBottom={props.fields.marginBottom}
+            leftMargin={props.fields.leftMargin}
+            data-test-selector="navigationList"
+        >
+            {renderLinks(props.rootPageLink.children, 1)}
+        </ListStyle>
+    );
+};
 
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(NavigationList),

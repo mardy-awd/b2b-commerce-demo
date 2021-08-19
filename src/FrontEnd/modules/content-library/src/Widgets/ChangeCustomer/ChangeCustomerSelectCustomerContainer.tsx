@@ -193,7 +193,7 @@ const ChangeCustomerSelectCustomerContainer: FC<Props> = ({
 
         changeCustomerContext({
             billToId: billTo.id,
-            shipToId: shipTo.id,
+            shipToId: shipTo.isNew ? "" : shipTo.id,
             fulfillmentMethod,
             pickUpWarehouse: fulfillmentMethod === FulfillmentMethod.PickUp ? pickUpWarehouse : null,
             returnUrl,

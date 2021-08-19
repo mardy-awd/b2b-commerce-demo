@@ -1,6 +1,8 @@
+import isApiError from "@insite/client-framework/Common/isApiError";
 import {
     ApiHandlerDiscreteParameter,
     createHandlerChainRunnerOptionalParameter,
+    HasOnError,
     HasOnSuccess,
 } from "@insite/client-framework/HandlerCreator";
 import { updateAccount, UpdateAccountApiParameter } from "@insite/client-framework/Services/AccountService";
@@ -9,7 +11,7 @@ import setInitialValues from "@insite/client-framework/Store/Pages/AccountSettin
 import { AccountModel } from "@insite/client-framework/Types/ApiModels";
 
 type HandlerType = ApiHandlerDiscreteParameter<
-    HasOnSuccess,
+    HasOnSuccess & HasOnError<string>,
     UpdateAccountApiParameter,
     AccountModel,
     { account: AccountModel }
@@ -30,7 +32,15 @@ export const PopulateApiParameter: HandlerType = props => {
 };
 
 export const CallUpdateAccount: HandlerType = async props => {
-    props.apiResult = await updateAccount(props.apiParameter);
+    try {
+        props.apiResult = await updateAccount(props.apiParameter);
+    } catch (error) {
+        if (isApiError(error) && error.status === 400) {
+            props.parameter.onError?.(error.errorJson.message);
+            return false;
+        }
+        throw error;
+    }
 };
 
 export const UpdateSession: HandlerType = props => {

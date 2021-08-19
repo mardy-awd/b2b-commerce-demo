@@ -101,11 +101,12 @@ type ModalBodyProps = ThemeProps<BaseTheme> & Pick<ModalPresentationProps, "size
 const modalBodyStyles = (cssOverrides: any, size?: number, sizeVariant?: SizeVariant) => css`
     width: 100%;
     background: ${getColor("common.background")};
-    overflow-y: auto;
+    overflow-y: visible;
     flex: 0 1 auto;
     display: flex;
     position: relative;
     flex-direction: column;
+    overflow-y: scroll;
     &:focus {
         outline: none;
     }

@@ -1,3 +1,4 @@
+import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import placeOrderForApproval from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/PlaceOrderForApproval";
@@ -5,7 +6,7 @@ import translate from "@insite/client-framework/Translate";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
 import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext";
-import React, { FC } from "react";
+import React, { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 
 interface OwnProps {
@@ -30,8 +31,6 @@ export interface SubmitForApprovalButtonStyles {
 
 export const submitForApprovalButtonStyles: SubmitForApprovalButtonStyles = {};
 
-const styles = submitForApprovalButtonStyles;
-
 type Props = OwnProps &
     ReturnType<typeof mapStateToProps> &
     ResolveThunks<typeof mapDispatchToProps> &
@@ -46,6 +45,7 @@ const CheckoutReviewAndSubmitSubmitForApprovalButton = ({
     toaster,
     extendedStyles,
 }: Props) => {
+    const [styles] = useState(() => mergeToNew(submitForApprovalButtonStyles.submitForApprovalButton, extendedStyles));
     const handleClick = () => {
         placeOrderForApproval({
             onSuccess: (cartId: string) => {
@@ -73,7 +73,7 @@ const CheckoutReviewAndSubmitSubmitForApprovalButton = ({
             type="submit"
             disabled={isDisabled}
             data-test-selector="checkoutReviewAndSubmit_submitForApproval"
-            {...extendedStyles}
+            {...styles}
             onClick={handleClick}
         >
             {translate("Submit For Approval")}

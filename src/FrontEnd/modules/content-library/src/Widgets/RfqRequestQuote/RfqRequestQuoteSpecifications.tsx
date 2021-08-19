@@ -28,6 +28,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     rfqQuoteDetailsPageUrl: getPageLinkByPageType(state, "RfqQuoteDetailsPage")?.url,
     rfqQuoteConfirmationPageUrl: getPageLinkByPageType(state, "RfqConfirmationPage")?.url,
     jobQuoteEnabled: getSettingsCollection(state).quoteSettings.jobQuoteEnabled,
+    isUpdatingCartLine: state.pages.cart.isUpdatingCartLine,
 });
 
 const mapDispatchToProps = {
@@ -93,6 +94,7 @@ const RfqRequestQuoteSpecifications: FC<Props> = ({
     rfqQuoteDetailsPageUrl,
     rfqQuoteConfirmationPageUrl,
     jobQuoteEnabled,
+    isUpdatingCartLine,
 }) => {
     const [notes, setNotes] = useState(cart?.notes);
     const [jobName, setJobName] = useState("");
@@ -150,7 +152,7 @@ const RfqRequestQuoteSpecifications: FC<Props> = ({
         return valid;
     };
 
-    const canSubmit = cart.cartLines && cart.cartLines.length > 0;
+    const canSubmit = cart.cartLines && cart.cartLines.length > 0 && !isUpdatingCartLine;
 
     const submitHandler = () => {
         if (!canSubmit || !validateJobName(jobName) || !validateUser(accountId || "")) {

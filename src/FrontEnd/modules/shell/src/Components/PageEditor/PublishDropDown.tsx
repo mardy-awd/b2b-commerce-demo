@@ -143,15 +143,22 @@ const PublishDropDownButton = styled(Button)<HasExpanded>`
     background: transparent;
     border: 0;
     height: 27px;
-    margin: 1px 0 1px 0;
+    margin: 1px 0 1px 2px;
     padding: 0 1px;
     span {
         svg {
             color: ${({ theme }) => theme.colors.text.accent};
         }
     }
-    &:hover {
-        background: transparent;
+    &:hover,
+    &:focus {
+        border: none;
+        span {
+            svg {
+                color: ${({ theme }) => theme.colors.primary.main};
+            }
+        }
+        background: ${({ theme }) => theme.colors.custom.activeBackground};
     }
     &:focus {
         outline: 0;

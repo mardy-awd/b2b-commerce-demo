@@ -1,6 +1,5 @@
-import { getCookie } from "@insite/client-framework/Common/Cookies";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
+import { getCurrentUserIsGuest, getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { getLocation, getReturnUrl } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import signInAsGuest from "@insite/client-framework/Store/Pages/SignIn/Handlers/SignInAsGuest";
@@ -30,13 +29,9 @@ const mapStateToProps = (state: ApplicationState) => {
     const shippingPageUrl = getPageLinkByPageType(state, "CheckoutShippingPage")?.url;
     const referredFromShipping = returnUrl === shippingPageUrl;
     const createAccountPageLink = getPageLinkByPageType(state, "CreateAccountPage");
-    const applicationCookie = getCookie(".AspNet.ApplicationCookie");
     return {
         allowCreateAccount: accountSettings.allowCreateAccount,
-        allowGuestCheckout:
-            accountSettings.allowGuestCheckout &&
-            (!state.context.session.isAuthenticated || !applicationCookie) &&
-            referredFromShipping,
+        allowGuestCheckout: accountSettings.allowGuestCheckout && !getCurrentUserIsGuest(state) && referredFromShipping,
         returnUrl,
         createAccountUrl: createAccountPageLink ? `${createAccountPageLink.url}${search}` : undefined,
     };

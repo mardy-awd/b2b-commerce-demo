@@ -9,6 +9,7 @@ import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/Link
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import { ChangeCustomerPageContext } from "@insite/content-library/Pages/ChangeCustomerPage";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import Icon, { IconPresentationProps } from "@insite/mobius/Icon/Icon";
@@ -91,9 +92,9 @@ interface OwnProps extends WidgetProps {
 }
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasHistory;
-const styles = headerSignInStyles;
+
 let icon: React.ComponentType;
-const HeaderSignIn = ({
+export const HeaderSignIn = ({
     userName,
     isSignInPage,
     currentUserIsGuest,
@@ -113,6 +114,8 @@ const HeaderSignIn = ({
     if (fields.icon === "User") {
         icon = User;
     }
+
+    const styles = useMergeStyles("headerSignIn", headerSignInStyles);
 
     const onSignInHandler = () => {
         if ((!userName || currentUserIsGuest) && !isSignInPage) {

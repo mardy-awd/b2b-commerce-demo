@@ -7,7 +7,11 @@ import {
 import { GetWishListsApiParameter } from "@insite/client-framework/Services/WishListService";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getById, getDataView } from "@insite/client-framework/Store/Data/DataState";
-import { getWishListLinesDataView } from "@insite/client-framework/Store/Data/WishListLines/WishListLinesSelectors";
+import {
+    getWishListLinesDataView,
+    isWishListLineDiscontinued,
+    isWishListLineRestricted,
+} from "@insite/client-framework/Store/Data/WishListLines/WishListLinesSelectors";
 import { WishListsDataView } from "@insite/client-framework/Store/Data/WishLists/WishListsState";
 import { WishListModel } from "@insite/client-framework/Types/ApiModels";
 
@@ -30,7 +34,13 @@ export function getWishListTotal(
     let total = 0;
     wishListLinesDataView.value.forEach(wishListLine => {
         const productInfo = productInfosByWishListLineId[wishListLine.id];
-        if (!productInfo || !productInfo.pricing || wishListLine.quoteRequired) {
+        if (
+            !productInfo ||
+            !productInfo.pricing ||
+            wishListLine.quoteRequired ||
+            isWishListLineDiscontinued(wishListLine, productInfo) ||
+            isWishListLineRestricted(wishListLine, productInfo)
+        ) {
             return;
         }
 
@@ -54,7 +64,13 @@ export function getWishListTotalWithVat(
     let total = 0;
     wishListLinesDataView.value.forEach(wishListLine => {
         const productInfo = productInfosByWishListLineId[wishListLine.id];
-        if (!productInfo || !productInfo.pricing || wishListLine.quoteRequired) {
+        if (
+            !productInfo ||
+            !productInfo.pricing ||
+            wishListLine.quoteRequired ||
+            isWishListLineDiscontinued(wishListLine, productInfo) ||
+            isWishListLineRestricted(wishListLine, productInfo)
+        ) {
             return;
         }
 

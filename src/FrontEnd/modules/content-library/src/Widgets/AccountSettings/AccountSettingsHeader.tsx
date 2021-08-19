@@ -96,6 +96,9 @@ const AccountSettingsHeader = ({
             onSuccess: () => {
                 toasterContext.addToast({ body: translate("Settings updated"), messageType: "success" });
             },
+            onError: message => {
+                toasterContext.addToast({ body: message, messageType: "warning" });
+            },
         });
     };
 

@@ -83,6 +83,7 @@ const omitKeys = [
     | "id"
     | "type"
     | "onKeyDown"
+    | "onChange"
     | "clickableText"
     | "disabled"
     | "error"
@@ -93,11 +94,26 @@ const omitKeys = [
     | "required"
     | "disable"
     | "mergeCss"
+    | "min"
+    | "max"
     | "css"
 >)[];
 
 const validForNumber = ({ altKey, ctrlKey, key }: React.KeyboardEvent<HTMLInputElement>) => {
     return altKey || ctrlKey || key.length > 1 || /[0-9\.\,\-\+]/.test(key);
+};
+
+const validNumber = (event: React.ChangeEvent<HTMLInputElement>, min?: number | string, max?: number | string) => {
+    const number = Number(event.currentTarget.value);
+    if (min !== undefined && number < Number(min)) {
+        return false;
+    }
+
+    if (max !== undefined && number > Number(max)) {
+        return false;
+    }
+
+    return true;
 };
 
 /**
@@ -114,6 +130,7 @@ const TextField: React.FC<TextFieldProps & HasDisablerContext> = React.forwardRe
                 const {
                     type,
                     onKeyDown,
+                    onChange,
                     clickableText,
                     disable,
                     disabled,
@@ -124,6 +141,8 @@ const TextField: React.FC<TextFieldProps & HasDisablerContext> = React.forwardRe
                     placeholder,
                     required,
                     mergeCss,
+                    min,
+                    max,
                     ...otherProps
                 } = props;
 
@@ -150,6 +169,15 @@ const TextField: React.FC<TextFieldProps & HasDisablerContext> = React.forwardRe
                     onKeyDown?.(event);
                 };
 
+                const internalOnChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+                    if (type === "number" && !validNumber(event, min, max)) {
+                        event.preventDefault();
+                        return;
+                    }
+
+                    onChange?.(event);
+                };
+
                 const formFieldProps = {
                     ...iconProps,
                     size: sizeVariantValues[sizeVariant].icon,
@@ -174,9 +202,12 @@ const TextField: React.FC<TextFieldProps & HasDisablerContext> = React.forwardRe
                             {...inputLabelObj}
                             {...omitMultiple(otherProps, omitKeys)}
                             ref={ref}
+                            min={min}
+                            max={max}
                             type={type || "text"}
                             id={inputId}
                             onKeyDown={internalOnKeyDownHandler}
+                            onChange={internalOnChangeHandler}
                             aria-labelledby={labelId}
                             aria-describedby={hasDescription ? descriptionId : undefined}
                             aria-invalid={!!error}

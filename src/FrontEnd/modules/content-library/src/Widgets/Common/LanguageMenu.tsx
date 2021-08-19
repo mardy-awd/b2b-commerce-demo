@@ -5,6 +5,7 @@ import setLanguage from "@insite/client-framework/Store/Context/Handlers/SetLang
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import Icon, { IconPresentationProps } from "@insite/mobius/Icon/Icon";
 import Globe from "@insite/mobius/Icons/Globe";
 import Select, { SelectPresentationProps } from "@insite/mobius/Select";
@@ -72,11 +73,13 @@ export const LogoImage = styled.img`
 `;
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
-const styles = languageMenuStyles;
-const LanguageMenu: FC<Props> = ({ languages, currentLanguage, fields, setLanguage }) => {
+export const LanguageMenu: FC<Props> = ({ languages, currentLanguage, fields, setLanguage }) => {
     if (!languages || languages.length <= 1) {
         return null;
     }
+
+    const styles = useMergeStyles("languageMenu", languageMenuStyles);
+
     const menuId = "languageMenu";
 
     return (

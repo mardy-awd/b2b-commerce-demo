@@ -7,6 +7,7 @@ export interface HasProductContext {
 }
 
 export interface ProductContextModel {
+    idx?: number;
     product: ProductModel;
     productInfo: ProductInfo;
     onQtyOrderedChanged?: (qtyOrdered: number) => void;

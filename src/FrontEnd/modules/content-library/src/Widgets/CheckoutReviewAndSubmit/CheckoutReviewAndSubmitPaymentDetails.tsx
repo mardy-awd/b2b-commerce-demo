@@ -374,9 +374,11 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     const [runSubmitPayPal, setRunSubmitPayPal] = useState(false);
 
     // will exist after we are redirected back here from paypal
-    const { PayerID: payPalPayerId, token: payPalToken } = parseQueryString<{ PayerID?: string; token?: string }>(
-        location.search,
-    );
+    const { PayerID: payPalPayerId, token: payPalToken, cartId } = parseQueryString<{
+        PayerID?: string;
+        token?: string;
+        cartId?: string;
+    }>(location.search);
 
     const resetForm = () => {
         setCardHolderNameError("");
@@ -483,7 +485,11 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             if (!checkoutReviewAndSubmitPageLink) {
                 return;
             }
-            checkoutWithPayPal({ redirectUri: `${window.location.host}${checkoutReviewAndSubmitPageLink.url}` });
+            let redirectUri = `${window.location.host}${checkoutReviewAndSubmitPageLink.url}`;
+            if (cartId) {
+                redirectUri += `?cartId=${cartId}`;
+            }
+            checkoutWithPayPal({ redirectUri });
         }
     }, [runSubmitPayPal, isPayPal]);
 
@@ -963,6 +969,14 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         const stateValid = validateState(stateId);
         const cityValid = validateCity(city);
         const postalCodeValid = validatePostalCode(postalCode);
+        let accountHolderNameValid = true;
+        let accountNumberValid = true;
+        let routingNumberValid = true;
+        if (eCheckDetails?.current) {
+            accountHolderNameValid = eCheckDetails.current.validateAccountHolderNameChange(accountHolderName);
+            accountNumberValid = eCheckDetails.current.validateAccountNumberChange(accountNumber);
+            routingNumberValid = eCheckDetails.current.validateRoutingNumberChange(routingNumber);
+        }
 
         if (!paymentMethodValid) {
             paymentMethodRef.current?.focus();
@@ -1010,10 +1024,9 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             stateValid &&
             cityValid &&
             postalCodeValid &&
-            (!eCheckDetails?.current ||
-                (eCheckDetails.current.validateAccountHolderNameChange(accountHolderName) &&
-                    eCheckDetails.current.validateAccountNumberChange(accountNumber) &&
-                    eCheckDetails.current.validateRoutingNumberChange(routingNumber)))
+            accountHolderNameValid &&
+            accountNumberValid &&
+            routingNumberValid
         );
     };
 
@@ -1120,52 +1133,58 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                 )}
                 {!isPayPal && (
                     <GridContainer {...styles.paymentMethodAndPONumberContainer}>
-                        {paymentMethods && paymentMethods.length > 0 && (
-                            <GridItem {...styles.paymentMethodGridItem}>
-                                <Select
-                                    {...styles.paymentMethodSelect}
-                                    label={translate("Payment Method")}
-                                    value={paymentMethod ?? paymentMethodDto?.name}
-                                    onChange={handlePaymentMethodChange}
-                                    required
-                                    error={showFormErrors && paymentMethodError}
-                                    data-test-selector="checkoutReviewAndSubmit_paymentMethod"
-                                    ref={paymentMethodRef}
-                                >
-                                    <option value="">{translate("Select Payment Method")}</option>
-                                    {paymentMethods.map(method => (
-                                        <option key={method.name} value={method.name}>
-                                            {method.description}
-                                        </option>
-                                    ))}
-                                </Select>
-                                {showPayPal && (
-                                    <PayPalButton
-                                        {...styles.payPalButton}
-                                        submitPayPalRequest={submitPayPalRequest}
-                                        error={showFormErrors ? payPalError : undefined}
-                                    ></PayPalButton>
-                                )}
-                                {paymentMethodDto?.isPaymentProfile && !paymentMethodDto.isPaymentProfileExpired && (
-                                    <PaymentProfileBillingAddress
-                                        address={paymentMethodDto.billingAddress}
-                                        extendedStyles={styles.paymentProfileBillingAddress}
-                                    />
-                                )}
-                                {paymentMethodDto?.isPaymentProfile && paymentMethodDto.isPaymentProfileExpired && (
-                                    <StyledWrapper {...styles.paymentProfileExpiredErrorWrapper}>
-                                        <Typography {...styles.paymentProfileExpiredErrorText}>
-                                            {siteMessage("Checkout_PaymentProfileExpired")}
-                                        </Typography>
-                                        {savedPaymentsPageLink && (
-                                            <Link {...styles.paymentProfileEditCardLink} onClick={handleEditCardClick}>
-                                                {translate("Edit Card")}
-                                            </Link>
+                        <GridItem {...styles.paymentMethodGridItem}>
+                            {paymentMethods && paymentMethods.length > 0 && (
+                                <>
+                                    <Select
+                                        {...styles.paymentMethodSelect}
+                                        label={translate("Payment Method")}
+                                        value={paymentMethod ?? paymentMethodDto?.name}
+                                        onChange={handlePaymentMethodChange}
+                                        required
+                                        error={showFormErrors && paymentMethodError}
+                                        data-test-selector="checkoutReviewAndSubmit_paymentMethod"
+                                        ref={paymentMethodRef}
+                                    >
+                                        <option value="">{translate("Select Payment Method")}</option>
+                                        {paymentMethods.map(method => (
+                                            <option key={method.name} value={method.name}>
+                                                {method.description}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                    {paymentMethodDto?.isPaymentProfile &&
+                                        !paymentMethodDto.isPaymentProfileExpired && (
+                                            <PaymentProfileBillingAddress
+                                                address={paymentMethodDto.billingAddress}
+                                                extendedStyles={styles.paymentProfileBillingAddress}
+                                            />
                                         )}
-                                    </StyledWrapper>
-                                )}
-                            </GridItem>
-                        )}
+                                    {paymentMethodDto?.isPaymentProfile && paymentMethodDto.isPaymentProfileExpired && (
+                                        <StyledWrapper {...styles.paymentProfileExpiredErrorWrapper}>
+                                            <Typography {...styles.paymentProfileExpiredErrorText}>
+                                                {siteMessage("Checkout_PaymentProfileExpired")}
+                                            </Typography>
+                                            {savedPaymentsPageLink && (
+                                                <Link
+                                                    {...styles.paymentProfileEditCardLink}
+                                                    onClick={handleEditCardClick}
+                                                >
+                                                    {translate("Edit Card")}
+                                                </Link>
+                                            )}
+                                        </StyledWrapper>
+                                    )}
+                                </>
+                            )}
+                            {showPayPal && (
+                                <PayPalButton
+                                    {...styles.payPalButton}
+                                    submitPayPalRequest={submitPayPalRequest}
+                                    error={showFormErrors ? payPalError : undefined}
+                                ></PayPalButton>
+                            )}
+                        </GridItem>
                         {enableVat && (
                             <GridItem {...styles.vatNumberGridItem}>
                                 <TextField

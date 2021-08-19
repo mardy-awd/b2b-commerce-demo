@@ -3,7 +3,9 @@ import { useGetLink } from "@insite/client-framework/Store/Links/LinksSelectors"
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
+import Img, { ImgProps } from "@insite/mobius/Img";
+import { LazyImageProps } from "@insite/mobius/LazyImage";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
@@ -26,7 +28,11 @@ interface OwnProps extends WidgetProps {
 
 export interface ImageStyles {
     wrapper?: InjectableCss;
+    /**
+     * @deprecated Use img instead
+     */
     image?: LazyImageProps;
+    img?: ImgProps;
     imageLink?: LinkPresentationProps;
 }
 
@@ -34,15 +40,22 @@ export const imageStyles: ImageStyles = {
     image: {
         css: css`
             max-width: 100%;
+            height: auto;
+        `,
+    },
+    img: {
+        css: css`
+            max-width: 100%;
+            height: auto;
         `,
     },
 };
 
-const styles = imageStyles;
-
-const Image: FC<OwnProps> = ({ fields }) => {
+export const Image: FC<OwnProps> = ({ fields }) => {
     const { url } = useGetLink(fields.imageLink);
-    const image = <LazyImage src={fields.imageUrl} altText={fields.altText} {...styles.image} />;
+    const styles = useMergeStyles("image", imageStyles);
+
+    const image = <Img src={fields.imageUrl} altText={fields.altText} loading="lazy" {...styles.img} />;
 
     return (
         <StyledWrapper {...styles.wrapper}>

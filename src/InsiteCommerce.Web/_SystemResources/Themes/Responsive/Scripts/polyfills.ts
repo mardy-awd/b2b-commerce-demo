@@ -40,9 +40,7 @@ if (!Array.prototype.find) {
                 throw new TypeError("predicate must be a function");
             }
             const list = Object(this);
-            /* tslint:disable no-bitwise */
             const length = list.length >>> 0;
-            /* tslint:enable no-bitwise */
             const thisArg = arguments[1];
             let value;
 

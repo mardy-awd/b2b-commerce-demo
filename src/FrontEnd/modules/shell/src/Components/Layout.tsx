@@ -48,6 +48,10 @@ const FlexWrapper = styled.div`
     display: flex;
     height: 100%;
     background-color: ${(props: ShellThemeProps) => props.theme.colors.common.background};
+
+    .mdc-tab-scroller__scroll-area {
+        overflow: hidden;
+    }
 `;
 
 const SideBarArea = styled.div`
@@ -116,7 +120,7 @@ export default layout;
 
 export const SideBarStyle = styled.div<InjectableCss>`
     width: ${(props: ShellThemeProps) => props.theme.sideBarWidth};
-    height: calc(100vh - 55px);
+    height: calc(100vh - 40px);
     overflow: auto;
     ${injectCss}
 `;

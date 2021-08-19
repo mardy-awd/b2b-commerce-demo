@@ -2,6 +2,7 @@ import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCurrentUserIsGuest } from "@insite/client-framework/Store/Context/ContextSelectors";
+import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import translate from "@insite/client-framework/Translate";
 import {
     AddressFieldDisplayCollectionModel,
@@ -36,9 +37,12 @@ interface OwnProps {
 }
 
 const mapStateToProps = (state: ApplicationState) => {
+    const { cartId } = state.pages.checkoutShipping;
+    const cartState = cartId ? getCartState(state, cartId) : getCurrentCartState(state);
     return {
         currentUserIsGuest: getCurrentUserIsGuest(state),
         isBillingAddressUpdateRequired: state.pages.checkoutShipping.isBillingAddressUpdateRequired,
+        cart: cartState.value,
     };
 };
 
@@ -104,6 +108,7 @@ const BillingAddress = ({
     currentUserIsGuest,
     toaster,
     isBillingAddressUpdateRequired,
+    cart,
 }: Props) => {
     const [isCustomerSelectorModalOpen, setIsCustomerSelectorModalOpen] = useState(false);
     const [isEditAddressModalOpen, setIsEditAddressModalOpen] = useState(false);
@@ -153,17 +158,19 @@ const BillingAddress = ({
                     <Typography {...styles.headingText} as="h3">
                         {translate("Billing Address")}
                     </Typography>
-                    {!currentUserIsGuest && (
-                        <Link
-                            {...styles.selectSavedAddressLink}
-                            type="button"
-                            onClick={selectAddressClickHandler}
-                            data-test-selector="checkoutShipping_selectSavedAddress"
-                        >
-                            {translate("Select Saved Address")}
-                            <VisuallyHidden>{translate("For Billing Address")}</VisuallyHidden>
-                        </Link>
-                    )}
+                    {!currentUserIsGuest &&
+                        cart?.status !== "QuoteProposed" &&
+                        !(cart?.status === "Cart" && cart?.type === "Job") && (
+                            <Link
+                                {...styles.selectSavedAddressLink}
+                                type="button"
+                                onClick={selectAddressClickHandler}
+                                data-test-selector="checkoutShipping_selectSavedAddress"
+                            >
+                                {translate("Select Saved Address")}
+                                <VisuallyHidden>{translate("For Billing Address")}</VisuallyHidden>
+                            </Link>
+                        )}
                 </GridItem>
                 <GridItem {...styles.addressDisplayAndFormGridItem}>
                     {currentUserIsGuest || isBillingAddressUpdateRequired ? (

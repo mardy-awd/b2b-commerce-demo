@@ -86,6 +86,10 @@ export const listStyles: BrandListStyles = {
     brandLink: {
         css: css`
             width: 100%;
+            display: flex;
+            &:focus {
+                outline-offset: -2px;
+            }
         `,
     },
     verticalColumnContainer: {

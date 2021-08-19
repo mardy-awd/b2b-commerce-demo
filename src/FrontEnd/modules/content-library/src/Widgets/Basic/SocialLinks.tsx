@@ -5,6 +5,7 @@ import { HasFields } from "@insite/client-framework/Types/ContentItemModel";
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import Camera from "@insite/mobius/Icons/Camera";
 import Facebook from "@insite/mobius/Icons/Facebook";
 import FileText from "@insite/mobius/Icons/FileText";
@@ -110,8 +111,6 @@ export const linkListStyles: LinkListStyles = {
 
 export const socialLinksStyles = linkListStyles;
 
-const styles = linkListStyles;
-
 const GetIcon = (icon: string) => {
     switch (icon) {
         case icons.youtube:
@@ -141,8 +140,11 @@ const GetIcon = (icon: string) => {
     return "";
 };
 
-const SocialLinks: FC<OwnProps> = ({ fields }) => {
+export const SocialLinks: FC<OwnProps> = ({ fields }) => {
     const links = useGetLinks(fields.links, o => o.fields.destination);
+
+    const styles = useMergeStyles("socialLinks", linkListStyles);
+
     const socialLinkListStyle = css`
         ${fields.direction === "horizontal" ? "flex-direction: row;" : "flex-direction: column;"}
         ${fields.backgroundColor && `background-color: ${fields.backgroundColor};`}

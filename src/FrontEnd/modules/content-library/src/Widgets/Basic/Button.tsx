@@ -1,14 +1,16 @@
 /* eslint-disable spire/export-styles */
-import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { useGetLink } from "@insite/client-framework/Store/Links/LinksSelectors";
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import Button from "@insite/mobius/Button";
 import { useHistory } from "@insite/mobius/utilities/HistoryContext";
+import InjectableCss from "@insite/mobius/utilities/InjectableCss";
+import injectCss from "@insite/mobius/utilities/injectCss";
 import * as React from "react";
 import { FC } from "react";
-import { css } from "styled-components";
+import styled from "styled-components";
 
 const enum fields {
     variant = "variant",
@@ -26,17 +28,15 @@ interface OwnProps extends WidgetProps {
     };
 }
 
-const CmsButton: FC<OwnProps> = ({ fields }) => {
+export interface ButtonStyles {
+    wrapperStyles: InjectableCss;
+}
+
+const wrapperStyles: InjectableCss = {};
+
+export const CmsButton: FC<OwnProps> = ({ fields }) => {
     const history = useHistory();
     const link = useGetLink(fields.link);
-
-    const wrapperStyles = {
-        css: css`
-            width: 100%;
-            display: flex;
-            justify-content: ${fields.alignment ?? "left"};
-        `,
-    };
 
     const onClick = () => {
         if (!link.url) {
@@ -50,14 +50,23 @@ const CmsButton: FC<OwnProps> = ({ fields }) => {
         }
     };
 
+    const styles = useMergeStyles("button", { wrapperStyles });
+
     return (
-        <StyledWrapper {...wrapperStyles}>
+        <ContentWrapper alignment={fields.alignment} {...styles?.wrapperStyles}>
             <Button variant={fields.variant} onClick={onClick}>
                 {fields.label}
             </Button>
-        </StyledWrapper>
+        </ContentWrapper>
     );
 };
+
+export const ContentWrapper = styled.div<InjectableCss & { alignment: string }>`
+    display: flex;
+    width: 100%;
+    justify-content: ${props => props.alignment ?? "flex-start"};
+    ${injectCss};
+`;
 
 const widgetModule: WidgetModule = {
     component: CmsButton,

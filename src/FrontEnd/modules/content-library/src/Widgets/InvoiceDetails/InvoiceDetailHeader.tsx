@@ -86,7 +86,7 @@ const InvoiceDetailHeader: FC<WidgetProps> = ({ fields }) => {
             </GridItem>
             <GridItem {...styles.buttonGridItem}>
                 <Hidden {...styles.menuHiddenContainer}>
-                    <OverflowMenu position="end" {...styles.narrowOverflowMenu}>
+                    <OverflowMenu hasChildPortal position="end" {...styles.narrowOverflowMenu}>
                         <Clickable
                             {...styles.printClickable}
                             onClick={openPrintDialog}

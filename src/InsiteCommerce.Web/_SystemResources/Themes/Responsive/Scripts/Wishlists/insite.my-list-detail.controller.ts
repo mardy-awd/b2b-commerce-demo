@@ -422,9 +422,10 @@
         calculateListTotal(): void {
             this.listTotal = 0;
             for (let i = 0; i < this.listModel.wishListLineCollection.length; i++) {
-                const product = this.wishListService.mapWishlistLineToProduct(this.listModel.wishListLineCollection[i]);
+                const wishListLine = this.listModel.wishListLineCollection[i];
+                const product = this.wishListService.mapWishlistLineToProduct(wishListLine);
 
-                if (product.pricing) {
+                if (product.pricing && !this.isDiscontinued(wishListLine) && !this.isRestricted(wishListLine)) {
                     const unitNetPrice = this.productPriceService.getUnitNetPrice(product).price;
                     const extendedNetPrice = Math.round(unitNetPrice *
                         product.qtyOrdered *

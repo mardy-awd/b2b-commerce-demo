@@ -4,6 +4,7 @@ import { trackPageChange } from "@insite/client-framework/Common/Utilities/track
 import { CategoryContext } from "@insite/client-framework/Components/CategoryContext";
 import { HasShellContext } from "@insite/client-framework/Components/IsInShell";
 import Zone from "@insite/client-framework/Components/Zone";
+import { redirectTo, setStatusCode } from "@insite/client-framework/ServerSideRendering";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import setBreadcrumbs from "@insite/client-framework/Store/Components/Breadcrumbs/Handlers/SetBreadcrumbs";
 import {
@@ -35,12 +36,13 @@ const mapStateToProps = (state: ApplicationState) => {
         selectedCategoryPath || (location.pathname.toLowerCase().startsWith("/content/") ? "" : location.pathname);
     const {
         pages: {
-            productList: { productFilters, parameter, isSearchPage, filterQuery, productInfosByProductId },
+            productList: { isLoading, productFilters, parameter, isSearchPage, filterQuery, productInfosByProductId },
         },
     } = state;
     const catalogPage = getCatalogPageStateByPath(state, path).value;
     const productsDataView = getProductsDataView(state, parameter);
     return {
+        isLoading,
         stockedItemsOnly: productFilters.stockedItemsOnly,
         previouslyPurchasedProducts: productFilters.previouslyPurchasedProducts,
         query: productFilters.query,
@@ -101,11 +103,28 @@ class ProductListPage extends React.Component<Props> {
         const { productsDataView } = this.props;
         if (!productsDataView.value && !productsDataView.isLoading) {
             this.loadProducts();
+        } else if (!IS_SERVER_SIDE && productsDataView.value) {
+            const { searchTermRedirectUrl } = productsDataView;
+
+            // Check that the request is not a redirection to where we are currently
+            if (searchTermRedirectUrl && window?.location?.toString() !== searchTermRedirectUrl) {
+                if (searchTermRedirectUrl.lastIndexOf("http", 0) === 0) {
+                    window.location.replace(searchTermRedirectUrl);
+                } else {
+                    this.props.history.replace(searchTermRedirectUrl);
+                }
+                return;
+            }
+        } else if (this.props.isSearchPage) {
+            this.redirectToProductDetailIfExactMatch();
         }
 
         if (this.props.productListCatalogPage) {
             this.setMetadata();
-            if (!this.props.breadcrumbLinks) {
+            if (
+                this.props.breadcrumbLinks?.map(o => o.children?.toString()).join(",") !==
+                this.props.productListCatalogPage.breadCrumbs?.map(o => o.text).join(",")
+            ) {
                 this.setProductListBreadcrumbs();
             }
         } else if (this.props.isSearchPage) {
@@ -122,6 +141,7 @@ class ProductListPage extends React.Component<Props> {
 
     componentDidUpdate(prevProps: Props): void {
         const {
+            isLoading,
             filterQuery,
             location: { pathname, search },
             firstProductDetailPath,
@@ -130,7 +150,9 @@ class ProductListPage extends React.Component<Props> {
         } = this.props;
 
         // handle the query string change requests initiated by the filtering widget setQueryFilter calls
-        if (filterQuery !== prevProps.filterQuery) {
+        // Make sure we are fully loaded, since a loading product list will change the filteQuery to match the current pathname/search
+        // This can trigger a loop with the pathname/search updating and the filterQuery not updated till the productList is loaded
+        if (!isLoading && filterQuery !== prevProps.filterQuery) {
             const currentUrl = `${pathname}${search}`;
             const newUrl = filterQuery ? `${pathname}?${filterQuery}` : pathname;
             if (newUrl !== currentUrl) {
@@ -139,9 +161,10 @@ class ProductListPage extends React.Component<Props> {
             return;
         }
 
-        if (this.props.productsDataView.value && pathname === prevProps.location.pathname) {
-            const { searchTermRedirectUrl, exactMatch, value: products } = this.props.productsDataView;
-            if (searchTermRedirectUrl) {
+        if (!isLoading && this.props.productsDataView.value && pathname === prevProps.location.pathname) {
+            // Check that the request is not a redirection to where we are currently
+            const { searchTermRedirectUrl } = this.props.productsDataView;
+            if (searchTermRedirectUrl && window?.location?.toString() !== searchTermRedirectUrl) {
                 if (searchTermRedirectUrl.lastIndexOf("http", 0) === 0) {
                     window.location.replace(searchTermRedirectUrl);
                 } else {
@@ -150,25 +173,10 @@ class ProductListPage extends React.Component<Props> {
                 return;
             }
 
-            if (exactMatch && !this.props.stockedItemsOnly) {
-                let productDetailUrl = firstProductDetailPath ?? products[0].canonicalUrl;
-                const parsedQuery = parseQueryString<{ query: string }>(search);
-                const query = parsedQuery.query;
-                if (!query) {
-                    return;
-                }
-                if (productDetailUrl.indexOf("?") !== -1) {
-                    productDetailUrl += `&criteria=${encodeURIComponent(query)}`;
-                } else {
-                    productDetailUrl += `?criteria=${encodeURIComponent(query)}`;
-                }
-
-                this.props.history.replace(productDetailUrl);
-                return;
-            }
+            this.redirectToProductDetailIfExactMatch();
         }
 
-        if (search !== prevProps.search || this.props.path !== prevProps.path) {
+        if (!isLoading && (search !== prevProps.search || this.props.path !== prevProps.path)) {
             if (this.props.path !== prevProps.path) {
                 this.props.clearAllProductFilters({
                     removeAll: true,
@@ -180,7 +188,10 @@ class ProductListPage extends React.Component<Props> {
         if (productListCatalogPage) {
             this.setMetadata();
             trackPageChange();
-            if (productListCatalogPage !== prevProps.productListCatalogPage || !this.props.breadcrumbLinks) {
+            if (
+                productListCatalogPage.categoryId !== prevProps.productListCatalogPage?.categoryId ||
+                !this.props.breadcrumbLinks
+            ) {
                 this.setProductListBreadcrumbs();
             }
         } else if (this.props.isSearchPage) {
@@ -195,6 +206,39 @@ class ProductListPage extends React.Component<Props> {
         if (searchDataModeActive !== prevProps.searchDataModeActive) {
             // refresh the search results when search data mode has been toggled in the cms shell
             this.loadProducts();
+        }
+    }
+
+    redirectToProductDetailIfExactMatch() {
+        if (!this.props.productsDataView.value) {
+            return;
+        }
+
+        const {
+            location: { search },
+            firstProductDetailPath,
+        } = this.props;
+
+        const { exactMatch, value: products } = this.props.productsDataView;
+        if (exactMatch && !this.props.stockedItemsOnly) {
+            let productDetailUrl = firstProductDetailPath ?? products[0].canonicalUrl;
+            const parsedQuery = parseQueryString<{ query: string }>(search);
+            const query = parsedQuery.query;
+            if (!query) {
+                return;
+            }
+            if (productDetailUrl.indexOf("?") !== -1) {
+                productDetailUrl += `&criteria=${encodeURIComponent(query)}`;
+            } else {
+                productDetailUrl += `?criteria=${encodeURIComponent(query)}`;
+            }
+
+            if (IS_SERVER_SIDE) {
+                setStatusCode(302);
+                redirectTo(productDetailUrl);
+            } else {
+                this.props.history.replace(productDetailUrl);
+            }
         }
     }
 

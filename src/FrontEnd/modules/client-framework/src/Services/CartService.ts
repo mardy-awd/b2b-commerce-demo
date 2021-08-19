@@ -363,6 +363,12 @@ export async function updateCartLineWithResult(
                 errorMessage: error.errorJson.message,
             };
         }
+        if (error?.status === 404) {
+            return {
+                successful: false,
+                errorMessage: error.errorMessage,
+            };
+        }
         throw error;
     }
 }

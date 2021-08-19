@@ -8,6 +8,7 @@ import {
 import { updateCart as updateCartApi } from "@insite/client-framework/Services/CartService";
 import { createShipTo, updateShipTo as updateShipToApi } from "@insite/client-framework/Services/CustomersService";
 import { updateSession } from "@insite/client-framework/Services/SessionService";
+import loadSession from "@insite/client-framework/Store/Context/Handlers/LoadSession";
 import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import loadCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCart";
 import loadCurrentCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCurrentCart";
@@ -70,6 +71,14 @@ export const UpdateSession: HandlerType = async props => {
                 customerWasUpdated: true,
             },
         });
+    }
+};
+
+export const LoadSession: HandlerType = props => {
+    const state = props.getState();
+    const { cartId } = state.pages.checkoutShipping;
+    if (!cartId && props.apiResult) {
+        props.dispatch(loadSession());
     }
 };
 
@@ -138,6 +147,7 @@ export const chain = [
     DispatchShipTosResetDataViews,
     UpdateContext,
     UpdateSession,
+    LoadSession,
     UpdateCart,
     LoadCart,
     DispatchCompleteUpdateShipTo,

@@ -66,16 +66,25 @@ interface State {
 }
 
 class Header extends React.Component<Props, State> {
+    private mounted = false;
+
     constructor(props: Props) {
         super(props);
         this.state = {};
     }
 
     async componentDidMount() {
+        this.mounted = true;
         const { autoUpdatedPageTypes } = await getAutoUpdatedPageTypes();
-        this.setState({
-            autoUpdatedPageTypes,
-        });
+        if (this.mounted) {
+            this.setState({
+                autoUpdatedPageTypes,
+            });
+        }
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     editPageOptions = () => {

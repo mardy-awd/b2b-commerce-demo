@@ -113,6 +113,8 @@ class AddPage extends React.Component<Props, State> {
         let pageNameError = "";
         if (!pageName) {
             pageNameError = "Display Name is Required";
+        } else if (pageName.length > 100) {
+            pageNameError = "Display Name is too long, limit is 100 characters";
         }
         let pageTemplateError = "";
         if (!selectedPageTemplate && this.state.templates.length > 1) {

@@ -61,8 +61,12 @@ const HeaderPublishStatus: FC<Props> = ({
     futurePublishOn,
 }) => {
     useEffect(() => {
+        if (!pageId || loaded) {
+            return;
+        }
+
         loadPublishInfo(pageId);
-    }, [pageId]);
+    }, [pageId, loaded]);
 
     let value: "Published" | "Draft" | "Scheduled" | undefined;
 

@@ -3,7 +3,9 @@ import { useGetLink } from "@insite/client-framework/Store/Links/LinksSelectors"
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import MobiusLink from "@insite/mobius/Link";
+import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
 import { FC } from "react";
 
@@ -19,12 +21,22 @@ interface OwnProps extends WidgetProps {
     };
 }
 
-const Link: FC<OwnProps> = ({ fields }) => {
+const linkStyles: InjectableCss = {};
+
+export const Link: FC<OwnProps> = ({ fields }) => {
     const { title, url } = useGetLink(fields.destination);
+
+    const styles = useMergeStyles("link", linkStyles);
+
     if (!url) {
         return null;
     }
-    return <MobiusLink href={url}>{fields.overrideTitle || title || url}</MobiusLink>;
+
+    return (
+        <MobiusLink {...styles} href={url}>
+            {fields.overrideTitle || title || url}
+        </MobiusLink>
+    );
 };
 
 const widgetModule: WidgetModule = {

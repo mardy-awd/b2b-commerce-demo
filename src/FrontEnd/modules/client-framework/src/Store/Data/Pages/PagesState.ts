@@ -15,6 +15,7 @@ export interface PagesState extends DataViewState<PageProps> {
     readonly draggingWidgetId?: string;
     readonly pageDefinitionsByType?: SafeDictionary<Pick<PageDefinition, "pageType">>;
     readonly bypassedAuthorization: SafeDictionary<true>;
+    readonly requiresAuthorizationByPageId: SafeDictionary<boolean>;
 }
 
 const frozenEmptyObject = Object.freeze({});

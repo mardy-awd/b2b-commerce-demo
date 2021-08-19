@@ -6,6 +6,7 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/InvoiceHist
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import InvoiceDetailPageTypeLink from "@insite/content-library/Components/InvoiceDetailPageTypeLink";
 import { InvoiceHistoryPageContext } from "@insite/content-library/Pages/InvoiceHistoryPage";
 import { ClickableProps } from "@insite/mobius/Clickable";
 import DataTable, { DataTableProps, SortOrderOptions } from "@insite/mobius/DataTable";
@@ -277,13 +278,11 @@ const InvoiceHistoryTable = (props: Props) => {
                                 {...styles.dataTableRow}
                                 data-test-selector="invoiceHistory_invoiceLine"
                             >
-                                <DataTableCell {...styles.invoiceNumberCell}>
-                                    <Link
-                                        href={`/MyAccount/Invoices/Details?invoiceNumber=${invoiceNumber}`}
-                                        data-test-selector="invoiceHistory_invoiceLine_number"
-                                    >
-                                        {invoiceNumber}
-                                    </Link>
+                                <DataTableCell
+                                    {...styles.invoiceNumberCell}
+                                    data-test-selector="invoiceHistory_invoiceLine_number"
+                                >
+                                    <InvoiceDetailPageTypeLink title={invoiceNumber} invoiceNumber={invoiceNumber} />
                                 </DataTableCell>
                                 <DataTableCell
                                     {...styles.invoiceDateCell}

@@ -1,12 +1,14 @@
+import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import { createPageElement } from "@insite/client-framework/Components/ContentItemStore";
 import { HasShellContext, ShellContext, withIsInShell } from "@insite/client-framework/Components/IsInShell";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { loadPageByType } from "@insite/client-framework/Store/Data/Pages/PagesActionCreators";
-import { getFooter } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { getFooter, getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
 
 const mapStateToProps = (state: ApplicationState) => ({
+    preventLoading: !!parseQueryString<{ skipHeaderFooter: string }>(getLocation(state).search).skipHeaderFooter,
     footer: getFooter(state),
 });
 
@@ -19,7 +21,7 @@ type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispat
 class Footer extends React.Component<Props> {
     UNSAFE_componentWillMount() {
         const props = this.props;
-        if (props.footer.id === "") {
+        if (!props.preventLoading && props.footer.id === "") {
             props.loadPageByType("Footer");
         }
     }

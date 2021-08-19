@@ -63,7 +63,6 @@ export const productImageStyles: ProductListProductImageStyles = {
     },
     productImage: {
         image: {
-            width: "100%",
             css: css`
                 img {
                     min-width: 100%;

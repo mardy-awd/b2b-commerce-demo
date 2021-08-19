@@ -864,6 +864,7 @@ export interface CartLineModel extends BaseModel {
     erpNumber: string;
     hasInsufficientInventory: boolean;
     id: string;
+    idx?: number;
     isActive: boolean;
     isConfigured: boolean;
     isDiscontinued: boolean;
@@ -1172,6 +1173,7 @@ export interface ProductModel extends BaseModel {
     variantTraits?: VariantTraitModel[];
     variantTypeId: string | null;
     warehouses?: WarehouseModel[];
+    salePriceLabel: string;
     cantBuy: boolean;
 }
 

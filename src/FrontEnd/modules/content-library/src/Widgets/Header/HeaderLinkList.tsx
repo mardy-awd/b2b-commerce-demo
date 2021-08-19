@@ -1,9 +1,9 @@
-import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { getPageLinkByNodeId, LinkModel, useGetLinks } from "@insite/client-framework/Store/Links/LinksSelectors";
 import { HasFields } from "@insite/client-framework/Types/ContentItemModel";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import getColor from "@insite/mobius/utilities/getColor";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
@@ -46,9 +46,11 @@ export const headerLinkListStyles: HeaderLinkListStyles = {
     },
 };
 
-const HeaderLinkList: React.FC<OwnProps> = ({ fields, extendedStyles }) => {
+export const HeaderLinkList: React.FC<OwnProps> = ({ fields, extendedStyles }) => {
     const links = useGetLinks(fields.links, o => o.fields.destination);
-    const [styles] = React.useState(() => mergeToNew(headerLinkListStyles, extendedStyles));
+
+    const styles = useMergeStyles("headerLinkList", headerLinkListStyles, extendedStyles);
+
     if (links.length < 1) {
         return null;
     }

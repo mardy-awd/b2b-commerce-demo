@@ -154,7 +154,7 @@ module insite.catalog {
                 if (this.products.pagination) {
                     this.page = this.products.pagination.currentPage;
                 }
-                
+
                 this.onSessionUpdated(session);
             });
 
@@ -173,7 +173,7 @@ module insite.catalog {
 
             const expand = ["onlyfacets"];
             this.productService.getProducts(params, expand).then(
-                (productCollection: ProductCollectionModel) => { this.getFacetsCompleted(productCollection)},
+                (productCollection: ProductCollectionModel) => { this.getFacetsCompleted(productCollection) },
                 (error: any) => { this.getFacetsFailed(error); });
         }
 
@@ -399,16 +399,16 @@ module insite.catalog {
                 this.spinnerService.show("mainLayout");
             }
 
-            if(this.pageBrandId){
+            if (this.pageBrandId) {
                 params.brandIds = [this.pageBrandId];
             }
 
-            if(this.pageProductLineId){
-                params.productLineIds  = [this.pageProductLineId];
+            if (this.pageProductLineId) {
+                params.productLineIds = [this.pageProductLineId];
             }
 
             expand = expand ? expand : ["pricing", "attributes", "facets", "brand"];
-            if (this.showSearchData){
+            if (this.showSearchData) {
                 expand.push("scoreexplanation");
             }
 
@@ -422,14 +422,27 @@ module insite.catalog {
             this.updateSearchQuery(params);
 
             if (productCollection.searchTermRedirectUrl) {
-                // use replace to prevent back button from returning to this page
-                if (productCollection.searchTermRedirectUrl.lastIndexOf("http", 0) === 0) {
-                    this.$window.location.replace(productCollection.searchTermRedirectUrl);
+                // Check that the request is not a redirection to where we are currently
+                if (this.$window.location.toString() !== productCollection.searchTermRedirectUrl
+                    // Check that we have not already redirected to this page already
+                    // Stopping a redirect loop
+                    && this.$localStorage.get("searchTermRedirectUrl") !== productCollection.searchTermRedirectUrl) {
+                    // use replace to prevent back button from returning to this page
+                    if (productCollection.searchTermRedirectUrl.lastIndexOf("http", 0) === 0) {
+                        this.$window.location.replace(productCollection.searchTermRedirectUrl);
+                    } else {
+                        this.$location.replace();
+                        this.coreService.redirectToPath(productCollection.searchTermRedirectUrl);
+                    }
+                    return;
+                } else if (this.$window.location.toString() === productCollection.searchTermRedirectUrl) {
+                    // Capture the page, so the page being redirected to will not trigger a redirect back.
+                    this.$localStorage.set("searchTermRedirectUrl", productCollection.searchTermRedirectUrl);
                 } else {
-                    this.$location.replace();
-                    this.coreService.redirectToPath(productCollection.searchTermRedirectUrl);
+                    // Cleanup state for future redirect captures
+                    // We are here after a successful searchTermRedirect, but it match what was already redirected to.
+                    this.$localStorage.remove("searchTermRedirectUrl");
                 }
-                return;
             }
 
             // got product data
@@ -442,7 +455,7 @@ module insite.catalog {
                 } else {
                     this.coreService.redirectToPath(`${productDetailUrl}?criteria=${encodeURIComponent(params.query)}`);
                 }
-                
+
                 return;
             }
 
@@ -790,7 +803,7 @@ module insite.catalog {
                 $itemBlocks.each((i, elem) => {
                     const $elem = $(elem);
                     maxHeight = Math.max(maxHeight, $elem.find(".item-inf-wrapper").height());
-                    priceHeight = Math.max(priceHeight,$elem.find(".item-price").height());
+                    priceHeight = Math.max(priceHeight, $elem.find(".item-price").height());
                     thumbHeight = Math.max(thumbHeight, $elem.find(".item-thumb").height());
                     productInfoHeight = Math.max(productInfoHeight, $elem.find(".product-info").height());
                     actionsBlockHeight = Math.max(actionsBlockHeight, $elem.find(".actions-block").height());
@@ -831,15 +844,11 @@ module insite.catalog {
 
         // all columns for table view check boxes
         protected sortedTableColumns(products: ProductCollectionModel): AttributeTypeFacetDto[] {
-            if (!products.attributeTypeFacets && !products.brandFacets && !products.productLineFacets) {
-                return [];
-            }
-
-            const sortedTableColumns = lodash.chain(products.attributeTypeFacets)
+            const sortedTableColumns = products.attributeTypeFacets ? lodash.chain(products.attributeTypeFacets)
                 .sortBy(["sort", "name"])
-                .value();
+                .value() : [];
 
-            if (products.brandFacets.length > 0) {
+            if (products.brandFacets && products.brandFacets.length > 0) {
                 sortedTableColumns.push({
                     attributeTypeId: "",
                     name: "Brand",
@@ -849,7 +858,7 @@ module insite.catalog {
                 });
             }
 
-            if (products.productLineFacets.length > 0) {
+            if (products.productLineFacets && products.productLineFacets.length > 0) {
                 sortedTableColumns.push({
                     attributeTypeId: "",
                     name: "Product Line",

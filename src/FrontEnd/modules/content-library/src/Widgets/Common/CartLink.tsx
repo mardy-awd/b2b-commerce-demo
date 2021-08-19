@@ -11,6 +11,7 @@ import ShoppingBag from "@insite/mobius/Icons/ShoppingBag";
 import ShoppingCart from "@insite/mobius/Icons/ShoppingCart";
 import Truck from "@insite/mobius/Icons/Truck";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
+import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
 import React, { FC, useEffect } from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -33,6 +34,8 @@ const mapDispatchToProps = {
 
 export interface CartLinkStyles {
     routerLink?: LinkPresentationProps;
+    desktopCountText?: TypographyPresentationProps;
+    mobileCountText?: TypographyPresentationProps;
 }
 
 export const cartLinkStyles: CartLinkStyles = {
@@ -82,7 +85,7 @@ const CartLink: FC<Props> = ({
 }) => {
     useEffect(() => {
         if (shouldLoadCart) {
-            loadCurrentCart();
+            loadCurrentCart({ shouldLoadFullCart: false, replaceCart: false });
         }
     }, [shouldLoadCart]);
 
@@ -106,7 +109,15 @@ const CartLink: FC<Props> = ({
         >
             <Hidden below="lg" as="span">
                 {showLabel && `${translate("Cart")} `}(
-                <span data-test-selector="cartLinkQuantity">{retainedTotalCountToDisplay}</span>)
+                <Typography as="span" {...styles.desktopCountText} data-test-selector="cartLinkQuantity">
+                    {retainedTotalCountToDisplay}
+                </Typography>
+                )
+            </Hidden>
+            <Hidden above="md">
+                <Typography as="span" {...styles.mobileCountText}>
+                    {retainedTotalCountToDisplay}
+                </Typography>
             </Hidden>
             <VisuallyHidden>{siteMessage("Header_CartCount")}</VisuallyHidden>
         </Link>

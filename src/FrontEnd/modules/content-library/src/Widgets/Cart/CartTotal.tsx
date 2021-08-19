@@ -64,6 +64,7 @@ const mapStateToProps = (state: ApplicationState) => {
         discountTotal,
         cartSettings: settingsCollection.cartSettings,
         checkoutShippingPageUrl: getPageLinkByPageType(state, "CheckoutShippingPage")?.url,
+        checkoutReviewAndSubmitPageUrl: getPageLinkByPageType(state, "CheckoutReviewAndSubmitPage")?.url,
         canCheckoutWithCart: canCheckoutWithCart(cart),
         isCartCheckoutDisabled: isCartLoading || !cart || isCartCheckoutDisabled(cart),
         isCartEmpty: isCartEmpty(cart),
@@ -173,6 +174,7 @@ const styles = cartTotalStyles;
 const CartTotal: FC<Props> = ({
     cartSettings,
     checkoutShippingPageUrl,
+    checkoutReviewAndSubmitPageUrl,
     preloadCheckoutShippingData,
     history,
     canCheckoutWithCart,
@@ -209,10 +211,15 @@ const CartTotal: FC<Props> = ({
         }
 
         setQuoteRequiredModalIsOpen(false);
+
+        const { canBypassCheckoutAddress } = cart!;
+        if (canBypassCheckoutAddress) {
+            history.push(checkoutReviewAndSubmitPageUrl!);
+            return;
+        }
+
         preloadCheckoutShippingData({
             onSuccess: () => {
-                // TODO ISC-12526 The checkout shipping page link does not exist
-                // because the PageLinks response doesn't return it.
                 history.push(checkoutShippingPageUrl!);
             },
         });

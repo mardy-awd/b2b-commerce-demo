@@ -1,5 +1,8 @@
+import { isSiteInShellCookieName } from "@insite/client-framework/Common/ContentMode";
+import { getCookie } from "@insite/client-framework/Common/Cookies";
 import isApiError from "@insite/client-framework/Common/isApiError";
 import { sendToShell } from "@insite/client-framework/Components/ShellHole";
+import Logger from "@insite/client-framework/Logger";
 import { fetch } from "@insite/client-framework/ServerSideRendering";
 import { ApiParameter, del, get, patch, ServiceResult } from "@insite/client-framework/Services/ApiService";
 import { BillToModel, SessionModel, ShipToModel } from "@insite/client-framework/Types/ApiModels";
@@ -52,6 +55,73 @@ export type Session = Omit<SessionModel, "billTo" | "shipTo"> & {
     billToId?: string;
     shipToId?: string;
 };
+
+let otherTabSessionChangeWatcherId: number | undefined;
+
+/** Disables the effects of a previous call to `watchForOtherTabSessionChange`. */
+export const stopWatchingForOtherTabSessionChange = () => {
+    if (IS_SERVER_SIDE) {
+        return;
+    }
+
+    if (otherTabSessionChangeWatcherId === undefined) {
+        if (!IS_PRODUCTION) {
+            Logger.debug("No watcher for other-tab session change found.");
+        }
+        return;
+    }
+
+    if (!IS_PRODUCTION) {
+        Logger.debug("Stopping watcher for other-tab session change.");
+    }
+    window.clearInterval(otherTabSessionChangeWatcherId);
+    otherTabSessionChangeWatcherId = undefined;
+};
+
+/** At a brief interval, checks the cookies to detect a change in the session from another browser tab, reloading the page if it happened. Use `stopWatchingForOtherTabSessionChange` to disable. */
+export const watchForOtherTabSessionChange = () => {
+    if (IS_SERVER_SIDE) {
+        return;
+    }
+
+    if (getCookie(isSiteInShellCookieName) === "true") {
+        return;
+    }
+
+    if (otherTabSessionChangeWatcherId !== undefined) {
+        return;
+    }
+
+    if (!IS_PRODUCTION) {
+        Logger.debug("Creating watcher for other-tab session change.");
+    }
+
+    let previousCookie = document.cookie;
+
+    /** Presence/absence of the CurrentBillToId cookie seems sufficient to detect sign-in/sign-out. */
+    const hasBillTo = () => !!getCookie("CurrentBillToId");
+    const previousHasBillTo = hasBillTo();
+
+    otherTabSessionChangeWatcherId = setInterval(() => {
+        // Cookie parsing takes time so we skip it if it hasn't changed.
+        if (previousCookie === document.cookie) {
+            return;
+        }
+
+        previousCookie = document.cookie;
+
+        if (previousHasBillTo === hasBillTo()) {
+            return;
+        }
+
+        Logger.info("Window state invalid due to session change, reloading.");
+        window.location.reload();
+
+        stopWatchingForOtherTabSessionChange(); // Prevent repeated window reloads if it doesn't finish fast enough.
+    }, 1000);
+};
+
+watchForOtherTabSessionChange();
 
 const sessionsUrl = "/api/v1/sessions";
 

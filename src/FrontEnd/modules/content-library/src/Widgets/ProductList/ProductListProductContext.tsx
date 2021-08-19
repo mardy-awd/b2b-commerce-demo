@@ -9,6 +9,7 @@ import { connect, ResolveThunks } from "react-redux";
 
 interface OwnProps {
     product: ProductModel;
+    idx?: number;
 }
 
 const mapStateToProps = (state: ApplicationState, ownProps: OwnProps) => ({
@@ -28,6 +29,7 @@ const ProductListProductContext: FC<Props> = ({
     children,
     changeUnitOfMeasure,
     changeQtyOrdered,
+    idx,
 }) => {
     if (!productInfo) {
         return null;
@@ -36,6 +38,7 @@ const ProductListProductContext: FC<Props> = ({
     const productContext: ProductContextModel = {
         product,
         productInfo,
+        idx,
         onQtyOrderedChanged: qtyOrdered => changeQtyOrdered({ productId: product.id, qtyOrdered }),
         onUnitOfMeasureChanged: unitOfMeasure => changeUnitOfMeasure({ productId: product.id, unitOfMeasure }),
     };

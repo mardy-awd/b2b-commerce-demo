@@ -69,6 +69,9 @@
         }
 
         protected updateLineFailed(error: any): void {
+            if (this.isUpdateInProgress) {
+                this.isUpdateInProgress = false;
+            }
         }
 
         removeLine(cartLine: CartLineModel): void {
@@ -82,6 +85,9 @@
         }
 
         protected removeLineFailed(error: any): void {
+            if (this.isUpdateInProgress) {
+                this.isUpdateInProgress = false;
+            }
         }
 
         quantityKeyPress(keyEvent: KeyboardEvent, cartLine: CartLineModel): void {

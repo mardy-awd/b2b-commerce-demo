@@ -3,7 +3,7 @@ import { AnyShellAction } from "@insite/shell/Store/Reducers";
 import ShellState from "@insite/shell/Store/ShellState";
 import { RouterAction } from "connected-react-router";
 
-type ShellDispatch = (action: AnyShellAction | ShellThunkAction | RouterAction | AppThunkAction) => void;
+export type ShellDispatch = (action: AnyShellAction | ShellThunkAction | RouterAction | AppThunkAction) => void;
 
 /** Used as a hint on action creators so that its "dispatch" and "getState" params are correctly typed. */
 export default interface ShellThunkAction {

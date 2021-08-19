@@ -1,3 +1,4 @@
+import { getCookie, removeCookie } from "@insite/client-framework/Common/Cookies";
 import {
     createHandlerChainRunner,
     Handler,
@@ -5,6 +6,8 @@ import {
 } from "@insite/client-framework/HandlerCreator";
 import { deleteWishList as deleteWishListApi } from "@insite/client-framework/Services/WishListService";
 import loadWishLists from "@insite/client-framework/Store/Pages/MyLists/Handlers/LoadWishLists";
+// eslint-disable-next-line spire/fenced-imports
+import { LastUpdatedListIdCookieName } from "@insite/content-library/Components/AddToListModal";
 
 type HandlerType = Handler<
     {
@@ -30,6 +33,9 @@ export const RequestRemoveWishlist: HandlerType = props => {
 };
 
 export const ResetWishListsData: HandlerType = props => {
+    if (getCookie(LastUpdatedListIdCookieName) === props.parameter.wishListId) {
+        removeCookie(LastUpdatedListIdCookieName);
+    }
     props.dispatch({
         type: "Data/WishLists/Reset",
     });

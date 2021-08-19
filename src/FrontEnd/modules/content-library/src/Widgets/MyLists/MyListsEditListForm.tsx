@@ -84,7 +84,7 @@ class MyListsEditListForm extends React.Component<Props, State> {
 
     submitHandler = (e: any) => {
         if (this.state.name === "") {
-            this.setState({ nameError: siteMessage("Lists_Enter_New_Wishlist_Name") });
+            this.setState({ nameError: siteMessage("Lists_List_Name_Required") });
             return;
         }
 

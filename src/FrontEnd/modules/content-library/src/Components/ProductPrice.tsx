@@ -3,6 +3,7 @@ import StyledWrapper, { getStyledWrapper } from "@insite/client-framework/Common
 import wrapInContainerStyles from "@insite/client-framework/Common/wrapInContainerStyles";
 import { ProductContextModel } from "@insite/client-framework/Components/ProductContext";
 import {
+    getUnitListPrice,
     getUnitNetPrice,
     getUnitRegularPriceWithVat,
 } from "@insite/client-framework/Services/Helpers/ProductPriceService";
@@ -285,6 +286,11 @@ const ProductPrice = ({
                     enableVat={enableVat}
                     displayWithVat={displayVatForPrice}
                     styles={priceStyles}
+                    salePriceLabel={
+                        productContextModel.product?.salePriceLabel ||
+                        cartLineModel?.salePriceLabel ||
+                        translate("Sale Price:")
+                    }
                 />
             </StyledWrapper>
             {showSecondaryPrice && (
@@ -335,6 +341,7 @@ interface PriceProps {
     enableVat: boolean;
     displayWithVat: boolean;
     styles: PriceStyles;
+    salePriceLabel?: string;
 }
 
 const Price = ({
@@ -346,11 +353,21 @@ const Price = ({
     enableVat,
     displayWithVat,
     styles,
+    salePriceLabel,
 }: PriceProps) => {
+    let salePriceLabelPrefix = "";
+    if (pricing && salePriceLabel) {
+        const { price: unitNetPrice } = getUnitNetPrice(pricing, qtyOrdered || 1);
+        const { price: unitListPrice } = getUnitListPrice(pricing, qtyOrdered || 1);
+        if (unitNetPrice < unitListPrice) {
+            salePriceLabelPrefix = `${salePriceLabel} `;
+        }
+    }
     return (
         <>
             {pricing ? (
                 <Typography {...styles.priceText} data-test-selector="productPrice_unitNetPrice">
+                    {salePriceLabelPrefix}
                     {enableVat && displayWithVat
                         ? getUnitRegularPriceWithVat(pricing, qtyOrdered || 1).priceDisplay
                         : getUnitNetPrice(pricing, qtyOrdered || 1).priceDisplay}

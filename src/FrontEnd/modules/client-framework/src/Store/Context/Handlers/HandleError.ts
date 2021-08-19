@@ -14,7 +14,10 @@ export const LogError: HandlerType = props => {
 export const DisplayError: HandlerType = props => {
     if (IS_SERVER_SIDE) {
         setDisplayErrorPage(props.parameter.error);
-    } else if (isApiError(props.parameter.error) && props.parameter.error.status === 401) {
+    } else if (
+        isApiError(props.parameter.error) &&
+        (props.parameter.error.status === 401 || props.parameter.error.status === 403)
+    ) {
         if (getCookie(isSiteInShellCookieName) === "true") {
             // If we are in the Shell, trigger a modal open with an Unauthorized error
             props.dispatch({

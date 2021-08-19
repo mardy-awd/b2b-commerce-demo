@@ -132,7 +132,7 @@ const wishListUrl = "/api/v1/wishlists";
 export async function getWishLists(parameter: GetWishListsApiParameter) {
     const wishListCollection = await get<WishListCollectionModel>(wishListUrl, parameter);
     wishListCollection.wishListCollection?.forEach(o => {
-        cleanWishList(o);
+        cleanWishList(o, parameter);
     });
     return wishListCollection;
 }
@@ -170,7 +170,7 @@ export async function updateWishList(parameter: UpdateWishListApiParameter) {
         description: parameter.description,
     };
     const wishList = await patch<WishListModel>(`${wishListUrl}/${wishListId}`, wishListToUpdate);
-    cleanWishList(wishList);
+    cleanWishList(wishList, {});
     return wishList;
 }
 

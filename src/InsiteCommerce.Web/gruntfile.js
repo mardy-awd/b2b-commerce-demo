@@ -15,16 +15,18 @@ module.exports = function (grunt) {
 
             webThemes: {
                 files: [{
+                    nocase: true,
                     expand: true,
-                    src: "themes/**/*.scss",
+                    src: "Themes/**/*.scss",
                     ext: ".css"
                 }]
             },
 
             webStyles: {
                 files: [{
+                    nocase: true,
                     expand: true,
-                    src: "styles/*.scss",
+                    src: "Styles/*.scss",
                     ext: ".css"
                 }]
             }
@@ -32,12 +34,14 @@ module.exports = function (grunt) {
 
         watch: {
             webThemes: {
-                files: "themes/**/*.scss",
+                nocase: true,
+                files: "Themes/**/*.scss",
                 tasks: ["sass:webThemes"]
             },
 
             webStyles: {
-                files: "styles/*.scss",
+                nocase: true,
+                files: "Styles/*.scss",
                 tasks: ["sass:webStyles"]
             }
         }

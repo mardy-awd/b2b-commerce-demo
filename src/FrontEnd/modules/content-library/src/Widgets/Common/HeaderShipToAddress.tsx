@@ -7,6 +7,7 @@ import { getFulfillmentLabel, getIsPunchOutSession } from "@insite/client-framew
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import Drawer, { DrawerPresentationProps, DrawerProps } from "@insite/mobius/Drawer";
 import Icon, { IconPresentationProps } from "@insite/mobius/Icon/Icon";
@@ -125,8 +126,6 @@ interface OwnProps extends WidgetProps {
     fields: {};
 }
 
-const styles = headerShipToAddressStyles;
-
 const HeaderShipToAddress: FC<Props> = ({
     id,
     fulfillmentLabel,
@@ -142,6 +141,8 @@ const HeaderShipToAddress: FC<Props> = ({
     const handleCloseDrawer = () => {
         setDrawerIsOpen({ isOpen: false });
     };
+
+    const styles = useMergeStyles("headerShipToAddress", headerShipToAddressStyles);
 
     let drawerStyles: DrawerPresentationProps | undefined;
     if (shellContext.isInShell && shellContext.isEditing) {

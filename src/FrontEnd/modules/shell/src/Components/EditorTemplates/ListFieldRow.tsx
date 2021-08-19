@@ -142,7 +142,9 @@ class ListFieldRow extends React.Component<Props, State> {
     updateField = (fieldName: string, value: any) => {
         const { item, index, onChange } = this.props;
         item.fields[fieldName] = value;
-        onChange(index, item);
+        if (!this.hasValidationErrors()) {
+            onChange(index, item);
+        }
     };
 
     onClick = () => {

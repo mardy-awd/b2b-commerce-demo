@@ -1,7 +1,6 @@
 import { createTypedReducerWithImmer } from "@insite/client-framework/Common/CreateTypedReducer";
 import { PageVersionInfoModel, PublishedPageVersionsModel } from "@insite/shell/Services/ContentAdminService";
 import { CompareModalState } from "@insite/shell/Store/CompareModal/CompareModalState";
-import { PublishModalState } from "@insite/shell/Store/PublishModal/PublishModalState";
 import { Draft as ImmerDraft } from "immer";
 
 const initialState: CompareModalState = {
@@ -62,12 +61,28 @@ const reducer = {
         },
     ) => {
         if (draft.compareVersions) {
-            draft.compareVersions.published = pageVersion;
+            draft.compareVersions.leftVersion = pageVersion;
         }
     },
 
-    "CompareModal/SetShowCompleteVersionHistory": (draft: Draft, action: { showCompleteVersionHistory: boolean }) => {
+    "CompareModal/SetShowCompleteVersionHistory": (
+        draft: Draft,
+        action: { showCompleteVersionHistory: boolean; side?: "left" | "right" },
+    ) => {
         draft.showCompleteVersionHistory = action.showCompleteVersionHistory;
+        draft.completeVersionHistorySide = action.side;
+    },
+
+    "CompareModal/SetLeftVersion": (draft: Draft, action: { pageVersion: PageVersionInfoModel }) => {
+        if (draft.compareVersions) {
+            draft.compareVersions.leftVersion = action.pageVersion;
+        }
+    },
+
+    "CompareModal/SetRightVersion": (draft: Draft, action: { pageVersion?: PageVersionInfoModel }) => {
+        if (draft.compareVersions) {
+            draft.compareVersions.rightVersion = action.pageVersion;
+        }
     },
 };
 

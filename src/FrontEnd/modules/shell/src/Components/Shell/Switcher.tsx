@@ -1,5 +1,6 @@
 import { DeviceType } from "@insite/client-framework/Types/ContentItemModel";
 import Icon from "@insite/mobius/Icon";
+import CompareVersionClicker from "@insite/shell/Components/Shell/CompareVersionClicker";
 import ContentModeClicker from "@insite/shell/Components/Shell/ContentModeClicker";
 import { Spacer } from "@insite/shell/Components/Shell/HeaderBar";
 import HeaderGear from "@insite/shell/Components/Shell/HeaderGear";
@@ -10,9 +11,10 @@ import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
-const mapStateToProps = ({ shellContext: { mobileCmsModeActive, stageMode } }: ShellState) => ({
+const mapStateToProps = ({ shellContext: { mobileCmsModeActive, stageMode, contentMode } }: ShellState) => ({
     mobileCmsModeActive,
     stageMode,
+    contentMode,
 });
 
 const mapDispatchToProps = {
@@ -21,7 +23,7 @@ const mapDispatchToProps = {
 
 type Props = { disabled?: boolean } & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
-const Switcher: React.FC<Props> = ({ disabled, mobileCmsModeActive, stageMode, changeStageMode }) => {
+const Switcher: React.FC<Props> = ({ disabled, mobileCmsModeActive, stageMode, contentMode, changeStageMode }) => {
     const clicker = (targetStageMode: DeviceType) => (
         <ViewPortClicker
             targetStageMode={targetStageMode}
@@ -45,6 +47,7 @@ const Switcher: React.FC<Props> = ({ disabled, mobileCmsModeActive, stageMode, c
                 </>
             )}
             <div>
+                {contentMode === "Editing" && <CompareVersionClicker disabled={disabled} />}
                 <ContentModeClicker targetContentMode="Editing" icon="Edit2" disabled={disabled} />
                 <ContentModeClicker targetContentMode="Previewing" icon="Eye" disabled={disabled} />
             </div>

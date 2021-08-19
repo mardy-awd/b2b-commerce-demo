@@ -206,6 +206,7 @@ class Popover extends React.Component<PopoverProps, State> {
             !this.isInsideChildPortalModal(event.target as Node)
         ) {
             this.closePopover(event);
+            return;
         }
         typeof this.props.handleKeyDown === "function" && this.props.handleKeyDown(event);
     };

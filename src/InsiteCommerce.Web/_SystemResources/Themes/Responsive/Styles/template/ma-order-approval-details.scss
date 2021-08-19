@@ -125,3 +125,11 @@
         }
     }
 }
+
+@media print {
+    .ma-order-approval-details {
+        .cart-items {
+            max-height: none;
+        }
+    }
+}

@@ -136,7 +136,11 @@ const SubCategoryLinkView = ({
                 <GridItem {...styles.subCategoryImageItem}>
                     {category.smallImagePath && (
                         <Clickable href={category.path} {...styles.subCategoryImageClickable}>
-                            <LazyImage src={category.smallImagePath} {...styles.subCategoryImage} />
+                            <LazyImage
+                                src={category.smallImagePath}
+                                altText={category.imageAltText}
+                                {...styles.subCategoryImage}
+                            />
                         </Clickable>
                     )}
                 </GridItem>

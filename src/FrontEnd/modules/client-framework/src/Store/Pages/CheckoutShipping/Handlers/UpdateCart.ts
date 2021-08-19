@@ -143,14 +143,14 @@ export const UpdateBillTo: HandlerType = async props => {
 };
 
 export const UpdateSession: HandlerType = async props => {
-    const { updatedShipTo, cart, getState } = props;
+    const { updatedShipTo, updatedBillTo, cart, getState } = props;
     const { cartId } = getState().pages.checkoutShipping;
 
-    if (!cartId && updatedShipTo) {
+    if (!cartId && (updatedShipTo || updatedBillTo)) {
         await updateSession({
             session: {
-                billToId: cart.billToId,
-                shipToId: updatedShipTo.id,
+                billToId: updatedBillTo?.id ?? cart.billToId,
+                shipToId: updatedShipTo?.id ?? cart.shipToId,
                 customerWasUpdated: true,
             } as Session,
         });

@@ -15,7 +15,7 @@ import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import LoadingSpinner from "@insite/mobius/LoadingSpinner";
 import Radio, { RadioComponentProps } from "@insite/mobius/Radio";
 import RadioGroup, { RadioGroupComponentProps } from "@insite/mobius/RadioGroup";
-import Typography, { TypographyProps } from "@insite/mobius/Typography";
+import Typography, { TypographyPresentationProps, TypographyProps } from "@insite/mobius/Typography";
 import FieldSetPresentationProps, { FieldSetGroupPresentationProps } from "@insite/mobius/utilities/fieldSetProps";
 import getColor from "@insite/mobius/utilities/getColor";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
@@ -27,7 +27,6 @@ const messagesParameter = {};
 
 const mapStateToProps = (state: ApplicationState) => ({
     messagesDataView: getMessagesDataView(state, messagesParameter),
-    byId: state.data.messages.byId,
     language: state.context.session.language,
 });
 
@@ -48,6 +47,8 @@ export interface AccountMessagesStyles {
     messageFilter?: MessageFilterStyles;
     messageCardGridItem?: GridItemProps;
     messageCard?: MessageCardStyles;
+    noMessagesGridItem?: GridItemProps;
+    noMessagesText?: TypographyPresentationProps;
 }
 
 interface MessageFilterStyles {
@@ -89,6 +90,14 @@ export const accountMessagesStyles: AccountMessagesStyles = {
             width: 100%;
         `,
     },
+    messagesAccordionSection: {
+        panelProps: {
+            css: css`
+                max-height: 500px;
+                overflow-y: auto;
+            `,
+        },
+    },
     messagesGridContainer: { gap: 15 },
     messageFilterGridItem: { width: 12 },
     messageFilter: {
@@ -102,7 +111,7 @@ export const accountMessagesStyles: AccountMessagesStyles = {
         },
         radioButton: {
             css: css`
-                margin-top: 10px;
+                margin: 10px 20px 5px 0;
             `,
         },
     },
@@ -126,15 +135,30 @@ export const accountMessagesStyles: AccountMessagesStyles = {
         },
         actionButton: {
             variant: "secondary",
+            css: css`
+                margin-bottom: 10px;
+            `,
         },
         bottomBorderGridItem: { width: 12 },
         bottomBorder: {
             css: css`
                 height: 1px;
                 width: 100%;
-                background: ${getColor("common.accent")};
+                background: ${getColor("common.border")};
             `,
         },
+    },
+    noMessagesGridItem: {
+        width: 12,
+        css: css`
+            justify-content: center;
+        `,
+    },
+    noMessagesText: {
+        css: css`
+            margin-bottom: 20px;
+            font-size: 20px;
+        `,
     },
 };
 
@@ -158,7 +182,6 @@ const StyledArticle = getStyledWrapper("article");
 
 interface State {
     messagesFilterType: string;
-    isMessagesPreview: boolean;
 }
 
 class AccountMessages extends React.Component<Props, State> {
@@ -167,7 +190,6 @@ class AccountMessages extends React.Component<Props, State> {
 
         this.state = {
             messagesFilterType: "All",
-            isMessagesPreview: true,
         };
     }
 
@@ -180,7 +202,7 @@ class AccountMessages extends React.Component<Props, State> {
     render() {
         let title = "Messages";
         const { messagesDataView, updateMessageIsRead, language } = this.props;
-        const { messagesFilterType, isMessagesPreview } = this.state;
+        const { messagesFilterType } = this.state;
         const messages = messagesDataView.value ? messagesDataView.value : [];
 
         if (messagesDataView.value) {
@@ -188,23 +210,13 @@ class AccountMessages extends React.Component<Props, State> {
             title = `Messages (${countUnreadMessages})`;
         }
 
-        let filteredMessages = filterMessagesBasedOnFilterType(messages, messagesFilterType);
-        if (isMessagesPreview) {
-            filteredMessages = filteredMessages.slice(0, 3);
-        }
+        const filteredMessages = filterMessagesBasedOnFilterType(messages, messagesFilterType);
         const componentStyles: MessageFilterStyles = styles.messageFilter || {};
 
         return (
             <StyledSection {...styles.messagesSection} data-test-selector="myAccountMessagesSection">
                 <Accordion {...styles.messagesAccordion} headingLevel={2}>
-                    <ManagedAccordionSection
-                        title={title}
-                        onTogglePanel={() => {
-                            this.setState({ isMessagesPreview: false });
-                        }}
-                        {...styles.messagesAccordionSection}
-                        initialExpanded
-                    >
+                    <ManagedAccordionSection title={title} {...styles.messagesAccordionSection}>
                         <GridContainer {...styles.messagesGridContainer}>
                             <GridItem {...styles.messageFilterGridItem}>
                                 {messagesDataView.value && (
@@ -227,16 +239,20 @@ class AccountMessages extends React.Component<Props, State> {
                                     </RadioGroup>
                                 )}
                             </GridItem>
-                            {filteredMessages &&
-                                filteredMessages.map(message => (
-                                    <GridItem {...styles.messageCardGridItem} key={`${message.id}`}>
-                                        <MessageCard
-                                            message={message}
-                                            updateMessageIsRead={updateMessageIsRead}
-                                            language={language}
-                                        />
-                                    </GridItem>
-                                ))}
+                            {filteredMessages.map(message => (
+                                <GridItem {...styles.messageCardGridItem} key={`${message.id}`}>
+                                    <MessageCard
+                                        message={message}
+                                        updateMessageIsRead={updateMessageIsRead}
+                                        language={language}
+                                    />
+                                </GridItem>
+                            ))}
+                            {filteredMessages.length === 0 && (
+                                <GridItem {...styles.noMessagesGridItem}>
+                                    <Typography {...styles.noMessagesText}>{translate("No messages")}</Typography>
+                                </GridItem>
+                            )}
                         </GridContainer>
                         {messagesDataView.isLoading && (
                             <StyledWrapper {...styles.centeringWrapper}>
@@ -254,11 +270,9 @@ type MessageCardProps = {
     message: MessageModel;
 } & Pick<Props, "updateMessageIsRead" | "language">;
 
-const MessageCard: React.FunctionComponent<MessageCardProps> = (props: MessageCardProps) => {
-    const { message, language } = props;
-
+const MessageCard = ({ message, language, updateMessageIsRead }: MessageCardProps) => {
     const handleClickMessageReadStatus = () =>
-        props.updateMessageIsRead({
+        updateMessageIsRead({
             message,
             isRead: !message.isRead,
         });

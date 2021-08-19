@@ -9,6 +9,7 @@ import translate from "@insite/client-framework/Translate";
 import { CartLineModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import ProductAddedToCartMessage from "@insite/content-library/Components/ProductAddedToCartMessage";
 import ProductSelector, { ProductSelectorStyles } from "@insite/content-library/Components/ProductSelector";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
@@ -37,7 +38,7 @@ const mapDispatchToProps = {
     addToCart: makeHandlerChainAwaitable(addToCart),
 };
 
-type Props = WidgetProps &
+export type Props = WidgetProps &
     ReturnType<typeof mapStateToProps> &
     ResolveThunks<typeof mapDispatchToProps> &
     HasToasterContext;
@@ -111,9 +112,7 @@ export const quickOrderStyles: QuickOrderStyles = {
     },
 };
 
-const styles = quickOrderStyles;
-
-const QuickOrder: FC<Props> = ({
+export const QuickOrder: FC<Props> = ({
     canOrderUpload,
     showAddToCartConfirmationDialog,
     orderUploadPageNavLink,
@@ -127,6 +126,8 @@ const QuickOrder: FC<Props> = ({
     if (!allowQuickOrder) {
         return null;
     }
+
+    const styles = useMergeStyles("quickOrder", quickOrderStyles);
 
     const addProductToCart = async (productInfo: ProductInfo) => {
         const cartline = (await addToCart({

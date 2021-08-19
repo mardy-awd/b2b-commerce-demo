@@ -52,15 +52,6 @@
     },
     {
       "parentId": "db273b6a-40c4-478d-ad1b-a59e399b4ed4",
-      "type": "RfqQuoteDetails/RfqQuoteDetailsMessages",
-      "zone": "Content01",
-      "id": "b582968f-ac5e-4b49-8796-ab5b9ede097d",
-      "generalFields": {},
-      "translatableFields": {},
-      "contextualFields": {}
-    },
-    {
-      "parentId": "db273b6a-40c4-478d-ad1b-a59e399b4ed4",
       "type": "RfqQuoteDetails/RfqQuoteDetailsProductList",
       "zone": "Content02",
       "id": "f80113f4-a0f9-411f-b5a2-78d3127ae9b1",
@@ -72,7 +63,7 @@
       "parentId": "db273b6a-40c4-478d-ad1b-a59e399b4ed4",
       "type": "RfqQuoteDetails/RfqQuoteDetailsMessages",
       "zone": "Content1",
-      "id": "b582968f-ac5e-4b49-8796-ab5b9ede097d",
+      "id": "dce1bcbe-a44d-4e47-9762-b38b5bb72186",
       "generalFields": {},
       "translatableFields": {},
       "contextualFields": {}

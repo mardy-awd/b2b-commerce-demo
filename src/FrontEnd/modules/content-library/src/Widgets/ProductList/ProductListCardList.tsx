@@ -1,9 +1,10 @@
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
+import { getIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
+import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import setView from "@insite/client-framework/Store/Pages/ProductList/Handlers/SetView";
 import { getProductListDataView } from "@insite/client-framework/Store/Pages/ProductList/ProductListSelectors";
 import { ProductListViewType } from "@insite/client-framework/Store/Pages/ProductList/ProductListState";
-import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import CardContainer, { CardContainerStyles } from "@insite/content-library/Components/CardContainer";
@@ -19,7 +20,7 @@ import ProductListTable from "@insite/content-library/Widgets/ProductList/Produc
 import Hidden from "@insite/mobius/Hidden";
 import LoadingOverlay from "@insite/mobius/LoadingOverlay";
 import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
-import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
+import { TypographyPresentationProps } from "@insite/mobius/Typography";
 import getColor from "@insite/mobius/utilities/getColor";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React, { FC, ReactNode } from "react";
@@ -54,12 +55,20 @@ interface OwnProps extends WidgetProps {
     };
 }
 
-const mapStateToProps = (state: ApplicationState, ownProps: OwnProps) => ({
-    isLoading: state.pages.productList.isLoading,
-    productsDataView: getProductListDataView(state),
-    // TODO ISC-13448 we no need ProductListSettings DefaultView, besause we use widget property productListDefaultView instead
-    view: state.pages.productList.view || ownProps.fields.productListDefaultView,
-});
+const mapStateToProps = (state: ApplicationState, ownProps: OwnProps) => {
+    const {
+        pages: {
+            productList: { isSearchPage },
+        },
+    } = state;
+    return {
+        isLoading: state.pages.productList.isLoading,
+        productsDataView: getProductListDataView(state),
+        // TODO ISC-13448 we no need ProductListSettings DefaultView, besause we use widget property productListDefaultView instead
+        view: state.pages.productList.view || ownProps.fields.productListDefaultView,
+        isSearchPage,
+    };
+};
 
 const mapDispatchToProps = {
     setView,
@@ -125,7 +134,7 @@ export const listStyles: ProductListCardListStyles = {
 
 const styles = listStyles;
 
-const ProductListCardList: FC<Props> = ({ isLoading, productsDataView, view, fields, setView }) => {
+const ProductListCardList: FC<Props> = ({ isLoading, productsDataView, view, fields, setView, id, isSearchPage }) => {
     if (isLoading && !productsDataView.value) {
         return (
             <StyledWrapper {...styles.centeringWrapper}>
@@ -148,19 +157,26 @@ const ProductListCardList: FC<Props> = ({ isLoading, productsDataView, view, fie
         return (
             <StyledWrapper {...styles.wrapper}>
                 <StyledWrapper {...styles.centeringWrapper} data-test-selector="productListNoneFound">
-                    <Typography {...styles.noProductsText}>{translate("No products found")}</Typography>
+                    {isSearchPage && <Zone contentId={id} zoneName="Content00" />}
+                    {!isSearchPage && <Zone contentId={id} zoneName="Content01" />}
                 </StyledWrapper>
             </StyledWrapper>
         );
     }
 
     const renderProducts = (children: ReactNode) => {
-        return products.map(product => (
-            <ProductListProductContext product={product} key={product.id}>
+        return products.map((product, idx) => (
+            <ProductListProductContext product={product} idx={idx} key={product.id}>
                 {children}
             </ProductListProductContext>
         ));
     };
+
+    const overriddenProps = { ...fields };
+    if (getIsWebCrawler()) {
+        overriddenProps.showAvailability = false;
+    }
+
     return (
         <StyledWrapper {...styles.wrapper}>
             <ProductListPageDataContext.Consumer>
@@ -172,16 +188,16 @@ const ProductListCardList: FC<Props> = ({ isLoading, productsDataView, view, fie
                 <Hidden below="md">
                     <CardList extendedStyles={styles.cardList} data-test-selector={`productListCardContainer${view}`}>
                         {view === "Table" ? (
-                            <ProductListTable products={products} {...fields} />
+                            <ProductListTable products={products} {...overriddenProps} />
                         ) : (
                             renderProducts(
                                 view === "List" ? (
                                     <CardContainer extendedStyles={styles.cardContainerStyles}>
-                                        <ProductListProductCard {...fields} />
+                                        <ProductListProductCard {...overriddenProps} />
                                     </CardContainer>
                                 ) : (
                                     <CardContainerMultiColumn extendedStyles={styles.cardContainerMultiColumnStyles}>
-                                        <ProductListProductGridCard {...fields} />
+                                        <ProductListProductGridCard {...overriddenProps} />
                                     </CardContainerMultiColumn>
                                 ),
                             )
@@ -192,7 +208,7 @@ const ProductListCardList: FC<Props> = ({ isLoading, productsDataView, view, fie
                     <CardList extendedStyles={styles.cardList} data-test-selector="cardListProductsNarrow">
                         {renderProducts(
                             <CardContainer extendedStyles={styles.cardContainerStyles}>
-                                <ProductListProductCard {...fields} />
+                                <ProductListProductCard {...overriddenProps} />
                             </CardContainer>,
                         )}
                     </CardList>

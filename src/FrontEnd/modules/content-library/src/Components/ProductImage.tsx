@@ -3,6 +3,7 @@ import { ProductContextModel } from "@insite/client-framework/Components/Product
 import translate from "@insite/client-framework/Translate";
 import { CartLineModel } from "@insite/client-framework/Types/ApiModels";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
+import Img, { ImgProps } from "@insite/mobius/Img";
 import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
 import React, { FC } from "react";
 import { css } from "styled-components";
@@ -16,7 +17,11 @@ type Props = OwnProps;
 
 export interface ProductImageStyles {
     linkWrappingImage?: ClickablePresentationProps;
+    /**
+     * @deprecated Use img instead
+     */
     image?: LazyImageProps;
+    img?: ImgProps;
 }
 
 export const productImageStyles: ProductImageStyles = {
@@ -30,6 +35,12 @@ export const productImageStyles: ProductImageStyles = {
             img {
                 height: 100%;
             }
+        `,
+    },
+    img: {
+        css: css`
+            height: auto;
+            width: 100%;
         `,
     },
 };
@@ -48,10 +59,11 @@ const ProductImage: FC<Props> = ({ product, extendedStyles }) => {
             : product.smallImagePath;
 
     const productDetailPath = "product" in product ? product.productInfo.productDetailPath : product.productUri;
+    const loading = product.idx === undefined ? "lazy" : product.idx < 3 ? "eager" : "lazy";
 
     return (
         <Clickable {...styles.linkWrappingImage} href={productDetailPath} data-test-selector="productImage">
-            <LazyImage {...styles.image} src={imagePath} altText={altText} />
+            <Img {...styles.img} loading={loading} src={imagePath} altText={altText} />
         </Clickable>
     );
 };

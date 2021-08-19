@@ -43,7 +43,10 @@ class CurrentCategory extends React.Component<Props> {
             if (categoryPath && !catalogPageState.isLoading) {
                 this.props.loadCatalogPageByPath({ path: categoryPath });
             }
-        } else if (catalogPageState.value.breadCrumbs && !this.props.breadcrumbLinks) {
+        } else if (
+            this.props.breadcrumbLinks?.map(o => o.children?.toString()).join(",") !==
+            catalogPageState.value.breadCrumbs?.map(o => o.text).join(",")
+        ) {
             this.setBreadcrumbs();
         }
     }

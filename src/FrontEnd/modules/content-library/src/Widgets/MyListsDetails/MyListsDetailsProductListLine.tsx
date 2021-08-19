@@ -4,6 +4,10 @@ import { ProductContext, ProductContextModel } from "@insite/client-framework/Co
 import siteMessage from "@insite/client-framework/SiteMessage";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
+import {
+    isWishListLineDiscontinued,
+    isWishListLineRestricted,
+} from "@insite/client-framework/Store/Data/WishListLines/WishListLinesSelectors";
 import setWishListLineIsSelected from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/SetWishListLineIsSelected";
 import updateQuantity from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/UpdateQuantity";
 import updateUnitOfMeasure from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/UpdateUnitOfMeasure";
@@ -372,28 +376,9 @@ const MyListsDetailsProductListLine: React.FC<Props> = ({
         updateWishListLineQuantities({ reloadWishListLines: true });
     };
 
-    const isDiscontinued = () => {
-        const availability = productInfo.inventory?.inventoryAvailabilityDtos?.find(
-            o => o.unitOfMeasure.toLowerCase() === productInfo.unitOfMeasure.toLowerCase(),
-        )?.availability;
-
-        return (
-            !wishListLine.isActive ||
-            (wishListLine.isDiscontinued && availability?.messageType === AvailabilityMessageType.OutOfStock)
-        );
-    };
-
-    const isRestricted = () => {
-        if (isDiscontinued()) {
-            return false;
-        }
-
-        return !wishListLine.isVisible;
-    };
-
     const canEditWishList = wishList.allowEdit || !wishList.isSharedList;
 
-    if (isRestricted() || isDiscontinued()) {
+    if (isWishListLineRestricted(wishListLine, productInfo) || isWishListLineDiscontinued(wishListLine, productInfo)) {
         return (
             <GridContainer
                 {...styles.lineInnerContainer}
@@ -420,8 +405,12 @@ const MyListsDetailsProductListLine: React.FC<Props> = ({
                 </GridItem>
                 <GridItem {...styles.priceAndAvailabilityGridItem}>
                     <Typography {...styles.restrictedMessageText} data-test-selector="restrictedMessage">
-                        {isRestricted() && <>{siteMessage("Lists_Item_Not_Displayed_Due_To_Restrictions")}</>}
-                        {isDiscontinued() && <>{siteMessage("Lists_Item_Not_Displayed_Due_To_Discontinued")}</>}
+                        {isWishListLineRestricted(wishListLine, productInfo) && (
+                            <>{siteMessage("Lists_Item_Not_Displayed_Due_To_Restrictions")}</>
+                        )}
+                        {isWishListLineDiscontinued(wishListLine, productInfo) && (
+                            <>{siteMessage("Lists_Item_Not_Displayed_Due_To_Discontinued")}</>
+                        )}
                     </Typography>
                 </GridItem>
                 <GridItem {...styles.buttonsGridItem}>

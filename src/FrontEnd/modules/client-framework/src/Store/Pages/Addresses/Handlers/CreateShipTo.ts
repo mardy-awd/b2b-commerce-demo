@@ -3,16 +3,16 @@ import {
     createShipTo as createShipToApi,
     CreateShipToApiParameter,
 } from "@insite/client-framework/Services/CustomersService";
-import { ShipToCollectionModel } from "@insite/client-framework/Types/ApiModels";
+import { ShipToModel } from "@insite/client-framework/Types/ApiModels";
 
-type HandlerType = ApiHandler<CreateShipToApiParameter, ShipToCollectionModel>;
+type HandlerType = ApiHandler<CreateShipToApiParameter, ShipToModel>;
 
 export const PopulateApiParameter: HandlerType = props => {
     props.apiParameter = props.parameter;
 };
 
 export const CreateShipTo: HandlerType = async props => {
-    await createShipToApi(props.apiParameter);
+    props.apiResult = await createShipToApi(props.apiParameter);
 };
 
 export const DispatchShipTosReset: HandlerType = props => {

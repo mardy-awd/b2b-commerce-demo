@@ -34,7 +34,7 @@ const ChangeCustomerSelectCustomer: FC<Props> = ({ fields }) => {
     const [shipTosParameter, setShipTosParameter] = useState<GetShipTosApiParameter>({
         page: 1,
         pageSize: 20,
-        expand: ["validation", "excludeShowAll", "excludeOneTime", "excludeCreateNew"],
+        expand: ["validation", "excludeShowAll", "excludeOneTime"],
     });
 
     return (

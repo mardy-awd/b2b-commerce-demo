@@ -1,5 +1,7 @@
 import sleep from "@insite/client-framework/Common/Sleep";
+import { getById } from "@insite/client-framework/Store/Data/DataState";
 import { loadPage } from "@insite/client-framework/Store/Data/Pages/PagesActionCreators";
+import { closeSiteHole, sendToSite } from "@insite/shell/Components/Shell/SiteHole";
 import {
     getPublishedPageVersions,
     PageVersionInfoModel,
@@ -17,6 +19,16 @@ export const closeComparison = (): AnyShellAction => ({
 export const configureComparison = (compareVersions: CompareModalState["compareVersions"]): AnyShellAction => ({
     type: "CompareModal/ConfigureComparison",
     compareVersions,
+});
+
+export const setLeftVersion = (pageVersion: PageVersionInfoModel): AnyShellAction => ({
+    type: "CompareModal/SetLeftVersion",
+    pageVersion,
+});
+
+export const setRightVersion = (pageVersion?: PageVersionInfoModel): AnyShellAction => ({
+    type: "CompareModal/SetRightVersion",
+    pageVersion,
 });
 
 export const setIsSideBySide = (isSideBySide: boolean): AnyShellAction => ({
@@ -53,24 +65,36 @@ export const loadPublishedPageVersions = (
     });
 };
 
-export const restoreVersion = (
-    pageVersion: PageVersionInfoModel,
-    pageId: string,
-): ShellThunkAction => async dispatch => {
+export const restoreVersion = (pageVersion: PageVersionInfoModel, pageId: string): ShellThunkAction => async (
+    dispatch,
+    getState,
+) => {
     const result = await restorePageVersion(pageVersion.versionId);
     if (result.success) {
         dispatch({
             type: "CompareModal/CompletePageVersionRestore",
             pageVersion,
         });
-
+        const page = getById(getState().data.pages, pageId).value;
+        dispatch({
+            type: "PageTree/UpdatePageState",
+            pageId,
+            parentId: page?.parentId || null,
+            publishOn: new Date(pageVersion.publishOn),
+            isWaitingForApproval: false,
+            publishInTheFuture: false,
+        });
+        sendToSite({ type: "Reload" });
+        closeSiteHole();
+        dispatch({ type: "Data/Pages/Reset" });
         dispatch(loadPage({ pathname: `/Content/Page/${pageId}`, search: "" } as Location));
     }
 };
 
-export const showCompleteVersionHistoryModal = (): AnyShellAction => ({
+export const showCompleteVersionHistoryModal = (side: "left" | "right"): AnyShellAction => ({
     type: "CompareModal/SetShowCompleteVersionHistory",
     showCompleteVersionHistory: true,
+    side,
 });
 
 export const closeCompleteVersionHistoryModal = (): AnyShellAction => ({

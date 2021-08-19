@@ -1,5 +1,6 @@
-import { Session } from "@insite/client-framework/Services/SessionService";
+(global as any).IS_SERVER_SIDE = false;
 
+import { Session } from "@insite/client-framework/Services/SessionService";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCurrentUserIsGuest, getIsPunchOutSession } from "@insite/client-framework/Store/Context/ContextSelectors";
 import ContextState from "@insite/client-framework/Store/Context/ContextState";

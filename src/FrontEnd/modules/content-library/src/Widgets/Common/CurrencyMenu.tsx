@@ -5,6 +5,7 @@ import setCurrency from "@insite/client-framework/Store/Context/Handlers/SetCurr
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import Select, { SelectPresentationProps } from "@insite/mobius/Select";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
@@ -67,11 +68,18 @@ interface OwnProps extends WidgetProps {
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
-const styles = currencyMenuStyles;
-const CurrencyMenu: FC<Props> = ({ currencies, currentCurrencyId, currentCurrencySymbol, fields, setCurrency }) => {
+export const CurrencyMenu: FC<Props> = ({
+    currencies,
+    currentCurrencyId,
+    currentCurrencySymbol,
+    fields,
+    setCurrency,
+}) => {
     if (!currencies || currencies.length <= 1) {
         return null;
     }
+
+    const styles = useMergeStyles("currencyMenu", currencyMenuStyles);
 
     const menuId = "currencyMenu";
 
@@ -86,6 +94,7 @@ const CurrencyMenu: FC<Props> = ({ currencies, currentCurrencyId, currentCurrenc
                 uid={menuId}
                 onChange={event => setCurrency({ currencyId: event.currentTarget.value })}
                 value={currentCurrencyId}
+                autoComplete="off"
             >
                 {currencies.map(c => (
                     <option value={c.id} key={c.id}>

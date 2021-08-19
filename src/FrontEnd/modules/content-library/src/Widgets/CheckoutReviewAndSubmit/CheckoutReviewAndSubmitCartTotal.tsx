@@ -76,7 +76,7 @@ const mapStateToProps = (state: ApplicationState) => {
         discountTotal,
         showPlaceOrderButton: canPlaceOrder(cartState.value),
         placeOrderErrorMessage: state.pages.checkoutReviewAndSubmit.placeOrderErrorMessage,
-        showSubmitForApprovalOrder: canSubmitForApprovalOrder(getCurrentCartState(state).value),
+        showSubmitForApprovalOrder: canSubmitForApprovalOrder(cartState.value),
         canUpdateShipToAddress:
             billTo?.isGuest ||
             shipTo?.oneTimeAddress ||

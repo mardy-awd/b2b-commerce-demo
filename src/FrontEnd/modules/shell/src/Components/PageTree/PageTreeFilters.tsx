@@ -17,8 +17,6 @@ import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled, { css } from "styled-components";
 
-interface OwnProps {}
-
 const mapStateToProps = (state: ShellState) => ({
     isLoadingFilters: state.pageTree.isLoadingFilters,
     potentialTreeFilters: state.pageTree.potentialTreeFilters,
@@ -35,12 +33,20 @@ const mapDispatchToProps = {
     clearFilters,
 };
 
-type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & OwnProps;
+type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
 interface State {
     queryBoxValue: string;
     potentialFiltersOpen: boolean;
+    treeFilters: TreeFilterModel[];
+    focusedTreeFilterIndex?: number;
 }
+
+const DOWN_KEY = 40;
+const UP_KEY = 38;
+const ENTER_KEY = 13;
+const ESC_KEY = 27;
+const backTreeFilter: TreeFilterModel = { value: "Back", key: "Back", type: "Back" };
 
 class PageTreeFilters extends ClickOutside<Props, State> {
     private readonly queryBoxInput: React.RefObject<HTMLInputElement>;
@@ -52,6 +58,7 @@ class PageTreeFilters extends ClickOutside<Props, State> {
         this.state = {
             queryBoxValue: props.treeFiltersQuery,
             potentialFiltersOpen: false,
+            treeFilters: this.getAllQuickFilters(),
         };
 
         this.queryBoxInput = React.createRef();
@@ -61,15 +68,26 @@ class PageTreeFilters extends ClickOutside<Props, State> {
         this.props.loadFiltersForQuery(this.state.queryBoxValue);
     };
 
-    potentialFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    queryBoxInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!this.state.queryBoxValue && !event.target.value.trim()) {
+            return;
+        }
+
         this.setState({
             queryBoxValue: event.target.value,
+            potentialFiltersOpen: true,
         });
         window.clearTimeout(this.timer);
         this.timer = window.setTimeout(this.dispatchFilterChange, 100);
     };
 
-    potentialFilterFocus = () => {
+    queryBoxInputFocus = () => {
+        this.setState({
+            potentialFiltersOpen: true,
+        });
+    };
+
+    queryBoxInputClick = () => {
         this.setState({
             potentialFiltersOpen: true,
         });
@@ -79,8 +97,10 @@ class PageTreeFilters extends ClickOutside<Props, State> {
         if (target === this.queryBoxInput.current) {
             return;
         }
+
         this.setState({
             potentialFiltersOpen: false,
+            focusedTreeFilterIndex: undefined,
         });
     }
 
@@ -108,14 +128,74 @@ class PageTreeFilters extends ClickOutside<Props, State> {
         this.props.removeFilter(treeFilter);
     };
 
-    createQuickFilter(value: string) {
-        const treeFilter = {
+    createQuickFilter = (value: string) => {
+        const treeFilter: TreeFilterModel = {
             value,
             key: value,
             type: "QuickFilter",
         };
 
-        return <QueryResultItem treeFilter={treeFilter} clickFilter={this.clickPotentialFilter} />;
+        return treeFilter;
+    };
+
+    getAllQuickFilters = () => {
+        return ["Language", "Customer Segment", "Device Type", "Page Status", "Tag"].map(this.createQuickFilter);
+    };
+
+    queryBoxInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        switch (event.keyCode) {
+            case DOWN_KEY:
+                event.preventDefault();
+                this.setState({
+                    focusedTreeFilterIndex:
+                        this.state.focusedTreeFilterIndex === undefined ||
+                        this.state.focusedTreeFilterIndex === this.state.treeFilters.length - 1
+                            ? 0
+                            : this.state.focusedTreeFilterIndex + 1,
+                });
+                break;
+            case UP_KEY:
+                event.preventDefault();
+                this.setState({
+                    focusedTreeFilterIndex:
+                        this.state.focusedTreeFilterIndex === undefined || this.state.focusedTreeFilterIndex === 0
+                            ? this.state.treeFilters.length - 1
+                            : this.state.focusedTreeFilterIndex - 1,
+                });
+                break;
+            case ENTER_KEY:
+                if (this.state.focusedTreeFilterIndex !== undefined) {
+                    this.clickPotentialFilter(this.state.treeFilters[this.state.focusedTreeFilterIndex]);
+                }
+                break;
+            case ESC_KEY:
+                this.setState({
+                    potentialFiltersOpen: false,
+                    focusedTreeFilterIndex: undefined,
+                });
+                this.queryBoxInput.current?.blur();
+                break;
+            default:
+                break;
+        }
+    };
+
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        const { potentialTreeFilters } = this.props;
+        const { queryBoxValue } = this.state;
+        if (prevProps.potentialTreeFilters !== potentialTreeFilters || prevState.queryBoxValue !== queryBoxValue) {
+            const treeFilters =
+                queryBoxValue === ""
+                    ? this.getAllQuickFilters()
+                    : potentialTreeFilters.length > 0
+                    ? potentialTreeFilters.concat([backTreeFilter])
+                    : potentialTreeFilters;
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({
+                treeFilters,
+                focusedTreeFilterIndex: undefined,
+            });
+        }
     }
 
     render() {
@@ -124,7 +204,7 @@ class PageTreeFilters extends ClickOutside<Props, State> {
         }
 
         const { potentialTreeFilters, extraTreeFilterCount, appliedTreeFilters } = this.props;
-        const { potentialFiltersOpen, queryBoxValue } = this.state;
+        const { potentialFiltersOpen, queryBoxValue, treeFilters } = this.state;
 
         return (
             <PageTreeFiltersStyle>
@@ -135,23 +215,24 @@ class PageTreeFilters extends ClickOutside<Props, State> {
                             data-test-selector="pageTreeFilters_queryBox"
                             potentialFiltersOpen={this.state.potentialFiltersOpen}
                             placeholder="Type or click to add filter"
-                            onChange={this.potentialFilterChange}
-                            onFocus={this.potentialFilterFocus}
+                            onKeyDown={this.queryBoxInputKeyDown}
+                            onChange={this.queryBoxInputChange}
+                            onFocus={this.queryBoxInputFocus}
+                            onClick={this.queryBoxInputClick}
                             value={this.state.queryBoxValue}
                         />
                         {this.props.isLoadingFilters && <LoadingSpinner {...loadingSpinnerProps} />}
                     </QueryBoxWrapper>
                     {potentialFiltersOpen && (
                         <QueryResults data-test-selector="pageTreeFilters_potentialFilters" ref={this.setWrapperRef}>
-                            {potentialTreeFilters.map(o => (
-                                <QueryResultItem key={o.key} treeFilter={o} clickFilter={this.clickPotentialFilter} />
-                            ))}
-                            {potentialTreeFilters.length > 0 && (
+                            {treeFilters.map((o, index) => (
                                 <QueryResultItem
-                                    treeFilter={{ value: "Back", key: "Back", type: "Back" }}
+                                    key={o.key}
+                                    treeFilter={o}
                                     clickFilter={this.clickPotentialFilter}
+                                    focused={index === this.state.focusedTreeFilterIndex}
                                 />
-                            )}
+                            ))}
                             {queryBoxValue !== "" && potentialTreeFilters.length === 0 && (
                                 <li data-test-selector="pageTreeFilters_noResultsFound">No Results Found</li>
                             )}
@@ -159,14 +240,6 @@ class PageTreeFilters extends ClickOutside<Props, State> {
                                 <li data-test-selector="pageTreeFilters_moreResultsFound">
                                     +{extraTreeFilterCount} More Results
                                 </li>
-                            )}
-                            {queryBoxValue === "" && (
-                                <>
-                                    {this.createQuickFilter("Language")}
-                                    {this.createQuickFilter("Customer Segment")}
-                                    {this.createQuickFilter("Device Type")}
-                                    {this.createQuickFilter("Page Status")}
-                                </>
                             )}
                         </QueryResults>
                     )}
@@ -195,6 +268,7 @@ class PageTreeFilters extends ClickOutside<Props, State> {
 class QueryResultItem extends React.Component<{
     treeFilter: TreeFilterModel;
     clickFilter: (treeFilter: TreeFilterModel) => void;
+    focused: boolean;
 }> {
     onClick = () => {
         this.props.clickFilter(this.props.treeFilter);
@@ -209,7 +283,12 @@ class QueryResultItem extends React.Component<{
             .replace("PageStatus", "Page Status");
 
         return (
-            <li key={key} data-test-selector={`pageTreeFilters_potentialFilters_${value}`} onClick={this.onClick}>
+            <li
+                key={key}
+                className={this.props.focused ? "focused" : ""}
+                data-test-selector={`pageTreeFilters_potentialFilters_${value}`}
+                onClick={this.onClick}
+            >
                 {type === "QuickFilter" || type === "Back" ? "" : `${displayType}:`} {value}
             </li>
         );
@@ -309,7 +388,8 @@ const QueryResults = styled.ul`
         font-size: 14px;
         padding: 5px 18px;
     }
-    & li:hover {
+    & li:hover,
+    & li.focused {
         cursor: pointer;
         color: ${getColor("secondary.contrast")};
         background-color: ${(props: ShellThemeProps) => props.theme.colors.text.main};

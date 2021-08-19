@@ -73,6 +73,12 @@ export const primaryImageStyles: ProductDetailsPrimaryImageStyles = {
                 }
             `,
         },
+        img: {
+            css: css`
+                width: auto;
+                max-height: 70vh;
+            `,
+        },
     },
 };
 

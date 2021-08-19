@@ -7,6 +7,7 @@ import {
 } from "@insite/client-framework/HandlerCreator";
 import { GetShipTosApiParameter } from "@insite/client-framework/Services/CustomersService";
 import { Session, updateSession } from "@insite/client-framework/Services/SessionService";
+import loadSession from "@insite/client-framework/Store/Context/Handlers/LoadSession";
 import { getBillToState } from "@insite/client-framework/Store/Data/BillTos/BillTosSelectors";
 import loadBillTo from "@insite/client-framework/Store/Data/BillTos/Handlers/LoadBillTo";
 import updateBillToChain from "@insite/client-framework/Store/Data/BillTos/Handlers/UpdateBillTo";
@@ -94,6 +95,10 @@ export const UpdateSession: HandlerType = async props => {
     });
 };
 
+export const LoadSession: HandlerType = props => {
+    props.dispatch(loadSession());
+};
+
 export const LoadCart: HandlerType = async props => {
     const state = props.getState();
     const { cartId } = state.pages.checkoutShipping;
@@ -134,6 +139,7 @@ export const chain = [
     GetDefaultShipTo,
     UpdateContext,
     UpdateSession,
+    LoadSession,
     LoadCart,
     DispatchCompleteUpdateBillTo,
     DispatchCompleteUpdateShipTo,

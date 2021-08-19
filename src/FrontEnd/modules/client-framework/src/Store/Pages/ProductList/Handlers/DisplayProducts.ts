@@ -3,10 +3,12 @@ import { createFromProduct, ProductInfo } from "@insite/client-framework/Common/
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
 import { trackSearchResultEvent } from "@insite/client-framework/Common/Utilities/tracking";
 import waitFor from "@insite/client-framework/Common/Utilities/waitFor";
+import { getIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
 import {
     createHandlerChainRunner,
     executeAwaitableHandlerChain,
     Handler,
+    makeHandlerChainAwaitable,
 } from "@insite/client-framework/HandlerCreator";
 import { CatalogPage } from "@insite/client-framework/Services/CategoryService";
 import {
@@ -26,7 +28,7 @@ import { getProductsDataView } from "@insite/client-framework/Store/Data/Product
 import setFilterQuery from "@insite/client-framework/Store/Pages/ProductList/Handlers/SetFilterQuery";
 import { getProductListDataViewProperty } from "@insite/client-framework/Store/Pages/ProductList/ProductListSelectors";
 import { ProductFilters } from "@insite/client-framework/Store/Pages/ProductList/ProductListState";
-import { ProductModel } from "@insite/client-framework/Types/ApiModels";
+import { ProductModel, RealTimePricingModel } from "@insite/client-framework/Types/ApiModels";
 import qs from "qs";
 
 const productListSortTypeCookie = "productListSortType";
@@ -196,10 +198,26 @@ export const DispatchSetParameter: HandlerType = props => {
 };
 
 export const DispatchLoadProducts: HandlerType = async props => {
-    props.result.products = getProductsDataView(props.getState(), props.apiParameter).value;
-
+    const state = props.getState();
+    props.result.products = getProductsDataView(state, props.apiParameter).value;
     if (props.result.products) {
-        return;
+        const attributeTypeFacetIds = getProductListDataViewProperty(state, "attributeTypeFacets")?.map(
+            o => o.attributeTypeId,
+        );
+
+        let attributeTypeIds: string[] = [];
+        props.result.products.forEach(product => {
+            const ids = product.attributeTypes?.map(o => o.id) || [];
+            attributeTypeIds = attributeTypeIds.concat(ids);
+        });
+        if (attributeTypeIds.length === attributeTypeFacetIds?.length) {
+            const isAllAttributesAssignedToCategory = attributeTypeIds.every(
+                o => attributeTypeFacetIds.indexOf(o) > -1,
+            );
+            if (isAllAttributesAssignedToCategory) {
+                return;
+            }
+        }
     }
 
     props.result.products = await executeAwaitableHandlerChain(loadProducts, props.apiParameter, props);
@@ -294,31 +312,46 @@ export const LoadRealTimePrices: HandlerType = async props => {
         return;
     }
 
-    props.dispatch(
-        loadRealTimePricing({
-            productPriceParameters: productIds.map(o => productInfosByProductId[o]!),
-            onSuccess: realTimePricing => {
-                props.dispatch({
-                    type: "Pages/ProductList/CompleteLoadRealTimePricing",
-                    realTimePricing,
-                });
-                props.pricingLoaded = true;
-            },
-            onError: () => {
-                props.dispatch({
-                    type: "Pages/ProductList/FailedLoadRealTimePricing",
-                });
-                props.pricingLoaded = true;
-            },
-            onComplete(realTimePricingProps) {
-                if (realTimePricingProps.apiResult) {
-                    this.onSuccess?.(realTimePricingProps.apiResult);
-                } else if (realTimePricingProps.error) {
-                    this.onError?.(realTimePricingProps.error);
-                }
-            },
-        }),
-    );
+    const loadRealTimePricingParameter: Parameters<typeof loadRealTimePricing>[0] = {
+        productPriceParameters: productIds.map(o => productInfosByProductId[o]!),
+        onSuccess: realTimePricing => {
+            props.dispatch({
+                type: "Pages/ProductList/CompleteLoadRealTimePricing",
+                realTimePricing,
+            });
+            props.pricingLoaded = true;
+        },
+        onError: () => {
+            props.dispatch({
+                type: "Pages/ProductList/FailedLoadRealTimePricing",
+            });
+            props.pricingLoaded = true;
+        },
+        onComplete(realTimePricingProps) {
+            if (realTimePricingProps.apiResult) {
+                this.onSuccess?.(realTimePricingProps.apiResult);
+            } else if (realTimePricingProps.error) {
+                this.onError?.(realTimePricingProps.error);
+            }
+        },
+    };
+
+    if (IS_SERVER_SIDE && getIsWebCrawler()) {
+        const awaitableLoadRealTimePricing = makeHandlerChainAwaitable<
+            Parameters<typeof loadRealTimePricing>[0],
+            RealTimePricingModel
+        >(loadRealTimePricing);
+        const realTimePricing = await awaitableLoadRealTimePricing({
+            productPriceParameters: loadRealTimePricingParameter.productPriceParameters,
+        })(props.dispatch, props.getState);
+        if (realTimePricing) {
+            loadRealTimePricingParameter.onSuccess?.(realTimePricing);
+        } else {
+            loadRealTimePricingParameter.onError?.(realTimePricing);
+        }
+    } else {
+        props.dispatch(loadRealTimePricing(loadRealTimePricingParameter));
+    }
 
     if (getSettingsCollection(props.getState()).productSettings.inventoryIncludedWithPricing) {
         await waitFor(() => !!props.pricingLoaded);
@@ -326,7 +359,7 @@ export const LoadRealTimePrices: HandlerType = async props => {
 };
 
 export const LoadRealTimeInventory: HandlerType = props => {
-    if (!props.result.products?.length) {
+    if (!props.result.products?.length || getIsWebCrawler()) {
         return;
     }
 

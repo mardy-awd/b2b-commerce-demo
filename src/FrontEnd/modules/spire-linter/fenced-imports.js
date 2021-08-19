@@ -66,7 +66,10 @@ const allowedModules = {
         ["@insite/content-library", "@insite/client-framework", "@insite/mobius", "@insite/shell-public"],
     ],
     "client-framework": [validClientImports, ["@insite/client-framework", "@insite/mobius"]],
-    "content-library": [validClientImports, ["@insite/content-library", "@insite/client-framework", "@insite/mobius"]],
+    "content-library": [
+        validClientImports,
+        ["@insite/content-library", "@insite/client-framework", "@insite/mobius", "enzyme", "jest-styled-components"],
+    ],
     mobius: [validMobiusImports, ["@insite/mobius"]],
     "server-framework": [
         validServerImports,

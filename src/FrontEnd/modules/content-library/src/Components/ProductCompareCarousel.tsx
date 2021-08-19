@@ -427,21 +427,6 @@ const Carousel = ({
             loop: true,
         });
         setCanScroll();
-
-        const onMainSelect = () => {
-            emblaSecond.scrollTo(embla.selectedScrollSnap());
-        };
-        const onSecondSelect = () => {
-            embla.scrollTo(emblaSecond.selectedScrollSnap());
-        };
-
-        embla.on("select", onMainSelect);
-        emblaSecond.on("select", onSecondSelect);
-
-        return () => {
-            embla.off("select", onMainSelect);
-            emblaSecond.off("select", onSecondSelect);
-        };
     }, [embla, emblaSecond, slidesToScroll, draggable, slideDetails]);
 
     const getProductAttributeValue = (product: ProductModel, attribute: AttributeTypeModel) => {
@@ -490,6 +475,7 @@ const Carousel = ({
                             {...styles.prevArrowButton}
                             onClick={() => {
                                 embla && embla.scrollPrev();
+                                emblaSecond && emblaSecond.scrollPrev();
                             }}
                             disabled={!canScrollPrev}
                             data-test-selector="prevBtn"
@@ -582,6 +568,7 @@ const Carousel = ({
                             {...styles.nextArrowButton}
                             onClick={() => {
                                 embla && embla.scrollNext();
+                                emblaSecond && emblaSecond.scrollNext();
                             }}
                             disabled={!canScrollNext}
                             data-test-selector="nextBtn"

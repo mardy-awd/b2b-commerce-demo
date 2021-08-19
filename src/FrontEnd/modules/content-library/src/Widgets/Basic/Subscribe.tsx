@@ -3,6 +3,7 @@ import siteMessage from "@insite/client-framework/SiteMessage";
 import subscribe from "@insite/client-framework/Store/CommonHandlers/Subscribe";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -104,11 +105,9 @@ export const subscribeStyles: SubscribeStyles = {
     },
 };
 
-const styles = subscribeStyles;
-
 const emailRegexp = new RegExp("\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
 
-const CmsSubscribe = ({ fields, subscribe, id }: Props) => {
+export const CmsSubscribe = ({ fields, subscribe, id }: Props) => {
     const emailRequiredFieldMessage = siteMessage("EmailSubscription_EmailIsRequiredErrorMessage");
     const emailFieldMessage = siteMessage("EmailSubscription_EmailIsInvalidErrorMessage");
 
@@ -116,6 +115,8 @@ const CmsSubscribe = ({ fields, subscribe, id }: Props) => {
     const [emailError, setEmailError] = useState(emailRequiredFieldMessage);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const toasterContext = useContext(ToasterContext);
+
+    const styles = useMergeStyles("subscribe", subscribeStyles);
 
     const onSubscribeClick = () => {
         setIsSubmitted(true);

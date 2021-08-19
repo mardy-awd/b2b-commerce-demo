@@ -259,6 +259,34 @@ export const scheduleReminderModalStyles: ScheduleReminderModalStyles = {
                 )}
         `,
     },
+    startDatePicker: {
+        calendarIconProps: {
+            css: css`
+                width: 28px !important;
+                padding: 8px 4px !important;
+            `,
+        },
+        clearIconProps: {
+            css: css`
+                width: 28px !important;
+                padding: 8px 4px !important;
+            `,
+        },
+    },
+    endDatePicker: {
+        calendarIconProps: {
+            css: css`
+                width: 28px !important;
+                padding: 8px 4px !important;
+            `,
+        },
+        clearIconProps: {
+            css: css`
+                width: 28px !important;
+                padding: 8px 4px !important;
+            `,
+        },
+    },
 };
 
 const styles = scheduleReminderModalStyles;

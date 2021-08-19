@@ -1,3 +1,4 @@
+import { ShellContext } from "@insite/client-framework/Components/IsInShell";
 import MissingComponent from "@insite/client-framework/Components/MissingComponent";
 import { getPageByUrl } from "@insite/client-framework/Services/ContentService";
 import { loadPage } from "@insite/client-framework/Store/Data/Pages/PagesActionCreators";
@@ -97,7 +98,14 @@ class PageEditor extends React.Component<Props, PageEditorState> {
             return null;
         }
         if (!pageDefinition && !switchingToPage && page.type !== nullPage.type) {
-            return <MissingComponent type={page.type} isWidget={false} />;
+            return (
+                <ShellContext.Provider value={{ isInShell: true, pageId: page.id }}>
+                    <MissingComponent type={page.type} isWidget={false} />
+                </ShellContext.Provider>
+            );
+        }
+        if (!pageDefinition) {
+            return null;
         }
 
         return (

@@ -9,8 +9,9 @@ import ToasterContext from "@insite/mobius/Toast/ToasterContext";
 import Tooltip, { TooltipPresentationProps } from "@insite/mobius/Tooltip";
 import Typography from "@insite/mobius/Typography";
 import getColor from "@insite/mobius/utilities/getColor";
+import { useShellDispatch, useShellSelector } from "@insite/shell/Common/Hooks/reduxHooks";
 import BadgeDefault from "@insite/shell/Components/Icons/BadgeDefault";
-import { ContentContextModel } from "@insite/shell/Services/ContentAdminService";
+import { ContentContextModel, PagePublishInfo } from "@insite/shell/Services/ContentAdminService";
 import { configureComparison } from "@insite/shell/Store/CompareModal/CompareModalActionCreators";
 import {
     closePublishModal,
@@ -22,60 +23,9 @@ import {
     setRollbackOn,
     togglePublishInTheFuture,
 } from "@insite/shell/Store/PublishModal/PublishModalActionCreators";
-import ShellState from "@insite/shell/Store/ShellState";
 import React, { useEffect } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled, { css } from "styled-components";
-
-const mapStateToProps = (state: ShellState) => {
-    const {
-        compareModal: { compareVersions },
-        shellContext: { languagesById, personasById, permissions, stageMode, currentLanguageId },
-        publishModal: {
-            showModal,
-            publishInTheFuture,
-            pagePublishInfosState,
-            publishOn,
-            rollbackOn,
-            isEditingExistingPublish,
-            failedToPublishPageIds,
-            pagePublishInfoIsSelected,
-            isBulkPublish,
-        },
-    } = state;
-
-    const page = getCurrentPage(state);
-
-    return {
-        visible: !!showModal && !compareVersions,
-        publishImmediately: !publishInTheFuture,
-        page,
-        pagePublishInfosState,
-        languagesById,
-        personasById,
-        permissions,
-        isEditingExistingPublish,
-        publishOn,
-        rollbackOn,
-        failedToPublishPageIds,
-        isBulkPublish,
-        pagePublishInfoIsSelected,
-        stageMode,
-        currentLanguageId,
-    };
-};
-
-const mapDispatchToProps = {
-    closePublishModal,
-    togglePublishInTheFuture,
-    publish,
-    loadAllPagePublishInfo,
-    setPublishOn,
-    setRollbackOn,
-    setIsSelected,
-    setIsSelectedForAll,
-    configureComparison,
-};
 
 export interface PublishPageSelection {
     pageId: string;
@@ -174,37 +124,31 @@ const styles: PublishModalStyles = {
     },
 };
 
-type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
+const PublishModal: React.FC = () => {
+    const {
+        showModal,
+        publishInTheFuture,
+        pagePublishInfosState,
+        publishOn,
+        rollbackOn,
+        isEditingExistingPublish,
+        failedToPublishPageIds,
+        pagePublishInfoIsSelected,
+        isBulkPublish,
+    } = useShellSelector(state => state.publishModal);
+    const compareVersions = useShellSelector(state => state.compareModal.compareVersions);
+    const page = useShellSelector(state => getCurrentPage(state));
+    const languagesById = useShellSelector(state => state.shellContext.languagesById);
+    const personasById = useShellSelector(state => state.shellContext.personasById);
+    const permissions = useShellSelector(state => state.shellContext.permissions);
+    const stageMode = useShellSelector(state => state.shellContext.stageMode);
+    const currentLanguageId = useShellSelector(state => state.shellContext.currentLanguageId);
 
-const PublishModal: React.FC<Props> = ({
-    visible,
-    closePublishModal,
-    loadAllPagePublishInfo,
-    publishImmediately,
-    togglePublishInTheFuture,
-    pagePublishInfosState,
-    page: {
-        id,
-        fields: { title },
-    },
-    publish,
-    languagesById,
-    personasById,
-    permissions,
-    publishOn,
-    rollbackOn,
-    setPublishOn,
-    setRollbackOn,
-    isEditingExistingPublish,
-    failedToPublishPageIds,
-    isBulkPublish,
-    pagePublishInfoIsSelected,
-    setIsSelected,
-    setIsSelectedForAll,
-    configureComparison,
-    stageMode,
-    currentLanguageId,
-}) => {
+    const dispatch = useShellDispatch();
+
+    const visible = !!showModal && !compareVersions;
+    const publishImmediately = !publishInTheFuture;
+
     const [selectAll, setSelectAll] = React.useState<boolean | "indeterminate">(true);
     const toasterContext = React.useContext(ToasterContext);
 
@@ -212,8 +156,8 @@ const PublishModal: React.FC<Props> = ({
         if (!visible) {
             return;
         }
-        loadAllPagePublishInfo(id);
-    }, [visible, id]);
+        dispatch(loadAllPagePublishInfo(page.id));
+    }, [visible, page.id]);
 
     useEffect(() => {
         if (pagePublishInfoIsSelected.every(o => o)) {
@@ -223,7 +167,7 @@ const PublishModal: React.FC<Props> = ({
         } else {
             setSelectAll("indeterminate");
         }
-    }, [pagePublishInfoIsSelected, setIsSelected]);
+    }, [pagePublishInfoIsSelected]);
 
     const nothingToPublish =
         pagePublishInfosState.value &&
@@ -272,26 +216,62 @@ const PublishModal: React.FC<Props> = ({
     };
 
     const publishOnChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
-        setPublishOn(selectedDay);
+        dispatch(setPublishOn(selectedDay));
     };
 
     const rollbackOnChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
-        setRollbackOn(selectedDay);
+        dispatch(setRollbackOn(selectedDay));
     };
 
     const selectAllChangeHandler: CheckboxProps["onChange"] = (_, value) => {
-        setIsSelectedForAll(value);
+        dispatch(setIsSelectedForAll(value));
         setSelectAll(value);
     };
 
-    const removeFuturePublishClickHandler = () => {
-        setPublishOn(undefined);
-        setRollbackOn(undefined);
-        publish(toasterContext);
+    const selectChangeHandler = (index: number, value: boolean) => {
+        dispatch(setIsSelected(index, value));
+        if (!value) {
+            return;
+        }
+
+        if (!pagePublishInfosState?.value) {
+            return;
+        }
+
+        const selectedElement = pagePublishInfosState.value[index];
+        if (!selectedElement) {
+            return;
+        }
+
+        const pageId = selectedElement.pageId;
+        const mainPageIndex = pagePublishInfosState.value.findIndex(
+            o => o.pageId === pageId && !o.published && !o.deviceType && !o.personaId && !o.languageId,
+        );
+
+        if (mainPageIndex) {
+            dispatch(setIsSelected(mainPageIndex, value));
+        }
     };
 
-    const size =
-        nothingToPublish || hasFewPagesForApproval || hasFailedToPublishPages ? 350 : isBulkPublish ? 980 : undefined;
+    const isMainPageDisabled = (page: PagePublishInfo): boolean => {
+        if (page.published || page.deviceType || page.personaId || page.languageId) {
+            return false;
+        }
+
+        const otherVersions = pagePublishInfosState.value?.find(
+            (o, index) => o.pageId === page.pageId && o !== page && pagePublishInfoIsSelected[index],
+        );
+
+        return !!otherVersions;
+    };
+
+    const removeFuturePublishClickHandler = () => {
+        dispatch(setPublishOn(undefined));
+        dispatch(setRollbackOn(undefined));
+        dispatch(publish(toasterContext));
+    };
+
+    const size = nothingToPublish || hasFewPagesForApproval || hasFailedToPublishPages ? 350 : 980;
 
     return (
         <ModalStyle
@@ -299,8 +279,8 @@ const PublishModal: React.FC<Props> = ({
             data-test-selector="publishModal"
             size={size}
             isOpen={visible}
-            handleClose={closePublishModal}
-            headline="Publish Page"
+            handleClose={() => dispatch(closePublishModal())}
+            headline={isBulkPublish ? "Bulk Publish Pages" : "Publish Page"}
             data-hide={pagePublishInfosState.isLoading}
             {...styles.modal}
         >
@@ -361,7 +341,6 @@ const PublishModal: React.FC<Props> = ({
                                         modifiedOn,
                                         pageId,
                                         name,
-                                        unpublished,
                                         published,
                                     } = pagePublishInfo;
                                     const contextString = getContextualId(
@@ -371,6 +350,14 @@ const PublishModal: React.FC<Props> = ({
                                         isBulkPublish ? pageId : "",
                                     );
                                     const testSelector = `publishContextRow${index}`;
+
+                                    if (
+                                        (languageId && !languagesById[languageId]) ||
+                                        (personaId && !personasById[personaId])
+                                    ) {
+                                        return <></>;
+                                    }
+
                                     return (
                                         <tr key={contextString} data-test-selector={testSelector}>
                                             <td>
@@ -379,15 +366,17 @@ const PublishModal: React.FC<Props> = ({
                                                     checked={
                                                         pagePublishInfoIsSelected[index] || isEditingExistingPublish
                                                     }
-                                                    disabled={isEditingExistingPublish}
+                                                    disabled={
+                                                        isEditingExistingPublish || isMainPageDisabled(pagePublishInfo)
+                                                    }
                                                     onChange={(_, value) => {
-                                                        setIsSelected(index, value);
+                                                        selectChangeHandler(index, value);
                                                     }}
                                                 />
                                             </td>
                                             <td data-test-selector={`${testSelector}_title`}>
                                                 <NameStyle>
-                                                    {isBulkPublish ? name : title} <BadgeDefault />
+                                                    {isBulkPublish ? name : page.fields.title} <BadgeDefault />
                                                 </NameStyle>
                                             </td>
                                             <td data-test-selector={`${testSelector}_language`}>
@@ -409,16 +398,16 @@ const PublishModal: React.FC<Props> = ({
                                                         data-test-selector={`${testSelector}_compareButton`}
                                                         variant="tertiary"
                                                         onClick={() => {
-                                                            configureComparison({
-                                                                unpublished,
-                                                                published,
-                                                                languageId: languageId ?? currentLanguageId,
-                                                                personaId,
-                                                                deviceType,
-                                                                stageMode,
-                                                                pageId,
-                                                                name,
-                                                            });
+                                                            dispatch(
+                                                                configureComparison({
+                                                                    languageId: languageId ?? currentLanguageId,
+                                                                    personaId,
+                                                                    deviceType,
+                                                                    stageMode,
+                                                                    pageId,
+                                                                    name,
+                                                                }),
+                                                            );
                                                         }}
                                                     >
                                                         Compare
@@ -433,7 +422,10 @@ const PublishModal: React.FC<Props> = ({
                     </PublishableContextTableWrapper>
                     <PublishLaterContainer>
                         <div>
-                            <Checkbox checked={publishImmediately} onChange={togglePublishInTheFuture}>
+                            <Checkbox
+                                checked={publishImmediately}
+                                onChange={() => dispatch(togglePublishInTheFuture())}
+                            >
                                 Publish Immediately
                             </Checkbox>
                             <br />
@@ -480,7 +472,7 @@ const PublishModal: React.FC<Props> = ({
                 </>
             )}
             <PublishCancelButtonContainer>
-                <CancelButton variant="tertiary" onClick={closePublishModal}>
+                <CancelButton variant="tertiary" onClick={() => dispatch(closePublishModal())}>
                     Cancel
                 </CancelButton>
                 {isEditingExistingPublish && !publishImmediately && (
@@ -507,7 +499,7 @@ const PublishModal: React.FC<Props> = ({
                             (!publishImmediately && !publishOn) ||
                             allPagesSkipped
                         }
-                        onClick={() => publish(toasterContext)}
+                        onClick={() => dispatch(publish(toasterContext))}
                     >
                         {hasFailedToPublishPages
                             ? permissions?.canPublishContent
@@ -584,8 +576,8 @@ const PublishableContextTableWrapper = styled.div`
 `;
 
 const ButtonInTable = styled(Button)`
-    padding: 1px 4px 0;
-    height: 20px;
+    padding: 1px 4px;
+    min-height: 20px;
     white-space: nowrap;
     > span {
         font-size: 13px;
@@ -596,12 +588,6 @@ const PublishLaterContainer = styled.div`
     padding: 15px 9px;
     display: flex;
     flex-wrap: wrap;
-
-    && {
-        .react-datetime-picker {
-            width: 282px;
-        }
-    }
 
     > div:first-child {
         flex-basis: 100%;
@@ -635,4 +621,4 @@ const NameStyle = styled.div`
     }
 `;
 
-export default connect(mapStateToProps, mapDispatchToProps)(PublishModal);
+export default PublishModal;

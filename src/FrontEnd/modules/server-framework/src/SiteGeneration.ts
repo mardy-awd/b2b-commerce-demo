@@ -238,7 +238,7 @@ async function setupPage(
             if (autoUpdateData?.templateHash === pageModel.templateHash) {
                 return;
             }
-            pageId = autoUpdateData.pageId;
+            pageId = autoUpdateData?.pageId;
         }
     }
 

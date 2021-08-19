@@ -17,7 +17,7 @@ const CategoryImage: React.FC<Props> = ({ category }) => {
         return null;
     }
 
-    return <LazyImage src={category.largeImagePath} altText="" {...categoryImageStyles.image} />;
+    return <LazyImage src={category.largeImagePath} altText={category.imageAltText} {...categoryImageStyles.image} />;
 };
 
 const widgetModule: WidgetModule = {

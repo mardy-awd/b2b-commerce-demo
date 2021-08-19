@@ -1,6 +1,5 @@
 import { getFocalPointStyles, parserOptions } from "@insite/client-framework/Common/BasicSelectors";
 import useRecursiveTimeout from "@insite/client-framework/Common/Hooks/useRecursiveTimeout";
-import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { responsiveStyleRules } from "@insite/client-framework/Common/Utilities/responsive";
 import { useGetLinks } from "@insite/client-framework/Store/Links/LinksSelectors";
@@ -8,6 +7,7 @@ import { HasFields } from "@insite/client-framework/Types/ContentItemModel";
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import Button, { ButtonIcon, ButtonPresentationProps } from "@insite/mobius/Button";
 import { IconPresentationProps } from "@insite/mobius/Icon";
 import ChevronLeft from "@insite/mobius/Icons/ChevronLeft";
@@ -218,10 +218,10 @@ export const slideshowStyles: SlideshowStyles = {
     },
 };
 
-const Slideshow: FC<OwnProps> = ({ fields, extendedStyles }) => {
+export const Slideshow: FC<OwnProps> = ({ fields, extendedStyles }) => {
     const history = useHistory();
     const buttonLinks = useGetLinks(fields.slides, o => o.fields.buttonLink);
-    const [styles] = useState(() => mergeToNew(slideshowStyles, extendedStyles));
+    const styles = useMergeStyles("slideshow", slideshowStyles, extendedStyles);
 
     const [emblaRef, embla] = useEmblaCarousel();
     const [selectedIndex, setSelectedIndex] = useState(0);

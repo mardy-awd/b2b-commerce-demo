@@ -3,16 +3,17 @@ import parseQueryString from "@insite/client-framework/Common/Utilities/parseQue
 import Zone from "@insite/client-framework/Components/Zone";
 import siteMessage from "@insite/client-framework/SiteMessage";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import setBreadcrumbs from "@insite/client-framework/Store/Components/Breadcrumbs/Handlers/SetBreadcrumbs";
+import { getCurrentPage, getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { getWishListState } from "@insite/client-framework/Store/Data/WishLists/WishListsSelectors";
+import { getHomePageUrl } from "@insite/client-framework/Store/Links/LinksSelectors";
 import activateInvite from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/ActivateInvite";
 import loadWishListIfNeeded from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/LoadWishListIfNeeded";
 import setAllWishListLinesIsSelected from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/SetAllWishListLinesIsSelected";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
-import ManageShareListModal from "@insite/content-library/Components/ManageShareListModal";
 import Modals from "@insite/content-library/Components/Modals";
-import ShareListModal from "@insite/content-library/Components/ShareListModal";
+import { generateLinksFrom } from "@insite/content-library/Components/PageBreadcrumbs";
 import Page from "@insite/mobius/Page";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import getColor from "@insite/mobius/utilities/getColor";
@@ -25,12 +26,17 @@ import { css } from "styled-components";
 const mapStateToProps = (state: ApplicationState) => {
     const location = getLocation(state);
     const parsedQuery = parseQueryString<{ id?: string; invite?: string }>(location.search);
+    const homePageUrl = getHomePageUrl(state);
     const id = parsedQuery.id;
     return {
         invite: parsedQuery.invite,
         location,
+        homePageUrl,
         wishListId: id,
         wishListState: getWishListState(state, id),
+        parentNodeId: getCurrentPage(state).parentId,
+        links: state.links,
+        breadcrumbLinks: state.components.breadcrumbs.links,
     };
 };
 
@@ -38,6 +44,7 @@ const mapDispatchToProps = {
     activateInvite,
     loadWishListIfNeeded,
     setAllWishListLinesIsSelected,
+    setBreadcrumbs,
 };
 
 type Props = ResolveThunks<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps> & PageProps & HasHistory;
@@ -73,6 +80,14 @@ class MyListsDetailsPage extends React.Component<Props, State> {
         };
     }
 
+    private checkState() {
+        if (!this.props.breadcrumbLinks && this.props.wishListState.value) {
+            const newLinks = generateLinksFrom(this.props.links, this.props.parentNodeId, this.props.homePageUrl);
+            newLinks.push({ children: this.props.wishListState.value?.name });
+            this.props.setBreadcrumbs({ links: newLinks });
+        }
+    }
+
     componentDidMount(): void {
         if (this.props.wishListId) {
             this.props.setAllWishListLinesIsSelected({ isSelected: false });
@@ -99,6 +114,10 @@ class MyListsDetailsPage extends React.Component<Props, State> {
         }
     }
 
+    UNSAFE_componentWillMount() {
+        this.checkState();
+    }
+
     componentDidUpdate(): void {
         if (
             !this.props.wishListState.value &&
@@ -108,6 +127,8 @@ class MyListsDetailsPage extends React.Component<Props, State> {
         ) {
             this.props.loadWishListIfNeeded({ wishListId: this.props.wishListId });
         }
+
+        this.checkState();
     }
 
     render() {
@@ -126,8 +147,6 @@ class MyListsDetailsPage extends React.Component<Props, State> {
                     <Zone contentId={this.props.id} zoneName="Content" />
                 )}
                 <Modals />
-                <ShareListModal />
-                <ManageShareListModal />
             </Page>
         );
     }

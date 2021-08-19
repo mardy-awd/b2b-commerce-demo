@@ -2,6 +2,7 @@ import { createFromProduct, ProductInfo } from "@insite/client-framework/Common/
 import throwErrorIfTesting from "@insite/client-framework/Common/ThrowErrorIfTesting";
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
 import waitFor from "@insite/client-framework/Common/Utilities/waitFor";
+import { getIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
 import {
     createHandlerChainRunner,
     executeAwaitableHandlerChain,
@@ -214,7 +215,7 @@ export const LoadRealTimePrices: HandlerType = async props => {
 };
 
 export const LoadRealTimeInventory: HandlerType = props => {
-    if (!props.product) {
+    if (!props.product || getIsWebCrawler()) {
         return;
     }
 

@@ -1,3 +1,4 @@
+import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import { emptyGuid } from "@insite/client-framework/Common/StringHelpers";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { Dictionary } from "@insite/client-framework/Common/Types";
@@ -19,6 +20,7 @@ import { HasFields } from "@insite/client-framework/Types/ContentItemModel";
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { StylesContext } from "@insite/content-library/additionalStyles";
 import MainNavigationItem from "@insite/content-library/Components/MainNavigationItem";
 import NavigationDrawer from "@insite/content-library/Components/NavigationDrawer";
 import SearchInput, { SearchInputStyles } from "@insite/content-library/Widgets/Header/SearchInput";
@@ -423,9 +425,7 @@ export const mainNavigationStyles: MainNavigationStyles = {
     },
 };
 
-const styles = mainNavigationStyles;
-
-class MainNavigation extends React.Component<Props, State> {
+export class MainNavigation extends React.Component<Props, State> {
     container = React.createRef<HTMLDivElement>();
     mobileSearchInput = React.createRef<HTMLInputElement>();
 
@@ -510,6 +510,8 @@ class MainNavigation extends React.Component<Props, State> {
         const { selectedLinkIndex } = this.state;
 
         const showQuickOrderLink = showQuickOrder && allowQuickOrder;
+        const mainNavContextStyles = this?.context?.styles?.mainNavigation ?? {};
+        const styles = mergeToNew(mainNavigationStyles, mainNavContextStyles);
 
         return (
             <>
@@ -580,6 +582,8 @@ class MainNavigation extends React.Component<Props, State> {
         );
     }
 }
+
+MainNavigation.contextType = StylesContext;
 
 const mainNavigation: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(MainNavigation),

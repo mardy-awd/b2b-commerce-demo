@@ -1,4 +1,5 @@
 /* eslint-disable spire/export-styles */
+import { getIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
 import { HasProduct, withProduct } from "@insite/client-framework/Components/ProductContext";
 import { ConfigurationType } from "@insite/client-framework/Services/ProductServiceV2";
 import ProductAvailability, { ProductAvailabilityStyles } from "@insite/content-library/Components/ProductAvailability";
@@ -27,6 +28,7 @@ const ProductContextAvailability = ({
         )?.availability || undefined;
 
     if (
+        getIsWebCrawler() ||
         product.isVariantParent ||
         (!!product.configurationType &&
             product.configurationType !== ConfigurationType.None &&

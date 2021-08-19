@@ -7,6 +7,7 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import removeWishListShare from "@insite/client-framework/Store/Components/ManageShareListModal/Handlers/RemoveWishListShare";
 import setManageShareListModalIsOpen from "@insite/client-framework/Store/Components/ManageShareListModal/Handlers/SetManageShareListModalIsOpen";
 import setShareListModalIsOpen from "@insite/client-framework/Store/Components/ShareListModal/Handlers/SetShareListModalIsOpen";
+import loadWishList from "@insite/client-framework/Store/Data/WishLists/Handlers/LoadWishList";
 import updateWishList from "@insite/client-framework/Store/Data/WishLists/Handlers/UpdateWishList";
 import { getWishListState } from "@insite/client-framework/Store/Data/WishLists/WishListsSelectors";
 import translate from "@insite/client-framework/Translate";
@@ -24,7 +25,7 @@ import Radio, { RadioProps } from "@insite/mobius/Radio";
 import RadioGroup, { RadioGroupProps } from "@insite/mobius/RadioGroup";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -37,7 +38,8 @@ type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeo
 const mapStateToProps = (state: ApplicationState) => ({
     session: state.context.session,
     modalIsOpen: state.components.manageShareListModal.isOpen,
-    wishList: getWishListState(state, state.components.manageShareListModal.wishListId).value,
+    wishListId: state.components.manageShareListModal.wishListId,
+    wishListState: getWishListState(state, state.components.manageShareListModal.wishListId),
 });
 
 const mapDispatchToProps = {
@@ -45,6 +47,7 @@ const mapDispatchToProps = {
     setShareListModalIsOpen,
     removeWishListShare,
     updateWishList: makeHandlerChainAwaitable(updateWishList),
+    loadWishList,
 };
 
 export interface ManageShareListModalStyles {
@@ -149,32 +152,62 @@ export const addToListModalStyles: ManageShareListModalStyles = {
     },
 };
 
-const ManageShareListModal: React.FC<Props> = ({
+const ManageShareListModal = ({
     modalIsOpen,
-    wishList,
+    wishListId,
+    wishListState,
     extendedStyles,
     setManageShareListModalIsOpen,
     setShareListModalIsOpen,
     removeWishListShare,
     updateWishList,
-}) => {
-    if (!wishList) {
-        return null;
-    }
-    const [styles] = React.useState(() => mergeToNew(addToListModalStyles, extendedStyles));
-    const [allowEditing, setAllowEditing] = React.useState(wishList?.allowEdit.toString());
-    const [makeListPrivateModalVisible, setMakeListPrivateModalVisible] = React.useState(false);
+    loadWishList,
+}: Props) => {
+    const [styles] = useState(() => mergeToNew(addToListModalStyles, extendedStyles));
+
+    const [wishList, setWishList] = useState(wishListState.value);
+    const [allowEditing, setAllowEditing] = useState(wishList?.allowEdit.toString());
+    useEffect(() => {
+        if (!wishListState.value || typeof wishListState.value.sharedUsers === "undefined") {
+            return;
+        }
+
+        setWishList(wishListState.value);
+        setAllowEditing(wishListState.value.allowEdit.toString());
+    }, [wishListState]);
+
+    const [makeListPrivateModalVisible, setMakeListPrivateModalVisible] = useState(false);
+
+    useEffect(() => {
+        if (!modalIsOpen || !wishListId || wishListState.isLoading) {
+            return;
+        }
+
+        if (typeof wishListState.value?.sharedUsers !== "undefined") {
+            return;
+        }
+
+        loadWishList({
+            wishListId,
+            exclude: ["listLines"],
+            expand: ["sharedUsers"],
+        });
+    }, [modalIsOpen, wishListState]);
 
     const modalCloseHandler = () => {
         setManageShareListModalIsOpen({ modalIsOpen: false });
     };
 
     const inviteClickHandler = () => {
-        setShareListModalIsOpen({ modalIsOpen: true, wishListId: wishList.id, fromManage: true });
+        setShareListModalIsOpen({ modalIsOpen: true, wishListId, fromManage: true });
         setManageShareListModalIsOpen({ modalIsOpen: false });
     };
 
     const userRemoveHandler = (userId: string) => {
+        if (!wishList) {
+            return;
+        }
+
         const isLastUser = wishList.sharedUsers?.length === 1;
         removeWishListShare({ wishList, userId });
         if (isLastUser) {
@@ -183,6 +216,10 @@ const ManageShareListModal: React.FC<Props> = ({
     };
 
     const handleMakeListPrivateClick = async () => {
+        if (!wishList) {
+            return;
+        }
+
         await updateWishList({
             apiParameter: {
                 wishList: {
@@ -201,6 +238,10 @@ const ManageShareListModal: React.FC<Props> = ({
     };
 
     const handleEditingPermissionChanged = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!wishList) {
+            return;
+        }
+
         setAllowEditing(event.target.value);
         await updateWishList({
             apiParameter: {
@@ -230,27 +271,27 @@ const ManageShareListModal: React.FC<Props> = ({
                 }}
                 {...styles.editingPermissionRadioGroup}
             >
-                <Radio value="true" {...styles.editingPermissionRadio}>
+                <Radio value="true" {...styles.editingPermissionRadio} disabled={wishListState.isLoading}>
                     {translate("Allow Editing")}
                 </Radio>
-                <Radio value="false" {...styles.editingPermissionRadio}>
+                <Radio value="false" {...styles.editingPermissionRadio} disabled={wishListState.isLoading}>
                     {translate("View Only")}
                 </Radio>
             </RadioGroup>
-            {wishList.shareOption === ShareOptions.AllCustomerUsers && (
+            {wishList?.shareOption === ShareOptions.AllCustomerUsers && (
                 <Typography {...styles.sharedWithAllText}>
                     {translate("Shared with all users on billing account.")}
                 </Typography>
             )}
-            {wishList.shareOption !== ShareOptions.AllCustomerUsers && (
+            {wishList && wishList.shareOption !== ShareOptions.AllCustomerUsers && (
                 <StyledWrapper {...styles.usersTableWrapper}>
                     <Typography {...styles.usersTableText}>{translate("Users Shared With")}</Typography>
-                    <Button {...styles.inviteButton} onClick={inviteClickHandler}>
+                    <Button {...styles.inviteButton} disabled={wishListState.isLoading} onClick={inviteClickHandler}>
                         {translate("Invite User")}
                     </Button>
                 </StyledWrapper>
             )}
-            {wishList.shareOption !== ShareOptions.AllCustomerUsers && (
+            {wishList && wishList.shareOption !== ShareOptions.AllCustomerUsers && (
                 <DataTable {...styles.userTable}>
                     <DataTableHead {...styles.userTableHead}>
                         <DataTableHeader {...styles.userTableHeader} title={translate("User")}>
@@ -258,11 +299,15 @@ const ManageShareListModal: React.FC<Props> = ({
                         </DataTableHeader>
                     </DataTableHead>
                     <DataTableBody {...styles.userTableBody}>
-                        {wishList?.sharedUsers?.map(({ id, displayName }) => (
+                        {wishList.sharedUsers?.map(({ id, displayName }) => (
                             <DataTableRow key={id}>
                                 <DataTableCell {...styles.userCell}>
                                     <Typography {...styles.userNameText}>{displayName || id}</Typography>
-                                    <Link {...styles.userRemoveLink} onClick={() => userRemoveHandler(id)}>
+                                    <Link
+                                        {...styles.userRemoveLink}
+                                        disabled={wishListState.isLoading}
+                                        onClick={() => userRemoveHandler(id)}
+                                    >
                                         {translate("Remove")}
                                     </Link>
                                 </DataTableCell>
@@ -272,10 +317,14 @@ const ManageShareListModal: React.FC<Props> = ({
                 </DataTable>
             )}
             <StyledWrapper {...styles.buttonsWrapper}>
-                <Button {...styles.makePrivateButton} onClick={handleOpenMakeListPrivateClick}>
+                <Button
+                    {...styles.makePrivateButton}
+                    disabled={wishListState.isLoading}
+                    onClick={handleOpenMakeListPrivateClick}
+                >
                     {translate("Make List Private")}
                 </Button>
-                <Button {...styles.closeButton} onClick={() => modalCloseHandler()}>
+                <Button {...styles.closeButton} disabled={wishListState.isLoading} onClick={() => modalCloseHandler()}>
                     {translate("Done")}
                 </Button>
                 <TwoButtonModal

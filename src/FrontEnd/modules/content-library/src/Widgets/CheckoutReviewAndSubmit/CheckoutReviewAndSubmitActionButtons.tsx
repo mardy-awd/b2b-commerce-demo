@@ -19,7 +19,7 @@ import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import breakpointMediaQueries from "@insite/mobius/utilities/breakpointMediaQueries";
 import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
-import React, { FC } from "react";
+import React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -32,7 +32,7 @@ const mapStateToProps = (state: ApplicationState) => {
         checkoutShippingPageLink: getPageLinkByPageType(state, "CheckoutShippingPage"),
         cart: cartState.value,
         showPlaceOrderButton: canPlaceOrder(cartState.value),
-        showSubmitForApprovalOrder: canSubmitForApprovalOrder(getCurrentCartState(state).value),
+        showSubmitForApprovalOrder: canSubmitForApprovalOrder(cartState.value),
     };
 };
 
@@ -119,7 +119,7 @@ export const checkoutReviewAndSubmitActionButtonsStyles: CheckoutReviewAndSubmit
 
 const styles = checkoutReviewAndSubmitActionButtonsStyles;
 
-const CheckoutReviewAndSubmitActionButtons: FC<Props> = ({
+const CheckoutReviewAndSubmitActionButtons = ({
     checkoutShippingPageLink,
     showPlaceOrderButton,
     showSubmitForApprovalOrder,
@@ -128,7 +128,7 @@ const CheckoutReviewAndSubmitActionButtons: FC<Props> = ({
     preloadCheckoutShippingData,
     cart,
     cartId,
-}) => {
+}: Props) => {
     if (!cart) {
         return null;
     }

@@ -1,15 +1,20 @@
+import { getById } from "@insite/client-framework/Store/Data/DataState";
+import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { DeviceType } from "@insite/client-framework/Types/ContentItemModel";
 import Button from "@insite/mobius/Button";
+import Modal from "@insite/mobius/Modal";
+import Typography from "@insite/mobius/Typography";
 import getColor from "@insite/mobius/utilities/getColor";
 import ContextHeader from "@insite/shell/Components/CompareModal/ContextHeader";
 import ArrowDown from "@insite/shell/Components/Icons/ArrowDown";
 import Stage, { DeviceContent } from "@insite/shell/Components/Shell/Stage";
 import { PageVersionInfoModel } from "@insite/shell/Services/ContentAdminService";
-import shellTheme from "@insite/shell/ShellTheme";
 import {
     closeComparison,
     loadPublishedPageVersions,
     restoreVersion,
+    setLeftVersion,
+    setRightVersion,
     showCompleteVersionHistoryModal,
 } from "@insite/shell/Store/CompareModal/CompareModalActionCreators";
 import ShellState from "@insite/shell/Store/ShellState";
@@ -19,11 +24,23 @@ import styled from "styled-components";
 
 const mapStateToProps = (state: ShellState) => {
     const {
+        publishModal: { pagePublishInfosState },
         compareModal: { compareVersions, publishedPageVersions, isSideBySide, isShowingLeftSide },
     } = state;
 
+    const pageId = compareVersions?.pageId || getCurrentPage(state).id;
+    const pageType = getById(state.data.pages, pageId).value?.type;
+
     return {
+        pageType,
         compareVersions,
+        pagePublishInfo: pagePublishInfosState.value?.find(
+            ({ pageId: publishPageId, languageId, personaId, deviceType }) =>
+                publishPageId === pageId &&
+                (!languageId || languageId === compareVersions?.languageId) &&
+                (!personaId || personaId === compareVersions?.personaId) &&
+                (!deviceType || deviceType === compareVersions?.deviceType),
+        ),
         publishedPageVersions,
         isSideBySide,
         isShowingLeftSide,
@@ -35,47 +52,77 @@ const mapDispatchToProps = {
     showCompleteVersionHistoryModal,
     restoreVersion,
     closeComparison,
+    setLeftVersion,
+    setRightVersion,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
-const primaryContrast = shellTheme.colors.primary.contrast;
+type CombinedVersionType = Omit<PageVersionInfoModel, "publishOn"> & { publishOn?: string };
 
 interface State {
-    selectionOpened: boolean;
+    leftSelectionOpened: boolean;
+    rightSelectionOpened: boolean;
     versionsLoaded: boolean;
+    versionToRestore?: PageVersionInfoModel;
+    isRestoreModalOpen: boolean;
 }
 
 class PublishComparer extends React.Component<Props, State> {
-    private readonly pageVersionOptionsElement = React.createRef<HTMLDivElement>();
+    private readonly leftPageVersionOptionsElement = React.createRef<HTMLDivElement>();
+    private readonly rightPageVersionOptionsElement = React.createRef<HTMLDivElement>();
 
     constructor(props: Props) {
         super(props);
 
         this.state = {
-            selectionOpened: false,
+            leftSelectionOpened: false,
+            rightSelectionOpened: false,
             versionsLoaded: false,
+            isRestoreModalOpen: false,
         };
     }
 
-    toggleSelectionClickHandler = () => {
-        this.setState({ selectionOpened: !this.state.selectionOpened });
+    toggleLeftSelectionClickHandler = () => {
+        this.setState({ leftSelectionOpened: !this.state.leftSelectionOpened });
     };
 
-    showAllVersionsHandler = () => {
-        this.setState({ selectionOpened: false });
-        this.props.showCompleteVersionHistoryModal();
+    toggleRightSelectionClickHandler = () => {
+        this.setState({ rightSelectionOpened: !this.state.rightSelectionOpened });
+    };
+
+    showCompleteHistoryForHandler = (side: "left" | "right") => {
+        this.setState({ leftSelectionOpened: false, rightSelectionOpened: false });
+        this.props.showCompleteVersionHistoryModal(side);
     };
 
     closeModalHandler = () => {
         this.props.closeComparison();
-        this.setState({ selectionOpened: false, versionsLoaded: false });
+        this.setState({
+            leftSelectionOpened: false,
+            rightSelectionOpened: false,
+            versionsLoaded: false,
+            isRestoreModalOpen: false,
+        });
     };
 
     restorePageVersionHandler = (pageVersion: PageVersionInfoModel) => {
-        this.setState({ selectionOpened: false });
-        if (this.props.compareVersions) {
-            this.props.restoreVersion(pageVersion, this.props.compareVersions.pageId);
+        this.setState({
+            leftSelectionOpened: false,
+            rightSelectionOpened: false,
+            isRestoreModalOpen: true,
+            versionToRestore: pageVersion,
+        });
+    };
+
+    closeRestoreModalHandler = () => {
+        this.setState({ isRestoreModalOpen: false, versionToRestore: undefined });
+    };
+
+    confirmRestoreHandler = () => {
+        if (this.state.versionToRestore && this.props.compareVersions) {
+            this.closeModalHandler();
+            this.props.restoreVersion(this.state.versionToRestore, this.props.compareVersions.pageId);
         }
     };
 
@@ -90,11 +137,19 @@ class PublishComparer extends React.Component<Props, State> {
 
     handleClickOutside = (event: MouseEvent) => {
         if (
-            this.state.selectionOpened &&
-            this.pageVersionOptionsElement.current &&
-            !this.pageVersionOptionsElement.current.contains(event.target as Node)
+            this.state.leftSelectionOpened &&
+            this.leftPageVersionOptionsElement.current &&
+            !this.leftPageVersionOptionsElement.current.contains(event.target as Node)
         ) {
-            this.setState({ selectionOpened: false });
+            this.setState({ leftSelectionOpened: false });
+        }
+
+        if (
+            this.state.rightSelectionOpened &&
+            this.rightPageVersionOptionsElement.current &&
+            !this.rightPageVersionOptionsElement.current.contains(event.target as Node)
+        ) {
+            this.setState({ rightSelectionOpened: false });
         }
     };
 
@@ -103,90 +158,251 @@ class PublishComparer extends React.Component<Props, State> {
     }
 
     loadPageVersionsIfNeeded() {
-        if (
-            !this.state.versionsLoaded &&
-            this.props.compareVersions?.unpublished &&
-            this.props.compareVersions?.published
-        ) {
+        if (!this.state.versionsLoaded && this.props.compareVersions?.pageId) {
             this.setState({ versionsLoaded: true });
             this.props.loadPublishedPageVersions(this.props.compareVersions.pageId, 1, 5);
         }
     }
 
+    renderPageVersionOption = (pageVersion: CombinedVersionType, onClickHandler: () => void) => {
+        return (
+            <PageVersionOption key={pageVersion.versionId}>
+                <PageVersionPublishInfo>
+                    <div>
+                        {"publishOn" in pageVersion && pageVersion.publishOn ? (
+                            <>
+                                <span>Published On:</span>
+                                {new Date(pageVersion.publishOn).toLocaleString()}
+                            </>
+                        ) : (
+                            <>
+                                <span>Modified On:</span>
+                                {new Date(pageVersion.modifiedOn).toLocaleString()}
+                            </>
+                        )}
+                    </div>
+                    <div>
+                        {"publishOn" in pageVersion && pageVersion.publishOn ? (
+                            <span>Published By:</span>
+                        ) : (
+                            <span>Modified By:</span>
+                        )}
+                        {pageVersion.modifiedBy}
+                    </div>
+                </PageVersionPublishInfo>
+                <div>
+                    <ViewButton
+                        size={22}
+                        sizeVariant="small"
+                        data-test-selector={`publishCompareModal_view_${pageVersion.versionId}`}
+                        onClick={onClickHandler}
+                    >
+                        View
+                    </ViewButton>
+                </div>
+            </PageVersionOption>
+        );
+    };
+
     render() {
-        const { compareVersions, publishedPageVersions, isSideBySide, isShowingLeftSide } = this.props;
+        const {
+            pageType,
+            compareVersions,
+            pagePublishInfo,
+            publishedPageVersions,
+            isSideBySide,
+            isShowingLeftSide,
+        } = this.props;
 
-        if (!compareVersions) {
+        if (!compareVersions || !publishedPageVersions) {
             return null;
         }
 
-        const { unpublished, published, languageId, deviceType, personaId, stageMode } = compareVersions;
+        const { languageId, deviceType, personaId, stageMode, canSelectVersion } = compareVersions;
+        const { pageVersions } = publishedPageVersions;
+        const unpublished = pagePublishInfo?.unpublished;
+        const published = !pagePublishInfo?.futurePublishOn ? pagePublishInfo?.published : undefined;
+        const futurePublished = pagePublishInfo?.futurePublishOn ? pagePublishInfo?.published : undefined;
+        const currentPublished = pageVersions[0];
+        const leftVersion = compareVersions.leftVersion || published || currentPublished;
+        const rightVersion: CombinedVersionType | undefined =
+            compareVersions.rightVersion || futurePublished || unpublished;
 
-        if (!unpublished || !published || !publishedPageVersions) {
-            return null;
+        if (!leftVersion) {
+            return (
+                <Modal size={350} isOpen={true} handleClose={this.closeModalHandler} headline="Compare Versions">
+                    <Typography color="danger" data-test-selector="publishCompareModal_message">
+                        There is nothing to compare.
+                    </Typography>
+                    <ButtonsContainer>
+                        <CancelButton variant="tertiary" onClick={this.closeModalHandler}>
+                            Cancel
+                        </CancelButton>
+                    </ButtonsContainer>
+                </Modal>
+            );
         }
+
+        const canRestoreLeftVersion =
+            !futurePublished && (!!unpublished || leftVersion.versionId !== currentPublished.versionId);
+        const canRestoreRightVersion =
+            !futurePublished &&
+            !!rightVersion &&
+            ((unpublished && rightVersion.versionId !== unpublished.versionId) ||
+                (!unpublished && rightVersion.versionId !== currentPublished.versionId));
 
         const forcedContext = `&languageId=${languageId}&deviceType=${deviceType}&personaId=${personaId}`;
+        const skipHeaderFooter = pageType === "Header" || pageType === "Footer" ? "&skipHeaderFooter=true" : "";
 
         return (
             <FullScreenModal data-test-selector="publishCompareModal">
                 <ContextHeader closeModal={this.closeModalHandler} />
                 <VersionsHeader isSideBySide={isSideBySide}>
                     {(isSideBySide || isShowingLeftSide) && (
-                        <CurrentlyPublishedHeader>
-                            <VersionSelectionWrapper ref={this.pageVersionOptionsElement}>
-                                <VersionSelector
-                                    title="Version Selection"
-                                    data-test-selector="publishCompareModal_toggleSelection"
-                                    onClick={this.toggleSelectionClickHandler}
-                                >
-                                    <span>Currently Published: </span>
-                                    <span>{new Date(published.publishOn).toLocaleString()}</span>
-                                    <ArrowDownWrapper>
-                                        <ArrowDown color1={primaryContrast} height={7} />
-                                    </ArrowDownWrapper>
-                                </VersionSelector>
-                                <PageVersionOptions isActive={this.state.selectionOpened}>
-                                    {publishedPageVersions?.pageVersions?.map((o, index) => (
-                                        <PageVersionOption key={o.versionId}>
-                                            <PageVersionPublishInfo>
-                                                <div>
-                                                    <span>Published On:</span>
-                                                    {new Date(o.publishOn).toLocaleString()}
-                                                </div>
-                                                <div>
-                                                    <span>Published By:</span>
-                                                    {o.modifiedBy}
-                                                </div>
-                                            </PageVersionPublishInfo>
-                                            <div>
-                                                <RestoreButton
-                                                    size={22}
-                                                    sizeVariant="small"
-                                                    data-test-selector={`publishCompareModal_view_${index}`}
-                                                    onClick={() => this.restorePageVersionHandler(o)}
-                                                >
-                                                    View
-                                                </RestoreButton>
-                                            </div>
-                                        </PageVersionOption>
-                                    ))}
-                                    {publishedPageVersions && publishedPageVersions.totalItemCount > 5 && (
-                                        <ShowCompleteHistoryButton onClick={this.showAllVersionsHandler}>
-                                            Show Complete History
-                                        </ShowCompleteHistoryButton>
-                                    )}
-                                </PageVersionOptions>
-                            </VersionSelectionWrapper>
-                        </CurrentlyPublishedHeader>
+                        <LeftPaneHeader>
+                            {!canSelectVersion ? (
+                                <div>
+                                    <span>Published: </span>
+                                    <span>{new Date(leftVersion.modifiedOn).toLocaleString()}</span>
+                                </div>
+                            ) : (
+                                <VersionSelectionWrapper ref={this.leftPageVersionOptionsElement}>
+                                    <VersionSelector
+                                        title="Version Selection"
+                                        data-test-selector="publishCompareModal_toggleSelection"
+                                        onClick={this.toggleLeftSelectionClickHandler}
+                                    >
+                                        <span>Page Version: </span>
+                                        <span>
+                                            {new Date(leftVersion.publishOn).toLocaleString()}
+                                            {leftVersion.versionId === currentPublished.versionId ? " (Published)" : ""}
+                                        </span>
+                                        <ArrowDownWrapper>
+                                            <ArrowDown color1="white" height={7} />
+                                        </ArrowDownWrapper>
+                                    </VersionSelector>
+                                    <PageVersionOptions isActive={this.state.leftSelectionOpened}>
+                                        {pageVersions?.map(o =>
+                                            this.renderPageVersionOption(o, () => {
+                                                this.setState({ leftSelectionOpened: false });
+                                                this.props.setLeftVersion(o);
+                                            }),
+                                        )}
+                                        {publishedPageVersions.totalItemCount > 5 && (
+                                            <ShowCompleteHistoryButton
+                                                onClick={() => this.showCompleteHistoryForHandler("left")}
+                                            >
+                                                Show Complete History
+                                            </ShowCompleteHistoryButton>
+                                        )}
+                                    </PageVersionOptions>
+                                </VersionSelectionWrapper>
+                            )}
+                            <RestoreButton
+                                sizeVariant="small"
+                                disabled={!canRestoreLeftVersion}
+                                onClick={() => this.restorePageVersionHandler(leftVersion)}
+                            >
+                                Restore
+                            </RestoreButton>
+                        </LeftPaneHeader>
                     )}
                     {(isSideBySide || !isShowingLeftSide) && (
-                        <ToBePublishedHeader>
-                            <div>
-                                <span>Version From: </span>
-                                <span>{new Date(unpublished.modifiedOn).toLocaleString()}</span>
-                            </div>
-                        </ToBePublishedHeader>
+                        <RightPaneHeader>
+                            {!canSelectVersion ? (
+                                <>
+                                    {rightVersion && (
+                                        <div>
+                                            {rightVersion.versionId === futurePublished?.versionId ? (
+                                                <>
+                                                    <span>Futured: </span>
+                                                    <span>{new Date(futurePublished.modifiedOn).toLocaleString()}</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span>Draft: </span>
+                                                    <span>{new Date(rightVersion.modifiedOn).toLocaleString()}</span>
+                                                </>
+                                            )}
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <VersionSelectionWrapper ref={this.rightPageVersionOptionsElement}>
+                                    <VersionSelector
+                                        title="Version Selection"
+                                        data-test-selector="publishCompareModal_toggleRightSelection"
+                                        onClick={this.toggleRightSelectionClickHandler}
+                                    >
+                                        {rightVersion ? (
+                                            <>
+                                                <span>Page Version: </span>
+                                                {rightVersion.versionId === futurePublished?.versionId ? (
+                                                    <>
+                                                        {new Date(futurePublished.publishOn).toLocaleString()} (Futured)
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        {rightVersion.publishOn ? (
+                                                            <>
+                                                                {new Date(rightVersion.publishOn).toLocaleString()}
+                                                                {rightVersion.versionId === currentPublished.versionId
+                                                                    ? " (Published)"
+                                                                    : ""}
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                {new Date(rightVersion.modifiedOn).toLocaleString()}{" "}
+                                                                (Draft)
+                                                            </>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <span>No drafts available</span>
+                                        )}
+                                        <ArrowDownWrapper>
+                                            <ArrowDown height={7} />
+                                        </ArrowDownWrapper>
+                                    </VersionSelector>
+                                    <PageVersionOptions isActive={this.state.rightSelectionOpened}>
+                                        {futurePublished &&
+                                            this.renderPageVersionOption(futurePublished, () => {
+                                                this.setState({ rightSelectionOpened: false });
+                                                this.props.setRightVersion(futurePublished);
+                                            })}
+                                        {unpublished &&
+                                            this.renderPageVersionOption(unpublished, () => {
+                                                this.setState({ rightSelectionOpened: false });
+                                                this.props.setRightVersion(undefined);
+                                            })}
+                                        {pageVersions?.map(o =>
+                                            this.renderPageVersionOption(o, () => {
+                                                this.setState({ rightSelectionOpened: false });
+                                                this.props.setRightVersion(o);
+                                            }),
+                                        )}
+                                        {publishedPageVersions.totalItemCount > 5 && (
+                                            <ShowCompleteHistoryButton
+                                                onClick={() => this.showCompleteHistoryForHandler("right")}
+                                            >
+                                                Show Complete History
+                                            </ShowCompleteHistoryButton>
+                                        )}
+                                    </PageVersionOptions>
+                                </VersionSelectionWrapper>
+                            )}
+                            {rightVersion && (
+                                <RestoreButton
+                                    sizeVariant="small"
+                                    disabled={!canRestoreRightVersion}
+                                    onClick={() => this.restorePageVersionHandler(rightVersion as any)}
+                                >
+                                    Restore
+                                </RestoreButton>
+                            )}
+                        </RightPaneHeader>
                     )}
                 </VersionsHeader>
                 <PreviewRow isSideBySide={isSideBySide}>
@@ -195,20 +411,38 @@ class PublishComparer extends React.Component<Props, State> {
                             <PreviewFrame
                                 id="leftSiteIFrame"
                                 stageMode={stageMode}
-                                src={`/.spire/GetContentByVersion?pageVersionId=${published.versionId}${forcedContext}`}
+                                src={`/.spire/GetContentByVersion?pageVersionId=${leftVersion.versionId}${forcedContext}${skipHeaderFooter}`}
                             />
                         </Stage>
                     </StageWrapper>
                     <StageWrapper isVisible={isSideBySide || !isShowingLeftSide}>
                         <Stage stageMode={stageMode}>
-                            <PreviewFrame
-                                id="rightSiteIFrame"
-                                stageMode={stageMode}
-                                src={`/.spire/GetContentByVersion?pageVersionId=${unpublished.versionId}${forcedContext}`}
-                            />
+                            {rightVersion && (
+                                <PreviewFrame
+                                    id="rightSiteIFrame"
+                                    stageMode={stageMode}
+                                    src={`/.spire/GetContentByVersion?pageVersionId=${rightVersion.versionId}${forcedContext}${skipHeaderFooter}`}
+                                />
+                            )}
                         </Stage>
                     </StageWrapper>
                 </PreviewRow>
+                <Modal
+                    size={430}
+                    headline="Restore Version"
+                    isOpen={this.state.isRestoreModalOpen}
+                    handleClose={this.closeRestoreModalHandler}
+                >
+                    <Typography>Unpublished changes to the current draft will be lost.</Typography>
+                    <ButtonsContainer>
+                        <CancelButton variant="tertiary" onClick={this.closeRestoreModalHandler}>
+                            Cancel
+                        </CancelButton>
+                        <ConfirmRestoreButton variant="primary" onClick={this.confirmRestoreHandler}>
+                            Restore
+                        </ConfirmRestoreButton>
+                    </ButtonsContainer>
+                </Modal>
             </FullScreenModal>
         );
     }
@@ -228,7 +462,7 @@ const FullScreenModal = styled.div`
 
 const VersionsHeader = styled.div<{ isSideBySide: boolean }>`
     display: flex;
-    height: 40px;
+    height: 60px;
     > div {
         width: ${props => (props.isSideBySide ? "50%" : "100%")};
     }
@@ -276,12 +510,13 @@ const PreviewFrame = styled.iframe<{ stageMode: DeviceType }>`
     }}
 `;
 
-const PublishHeader = styled.div`
+const PaneHeader = styled.div`
     color: white;
     font-size: 18px;
     display: flex;
 
     > *:first-child {
+        margin-top: 7px;
         padding-top: 5px;
 
         > *:first-child {
@@ -291,12 +526,14 @@ const PublishHeader = styled.div`
     }
 `;
 
-const CurrentlyPublishedHeader = styled(PublishHeader)`
+const LeftPaneHeader = styled(PaneHeader)`
     background: ${getColor("common.backgroundContrast")};
+    justify-content: space-between;
 `;
 
-const ToBePublishedHeader = styled(PublishHeader)`
+const RightPaneHeader = styled(PaneHeader)`
     background: #f5a623;
+    justify-content: space-between;
     > *:first-child {
         color: ${getColor("common.accentContrast")};
     }
@@ -344,7 +581,7 @@ const PageVersionOption = styled.div`
     }
 `;
 
-const RestoreButton = styled(Button)`
+const ViewButton = styled(Button)`
     background: ${getColor("common.background")};
     color: ${getColor("common.accentContrast")};
     border-color: ${getColor("common.backgroundContrast")};
@@ -369,6 +606,25 @@ const PageVersionPublishInfo = styled.div`
 
 const ShowCompleteHistoryButton = styled(Button)`
     width: 100%;
+`;
+
+const ButtonsContainer = styled.div`
+    text-align: right;
+`;
+
+const CancelButton = styled(Button)`
+    margin-top: 20px;
+    margin-right: 10px;
+`;
+
+const RestoreButton = styled(Button)`
+    margin-top: 9px;
+    margin-right: 10px;
+`;
+
+const ConfirmRestoreButton = styled(Button)`
+    margin-top: 20px;
+    margin-right: 10px;
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(PublishComparer);

@@ -1,4 +1,5 @@
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
+
 import getLocalizedDateTime from "@insite/client-framework/Common/Utilities/getLocalizedDateTime";
 import siteMessage from "@insite/client-framework/SiteMessage";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
@@ -90,6 +91,7 @@ export interface ReviewBudgetStyles {
     notConfiguredMessageIcon?: IconPresentationProps;
     centeringWrapper?: InjectableCss;
     spinner?: LoadingSpinnerProps;
+    tableContainer?: InjectableCss;
 }
 
 export const reviewBudgetStyles: ReviewBudgetStyles = {
@@ -142,6 +144,11 @@ export const reviewBudgetStyles: ReviewBudgetStyles = {
     spinner: {
         css: css`
             margin: auto;
+        `,
+    },
+    tableContainer: {
+        css: css`
+            overflow: auto;
         `,
     },
 };
@@ -303,65 +310,71 @@ class ReviewBudget extends React.Component<Props, State> {
                             </StyledWrapper>
                         )}
                         {!budgetDataView.isLoading && rows.length > 0 && (
-                            <DataTable {...styles.dataTable}>
-                                <DataTableHead>
-                                    <DataTableHeader {...styles.periodHeader}>{translate("Period")}</DataTableHeader>
-                                    <DataTableHeader {...styles.startDateHeader}>
-                                        {translate("Start Date")}
-                                    </DataTableHeader>
-                                    <DataTableHeader {...styles.currentFiscalYearBudgetHeader}>
-                                        {translate("Budget")}
-                                    </DataTableHeader>
-                                    <DataTableHeader {...styles.currentFiscalYearActualHeader}>
-                                        {translate("Current Fiscal Year")}
-                                    </DataTableHeader>
-                                    <DataTableHeader {...styles.currentFiscalYearVarianceHeader}>
-                                        {translate("Variance")}
-                                    </DataTableHeader>
-                                    <DataTableHeader {...styles.lastFiscalYearActualHeader}>
-                                        {translate("Last Fiscal Year")}
-                                    </DataTableHeader>
-                                    <DataTableHeader {...styles.lastFiscalYearVarianceHeader}>
-                                        {translate("Variance")}
-                                    </DataTableHeader>
-                                </DataTableHead>
-                                <DataTableBody>
-                                    {rows.map(
-                                        ({
-                                            period,
-                                            startDate,
-                                            currentFiscalYearBudgetDisplay,
-                                            currentFiscalYearActualDisplay,
-                                            currentFiscalYearVarianceDisplay,
-                                            lastFiscalYearActualDisplay,
-                                            lastFiscalYearVarianceDisplay,
-                                        }) => (
-                                            <DataTableRow key={period} data-test-selector="reviewBudgetPeriodRow">
-                                                <DataTableCell {...styles.periodCells}>{period}</DataTableCell>
-                                                <DataTableCell {...styles.startDateCells}>{startDate}</DataTableCell>
-                                                <DataTableCell
-                                                    {...styles.currentFiscalYearBudgetCells}
-                                                    data-test-selector={`budgetAmount_${period - 1}`}
-                                                >
-                                                    {currentFiscalYearBudgetDisplay}
-                                                </DataTableCell>
-                                                <DataTableCell {...styles.currentFiscalYearActualCells}>
-                                                    {currentFiscalYearActualDisplay}
-                                                </DataTableCell>
-                                                <DataTableCell {...styles.currentFiscalYearVarianceCells}>
-                                                    {currentFiscalYearVarianceDisplay}
-                                                </DataTableCell>
-                                                <DataTableCell {...styles.lastFiscalYearActualCells}>
-                                                    {lastFiscalYearActualDisplay}
-                                                </DataTableCell>
-                                                <DataTableCell {...styles.lastFiscalYearVarianceCells}>
-                                                    {lastFiscalYearVarianceDisplay}
-                                                </DataTableCell>
-                                            </DataTableRow>
-                                        ),
-                                    )}
-                                </DataTableBody>
-                            </DataTable>
+                            <StyledWrapper {...styles.tableContainer}>
+                                <DataTable {...styles.dataTable}>
+                                    <DataTableHead>
+                                        <DataTableHeader {...styles.periodHeader}>
+                                            {translate("Period")}
+                                        </DataTableHeader>
+                                        <DataTableHeader {...styles.startDateHeader}>
+                                            {translate("Start Date")}
+                                        </DataTableHeader>
+                                        <DataTableHeader {...styles.currentFiscalYearBudgetHeader}>
+                                            {translate("Budget")}
+                                        </DataTableHeader>
+                                        <DataTableHeader {...styles.currentFiscalYearActualHeader}>
+                                            {translate("Current Fiscal Year")}
+                                        </DataTableHeader>
+                                        <DataTableHeader {...styles.currentFiscalYearVarianceHeader}>
+                                            {translate("Variance")}
+                                        </DataTableHeader>
+                                        <DataTableHeader {...styles.lastFiscalYearActualHeader}>
+                                            {translate("Last Fiscal Year")}
+                                        </DataTableHeader>
+                                        <DataTableHeader {...styles.lastFiscalYearVarianceHeader}>
+                                            {translate("Variance")}
+                                        </DataTableHeader>
+                                    </DataTableHead>
+                                    <DataTableBody>
+                                        {rows.map(
+                                            ({
+                                                period,
+                                                startDate,
+                                                currentFiscalYearBudgetDisplay,
+                                                currentFiscalYearActualDisplay,
+                                                currentFiscalYearVarianceDisplay,
+                                                lastFiscalYearActualDisplay,
+                                                lastFiscalYearVarianceDisplay,
+                                            }) => (
+                                                <DataTableRow key={period} data-test-selector="reviewBudgetPeriodRow">
+                                                    <DataTableCell {...styles.periodCells}>{period}</DataTableCell>
+                                                    <DataTableCell {...styles.startDateCells}>
+                                                        {startDate}
+                                                    </DataTableCell>
+                                                    <DataTableCell
+                                                        {...styles.currentFiscalYearBudgetCells}
+                                                        data-test-selector={`budgetAmount_${period - 1}`}
+                                                    >
+                                                        {currentFiscalYearBudgetDisplay}
+                                                    </DataTableCell>
+                                                    <DataTableCell {...styles.currentFiscalYearActualCells}>
+                                                        {currentFiscalYearActualDisplay}
+                                                    </DataTableCell>
+                                                    <DataTableCell {...styles.currentFiscalYearVarianceCells}>
+                                                        {currentFiscalYearVarianceDisplay}
+                                                    </DataTableCell>
+                                                    <DataTableCell {...styles.lastFiscalYearActualCells}>
+                                                        {lastFiscalYearActualDisplay}
+                                                    </DataTableCell>
+                                                    <DataTableCell {...styles.lastFiscalYearVarianceCells}>
+                                                        {lastFiscalYearVarianceDisplay}
+                                                    </DataTableCell>
+                                                </DataTableRow>
+                                            ),
+                                        )}
+                                    </DataTableBody>
+                                </DataTable>
+                            </StyledWrapper>
                         )}
                     </>
                 )}

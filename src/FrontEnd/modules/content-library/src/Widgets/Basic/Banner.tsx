@@ -1,11 +1,11 @@
 import { getFocalPointStyles, parserOptions } from "@insite/client-framework/Common/BasicSelectors";
-import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { responsiveStyleRules } from "@insite/client-framework/Common/Utilities/responsive";
 import { useGetLink } from "@insite/client-framework/Store/Links/LinksSelectors";
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { LinkPresentationProps } from "@insite/mobius/Link";
 import Typography from "@insite/mobius/Typography";
@@ -110,7 +110,7 @@ export const bannerStyles: BannerStyles = {
     },
 };
 
-const Banner: FC<OwnProps> = ({ fields, extendedStyles }) => {
+export const Banner: FC<OwnProps> = ({ fields, extendedStyles }) => {
     const { url, title } = useGetLink(fields.buttonLink);
     const history = useHistory();
     const onClick = () => {
@@ -153,7 +153,7 @@ const Banner: FC<OwnProps> = ({ fields, extendedStyles }) => {
         overlayPositioningStyles = "align-items: flex-end;";
     }
 
-    const [styles] = React.useState(() => mergeToNew(bannerStyles, extendedStyles));
+    const styles = useMergeStyles("banner", bannerStyles, extendedStyles);
 
     let fontSizeStyles;
     if (fields.responsiveFontSizes || fields.customFontSizes) {

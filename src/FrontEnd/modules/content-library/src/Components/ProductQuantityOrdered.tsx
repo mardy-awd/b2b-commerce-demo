@@ -112,6 +112,7 @@ const ProductQuantityOrdered = ({
             value={productQty}
             type="number"
             min={0}
+            max={999999}
             data-test-selector="product_qtyOrdered"
             {...otherProps}
             onKeyPress={keyPressHandler}

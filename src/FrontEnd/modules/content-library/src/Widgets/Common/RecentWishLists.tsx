@@ -87,6 +87,16 @@ class RecentWishLists extends React.Component<Props> {
         }
     }
 
+    componentDidUpdate() {
+        if (
+            this.props.canViewWishLists &&
+            !this.props.recentWishListsDataView.value &&
+            !this.props.recentWishListsDataView.isLoading
+        ) {
+            this.props.loadWishLists(recentWishListsParameter);
+        }
+    }
+
     render() {
         if (!this.props.canViewWishLists) {
             return null;

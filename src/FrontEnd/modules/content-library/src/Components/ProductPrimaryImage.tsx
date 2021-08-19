@@ -3,10 +3,11 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { ImageModel, ProductModel } from "@insite/client-framework/Types/ApiModels";
-import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
-import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
+import Img, { ImgProps } from "@insite/mobius/Img";
+import { LazyImageProps } from "@insite/mobius/LazyImage";
+import { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { css } from "styled-components";
 
@@ -26,9 +27,19 @@ const mapStateToProps = (state: ApplicationState) => ({
 
 export interface ProductPrimaryImageStyles {
     centeringWrapper?: InjectableCss;
+    /**
+     * @deprecated Not used anymore
+     */
     hiddenWrapper?: InjectableCss;
+    /**
+     * @deprecated Not used anymore
+     */
     spinner?: LoadingSpinnerProps;
+    /**
+     * @deprecated Use img instead
+     */
     image?: LazyImageProps;
+    img?: ImgProps;
 }
 
 export const productPrimaryImageStyles: ProductPrimaryImageStyles = {
@@ -45,17 +56,13 @@ export const productPrimaryImageStyles: ProductPrimaryImageStyles = {
             }
         `,
     },
-    hiddenWrapper: {
-        css: css`
-            display: none;
-        `,
-    },
-    spinner: {
+    image: {
         css: css`
             margin: auto;
+            cursor: pointer;
         `,
     },
-    image: {
+    img: {
         css: css`
             cursor: pointer;
         `,
@@ -64,30 +71,6 @@ export const productPrimaryImageStyles: ProductPrimaryImageStyles = {
 
 const ProductPrimaryImage = ({ productSettings, product, image, useLargeImage, onClick, extendedStyles }: Props) => {
     const [styles] = useState(() => mergeToNew(productPrimaryImageStyles, extendedStyles));
-
-    const [lastHeight, setLastHeight] = useState(300);
-    const [lastInstance, setLastInstance] = useState<HTMLElement | null>(null);
-    const setRefHandler = (instance: HTMLElement | null) => {
-        if (instance) {
-            setLastInstance(instance);
-        }
-    };
-
-    const [isLoading, setIsLoading] = useState(false);
-    const onLoadHandler = useCallback(() => {
-        setIsLoading(false);
-        setTimeout(() => {
-            if (lastInstance && lastInstance.clientHeight > 0) {
-                setLastHeight(lastInstance.clientHeight);
-            }
-        }, 100);
-    }, [setIsLoading, lastInstance, setLastHeight]);
-
-    useEffect(() => {
-        if (image?.imageType === "Static") {
-            setIsLoading(true);
-        }
-    }, [image?.id]);
 
     if (!product) {
         return null;
@@ -127,30 +110,19 @@ const ProductPrimaryImage = ({ productSettings, product, image, useLargeImage, o
 
     return (
         <>
-            {isLoading && (
-                <StyledWrapper {...styles.centeringWrapper} style={{ height: lastHeight }}>
-                    <LoadingSpinner {...styles.spinner} />
-                </StyledWrapper>
-            )}
             {image.imageType === "Static" && (
-                <StyledWrapper
-                    {...(isLoading ? styles.hiddenWrapper : styles.centeringWrapper)}
-                    onClick={imageWrapperClickHandler}
-                >
-                    <LazyImage
-                        {...styles.image}
-                        key={image.id}
+                <StyledWrapper {...styles.centeringWrapper} onClick={imageWrapperClickHandler}>
+                    <Img
+                        {...styles.img}
                         src={path}
                         altText={image.imageAltText}
-                        imgProps={{ ref: setRefHandler }}
-                        onLoad={onLoadHandler}
-                        onError={onLoadHandler}
+                        loading="eager"
                         data-test-selector="productDetails_mainImage"
                     />
                 </StyledWrapper>
             )}
             {image.imageType === "360" && productSettings.imageProvider === "SIRV" && (
-                <div style={{ minHeight: lastHeight }} onClick={imageWrapperClickHandler}>
+                <div style={{ minHeight: 300 }} onClick={imageWrapperClickHandler}>
                     <div className="Sirv" key={image.id} data-src={image.mediumImagePath} />
                 </div>
             )}

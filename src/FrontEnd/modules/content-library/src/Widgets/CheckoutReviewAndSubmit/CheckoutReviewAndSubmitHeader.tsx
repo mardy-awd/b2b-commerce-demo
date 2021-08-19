@@ -38,7 +38,7 @@ const mapStateToProps = (state: ApplicationState) => {
         checkoutShippingPageLink: getPageLinkByPageType(state, "CheckoutShippingPage"),
         cart: cartState.value,
         showPlaceOrderButton: canPlaceOrder(cartState.value),
-        showSubmitForApprovalOrder: canSubmitForApprovalOrder(getCurrentCartState(state).value),
+        showSubmitForApprovalOrder: canSubmitForApprovalOrder(cartState.value),
         pageTitle: getCurrentPage(state).fields.title,
     };
 };

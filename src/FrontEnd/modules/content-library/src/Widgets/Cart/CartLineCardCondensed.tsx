@@ -211,6 +211,7 @@ const CartLineCardCondensed: FC<Props> = ({
                                         availability={cartLine.availability!}
                                         unitOfMeasure={cartLine.unitOfMeasure}
                                         trackInventory={cartLine.trackInventory}
+                                        failedToLoadInventory={cart.failedToGetRealTimeInventory}
                                         extendedStyles={styles.productAvailability}
                                     />
                                 )}

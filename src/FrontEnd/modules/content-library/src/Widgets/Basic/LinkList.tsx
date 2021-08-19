@@ -1,4 +1,3 @@
-import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import {
     getPageLinkByNodeId,
@@ -10,11 +9,12 @@ import { HasFields } from "@insite/client-framework/Types/ContentItemModel";
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import Link from "@insite/mobius/Link";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { css } from "styled-components";
 
 const enum fields {
@@ -62,10 +62,10 @@ export const linkListStyles: LinkListStyles = {
     },
 };
 
-const LinkList: FC<OwnProps> = ({ fields, extendedStyles }) => {
+export const LinkList: FC<OwnProps> = ({ fields, extendedStyles }) => {
     const links = useGetLinks(fields.links, o => o.fields.destination);
     const titleLink = useGetLink(fields.titleLink);
-    const [styles] = useState(() => mergeToNew(linkListStyles, extendedStyles));
+    const styles = useMergeStyles("linkList", linkListStyles, extendedStyles);
 
     const alignmentStyles = css`
         text-align: ${fields.alignment || "right"};
@@ -163,13 +163,32 @@ const widgetModule: WidgetModule = {
                 name: fields.links,
                 editorTemplate: "ListField",
                 getDisplay: (item: HasFields, state) => {
-                    const { type, value } = item.fields.destination;
+                    const {
+                        destination: { type, value },
+                        overriddenTitle,
+                    } = item.fields;
+                    if (overriddenTitle) {
+                        return overriddenTitle;
+                    }
                     if (type === "Page") {
                         const link = getPageLinkByNodeId(state, value);
                         return link?.title;
                     }
                     if (type === "Category") {
-                        return value; // TODO ISC-10781 make this work
+                        let displayValue = "";
+                        const categories = (state as any).pageEditor.categories;
+                        if (!categories) {
+                            displayValue = "Loading...";
+                        } else {
+                            const matchingCategories = categories.filter((o: { id: string }) => o.id === value);
+                            if (matchingCategories.length === 0) {
+                                displayValue = "Unknown";
+                            } else {
+                                displayValue = matchingCategories[0].shortDescription;
+                            }
+                        }
+
+                        return displayValue;
                     }
                     if (type === "Url") {
                         return value;

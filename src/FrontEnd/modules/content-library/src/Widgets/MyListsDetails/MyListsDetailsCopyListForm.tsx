@@ -23,6 +23,8 @@ import { css } from "styled-components";
 interface OwnProps {
     onCancel: () => void;
     onSubmit: (name: string, wishListId: string) => void;
+    enableCloseCopyListModalOnEsc: () => void;
+    disableCloseCopyListModalOnEsc: () => void;
 }
 
 interface State {
@@ -194,6 +196,8 @@ class MyListsDetailsCopyListForm extends React.Component<Props, State> {
                         selected={this.CREATE_ID}
                         options={options}
                         data-test-selector="selectList"
+                        onOpen={this.props.disableCloseCopyListModalOnEsc}
+                        onClose={this.props.enableCloseCopyListModalOnEsc}
                     />
                 </GridItem>
                 {this.state.wishListId === this.CREATE_ID && (

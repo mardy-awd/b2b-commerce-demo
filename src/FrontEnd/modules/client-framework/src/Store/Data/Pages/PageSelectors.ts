@@ -20,6 +20,10 @@ export function getPageStateByPath(state: HasPagesState, path: string) {
     return getById(state.data.pages, realPath, o => state.data.pages.idByPath[o.toLowerCase()] || "");
 }
 
+export function getRequiresAuthorization(state: HasPagesState, pageId: string) {
+    return state.data.pages.requiresAuthorizationByPageId[pageId];
+}
+
 export function getFooter(state: ApplicationState) {
     return getPageStateByType(state, "Footer").value || nullPage;
 }

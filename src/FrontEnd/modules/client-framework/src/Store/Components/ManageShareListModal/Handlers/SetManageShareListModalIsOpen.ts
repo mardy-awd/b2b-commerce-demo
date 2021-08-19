@@ -1,27 +1,9 @@
 import { createHandlerChainRunner, Handler } from "@insite/client-framework/HandlerCreator";
-import loadWishList from "@insite/client-framework/Store/Data/WishLists/Handlers/LoadWishList";
-import { getWishListState } from "@insite/client-framework/Store/Data/WishLists/WishListsSelectors";
 
 type HandlerType = Handler<{ wishListId?: string; modalIsOpen: boolean }>;
 
-export const LoadWishListIfNeeded: HandlerType = ({ parameter, getState, dispatch }) => {
-    if (!parameter.modalIsOpen || !parameter.wishListId) {
-        return;
-    }
-
-    const wishList = getWishListState(getState(), parameter.wishListId).value;
-    if (typeof wishList?.sharedUsers !== "undefined") {
-        return;
-    }
-
-    dispatch(
-        loadWishList({
-            wishListId: parameter.wishListId,
-            exclude: ["listLines"],
-            expand: ["sharedUsers"],
-        }),
-    );
-};
+/** @deprecated Not needed anymore */
+export const LoadWishListIfNeeded: HandlerType = () => {};
 
 export const DispatchCompleteSetIsOpen: HandlerType = props => {
     props.dispatch({
@@ -31,7 +13,7 @@ export const DispatchCompleteSetIsOpen: HandlerType = props => {
     });
 };
 
-export const chain = [LoadWishListIfNeeded, DispatchCompleteSetIsOpen];
+export const chain = [DispatchCompleteSetIsOpen];
 
 const setManageShareListModalIsOpen = createHandlerChainRunner(chain, "SetManageShareListModalIsOpen");
 export default setManageShareListModalIsOpen;

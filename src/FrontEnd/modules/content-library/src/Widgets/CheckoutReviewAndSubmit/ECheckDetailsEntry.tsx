@@ -117,6 +117,9 @@ const ECheckDetailsEntry = (
         setRoutingNumberError("");
         setAccountNumberError("");
         setAccountHolderNameError("");
+        onAccountNumberChange("");
+        onRoutingNumberChange("");
+        onAccountHolderNameChange("");
         setIsTokenExRoutingNumberIframeLoaded(false);
         setIsTokenExAccountNumberIframeLoaded(false);
     };
@@ -159,10 +162,19 @@ const ECheckDetailsEntry = (
         }
 
         const accountNumberValidNumberRequiredValid = isNonEmptyString(accountNumber);
+        if (!accountNumberValidNumberRequiredValid) {
+            setAccountNumberError(translate("Account Number is required."));
+            return false;
+        }
+
         const accountNumberValidNumberValid = /[a-zA-Z0-9]*/.test(accountNumber);
-        setAccountNumberError(!accountNumberValidNumberRequiredValid ? translate("Account Number is required.") : "");
-        setAccountNumberError(!accountNumberValidNumberValid ? translate("Account Number is invalid.") : "");
-        return accountNumberValidNumberRequiredValid && accountNumberValidNumberValid;
+        if (!accountNumberValidNumberValid) {
+            setAccountNumberError(translate("Account Number is invalid."));
+            return false;
+        }
+
+        setAccountNumberError("");
+        return true;
     };
 
     const validateRoutingNumberChange = (routingNumber: string) => {
@@ -171,10 +183,19 @@ const ECheckDetailsEntry = (
         }
 
         const routingNumberRequiredValid = isNonEmptyString(routingNumber);
+        if (!routingNumberRequiredValid) {
+            setRoutingNumberError(translate("Routing Number is required."));
+            return false;
+        }
+
         const routingNumberValid = /[a-zA-Z0-9]*/.test(routingNumber);
-        setRoutingNumberError(!routingNumberRequiredValid ? translate("Routing Number is required.") : "");
-        setRoutingNumberError(!routingNumberValid ? translate("Routing Number is invalid.") : "");
-        return routingNumberRequiredValid && routingNumberValid;
+        if (!routingNumberValid) {
+            setRoutingNumberError(translate("Routing Number is invalid."));
+            return false;
+        }
+
+        setRoutingNumberError("");
+        return true;
     };
 
     const handleAccountNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -117,7 +117,7 @@
         }
 
         protected signOutIfGuestSignedIn(): ng.IPromise<string> {
-            if (this.session.isAuthenticated && this.session.isGuest) {
+            if (this.session.isAuthenticated && this.session.isGuest && this.accessToken.exists()) {
                 return this.unassignCartFromGuest().then(
                     (result) => { return this.sessionService.signOut(); }
                 );

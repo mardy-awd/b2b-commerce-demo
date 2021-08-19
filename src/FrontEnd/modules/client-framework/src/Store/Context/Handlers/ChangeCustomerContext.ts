@@ -63,7 +63,7 @@ export const UpdateSession: HandlerType = async props => {
             isDefault: props.parameter.isDefault,
         } as BillToModel;
     }
-    if (props.apiParameter.session.shipToId) {
+    if (props.apiParameter.session.shipToId !== undefined) {
         newApiParameter.session.shipTo = { id: props.parameter.shipToId } as ShipToModel;
     }
 
@@ -138,7 +138,7 @@ export const NavigateToReturnUrl: HandlerType = async props => {
     const homePageUrl = getPageLinkByPageType(state, "HomePage")?.url;
     let languageSpecificLandingPage = session.customLandingPage;
     if (homePageUrl && homePageUrl !== "/") {
-        if (languageSpecificLandingPage.startsWith("/")) {
+        if (languageSpecificLandingPage && languageSpecificLandingPage.startsWith("/")) {
             languageSpecificLandingPage = homePageUrl.concat(session.customLandingPage);
         } else {
             languageSpecificLandingPage = homePageUrl.concat("/", session.customLandingPage);
@@ -146,6 +146,10 @@ export const NavigateToReturnUrl: HandlerType = async props => {
     }
     const defaultUrl = session.dashboardIsHomepage
         ? getPageLinkByPageType(state, "MyAccountPage")?.url
+        : session.customLandingPage
+        ? languageSpecificLandingPage
+        : props.apiParameter.session.shipToId === ""
+        ? `${getPageLinkByPageType(state, "AddressesPage")?.url}?isNewShipTo=true`
         : languageSpecificLandingPage ?? homePageUrl;
     const checkoutShippingUrl = getPageLinkByPageType(state, "CheckoutShippingPage")?.url;
     let returnUrl = props.parameter.returnUrl;

@@ -7,6 +7,7 @@ EntityFramework.SqlServer
 FluentValidation
 IdentityServer3
 Microsoft.AspNet.Identity.Core
+Microsoft.AspNet.Identity.EntityFramework
 Microsoft.AspNet.Identity.Owin
 Microsoft.Azure.KeyVault.Core
 Microsoft.Azure.Storage.Blob
@@ -15,6 +16,7 @@ Microsoft.CSharp
 Microsoft.Graph
 Microsoft.Graph.Core
 Microsoft.Owin
+Microsoft.Owin.Host.SystemWeb
 Microsoft.Owin.Security
 Microsoft.Owin.Security.OAuth
 Microsoft.Owin.Security.WsFederation

@@ -1,12 +1,19 @@
 import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
+import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import loadCurrentCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCurrentCart";
+import { getCurrentCountries } from "@insite/client-framework/Store/Data/Countries/CountriesSelectors";
 import loadCurrentCountries from "@insite/client-framework/Store/Data/Countries/Handlers/LoadCurrentCountries";
 import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import loadCurrentPromotions from "@insite/client-framework/Store/Data/Promotions/Handlers/LoadCurrentPromotions";
+import {
+    getCurrentPromotionsDataView,
+    getPromotionsDataView,
+} from "@insite/client-framework/Store/Data/Promotions/PromotionsSelectors";
 import clearMessages from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/ClearMessages";
 import loadDataIfNeeded from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/LoadDataIfNeeded";
+import setCartId from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/SetCartId";
 import setPlaceOrderErrorMessage from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/SetPlaceOrderErrorMessage";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
@@ -16,6 +23,7 @@ import React, { Component } from "react";
 import { connect, ResolveThunks } from "react-redux";
 
 const mapDispatchToProps = {
+    setCartId,
     loadCurrentCart,
     loadCurrentPromotions,
     loadCurrentCountries,
@@ -27,8 +35,18 @@ const mapDispatchToProps = {
 const mapStateToProps = (state: ApplicationState) => {
     const parsedQuery = parseQueryString<{ cartId?: string }>(getLocation(state).search);
     const cartId = parsedQuery.cartId;
+    let isLoadDataNeeded = false;
+    if (cartId) {
+        const cartState = getCartState(state, cartId);
+        isLoadDataNeeded = (!cartState.value && !cartState.isLoading) || !getPromotionsDataView(state, cartId).value;
+    } else {
+        const currentCartState = getCurrentCartState(state);
+        isLoadDataNeeded =
+            (!currentCartState.value && !currentCartState.isLoading) || !getCurrentPromotionsDataView(state).value;
+    }
     return {
         cartId,
+        isLoadDataNeeded: isLoadDataNeeded || !getCurrentCountries(state),
     };
 };
 
@@ -36,7 +54,10 @@ type Props = PageProps & ResolveThunks<typeof mapDispatchToProps> & ReturnType<t
 
 class CheckoutReviewAndSubmitPage extends Component<Props> {
     UNSAFE_componentWillMount() {
-        this.props.loadDataIfNeeded({ cartId: this.props.cartId });
+        this.props.setCartId({ cartId: this.props.cartId });
+        if (this.props.isLoadDataNeeded) {
+            this.props.loadDataIfNeeded({ cartId: this.props.cartId });
+        }
     }
 
     componentDidMount() {

@@ -1,4 +1,8 @@
 import { removeCookie, setCookie } from "@insite/client-framework/Common/Cookies";
+import {
+    stopWatchingForOtherTabSessionChange,
+    watchForOtherTabSessionChange,
+} from "@insite/client-framework/Services/SessionService";
 
 export interface UpdateContextModel {
     languageId?: string | null;
@@ -9,6 +13,8 @@ export interface UpdateContextModel {
 }
 
 export function updateContext(context: UpdateContextModel) {
+    stopWatchingForOtherTabSessionChange(); // Prevent reload from the changes we're doing here.
+
     if (typeof context.languageId !== "undefined") {
         if (context.languageId === null) {
             removeCookie("CurrentLanguageId");
@@ -48,4 +54,6 @@ export function updateContext(context: UpdateContextModel) {
             setCookie("CurrentShipToId", context.shipToId.toString(), { path: "/" });
         }
     }
+
+    watchForOtherTabSessionChange(); // Restart the watcher with the updated "current" state.
 }

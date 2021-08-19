@@ -5,8 +5,7 @@ import loadWishLists from "@insite/client-framework/Store/Pages/MyLists/Handlers
 import updateLoadParameter from "@insite/client-framework/Store/Pages/MyLists/Handlers/UpdateLoadParameter";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
-import ManageShareListModal from "@insite/content-library/Components/ManageShareListModal";
-import ShareListModal from "@insite/content-library/Components/ShareListModal";
+import Modals from "@insite/content-library/Components/Modals";
 import Page from "@insite/mobius/Page";
 import React, { useEffect } from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -33,8 +32,7 @@ const MyListsPage = ({ id, wishListsDataView, loadWishLists }: Props) => {
     return (
         <Page>
             <Zone contentId={id} zoneName="Content" />
-            <ShareListModal />
-            <ManageShareListModal />
+            <Modals />
         </Page>
     );
 };

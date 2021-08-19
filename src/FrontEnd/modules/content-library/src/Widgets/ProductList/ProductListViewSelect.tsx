@@ -4,6 +4,7 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import setView from "@insite/client-framework/Store/Pages/ProductList/Handlers/SetView";
 import { getProductListDataView } from "@insite/client-framework/Store/Pages/ProductList/ProductListSelectors";
 import { ProductListViewType } from "@insite/client-framework/Store/Pages/ProductList/ProductListState";
+import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
@@ -13,6 +14,7 @@ import Grid from "@insite/mobius/Icons/Grid";
 import List from "@insite/mobius/Icons/List";
 import Table from "@insite/mobius/Icons/Table";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
+import VisuallyHidden from "@insite/mobius/VisuallyHidden";
 import React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
@@ -77,7 +79,7 @@ const styles = viewSelectStyles;
 class ProductListViewSelect extends React.Component<Props> {
     UNSAFE_componentWillMount() {
         const view = getCookie("ProductList-View");
-        if (view) {
+        if (view && this.props.view !== view) {
             this.props.setView({ view: view as ProductListViewType });
         }
     }
@@ -113,6 +115,7 @@ class ProductListViewSelect extends React.Component<Props> {
                     {...styles.listViewClickable}
                     onClick={clickListViewHandler}
                 >
+                    <VisuallyHidden>{translate("Product List View")}</VisuallyHidden>
                     <Icon {...styles.listViewIcon} color={view === "List" ? "primary" : undefined} />
                 </Clickable>
                 <Clickable
@@ -120,6 +123,7 @@ class ProductListViewSelect extends React.Component<Props> {
                     {...styles.gridViewClickable}
                     onClick={clickGridViewHandler}
                 >
+                    <VisuallyHidden>{translate("Product Grid View")}</VisuallyHidden>
                     <Icon {...styles.gridViewIcon} color={view === "Grid" ? "primary" : undefined} />
                 </Clickable>
                 <Clickable
@@ -127,6 +131,7 @@ class ProductListViewSelect extends React.Component<Props> {
                     {...styles.gridViewClickable}
                     onClick={clickTableViewHandler}
                 >
+                    <VisuallyHidden>{translate("Product Table View")}</VisuallyHidden>
                     <Icon {...styles.tableViewIcon} color={view === "Table" ? "primary" : undefined} />
                 </Clickable>
             </StyledWrapper>

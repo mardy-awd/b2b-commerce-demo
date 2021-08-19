@@ -76,6 +76,7 @@ const CartLineQuantity: FC<Props> = ({
                 {...styles.editableQuantityTextField}
                 type="number"
                 min={0}
+                max={999999}
                 label={label || translate("QTY")}
                 value={value}
                 disabled={!cart.canModifyOrder || cartLine.isPromotionItem || cart.type === "Job" || isLoading[cart.id]}

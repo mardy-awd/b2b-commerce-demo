@@ -5,7 +5,7 @@ import LinksState from "@insite/client-framework/Store/Links/LinksState";
 import translate from "@insite/client-framework/Translate";
 import Breadcrumbs, { BreadcrumbsPresentationProps } from "@insite/mobius/Breadcrumbs";
 import { LinkProps } from "@insite/mobius/Link";
-import React, { FC } from "react";
+import React from "react";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state: ApplicationState) => {
@@ -25,12 +25,15 @@ export const pageBreadcrumbStyles: PageBreadcrumbsStyles = {};
 
 type Props = ReturnType<typeof mapStateToProps>;
 
-const PageBreadcrumbs: FC<Props> = (props: Props) => {
+const PageBreadcrumbs = (props: Props) => {
     const homePageLink = { children: translate("Home"), href: props.homePageUrl };
     let links = props.links || generateLinksFrom(props.linksState, props.nodeId, props.homePageUrl);
 
-    if (links?.length > 0) {
-        links = [homePageLink, ...links.slice(1)];
+    if (links.length > 0) {
+        // we need to always direct to the language-specific homepage URL
+        let arrayConcat = [...links];
+        arrayConcat = [homePageLink, ...arrayConcat.splice(1, arrayConcat.length)];
+        links = arrayConcat;
     }
 
     return <Breadcrumbs links={links} data-test-selector="pageBreadcrumbs" {...pageBreadcrumbStyles.breadcrumbs} />;
@@ -42,11 +45,7 @@ export function generateLinksFrom(linksState: LinksState, nodeId: string, homePa
     let currentLink = getPageLinkByNodeId({ links: linksState }, nodeId);
 
     while (currentLink) {
-        if (currentLink.type === "HomePage") {
-            links.unshift(homePageLink);
-        } else {
-            links.unshift({ children: currentLink.title, href: currentLink.url });
-        }
+        links.unshift({ children: currentLink.title, href: currentLink.url });
         currentLink = currentLink.parentId
             ? getPageLinkByNodeId({ links: linksState }, currentLink.parentId)
             : undefined;

@@ -24,7 +24,11 @@ import {
     RetrievePageResult,
 } from "@insite/client-framework/Services/ContentService";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getPageStateByPath, getPageStateByType } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import {
+    getPageStateByPath,
+    getPageStateByType,
+    getRequiresAuthorization,
+} from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import { AnyAction } from "@insite/client-framework/Store/Reducers";
 import { PageDefinition } from "@insite/client-framework/Types/ContentItemDefinitions";
@@ -163,8 +167,9 @@ export const loadPage = (location: Location, history?: History, onSuccess?: () =
             const currentState = getState();
             const existingPage = getPageStateByPath(currentState, location.pathname);
 
-            // if a page requiresAuthorization we want to reload them in case the user has signed in, so bypass the finished call
-            if (existingPage.value && !existingPage.value.requiresAuthorization) {
+            // if a page requiresAuthorization we want to reload them in case the user has signed in
+            // so bypass the finished call
+            if (existingPage.value && !getRequiresAuthorization(currentState, existingPage.value.id)) {
                 finishedLoadingPage(existingPage.value);
                 return;
             }
@@ -213,12 +218,21 @@ export const loadPage = (location: Location, history?: History, onSuccess?: () =
                 authorizationFailed,
                 bypassedAuthorization,
                 isAuthenticatedOnServer,
+                requiresAuthorization,
             } = retrievePageResult;
 
             if (bypassedAuthorization && page) {
                 dispatch({
                     type: "Data/Pages/SetBypassedAuthorization",
                     pageId: page.id,
+                });
+            }
+
+            if (page) {
+                dispatch({
+                    type: "Data/Pages/SetRequiresAuthorization",
+                    pageId: page.id,
+                    requiresAuthorization,
                 });
             }
 

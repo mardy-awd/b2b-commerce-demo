@@ -228,7 +228,7 @@ class OrderHistoryTable extends React.Component<Props> {
                       })
                     : "",
                 orderNumber: order.webOrderNumber || order.erpOrderNumber,
-                shipTo: `${order.stCompanyName} ${order.btAddress1} ${order.btAddress2} ${order.shipToCity} ${order.shipToState}`,
+                shipTo: `${order.stCompanyName} ${order.stAddress1} ${order.stAddress2} ${order.shipToCity} ${order.shipToState}`,
                 status: order.statusDisplay,
                 po: order.customerPO,
                 total: order.orderGrandTotalDisplay,

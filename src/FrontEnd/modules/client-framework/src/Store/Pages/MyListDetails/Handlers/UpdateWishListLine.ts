@@ -19,6 +19,7 @@ type HandlerType = HandlerWithResult<
         wishListLineId: string;
         wishListLine: WishListLineModel;
         reloadWishListLines?: boolean;
+        skipResettingData?: boolean;
     } & HasOnSuccess,
     UpdateWishListLineResult
 >;
@@ -43,12 +44,14 @@ export const RequestUpdateWishListLine: HandlerType = async props => {
 };
 
 export const ResetWishListsData: HandlerType = props => {
-    props.dispatch({
-        type: "Data/WishListLines/Reset",
-    });
-    props.dispatch({
-        type: "Data/WishLists/Reset",
-    });
+    if (!props.parameter.skipResettingData) {
+        props.dispatch({
+            type: "Data/WishListLines/Reset",
+        });
+        props.dispatch({
+            type: "Data/WishLists/Reset",
+        });
+    }
 };
 
 export const DispatchUpdateWishListLine: HandlerType = props => {

@@ -263,6 +263,7 @@ const MyListsDetailsProductList: React.FC<Props> = ({
             wishListId: wishList.id,
             wishListLineId: wishListLineToUpdate.id,
             wishListLine: wishListLineToUpdate,
+            skipResettingData: true,
             onSuccess: () => {
                 setEditNotesModalIsOpen(false);
             },

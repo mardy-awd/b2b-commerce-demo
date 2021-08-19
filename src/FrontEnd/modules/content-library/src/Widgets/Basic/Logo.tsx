@@ -1,11 +1,13 @@
-import mergeToNew from "@insite/client-framework/Common/mergeToNew";
+import { useEagerLogoLoading } from "@insite/client-framework/Common/EagerLoadingLogo";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getHomePageUrl } from "@insite/client-framework/Store/Links/LinksSelectors";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
+import Img, { ImgProps } from "@insite/mobius/Img";
+import { LazyImageProps } from "@insite/mobius/LazyImage";
 import Link from "@insite/mobius/Link";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
@@ -35,7 +37,11 @@ type Props = OwnProps & ReturnType<typeof mapStateToProps>;
 
 export interface LogoStyles {
     wrapper?: InjectableCss;
+    /**
+     * @deprecated Use img instead
+     */
     image?: LazyImageProps;
+    img?: ImgProps;
 }
 
 export const logoStyles: LogoStyles = {
@@ -50,15 +56,26 @@ export const logoStyles: LogoStyles = {
             width: 100%;
         `,
     },
+    img: {
+        css: css`
+            width: 100%;
+        `,
+    },
 };
 
-const Logo: React.FunctionComponent<Props> = ({ fields, extendedStyles, homePageLink }: Props) => {
-    const [styles] = React.useState(() => mergeToNew(logoStyles, extendedStyles));
+export const Logo: React.FunctionComponent<Props> = ({ fields, extendedStyles, homePageLink }: Props) => {
+    const styles = useMergeStyles("logo", logoStyles, extendedStyles);
+    const isEager = useEagerLogoLoading();
 
     return (
         <StyledWrapper {...styles.wrapper}>
             <Link href={homePageLink}>
-                <LazyImage src={fields.logoImage} altText={translate("Home")} {...styles.image} />
+                <Img
+                    src={fields.logoImage}
+                    loading={isEager ? "eager" : "lazy"}
+                    altText={translate("Home")}
+                    {...styles.img}
+                />
             </Link>
         </StyledWrapper>
     );

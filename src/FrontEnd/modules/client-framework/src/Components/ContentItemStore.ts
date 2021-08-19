@@ -43,6 +43,10 @@ function loadItems<T extends FoundModule<PageModule | WidgetModule>>(
     action: (component: T, type: string) => void,
 ) {
     for (const foundItemKey of foundItems.keys()) {
+        if (foundItemKey.includes(".test.") || foundItemKey.includes("TestRendering/helpers.tsx")) {
+            continue;
+        }
+
         const type = foundItemKey.replace("./", "").replace(".tsx", "");
         const component = foundItems<T>(foundItemKey);
 
@@ -194,4 +198,20 @@ export function getTheWidgetDefinitions(): Dictionary<WidgetDefinition> {
  */
 export function getThePageDefinitions(): Dictionary<PageDefinition> {
     return pageDefinitions;
+}
+
+let isWebCrawler: boolean;
+
+export function setIsWebCrawler(value: boolean) {
+    isWebCrawler = value;
+}
+
+export function getIsWebCrawler() {
+    return isWebCrawler;
+}
+
+export function checkIsWebCrawler(userAgent: string): boolean {
+    const botString = /bot|crawler|baiduspider|80legs|ia_archiver|voyager|curl|wget|yahoo! slurp|mediapartners-google/;
+    const regExp = new RegExp(botString, "i");
+    return regExp.test(userAgent);
 }

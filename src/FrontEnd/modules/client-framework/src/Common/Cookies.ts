@@ -22,6 +22,7 @@ export function setCookie(name: string, value: string, options?: CookieAttribute
         // if we do decide to support this and removeCookie
         // we would need to modify the collection that is returned from getSessionCookies, encode the value and then recall setSessionCookies
         Logger.error("setCookie is not currently supported during server side rendering.");
+        return;
     }
 
     const isSecure = window.location.protocol === "https:";
@@ -39,6 +40,7 @@ setupSetCookie(setCookie);
 export function removeCookie(name: string, options?: CookieAttributes) {
     if (IS_SERVER_SIDE) {
         Logger.error("removeCookie is not currently supported during server side rendering.");
+        return;
     }
     return Cookies.remove(name, options);
 }

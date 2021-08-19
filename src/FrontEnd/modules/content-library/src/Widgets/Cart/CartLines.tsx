@@ -281,6 +281,7 @@ const CartLines: FC<Props> = ({
                     isCondensed={isCondensed}
                     productsCannotBePurchased={productsCannotBePurchased}
                     cartNotPriced={cart.cartNotPriced}
+                    failedToGetRealTimeInventory={cart.failedToGetRealTimeInventory}
                     onIsCondensedChange={isCondensedChangeHandler}
                     onRemoveAllClick={removeAllClickHandler}
                 />
@@ -296,6 +297,7 @@ interface CartLinesHeaderProps {
     isCondensed: boolean;
     productsCannotBePurchased?: boolean;
     cartNotPriced?: boolean;
+    failedToGetRealTimeInventory?: boolean;
     onIsCondensedChange: CheckboxProps["onChange"];
     onRemoveAllClick: () => void;
 }
@@ -305,6 +307,7 @@ const CartLinesHeader: FC<CartLinesHeaderProps> = ({
     isCondensed,
     productsCannotBePurchased,
     cartNotPriced,
+    failedToGetRealTimeInventory,
     onIsCondensedChange,
     onRemoveAllClick,
 }) => {
@@ -353,6 +356,14 @@ const CartLinesHeader: FC<CartLinesHeaderProps> = ({
                     <Icon {...headerStyles.warningIcon}></Icon>
                     <Typography {...headerStyles.warningText}>
                         {siteMessage("Cart_NoPriceAvailableAtCheckout")}
+                    </Typography>
+                </StyledSection>
+            )}
+            {failedToGetRealTimeInventory && (
+                <StyledSection {...headerStyles.warningSection}>
+                    <Icon {...headerStyles.warningIcon}></Icon>
+                    <Typography {...headerStyles.warningText}>
+                        {siteMessage("Cart_NoInventoryAvailableAtCheckout")}
                     </Typography>
                 </StyledSection>
             )}

@@ -13,7 +13,10 @@ export function canDeletePage(
     return (
         (!futurePublishNodeIds[key] || futurePublishNodeIds[key] <= new Date()) &&
         permissions.canDeletePage &&
-        (pageDefinition.pageType === "Content" || !!treeNode.isVariant || !!treeNode.isRootVariant) &&
+        (pageDefinition?.pageType === "Content" ||
+            !!treeNode.isVariant ||
+            !!treeNode.isRootVariant ||
+            !pageDefinition) &&
         (treeNode.isVariant ? !treeNode.isDefaultVariant : true)
     );
 }
@@ -27,8 +30,8 @@ export function canEditPage(
     const key = treeNode.isVariant ? `${treeNode.nodeId}_${treeNode.pageId}` : treeNode.nodeId;
     return (
         (!futurePublishNodeIds[key] || futurePublishNodeIds[key] <= new Date()) &&
-        ((permissions.canEditWidget && pageDefinition.pageType === "Content") ||
-            (permissions.canEditSystemWidget && pageDefinition.pageType === "System"))
+        ((permissions.canEditWidget && pageDefinition?.pageType === "Content") ||
+            (permissions.canEditSystemWidget && pageDefinition?.pageType === "System"))
     );
 }
 
@@ -38,11 +41,16 @@ export function canAddChildPage(
     treeNode: TreeNodeModel,
 ) {
     return (
+        pageDefinition &&
         permissions.canCreatePage &&
         treeNode.displayName !== "Header" &&
         treeNode.displayName !== "Footer" &&
         !treeNode.isVariant
     );
+}
+
+export function canAddVariant(pageDefinition: LoadedPageDefinition, permissions: PermissionsModel) {
+    return pageDefinition && permissions.canCreateVariant;
 }
 
 export function canCopyPage(
@@ -56,7 +64,7 @@ export function canCopyPage(
         !treeNode.isRootVariant &&
         treeNode.displayName !== "Header" &&
         treeNode.displayName !== "Footer" &&
-        pageDefinition.pageType === "Content"
+        pageDefinition?.pageType === "Content"
     );
 }
 

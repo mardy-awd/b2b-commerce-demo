@@ -128,7 +128,7 @@ const ShareEntityButton = ({
     const checkForErrors = () => {
         // Regular expression to validate email address
         const regexp = new RegExp("\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
-        const localEmailToError = !emailTo ? requiredFieldMessage : regexp.test(emailFrom) ? "" : emailFieldMessage;
+        const localEmailToError = !emailTo ? requiredFieldMessage : regexp.test(emailTo) ? "" : emailFieldMessage;
         setEmailToError(localEmailToError);
         const localEmailFromError = !emailFrom ? requiredFieldMessage : regexp.test(emailFrom) ? "" : emailFieldMessage;
         setEmailFromError(localEmailFromError);
@@ -230,7 +230,8 @@ const ShareEntityButton = ({
                 <GridContainer {...styles.container} data-test-selector="shareEntity_modal">
                     <GridItem {...styles.emailToGridItem}>
                         <TextField
-                            label={`${translate("Email To")}*`}
+                            label={`${translate("Email To")}`}
+                            required
                             value={emailTo}
                             error={emailToError}
                             onChange={emailToChangeHandler}
@@ -240,7 +241,8 @@ const ShareEntityButton = ({
                     </GridItem>
                     <GridItem {...styles.emailFromGridItem}>
                         <TextField
-                            label={`${translate("Email From")}*`}
+                            label={`${translate("Email From")}`}
+                            required
                             value={emailFrom}
                             error={emailFromError}
                             onChange={emailFromChangeHandler}

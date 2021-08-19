@@ -1,6 +1,4 @@
-﻿/* tslint:disable */
-class guidHelper {
-/* tslint:enable */
+﻿class guidHelper {
     static isGuid(value: string, allowNull?: boolean): boolean {
         return /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/i.test(value) || allowNull && value === null;
     }
@@ -14,7 +12,6 @@ class guidHelper {
     }
 
     static generateGuid(): string {
-        /* tslint:disable no-bitwise */
         const guidTemplate = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";
         const hex = "0123456789abcdef";
         let random = 0;
@@ -38,6 +35,5 @@ class guidHelper {
         }
 
         return result;
-        /* tslint:enable no-bitwise */
     }
 }

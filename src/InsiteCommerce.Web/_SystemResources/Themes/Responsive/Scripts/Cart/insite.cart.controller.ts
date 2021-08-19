@@ -121,7 +121,7 @@ module insite.cart {
 
         displayCart(cart: CartModel): void {
             this.cart = cart;
-            this.canAddAllToList = this.cart.cartLines.every(l => l.canAddToWishlist);
+            this.canAddAllToList = this.cart.cartLines.every(l => !l.isRestricted && l.canAddToWishlist);
             this.promotionService.getCartPromotions(this.cart.id).then(
                 (promotionCollection: PromotionCollectionModel) => { this.getCartPromotionsCompleted(promotionCollection); },
                 (error: any) => { this.getCartPromotionsFailed(error); });

@@ -40,6 +40,7 @@ import Clickable from "@insite/mobius/Clickable";
 import Hidden, { HiddenProps } from "@insite/mobius/Hidden";
 import Modal, { ModalPresentationProps } from "@insite/mobius/Modal";
 import OverflowMenu, { OverflowMenuPresentationProps } from "@insite/mobius/OverflowMenu";
+import { markForFocusLater } from "@insite/mobius/Overlay/helpers/focusManager";
 import ToasterContext from "@insite/mobius/Toast/ToasterContext";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
 import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext";
@@ -55,6 +56,7 @@ interface State {
     copyListModalIsOpen: boolean;
     printAllModalIsOpen: boolean;
     scheduleReminderModalIsOpen: boolean;
+    closeCopyListModalOnEsc: boolean;
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
@@ -222,6 +224,7 @@ class MyListsDetailsActions extends React.Component<Props, State> {
             deleteListItemsModalIsOpen: false,
             copyListModalIsOpen: false,
             scheduleReminderModalIsOpen: false,
+            closeCopyListModalOnEsc: true,
         };
     }
 
@@ -423,6 +426,14 @@ class MyListsDetailsActions extends React.Component<Props, State> {
         this.setState({ copyListModalIsOpen: false });
     };
 
+    disableCloseCopyListModalOnEsc = () => {
+        this.setState({ closeCopyListModalOnEsc: false });
+    };
+
+    enableCloseCopyListModalOnEsc = () => {
+        this.setState({ closeCopyListModalOnEsc: true });
+    };
+
     scheduleReminderClickHandler = () => {
         this.setState({ scheduleReminderModalIsOpen: true });
     };
@@ -436,7 +447,6 @@ class MyListsDetailsActions extends React.Component<Props, State> {
         if (!wishList) {
             return null;
         }
-
         const showEdit = wishList.allowEdit || !wishList.isSharedList;
         const showShare =
             !wishList.isSharedList && wishListSettings.allowMultipleWishLists && wishListSettings.allowListSharing;
@@ -457,7 +467,7 @@ class MyListsDetailsActions extends React.Component<Props, State> {
                 </Typography>
                 <StyledWrapper {...styles.buttonWrapper} data-test-selector="menuWrapper">
                     <Hidden {...styles.narrowHidden}>
-                        <OverflowMenu position="end" {...styles.overflowMenu}>
+                        <OverflowMenu position="end" onOpen={markForFocusLater} {...styles.overflowMenu}>
                             {showAddToCart ? (
                                 <Clickable onClick={this.addToCartClickHandler}>{addListToCartButtonText}</Clickable>
                             ) : null}
@@ -486,7 +496,7 @@ class MyListsDetailsActions extends React.Component<Props, State> {
                         </OverflowMenu>
                     </Hidden>
                     <Hidden {...styles.wideHidden} data-test-selector="wideHidden">
-                        <OverflowMenu {...styles.overflowMenu}>
+                        <OverflowMenu onOpen={markForFocusLater} {...styles.overflowMenu}>
                             {showCopy ? (
                                 <Clickable onClick={this.copyClickHandler} data-test-selector="copyList">
                                     {translate("Copy")}
@@ -606,11 +616,14 @@ class MyListsDetailsActions extends React.Component<Props, State> {
                     headline={translate("Copy List")}
                     isOpen={this.state.copyListModalIsOpen}
                     handleClose={this.copyCancelHandler}
+                    closeOnEsc={this.state.closeCopyListModalOnEsc}
                     {...styles.copyListModal}
                 >
                     <MyListsDetailsCopyListForm
                         onCancel={this.copyCancelHandler}
                         onSubmit={this.copySubmitHandler}
+                        enableCloseCopyListModalOnEsc={this.enableCloseCopyListModalOnEsc}
+                        disableCloseCopyListModalOnEsc={this.disableCloseCopyListModalOnEsc}
                     ></MyListsDetailsCopyListForm>
                 </Modal>
                 <ScheduleReminderModal

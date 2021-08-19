@@ -6,7 +6,6 @@ import { GetPagesByParentApiParameter, PagesCollectionModel } from "@insite/clie
 import { setDataViewLoaded, setDataViewLoading } from "@insite/client-framework/Store/Data/DataState";
 import { nullPage, PagesState } from "@insite/client-framework/Store/Data/Pages/PagesState";
 import { createContextualIds, prepareFields } from "@insite/client-framework/Store/Data/Pages/PrepareFields";
-import { getPageLinkByNodeId } from "@insite/client-framework/Store/Links/LinksSelectors";
 import LinksState from "@insite/client-framework/Store/Links/LinksState";
 import { PageDefinition } from "@insite/client-framework/Types/ContentItemDefinitions";
 import { DeviceType } from "@insite/client-framework/Types/ContentItemModel";
@@ -30,6 +29,7 @@ export const initialState: PagesState = {
     },
     dataViews: {},
     bypassedAuthorization: {},
+    requiresAuthorizationByPageId: {},
 };
 
 interface SetPageIsLoaded {
@@ -69,7 +69,6 @@ export const reducer = {
             currentPersonaIds,
             defaultPersonaId,
             currentDeviceType,
-            links,
         } = action;
 
         const contextualIds = createContextualIds(
@@ -81,8 +80,7 @@ export const reducer = {
         );
 
         for (const page of collection.pages) {
-            const path = getPageLinkByNodeId({ links }, page.nodeId)?.url;
-            finishLoadPage(draft, page, path, action, contextualIds);
+            finishLoadPage(draft, page, undefined, action, contextualIds);
         }
 
         setDataViewLoaded(draft, parameter, collection, collection => collection.pages as PageProps[]);
@@ -149,6 +147,13 @@ export const reducer = {
 
     "Data/Pages/SetBypassedAuthorization": (draft: Draft<PagesState>, { pageId }: { pageId: string }) => {
         draft.bypassedAuthorization[pageId] = true;
+    },
+
+    "Data/Pages/SetRequiresAuthorization": (
+        draft: Draft<PagesState>,
+        { pageId, requiresAuthorization }: { pageId: string; requiresAuthorization: boolean },
+    ) => {
+        draft.requiresAuthorizationByPageId[pageId] = requiresAuthorization;
     },
 
     "Data/Pages/SetLocation": (draft: Draft<PagesState>, action: { location: Location }) => {

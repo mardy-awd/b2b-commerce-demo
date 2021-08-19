@@ -7,6 +7,10 @@ import {
 } from "@insite/client-framework/HandlerCreator";
 import { addAccount, AddAccountApiParameter } from "@insite/client-framework/Services/AccountService";
 import { ServiceResult } from "@insite/client-framework/Services/ApiService";
+import {
+    stopWatchingForOtherTabSessionChange,
+    watchForOtherTabSessionChange,
+} from "@insite/client-framework/Services/SessionService";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import sendActivationEmail from "@insite/client-framework/Store/Pages/UserSetup/Handlers/SendActivationEmail";
 import { AccountModel } from "@insite/client-framework/Types/ApiModels";
@@ -40,7 +44,9 @@ export const PopulateApiParameter: HandlerType = props => {
 };
 
 export const CallAddAccount: HandlerType = async props => {
+    stopWatchingForOtherTabSessionChange();
     props.apiResult = await addAccount(props.apiParameter);
+    watchForOtherTabSessionChange();
     if (!props.apiResult.successful) {
         props.parameter.onError?.(props.apiResult.errorMessage);
         return false;

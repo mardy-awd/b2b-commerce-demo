@@ -9,6 +9,7 @@ import Trash from "@insite/shell/Components/Icons/Trash";
 import { HasConfirmationContext, withConfirmation } from "@insite/shell/Components/Modals/ConfirmationContext";
 import {
     canAddChildPage,
+    canAddVariant,
     canCopyPage,
     canDeleteLayout,
     canDeletePage,
@@ -16,7 +17,7 @@ import {
     canEditPage,
 } from "@insite/shell/Components/PageTree/PageTreeFlyout.Functions";
 import { getPageDefinition } from "@insite/shell/DefinitionLoader";
-import { getPagePublishInfo } from "@insite/shell/Services/ContentAdminService";
+import { getPagePublishInfo, getPublishedPageVersions } from "@insite/shell/Services/ContentAdminService";
 import { ShellThemeProps } from "@insite/shell/ShellTheme";
 import { showErrorModal } from "@insite/shell/Store/ErrorModal/ErrorModalActionCreator";
 import { editPageOptions } from "@insite/shell/Store/PageEditor/PageEditorActionCreators";
@@ -141,7 +142,12 @@ class PageTreeFlyOut extends React.Component<Props> {
         if (!this.props.flyOutNode.isRootVariant) {
             const pagePublishInfo = await getPagePublishInfo(this.props.flyOutNode.pageId);
             if (pagePublishInfo.length) {
-                this.props.showErrorModal("Page should be published before creating any variant.");
+                this.props.showErrorModal(
+                    "Page should be published before creating any variant.",
+                    undefined,
+                    undefined,
+                    "Create Variant",
+                );
                 return;
             }
         }
@@ -158,8 +164,18 @@ class PageTreeFlyOut extends React.Component<Props> {
         this.props.openRulesEdit(this.props.flyOutNode.pageId);
     };
 
-    private handleMakeDefault = () => {
+    private handleMakeDefault = async () => {
         this.props.closeFlyOut();
+        const publishedVersions = await getPublishedPageVersions(this.props.flyOutNode.pageId, 1, 1);
+        if (publishedVersions.totalItemCount === 0) {
+            this.props.showErrorModal(
+                "This variant cannot be made the default because it has not been published. Publish the variant and try again.",
+                undefined,
+                undefined,
+                "Make Default",
+            );
+            return;
+        }
         this.props.openMakeDefaultVariant(this.props.flyOutNode.parentId, this.props.flyOutNode.pageId);
     };
 
@@ -182,7 +198,7 @@ class PageTreeFlyOut extends React.Component<Props> {
             );
         }
 
-        if (!permissions || !pageDefinition) {
+        if (!permissions) {
             return null;
         }
 
@@ -198,14 +214,14 @@ class PageTreeFlyOut extends React.Component<Props> {
                     <>
                         {canAddChildPage(pageDefinition, permissions, flyOutNode) &&
                             flyOutOption(this.handleAddPage, <OverflowAddPage />, "Add Page")}
-                        {permissions.canCreateVariant &&
+                        {canAddVariant(pageDefinition, permissions) &&
                             !flyOutNode.isVariant &&
                             flyOutOption(this.handleCreateVariant, <OverflowAddPage />, "Create Variant")}
-                        {permissions.canCreateVariant &&
+                        {canAddVariant(pageDefinition, permissions) &&
                             flyOutNode.isVariant &&
                             !flyOutNode.isDefaultVariant &&
                             flyOutOption(this.handleEditRules, <Edit />, "Edit Rules")}
-                        {permissions.canCreateVariant &&
+                        {canAddVariant(pageDefinition, permissions) &&
                             flyOutNode.isVariant &&
                             !flyOutNode.isDefaultVariant &&
                             flyOutOption(this.handleMakeDefault, <Edit />, "Make Default")}
@@ -234,6 +250,13 @@ class PageTreeFlyOut extends React.Component<Props> {
             top = rect.top;
         }
 
+        if (top + 200 > window.innerHeight) {
+            return {
+                bottom: window.innerHeight - top - 40,
+                left,
+            };
+        }
+
         return {
             left,
             top,
@@ -250,12 +273,11 @@ export const pageTreeFlyOutMenuHasItems = (
 
     return (
         !!permissions &&
-        ((pageDefinition &&
-            (canEditPage(futurePublishNodeIds, pageDefinition, permissions, flyOutNode) ||
-                canAddChildPage(pageDefinition, permissions, flyOutNode) ||
-                permissions.canCreateVariant ||
-                canCopyPage(pageDefinition, permissions, flyOutNode) ||
-                canDeletePage(futurePublishNodeIds, pageDefinition, permissions, flyOutNode))) ||
+        (canEditPage(futurePublishNodeIds, pageDefinition, permissions, flyOutNode) ||
+            canAddChildPage(pageDefinition, permissions, flyOutNode) ||
+            canAddVariant(pageDefinition, permissions) ||
+            canCopyPage(pageDefinition, permissions, flyOutNode) ||
+            canDeletePage(futurePublishNodeIds, pageDefinition, permissions, flyOutNode) ||
             (flyOutNode.type === "Layout" && (canEditLayout(permissions) || canDeleteLayout(permissions))))
     );
 };
@@ -269,8 +291,6 @@ const PageTreeFlyOutMenu = styled.div`
     position: fixed;
     display: block;
     z-index: 1000;
-    left: 0;
-    top: 0;
 `;
 
 const FlyoutOption = styled.div`

@@ -1,4 +1,5 @@
 import { Dictionary } from "@insite/client-framework/Common/Types";
+import { checkIsWebCrawler, setIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
 import {
     serverSiteMessageResolver,
     serverTranslationResolver,
@@ -18,7 +19,6 @@ import robots from "@insite/server-framework/Robots";
 import { shellRenderer } from "@insite/server-framework/ShellRenderer";
 import { getAutoUpdatedPageTypes } from "@insite/server-framework/SiteGeneration/PageCreators";
 import { Request, Response } from "express";
-import * as React from "react";
 
 setResolver(serverSiteMessageResolver);
 setTranslationResolver(serverTranslationResolver);
@@ -126,6 +126,9 @@ function setupSSR(request: Request, domain: Parameters<typeof setDomain>[0]) {
         delete headers["content-length"];
     }
     setHeaders(headers);
+
+    setIsWebCrawler(checkIsWebCrawler(headers["user-agent"] as string));
+
     const protocol = headers["x-forwarded-proto"]?.toString().toLowerCase() === "https" ? "https" : request.protocol;
     setUrl(`${protocol}://${request.get("host")}${request.originalUrl}`);
 }

@@ -21,8 +21,6 @@ import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled, { css } from "styled-components";
 
-interface OwnProps {}
-
 const mapStateToProps = (state: ShellState) => ({
     selectedPageId: getCurrentPage(state).id,
     isEditMode: state.shellContext.contentMode === "Editing",
@@ -48,7 +46,7 @@ const mapDispatchToProps = {
     openAddLayout,
 };
 
-type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & OwnProps;
+type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
 interface State {
     flyOutNode?: TreeNodeModel;
@@ -136,6 +134,7 @@ class PageTree extends ClickOutside<Props, State> {
             futurePublishNodeIds,
             draftNodeIds,
         } = this.props;
+
         if (mobileCmsModeActive) {
             return (
                 <PageTreeStyle ref={this.setWrapperRef} onClick={this.closeFlyOut}>
@@ -168,11 +167,16 @@ class PageTree extends ClickOutside<Props, State> {
             );
         }
 
+        const noPagesFound =
+            Object.keys(headerNodesByParentId).length === 0 &&
+            Object.keys(nodesByParentId).length === 0 &&
+            Object.keys(footerNodesByParentId).length === 0;
+
         return (
             <PageTreeContainerStyle>
                 <PageTreeStyle ref={this.setWrapperRef} onClick={this.closeFlyOut}>
                     <Typography variant="h2" css={pagesH2}>
-                        Pages
+                        {noPagesFound ? "No pages found" : "Pages"}
                         {hasExpandedNodes && (
                             <CollapseTreeStyle onClick={this.closeAll}>
                                 <SectionCollapse />
@@ -226,7 +230,6 @@ class PageTree extends ClickOutside<Props, State> {
                         futurePublishNodeIds={futurePublishNodeIds}
                         draftNodeIds={draftNodeIds}
                     />
-
                     {flyOutNode && flyOutElement && (
                         <PageTreeFlyOut
                             flyOutNode={flyOutNode}

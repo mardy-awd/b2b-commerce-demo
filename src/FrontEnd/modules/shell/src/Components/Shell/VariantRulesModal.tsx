@@ -69,7 +69,7 @@ const VariantRulesModal: React.FC<Props> = ({ variantRulesForPageId, visible, is
                 that matches a specific country to only show this variant to users from that country.
             </Typography>
             <RulesContainer>
-                <RulesIFrame id="rule-manager-iframe" src={`/admin/data/pages/${variantRulesForPageId}`}></RulesIFrame>
+                <RulesIFrame id="rule-manager-iframe" src={`/admin/data/pages/${variantRulesForPageId}?iframe=true`} />
             </RulesContainer>
             <SaveCancelButtonContainer>
                 <CancelButton data-test-selector="VariantRulesModal_Cancel" variant="tertiary" onClick={closeRulesEdit}>

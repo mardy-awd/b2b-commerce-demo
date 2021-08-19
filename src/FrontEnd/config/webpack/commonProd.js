@@ -22,6 +22,10 @@ module.exports = {
             // to stop all the missing license text warnings....
             licenseTemplateDir: path.resolve(__dirname, "./default-license-texts"),
             outputFilename: "licenses.json",
+            licenseTypeOverrides: {
+                // domutils license is not recognized correctly, override here. Hopefully it never changes.
+                domutils: "BSD-2-Clause",
+            },
             unacceptableLicenseTest: licenseType => {
                 // Note: This list requires approval from legal. Likely more licenses may also be added
                 return !allowedLicenses.includes(licenseType);

@@ -1,6 +1,10 @@
 import { ApiHandlerDiscreteParameter, createHandlerChainRunner } from "@insite/client-framework/HandlerCreator";
 import { addAccount } from "@insite/client-framework/Services/AccountService";
 import { ServiceResult } from "@insite/client-framework/Services/ApiService";
+import {
+    stopWatchingForOtherTabSessionChange,
+    watchForOtherTabSessionChange,
+} from "@insite/client-framework/Services/SessionService";
 import signIn from "@insite/client-framework/Store/Context/Handlers/SignIn";
 import { AccountModel } from "@insite/client-framework/Types/ApiModels";
 
@@ -38,7 +42,9 @@ export const PopulateApiParameter: HandlerType = props => {
 };
 
 export const AddAccount: HandlerType = async props => {
+    stopWatchingForOtherTabSessionChange();
     props.apiResult = await addAccount({ account: props.apiParameter });
+    watchForOtherTabSessionChange();
 };
 
 export const SignIn: HandlerType = props => {
