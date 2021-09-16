@@ -33,7 +33,7 @@ const reducer = {
         action: {
             productInfosById: SafeDictionary<ProductInfo>;
             variantSelection: SafeDictionary<string>;
-            selectedProductId: string;
+            selectedProductId?: string;
             configuration?: ConfigurationModel | null;
         },
     ) => {

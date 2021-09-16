@@ -472,7 +472,11 @@ const PublishModal: React.FC = () => {
                 </>
             )}
             <PublishCancelButtonContainer>
-                <CancelButton variant="tertiary" onClick={() => dispatch(closePublishModal())}>
+                <CancelButton
+                    variant="tertiary"
+                    data-test-selector="publishModal_cancel"
+                    onClick={() => dispatch(closePublishModal())}
+                >
                     Cancel
                 </CancelButton>
                 {isEditingExistingPublish && !publishImmediately && (

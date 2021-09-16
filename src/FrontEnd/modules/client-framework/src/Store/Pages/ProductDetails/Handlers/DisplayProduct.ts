@@ -164,7 +164,7 @@ export const DispatchCompleteLoadProduct: HandlerType = props => {
         type: "Pages/ProductDetails/CompleteLoadProduct",
         productInfosById: props.productInfosById ?? {},
         variantSelection: props.variantSelection ?? {},
-        selectedProductId: props.product.id,
+        selectedProductId: Object.keys(props.variantSelection as any).length ? undefined : props.product.id,
         configuration: props.product.detail?.configuration,
     });
 };
@@ -264,7 +264,7 @@ export const LoadRealTimeInventory: HandlerType = props => {
                             });
 
                             const productInfo = createFromProduct(
-                                getProductState(props.getState(), props.product.id).value!,
+                                getProductState(props.getState(), props.product.id).value ?? props.product,
                             );
 
                             props.dispatch({

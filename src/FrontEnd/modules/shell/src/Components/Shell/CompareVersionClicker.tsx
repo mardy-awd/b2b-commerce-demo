@@ -52,6 +52,7 @@ const CompareVersionClicker = ({
 
     return (
         <ClickerStyle
+            data-test-selector="contentModeClicker_CompareVersion"
             clickable
             disabled={disabled}
             onClick={() => {

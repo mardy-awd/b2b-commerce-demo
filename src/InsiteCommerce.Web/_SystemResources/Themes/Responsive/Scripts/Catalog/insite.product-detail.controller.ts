@@ -496,7 +496,10 @@ module insite.catalog {
             }
 
             if (this.product.productUnitOfMeasures && this.product.productUnitOfMeasures.length > 1) {
-                if (!this.product.selectedUnitOfMeasure || this.product.productUnitOfMeasures.every(o => o.unitOfMeasure !== this.product.selectedUnitOfMeasure)) {
+                if (!this.product.selectedUnitOfMeasure
+                    || this.product.productUnitOfMeasures.every(o => o.unitOfMeasure !== this.product.selectedUnitOfMeasure)
+                    || this.settings.alternateUnitsOfMeasure === false
+                ) {
                     this.product.selectedUnitOfMeasure = this.getDefaultValue(this.product.productUnitOfMeasures);
                     this.changeUnitOfMeasure(this.product);
                 } else if (!this.settings.realTimePricing) {

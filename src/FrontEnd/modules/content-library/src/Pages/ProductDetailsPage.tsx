@@ -46,6 +46,7 @@ const mapStateToProps = (state: ApplicationState) => {
         page: getCurrentPage(state),
         location,
         websiteSettings: getSettingsCollection(state).websiteSettings,
+        selectedProductId: state.pages.productDetails.selectedProductId,
     };
 };
 
@@ -176,13 +177,15 @@ class ProductDetailsPage extends React.Component<Props, State> {
 
         return (
             <Page data-test-selector={`productDetails_productId_${productId}`}>
-                <CurrentCategory>
-                    <ProductContext.Provider value={productContext}>
-                        <ParentProductIdContext.Provider value={this.props.parentProductState?.value?.id}>
-                            <Zone contentId={this.props.id} zoneName="Content" />
-                        </ParentProductIdContext.Provider>
-                    </ProductContext.Provider>
-                </CurrentCategory>
+                {this.props.selectedProductId && (
+                    <CurrentCategory>
+                        <ProductContext.Provider value={productContext}>
+                            <ParentProductIdContext.Provider value={this.props.parentProductState?.value?.id}>
+                                <Zone contentId={this.props.id} zoneName="Content" />
+                            </ParentProductIdContext.Provider>
+                        </ProductContext.Provider>
+                    </CurrentCategory>
+                )}
                 <Modals />
             </Page>
         );

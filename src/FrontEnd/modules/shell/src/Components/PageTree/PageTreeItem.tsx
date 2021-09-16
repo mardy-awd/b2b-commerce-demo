@@ -94,6 +94,7 @@ class PageTreeItem extends React.Component<Props> {
                     neverPublished={
                         neverPublishedNodeIds[node.isVariant ? `${node.nodeId}_${node.pageId}` : node.nodeId]
                     }
+                    data-test-selector={`pageTreeTitle_${node.displayName}`}
                 >
                     {children && !node.isVariant && (
                         <ExpandStyle

@@ -2,6 +2,7 @@ import { ProductInfo } from "@insite/client-framework/Common/ProductInfo";
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
 import { createHandlerChainRunner, Handler } from "@insite/client-framework/HandlerCreator";
 import loadRealTimePricing from "@insite/client-framework/Store/CommonHandlers/LoadRealTimePricing";
+import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import {
     getProductState,
     getVariantChildrenDataView,
@@ -77,7 +78,9 @@ export const SetProductInfo: HandlerType = props => {
     if (!productInfosById) {
         throw new Error("productInfosById was undefined in the productDetailsState");
     }
-    if (!selectedProductId) {
+
+    const currentSelectedProductId = selectedProductId ?? props.parameter.productId;
+    if (!currentSelectedProductId) {
         throw new Error("selectedProductId was undefined in the productDetailsState");
     }
 
@@ -85,9 +88,9 @@ export const SetProductInfo: HandlerType = props => {
         throw new Error("selectedProductId was undefined in the props for UpdateVariantSelection");
     }
 
-    const currentProductInfo = productInfosById[selectedProductId];
+    const currentProductInfo = productInfosById[currentSelectedProductId];
     if (!currentProductInfo) {
-        throw new Error(`There was no productInfoById for the id ${selectedProductId}`);
+        throw new Error(`There was no productInfoById for the id ${currentSelectedProductId}`);
     }
     const newProductInfo = productInfosById[props.selectedProductId];
     if (!newProductInfo) {
@@ -100,9 +103,11 @@ export const SetProductInfo: HandlerType = props => {
 
     props.productInfo = {
         ...newProductInfo,
-        unitOfMeasure: product.unitOfMeasures!.some(o => o.unitOfMeasure === currentProductInfo.unitOfMeasure)
-            ? currentProductInfo.unitOfMeasure
-            : newProductInfo.unitOfMeasure,
+        unitOfMeasure:
+            getSettingsCollection(state).productSettings.alternateUnitsOfMeasure &&
+            product.unitOfMeasures!.some(o => o.unitOfMeasure === currentProductInfo.unitOfMeasure)
+                ? currentProductInfo.unitOfMeasure
+                : newProductInfo.unitOfMeasure,
         qtyOrdered: Math.max(currentProductInfo.qtyOrdered, product.minimumOrderQty),
     };
 };
