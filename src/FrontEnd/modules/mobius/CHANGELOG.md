@@ -9,6 +9,8 @@
 - `AccordionSection`: new props `expandIconProps`, `collapseIconProps`, and `toggleTransition` to provide more granular control over iconography. 
 - `DataTable`: Added sortable features to `DataTableHeader`. Style extensibility is through DataTable in theme, and can also be applied to components individually.
 - `DatePicker`: added a padding to fix the display on mobile.
+- `Pagination`: set button type to "button".
+- `DataTableHeader`: set button type to "button" for Clickable element.
 
 ## Insite Commerce 5.0.2 cut 6/18 docs release
 

@@ -31,7 +31,7 @@ export type TabGroupProps = MobiusStyledComponentProps<
         /** Current tab. */
         current?: string;
         /** Function to be executed when tab is changed, receives a single argument of the event. */
-        onTabChange?: (event: React.MouseEvent | React.KeyboardEvent) => void;
+        onTabChange?: (event: React.MouseEvent | React.KeyboardEvent, tabKey?: string) => void;
     } & TabGroupPresentationProps
 >;
 
@@ -118,7 +118,7 @@ class TabGroup extends React.Component<Props, State> {
     changeTab = (tabKey: string, event: React.MouseEvent | React.KeyboardEvent) => {
         this.setState({ currentTab: tabKey });
         // eslint-disable-next-line no-unused-expressions
-        this.props.onTabChange && this.props.onTabChange(event);
+        this.props.onTabChange && this.props.onTabChange(event, tabKey);
         ((this.tabRefs[tabKey].current as unknown) as HTMLButtonElement).focus();
     };
 

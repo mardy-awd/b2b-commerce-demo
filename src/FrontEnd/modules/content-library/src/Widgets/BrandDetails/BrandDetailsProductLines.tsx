@@ -6,7 +6,7 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { BrandDetailsPageContext } from "@insite/content-library/Pages/BrandDetailsPage";
 import Button, { ButtonProps } from "@insite/mobius/Button";
-import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
+import { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
@@ -47,12 +47,16 @@ export interface BrandDetailsProductLinesStyles {
     productLineItemColumn?: GridItemProps;
     innerProductLineContainer?: GridContainerProps;
     productLineImageItem?: GridItemProps;
-    productLineImageClickable?: ClickablePresentationProps;
     productLineImage?: LazyImageProps;
+    /** @deprecated item is no longer used for syntatic correctness */
     productLineNameLinkItem?: GridItemProps;
+    productLineNameItem?: GridItemProps;
     productLineNameLink?: LinkProps;
+    productLineName?: TypographyProps;
     viewAllButtonItem?: GridItemProps;
     viewAllButton?: ButtonProps;
+    /** @deprecated Clickable component is no longer used for syntatic correctness */
+    productLineImageClickable?: ClickablePresentationProps;
 }
 
 export const productLinesStyles: BrandDetailsProductLinesStyles = {
@@ -98,14 +102,14 @@ export const productLinesStyles: BrandDetailsProductLinesStyles = {
             justify-content: center;
         `,
     },
-    productLineImageClickable: {
+    productLineImage: {
         css: css`
             img {
                 height: 100%;
             }
         `,
     },
-    productLineNameLinkItem: {
+    productLineNameItem: {
         width: 12,
         css: css`
             width: 100%;
@@ -113,6 +117,7 @@ export const productLinesStyles: BrandDetailsProductLinesStyles = {
         `,
     },
     productLineNameLink: {
+        color: "text.main",
         typographyProps: {
             weight: "bold",
             css: css`
@@ -120,8 +125,19 @@ export const productLinesStyles: BrandDetailsProductLinesStyles = {
                 overflow-wrap: break-word;
                 word-wrap: break-word;
                 text-align: center;
+                font-weight: bold;
             `,
         },
+    },
+    productLineName: {
+        weight: "bold",
+        css: css`
+            width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            text-align: center;
+            font-weight: bold;
+        `,
         color: "text.main",
     },
     viewAllButtonItem: {
@@ -185,30 +201,36 @@ const BrandDetailsProductLines: FC<Props> = ({ fields }) => {
                 {brandProductLines?.slice(0, viewCount).map(productLine => (
                     <GridItem key={productLine.id} {...productLineItemStyles}>
                         <GridContainer {...styles.innerProductLineContainer}>
-                            {showImages && (
-                                <GridItem {...styles.productLineImageItem}>
-                                    <Clickable
-                                        href={productLine.productListPagePath}
-                                        {...styles.productLineImageClickable}
-                                    >
+                            {showImages ? (
+                                <Link href={productLine.productListPagePath}>
+                                    <GridItem {...styles.productLineImageItem}>
                                         <LazyImage
                                             src={productLine.featuredImagePath}
                                             altText={productLine.featuredImageAltText}
                                             {...styles.productLineImage}
                                             data-test-selector={`brandProductLineImage_${productLine.id}`}
                                         />
-                                    </Clickable>
+                                    </GridItem>
+                                    <GridItem {...styles.productLineNameItem}>
+                                        <Typography
+                                            {...styles.productLineName}
+                                            data-test-selector={`brandProductLineLink_${productLine.id}`}
+                                        >
+                                            {productLine.name}
+                                        </Typography>
+                                    </GridItem>
+                                </Link>
+                            ) : (
+                                <GridItem {...styles.productLineNameItem}>
+                                    <Link
+                                        href={productLine.productListPagePath}
+                                        {...styles.productLineNameLink}
+                                        data-test-selector={`brandProductLineLink_${productLine.id}`}
+                                    >
+                                        {productLine.name}
+                                    </Link>
                                 </GridItem>
                             )}
-                            <GridItem {...styles.productLineNameLinkItem}>
-                                <Link
-                                    href={productLine.productListPagePath}
-                                    {...styles.productLineNameLink}
-                                    data-test-selector={`brandProductLineLink_${productLine.id}`}
-                                >
-                                    {productLine.name}
-                                </Link>
-                            </GridItem>
                         </GridContainer>
                     </GridItem>
                 ))}

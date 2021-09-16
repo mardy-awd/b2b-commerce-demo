@@ -31,7 +31,9 @@ const mapStateToProps = (state: ShellState) => {
             definition = cloneDeep(getPageDefinition(currentPage.type));
         } else {
             item = state.data.pages.widgetsById[state.pageEditor.editingId];
-            definition = getWidgetDefinition(item.type);
+            if (item) {
+                definition = getWidgetDefinition(item.type);
+            }
         }
     }
 

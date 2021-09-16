@@ -245,6 +245,7 @@ const SignInChangePasswordForm = ({
                             setShowPasswords(!showPasswords);
                         }}
                         checked={showPasswords}
+                        hiddenIconText={password}
                         {...styles.showPasswordsCheckbox}
                     >
                         {translate("Show Passwords")}

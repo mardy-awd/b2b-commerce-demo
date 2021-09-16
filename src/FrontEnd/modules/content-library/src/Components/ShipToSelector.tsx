@@ -13,7 +13,7 @@ import CustomerSelectorToolbar, {
 import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled, { css } from "styled-components";
 
@@ -59,7 +59,7 @@ const CenteringWrapper = styled.div<InjectableCss>`
     ${({ css }) => css}
 `;
 
-const shipToSelector: FC<Props> = ({
+const shipToSelector = ({
     currentShipTo,
     currentBillToId,
     onCreateNewAddressClick,
@@ -68,7 +68,7 @@ const shipToSelector: FC<Props> = ({
     onSelect,
     allowSelectBillTo,
     defaultPageSize,
-}) => {
+}: Props) => {
     const [parameter, setParameter] = useState<GetShipTosApiParameter>({
         page: 1,
         pageSize: defaultPageSize,
@@ -117,7 +117,7 @@ type WrappedProps = WrappedShipToSelectorProps &
     ResolveThunks<typeof mapDispatchToPropsWrapped> &
     ReturnType<typeof mapStateToPropsWrapped>;
 
-const wrappedShipToSelector: FC<WrappedProps> = ({
+const wrappedShipToSelector = ({
     currentShipTo,
     shipTosDataView,
     customerSettings,
@@ -128,7 +128,7 @@ const wrappedShipToSelector: FC<WrappedProps> = ({
     onSelect,
     parameter,
     setParameter,
-}) => {
+}: WrappedProps) => {
     const [styles] = useState(() => mergeToNew(shipToSelectorStyles, extendedStyles));
     const [searchText, setSearchText] = useState("");
 
@@ -148,12 +148,11 @@ const wrappedShipToSelector: FC<WrappedProps> = ({
 
     const selectCustomerHandler = (customer: BaseAddressModel) => onSelect(customer as ShipToModel);
 
-    const editCustomerHandler =
-        customerSettings?.allowShipToAddressEdit && onEdit
-            ? (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, customer: BaseAddressModel) => {
-                  onEdit?.(event, customer as ShipToModel);
-              }
-            : undefined;
+    const editCustomerHandler = onEdit
+        ? (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, customer: BaseAddressModel) => {
+              onEdit(event, customer as ShipToModel);
+          }
+        : undefined;
 
     const changePageHandler = (page: number) => {
         setParameter({
@@ -203,9 +202,6 @@ const wrappedShipToSelector: FC<WrappedProps> = ({
                             pagination={shipTosDataView.pagination!}
                             selectedCustomer={currentShipTo}
                             onSelect={selectCustomerHandler}
-                            allowEditCustomer={
-                                customerSettings !== undefined && customerSettings.allowShipToAddressEdit
-                            }
                             onEdit={editCustomerHandler}
                             onChangePage={changePageHandler}
                             onChangeResultsPerPage={changeResultsPerPageHandler}

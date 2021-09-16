@@ -45,6 +45,8 @@ Insite.RealTimePricing
 Insite.Requisition
 Insite.Rfq
 Insite.Search.Elasticsearch
+Insite.Search.Hawksearch
+Insite.Search.Shared
 Insite.TaxCalculator.Vertex
 Insite.Websites
 Insite.WIS.Broker

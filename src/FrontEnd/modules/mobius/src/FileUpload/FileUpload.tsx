@@ -152,6 +152,8 @@ const UploadWrapper = styled.div`
     flex-direction: row;
 `;
 
+const ButtonWrapper = styled.div``;
+
 const uploadOmitProps = ["onFileChange", "size", "border", "label", "backgroundColor"] as (keyof Omit<
     FileUploadProps,
     | "buttonText"
@@ -350,26 +352,28 @@ class FileUpload extends React.Component<FileUploadProps & HasDisablerContext, F
                                 {...omitMultiple(this.props, formFieldOmitProps)}
                             />
                             {hideButton ? null : (
-                                <Button
-                                    sizeVariant={sizeValues.button}
-                                    htmlFor={inputId}
-                                    forwardAs={isDisabled ? "button" : "label"}
-                                    css={css`
-                                        white-space: noWrap;
-                                        display: inline-block;
-                                        box-sizing: border-box;
-                                        line-height: ${sizeValues.height - 3}px;
-                                        margin: ${label && labelPosition !== "left" ? sizeValues.labelHeight : 0}px 0 0
-                                            15px;
-                                        ${buttonCss}
-                                    `}
-                                    disabled={isDisabled}
-                                    {...otherButtonProps}
-                                >
-                                    {buttonText && FileUpload.defaultButtonText === buttonText
-                                        ? theme?.translate(buttonText)
-                                        : buttonText}
-                                </Button>
+                                <ButtonWrapper>
+                                    <Button
+                                        sizeVariant={sizeValues.button}
+                                        htmlFor={inputId}
+                                        forwardAs={isDisabled ? "button" : "label"}
+                                        css={css`
+                                            white-space: noWrap;
+                                            display: inline-block;
+                                            box-sizing: border-box;
+                                            line-height: ${sizeValues.height - 3}px;
+                                            margin: ${label && labelPosition !== "left" ? sizeValues.labelHeight : 0}px
+                                                0 0 15px;
+                                            ${buttonCss}
+                                        `}
+                                        disabled={isDisabled}
+                                        {...otherButtonProps}
+                                    >
+                                        {buttonText && FileUpload.defaultButtonText === buttonText
+                                            ? theme?.translate(buttonText)
+                                            : buttonText}
+                                    </Button>
+                                </ButtonWrapper>
                             )}
                         </UploadWrapper>
                     );

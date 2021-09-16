@@ -153,6 +153,13 @@ export const orderLinesListStyles: OrderLinesListStyles = {
     orderLineCardInfoGridItem: {
         width: [8, 8, 7, 8, 8],
         printWidth: 10,
+        css: css`
+            @media print {
+                &&&& {
+                    max-width: 100%;
+                }
+            }
+        `,
     },
     orderLineCardInfoGridContainer: {
         gap: 10,

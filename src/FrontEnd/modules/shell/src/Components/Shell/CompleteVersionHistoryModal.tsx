@@ -178,12 +178,12 @@ const CompleteVersionHistoryModal = ({
                                 </thead>
                                 <tbody>
                                     {publishedPageVersionsPaginated?.pageVersions.map(pageVersion => {
-                                        const { modifiedBy, modifiedOn, versionId } = pageVersion;
+                                        const { modifiedBy, publishOn, versionId } = pageVersion;
                                         return (
                                             <tr key={versionId}>
                                                 <td>
                                                     <Radio value={versionId}>
-                                                        {new Date(modifiedOn).toLocaleString()}
+                                                        {new Date(publishOn).toLocaleString()}
                                                     </Radio>
                                                 </td>
                                                 <td>{modifiedBy}</td>

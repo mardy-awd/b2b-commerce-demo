@@ -39,10 +39,12 @@ const ErrorModal: FC<Props> = ({ modalIsOpen, isUnauthorizedError, closeErrorMod
         return null;
     }
 
+    const headline = isUnauthorizedError ? translate("Authorization Required") : errorPage.value.fields["modalTitle"];
     return (
-        <Modal headline={errorPage.value.fields["modalTitle"]} isOpen={modalIsOpen} handleClose={modalCloseHandler}>
-            {isUnauthorizedError && <>{translate("Please sign in with a website user to view this page.")}</>}
-            {!isUnauthorizedError && (
+        <Modal headline={headline} isOpen={modalIsOpen} handleClose={modalCloseHandler}>
+            {isUnauthorizedError ? (
+                <>{translate("Please sign in with a website user to view this page.")}</>
+            ) : (
                 <div data-test-selector="unhandledErrorModal">
                     <ShellContext.Provider value={{ isInShell, pageId: errorPage.id }}>
                         {createPageElement(errorPage.value.type, errorPage.value)}

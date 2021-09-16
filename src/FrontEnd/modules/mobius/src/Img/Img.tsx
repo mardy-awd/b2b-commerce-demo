@@ -20,6 +20,8 @@ export type ImgProps = MobiusStyledComponentProps<
         altText?: string;
         /** Controls whether the img is lazy or eager loaded, default is eager */
         loading?: string;
+        // Event handler for screen readers accessing an image modal in ProductPrimaryImage.tsx
+        onKeyPress?: React.KeyboardEventHandler<HTMLImageElement>;
     }
 >;
 

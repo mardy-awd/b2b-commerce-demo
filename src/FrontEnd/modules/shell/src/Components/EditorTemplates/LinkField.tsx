@@ -299,9 +299,11 @@ class LinkField extends ClickOutside<Props, State> {
                     {this.props.categories && this.props.categoryIndexByParentId ? (
                         <ul>
                             <TreeItemStyle key={emptyGuid}>
-                                <TitleStyle className="link-selector" data-id={emptyGuid}>
-                                    <span onClick={this.clickCategory}>Root</span>
-                                </TitleStyle>
+                                {fieldDefinition.showCategoryRoot && (
+                                    <TitleStyle className="link-selector" data-id={emptyGuid}>
+                                        <span onClick={this.clickCategory}>Root</span>
+                                    </TitleStyle>
+                                )}
                                 {this.renderCategoryChunk(emptyGuid)}
                             </TreeItemStyle>
                         </ul>

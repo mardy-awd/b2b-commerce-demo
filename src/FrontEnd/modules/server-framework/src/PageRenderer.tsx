@@ -1,6 +1,7 @@
 import { contentModeCookieName, isSiteInShellCookieName } from "@insite/client-framework/Common/ContentMode";
 import { encodeCookie } from "@insite/client-framework/Common/Cookies";
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
+import { loadAndParseFontCss } from "@insite/client-framework/Common/Utilities/fontProcessing";
 import { getHeadTrackingScript, getNoscriptTrackingScript } from "@insite/client-framework/Common/Utilities/tracking";
 import { ShellContext } from "@insite/client-framework/Components/IsInShell";
 import PreviewLogin from "@insite/client-framework/Components/PreviewLogin";
@@ -152,6 +153,11 @@ export async function pageRenderer(request: Request, response: Response) {
         getTranslationDictionariesPromise,
     ]);
 
+    const fontFamilyImportUrl = await safeRequest(
+        () => loadAndParseFontCss(theme.typography.fontFamilyImportUrl, request.headers["user-agent"]),
+        theme.typography.fontFamilyImportUrl,
+    );
+
     if (siteMessages) {
         setServerSiteMessages(siteMessages);
     }
@@ -231,7 +237,7 @@ export async function pageRenderer(request: Request, response: Response) {
                 <meta name="description" content={metadata?.metaDescription} />
                 <link rel="canonical" href={metadata?.canonicalUrl} />
                 <base href="/" />
-                <link href={theme.typography.fontFamilyImportUrl} rel="stylesheet" />
+                <link href={fontFamilyImportUrl} rel="stylesheet" />
                 {sheet?.getStyleElement()}
                 <script>{`if (window.parent !== window) {
     window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;
@@ -253,7 +259,7 @@ export async function pageRenderer(request: Request, response: Response) {
                 <script
                     // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{
-                        __html: `try{eval("(async()=>{})()");}catch(e){alert((siteMessages && siteMessages.Browser_UnsupportedWarning) || 'This site does not support your current browser. Please update your browser to the most recent version of Chrome, Edge, Safari or Firefox.');}`,
+                        __html: `try{eval("(async()=>{})()");}catch(e){alert((typeof siteMessages !== 'undefined' && siteMessages.Browser_UnsupportedWarning) || 'This site does not support your current browser. Please update your browser to the most recent version of Chrome, Edge, Safari or Firefox.');}`,
                     }}
                 ></script>
                 <script
@@ -301,38 +307,43 @@ export async function pageRenderer(request: Request, response: Response) {
 }
 
 async function renderUntilPromisesResolved(request: Request, renderRawAndStyles: () => void) {
-    renderRawAndStyles();
+    let redirectToUrl: string | undefined;
+
+    const renderSite = () => {
+        renderRawAndStyles();
+        redirectToUrl = getRedirectTo();
+    };
 
     const trackedPromises = getTrackedPromises() ?? [];
-    let promiseLoops = 0; // After a certain number of loops, there may be a problem.
-    let redirect = getRedirectTo();
-    while (trackedPromises.length !== 0 && promiseLoops < 10 && !redirect) {
-        promiseLoops += 1;
-        if (promiseLoops > 5) {
-            // Suspicious
-            if (promiseLoops === 6) {
-                logger.warn("New promises are still being created after 5 cycles, possible state management issue.");
+    let renderLoop = 0;
+
+    renderSite();
+
+    while (trackedPromises.length !== 0 && renderLoop < 10 && !redirectToUrl) {
+        renderLoop += 1;
+        if (renderLoop > 5) {
+            if (renderLoop === 6) {
                 setPromiseAddedCallback(stack =>
-                    logger.warn(`${request.url}: New promise added on loop ${promiseLoops}: ${stack}`),
+                    logger.warn(
+                        `During SSR of ${request.url} there was a new promise added on loop ${renderLoop}.
+This usually indicates a problem with react state management that will affect performance.
+The new promise was added at the following location:
+${stack}`,
+                    ),
                 );
             }
-            logger.warn(`${request.url}: tracked promises: ${trackedPromises.length}; loop ${promiseLoops}.`);
         }
 
         const awaitedPromises: typeof trackedPromises = [];
-        let awaitedPromise: Promise<any> | undefined;
-        // eslint-disable-next-line no-cond-assign
-        while ((awaitedPromise = trackedPromises.shift())) {
-            awaitedPromises.push(awaitedPromise);
+        while (trackedPromises.length > 0) {
+            awaitedPromises.push(trackedPromises.shift()!);
         }
 
         await Promise.all(awaitedPromises);
 
-        // Render again, potentially make more promises.
-        renderRawAndStyles();
-        redirect = getRedirectTo();
+        renderSite();
     }
-    return redirect;
+    return redirectToUrl;
 }
 
 export interface GenerateDataResponse {

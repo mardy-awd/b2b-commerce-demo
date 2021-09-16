@@ -295,7 +295,12 @@ class ProductListPage extends React.Component<Props> {
     }
 
     setSearchBreadcrumbs() {
-        this.props.setBreadcrumbs({ links: [{ children: `${translate("Search Results")}: ${this.props.query}` }] });
+        this.props.setBreadcrumbs({
+            links: [
+                { children: translate("Home"), href: "/" },
+                { children: `${translate("Search Results")}: ${this.props.query}` },
+            ],
+        });
     }
 
     render() {

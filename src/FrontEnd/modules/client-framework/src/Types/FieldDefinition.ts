@@ -87,6 +87,7 @@ export interface TagsDefinition extends BaseFieldDefinition<"TagsField", string[
 export interface LinkFieldDefinition extends BaseFieldDefinition<"LinkField", LinkFieldValue> {
     allowUrls?: (item: HasFields) => boolean;
     allowCategories?: (item: HasFields) => boolean;
+    showCategoryRoot?: (item: HasFields) => boolean;
 }
 
 export interface ColorPickerFieldDefinition extends BaseFieldDefinition<"ColorPickerField", string> {}

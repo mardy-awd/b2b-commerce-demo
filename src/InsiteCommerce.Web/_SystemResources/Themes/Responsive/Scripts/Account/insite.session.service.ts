@@ -546,11 +546,11 @@ module insite.account {
                 returnUrl = dashboardUrl;
             } else if (sessionModel.customLandingPage) {
                 returnUrl = sessionModel.customLandingPage;
-            } else if (sessionModel.shipTo.isNew) {
-                returnUrl = `${addressesUrl}?isNewShipTo=true`;
             }
 
-            if (returnUrl.toLowerCase() === checkoutAddressUrl.toLowerCase()) {
+            if (sessionModel.shipTo.isNew) {
+                returnUrl = `${addressesUrl}?isNewShipTo=true`;
+            } else if (returnUrl.toLowerCase() === checkoutAddressUrl.toLowerCase()) {
                 if (!canCheckOut || sessionModel.isRestrictedProductExistInCart) {
                     returnUrl = cartUrl;
                 } else if (byPassAddressPage) {

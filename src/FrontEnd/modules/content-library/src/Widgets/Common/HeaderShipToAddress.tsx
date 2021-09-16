@@ -60,7 +60,8 @@ const baseDrawerStyles: DrawerPresentationProps = {
         `,
         drawerBody: css`
             background: ${getColor("common.background")};
-            height: 375px;
+            height: auto;
+            max-height: 500px;
             overflow-x: inherit;
             overflow-y: inherit;
         `,

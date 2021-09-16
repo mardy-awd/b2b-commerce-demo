@@ -148,13 +148,13 @@ export const NavigateToReturnUrl: HandlerType = async props => {
         ? getPageLinkByPageType(state, "MyAccountPage")?.url
         : session.customLandingPage
         ? languageSpecificLandingPage
-        : props.apiParameter.session.shipToId === ""
-        ? `${getPageLinkByPageType(state, "AddressesPage")?.url}?isNewShipTo=true`
-        : languageSpecificLandingPage ?? homePageUrl;
+        : homePageUrl;
+
     const checkoutShippingUrl = getPageLinkByPageType(state, "CheckoutShippingPage")?.url;
     let returnUrl = props.parameter.returnUrl;
-
-    if (returnUrl?.toLowerCase() === checkoutShippingUrl?.toLowerCase()) {
+    if (props.apiParameter.session.shipToId === "") {
+        returnUrl = `${getPageLinkByPageType(state, "AddressesPage")?.url}?isNewShipTo=true`;
+    } else if (returnUrl?.toLowerCase() === checkoutShippingUrl?.toLowerCase()) {
         const cartResult = await getCart({
             cartId: API_URL_CURRENT_FRAGMENT,
             expand: ["cartLines", "hiddenproducts"],

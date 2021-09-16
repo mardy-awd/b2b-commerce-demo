@@ -211,6 +211,12 @@ const BrandList: FC<Props> = (props: Props) => {
 
     const handleBackToTop = () => {
         window.scrollTo(0, 0);
+        const elementToFocus = document.getElementById("collapseButton");
+        if (elementToFocus) {
+            elementToFocus.focus();
+        } else {
+            document.getElementById("expandButton")?.focus();
+        }
     };
 
     const handleBrandLetterClick = (letter: string) => {
@@ -229,14 +235,24 @@ const BrandList: FC<Props> = (props: Props) => {
                 {state.expanded === false ? (
                     <Typography {...styles.actionLinksDisabled}>{translate("Collapse All")}</Typography>
                 ) : (
-                    <Link onClick={onCollapse} {...styles.actionLinks} data-test-selector="brandListCollapseAllLink">
+                    <Link
+                        onClick={onCollapse}
+                        {...styles.actionLinks}
+                        id="collapseButton"
+                        data-test-selector="brandListCollapseAllLink"
+                    >
                         {translate("Collapse All")}
                     </Link>
                 )}
                 {state.expanded === true ? (
                     <Typography {...styles.actionLinksDisabled}>{translate("Expand All")}</Typography>
                 ) : (
-                    <Link onClick={onExpand} {...styles.actionLinks} data-test-selector="brandListExpandAllLink">
+                    <Link
+                        onClick={onExpand}
+                        {...styles.actionLinks}
+                        id="expandButton"
+                        data-test-selector="brandListExpandAllLink"
+                    >
                         {translate("Expand All")}
                     </Link>
                 )}

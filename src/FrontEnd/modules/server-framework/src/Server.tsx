@@ -1,4 +1,5 @@
 import { Dictionary } from "@insite/client-framework/Common/Types";
+import { getFontContent } from "@insite/client-framework/Common/Utilities/fontProcessing";
 import { checkIsWebCrawler, setIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
 import {
     serverSiteMessageResolver,
@@ -66,19 +67,20 @@ const redirectTo = async ({ originalUrl, path }: Request, response: Response) =>
 
 type RouteHandler = (request: Request, response: Response) => Promise<void>;
 
-const routes: { path: string | RegExp; handler: RouteHandler }[] = [];
+const routes: { path: string | RegExp; handler: RouteHandler; makeLowerCase: boolean }[] = [];
 
-function addRoute(path: RegExp | string, handler: RouteHandler) {
+function addRoute(path: RegExp | string, handler: RouteHandler, makeLowerCase = true) {
     routes.push({
         path: typeof path === "string" ? path.toLowerCase() : path,
         handler,
+        makeLowerCase,
     });
 }
 
 addRoute("/.spire/autoUpdatedPageTypes", getAutoUpdatedPageTypes);
 addRoute("/.spire/health", healthCheck);
 addRoute("/.spire/diagnostics", diagnostics);
-addRoute("/robots.txt", robots);
+addRoute("/robots.txt", robots, false);
 addRoute("/.spire/content/getTemplatePaths", getTemplatePaths);
 addRoute("/.spire/content/getTemplate", getTemplate);
 addRoute(/^\/sitemap.*\.xml/i, relayRequest);
@@ -92,6 +94,7 @@ addRoute(shareEntityRoute, (request: Request, response: Response) => {
     request.url = tempUrl.pathname + tempUrl.search;
     return pageRenderer(request, response);
 });
+addRoute("/.spire/fonts/getFont", getFontContent);
 
 export default function server(request: Request, response: Response, domain: Parameters<typeof setDomain>[0]) {
     setupSSR(request, domain);
@@ -100,7 +103,9 @@ export default function server(request: Request, response: Response, domain: Par
 
     for (const route of routes) {
         if (
-            (typeof route.path === "string" && route.path === loweredPath) ||
+            (typeof route.path === "string" && route.makeLowerCase
+                ? route.path === loweredPath
+                : route.path === request.path) ||
             (typeof route.path !== "string" && loweredPath.match(route.path))
         ) {
             return route.handler(request, response);

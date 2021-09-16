@@ -10,7 +10,7 @@ import {
     UpdateCartApiParameter,
     updateCartWithResult,
 } from "@insite/client-framework/Services/CartService";
-import { getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import loadCurrentCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCurrentCart";
 
 type HandlerType = ApiHandlerDiscreteParameter<HasOnSuccess<string>, UpdateCartApiParameter, CartResult>;
@@ -22,7 +22,9 @@ export const DispatchBeginPlaceOrderForApproval: HandlerType = props => {
 };
 
 export const PopulateApiParameter: HandlerType = props => {
-    const cartState = getCurrentCartState(props.getState());
+    const state = props.getState();
+    const cartId = state.pages?.checkoutReviewAndSubmit?.cartId;
+    const cartState = cartId ? getCartState(state, cartId) : getCurrentCartState(state);
 
     if (!cartState.value) {
         throw new Error("There was no current cart and we are trying to place the current cart as an order.");
@@ -75,6 +77,19 @@ export const DispatchResetOrders: HandlerType = props => {
     });
 };
 
+export const DispatchResetQuotes: HandlerType = props => {
+    const state = props.getState();
+    const { cartId } = state.pages.checkoutShipping;
+    if (cartId) {
+        props.dispatch({
+            type: "Data/Quotes/Reset",
+        });
+        props.dispatch({
+            type: "Data/JobQuotes/Reset",
+        });
+    }
+};
+
 export const chain = [
     DispatchBeginPlaceOrderForApproval,
     PopulateApiParameter,
@@ -83,6 +98,7 @@ export const chain = [
     ExecuteOnSuccessCallback,
     DispatchCompletePlaceOrderForApproval,
     DispatchResetOrders,
+    DispatchResetQuotes,
 ];
 
 const placeOrderForApproval = createHandlerChainRunner(chain, "PlaceOrderForApproval");

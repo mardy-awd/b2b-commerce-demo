@@ -54,6 +54,7 @@ export interface AccountModel extends BaseModel {
     setDefaultCustomer: boolean;
     shipToId: string | null;
     userName: string;
+    vmiRole: string;
 }
 
 export interface AccountPaymentProfileCollectionModel extends BaseModel {
@@ -92,6 +93,13 @@ export interface PersonaModel extends BaseModel {
     id: string;
     isDefault: boolean;
     name: string;
+}
+
+export interface VmiUserModel extends BaseModel {
+    removeVmiPermissions: boolean;
+    role: string;
+    userId: string;
+    vmiLocationIds: string[] | null;
 }
 
 export interface AccountSettingsModel extends BaseModel {
@@ -171,6 +179,7 @@ export interface ShipToModel extends BaseModel {
     id: string;
     isDefault: boolean;
     isNew: boolean;
+    isVmiLocation: boolean;
     label: string;
     lastName: string;
     oneTimeAddress: boolean;
@@ -294,6 +303,7 @@ export interface AccountShipToModel {
     assign: boolean;
     city: string;
     costCode: string;
+    id: string | null;
     isDefaultShipTo: boolean;
     shipToNumber: string;
     state: string;
@@ -1372,6 +1382,68 @@ export interface ProductSubscriptionModel extends BaseModel {
     productSubscription: ProductSubscriptionDto | null;
 }
 
+export interface VmiNoteCollectionModel extends BaseModel {
+    pagination: PaginationModel | null;
+    vmiNotes: VmiNoteModel[] | null;
+}
+
+export interface VmiCountCollectionModel extends BaseModel {
+    pagination: PaginationModel | null;
+    vmiCounts: VmiCountModel[] | null;
+}
+
+export interface VmiBinCollectionModel extends BaseModel {
+    pagination: PaginationModel | null;
+    vmiBins: VmiBinModel[] | null;
+}
+
+export interface VmiNoteModel extends BaseModel {
+    id: string;
+    includeOnOrder: boolean;
+    note: string;
+    vmiBinId: string;
+}
+
+export interface VmiCountModel extends BaseModel {
+    count: number;
+    id: string;
+    productId: string;
+    vmiBinId: string;
+}
+
+export interface VmiBinModel extends BaseModel {
+    binNumber: string;
+    id: string;
+    lastCountDate: Date | null;
+    lastCountQty: number;
+    lastCountUserName: string;
+    lastOrderDate: Date | null;
+    maximumQty: number;
+    minimumQty: number;
+    previousCountDate: Date | null;
+    previousCountQty: number;
+    previousCountUserName: string;
+    productId: string;
+    vmiLocationId: string;
+    product: ProductDto;
+}
+
+export interface VmiLocationCollectionModel extends BaseModel {
+    pagination: PaginationModel | null;
+    vmiLocations: VmiLocationModel[] | null;
+}
+
+export interface VmiLocationModel extends BaseModel {
+    billToId: string;
+    id: string;
+    isPrimaryLocation: boolean;
+    name: string;
+    customerLabel: string;
+    shipToId: string | null;
+    useBins: boolean;
+    customer: BaseAddressModel;
+}
+
 export interface WarehouseCollectionModel extends BaseModel {
     defaultLatitude: number;
     defaultLongitude: number;
@@ -2256,6 +2328,7 @@ export interface OrderSettingsModel extends BaseModel {
     showPoNumber: boolean;
     showTermsCode: boolean;
     showWebOrderNumber: boolean;
+    vmiEnabled: boolean;
 }
 
 export interface OrderStatusMappingCollectionModel extends BaseModel {

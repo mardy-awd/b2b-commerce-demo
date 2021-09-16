@@ -48,6 +48,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps) => {
         customerSettings,
         isDefault,
         showIsDefaultCheckbox: !requireSelectCustomerOnSignIn,
+        displayChangeCustomerLink: state.context?.session?.displayChangeCustomerLink,
     };
 };
 
@@ -98,6 +99,7 @@ const AddressesSelectCustomerContainer = ({
     setAsDefault,
     extendedStyles,
     showIsDefaultCheckbox,
+    displayChangeCustomerLink,
 }: Props) => {
     const [styles] = React.useState(() => mergeToNew(addressDrawerSelectCustomerContainerStyles, extendedStyles));
     const [shipToSearchText, setShipToSearchText] = React.useState("");
@@ -140,6 +142,10 @@ const AddressesSelectCustomerContainer = ({
     const handleChangeDefaultAddresses = (_: React.SyntheticEvent<Element, Event>, value: boolean) => {
         setAsDefault({ isDefault: value });
     };
+
+    if (!displayChangeCustomerLink) {
+        return null;
+    }
 
     return (
         <GridContainer {...styles.container}>

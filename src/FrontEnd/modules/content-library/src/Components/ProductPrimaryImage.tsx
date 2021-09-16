@@ -101,6 +101,14 @@ const ProductPrimaryImage = ({ productSettings, product, image, useLargeImage, o
         onClick?.();
     };
 
+    const imageWrapperKeyHandler: React.KeyboardEventHandler<HTMLImageElement> = event => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.key === "Enter") {
+            onClick?.();
+        }
+    };
+
     const path = useLargeImage
         ? image.largeImagePath || image.mediumImagePath
         : image.mediumImagePath || image.largeImagePath;
@@ -118,6 +126,8 @@ const ProductPrimaryImage = ({ productSettings, product, image, useLargeImage, o
                         altText={image.imageAltText}
                         loading="eager"
                         data-test-selector="productDetails_mainImage"
+                        onKeyPress={imageWrapperKeyHandler}
+                        tabIndex={0}
                     />
                 </StyledWrapper>
             )}

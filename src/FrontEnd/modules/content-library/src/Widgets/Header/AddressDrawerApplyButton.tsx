@@ -70,6 +70,7 @@ export const addressDrawerApplyButtonStyles: AddressDrawerApplyButtonStyles = {
     gridItem: {
         css: css`
             justify-content: flex-end;
+            padding-bottom: 20px;
         `,
         width: 12,
     },

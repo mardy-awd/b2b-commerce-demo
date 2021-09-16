@@ -145,6 +145,8 @@
                 "Insite.Requisition": null,
                 "Insite.Rfq": null,
                 "Insite.Search.Elasticsearch": null,
+                "Insite.Search.Hawksearch": null,
+                "Insite.Search.Shared": null,
                 "Insite.TaxCalculator.Vertex": null,
                 "Insite.Websites": null,
                 "Insite.WIS.Broker": null,

@@ -21,7 +21,7 @@
                     <div class="row">
                         <div class="medium-6 large-6 columns">
                             <label for="SignInInfo_UserName" ng-bind="vm.settings.useEmailAsUserName ? '[% translate 'Email' EscapeSingleQuotes %]' : '[% translate 'Username' EscapeSingleQuotes %]'"></label>
-                            <input type="text" id="SignInInfo_UserName" name="userName"
+                            <input type="{{vm.settings.useEmailAsUserName ? 'email' : 'text'}}" id="SignInInfo_UserName" name="userName"
                                    placeholder="{{vm.settings.useEmailAsUserName ? '[% translate 'Email' EscapeSingleQuotes %]' : '[% translate 'Username' EscapeSingleQuotes %]'}}"
                                    required
                                    maxlength="75"
@@ -41,6 +41,7 @@
                     </div>
                     <p class="error">
                         <span class="field-validation-error" ng-if="vm.signInForm.$submitted && vm.signInForm.userName.$error.required">[% siteMessage 'SignInInfo_UserName_Required' %]</span>
+                        <span class="field-validation-error" ng-if="vm.signInForm.$submitted && vm.signInForm.userName.$error.email">[% siteMessage 'SignInInfo_Email_Validation' %]</span>
                         <span class="field-validation-error" ng-if="vm.signInForm.$submitted && vm.signInForm.password.$error.required">[% siteMessage 'SignInInfo_Password_Required' %]</span>
                         <span class="field-validation-error" ng-if="vm.signInError" id="tst_signIn_generalError">{{vm.signInError}}</span>
                     </p>
@@ -76,7 +77,7 @@
                 </div>
             </div>
             [% if Model.ExternalError != null and Model.ExternalError != "" -%]
-            <div class="messaging--error">[[Model.ExternalError]]</div>
+            <div id="tst_signIn_externalProviderError" class="messaging--error" ng-non-bindable>[[Model.ExternalError]]</div>
             [% endif -%]
         </div>
     </div>
@@ -94,8 +95,10 @@
                                     data-msg-required="{{'[% siteMessage 'Field_Required' EscapeSingleQuotes %]'.replace('{0}', '[% translate 'Username' EscapeSingleQuotes %]')}}"
                                     data-rule-username="true"
                                     data-msg-username="{{'[% siteMessage 'Field_Invalid' EscapeSingleQuotes %]'.replace('{0}', '[% translate 'Username' EscapeSingleQuotes %]')}}"
+                                    data-rule-email="{{vm.settings.useEmailAsUserName}}"
+                                    data-msg-email="{{'[% siteMessage 'ResetPassword_EmailAddress_Validation' %]'}}"
                                     ng-model="vm.userNameToReset"
-                                    placeholder="[% translate 'Enter username' %]">
+                                    placeholder="{{vm.settings.useEmailAsUserName ? '[% translate 'Enter email' EscapeSingleQuotes %]' : '[% translate 'Enter username' EscapeSingleQuotes %]'}}">
                             <span class="field-validation-valid" data-valmsg-for="Username" data-valmsg-replace="true"></span>
                         </div>
                     </div>
@@ -112,7 +115,7 @@
                 </form>
             </div>
             <div class="pw-reset" ng-show="vm.resetPasswordSuccess">
-                <div class="row message">[% siteMessage 'ResetPassword_ResetPasswordEmailSent' %]</div>
+                <div id="tst_forgotPassword_successMessage" class="row message">[% siteMessage 'ResetPassword_ResetPasswordEmailSent' %]</div>
                 <div class="row btns">
                     <button type="button" class="btn primary btn-done" onclick="$('.close-reveal-modal').click()">[% translate 'Close' %]</button>
                 </div>

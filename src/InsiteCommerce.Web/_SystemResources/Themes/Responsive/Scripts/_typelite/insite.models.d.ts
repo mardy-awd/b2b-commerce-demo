@@ -173,6 +173,21 @@ declare module System {
 	}
 }
 declare module Insite.Catalog.WebApi.V1.ApiModels {
+	interface VmiLocationCollectionModel extends Insite.Core.WebApi.BaseModel {
+		pagination: Insite.Core.WebApi.PaginationModel;
+		vmiLocations: VmiLocationModel[];
+	}
+	interface VmiLocationModel extends Insite.Core.WebApi.BaseModel {
+		id: System.Guid;
+		name: string;
+		billToId: System.Guid;
+		useBins: boolean;
+		isPrimaryLocation: boolean;
+		shipToId?: System.Guid;
+		customerId: System.Guid;
+		customer: Insite.Customers.WebApi.V1.ApiModels.BaseAddressModel;
+		customerLabel: string;
+	}
 	interface WarehouseModel extends Insite.Core.WebApi.BaseModel {
 		id: System.Guid;
 		name: string;
@@ -1891,6 +1906,8 @@ declare module Insite.Order.WebApi.V1.ApiModels {
 		shipViaDescription: string;
 		fulfillmentMethod: string;
 		customerVatNumber: string;
+		vmiLocationId: string;
+		vmiLocationName: string;
 	}
 	interface OrderLineModel extends Insite.Core.WebApi.BaseModel {
 		id: string;

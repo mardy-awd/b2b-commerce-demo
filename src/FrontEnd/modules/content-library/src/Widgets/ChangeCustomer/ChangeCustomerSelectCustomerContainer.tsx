@@ -63,6 +63,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps) => {
         homeUrl: getPageLinkByPageType(state, "HomePage")?.url,
         returnUrl: getReturnUrl(state),
         canSetDefaultCustomer: !requireSelectCustomerOnSignIn && !session.hasDefaultCustomer,
+        displayChangeCustomerLink: session?.displayChangeCustomerLink,
     };
 };
 
@@ -156,6 +157,7 @@ const ChangeCustomerSelectCustomerContainer: FC<Props> = ({
     checkoutReviewAndSubmitUrl,
     canSetDefaultCustomer,
     defaultCustomerChangedMessage,
+    displayChangeCustomerLink,
 }) => {
     const [styles] = useState(() => mergeToNew(changeCustomerSelectCustomerContainerStyles, extendedStyles));
     const [billTo, setBillTo] = useState<BillToModel | undefined>(undefined);

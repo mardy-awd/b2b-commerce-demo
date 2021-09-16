@@ -15,6 +15,7 @@ import injectCss from "@insite/mobius/utilities/injectCss";
 import omitMultiple from "@insite/mobius/utilities/omitMultiple";
 import resolveColor from "@insite/mobius/utilities/resolveColor";
 import uniqueId from "@insite/mobius/utilities/uniqueId";
+import VisuallyHidden from "@insite/mobius/VisuallyHidden";
 import Color from "color";
 import * as React from "react";
 import styled, { css, ThemeProps, withTheme } from "styled-components";
@@ -56,6 +57,8 @@ export interface CheckboxProps extends CheckboxPresentationProps {
     /** Display variants. */
     variant?: "toggle" | "default";
     uid?: string;
+    /** Renders an invisible element next to the icon for those using screen readers */
+    hiddenIconText?: string;
 }
 
 export const checkboxSizes = {
@@ -120,17 +123,24 @@ const CheckboxStyle = styled.div<InjectableCss & StyleProps>`
     ${injectCss}
 `;
 
-const IconCheck: React.FC<{ iconProps: IconProps }> = ({ iconProps, ...thisOtherProps }) => (
-    <IconMemo {...thisOtherProps} {...iconProps} />
+const IconCheck: React.FC<{ iconProps: IconProps; hiddenIconText?: string }> = ({
+    iconProps,
+    hiddenIconText,
+    ...thisOtherProps
+}) => (
+    <>
+        <IconMemo {...thisOtherProps} {...iconProps} />
+        {hiddenIconText && <VisuallyHidden>{hiddenIconText}</VisuallyHidden>}
+    </>
 );
 
 type Props = CheckboxProps & ThemeProps<BaseTheme>;
 
 type State = Required<Pick<Props, "checked" | "uid">>;
 
-const omitList = ["color", "onChange", "id", "sizeVariant", "css", "mergeCss"] as (keyof Omit<
+const omitList = ["color", "onChange", "id", "sizeVariant", "css", "mergeCss", "hiddenIconText"] as (keyof Omit<
     Props,
-    "children" | "disabled" | "disable" | "error" | "variant" | "indeterminate" | "mergeCss" | "css"
+    "children" | "disabled" | "disable" | "error" | "variant" | "indeterminate" | "mergeCss" | "css" | "hiddenIconText"
 >)[];
 
 class Checkbox extends React.Component<Props & HasDisablerContext, State> {
@@ -176,7 +186,16 @@ class Checkbox extends React.Component<Props & HasDisablerContext, State> {
     };
 
     render() {
-        const { children, disable, disabled, error, variant = "default", mergeCss, ...otherProps } = this.props;
+        const {
+            children,
+            disable,
+            disabled,
+            error,
+            variant = "default",
+            mergeCss,
+            hiddenIconText,
+            ...otherProps
+        } = this.props;
         const isIndeterminate = this.state.checked === "indeterminate";
 
         return (
@@ -277,6 +296,7 @@ class Checkbox extends React.Component<Props & HasDisablerContext, State> {
                                         color: "currentColor",
                                         ...spreadProps("indeterminateIconProps"),
                                     }}
+                                    hiddenIconText={hiddenIconText}
                                 />
                             )}
                             {!isIndeterminate && (

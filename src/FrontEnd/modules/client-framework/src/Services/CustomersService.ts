@@ -152,3 +152,12 @@ function cleanShipToModel(shipToModel: ShipToModel, parameter?: { expand?: strin
         shipToModel.id = shipToModel.label;
     }
 }
+
+export const defaultVmiLocationGetShipTosApiParameter = (billToId: string | undefined) => {
+    return {
+        page: 1,
+        pageSize: 20,
+        billToId,
+        expand: ["excludeShowAll", "excludeOneTime", "excludeCreateNew"],
+    } as GetShipTosApiParameter;
+};

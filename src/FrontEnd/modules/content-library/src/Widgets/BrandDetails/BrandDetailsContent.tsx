@@ -32,9 +32,18 @@ const BrandDetailsContent: FC<Props> = () => {
         return null;
     }
 
+    // if there is a body tag, keep only what's between the body tag, then change those characters so the whole string is wrapped in a div tag instead
+    let updatedHtmlContent = brand.htmlContent;
+    const bodyTag = brand.htmlContent.indexOf("<body");
+    if (bodyTag > -1) {
+        updatedHtmlContent = `<div${brand.htmlContent.substring(
+            bodyTag + 5,
+            brand.htmlContent.indexOf("</body>"),
+        )}</div>`;
+    }
     return (
         <StyledWrapper {...styles.container} data-test-selector="brandContent">
-            {parse(brand.htmlContent, parserOptions)}
+            {parse(updatedHtmlContent, parserOptions)}
         </StyledWrapper>
     );
 };

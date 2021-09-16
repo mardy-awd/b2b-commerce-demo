@@ -84,13 +84,32 @@ const widgetModule: WidgetModule = {
                 name: fields.links,
                 editorTemplate: "ListField",
                 getDisplay: (item: HasFields, state) => {
-                    const { type, value } = item.fields.destination;
+                    const {
+                        destination: { type, value },
+                        overriddenTitle,
+                    } = item.fields;
+                    if (overriddenTitle) {
+                        return overriddenTitle;
+                    }
                     if (type === "Page") {
                         const link = getPageLinkByNodeId(state, value);
                         return link?.title;
                     }
                     if (type === "Category") {
-                        return value; // TODO ISC-10781 make this work
+                        let displayValue = "";
+                        const categories = (state as any).pageEditor.categories;
+                        if (!categories) {
+                            displayValue = "Loading...";
+                        } else {
+                            const matchingCategories = categories.filter((o: { id: string }) => o.id === value);
+                            if (matchingCategories.length === 0) {
+                                displayValue = "Unknown";
+                            } else {
+                                displayValue = matchingCategories[0].shortDescription;
+                            }
+                        }
+
+                        return displayValue;
                     }
                     if (type === "Url") {
                         return value;

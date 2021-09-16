@@ -1,4 +1,5 @@
 import { HasProduct, withProduct } from "@insite/client-framework/Components/ProductContext";
+import translate from "@insite/client-framework/Translate";
 import ProductSearchScoreData from "@insite/content-library/Components/ProductSearchScoreData";
 import { ProductCardSelections } from "@insite/content-library/Widgets/ProductList/ProductCardSelections";
 import ProductListActions from "@insite/content-library/Widgets/ProductList/ProductListActions";
@@ -6,6 +7,7 @@ import ProductListProductImage from "@insite/content-library/Widgets/ProductList
 import ProductListProductInformation from "@insite/content-library/Widgets/ProductList/ProductListProductInformation";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
+import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import React, { FC } from "react";
 import { css } from "styled-components";
 
@@ -19,6 +21,7 @@ export interface ProductListProductCardStyles {
     infoGridItem?: GridItemProps;
     actionsGridItem?: GridItemProps;
     searchScoreDataGridItem?: GridItemProps;
+    sponsoredText?: TypographyPresentationProps;
 }
 
 export const productCardStyles: ProductListProductCardStyles = {
@@ -33,6 +36,7 @@ export const productCardStyles: ProductListProductCardStyles = {
         width: [4, 4, 4, 3, 3],
         css: css`
             padding-right: 20px;
+            flex-direction: column;
         `,
     },
     rightColumnGridItem: {
@@ -47,6 +51,13 @@ export const productCardStyles: ProductListProductCardStyles = {
     searchScoreDataGridItem: {
         width: 12,
     },
+    sponsoredText: {
+        css: css`
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            opacity: 0.5;
+        `,
+    },
 };
 
 const styles = productCardStyles;
@@ -55,6 +66,9 @@ const ProductListProductCard: FC<Props> = props => {
     return (
         <GridContainer {...styles.gridContainer} data-test-selector={`productListProductCard${props.product.id}`}>
             <GridItem {...styles.leftColumnGridItem}>
+                {props.product.isSponsored && (
+                    <Typography {...styles.sponsoredText}>{translate("Sponsored")}</Typography>
+                )}
                 <ProductListProductImage showImage={props.showImage} showCompare={props.showCompare} />
             </GridItem>
             <GridItem {...styles.rightColumnGridItem}>

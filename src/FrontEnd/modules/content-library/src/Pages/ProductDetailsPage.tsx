@@ -6,6 +6,7 @@ import { HasProduct, ProductContext, ProductContextModel } from "@insite/client-
 import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSelectedProductPath, getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
+import { getCatalogPageStateByPath } from "@insite/client-framework/Store/Data/CatalogPages/CatalogPagesSelectors";
 import { getCurrentPage, getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import {
     getComputedVariantProduct,
@@ -30,10 +31,12 @@ const mapStateToProps = (state: ApplicationState) => {
         getSelectedProductPath(state) ||
         (location.pathname.toLowerCase().startsWith("/content/") ? "" : location.pathname);
     const productState = getProductStateByPath(state, productPath);
+    const catalogPageState = getCatalogPageStateByPath(state, productPath);
     const variantProductState = getProductState(state, state.pages.productDetails.selectedProductId);
     const computedVariantProduct = getComputedVariantProduct(productState, variantProductState);
     return {
         productState: computedVariantProduct,
+        catalogPageState,
         parentProductState: productState,
         productInfo:
             computedVariantProduct.value && state.pages.productDetails.productInfosById
@@ -92,11 +95,13 @@ class ProductDetailsPage extends React.Component<Props, State> {
     setMetadata() {
         const {
             productState: { value: product },
+            catalogPageState,
             websiteName,
             location,
             websiteSettings,
         } = this.props;
-        if (!product || !product.content) {
+
+        if (!catalogPageState?.value || !product) {
             return;
         }
 
@@ -106,8 +111,8 @@ class ProductDetailsPage extends React.Component<Props, State> {
             openGraphImage,
             openGraphTitle,
             openGraphUrl,
-            pageTitle,
-        } = product.content;
+            title,
+        } = catalogPageState.value;
 
         setPageMetadata(
             {
@@ -118,7 +123,7 @@ class ProductDetailsPage extends React.Component<Props, State> {
                 openGraphUrl,
                 currentPath: location.pathname,
                 canonicalPath: product.canonicalUrl,
-                title: pageTitle || product.productTitle,
+                title: title || product.productTitle,
                 websiteName,
             },
             websiteSettings,

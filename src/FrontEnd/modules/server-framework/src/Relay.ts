@@ -51,6 +51,8 @@ export async function relayRequest(request: Request, response: Response) {
     }
 
     headers["x-forwarded-host"] = request.get("host")!;
+    // We want to forward the referer for advance partner scenarios
+    headers["x-referer"] = request.get("referer")!;
 
     const url = `${ISC_API_URL}${request.originalUrl}`;
     logger.info(`Relaying ${request.method} ${request.originalUrl} to ${url}.`);

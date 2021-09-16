@@ -63,6 +63,9 @@ const WidgetGroups = [
     "Dealer Details",
     "News List",
     "News Page",
+    "VMI Locations",
+    "VMI Location Details",
+    "VMI Users",
 ] as const;
 
 export default WidgetGroups;

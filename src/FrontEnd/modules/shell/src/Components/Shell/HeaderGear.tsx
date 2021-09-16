@@ -131,14 +131,14 @@ const HeaderGear = ({
                         {searchDataModeActive ? "Disable Search Data Mode" : "Enable Search Data Mode"}
                     </Clickable>
                 )}
-                <Clickable data-test-selector="shellSettings_logOut" onClick={logOut}>
-                    Log Out
+                <Clickable data-test-selector="shellSettings_redoPageState" onClick={clickRedoPageState}>
+                    Redo Page State
                 </Clickable>
                 <Clickable data-test-selector="shellSettings_showAbout" onClick={() => setShowAbout(true)}>
                     About
                 </Clickable>
-                <Clickable data-test-selector="shellSettings_redoPageState" onClick={clickRedoPageState}>
-                    Redo Page State
+                <Clickable data-test-selector="shellSettings_logOut" onClick={logOut}>
+                    Log Out
                 </Clickable>
             </OverflowMenu>
             <Modal isOpen={showAbout} headline="About" isCloseable handleClose={() => setShowAbout(false)}>

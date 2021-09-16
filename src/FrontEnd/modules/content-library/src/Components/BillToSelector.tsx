@@ -13,7 +13,7 @@ import CustomerSelectorToolbar, {
 import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled, { css } from "styled-components";
 
@@ -56,7 +56,7 @@ const CenteringWrapper = styled.div<InjectableCss>`
     ${({ css }) => css}
 `;
 
-const billToSelector: FC<Props> = ({ currentBillTo, onSelect, extendedStyles, onEdit, defaultPageSize }) => {
+const billToSelector = ({ currentBillTo, onSelect, extendedStyles, onEdit, defaultPageSize }: Props) => {
     const [parameter, setParameter] = useState<GetBillTosApiParameter>({ page: 1, pageSize: defaultPageSize });
 
     return (
@@ -84,7 +84,6 @@ interface WrappedBillToSelectorProps {
 
 const mapStateToPropsWrapped = (state: ApplicationState, props: WrappedBillToSelectorProps) => ({
     billTosDataView: getBillTosDataView(state, props.parameter),
-    customerSettings: getSettingsCollection(state).customerSettings,
 });
 
 const mapDispatchToPropsWrapped = {
@@ -95,7 +94,7 @@ type WrappedProps = WrappedBillToSelectorProps &
     ResolveThunks<typeof mapDispatchToPropsWrapped> &
     ReturnType<typeof mapStateToPropsWrapped>;
 
-const wrappedBillToSelector: FC<WrappedProps> = ({
+const wrappedBillToSelector = ({
     currentBillTo,
     billTosDataView,
     onSelect,
@@ -103,9 +102,8 @@ const wrappedBillToSelector: FC<WrappedProps> = ({
     setParameter,
     parameter,
     loadBillTos,
-    customerSettings,
     onEdit,
-}) => {
+}: WrappedProps) => {
     const [styles] = useState(() => mergeToNew(billToSelectorStyles, extendedStyles));
     const [searchText, setSearchText] = useState("");
 
@@ -125,12 +123,11 @@ const wrappedBillToSelector: FC<WrappedProps> = ({
 
     const selectCustomerHandler = (customer: BaseAddressModel) => onSelect(customer as BillToModel);
 
-    const editCustomerHandler =
-        customerSettings?.allowBillToAddressEdit && onEdit
-            ? (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, customer: BaseAddressModel) => {
-                  onEdit?.(event, customer as BillToModel);
-              }
-            : undefined;
+    const editCustomerHandler = onEdit
+        ? (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, customer: BaseAddressModel) => {
+              onEdit(event, customer as BillToModel);
+          }
+        : undefined;
 
     const changePageHandler = (page: number) => {
         setParameter({
@@ -178,9 +175,6 @@ const wrappedBillToSelector: FC<WrappedProps> = ({
                             pagination={billTosDataView.pagination!}
                             selectedCustomer={currentBillTo}
                             onSelect={selectCustomerHandler}
-                            allowEditCustomer={
-                                customerSettings !== undefined && customerSettings.allowBillToAddressEdit
-                            }
                             onEdit={editCustomerHandler}
                             onChangePage={changePageHandler}
                             onChangeResultsPerPage={changeResultsPerPageHandler}

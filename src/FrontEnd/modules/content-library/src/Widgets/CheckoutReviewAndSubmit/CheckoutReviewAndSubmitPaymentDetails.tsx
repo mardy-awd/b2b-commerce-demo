@@ -537,9 +537,13 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     const tokenExConfig = typeof tokenName !== "undefined" ? tokenExConfigs[tokenName] : undefined;
 
     useEffect(() => {
+        if (typeof TokenEx === "undefined" || !tokenExConfig) {
+            return;
+        }
+
         setIsTokenExIframeLoaded(false);
         setUpTokenEx();
-    }, [tokenExConfig]);
+    }, [tokenExConfig, typeof TokenEx]);
 
     const setUpTokenEx = () => {
         if (!tokenExConfig || !paymentMethodDto) {

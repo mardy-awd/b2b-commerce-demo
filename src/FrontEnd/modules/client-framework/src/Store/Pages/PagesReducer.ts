@@ -39,6 +39,9 @@ import SignInReducer from "@insite/client-framework/Store/Pages/SignIn/SignInRed
 import StaticListReducer from "@insite/client-framework/Store/Pages/StaticList/StaticListReducer";
 import UserListReducer from "@insite/client-framework/Store/Pages/UserList/UserListReducer";
 import UserSetupReducer from "@insite/client-framework/Store/Pages/UserSetup/UserSetupReducer";
+import VmiLocationDetailsReducer from "@insite/client-framework/Store/Pages/VmiLocationDetails/VmiLocationDetailsReducer";
+import VmiLocationsReducer from "@insite/client-framework/Store/Pages/VmiLocations/VmiLocationsReducer";
+import VmiUsersReducer from "@insite/client-framework/Store/Pages/VmiUsers/VmiUsersReducer";
 import { combineReducers } from "redux";
 
 const reducers = {
@@ -83,6 +86,9 @@ const reducers = {
     staticList: StaticListReducer,
     userList: UserListReducer,
     userSetup: UserSetupReducer,
+    vmiLocationDetails: VmiLocationDetailsReducer,
+    vmiLocations: VmiLocationsReducer,
+    vmiUsers: VmiUsersReducer,
 };
 
 export type PagesReducers = typeof reducers;

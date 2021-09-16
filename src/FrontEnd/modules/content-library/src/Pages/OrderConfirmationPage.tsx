@@ -7,6 +7,7 @@ import preloadOrderConfirmationData from "@insite/client-framework/Store/Pages/O
 import setIsPreloadingData from "@insite/client-framework/Store/Pages/OrderConfirmation/Handlers/SetIsPreloadingData";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
+import AddToListModal from "@insite/content-library/Components/AddToListModal";
 import Page from "@insite/mobius/Page";
 import { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
 import React, { Component } from "react";
@@ -51,6 +52,7 @@ class OrderConfirmationPage extends Component<Props> {
         return (
             <Page>
                 <Zone zoneName="Content" contentId={this.props.id} />
+                <AddToListModal />
             </Page>
         );
     }

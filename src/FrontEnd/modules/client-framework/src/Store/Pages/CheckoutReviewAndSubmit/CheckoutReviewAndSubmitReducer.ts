@@ -39,6 +39,7 @@ const reducer = {
     },
     "Pages/CheckoutReviewAndSubmit/CompletePlaceOrder": (draft: Draft<CheckoutReviewAndSubmitState>) => {
         draft.isPlacingOrder = false;
+        draft.cartId = undefined;
     },
     "Pages/CheckoutReviewAndSubmit/BeginCheckoutWithPayPal": (draft: Draft<CheckoutReviewAndSubmitState>) => {
         draft.isCheckingOutWithPayPay = true;
@@ -71,6 +72,7 @@ const reducer = {
     },
     "Pages/CheckoutReviewAndSubmit/CompletePlaceOrderForApproval": (draft: Draft<CheckoutReviewAndSubmitState>) => {
         draft.isPlacingOrder = false;
+        draft.cartId = undefined;
     },
     "Pages/CheckoutReviewAndSubmit/SetIsPreloadingData": (
         draft: Draft<CheckoutReviewAndSubmitState>,

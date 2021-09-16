@@ -269,7 +269,7 @@ module insite.cart {
 
             const hasRestrictions = cart.cartLines.some(o => o.isRestricted);
             // if cart does not have cartLines or any cartLine is restricted, go to Cart page
-            if (!this.cart.cartLines || this.cart.cartLines.length === 0 || hasRestrictions) {
+            if (!this.isOpenedFromCmsShell() && (!this.cart.cartLines || this.cart.cartLines.length === 0 || hasRestrictions)) {
                 this.coreService.redirectToPath(this.cartUrl);
             }
 
@@ -1176,6 +1176,11 @@ module insite.cart {
         }
 
         protected updateSessionFailed(error: any): void {
+        }
+
+        protected isOpenedFromCmsShell() {
+            let url = window.location !== window.parent.location ? document.referrer : document.location.href;
+            return url.toLowerCase().indexOf("/contentadmin") !== -1;
         }
     }
 

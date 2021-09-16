@@ -83,6 +83,7 @@ export interface ProductListTableStyles {
     unitOfMeasureCell?: DataTableCellProps;
     unitOfMeasureText?: TypographyPresentationProps;
     actionsCell?: DataTableCellProps;
+    sponsoredText?: TypographyPresentationProps;
 }
 
 export const actionsStyles: ProductListTableStyles = {
@@ -102,6 +103,7 @@ export const actionsStyles: ProductListTableStyles = {
         width: [4, 4, 4, 3, 3],
         css: css`
             padding-right: 12px;
+            flex-direction: column;
         `,
     },
     rightColumnGridItem: {
@@ -155,6 +157,13 @@ export const actionsStyles: ProductListTableStyles = {
             width: 200px;
             background-color: inherit;
             background-clip: padding-box;
+        `,
+    },
+    sponsoredText: {
+        css: css`
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            opacity: 0.5;
         `,
     },
 };
@@ -255,6 +264,9 @@ const ProductListTable: FC<Props> = ({
                     <DataTableCell {...styles.descriptionCell}>
                         <GridContainer {...styles.gridContainer}>
                             <GridItem {...styles.leftColumnGridItem}>
+                                {product.isSponsored && (
+                                    <Typography {...styles.sponsoredText}>{translate("Sponsored")}</Typography>
+                                )}
                                 <ProductListProductImage
                                     showImage={true}
                                     showCompare={false}

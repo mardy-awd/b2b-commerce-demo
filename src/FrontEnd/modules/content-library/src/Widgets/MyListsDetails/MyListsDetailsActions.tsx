@@ -206,6 +206,11 @@ export const actionStyles: MyListsDetailsActionStyles = {
     },
     copyListModal: {
         sizeVariant: "small",
+        cssOverrides: {
+            modalBody: css`
+                overflow: visible;
+            `,
+        },
     },
 };
 

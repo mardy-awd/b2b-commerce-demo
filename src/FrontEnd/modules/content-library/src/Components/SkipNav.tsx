@@ -24,12 +24,20 @@ export const skipNavStyles: SkipNavStyles = {
 
 interface OwnProps {
     text: string;
-    destination: React.RefObject<HTMLElement>;
+    destination?: React.RefObject<HTMLElement>;
     extendedStyles?: SkipNavStyles;
+    focusFunction?: () => void;
 }
 
 const SkipNav: React.FC<OwnProps> = (props: OwnProps) => {
     const [styles] = React.useState(() => mergeToNew(skipNavStyles, props.extendedStyles));
+    if (props.focusFunction) {
+        return (
+            <Button {...styles.skipToContent} onClick={props.focusFunction}>
+                {props.text}
+            </Button>
+        );
+    }
     return (
         <Button {...styles.skipToContent} onClick={() => props.destination?.current?.focus()}>
             {props.text}

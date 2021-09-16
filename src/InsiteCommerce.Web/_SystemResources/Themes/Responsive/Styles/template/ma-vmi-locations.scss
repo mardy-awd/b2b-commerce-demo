@@ -1,0 +1,64 @@
+﻿.ma-vmi-locations {
+    .top-actions {
+        .search-filter {
+            margin-right: 5px;
+            display: inline-block;
+            width: 30%;
+            float: left;
+        }
+
+        .top-actions-buttons {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        position: relative;
+        top: -60px;
+        margin-bottom: -60px;
+        overflow: hidden;
+    }
+    /* MA search */
+    .search-vmi-locations h3 {
+        margin-top: 0;
+    }
+
+    .btns {
+        margin-top: 0.5em;
+        float: left;
+        width: 100%;
+    }
+
+    .btns .btn {
+        float: right;
+    }
+}
+
+@media all and (max-width: 767px) {
+    .ma-vmi-locations {
+        .btns .btn {
+            width: 100%;
+            margin-bottom: 1em;
+        }
+    }
+}
+
+@media all and (min-width: 768px) {
+    .ma-vmi-locations {
+        .btns .btn {
+            margin-left: 1em;
+        }
+
+        .search-vmi-locations .columns {
+            float: left;
+        }
+
+        label.accord-head {
+            display: inline-block;
+        }
+
+        .search-vmi-locations {
+            width: 50% !important;
+        }
+    }
+}

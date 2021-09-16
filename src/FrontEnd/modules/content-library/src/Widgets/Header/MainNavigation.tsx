@@ -70,6 +70,7 @@ interface LinkModel {
 export interface MappedLink {
     title: string;
     url: string;
+    type?: string;
     excludeFromNavigation?: boolean;
     openInNewWindow?: boolean;
     numberOfColumns?: number;
@@ -133,6 +134,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps) => {
         categoryIdsToLoad,
         allowQuickOrder: getSettingsCollection(state).orderSettings.allowQuickOrder,
         categoryErrorStatusCodeById: state.data.categories.errorStatusCodeById,
+        displayChangeCustomerLink: state.context?.session?.displayChangeCustomerLink,
     };
 };
 
@@ -542,6 +544,7 @@ export class MainNavigation extends React.Component<Props, State> {
                                         styles={styles}
                                         container={this.container}
                                         isOpen={index === selectedLinkIndex}
+                                        displayChangeCustomerLink={this.props.displayChangeCustomerLink}
                                     />
                                 </StyledWrapper>
                             );
@@ -676,6 +679,7 @@ const mainNavigation: WidgetModule = {
                         },
                         isRequired: true,
                         allowUrls: item => item.fields.linkType === "Link",
+                        showCategoryRoot: item => true,
                     },
                     {
                         name: "overrideTitle",

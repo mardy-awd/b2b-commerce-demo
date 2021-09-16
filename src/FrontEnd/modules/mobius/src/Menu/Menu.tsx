@@ -17,6 +17,7 @@ export interface MappedLink {
     // expanded from content-library/src/widgets/header/MainNavigation.tsx
     title: string;
     url?: string;
+    type?: string;
     clickableProps?: ClickableProps;
     openInNewWindow?: boolean;
     numberOfColumns?: number;
@@ -60,6 +61,8 @@ type MenuComponentProps = MobiusStyledComponentProps<
         width?: number;
         /** Allows forcing the state of this menu to be open */
         isOpen?: true;
+        /** Session boolean value that decides whether to show Change Customer Link */
+        displayChangeCustomerLink?: boolean;
     }
 >;
 
@@ -250,37 +253,43 @@ class Menu extends React.Component<MenuProps, MenuState> {
                                         const hasChildren =
                                             item.children?.some(o => !o.excludeFromNavigation) &&
                                             currentDepth < maxDepth;
-                                        if (this.state.shouldRender) {
-                                            return (
-                                                <MenuItemStyle
-                                                    width={otherProps.width}
-                                                    css={cssOverrides?.menuItem}
-                                                    key={item.title}
-                                                    data-test-selector="menuItem"
-                                                    onClick={() => {
-                                                        this.closeMenuWithoutChildren(hasChildren);
-                                                    }}
-                                                >
-                                                    <Clickable
-                                                        href={item.url}
-                                                        onClick={this.closeMenu}
-                                                        {...applyProp("menuItemClickableProps")}
-                                                    >
-                                                        <MenuItemText
-                                                            hasChildren={hasChildren}
-                                                            {...applyProp("menuItemTypographyProps")}
-                                                        >
-                                                            {item.title}
-                                                        </MenuItemText>
-                                                        {hasChildren && <IconMemo {...applyProp("moreIconProps")} />}
-                                                    </Clickable>
-                                                    {hasChildren
-                                                        ? renderMenuItems(item!.children!, currentDepth + 1)
-                                                        : null}
-                                                </MenuItemStyle>
-                                            );
+
+                                        if (
+                                            (item.type === "ChangeCustomerPage" &&
+                                                !this.props.displayChangeCustomerLink) ||
+                                            !this.state.shouldRender
+                                        ) {
+                                            return null;
                                         }
-                                        return null;
+
+                                        return (
+                                            <MenuItemStyle
+                                                width={otherProps.width}
+                                                css={cssOverrides?.menuItem}
+                                                key={item.title}
+                                                data-test-selector="menuItem"
+                                                onClick={() => {
+                                                    this.closeMenuWithoutChildren(hasChildren);
+                                                }}
+                                            >
+                                                <Clickable
+                                                    href={item.url}
+                                                    onClick={this.closeMenu}
+                                                    {...applyProp("menuItemClickableProps")}
+                                                >
+                                                    <MenuItemText
+                                                        hasChildren={hasChildren}
+                                                        {...applyProp("menuItemTypographyProps")}
+                                                    >
+                                                        {item.title}
+                                                    </MenuItemText>
+                                                    {hasChildren && <IconMemo {...applyProp("moreIconProps")} />}
+                                                </Clickable>
+                                                {hasChildren
+                                                    ? renderMenuItems(item!.children!, currentDepth + 1)
+                                                    : null}
+                                            </MenuItemStyle>
+                                        );
                                     })}
                             </MenuStyle>
                         );

@@ -1,0 +1,34 @@
+﻿<div ng-controller="VmiLocationsController as vm" ng-cloak>
+    <div class="row top-actions">
+        <div class="medium-6 columns"></div>
+        <div class="medium-6 columns top-actions-buttons">
+            <button id="tst_vmiLocationsView_addBtn" type="button" class="btn primary add-btn" ng-click="">[% translate 'Add Location' %]</button>
+        </div>
+    </div>
+    <form>
+        <section class="accordion search-vmi-locations">
+            <div class="cm">
+                <input type="checkbox" id="accord-1" class="accord-check" />
+                <label for="accord-1" class="accord-head">[% translate 'Search' %]</label>
+                <article class="accord-content">
+                    <div class="row">
+                        <div class="columns search-col-1">
+                            <div class="search-total">
+                                <label>[% translate 'Search Locations' %]</label>
+                                <div class="row">
+                                    <div class="small-12 columns">
+                                        <input type="text" name="VmiLocation" id="VmiLocation" value="" placeholder="[% translate 'Location name or address' %]" ng-model="vm.searchFilter" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btns">
+                        <button type="submit" class="btn primary btn-search" ng-click="vm.search()">[% translate 'Search' %]</button>
+                        <button type="submit" class="btn secondary btn-clear" ng-click="vm.clear()">[% translate 'Clear' %]</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </form>
+</div>

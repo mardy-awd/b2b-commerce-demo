@@ -2,8 +2,10 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getBrandsDataView } from "@insite/client-framework/Store/Data/Brands/BrandsSelectors";
 import loadBrands from "@insite/client-framework/Store/Data/Brands/Handlers/LoadBrands";
+import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import SkipNav, { SkipNavStyles } from "@insite/content-library/Components/SkipNav";
 import { BrandsPageContext } from "@insite/content-library/Pages/BrandsPage";
 import { HomePageContext } from "@insite/content-library/Pages/HomePage";
 import FlexItem, { FlexItemProps } from "@insite/content-library/Widgets/Brand/FlexItem";
@@ -13,6 +15,7 @@ import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
 import { LinkProps } from "@insite/mobius/Link";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
+import VisuallyHidden from "@insite/mobius/VisuallyHidden";
 import React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
@@ -67,6 +70,7 @@ export interface BrandListStyles {
     imageItem?: FlexItemProps;
     link?: LinkProps;
     image?: LazyImageProps;
+    skipToContent?: SkipNavStyles;
 }
 
 export const listStyles: BrandListStyles = {
@@ -120,28 +124,70 @@ class BrandGallery extends React.Component<Props> {
 
         return (
             <StyledWrapper {...styles.container} data-test-selector="brandGallery">
+                <VisuallyHidden as="h1">{translate("Explore available brands")}</VisuallyHidden>
                 {this.props.fields.title && (
                     <Typography variant="headerSecondary" {...styles.titleText} data-test-selector="brandGalleryTitle">
                         {this.props.fields.title}
                     </Typography>
                 )}
                 <FlexWrapContainer {...styles.imageContainer}>
-                    {brandList.map(brand => (
-                        <FlexItem
-                            key={brand.id}
-                            flexColumns={[mobile, tablet, tablet, desktop, desktop]}
-                            {...styles.imageItem}
-                        >
-                            <Clickable href={brand.detailPagePath} {...styles.link}>
-                                <LazyImage
-                                    imgProps={imgProps}
-                                    {...styles.image}
-                                    src={brand.logoSmallImagePath}
-                                    altText={brand.logoAltText}
-                                />
-                            </Clickable>
-                        </FlexItem>
-                    ))}
+                    {brandList.map(brand => {
+                        if (brand === brandList[0]) {
+                            const focusFunction = () => {
+                                const elementToFocus = document.getElementById("collapseButton");
+                                if (elementToFocus) {
+                                    elementToFocus.focus();
+                                } else {
+                                    document.getElementById("expandButton")?.focus();
+                                }
+                            };
+                            return (
+                                <FlexItem
+                                    key={brand.id}
+                                    flexColumns={[mobile, tablet, tablet, desktop, desktop]}
+                                    {...styles.imageItem}
+                                >
+                                    <SkipNav
+                                        extendedStyles={styles.skipToContent}
+                                        text={translate("Skip to full brand list")}
+                                        focusFunction={focusFunction}
+                                    />
+                                    <Clickable href={brand.detailPagePath} {...styles.link}>
+                                        <LazyImage
+                                            imgProps={imgProps}
+                                            {...styles.image}
+                                            src={brand.logoSmallImagePath}
+                                            altText={
+                                                brand.logoAltText
+                                                    ? `${translate("Go to brand page")} ${brand.logoAltText}`
+                                                    : `${translate("Go to brand page")} ${brand.name}`
+                                            }
+                                        />
+                                    </Clickable>
+                                </FlexItem>
+                            );
+                        }
+                        return (
+                            <FlexItem
+                                key={brand.id}
+                                flexColumns={[mobile, tablet, tablet, desktop, desktop]}
+                                {...styles.imageItem}
+                            >
+                                <Clickable href={brand.detailPagePath} {...styles.link}>
+                                    <LazyImage
+                                        imgProps={imgProps}
+                                        {...styles.image}
+                                        src={brand.logoSmallImagePath}
+                                        altText={
+                                            brand.logoAltText
+                                                ? `${translate("Go to brand page")} ${brand.logoAltText}`
+                                                : `${translate("Go to brand page")} ${brand.name}`
+                                        }
+                                    />
+                                </Clickable>
+                            </FlexItem>
+                        );
+                    })}
                 </FlexWrapContainer>
             </StyledWrapper>
         );

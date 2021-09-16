@@ -1,3 +1,4 @@
+import { emptyGuid } from "@insite/client-framework/Common/StringHelpers";
 import ContentItemModel, { DeviceType } from "@insite/client-framework/Types/ContentItemModel";
 
 export function createContextualIds(
@@ -49,7 +50,9 @@ export function prepareFields(
     contextualIds: string[],
 ) {
     let { generalFields, fields, translatableFields, contextualFields } = contentItem;
-    const isHomePage = contentItem?.type === "HomePage";
+    // we can't depend on .Type for this because the variant root of HomePage Type: "VariantRootPage"
+    // header/footer don't have url segments, so this check is good enough
+    const possiblyHomePage = contentItem.parentId === emptyGuid;
     if (!fields) {
         fields = contentItem.fields = {};
     }
@@ -68,19 +71,22 @@ export function prepareFields(
     }
 
     for (const field in translatableFields) {
+        const skipDefaulting = possiblyHomePage && field === "urlSegment";
+
         const value = translatableFields[field][languageId];
         if (value || value === "") {
             fields[field] = value;
             continue;
         }
-        if (translatableFields[field][defaultLanguageId] && !isHomePage && field !== "urlSegment") {
+        if (translatableFields[field][defaultLanguageId] && !skipDefaulting) {
             fields[field] = translatableFields[field][defaultLanguageId];
             continue;
         }
         // if we can't find anything else, just grab the first one we find
         // look out for case of home page, where we want to respect the default value ("") if one has not been set for this language
         const keys = Object.keys(translatableFields[field]);
-        if (field === "urlSegment" && isHomePage) {
+
+        if (skipDefaulting) {
             fields[field] = "";
         } else {
             fields[field] = keys.length === 0 ? "" : translatableFields[field][keys[0]];

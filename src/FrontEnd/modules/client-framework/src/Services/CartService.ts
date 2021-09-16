@@ -57,6 +57,7 @@ export interface GetCartsApiParameter extends ApiParameter, HasPagingParameters 
     orderTotal?: string;
     orderSubtotalOperator?: string;
     orderSubtotal?: string;
+    vmiLocationId?: string;
 }
 
 export interface UpdateCartApiParameter extends ApiParameter {

@@ -1,3 +1,4 @@
+import validateEmail from "@insite/client-framework/Common/Utilities/validateEmail";
 import { makeHandlerChainAwaitable } from "@insite/client-framework/HandlerCreator";
 import siteMessage from "@insite/client-framework/SiteMessage";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
@@ -81,13 +82,17 @@ const SignInResetPasswordForm = ({ onClose, resetPassword, validateReCaptcha, ac
     const { useEmailAsUserName } = accountSettings;
 
     const sendEmail = async (userName: string) => {
-        if (!userName) {
+        if (!userName.trim()) {
             setErrorMessage(
                 siteMessage(
                     "Field_Required",
                     useEmailAsUserName ? translate("Email") : translate("Username"),
                 ) as string,
             );
+            return;
+        }
+        if (useEmailAsUserName && !validateEmail(userName)) {
+            setErrorMessage(siteMessage("ResetPassword_EmailAddress_Validation") as string);
             return;
         }
 
@@ -168,6 +173,7 @@ const SignInResetPasswordForm = ({ onClose, resetPassword, validateReCaptcha, ac
                     placeholder={useEmailAsUserName ? translate("Enter email") : translate("Enter username")}
                     error={errorMessage}
                     onChange={handleUsernameChange}
+                    data-test-selector="resetPassword_userName"
                 ></TextField>
             </GridItem>
             <GridItem {...styles.reCaptchaGridItem}>
@@ -177,7 +183,12 @@ const SignInResetPasswordForm = ({ onClose, resetPassword, validateReCaptcha, ac
                 <Button {...styles.cancelButton} onClick={onCancelClick}>
                     {translate("Return to sign in")}
                 </Button>
-                <Button {...styles.sendButton} disabled={isSubmitting} onClick={() => sendEmail(userName)}>
+                <Button
+                    {...styles.sendButton}
+                    disabled={isSubmitting}
+                    onClick={() => sendEmail(userName)}
+                    data-test-selector="resetPassword_submit"
+                >
                     {translate("Send Email")}
                 </Button>
             </GridItem>

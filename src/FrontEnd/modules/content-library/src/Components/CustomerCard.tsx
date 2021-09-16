@@ -1,6 +1,6 @@
 import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import translate from "@insite/client-framework/Translate";
-import { BaseAddressModel } from "@insite/client-framework/Types/ApiModels";
+import { BaseAddressModel, CustomerValidationDto } from "@insite/client-framework/Types/ApiModels";
 import AddressInfoDisplay, { AddressInfoDisplayStyles } from "@insite/content-library/Components/AddressInfoDisplay";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -8,14 +8,17 @@ import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import getColor from "@insite/mobius/utilities/getColor";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
-import React, { FC } from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
 
+type BaseAddressModelWithValidation = BaseAddressModel & { validation?: CustomerValidationDto | null };
+
 interface OwnProps {
-    customer: BaseAddressModel;
+    customer: BaseAddressModelWithValidation;
     isSelected?: boolean;
-    onSelect: (shipTo: BaseAddressModel) => void;
-    allowEditCustomer: boolean;
+    onSelect: (customer: BaseAddressModel) => void;
+    /** @deprecated Not used anymore */
+    allowEditCustomer?: boolean;
     onEdit?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, customer: BaseAddressModel) => void;
     extendedStyles?: CustomerCardStyles;
 }
@@ -64,11 +67,12 @@ const ActionsWrapper = styled.div<InjectableCss>`
     ${({ css }) => css}
 `;
 
-const CustomerCard: FC<OwnProps> = ({ customer, isSelected, allowEditCustomer, onEdit, extendedStyles, onSelect }) => {
-    const [styles] = React.useState(() => mergeToNew(customerCardStyles, extendedStyles));
+const CustomerCard = ({ customer, isSelected, onEdit, extendedStyles, onSelect }: OwnProps) => {
+    const [styles] = useState(() => mergeToNew(customerCardStyles, extendedStyles));
 
     const handleEditClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => onEdit?.(event, customer);
 
+    const hasEditableFields = customer.validation && Object.values(customer.validation).some(o => !o.isDisabled);
     return (
         <GridContainer {...styles.container}>
             <GridItem {...styles.addressGridItem}>
@@ -89,7 +93,7 @@ const CustomerCard: FC<OwnProps> = ({ customer, isSelected, allowEditCustomer, o
                     >
                         {isSelected ? "Selected" : "Select"}
                     </Button>
-                    {allowEditCustomer && onEdit && (
+                    {hasEditableFields && onEdit && (
                         <Link
                             {...styles.editLink}
                             onClick={handleEditClick}

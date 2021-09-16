@@ -44,7 +44,7 @@ export const LoadCurrentShipTo: HandlerType = async ({ dispatch, getState }) => 
 
     const { shipToId } = getSession(getState());
     let currentShipToState = getShipToState(getState(), shipToId);
-    if (!currentShipToState.value && !currentShipToState.isLoading) {
+    if (!currentShipToState.value && !currentShipToState.isLoading && shipToId) {
         await makeHandlerChainAwaitable(loadCurrentShipTo)({})(dispatch, getState);
         currentShipToState = getShipToState(getState(), shipToId);
         if (!currentShipToState.value) {

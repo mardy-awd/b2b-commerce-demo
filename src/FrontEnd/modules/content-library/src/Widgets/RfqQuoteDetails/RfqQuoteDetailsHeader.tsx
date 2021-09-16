@@ -273,6 +273,7 @@ const RfqQuoteDetailsHeader: FC<Props> = ({
     const expirationDateIsValid = expirationDateIsGreaterThanCurrentDate();
     const canBeDeclined = !quote.isSalesperson && quote.status === "QuoteProposed" && expirationDateIsValid;
     const canBeAccepted =
+        !quote.failedToGetRealTimeInventory &&
         !quote.isSalesperson &&
         (quote.status === "QuoteProposed" || quote.status === "AwaitingApproval") &&
         expirationDateIsValid;

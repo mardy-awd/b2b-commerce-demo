@@ -64,12 +64,14 @@ const ProductDetailsVariantOptions: React.FC<Props> = ({
     updateVariantSelection,
     variantTraits,
     parentProductId,
-    variantSelectionCompleted,
     variantProductState,
     selectedProductId,
 }) => {
     useEffect(() => {
-        if (variantProductState.value) {
+        if (
+            variantProductState.value &&
+            (variantProductState.value.isVariantParent || variantProductState.value.childTraitValues)
+        ) {
             window.history.replaceState(null, "", variantProductState.value.canonicalUrl);
         }
     }, [selectedProductId]);

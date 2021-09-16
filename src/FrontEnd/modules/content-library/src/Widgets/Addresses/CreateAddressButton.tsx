@@ -1,11 +1,12 @@
 import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
+import { getSession, getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import setCurrentShipTo from "@insite/client-framework/Store/Context/Handlers/SetCurrentShipTo";
 import { getAddressFieldsDataView } from "@insite/client-framework/Store/Data/AddressFields/AddressFieldsSelector";
 import { getCurrentBillToState } from "@insite/client-framework/Store/Data/BillTos/BillTosSelectors";
 import { getCurrentCountries } from "@insite/client-framework/Store/Data/Countries/CountriesSelectors";
 import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { isVmiAdmin } from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsSelectors";
 import createShipTo from "@insite/client-framework/Store/Pages/Addresses/Handlers/CreateShipTo";
 import translate from "@insite/client-framework/Translate";
 import { ShipToModel } from "@insite/client-framework/Types/ApiModels";
@@ -24,14 +25,19 @@ import React, { useEffect, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
-const mapStateToProps = (state: ApplicationState) => ({
-    customerSettings: getSettingsCollection(state).customerSettings,
-    currentBillTo: getCurrentBillToState(state).value,
-    newShipTo: state.pages.addresses.newShipTo,
-    countries: getCurrentCountries(state),
-    billToAddressFields: getAddressFieldsDataView(state).value?.billToAddressFields,
-    location: getLocation(state),
-});
+const mapStateToProps = (state: ApplicationState) => {
+    const session = getSession(state);
+    const settings = getSettingsCollection(state);
+    return {
+        customerSettings: settings.customerSettings,
+        currentBillTo: getCurrentBillToState(state).value,
+        newShipTo: state.pages.addresses.newShipTo,
+        countries: getCurrentCountries(state),
+        billToAddressFields: getAddressFieldsDataView(state).value?.billToAddressFields,
+        location: getLocation(state),
+        isVmiAdmin: isVmiAdmin(settings.orderSettings, session),
+    };
+};
 
 const mapDispatchToProps = {
     createShipTo,
@@ -67,6 +73,7 @@ const CreateAddressButton = ({
     countries,
     billToAddressFields,
     location,
+    isVmiAdmin,
     createShipTo,
     setCurrentShipTo,
 }: Props) => {
@@ -78,7 +85,7 @@ const CreateAddressButton = ({
         }
     }, []);
 
-    if (!customerSettings.allowCreateNewShipToAddress) {
+    if (!customerSettings.allowCreateNewShipToAddress && !isVmiAdmin) {
         return null;
     }
 

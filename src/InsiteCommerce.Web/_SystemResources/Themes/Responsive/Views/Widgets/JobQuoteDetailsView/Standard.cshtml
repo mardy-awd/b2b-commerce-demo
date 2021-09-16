@@ -61,7 +61,7 @@
                 <span>[% translate 'Sub-Total' %]:</span>
                 <span id="jobSubTotal" ng-bind="vm.orderTotal() | currency:vm.job.currencySymbol"></span>
             </div>
-            <button ng-if="vm.job.isEditable" class="btn primary" ng-disabled="!vm.orderTotal() > 0" ng-click="vm.generateOrder()" type="submit" id="generateOrderBtn">[% translate 'Generate Order' %]</button>
+            <button ng-if="vm.job.isEditable && !vm.job.failedToGetRealTimeInventory" class="btn primary" ng-disabled="!vm.orderTotal() > 0" ng-click="vm.generateOrder()" type="submit" id="generateOrderBtn">[% translate 'Generate Order' %]</button>
         </form>
     </div>
     <div ng-show="vm.validationMessage">

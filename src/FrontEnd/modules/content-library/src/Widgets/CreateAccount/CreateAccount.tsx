@@ -372,6 +372,7 @@ const CreateAccount = ({
                                     },
                                     type: "button",
                                 }}
+                                clickableText={password}
                                 data-test-selector="createAccount_password"
                                 required
                             />
@@ -392,6 +393,7 @@ const CreateAccount = ({
                                     },
                                     type: "button",
                                 }}
+                                clickableText={confirmPassword}
                                 data-test-selector="createAccount_confirmPassword"
                                 required
                             />

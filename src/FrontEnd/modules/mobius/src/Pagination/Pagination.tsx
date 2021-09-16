@@ -229,6 +229,7 @@ const Pagination: React.FC<PaginationProps> = withTheme(props => {
                         buttonProps,
                         currentPageButtonVariant,
                     })}
+                    type="button"
                 >
                     {page.toString()}
                 </Button>

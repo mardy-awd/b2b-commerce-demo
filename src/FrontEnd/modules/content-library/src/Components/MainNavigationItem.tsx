@@ -17,6 +17,7 @@ interface OwnProps {
     styles: MainNavigationStyles;
     container: React.RefObject<HTMLElement>;
     isOpen: boolean;
+    displayChangeCustomerLink: boolean;
 }
 
 type Props = ThemeProps<BaseTheme> & OwnProps;
@@ -94,6 +95,7 @@ class MainNavigationItem extends React.Component<Props> {
                     descriptionId={`${link.title}_${index}`}
                     menuItems={link.children}
                     menuTrigger={menuLink}
+                    displayChangeCustomerLink={this.props.displayChangeCustomerLink}
                     {...menuProps}
                     {...styles.cascadingMenu}
                 />
@@ -153,7 +155,18 @@ class MainNavigationItem extends React.Component<Props> {
                                     {child.children && (
                                         <ul>
                                             {child.children
-                                                .filter(grandChild => !grandChild.excludeFromNavigation)
+                                                .filter(grandChild => {
+                                                    if (grandChild.excludeFromNavigation) {
+                                                        return false;
+                                                    }
+                                                    if (
+                                                        grandChild.type === "ChangeCustomerPage" &&
+                                                        !this.props.displayChangeCustomerLink
+                                                    ) {
+                                                        return false;
+                                                    }
+                                                    return true;
+                                                })
                                                 .map((grandChild, index) => (
                                                     // eslint-disable-next-line react/no-array-index-key
                                                     <li key={index}>

@@ -17,12 +17,14 @@ import {
     AccountPaymentProfileModel,
     AccountShipToCollectionModel,
     AccountShipToModel,
+    VmiUserModel,
 } from "@insite/client-framework/Types/ApiModels";
 
 export interface GetAccountsApiParameter extends ApiParameter, HasPagingParameters {
     searchText?: string;
     expand?: "administration"[];
     additionalExpands?: string[];
+    roles?: string[];
 }
 
 export interface GetAccountApiParameter extends ApiParameter {
@@ -62,6 +64,10 @@ export interface GetAccountShipToCollectionApiParameter extends ApiParameter, Ha
 export interface ApplyAccountShipToCollectionApiParameter extends ApiParameter {
     accountId: string;
     shipToCollection: AccountShipToModel[];
+}
+
+export interface UpdateVmiUserApiParameter extends ApiParameter {
+    vmiUser: Partial<VmiUserModel>;
 }
 
 const accountsUrl = "/api/v1/accounts";
@@ -165,6 +171,27 @@ export async function applyAccountShipToCollection(
         };
     } catch (error) {
         if (isApiError(error) && error.status === 400) {
+            return {
+                successful: false,
+                errorMessage: error.errorJson.message,
+            };
+        }
+        throw error;
+    }
+}
+
+export async function updateVmiUser(parameter: UpdateVmiUserApiParameter): Promise<ServiceResult<VmiUserModel>> {
+    try {
+        const vmiUserModel = await patch<VmiUserModel>(
+            `${accountsUrl}/vmi/${parameter.vmiUser.userId}`,
+            parameter.vmiUser as VmiUserModel,
+        );
+        return {
+            result: vmiUserModel,
+            successful: true,
+        };
+    } catch (error) {
+        if ("status" in error && error.status === 400 && error.errorJson && error.errorJson.message) {
             return {
                 successful: false,
                 errorMessage: error.errorJson.message,

@@ -152,6 +152,7 @@ export const HeaderSignIn = ({
                             pageLink => !(pageLink.type === ChangeCustomerPageContext && !displayChangeCustomerLink),
                         ) ?? []
                     }
+                    displayChangeCustomerLink={displayChangeCustomerLink}
                     maxDepth={1}
                     menuTrigger={
                         <Clickable {...styles.titleClickable} data-test-selector="header_signIn">

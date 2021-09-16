@@ -1,5 +1,6 @@
 import { getStyledWrapper } from "@insite/client-framework/Common/StyledWrapper";
 import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
+import validateEmail from "@insite/client-framework/Common/Utilities/validateEmail";
 import siteMessage from "@insite/client-framework/SiteMessage";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
@@ -159,6 +160,10 @@ const SignInExistingAccount = ({ signIn, fields, accountSettings, externalError 
             return;
         }
 
+        if (accountSettings.useEmailAsUserName && !validateEmail(userName)) {
+            return;
+        }
+
         const queryParams = parseQueryString<{ returnUrl?: string }>(window.location.search);
         const returnUrl = removeAbsoluteUrl(queryParams.returnUrl?.toString());
 
@@ -199,12 +204,23 @@ const SignInExistingAccount = ({ signIn, fields, accountSettings, externalError 
         signInHandler(newPassword);
     };
 
-    const userErrorMessage =
-        !userName && isSignInClicked
-            ? accountSettings.useEmailAsUserName
-                ? siteMessage("SignInInfo_Email_Required")
-                : siteMessage("SignInInfo_UserName_Required")
-            : "";
+    const validateUserName = () => {
+        if (isSignInClicked) {
+            if (userName) {
+                if (accountSettings.useEmailAsUserName && !validateEmail(userName)) {
+                    return siteMessage("SignInInfo_Email_Validation");
+                }
+            } else {
+                return accountSettings.useEmailAsUserName
+                    ? siteMessage("SignInInfo_Email_Required")
+                    : siteMessage("SignInInfo_UserName_Required");
+            }
+        }
+
+        return "";
+    };
+
+    const userErrorMessage = validateUserName();
     const passwordErrorMessage =
         !password && isSignInClicked ? siteMessage("SignInInfo_Password_Required") : errorMessage || "";
 
@@ -233,13 +249,17 @@ const SignInExistingAccount = ({ signIn, fields, accountSettings, externalError 
                             onChange={e => setPassword(e.currentTarget.value)}
                             value={password}
                             error={passwordErrorMessage}
-                            iconProps={{ ...styles.icon, src: showPassword ? EyeOff : Eye }}
+                            iconProps={{
+                                ...styles.icon,
+                                src: showPassword ? EyeOff : Eye,
+                            }}
                             iconClickableProps={{
                                 onClick: () => {
                                     setShowPassword(!showPassword);
                                 },
                                 type: "button",
                             }}
+                            clickableText={password}
                             autoComplete="current-password"
                             data-test-selector="signIn_password"
                             type={showPassword ? "text" : "password"}
@@ -264,6 +284,7 @@ const SignInExistingAccount = ({ signIn, fields, accountSettings, externalError 
                             {...styles.forgotPasswordLink}
                             type="button"
                             onClick={() => setIsResetPasswordModalOpen(true)}
+                            data-test-selector="signIn_forgotPassword"
                         >
                             {translate("Forgot Password")}
                         </Link>
@@ -272,6 +293,7 @@ const SignInExistingAccount = ({ signIn, fields, accountSettings, externalError 
                             {...styles.resetPasswordModal}
                             isOpen={isResetPasswordModalOpen}
                             handleClose={() => onResetPasswordClose()}
+                            data-test-selector="resetPasswordModal"
                         >
                             <SignInResetPasswordForm onClose={() => onResetPasswordClose()} />
                         </Modal>

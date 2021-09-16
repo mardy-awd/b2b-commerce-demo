@@ -7,7 +7,11 @@ import {
 import { addAccount as addAccountApi, AddAccountApiParameter } from "@insite/client-framework/Services/AccountService";
 import { ServiceResult } from "@insite/client-framework/Services/ApiService";
 import { updateCart } from "@insite/client-framework/Services/CartService";
-import { deleteSession } from "@insite/client-framework/Services/SessionService";
+import {
+    deleteSession,
+    stopWatchingForOtherTabSessionChange,
+    watchForOtherTabSessionChange,
+} from "@insite/client-framework/Services/SessionService";
 import { getCurrentUserIsGuest } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import { AccountModel } from "@insite/client-framework/Types/ApiModels";
@@ -67,7 +71,9 @@ export const PopulateApiParameter: HandlerType = props => {
 };
 
 export const AddAccount: HandlerType = async props => {
+    stopWatchingForOtherTabSessionChange();
     props.apiResult = await addAccountApi(props.apiParameter);
+    watchForOtherTabSessionChange();
 };
 
 export const ExecuteOnErrorCallback: HandlerType = props => {

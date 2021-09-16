@@ -163,7 +163,12 @@ const DataTableHeader: React.FC<DataTableHeaderProps> = ({
                     title={title}
                 >
                     {sortable ? (
-                        <Clickable {...sortClickableProps} {...otherProps.sortClickableProps} onClick={onSortClick}>
+                        <Clickable
+                            {...sortClickableProps}
+                            {...otherProps.sortClickableProps}
+                            onClick={onSortClick}
+                            type="button"
+                        >
                             {cellContents}
                         </Clickable>
                     ) : (

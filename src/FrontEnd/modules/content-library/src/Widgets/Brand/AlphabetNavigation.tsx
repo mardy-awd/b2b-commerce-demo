@@ -92,7 +92,7 @@ const AlphabetNavigation: FC<Props> = (props: Props) => {
                 >
                     {alphabetItem.linkable ? (
                         <Link {...styles.navigationLink} onClick={createHandleClickOfLetter(alphabetItem.letter)}>
-                            {alphabetItem.letter}
+                            <u>{alphabetItem.letter}</u>
                         </Link>
                     ) : (
                         <Typography {...styles.navigationTextEmpty}>{alphabetItem.letter}</Typography>

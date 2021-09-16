@@ -12,7 +12,7 @@ import Radio, { RadioComponentProps, RadioStyle } from "@insite/mobius/Radio";
 import RadioGroup, { RadioGroupComponentProps } from "@insite/mobius/RadioGroup";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import FieldSetPresentationProps, { FieldSetGroupPresentationProps } from "@insite/mobius/utilities/fieldSetProps";
-import React from "react";
+import React, { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -67,12 +67,19 @@ const CheckoutShippingFulfillmentMethodSelector = ({
     enableWarehousePickup,
     setFulfillmentMethod,
 }: Props) => {
+    const [isUpdatingFulfillmentMethod, setIsUpdatingFulfillmentMethod] = useState(false);
     if (!fulfillmentMethod || !enableWarehousePickup) {
         return null;
     }
 
     const handleChangeFulfillmentMethod = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFulfillmentMethod({ fulfillmentMethod: event.currentTarget.value as "Ship" | "PickUp" });
+        setIsUpdatingFulfillmentMethod(true);
+        setFulfillmentMethod({
+            fulfillmentMethod: event.currentTarget.value as "Ship" | "PickUp",
+            onComplete: () => {
+                setIsUpdatingFulfillmentMethod(false);
+            },
+        });
     };
 
     return (
@@ -89,6 +96,7 @@ const CheckoutShippingFulfillmentMethodSelector = ({
                     <Radio
                         {...styles.shipRadio}
                         value={FulfillmentMethod.Ship}
+                        disabled={isUpdatingFulfillmentMethod}
                         data-test-selector="fulfillmentMethod_ship"
                     >
                         {translate("Ship to Address")}
@@ -96,6 +104,7 @@ const CheckoutShippingFulfillmentMethodSelector = ({
                     <Radio
                         {...styles.pickUpRadio}
                         value={FulfillmentMethod.PickUp}
+                        disabled={isUpdatingFulfillmentMethod}
                         data-test-selector="fulfillmentMethod_pickUp"
                     >
                         {translate("Pick Up")}

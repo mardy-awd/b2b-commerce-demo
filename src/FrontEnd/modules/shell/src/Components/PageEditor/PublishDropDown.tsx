@@ -67,7 +67,7 @@ class PublishDropDown extends React.Component<Props> {
                     onClick={this.onPublish}
                     expanded={visible}
                     variant="primary"
-                    typographyProps={{ transform: "capitalize" }}
+                    typographyProps={{ transform: "capitalize", weight: "normal" }}
                 >
                     Publish
                 </PublishButton>

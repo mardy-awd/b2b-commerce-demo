@@ -26,14 +26,12 @@ export const pageBreadcrumbStyles: PageBreadcrumbsStyles = {};
 type Props = ReturnType<typeof mapStateToProps>;
 
 const PageBreadcrumbs = (props: Props) => {
-    const homePageLink = { children: translate("Home"), href: props.homePageUrl };
     let links = props.links || generateLinksFrom(props.linksState, props.nodeId, props.homePageUrl);
-
     if (links.length > 0) {
         // we need to always direct to the language-specific homepage URL
-        let arrayConcat = [...links];
-        arrayConcat = [homePageLink, ...arrayConcat.splice(1, arrayConcat.length)];
-        links = arrayConcat;
+        const homePageLink = { children: translate("Home"), href: props.homePageUrl };
+        const linksWithoutHomePageLink = [...links].splice(1, links.length);
+        links = [homePageLink, ...linksWithoutHomePageLink];
     }
 
     return <Breadcrumbs links={links} data-test-selector="pageBreadcrumbs" {...pageBreadcrumbStyles.breadcrumbs} />;
@@ -41,7 +39,6 @@ const PageBreadcrumbs = (props: Props) => {
 
 export function generateLinksFrom(linksState: LinksState, nodeId: string, homePageUrl: string) {
     const links: LinkProps[] = [];
-    const homePageLink = { children: translate("Home"), href: homePageUrl };
     let currentLink = getPageLinkByNodeId({ links: linksState }, nodeId);
 
     while (currentLink) {

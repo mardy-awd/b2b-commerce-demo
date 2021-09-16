@@ -135,7 +135,7 @@ const RfqJobQuoteDetailsHeader: React.FC<Props> = ({
                     </Typography>
                 </GridItem>
                 <GridItem {...styles.buttonGridItem}>
-                    {jobQuote.isEditable && (
+                    {jobQuote.isEditable && !jobQuote.failedToGetRealTimeInventory && (
                         <Button
                             {...styles.generateOrderButton}
                             disabled={
