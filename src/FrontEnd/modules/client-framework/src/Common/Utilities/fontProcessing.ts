@@ -13,7 +13,7 @@ interface StoragePosition {
 }
 
 interface FontData {
-    content: string;
+    content: any;
     contentType: string | null;
 }
 
@@ -114,9 +114,7 @@ export const getFontContent = async (request: Request, response: Response) => {
         fontCssStorage[path][storageKey.length] &&
         storageKey.index < fontCssStorage[path][storageKey.length].length
     ) {
-        // Originally, the content-type was "text/css; charset=utf-8" due to the call to googleapis
-        // However, this was causing a warning, which went away when the later call to gstatic changed to font/woff2
-        response.contentType("font/woff2");
+        response.contentType("text/css; charset=utf-8");
         response.send(fontCssStorage[path][storageKey.length][storageKey.index]);
         return;
     }
@@ -137,7 +135,7 @@ export const getFontContent = async (request: Request, response: Response) => {
 
         const fontResponse = await fetch(Buffer.from(path, "base64").toString(), requestInit);
         if (fontResponse.status === 200) {
-            const body = await fontResponse.text();
+            const body = await (fontResponse as any).buffer(); // node-fetch
             const contentType = fontResponse.headers.get("content-type");
             fontsStorage[path] = {
                 content: body,

@@ -410,10 +410,7 @@ async function loadPageAndSetInitialCookies(request: Request, response: Response
 
         // getAll does exist and is needed to get more than a single set-cookie value
         const responseCookies = setCookie.parse((pageByUrlResponse.headers as any).getAll("set-cookie"));
-        const xFrameOptions = pageByUrlResponse.headers.get("X-Frame-Options");
-        if (xFrameOptions) {
-            response.header("X-Frame-Options", xFrameOptions);
-        }
+        response.header("X-Frame-Options", "sameorigin");
         for (const cookie of responseCookies) {
             const options = {
                 path: cookie.path,

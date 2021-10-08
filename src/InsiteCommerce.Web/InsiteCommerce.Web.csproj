@@ -88,7 +88,7 @@
     </Reference>
     <Reference Include="Avalara.AvaTax.Adapter, Version=5.7.3.1, Culture=neutral, PublicKeyToken=34e4ef76d6267205, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Avalara.AvaTax.Adapter.dll</HintPath>
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Avalara.AvaTax.Adapter.dll</HintPath>
     </Reference>
     <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>..\packages\AWSSDK.Core.3.5.1.57\lib\net45\AWSSDK.Core.dll</HintPath>
@@ -137,18 +137,18 @@
     </Reference>
     <Reference Include="CyberSource.Base, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7091342136fdb0df, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\CyberSource.Base.dll</HintPath>
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\CyberSource.Base.dll</HintPath>
     </Reference>
     <Reference Include="CyberSource.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\CyberSource.Clients.dll</HintPath>
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\CyberSource.Clients.dll</HintPath>
     </Reference>
     <Reference Include="DiffieHellman, Version=0.0.0.0, Culture=neutral">
       <HintPath>..\packages\DiffieHellman.1.0.0\lib\net40\DiffieHellman.dll</HintPath>
     </Reference>
     <Reference Include="DotLiquid, Version=2.0.24.0, Culture=neutral, PublicKeyToken=82e46016ecf9f07c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\DotLiquid.dll</HintPath>
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\DotLiquid.dll</HintPath>
     </Reference>
     <Reference Include="Elasticsearch.Net, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
       <HintPath>..\packages\Elasticsearch.Net.5.6.5\lib\net461\Elasticsearch.Net.dll</HintPath>
@@ -181,7 +181,7 @@
     </Reference>
     <Reference Include="GemBox.Spreadsheet, Version=33.3.30.1062, Culture=neutral, PublicKeyToken=b1b72c69714d4847, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\GemBox.Spreadsheet.dll</HintPath>
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\GemBox.Spreadsheet.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.8.7.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.8.7\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -203,7 +203,7 @@
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Ionic.Zip.dll</HintPath>
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="IronPdf, Version=4.4.9.15720, Culture=neutral, PublicKeyToken=94e1c31412563c75, processorArchitecture=MSIL">
       <HintPath>..\packages\IronPdf.4.4.9\lib\net40\IronPdf.dll</HintPath>
@@ -337,7 +337,7 @@
     </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Microsoft.Web.Services3.dll</HintPath>
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Microsoft.Web.Services3.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
@@ -357,7 +357,7 @@
     </Reference>
     <Reference Include="Payflow_dotNET, Version=4.3.1.0, Culture=neutral, PublicKeyToken=14aa1e8d77f2a97c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Payflow_dotNET.dll</HintPath>
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Payflow_dotNET.dll</HintPath>
     </Reference>
     <Reference Include="PayPalCoreSDK, Version=1.7.0.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
       <HintPath>..\packages\PayPalCoreSDK.1.7.0\lib\net451\PayPalCoreSDK.dll</HintPath>
@@ -381,7 +381,7 @@
     </Reference>
     <Reference Include="RemoteActiveDirectory, Version=1.0.0.53, Culture=neutral, PublicKeyToken=d9ff2a1d43ad9af4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\RemoteActiveDirectory.dll</HintPath>
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\RemoteActiveDirectory.dll</HintPath>
     </Reference>
     <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>..\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
@@ -608,296 +608,296 @@
     <Reference Include="Z.EntityFramework.Plus.EF6, Version=1.6.10.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
       <HintPath>..\packages\Z.EntityFramework.Plus.EF6.1.6.10\lib\net45\Z.EntityFramework.Plus.EF6.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.ContentLibrary, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.ContentLibrary.dll</HintPath>
+    <Reference Include="Insite.ContentLibrary, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.ContentLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Common, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Common.dll</HintPath>
+    <Reference Include="Insite.Common, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Core.Interfaces, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Core.Interfaces.dll</HintPath>
+    <Reference Include="Insite.Core.Interfaces, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Core.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Core, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Core.dll</HintPath>
+    <Reference Include="Insite.Core, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Integration.InsitePim, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Integration.InsitePim.dll</HintPath>
+    <Reference Include="Insite.Integration.InsitePim, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Integration.InsitePim.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.WIS.AffiliatedDistributors, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.WIS.AffiliatedDistributors.dll</HintPath>
+    <Reference Include="Insite.WIS.AffiliatedDistributors, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.WIS.AffiliatedDistributors.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.WIS.CloudSuiteDistribution, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.WIS.CloudSuiteDistribution.dll</HintPath>
+    <Reference Include="Insite.WIS.CloudSuiteDistribution, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.WIS.CloudSuiteDistribution.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.WIS.DistributorDataSolutions, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.WIS.DistributorDataSolutions.dll</HintPath>
+    <Reference Include="Insite.WIS.DistributorDataSolutions, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.WIS.DistributorDataSolutions.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.WIS.EnterWorks, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.WIS.EnterWorks.dll</HintPath>
+    <Reference Include="Insite.WIS.EnterWorks, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.WIS.EnterWorks.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Spire, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Spire.dll</HintPath>
+    <Reference Include="Insite.Spire, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Spire.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.WIS.Acumatica, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.WIS.Acumatica.dll</HintPath>
+    <Reference Include="Insite.WIS.Acumatica, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.WIS.Acumatica.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Data.Entities, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Data.Entities.dll</HintPath>
+    <Reference Include="Insite.Data.Entities, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Data.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.IocContainer.Unity, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.IocContainer.Unity.dll</HintPath>
+    <Reference Include="Insite.IocContainer.Unity, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.IocContainer.Unity.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Data.Providers.EntityFramework, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Data.Providers.EntityFramework.dll</HintPath>
+    <Reference Include="Insite.Data.Providers.EntityFramework, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Data.Providers.EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Data.Repositories, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Data.Repositories.dll</HintPath>
+    <Reference Include="Insite.Data.Repositories, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Data.Repositories.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Data, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Data.dll</HintPath>
+    <Reference Include="Insite.Data, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.WebFramework, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.WebFramework.dll</HintPath>
+    <Reference Include="Insite.WebFramework, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.WebFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Brands, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Brands.dll</HintPath>
+    <Reference Include="Insite.Brands, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Brands.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.MobileApp, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.MobileApp.dll</HintPath>
+    <Reference Include="Insite.MobileApp, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.MobileApp.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Payments, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Payments.dll</HintPath>
+    <Reference Include="Insite.Payments, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Payments.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PunchOut, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PunchOut.dll</HintPath>
+    <Reference Include="Insite.PunchOut, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PunchOut.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.RealTimeInventory, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.RealTimeInventory.dll</HintPath>
+    <Reference Include="Insite.RealTimeInventory, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.RealTimeInventory.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.SystemResources, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.SystemResources.dll</HintPath>
+    <Reference Include="Insite.SystemResources, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.SystemResources.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Account, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Account.dll</HintPath>
+    <Reference Include="Insite.Account, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Account.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Admin, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Admin.dll</HintPath>
+    <Reference Include="Insite.Admin, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Admin.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Budget, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Budget.dll</HintPath>
+    <Reference Include="Insite.Budget, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Budget.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Cart, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Cart.dll</HintPath>
+    <Reference Include="Insite.Cart, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Cart.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Catalog, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Catalog.dll</HintPath>
+    <Reference Include="Insite.Catalog, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Catalog.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Configurator, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Configurator.dll</HintPath>
+    <Reference Include="Insite.Configurator, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Configurator.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.ContentAdmin, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.ContentAdmin.dll</HintPath>
+    <Reference Include="Insite.ContentAdmin, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.ContentAdmin.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Customers, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Customers.dll</HintPath>
+    <Reference Include="Insite.Customers, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Customers.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Dashboard, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Dashboard.dll</HintPath>
+    <Reference Include="Insite.Dashboard, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Dashboard.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Dealers, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Dealers.dll</HintPath>
+    <Reference Include="Insite.Dealers, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Dealers.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Email, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Email.dll</HintPath>
+    <Reference Include="Insite.Email, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Email.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.IdentityServer, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.IdentityServer.dll</HintPath>
+    <Reference Include="Insite.IdentityServer, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.IdentityServer.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Integration.WebService, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Integration.WebService.dll</HintPath>
+    <Reference Include="Insite.Integration.WebService, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Integration.WebService.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Integration, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Integration.dll</HintPath>
+    <Reference Include="Insite.Integration, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Integration.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.WIS.Broker, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.WIS.Broker.dll</HintPath>
+    <Reference Include="Insite.WIS.Broker, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.WIS.Broker.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Invoice, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Invoice.dll</HintPath>
+    <Reference Include="Insite.Invoice, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Invoice.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.JobQuote, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.JobQuote.dll</HintPath>
+    <Reference Include="Insite.JobQuote, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.JobQuote.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Message, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Message.dll</HintPath>
+    <Reference Include="Insite.Message, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Message.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.OrderApproval, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.OrderApproval.dll</HintPath>
+    <Reference Include="Insite.OrderApproval, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.OrderApproval.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Order, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Order.dll</HintPath>
+    <Reference Include="Insite.Order, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Order.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Promotions, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Promotions.dll</HintPath>
+    <Reference Include="Insite.Promotions, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Promotions.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.QuickOrder, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.QuickOrder.dll</HintPath>
+    <Reference Include="Insite.QuickOrder, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.QuickOrder.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.RealTimePricing, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.RealTimePricing.dll</HintPath>
+    <Reference Include="Insite.RealTimePricing, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.RealTimePricing.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Requisition, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Requisition.dll</HintPath>
+    <Reference Include="Insite.Requisition, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Requisition.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Rfq, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Rfq.dll</HintPath>
+    <Reference Include="Insite.Rfq, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Rfq.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Swagger, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Swagger.dll</HintPath>
+    <Reference Include="Insite.Swagger, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Swagger.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.UserFiles, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.UserFiles.dll</HintPath>
+    <Reference Include="Insite.UserFiles, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.UserFiles.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Websites, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Websites.dll</HintPath>
+    <Reference Include="Insite.Websites, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Websites.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.WishLists, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.WishLists.dll</HintPath>
+    <Reference Include="Insite.WishLists, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.WishLists.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.CurrencyConversion.WebserviceX, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.CurrencyConversion.WebserviceX.dll</HintPath>
+    <Reference Include="Insite.CurrencyConversion.WebserviceX, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.CurrencyConversion.WebserviceX.dll</HintPath>
     </Reference>
-    <Reference Include="Elmah.Mvc, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Elmah.Mvc.dll</HintPath>
+    <Reference Include="Elmah.Mvc, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Elmah.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.GeocoderProvider.FreeGeoip, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.GeocoderProvider.FreeGeoip.dll</HintPath>
+    <Reference Include="Insite.GeocoderProvider.FreeGeoip, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.GeocoderProvider.FreeGeoip.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.GeocoderProvider.Google, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.GeocoderProvider.Google.dll</HintPath>
+    <Reference Include="Insite.GeocoderProvider.Google, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.GeocoderProvider.Google.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Plugins, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Plugins.dll</HintPath>
+    <Reference Include="Insite.Plugins, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Plugins.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Integration.Connector.Acumatica, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Integration.Connector.Acumatica.dll</HintPath>
+    <Reference Include="Insite.Integration.Connector.Acumatica, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Integration.Connector.Acumatica.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Integration.Connector.APlus, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Integration.Connector.APlus.dll</HintPath>
+    <Reference Include="Insite.Integration.Connector.APlus, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Integration.Connector.APlus.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Integration.Connector.Base, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Integration.Connector.Base.dll</HintPath>
+    <Reference Include="Insite.Integration.Connector.Base, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Integration.Connector.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Integration.Connector.CloudSuiteDistribution, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Integration.Connector.CloudSuiteDistribution.dll</HintPath>
+    <Reference Include="Insite.Integration.Connector.CloudSuiteDistribution, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Integration.Connector.CloudSuiteDistribution.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Integration.Connector.Facts, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Integration.Connector.Facts.dll</HintPath>
+    <Reference Include="Insite.Integration.Connector.Facts, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Integration.Connector.Facts.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Integration.Connector.IfsAurena, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Integration.Connector.IfsAurena.dll</HintPath>
+    <Reference Include="Insite.Integration.Connector.IfsAurena, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Integration.Connector.IfsAurena.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Integration.Connector.Ifs, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Integration.Connector.Ifs.dll</HintPath>
+    <Reference Include="Insite.Integration.Connector.Ifs, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Integration.Connector.Ifs.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Integration.Connector.Prophet21, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Integration.Connector.Prophet21.dll</HintPath>
+    <Reference Include="Insite.Integration.Connector.Prophet21, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Integration.Connector.Prophet21.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Integration.Connector.SXe, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Integration.Connector.SXe.dll</HintPath>
+    <Reference Include="Insite.Integration.Connector.SXe, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Integration.Connector.SXe.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.Adyen, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.Adyen.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.Adyen, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.Adyen.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.AuthorizeDotNet, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.AuthorizeDotNet.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.AuthorizeDotNet, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.AuthorizeDotNet.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.Bambora, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.Bambora.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.Bambora, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.Bambora.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.CardConnect, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.CardConnect.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.CardConnect, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.CardConnect.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.Cenpos, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.Cenpos.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.Cenpos, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.Cenpos.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.CyberSource, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.CyberSource.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.CyberSource, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.CyberSource.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.ApsPayments, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.ApsPayments.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.ApsPayments, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.ApsPayments.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.EBizCharge, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.EBizCharge.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.EBizCharge, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.EBizCharge.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.Elavon, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.Elavon.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.Elavon, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.Elavon.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.Moneris, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.Moneris.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.Moneris, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.Moneris.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.Payeezy, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.Payeezy.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.Payeezy, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.Payeezy.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.Paymetric, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.Paymetric.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.Paymetric, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.Paymetric.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.PayTrace, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.PayTrace.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.PayTrace, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.PayTrace.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.Stripe, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.Stripe.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.Stripe, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.Stripe.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.VantivExpress, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.VantivExpress.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.VantivExpress, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.VantivExpress.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.Orbital, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.Orbital.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.Orbital, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.Orbital.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.PayflowPro, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.PayflowPro.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.PayflowPro, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.PayflowPro.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.PaypalExpress, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.PaypalExpress.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.PaypalExpress, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.PaypalExpress.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.PaymentGateway.Vantiv, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.PaymentGateway.Vantiv.dll</HintPath>
+    <Reference Include="Insite.PaymentGateway.Vantiv, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.PaymentGateway.Vantiv.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Search.Elasticsearch, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Search.Elasticsearch.dll</HintPath>
+    <Reference Include="Insite.Search.Elasticsearch, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Search.Elasticsearch.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.RatingService.FedEx, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.RatingService.FedEx.dll</HintPath>
+    <Reference Include="Insite.RatingService.FedEx, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.RatingService.FedEx.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.RatingService.Ups, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.RatingService.Ups.dll</HintPath>
+    <Reference Include="Insite.RatingService.Ups, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.RatingService.Ups.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.StorageProviders.Amazon, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.StorageProviders.Amazon.dll</HintPath>
+    <Reference Include="Insite.StorageProviders.Amazon, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.StorageProviders.Amazon.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.StorageProviders.Azure, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.StorageProviders.Azure.dll</HintPath>
+    <Reference Include="Insite.StorageProviders.Azure, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.StorageProviders.Azure.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.TaxCalculator.Avalara, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.TaxCalculator.Avalara.dll</HintPath>
+    <Reference Include="Insite.TaxCalculator.Avalara, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.TaxCalculator.Avalara.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.TaxCalculator.CyberSource, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.TaxCalculator.CyberSource.dll</HintPath>
+    <Reference Include="Insite.TaxCalculator.CyberSource, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.TaxCalculator.CyberSource.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.TaxCalculator.Sx, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.TaxCalculator.Sx.dll</HintPath>
+    <Reference Include="Insite.TaxCalculator.Sx, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.TaxCalculator.Sx.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.TaxCalculator.Vertex, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.TaxCalculator.Vertex.dll</HintPath>
+    <Reference Include="Insite.TaxCalculator.Vertex, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.TaxCalculator.Vertex.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Public.Core, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Public.Core.dll</HintPath>
+    <Reference Include="Insite.Public.Core, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Public.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Public.Integration, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Public.Integration.dll</HintPath>
+    <Reference Include="Insite.Public.Integration, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Public.Integration.dll</HintPath>
     </Reference>
-    <Reference Include="Insite.Public.WebFramework, Version=5.0.17.120">
-      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.120\lib\net48\Insite.Public.WebFramework.dll</HintPath>
+    <Reference Include="Insite.Public.WebFramework, Version=5.0.17.130">
+      <HintPath>..\packages\Insite.Commerce.Private.5.0.17.130\lib\net48\Insite.Public.WebFramework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

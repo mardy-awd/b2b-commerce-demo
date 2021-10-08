@@ -111,7 +111,7 @@ test("getFontContent should return modified css file", async () => {
 
     await getFontContent(request, response);
 
-    expect(resultContentType).toHaveBeenCalledWith("font/woff2");
+    expect(resultContentType).toHaveBeenCalledWith("text/css; charset=utf-8");
     expect(resultContent).toHaveBeenCalledWith(expectedContent);
     expect(response.statusCode).toBe(200);
 });
@@ -150,8 +150,8 @@ test("getFontContent should load font file", async () => {
         Promise.resolve({
             status: 200,
             headers: new Headers(responseHeaders),
-            text: () => Promise.resolve("font"),
-        } as Response),
+            buffer: () => Promise.resolve("font"),
+        } as any),
     );
 
     const fontUrl = "https://fonts.gstatic.com/s/opensans/v22/mem5YaGs126MiZpBA-UN7rgOX-hpOqc.woff2";
