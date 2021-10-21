@@ -52,7 +52,15 @@ const store = configureStore(initialState);
 
 async function renderApp(renderer: Renderer = render) {
     let WrappingContext: React.FC = ({ children }) => <>{children}</>;
-    if (!!window && window.parent && window.parent.location.toString().toLowerCase().indexOf("/contentadmin/") > 0) {
+    let isInShell = false;
+    try {
+        isInShell =
+            !!window && window.parent && window.parent.location.toString().toLowerCase().indexOf("/contentadmin/") > 0;
+    } catch (error) {
+        // ignore this, it means we can't access the parent which means we aren't in CMS
+    }
+
+    if (isInShell) {
         logger.debug("CMS shell detected.");
         if (window.location.pathname.startsWith(getContentByVersionPath)) {
             logger.debug("Suppressing shell wrapper due to GetContentByVersion request.");

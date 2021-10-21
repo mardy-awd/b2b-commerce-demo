@@ -240,7 +240,10 @@ export async function pageRenderer(request: Request, response: Response) {
                 <link href={fontFamilyImportUrl} rel="stylesheet" />
                 {sheet?.getStyleElement()}
                 <script>{`if (window.parent !== window) {
-    window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    try {
+        window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    }
+    catch (ex) { }
 }`}</script>
                 {HeadEnd(layoutSectionRenderingContext)}
                 {isGetContentRequest && (
@@ -410,7 +413,10 @@ async function loadPageAndSetInitialCookies(request: Request, response: Response
 
         // getAll does exist and is needed to get more than a single set-cookie value
         const responseCookies = setCookie.parse((pageByUrlResponse.headers as any).getAll("set-cookie"));
-        response.header("X-Frame-Options", "sameorigin");
+        const xFrameOptions = pageByUrlResponse.headers.get("X-Frame-Options");
+        if (xFrameOptions) {
+            response.header("X-Frame-Options", xFrameOptions);
+        }
         for (const cookie of responseCookies) {
             const options = {
                 path: cookie.path,
