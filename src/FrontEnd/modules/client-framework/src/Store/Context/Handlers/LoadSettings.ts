@@ -6,6 +6,12 @@ import { getSettings, GetSettingsApiParameter, SettingsModel } from "@insite/cli
 
 type HandlerType = ApiHandlerDiscreteParameter<{}, GetSettingsApiParameter, SettingsModel>;
 
+export const DispatchBeginLoadSettings: HandlerType = props => {
+    props.dispatch({
+        type: "Context/BeginLoadSettings",
+    });
+};
+
 export const PopulateApiParameter: HandlerType = props => {
     props.apiParameter = {};
 };
@@ -21,7 +27,7 @@ export const DispatchCompleteLoadSettings: HandlerType = props => {
     });
 };
 
-export const chain = [RequestDataFromApi, DispatchCompleteLoadSettings];
+export const chain = [DispatchBeginLoadSettings, RequestDataFromApi, DispatchCompleteLoadSettings];
 
 const loadSettings = createHandlerChainRunnerOptionalParameter(chain, {}, "LoadSettings");
 export default loadSettings;

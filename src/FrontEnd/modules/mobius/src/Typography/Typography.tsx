@@ -75,7 +75,7 @@ const Typography: React.FC<TypographyProps> = ({ color, ellipsis, size, theme, f
             {(theme?: BaseTheme) => {
                 let newAs: keyof JSX.IntrinsicElements | undefined;
                 if (otherProps.variant?.startsWith("header")) {
-                    newAs = "p";
+                    newAs = headerSecondaryRegex.exec(otherProps.variant) ? "span" : "p";
                 }
                 const { color: variantColor, size: variantSize, css: variantCss, ...variantProps } = otherProps.variant
                     ? theme!.typography[otherProps.variant]
@@ -94,6 +94,9 @@ const Typography: React.FC<TypographyProps> = ({ color, ellipsis, size, theme, f
         </ThemeConsumer>
     );
 };
+
+/** Must prevent p tags from rendering inside headerSecondary buttons */
+const headerSecondaryRegex = /secondary/i;
 
 /** @component */
 export default Typography;

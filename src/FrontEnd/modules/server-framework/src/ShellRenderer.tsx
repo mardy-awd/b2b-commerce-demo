@@ -15,6 +15,13 @@ const renderedShell = `<!DOCTYPE html>${renderToStaticMarkup(
             <link rel="icon" href="data:," />
             <link href="https://fonts.googleapis.com/css?family=Barlow:300,400,700&display=swap" rel="stylesheet" />
             <link rel="shortcut icon" href={favicon} type="image/svg" />
+            {/* eslint-disable react/no-danger */}
+            <script
+                dangerouslySetInnerHTML={{
+                    __html: `if (document.domain === "localhost") { document.domain = "localhost"; }`,
+                }}
+            ></script>
+            {/* eslint-enable react/no-danger */}
         </head>
         <body>
             <div id="react-app"></div>

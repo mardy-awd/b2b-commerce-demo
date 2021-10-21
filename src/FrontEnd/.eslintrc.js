@@ -5,7 +5,7 @@ const path = require("path");
 module.exports = {
     root: true,
     parser: "@typescript-eslint/parser",
-    plugins: ["@typescript-eslint", "react-hooks", "ordered-imports", "spire", "prettier"],
+    plugins: ["@typescript-eslint", "react-hooks", "ordered-imports", "spire"],
     extends: [
         "airbnb",
         "airbnb/hooks",
@@ -40,20 +40,28 @@ module.exports = {
         "@typescript-eslint/type-annotation-spacing": "off", // Should be "error"; inconsistent code style.
         "arrow-body-style": "off", // Should be "error"; unnecessary complexity.
         "arrow-parens": "off", // Should be customized; we generally don't use unnecessary parentheses in our C# arrow functions.
-        "consistent-return": "off", // Should be "off"; handled nicely by TypeScript.
+        "consistent-return": "off", // handled by TS
         curly: ["warn", "all"],
-        "default-case": "off", // Should be "off"; a switch with no default is well-understood and handled correctly by TypeScript.
+        "default-case": "off", // handled by TS
         "dot-notation": "off", // Should be "error"; unnecessary complexity.
         "func-names": "off", // Should be configured for our needs.
+        "function-call-argument-newline": "off", // handled by prettier
         "function-paren-newline": "off", // handled by prettier
         "guard-for-in": "off", // Should be "error"; potential source of bugs.
         "implicit-arrow-linebreak": "off", // handled by prettier
         "import/first": "off", // Should be "error"; keeps imports in the appropriate place.
         "import/export": "off", // handled by ordered-imports
         "import/extensions": "off", // Requires special configuration or customization to be usable.
-        "import/no-extraneous-dependencies": "off", // Should be "off"; the way this is built doesn't require it package.json to be perfect.
+        "import/named": "off", // handled by TS
+        "import/no-cycle": "off", // Should be "error"; Incredibly slow and does not seem to work with typescript.
+        "import/no-duplicates": "off", // slow, and basically the same as no-duplicate-imports
+        "import/no-extraneous-dependencies": "off", // the way this is built doesn't require our package.json to be perfect.
         "import/no-mutable-exports": "off", // Should be "error"; may be occasional exceptions but this can lead to erratic behavior by consumers.
-        "import/no-unresolved": "off", // Should be "off"; dependency validation is handled by TypeScript and Webpack.
+        "import/no-named-as-default": "off", // handled by TS
+        "import/no-named-as-default-member": "off", // handled by TS
+        "import/no-self-import": "off", // expensive and highly unlikely
+        "import/no-unresolved": "off", // handled by TS
+        "import/no-useless-path-segments": "off", // handled by TS
         "import/order": "off", // Should be "error"; inconsistent import ordering makes reading the list harder than necessary.
         "import/prefer-default-export": "off", // Should be "error"; not using a default export where appropriate makes things slightly harder to use.
         indent: "off", // handled by prettier
@@ -68,18 +76,18 @@ module.exports = {
         "jsx-a11y/no-noninteractive-element-interactions": "off", // Should be "error"; accessibility issue.
         "jsx-a11y/no-static-element-interactions": "off", // Should be "error"; accessibility issue.
         "keyword-spacing": "off", // handled by prettier
-        "linebreak-style": "off", // Should be "off"; handled via .gitattributes `* text=auto`
+        "linebreak-style": "off", // handled by prettier
         "lines-between-class-members": "off", // Debatable, may be usable if customizable for packed fields but spaced functions.
         "max-classes-per-file": "off", // Debatable.
         "max-len": "off", //handled by prettier
-        "no-alert": "error", // Use a styled pop-up.
+        "no-alert": "error", // We shouldn't be using alerts
         "no-await-in-loop": "off", // Should be "off"; this isn't done unintentionally.
         "no-confusing-arrow": "off", // Debatable.
         "no-continue": "off", // Should be "off"; we"re comfortable using `continue`.
-        "no-console": "error",
+        "no-console": "warn",
         "no-loop-func": "off", // Should be "error; complicated code organization.
         "no-multi-assign": "off", // Debatable.
-        "no-multi-spaces": "off", // Should be "error"; bad formatting.
+        "no-multi-spaces": "off", // handled by prettier
         "no-mixed-operators": "error",
         "no-nested-ternary": "off", // Should be "error"; code written this way is hard to read.
         "no-param-reassign": "off", // Should be "off" or customized (if feasible);  our reducer+immer pattern requires it.
@@ -89,10 +97,10 @@ module.exports = {
         "no-underscore-dangle": "off", // Should be "error"; bad naming pattern.  May occasionally need to be suppressed for 3rd party APIs.
         "no-unused-expressions": "off", // Doesn't support `?.` (at the time this comment was written); @typescript-eslint/no-unused-expressions works.
         "no-useless-escape": "off", // Should be "error"; unnecessary syntax.
-        "no-var": "warn",
-        "one-var": "warn",
-        "object-curly-newline": "off", // Should be "off" unless it can be customized to our preferences.
-        "object-property-newline": "off", // Should be "error"; questionable formatting.
+        "no-var": "error",
+        "one-var": "error",
+        "object-curly-newline": "off", // handled by prettier
+        "object-property-newline": "off", // handled by prettier
         "operator-assignment": "off", // Should be "error"; unnecessary syntax.  Might occasionally be suppressed in edge cases.
         "operator-linebreak": "off", // should be ["error", "before"] but conflicts with prettier
         "ordered-imports/ordered-imports": [
@@ -102,34 +110,50 @@ module.exports = {
                 "specifier-ordering": "case-insensitive",
             },
         ],
-        "padded-blocks": "off", // Should be "error"; waste.
+        "padded-blocks": "off", // handled by prettier
         "prefer-destructuring": "off", // Should be "error"; destructuring is break-even-or-better than direct access for minification.
-        "prettier/prettier": "warn",
         "react/no-danger": "error",
         "react/button-has-type": "off", // Debatable, probably "off" is fine as it should be well-understood what happens with an implicit type.
+        "react/default-props-match-prop-types": "off", // does not apply to TS
         "react/destructuring-assignment": "off", // Should be "error";  destructuring is break-even-or-better than direct access for minification.
+        "react/display-name": "off", // slow and we don't use createReactClass
         "react/jsx-boolean-value": "off", // Should be "error"; ={true} on a boolean is unnecessary.
-        "react/jsx-closing-bracket-location": "off", // Should be "error"; poor format.
-        "react/jsx-closing-tag-location": "off", // Should be "error"; TSLint enforced a bad approach here.
-        "react/jsx-curly-newline": "off", // Should be "error"; inefficient format.
-        "react/jsx-filename-extension": "off", // Should be "off"; covered by TypeScript.
-        "react/jsx-first-prop-new-line": "off", // Should be "error"; format doesn't flow as well as it could.
-        "react/jsx-indent": "off", // Should be "error"; requires a customized configuration.
-        "react/jsx-indent-props": "off", // Should be "error"; requires a customized configuration.
-        "react/jsx-max-props-per-line": "off", // Should be "error"; format doesn't flow as well as it could.
-        "react/jsx-one-expression-per-line": "off", // Should be "error"; multi-expression interferes with clean formatting.
-        "react/jsx-props-no-multi-spaces": "off", // Should be "error"; inefficient format.
-        "react/jsx-props-no-spreading": "off", // Should be reviewed.
-        "react/jsx-tag-spacing": "off", // Should be "error"; the extra space makes formatting slightly nicer.
-        "react/jsx-wrap-multilines": "off", // Should be "off" or customized--we generally don't care.
+        "react/jsx-closing-bracket-location": "off", // handled by prettier
+        "react/jsx-closing-tag-location": "off", // handled by prettier
+        "react/jsx-curly-spacing": "off", // handled by prettier
+        "react/jsx-curly-newline": "off", // handled by prettier
+        "react/jsx-curly-brace-presence": ["error", "never"],
+        "react/jsx-filename-extension": "off", // handled by TS
+        "react/jsx-first-prop-new-line": "off", // handled by prettier
+        "react/jsx-indent": "off", // handled by prettier
+        "react/jsx-indent-props": "off", // handled by prettier
+        "react/jsx-no-bind": "off", // Should be "error"; Slow and doesn't appear to work
+        "react/jsx-max-props-per-line": "off", // handled by prettier
+        "react/jsx-one-expression-per-line": "off", // handled by prettier
+        "react/jsx-props-no-multi-spaces": "off", // handled by prettier
+        "react/jsx-props-no-spreading": "off", // Should be "error"; leads to confusing code
+        "react/jsx-tag-spacing": "off", // handled by prettier
+        "react/jsx-wrap-multilines": "off", // handled by prettier
         "react/no-access-state-in-setstate": "off", // Should be "error"; potential source of bugs.
+        "react/no-deprecated": "off", // slow and if we move to react 17 we can clean these up
+        "react/no-redundant-should-component-update": "off", // handled by TS
+        "react/no-string-refs": "off", // handled by TS
+        "react/no-this-in-sfc": "off", // handled by TS
+        "react/no-typos": "off", // handled by TS
         "react/no-unescaped-entities": "off", // Debatable--probably should be off since unescaped entities are safe and have cleaner code.
+        "react/no-unknown-property": "off", // handled by TS
+        "react/no-unused-prop-types": "off", // Should be "error"; Slow and doesn't seem to work
         "react/no-unused-state": "off", // Should be "error"; potential source of bugs.
-        "react/prop-types": "off", // Should be "off"; React prop-types concepts are native to TypeScript.
+        "react/prop-types": "off", // handled by TS
+        "react/prefer-es6-class": "off", // handled by TS
+        "react/prefer-stateless-function": "off", // Should be "error"; Very slow and can be enforced via code reviews
+        "react/require-default-props": "off", // handled by TS
+        "react/require-render-return": "off", // slow and will be obvious
         "react/self-closing-comp": "off", // Should be "error"; wasteful React syntax.
         "react/sort-comp": "off", // Should be "error"; non-standard React component format.
         "react/state-in-constructor": "off", // Should be "error"; non-standard React component format.
         "react/static-property-placement": "off", // Should be "error"; non-standard React component format.
+        "react/void-dom-elements-no-children": "off", // slow and will be obvious
         "react-hooks/rules-of-hooks": "off", // Should be "error"; indicates hooks aren't being used correctly.
         "react-hooks/exhaustive-deps": "off", // Should be "error"; indicates hooks aren't being used correctly.
         "require-atomic-updates": "off", // Ideally would be "error", but would get triggered frequently by our front-end handler chain design.
@@ -143,7 +167,7 @@ module.exports = {
         "spire/avoid-dynamic-translate": [
             "error",
             {
-                generateTranslations: true,
+                generateTranslations: false,
                 ignoreDir: [
                     "/modules/blueprints",
                     "/modules/blueprints-shell",
@@ -153,11 +177,15 @@ module.exports = {
                     "/modules/shell",
                     "/modules/shell-public",
                     "/modules/spire-linter",
-                    "/modules/test"
+                    "/modules/test",
                 ],
                 translationsLocation: path.resolve(__dirname, "wwwroot/AppData"),
-            }
+            },
         ],
         "vars-on-top": "off", // Conflicts with the general ban on `var`.
     },
 };
+
+// https://github.com/typescript-eslint/typescript-eslint/issues/389
+// TODO figure out how to run prettier separately
+

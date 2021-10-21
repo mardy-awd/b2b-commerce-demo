@@ -8,6 +8,7 @@ import {
     getCategories,
     GetCategoriesApiParameter,
 } from "@insite/client-framework/Services/CategoryService";
+import { getCategoriesDataView } from "@insite/client-framework/Store/Data/Categories/CategoriesSelectors";
 
 type Parameter = GetCategoriesApiParameter & HasOnSuccess<CategoryCollection>;
 
@@ -17,6 +18,13 @@ type Props = {
 };
 
 type HandlerType = Handler<Parameter, Props>;
+
+export const CheckIfDataViewLoading: HandlerType = props => {
+    const categoriesDataView = getCategoriesDataView(props.getState(), props.parameter);
+    if (categoriesDataView.isLoading) {
+        return false;
+    }
+};
 
 export const DispatchBeginLoadCategories: HandlerType = props => {
     props.dispatch({
@@ -61,6 +69,7 @@ export const ExecuteOnSuccessCallback: HandlerType = props => {
 };
 
 export const chain = [
+    CheckIfDataViewLoading,
     DispatchBeginLoadCategories,
     PopulateApiParameter,
     RequestDataFromApi,

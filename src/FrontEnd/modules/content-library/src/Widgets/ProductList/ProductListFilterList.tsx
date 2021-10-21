@@ -5,6 +5,7 @@ import clearAllProductFilters from "@insite/client-framework/Store/Pages/Product
 import removeProductFilters from "@insite/client-framework/Store/Pages/ProductList/Handlers/RemoveProductFilters";
 import { getProductListDataView } from "@insite/client-framework/Store/Pages/ProductList/ProductListSelectors";
 import translate from "@insite/client-framework/Translate";
+import { AttributeTypeFacetModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import SkipNav, { SkipNavStyles } from "@insite/content-library/Components/SkipNav";
@@ -35,6 +36,24 @@ const mapStateToProps = (state: ApplicationState) => {
 
         const filteredDataView = getProductsDataView(state, filteredApiParameter);
         const filteredProductCollection = filteredDataView.value ? filteredDataView : undefined;
+        const mergeAttributeTypeFacets = (
+            unfilteredAttributeTypeFacets?: AttributeTypeFacetModel[] | null,
+            filteredAttributeTypeFacets?: AttributeTypeFacetModel[] | null,
+        ) => {
+            if (!unfilteredAttributeTypeFacets) {
+                return filteredAttributeTypeFacets;
+            }
+
+            if (!filteredAttributeTypeFacets) {
+                return unfilteredAttributeTypeFacets;
+            }
+
+            return unfilteredAttributeTypeFacets.concat(
+                filteredAttributeTypeFacets.filter(
+                    o => !unfilteredAttributeTypeFacets.some(p => p.attributeTypeId === o.attributeTypeId),
+                ),
+            );
+        };
 
         return {
             loaded: true,
@@ -47,8 +66,10 @@ const mapStateToProps = (state: ApplicationState) => {
             priceFacets:
                 unfilteredProductCollection?.priceRange?.priceFacets ||
                 filteredProductCollection?.priceRange?.priceFacets,
-            attributeTypeFacets:
-                unfilteredProductCollection?.attributeTypeFacets || filteredProductCollection?.attributeTypeFacets,
+            attributeTypeFacets: mergeAttributeTypeFacets(
+                unfilteredProductCollection?.attributeTypeFacets,
+                filteredProductCollection?.attributeTypeFacets,
+            ),
             searchWithinQueries: productFilters.searchWithinQueries,
             selectedBrandIds: productFilters.brandIds,
             selectedProductLineIds: productFilters.productLineIds,

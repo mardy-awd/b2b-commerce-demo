@@ -12,6 +12,7 @@ import SearchFieldWrapper, {
 import Select, { SelectProps } from "@insite/mobius/Select";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
+import { css } from "styled-components";
 
 interface OwnProps extends WidgetProps {}
 

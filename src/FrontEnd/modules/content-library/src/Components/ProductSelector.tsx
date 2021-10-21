@@ -319,7 +319,8 @@ const ProductSelector = ({
             <GridItem {...styles.qtyGridItem}>
                 <TextField
                     type="number"
-                    min={1}
+                    defaultValue="1"
+                    min="0"
                     label={translate("QTY")}
                     value={qty}
                     onChange={e => {

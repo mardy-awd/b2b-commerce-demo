@@ -451,6 +451,7 @@ const CartLineCardExpanded: FC<Props> = ({
                                 showSavings={true}
                                 showSavingsAmount={productSettings.showSavingsAmount}
                                 showSavingsPercent={productSettings.showSavingsPercent}
+                                showInvalidPriceMessage={true}
                                 extendedStyles={styles.productPrice}
                             />
                         )}

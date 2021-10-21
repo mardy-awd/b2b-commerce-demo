@@ -1,6 +1,7 @@
 import { getFocalPointStyles, parserOptions } from "@insite/client-framework/Common/BasicSelectors";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { responsiveStyleRules } from "@insite/client-framework/Common/Utilities/responsive";
+import { useShellContext } from "@insite/client-framework/Components/IsInShell";
 import { useGetLink } from "@insite/client-framework/Store/Links/LinksSelectors";
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
@@ -113,11 +114,24 @@ export const bannerStyles: BannerStyles = {
 export const Banner: FC<OwnProps> = ({ fields, extendedStyles }) => {
     const { url, title } = useGetLink(fields.buttonLink);
     const history = useHistory();
+    const { isInShell } = useShellContext();
+
     const onClick = () => {
-        if (url) {
+        if (!url) {
+            return;
+        }
+
+        if (url.startsWith("http")) {
+            if (isInShell) {
+                return;
+            }
+
+            window.location.href = url;
+        } else {
             history.push(url);
         }
     };
+
     const backgroundStyles =
         fields.background === "image"
             ? `background-image: url(${fields.image});

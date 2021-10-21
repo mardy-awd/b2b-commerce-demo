@@ -28,17 +28,6 @@
         $modal.find(".close-reveal-modal").click();
     };
 
-    that.checkForIFrame = () => { // used to bust out of iframes for pdass compliance
-        try {
-            if (window.parent != null && window.location !== window.parent.location && window.parent.location.pathname.toLowerCase().indexOf("/contentadmin") < 0) {
-                (top as any).location = self.location.href;
-            }
-        } catch (e) {
-            console.log("Problem trying to check for iframe busting, this is usually a problem with http vs https or cross domain origin");
-            console.log(e);
-        }
-    };
-
     that.isCustomErrorEnabled = () => ($("html").attr("data-isCustomErrorEnabled").toLowerCase() === "true");
 
     that.datepicker = (selector, onCloseCallback, onSetCallback) => {

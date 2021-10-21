@@ -3,7 +3,7 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import translate from "@insite/client-framework/Translate";
 import { InvoiceModel } from "@insite/client-framework/Types/ApiModels";
 import AddressInfoDisplay, { AddressInfoDisplayStyles } from "@insite/content-library/Components/AddressInfoDisplay";
-import Typography, { TypographyProps } from "@insite/mobius/Typography";
+import Typography, { TypographyPresentationProps, TypographyProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
 import { css } from "styled-components";
@@ -14,15 +14,25 @@ interface OwnProps {
 }
 
 export interface InvoiceDetailsShippingAddressStyles {
+    headerText?: TypographyPresentationProps;
     titleText?: TypographyProps;
     addressDisplay?: AddressInfoDisplayStyles;
     wrapper?: InjectableCss;
 }
 
 export const shippingAddressStyles: InvoiceDetailsShippingAddressStyles = {
+    headerText: {
+        variant: "h5",
+        css: css`
+            @media print {
+                font-size: 12px;
+            }
+            margin-bottom: 5px;
+        `,
+    },
     titleText: {
         variant: "h6",
-        as: "h2",
+        as: "h3",
         css: css`
             @media print {
                 font-size: 12px;
@@ -32,7 +42,7 @@ export const shippingAddressStyles: InvoiceDetailsShippingAddressStyles = {
     },
 };
 
-const InvoiceDetailsShippingAddress: React.FunctionComponent<OwnProps> = ({ invoice, extendedStyles }: OwnProps) => {
+const InvoiceDetailsShippingAddress = ({ invoice, extendedStyles }: OwnProps) => {
     if (!invoice) {
         return null;
     }
@@ -41,6 +51,9 @@ const InvoiceDetailsShippingAddress: React.FunctionComponent<OwnProps> = ({ invo
 
     return (
         <StyledWrapper {...styles.wrapper}>
+            <Typography as="h2" {...styles.headerText}>
+                {translate("Shipping Information")}
+            </Typography>
             <Typography {...styles.titleText}>{translate("Shipping Address")}</Typography>
             <AddressInfoDisplay
                 companyName={invoice.stCompanyName}

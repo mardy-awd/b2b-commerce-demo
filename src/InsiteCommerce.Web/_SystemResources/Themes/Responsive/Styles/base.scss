@@ -1673,7 +1673,7 @@ body [role="main"] div.pbtm {
 
 /* Autocomplete */
 
-#qo-search-view-list, #qo-search-widget-list, #orders-page-search-list, .search-autocomplete-list, #selectBillTo-list, #selectShipTo-list, #selectWishList-list, #selectList-list, #shipTo-list {
+#qo-search-view-list, #qo-search-widget-list, #orders-page-search-list, .search-autocomplete-list, #selectBillTo-list, #selectShipTo-list, #selectWishList-list, #selectList-list, #shipTo-list, #vmi-count-searchbox-list, #vmi-product-search-view-list, #vmi-product-search-widget, #select-user-list {
     &.k-list-container {
         border: 1px solid #BBB;
         background: #FFF;
@@ -1794,13 +1794,13 @@ body [role="main"] div.pbtm {
     }
 }
 
-#qo-search-view-list, #qo-search-widget-list, #orders-page-search-list {
+#qo-search-view-list, #qo-search-widget-list, #orders-page-search-list, #vmi-product-search-view-list, #vmi-product-search-widget {
     &.k-list-container .k-item div .shortDescription {
         display: block;
     }
 }
 
-#selectBillTo-list, #selectShipTo-list, #selectWishList-list, #selectList-list, #shipTo-list {
+#selectBillTo-list, #selectShipTo-list, #selectWishList-list, #selectList-list, #shipTo-list, #vmi-count-searchbox-list, #select-user-list {
     &.k-list-container ul li {
         &.k-item {
             color: #252525;

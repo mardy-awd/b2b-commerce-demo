@@ -1,6 +1,9 @@
 import { HasCategoryContext, withCategory } from "@insite/client-framework/Components/CategoryContext";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { CategoryDetailsPageContext } from "@insite/content-library/Pages/CategoryDetailsPage";
+import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
+import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
 import * as React from "react";
 
@@ -12,7 +15,7 @@ export interface CategoryImageStyles {
 
 export const categoryImageStyles: CategoryImageStyles = {};
 
-const CategoryImage: React.FC<Props> = ({ category }) => {
+const CategoryImage = ({ category }: Props) => {
     if (!category) {
         return null;
     }
@@ -25,6 +28,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Categories",
         icon: "Image",
+        allowedContexts: [CategoryDetailsPageContext, ProductDetailsPageContext, ProductListPageContext],
     },
 };
 

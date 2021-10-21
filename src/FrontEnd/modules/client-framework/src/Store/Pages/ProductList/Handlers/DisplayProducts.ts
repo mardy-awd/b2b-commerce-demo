@@ -3,7 +3,7 @@ import { createFromProduct, ProductInfo } from "@insite/client-framework/Common/
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
 import { trackSearchResultEvent } from "@insite/client-framework/Common/Utilities/tracking";
 import waitFor from "@insite/client-framework/Common/Utilities/waitFor";
-import { getIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
+import { getIsWebCrawler } from "@insite/client-framework/Common/WebCrawler";
 import {
     createHandlerChainRunner,
     executeAwaitableHandlerChain,

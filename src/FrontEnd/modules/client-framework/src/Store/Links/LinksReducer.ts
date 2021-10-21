@@ -10,12 +10,15 @@ const initialState: LinksState = {
 };
 
 const reducer = {
-    "Links/BeginLoadPageLinks": (draft: Draft<LinksState>) => {},
+    "Links/BeginLoadPageLinks": (draft: Draft<LinksState>) => {
+        draft.areLinksLoading = true;
+    },
 
     "Links/CompleteLoadPageLinks": (draft: Draft<LinksState>, action: { pageLinks: PageLinkModel[] }) => {
         draft.pageLinks = action.pageLinks;
         draft.nodeIdToPageLinkPath = {};
         draft.pageTypesToNodeId = {};
+        draft.areLinksLoading = false;
 
         const loadLinks = (pageLinks: PageLinkModel[], path: number[], parentId?: string) => {
             let index = 0;

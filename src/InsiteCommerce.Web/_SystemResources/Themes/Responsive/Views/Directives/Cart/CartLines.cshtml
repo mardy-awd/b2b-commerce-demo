@@ -37,6 +37,9 @@
                 <div class="quantity-pricing">
                     <isc-quantity-break-pricing product-id="cartLine.id" break-prices="cartLine.breakPrices"></isc-quantity-break-pricing>
                 </div>
+                <span class="invalid-price" ng-if="!cartLine.isPromotionItem && !cartLine.quoteRequired && !cartLine.allowZeroPricing && cartLine.pricing.unitNetPrice === 0 && cartLine.pricing.unitRegularPrice === 0">
+                    [% translate 'Invalid Price' %]
+                </span>
             </div>
             <div class="price" ng-if="cart.cartNotPriced">
                 <div>[% siteMessage 'RealTimePricing_PriceLoadFailed' %]</div>

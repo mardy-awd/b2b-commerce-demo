@@ -10,10 +10,14 @@ import Page from "@insite/mobius/Page";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
 
-const mapStateToProps = (state: ApplicationState) => ({
-    shouldLoadBrandAlphabet: !state.pages.brands.brandAlphabetState.value,
-    shouldLoadAllBrandList: !getAllBrandsDataView(state).value,
-});
+const mapStateToProps = (state: ApplicationState) => {
+    const allBrandsDataView = getAllBrandsDataView(state);
+    return {
+        shouldLoadBrandAlphabet:
+            !state.pages.brands.brandAlphabetState.value && !state.pages.brands.brandAlphabetState.isLoading,
+        shouldLoadAllBrandList: !allBrandsDataView.value && !allBrandsDataView.isLoading,
+    };
+};
 
 const mapDispatchToProps = {
     loadBrandsAlphabet,

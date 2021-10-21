@@ -16,7 +16,6 @@ import { DataTableCellBaseProps } from "@insite/mobius/DataTable/DataTableCellBa
 import DataTableHead, { DataTableHeadProps } from "@insite/mobius/DataTable/DataTableHead";
 import DataTableHeader, { DataTableHeaderProps } from "@insite/mobius/DataTable/DataTableHeader";
 import DataTableRow, { DataTableRowProps } from "@insite/mobius/DataTable/DataTableRow";
-import Link from "@insite/mobius/Link";
 import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
@@ -24,6 +23,32 @@ import * as React from "react";
 import { useContext } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
+
+const enum fields {
+    showInvoiceNumber = "showInvoiceNumber",
+    showInvoiceDate = "showInvoiceDate",
+    showTerms = "showTerms",
+    showDueDate = "showDueDate",
+    showShipTo = "showShipTo",
+    showPONumber = "showPONumber",
+    showStatus = "showStatus",
+    showInvoiceTotal = "showInvoiceTotal",
+    showCurrentBalance = "showCurrentBalance",
+}
+
+interface OwnProps extends WidgetProps {
+    fields: {
+        [fields.showInvoiceNumber]: boolean;
+        [fields.showInvoiceDate]: boolean;
+        [fields.showTerms]: boolean;
+        [fields.showDueDate]: boolean;
+        [fields.showShipTo]: boolean;
+        [fields.showPONumber]: boolean;
+        [fields.showStatus]: boolean;
+        [fields.showInvoiceTotal]: boolean;
+        [fields.showCurrentBalance]: boolean;
+    };
+}
 
 const mapStateToProps = (state: ApplicationState) => ({
     getInvoicesParameter: state.pages.invoiceHistory.getInvoicesParameter,
@@ -34,7 +59,7 @@ const mapDispatchToProps = {
     updateSearchFields,
 };
 
-type Props = WidgetProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
 export interface InvoiceHistoryTableStyles {
     container?: InjectableCss;
@@ -182,82 +207,114 @@ const InvoiceHistoryTable = (props: Props) => {
         };
     });
 
+    const {
+        showInvoiceNumber,
+        showInvoiceDate,
+        showTerms,
+        showDueDate,
+        showShipTo,
+        showPONumber,
+        showStatus,
+        showInvoiceTotal,
+        showCurrentBalance,
+    } = props.fields;
+
+    const isTrueOrUndefined = (value?: boolean) => value === true || value === undefined;
+
     return (
         <StyledWrapper {...styles.container}>
             <DataTable {...styles.dataTable}>
                 <DataTableHead {...styles.dataTableHead}>
-                    <DataTableHeader
-                        tight
-                        sorted={sorted("invoiceNumber")}
-                        {...styles.invoiceNumberHeader}
-                        onSortClick={() => headerClick("invoiceNumber")}
-                    >
-                        {translate("Invoice #")}
-                    </DataTableHeader>
-                    <DataTableHeader
-                        tight
-                        sorted={sorted("invoiceDate")}
-                        {...styles.invoiceDateHeader}
-                        onSortClick={() => headerClick("invoiceDate")}
-                    >
-                        {translate("Invoice Date")}
-                    </DataTableHeader>
-                    <DataTableHeader
-                        tight
-                        sorted={sorted("terms")}
-                        {...styles.termsHeader}
-                        onSortClick={() => headerClick("terms")}
-                    >
-                        {translate("Terms")}
-                    </DataTableHeader>
-                    <DataTableHeader
-                        tight
-                        sorted={sorted("dueDate")}
-                        {...styles.dueDateHeader}
-                        onSortClick={() => headerClick("dueDate")}
-                    >
-                        {translate("Due Date")}
-                    </DataTableHeader>
-                    <DataTableHeader
-                        tight
-                        sorted={sorted("stCompanyName")}
-                        {...styles.shipToHeader}
-                        onSortClick={() => headerClick("stCompanyName")}
-                    >
-                        {translate("Ship To / Pick Up")}
-                    </DataTableHeader>
-                    <DataTableHeader
-                        tight
-                        sorted={sorted("customerPO")}
-                        {...styles.poNumberHeader}
-                        onSortClick={() => headerClick("customerPO")}
-                    >
-                        {translate("PO #")}
-                    </DataTableHeader>
-                    <DataTableHeader
-                        tight
-                        sorted={sorted("status")}
-                        {...styles.statusHeader}
-                        onSortClick={() => headerClick("status")}
-                    >
-                        {translate("Status")}
-                    </DataTableHeader>
-                    <DataTableHeader
-                        tight
-                        sorted={sorted("invoiceTotal")}
-                        {...styles.totalHeader}
-                        onSortClick={() => headerClick("invoiceTotal")}
-                    >
-                        {translate("Invoice Total")}
-                    </DataTableHeader>
-                    <DataTableHeader
-                        tight
-                        sorted={sorted("currentBalance")}
-                        {...styles.currentBalanceHeader}
-                        onSortClick={() => headerClick("currentBalance")}
-                    >
-                        {translate("Current Balance")}
-                    </DataTableHeader>
+                    {isTrueOrUndefined(showInvoiceNumber) && (
+                        <DataTableHeader
+                            tight
+                            sorted={sorted("invoiceNumber")}
+                            {...styles.invoiceNumberHeader}
+                            onSortClick={() => headerClick("invoiceNumber")}
+                        >
+                            {translate("Invoice #")}
+                        </DataTableHeader>
+                    )}
+                    {isTrueOrUndefined(showInvoiceDate) && (
+                        <DataTableHeader
+                            tight
+                            sorted={sorted("invoiceDate")}
+                            {...styles.invoiceDateHeader}
+                            onSortClick={() => headerClick("invoiceDate")}
+                        >
+                            {translate("Invoice Date")}
+                        </DataTableHeader>
+                    )}
+                    {isTrueOrUndefined(showTerms) && (
+                        <DataTableHeader
+                            tight
+                            sorted={sorted("terms")}
+                            {...styles.termsHeader}
+                            onSortClick={() => headerClick("terms")}
+                        >
+                            {translate("Terms")}
+                        </DataTableHeader>
+                    )}
+                    {isTrueOrUndefined(showDueDate) && (
+                        <DataTableHeader
+                            tight
+                            sorted={sorted("dueDate")}
+                            {...styles.dueDateHeader}
+                            onSortClick={() => headerClick("dueDate")}
+                        >
+                            {translate("Due Date")}
+                        </DataTableHeader>
+                    )}
+                    {isTrueOrUndefined(showShipTo) && (
+                        <DataTableHeader
+                            tight
+                            sorted={sorted("stCompanyName")}
+                            {...styles.shipToHeader}
+                            onSortClick={() => headerClick("stCompanyName")}
+                        >
+                            {translate("Ship To / Pick Up")}
+                        </DataTableHeader>
+                    )}
+                    {isTrueOrUndefined(showPONumber) && (
+                        <DataTableHeader
+                            tight
+                            sorted={sorted("customerPO")}
+                            {...styles.poNumberHeader}
+                            onSortClick={() => headerClick("customerPO")}
+                        >
+                            {translate("PO #")}
+                        </DataTableHeader>
+                    )}
+                    {isTrueOrUndefined(showStatus) && (
+                        <DataTableHeader
+                            tight
+                            sorted={sorted("status")}
+                            {...styles.statusHeader}
+                            onSortClick={() => headerClick("status")}
+                        >
+                            {translate("Status")}
+                        </DataTableHeader>
+                    )}
+                    {isTrueOrUndefined(showInvoiceTotal) && (
+                        <DataTableHeader
+                            tight
+                            sorted={sorted("invoiceTotal")}
+                            {...styles.totalHeader}
+                            onSortClick={() => headerClick("invoiceTotal")}
+                        >
+                            {translate("Invoice Total")}
+                        </DataTableHeader>
+                    )}
+                    {isTrueOrUndefined(showCurrentBalance) && (
+                        <DataTableHeader
+                            tight
+                            sorted={sorted("currentBalance")}
+                            {...styles.currentBalanceHeader}
+                            onSortClick={() => headerClick("currentBalance")}
+                        >
+                            {translate("Current Balance")}
+                        </DataTableHeader>
+                    )}
                 </DataTableHead>
                 <DataTableBody {...styles.dataTableBody}>
                     {rows.map(
@@ -278,25 +335,46 @@ const InvoiceHistoryTable = (props: Props) => {
                                 {...styles.dataTableRow}
                                 data-test-selector="invoiceHistory_invoiceLine"
                             >
-                                <DataTableCell
-                                    {...styles.invoiceNumberCell}
-                                    data-test-selector="invoiceHistory_invoiceLine_number"
-                                >
-                                    <InvoiceDetailPageTypeLink title={invoiceNumber} invoiceNumber={invoiceNumber} />
-                                </DataTableCell>
-                                <DataTableCell
-                                    {...styles.invoiceDateCell}
-                                    data-test-selector="invoiceHistory_invoiceLine_date"
-                                >
-                                    {date}
-                                </DataTableCell>
-                                <DataTableCell {...styles.termsCell}>{terms}</DataTableCell>
-                                <DataTableCell {...styles.dueDateCell}>{dueDate}</DataTableCell>
-                                <DataTableCell {...styles.shipToCell}>{shipTo}</DataTableCell>
-                                <DataTableCell {...styles.poNumberCell}>{customerPO}</DataTableCell>
-                                <DataTableCell {...styles.statusCell}>{status}</DataTableCell>
-                                <DataTableCell {...styles.totalCell}>{total}</DataTableCell>
-                                <DataTableCell {...styles.currentBalanceCell}>{currentBalance}</DataTableCell>
+                                {isTrueOrUndefined(showInvoiceNumber) && (
+                                    <DataTableCell
+                                        {...styles.invoiceNumberCell}
+                                        data-test-selector="invoiceHistory_invoiceLine_number"
+                                    >
+                                        <InvoiceDetailPageTypeLink
+                                            title={invoiceNumber}
+                                            invoiceNumber={invoiceNumber}
+                                        />
+                                    </DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showInvoiceDate) && (
+                                    <DataTableCell
+                                        {...styles.invoiceDateCell}
+                                        data-test-selector="invoiceHistory_invoiceLine_date"
+                                    >
+                                        {date}
+                                    </DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showTerms) && (
+                                    <DataTableCell {...styles.termsCell}>{terms}</DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showDueDate) && (
+                                    <DataTableCell {...styles.dueDateCell}>{dueDate}</DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showShipTo) && (
+                                    <DataTableCell {...styles.shipToCell}>{shipTo}</DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showPONumber) && (
+                                    <DataTableCell {...styles.poNumberCell}>{customerPO}</DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showStatus) && (
+                                    <DataTableCell {...styles.statusCell}>{status}</DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showInvoiceTotal) && (
+                                    <DataTableCell {...styles.totalCell}>{total}</DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showCurrentBalance) && (
+                                    <DataTableCell {...styles.currentBalanceCell}>{currentBalance}</DataTableCell>
+                                )}
                             </DataTableRow>
                         ),
                     )}
@@ -312,6 +390,81 @@ const widgetModule: WidgetModule = {
         group: "Invoice History",
         displayName: "Search Results Table",
         allowedContexts: [InvoiceHistoryPageContext],
+        fieldDefinitions: [
+            {
+                name: fields.showInvoiceNumber,
+                displayName: "Invoice #",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                isEnabled: () => false,
+                fieldType: "General",
+                sortOrder: 0,
+            },
+            {
+                name: fields.showInvoiceDate,
+                displayName: "Invoice Date",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 1,
+            },
+            {
+                name: fields.showTerms,
+                displayName: "Terms",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 2,
+            },
+            {
+                name: fields.showDueDate,
+                displayName: "Due Date",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 3,
+            },
+            {
+                name: fields.showShipTo,
+                displayName: "Ship To/Pick Up",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 4,
+            },
+            {
+                name: fields.showPONumber,
+                displayName: "PO #",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 5,
+            },
+            {
+                name: fields.showStatus,
+                displayName: "Status",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 6,
+            },
+            {
+                name: fields.showInvoiceTotal,
+                displayName: "Invoice Total",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 7,
+            },
+            {
+                name: fields.showCurrentBalance,
+                displayName: "Current Balance",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 8,
+            },
+        ],
     },
 };
 

@@ -22,13 +22,13 @@ export const orderDateStyles: OrderDateStyles = {
         `,
     },
     titleText: {
-        variant: "h6",
-        as: "h2",
+        variant: "h3",
         css: css`
             @media print {
                 font-size: 12px;
             }
             margin-bottom: 5px;
+            font-size: 16px;
         `,
     },
 };

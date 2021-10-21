@@ -1,6 +1,6 @@
 import { Dictionary } from "@insite/client-framework/Common/Types";
 import { getFontContent } from "@insite/client-framework/Common/Utilities/fontProcessing";
-import { checkIsWebCrawler, setIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
+import { checkIsWebCrawler, setIsWebCrawler } from "@insite/client-framework/Common/WebCrawler";
 import {
     serverSiteMessageResolver,
     serverTranslationResolver,

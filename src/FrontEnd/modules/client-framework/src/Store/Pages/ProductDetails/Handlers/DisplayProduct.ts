@@ -2,13 +2,13 @@ import { createFromProduct, ProductInfo } from "@insite/client-framework/Common/
 import throwErrorIfTesting from "@insite/client-framework/Common/ThrowErrorIfTesting";
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
 import waitFor from "@insite/client-framework/Common/Utilities/waitFor";
-import { getIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
+import { getIsWebCrawler } from "@insite/client-framework/Common/WebCrawler";
 import {
     createHandlerChainRunner,
     executeAwaitableHandlerChain,
     Handler,
 } from "@insite/client-framework/HandlerCreator";
-import { getProductByPath, getVariantChildren } from "@insite/client-framework/Services/ProductServiceV2";
+import { getProductByPath } from "@insite/client-framework/Services/ProductServiceV2";
 import loadRealTimeInventory from "@insite/client-framework/Store/CommonHandlers/LoadRealTimeInventory";
 import loadRealTimePricing from "@insite/client-framework/Store/CommonHandlers/LoadRealTimePricing";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
@@ -50,6 +50,9 @@ export const DispatchBeginLoadProduct: HandlerType = props => {
 
 export const LoadExistingProduct: HandlerType = props => {
     if (!props.parameter.path) {
+        props.dispatch({
+            type: "Pages/ProductDetails/CancelLoadProduct",
+        });
         return false;
     }
 
@@ -85,8 +88,12 @@ export const LoadProductIfNeeded: HandlerType = async props => {
                 }),
             );
         } else {
-            // this is purely so that we can track the recentlyViewed
-            getProductByPath({ ...props.parameter, addToRecentlyViewed: true }).then(() => {});
+            getProductByPath({ ...props.parameter, addToRecentlyViewed: true, expand: ["attributes"] }).then(result => {
+                props.dispatch({
+                    type: "Data/Products/CompleteLoadProduct",
+                    model: result,
+                });
+            });
         }
 
         return;
@@ -115,29 +122,33 @@ export const RequestVariantChildrenFromApi: HandlerType = async props => {
 };
 
 export const SetupVariantSelection: HandlerType = props => {
-    props.variantSelection = {};
-    if (!props.product?.isVariantParent || !props.variantChildren) {
-        return;
-    }
-
-    if (props.parameter.styledOption) {
-        const variantChild = props.variantChildren.find(
-            o => o.productNumber.toLowerCase() === props.parameter.styledOption!.toLowerCase(),
-        );
-        variantChild?.childTraitValues?.forEach(o => {
-            props.variantSelection![o.styleTraitId] = o.id;
-        });
-    }
-
-    if (Object.keys(props.variantSelection).length > 0) {
-        return;
-    }
-
-    props.product?.variantTraits?.forEach(variantTrait => {
-        const defaultVariantValue = variantTrait.traitValues!.find(traitValue => traitValue.isDefault);
-        props.variantSelection![variantTrait.id] = defaultVariantValue?.id ?? "";
-    });
+    props.variantSelection = getVariantSelection(props.product, props.variantChildren, props.parameter.styledOption);
 };
+
+function getVariantSelection(product?: ProductModel, variantChildren?: ProductModel[], styledOption?: string) {
+    const variantSelection: SafeDictionary<string> = {};
+    if (!product?.isVariantParent || !variantChildren) {
+        return variantSelection;
+    }
+
+    if (styledOption) {
+        const variantChild = variantChildren.find(o => o.productNumber.toLowerCase() === styledOption.toLowerCase());
+        variantChild?.childTraitValues?.forEach(o => {
+            variantSelection[o.styleTraitId] = o.id;
+        });
+
+        if (Object.keys(variantSelection).length > 0) {
+            return variantSelection;
+        }
+    }
+
+    product.variantTraits?.forEach(variantTrait => {
+        const defaultVariantValue = variantTrait.traitValues?.find(traitValue => traitValue.isDefault);
+        variantSelection[variantTrait.id] = defaultVariantValue?.id ?? "";
+    });
+
+    return variantSelection;
+}
 
 export const SetUnitOfMeasureAndQtyOrdered: HandlerType = props => {
     if (!props.product) {
@@ -269,7 +280,11 @@ export const LoadRealTimeInventory: HandlerType = props => {
 
                             props.dispatch({
                                 type: "Pages/ProductDetails/UpdateVariantSelection",
-                                variantSelection: {},
+                                variantSelection: getVariantSelection(
+                                    props.product,
+                                    props.variantChildren,
+                                    props.parameter.styledOption,
+                                ),
                                 variantSelectionCompleted: false,
                                 selectedProductInfo: productInfo,
                             });

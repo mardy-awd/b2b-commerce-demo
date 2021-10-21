@@ -10,7 +10,8 @@ module.exports = {
         messages: {
             avoid: "Avoid passing dynamic values to translate.",
             avoidUnsupported: "Avoid passing dynamic values to translate (unsupported case)",
-            unsupportedCasing: "Avoid mixing case with translate. The value \"{{value}}\" is already being translated with a different case.",
+            unsupportedCasing:
+                'Avoid mixing case with translate. The value "{{value}}" is already being translated with a different case.',
         },
     },
     schema: [
@@ -101,7 +102,7 @@ module.exports = {
                 }
 
                 if (argument.value && containsStringDifferentByCasing(translations, argument.value)) {
-                    context.report({ node, messageId: "unsupportedCasing", data: { value: argument.value }});
+                    context.report({ node, messageId: "unsupportedCasing", data: { value: argument.value } });
                     return;
                 } else if (argument.value) {
                     translations.push(argument.value);

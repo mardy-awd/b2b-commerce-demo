@@ -20,6 +20,7 @@ declare module Insite.Account.WebApi.V1.ApiModels {
 		firstName: string;
 		lastName: string;
 		role: string;
+		vmiRole: string;
 		approver: string;
 		isApproved: boolean;
 		activationStatus: string;
@@ -135,6 +136,21 @@ declare module Insite.Account.WebApi.V1.ApiModels {
 		assign: boolean;
 		isDefaultShipTo: boolean;
 		costCode: string;
+		id: System.Guid;
+	}
+	interface VmiUserImportCollectionModel extends Insite.Core.WebApi.BaseModel {
+		vmiUsers: Insite.Account.WebApi.V1.ApiModels.VmiUserImportModel[];
+	}
+	interface VmiUserImportModel extends Insite.Core.WebApi.BaseModel {
+		userId: System.Guid;
+		vmiLocationNames: System.Guid[];
+		vmiRoles: string[];
+	}
+	interface VmiUserModel extends Insite.Core.WebApi.BaseModel {
+		userId: System.Guid;
+		role: string;
+		vmiLocationIds: System.Guid[];
+		removeVmiPermissions: boolean;
 	}
 }
 declare module Insite.Core.WebApi {
@@ -173,21 +189,6 @@ declare module System {
 	}
 }
 declare module Insite.Catalog.WebApi.V1.ApiModels {
-	interface VmiLocationCollectionModel extends Insite.Core.WebApi.BaseModel {
-		pagination: Insite.Core.WebApi.PaginationModel;
-		vmiLocations: VmiLocationModel[];
-	}
-	interface VmiLocationModel extends Insite.Core.WebApi.BaseModel {
-		id: System.Guid;
-		name: string;
-		billToId: System.Guid;
-		useBins: boolean;
-		isPrimaryLocation: boolean;
-		shipToId?: System.Guid;
-		customerId: System.Guid;
-		customer: Insite.Customers.WebApi.V1.ApiModels.BaseAddressModel;
-		customerLabel: string;
-	}
 	interface WarehouseModel extends Insite.Core.WebApi.BaseModel {
 		id: System.Guid;
 		name: string;
@@ -373,7 +374,6 @@ declare module Insite.Catalog.WebApi.V1.ApiModels {
 		thirdPartyReviews: string;
 		defaultViewType: string;
 		showSavingsAmount: boolean;
-		useUpdatedRoundingLogic: boolean;
 		showSavingsPercent: boolean;
 		realTimePricing: boolean;
 		realTimeInventory: boolean;
@@ -403,6 +403,55 @@ declare module Insite.Catalog.WebApi.V1.ApiModels {
 		defaultLatitude: number;
 		defaultLongitude: number;
 		defaultRadius: number;
+	}
+	interface VmiLocationCollectionModel extends Insite.Core.WebApi.BaseModel {
+		pagination: Insite.Core.WebApi.PaginationModel;
+		vmiLocations: Insite.Catalog.WebApi.V1.ApiModels.VmiLocationModel[];
+	}
+	interface VmiLocationModel extends Insite.Core.WebApi.BaseModel {
+		id: System.Guid;
+		name: string;
+		billToId: System.Guid;
+		useBins: boolean;
+		isPrimaryLocation: boolean;
+		shipToId: System.Guid;
+		customer: Insite.Customers.WebApi.V1.ApiModels.BaseAddressModel;
+		customerLabel: string;
+		note: string;
+	}
+	interface VmiBinCollectionModel extends Insite.Core.WebApi.BaseModel {
+		pagination: Insite.Core.WebApi.PaginationModel;
+		vmiBins: Insite.Catalog.WebApi.V1.ApiModels.VmiBinModel[];
+	}
+	interface VmiBinModel extends Insite.Core.WebApi.BaseModel {
+		id: System.Guid;
+		vmiLocationId: System.Guid;
+		binNumber: string;
+		productId: System.Guid;
+		minimumQty: number;
+		maximumQty: number;
+		lastCountDate: Date;
+		lastCountQty: number;
+		lastCountUserName: string;
+		previousCountDate: Date;
+		previousCountQty: number;
+		previousCountUserName: string;
+		lastOrderDate: Date;
+		product: Insite.Catalog.Services.Dtos.ProductDto;
+		lastOrderErpOrderNumber: string;
+		lastOrderWebOrderNumber: string;
+	}
+	interface VmiCountCollectionModel extends Insite.Core.WebApi.BaseModel {
+		pagination: Insite.Core.WebApi.PaginationModel;
+		binCounts: Insite.Catalog.WebApi.V1.ApiModels.VmiCountModel[];
+	}
+	interface VmiCountModel extends Insite.Core.WebApi.BaseModel {
+		id: System.Guid;
+		vmiBinId: System.Guid;
+		productId: System.Guid;
+		count: number;
+		createdOn: Date;
+		createdBy: string;
 	}
 }
 declare module Insite.Customers.WebApi.V1.ApiModels {
@@ -544,6 +593,7 @@ declare module Insite.Websites.WebApi.V1.ApiModels {
 		mobileAppEnabled: boolean;
 		useTokenExGateway: boolean;
 		useECheckTokenExGateway: boolean;
+		tokenExTestMode: boolean;
 		usePaymetricGateway: boolean;
 		defaultPageSize: number;
 		enableCookiePrivacyPolicyPopup: boolean;
@@ -551,6 +601,7 @@ declare module Insite.Websites.WebApi.V1.ApiModels {
 		googleMapsApiKey: string;
 		googleTrackingTypeComputed: string;
 		googleTrackingAccountId: string;
+		cmsType: string;
 		includeSiteNameInPageTitle: boolean;
 		pageTitleDelimiter: string;
 		siteNameAfterTitle: boolean;
@@ -560,6 +611,7 @@ declare module Insite.Websites.WebApi.V1.ApiModels {
 		reCaptchaEnabledForForgotPassword: boolean;
 		reCaptchaEnabledForShareProduct: boolean;
 		advancedSpireCmsFeatures: boolean;
+		previewLoginEnabled: boolean;
 	}
 	interface AddressFieldCollectionModel extends Insite.Core.WebApi.BaseModel {
 		billToAddressFields: Insite.Websites.WebApi.V1.ApiModels.AddressFieldDisplayCollectionModel;
@@ -792,6 +844,7 @@ declare module Insite.Catalog.Services.Dtos {
 		searchBoostDecimal: number;
 		salePriceLabel: string;
 		cantBuy: boolean;
+		allowZeroPricing: boolean;
 		brand: Insite.Catalog.Services.Dtos.BrandDto;
 		productLine: Insite.Catalog.Services.Dtos.ProductLineDto;
 		productSubscription: Insite.Catalog.Services.Dtos.ProductSubscriptionDto;
@@ -866,6 +919,7 @@ declare module Insite.Catalog.Services.Dtos {
 		upcCode: string;
 		sku: string;
 		cantBuy: boolean;
+		allowZeroPricing: boolean;
 	}
 	interface ProductUnitOfMeasureDto {
 		productUnitOfMeasureId: System.Guid;
@@ -1010,6 +1064,15 @@ declare module Insite.Core.Plugins.Pricing {
 		extendedActualPriceDisplay: string;
 		regularBreakPrices: Insite.Core.Plugins.Pricing.BreakPriceDto[];
 		actualBreakPrices: Insite.Core.Plugins.Pricing.BreakPriceDto[];
+		unitListPriceWithVat: number;
+		unitListPriceWithVatDisplay: string;
+		extendedUnitListPriceWithVat: number;
+		extendedUnitListPriceWithVatDisplay: string;
+		unitRegularPriceWithVat: number;
+		unitRegularPriceWithVatDisplay: string;
+		extendedUnitRegularPriceWithVat: number;
+		extendedUnitRegularPriceWithVatDisplay: string;
+		vatMinusExtendedUnitRegularPrice: number;
 	}
 	interface BreakPriceDto {
 		breakQty: number;
@@ -1061,6 +1124,8 @@ declare module Insite.Core.Plugins.Search.Dtos {
 		count: number;
 		sortOrder: number;
 		selected: boolean;
+		styleParentId: System.Guid;
+		styleChildId: System.Guid;
 	}
 	interface GenericFacetDto {
 		id: System.Guid;
@@ -1254,6 +1319,7 @@ declare module Insite.Cart.WebApi.V1.ApiModels {
 		brand: Insite.Catalog.Services.Dtos.BrandDto;
 		vmiBinId: System.Guid;
 		isDiscontinued: boolean;
+		allowZeroPricing: boolean;
 	}
 	interface CreditCardBillingAddressDto {
 		address1: string;
@@ -1422,6 +1488,7 @@ declare module Insite.Catalog.WebApi.V2.ApiModels.Product {
 		isVariantParent: boolean;
 		variantTypeId: System.Guid;
 		cantBuy: boolean;
+		allowZeroPricing: boolean;
 		brand: Insite.Catalog.WebApi.V2.ApiModels.Product.BrandModel;
 		productLine: Insite.Catalog.WebApi.V2.ApiModels.Product.ProductLineModel;
 		unitOfMeasures: Insite.Catalog.WebApi.V2.ApiModels.Product.UnitOfMeasureModel[];
@@ -2018,6 +2085,7 @@ declare module Insite.Order.WebApi.V1.ApiModels {
 		showOrderStatus: boolean;
 		showOrders: boolean;
 		lookBackDays: number;
+		vmiEnabled: boolean;
 	}
 	interface RmaModel extends Insite.Core.WebApi.BaseModel {
 		orderNumber: string;
@@ -2246,6 +2314,7 @@ declare module Insite.WishLists.WebApi.V1.ApiModels {
 		sortOrder: number;
 		brand: Insite.Catalog.Services.Dtos.BrandDto;
 		isQtyAdjusted: boolean;
+		allowZeroPricing: boolean;
 	}
 	interface WishListEmailScheduleModel extends Insite.Core.WebApi.BaseModel {
 		repeatPeriod: string;

@@ -49,7 +49,7 @@ class SelectBrandsField extends React.Component<Props, State> {
         };
     }
 
-    UNSAFE_componentWillMount(): void {
+    componentDidMount(): void {
         this.loadSelectBrands(this.props.fieldValue);
         this.loadSelectedBrands(this.props.fieldValue);
     }

@@ -16,6 +16,7 @@ export interface SmallHeadingAndTextStyles {
     wrapper?: InjectableCss;
     heading?: TypographyProps;
     text?: TypographyProps;
+    extendedStyles?: SmallHeadingAndTextStyles;
 }
 
 export const smallHeadingAndTextStyles: SmallHeadingAndTextStyles = {

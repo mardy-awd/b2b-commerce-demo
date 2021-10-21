@@ -4,7 +4,9 @@ import VmiLocationsState from "@insite/client-framework/Store/Pages/VmiLocations
 import { Draft } from "immer";
 
 const initialState: VmiLocationsState = {
-    getVmiLocationsParameter: {},
+    getVmiLocationsParameter: {
+        expand: ["customerlabel"],
+    },
     selectedVmiLocations: {},
 };
 

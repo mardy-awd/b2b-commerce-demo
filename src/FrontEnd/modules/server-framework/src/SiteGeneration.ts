@@ -20,6 +20,9 @@ import { promisify } from "util";
 addPagesFromContext(require.context("../../client-framework/src/Internal/Pages", true, /\.tsx$/));
 addWidgetsFromContext(require.context("../../client-framework/src/Internal/Widgets", true, /\.tsx$/));
 
+// the new bundle splitting doesn't include all widgets in the bundle, but we want them for site generation
+addWidgetsFromContext(require.context("../../content-library/src/Widgets", true, /\.tsx$/));
+
 const readFileAsync = promisify(readFile);
 
 export async function generateSiteIfNeeded(): Promise<GenerateDataResponse | undefined> {

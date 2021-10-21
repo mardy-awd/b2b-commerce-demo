@@ -28,8 +28,8 @@ export function getWidgetDefinitions(): LoadedWidgetDefinition[] {
     return widgetDefinitions;
 }
 
-export function getWidgetDefinition(type: string): LoadedWidgetDefinition {
-    if (!loadedDefinitions) {
+export function getWidgetDefinition(type: string, overrideLoadedDefintions = false): LoadedWidgetDefinition {
+    if (!loadedDefinitions || overrideLoadedDefintions) {
         loadDefinitions();
     }
 

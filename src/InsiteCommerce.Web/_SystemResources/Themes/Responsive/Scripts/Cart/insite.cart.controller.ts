@@ -10,6 +10,7 @@ module insite.cart {
         settings: CartSettingsModel;
         showInventoryAvailability = false;
         productsCannotBePurchased = false;
+        invalidPriceAtCheckout = false;
         requiresRealTimeInventory = false;
         failedToGetRealTimeInventory = false;
         canAddAllToList = false;
@@ -110,6 +111,7 @@ module insite.cart {
             } else {
                 this.productsCannotBePurchased = true;
             }
+            this.invalidPriceAtCheckout = cart.cartLines.some(o => !o.isPromotionItem && !o.quoteRequired && !o.allowZeroPricing && o.pricing.unitNetPrice === 0 && o.pricing.unitRegularPrice === 0);
             this.displayCart(cart);
             this.cartIdParam = this.cart.id === "current" ? "" : `?cartId=${this.cart.id}`;
         }

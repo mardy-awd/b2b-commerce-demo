@@ -106,7 +106,8 @@ export const informationStyles: InvoiceDetailsInformationStyles = {
 };
 
 const styles = informationStyles;
-const InvoiceDetailsInformation: FC<Props> = ({ language }: Props) => {
+
+const InvoiceDetailsInformation = ({ language }: Props) => {
     const { value: invoice } = useContext(InvoiceStateContext);
     if (!invoice) {
         return null;
@@ -116,13 +117,6 @@ const InvoiceDetailsInformation: FC<Props> = ({ language }: Props) => {
         <GridContainer {...styles.invoiceInformationGridContainer} data-test-selector="invoiceDetail_information">
             <GridItem {...styles.informationGridItem}>
                 <GridContainer {...styles.informationGridContainer}>
-                    <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.statusGridItem)}>
-                        <SmallHeadingAndText
-                            extendedStyles={styles.headingAndTextStyles}
-                            heading={translate("Status")}
-                            text={invoice.status}
-                        />
-                    </GridItem>
                     <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.invoiceDateGridItem)}>
                         <SmallHeadingAndText
                             extendedStyles={styles.headingAndTextStyles}
@@ -133,11 +127,18 @@ const InvoiceDetailsInformation: FC<Props> = ({ language }: Props) => {
                             })}
                         />
                     </GridItem>
-                    <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.salespersonGridItem)}>
+                    <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.poNumberGridItem)}>
                         <SmallHeadingAndText
                             extendedStyles={styles.headingAndTextStyles}
-                            heading={translate("Salesperson")}
-                            text={invoice.salesperson}
+                            heading={translate("PO Number")}
+                            text={invoice.customerPO}
+                        />
+                    </GridItem>
+                    <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.statusGridItem)}>
+                        <SmallHeadingAndText
+                            extendedStyles={styles.headingAndTextStyles}
+                            heading={translate("Status")}
+                            text={invoice.status}
                         />
                     </GridItem>
                     <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.termsGridItem)}>
@@ -147,11 +148,11 @@ const InvoiceDetailsInformation: FC<Props> = ({ language }: Props) => {
                             text={invoice.terms}
                         />
                     </GridItem>
-                    <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.poNumberGridItem)}>
+                    <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.salespersonGridItem)}>
                         <SmallHeadingAndText
                             extendedStyles={styles.headingAndTextStyles}
-                            heading={translate("PO Number")}
-                            text={invoice.customerPO}
+                            heading={translate("Salesperson")}
+                            text={invoice.salesperson}
                         />
                     </GridItem>
                     <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.dueDateGridItem)}>
@@ -175,11 +176,11 @@ const InvoiceDetailsInformation: FC<Props> = ({ language }: Props) => {
                     )}
                 </GridContainer>
             </GridItem>
-            <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.billingAddressGridItem)}>
-                <InvoiceDetailsBillingAddress invoice={invoice} extendedStyles={styles.billingAddressStyle} />
-            </GridItem>
             <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.shippingAddressGridItem)}>
                 <InvoiceDetailsShippingAddress invoice={invoice} extendedStyles={styles.shippingAddressStyle} />
+            </GridItem>
+            <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.billingAddressGridItem)}>
+                <InvoiceDetailsBillingAddress invoice={invoice} extendedStyles={styles.billingAddressStyle} />
             </GridItem>
             {invoice.notes && (
                 <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.invoiceNotesGridItem)}>

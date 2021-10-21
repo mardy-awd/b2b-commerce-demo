@@ -1,5 +1,5 @@
 /* eslint-disable spire/export-styles */
-import { getIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
+import { getIsWebCrawler } from "@insite/client-framework/Common/WebCrawler";
 import { HasProduct, withProduct } from "@insite/client-framework/Components/ProductContext";
 import { ConfigurationType } from "@insite/client-framework/Services/ProductServiceV2";
 import ProductAvailability, { ProductAvailabilityStyles } from "@insite/content-library/Components/ProductAvailability";

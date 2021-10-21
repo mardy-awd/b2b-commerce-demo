@@ -116,7 +116,7 @@ export const orderDetailsButtonSetStyles: OrderDetailsButtonSetStyles = {
     },
     shareEntityButtonStyles: {
         button: {
-            variant: "tertiary",
+            variant: "secondary",
         },
     },
     buttonHidden: {
@@ -149,10 +149,12 @@ export const orderDetailsButtonSetStyles: OrderDetailsButtonSetStyles = {
         `,
     },
     cancelButton: {
+        buttonType: "outline",
         variant: "secondary",
     },
     printButton: {
-        variant: "tertiary",
+        buttonType: "outline",
+        variant: "secondary",
     },
     reorderButton: {
         css: css`
@@ -161,6 +163,7 @@ export const orderDetailsButtonSetStyles: OrderDetailsButtonSetStyles = {
         `,
     },
     rmaButton: {
+        buttonType: "solid",
         variant: "secondary",
     },
     spinner: {
@@ -396,10 +399,10 @@ const widgetModule: WidgetModule = {
                 displayName: "Buttons Order",
                 editorTemplate: "ListField",
                 defaultValue: [
-                    { fields: { name: buttons.email } },
-                    { fields: { name: buttons.print } },
-                    { fields: { name: buttons.cancel } },
                     { fields: { name: buttons.rma } },
+                    { fields: { name: buttons.print } },
+                    { fields: { name: buttons.email } },
+                    { fields: { name: buttons.cancel } },
                     { fields: { name: buttons.reorder } },
                 ],
                 getDisplay: (item: HasFields) => {

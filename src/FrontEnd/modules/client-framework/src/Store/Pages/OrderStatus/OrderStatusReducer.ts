@@ -8,7 +8,11 @@ const initialState: OrderStatusState = {
 };
 
 const reducer = {
+    "Pages/OrderStatus/BeginLoadOrder": (draft: Draft<OrderStatusState>) => {
+        draft.isLoading = true;
+    },
     "Pages/OrderStatus/CompleteLoadOrder": (draft: Draft<OrderStatusState>, action: { order: OrderModel }) => {
+        draft.isLoading = false;
         draft.order = action.order;
     },
     "Pages/OrderStatus/BeginReorder": (draft: Draft<OrderStatusState>) => {

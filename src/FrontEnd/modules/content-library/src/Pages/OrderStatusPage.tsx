@@ -27,6 +27,7 @@ const mapStateToProps = (state: ApplicationState) => {
         sTEmail: parsedQuery.stEmail ?? parsedQuery.stemail ?? "",
         sTPostalCode: parsedQuery.stPostalCode ?? parsedQuery.stpostalcode ?? "",
         order: state.pages.orderStatus.order,
+        isLoading: state.pages.orderStatus.isLoading,
     };
 };
 
@@ -58,12 +59,12 @@ class OrderStatusPage extends React.Component<Props> {
     }
 
     loadOrderIfNeeded = () => {
-        const { orderNumber, sTEmail, sTPostalCode, order, loadOrder, toaster } = this.props;
+        const { orderNumber, sTEmail, sTPostalCode, order, loadOrder, toaster, isLoading } = this.props;
         if (!orderNumber || (!sTEmail && !sTPostalCode)) {
             return;
         }
 
-        if (order && (order.webOrderNumber === orderNumber || order.erpOrderNumber === orderNumber)) {
+        if ((order && (order.webOrderNumber === orderNumber || order.erpOrderNumber === orderNumber)) || isLoading) {
             return;
         }
 

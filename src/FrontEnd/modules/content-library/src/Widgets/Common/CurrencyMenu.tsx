@@ -95,6 +95,7 @@ export const CurrencyMenu: FC<Props> = ({
                 onChange={event => setCurrency({ currencyId: event.currentTarget.value })}
                 value={currentCurrencyId}
                 autoComplete="off"
+                hasLabel
             >
                 {currencies.map(c => (
                     <option value={c.id} key={c.id}>

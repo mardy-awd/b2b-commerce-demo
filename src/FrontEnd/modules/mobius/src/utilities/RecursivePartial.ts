@@ -1,9 +1,9 @@
-type RecursivePartial<T> = {
-    [P in keyof T]?: T[P] extends (infer U)[]
-        ? RecursivePartial<U>[]
-        : T[P] extends object
-        ? RecursivePartial<T[P]>
-        : T[P];
+type RecursivePartial<Type> = {
+    [Property in keyof Type]?: Type[Property] extends (infer PropertyType)[]
+        ? RecursivePartial<PropertyType>[]
+        : Type[Property] extends object
+        ? RecursivePartial<Type[Property]>
+        : Type[Property];
 };
 
 export default RecursivePartial;

@@ -5,6 +5,7 @@ import parseQueryString from "@insite/client-framework/Common/Utilities/parseQue
 import { trackPageChange } from "@insite/client-framework/Common/Utilities/tracking";
 import { sendToShell } from "@insite/client-framework/Components/ShellHole";
 import { Location } from "@insite/client-framework/Components/SpireRouter";
+import { loadMobileComponents } from "@insite/client-framework/Internal";
 import logger from "@insite/client-framework/Logger";
 import {
     addTask,
@@ -192,9 +193,14 @@ export const loadPage = (location: Location, history?: History, onSuccess?: () =
                     if (IS_SERVER_SIDE) {
                         throw new Error("Server-side rendering is supposed to be disabled for this request.");
                     }
+
                     const pageVersion = await getPageByVersion(
                         parseQueryString<{ pageVersionId: string }>(location.search).pageVersionId,
                     );
+
+                    if (pageVersion.type.startsWith("Mobile/")) {
+                        await loadMobileComponents();
+                    }
 
                     dispatchCompleteLoadPage(pageVersion);
                     finishedLoadingPage(pageVersion);

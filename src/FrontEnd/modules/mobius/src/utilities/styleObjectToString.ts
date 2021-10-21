@@ -8,6 +8,9 @@ const numericProperties = ["line-height", "font-weight"];
  * @returns {string} A block of CSS rules as a String
  */
 export default function styleObjectToString(styleObject?: React.CSSProperties) {
+    if (styleObject) {
+        delete styleObject.color;
+    }
     const styleEntries = !styleObject ? [] : Object.entries(styleObject);
     return styleEntries.reduce((styleString, [propName, propValue]) => {
         const name = propName.replace(/([A-Z])/g, matches => `-${matches[0].toLowerCase()}`);

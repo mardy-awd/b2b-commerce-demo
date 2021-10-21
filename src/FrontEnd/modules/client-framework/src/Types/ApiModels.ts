@@ -405,6 +405,7 @@ export interface ProductDto {
     accessories: ProductDto[] | null;
     allowAnyGiftCardAmount: boolean;
     allowedAddToCart: boolean;
+    allowZeroPricing: boolean;
     alsoPurchasedProducts: ProductDto[] | null;
     altText: string;
     attributeTypes: AttributeTypeDto[] | null;
@@ -545,6 +546,7 @@ export interface StyleValueDto {
 }
 
 export interface StyledProductDto {
+    allowZeroPricing: boolean;
     availability: AvailabilityDto | null;
     erpNumber: string;
     largeImagePath: string;
@@ -816,7 +818,7 @@ export interface BudgetModel extends BaseModel {
 export interface BudgetLineModel extends BaseModel {
     currentFiscalYearActual: number;
     currentFiscalYearActualDisplay: string;
-    currentFiscalYearBudget: number;
+    currentFiscalYearBudget?: number;
     currentFiscalYearBudgetDisplay: string;
     currentFiscalYearVariance: number;
     currentFiscalYearVarianceDisplay: string;
@@ -860,6 +862,7 @@ export interface CartSettingsModel extends BaseModel {
 }
 
 export interface CartLineModel extends BaseModel {
+    allowZeroPricing: boolean;
     altText: string;
     availability: AvailabilityDto | null;
     baseUnitOfMeasure: string;
@@ -1141,6 +1144,7 @@ export interface ProductLineModel extends BaseModel {
 }
 
 export interface ProductModel extends BaseModel {
+    allowZeroPricing: boolean;
     attributeTypes?: AttributeTypeModel[];
     brand: BrandModel | null;
     canAddToCart: boolean;
@@ -1924,6 +1928,7 @@ export interface InvoiceHistoryTaxDto {
 }
 
 export interface JobQuoteLineModel extends BaseModel {
+    allowZeroPricing: boolean;
     altText: string;
     availability: AvailabilityDto | null;
     baseUnitOfMeasure: string;
@@ -2490,6 +2495,7 @@ export interface RequisitionLineModel extends BaseModel {
 }
 
 export interface RequisitionModel extends BaseModel {
+    allowZeroPricing: boolean;
     altText: string;
     availability: AvailabilityDto | null;
     baseUnitOfMeasure: string;
@@ -2560,6 +2566,7 @@ export interface QuoteCollectionModel extends BaseModel {
 }
 
 export interface QuoteLineModel extends BaseModel {
+    allowZeroPricing: boolean;
     altText: string;
     availability: AvailabilityDto | null;
     baseUnitOfMeasure: string;
@@ -2879,6 +2886,7 @@ export interface WishListShareModel extends BaseModel {
 }
 
 export interface WishListLineModel extends BaseModel {
+    allowZeroPricing: boolean;
     altText: string;
     availability: AvailabilityDto | null;
     baseUnitOfMeasure: string;

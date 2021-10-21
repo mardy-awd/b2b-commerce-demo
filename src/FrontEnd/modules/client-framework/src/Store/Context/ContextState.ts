@@ -7,11 +7,14 @@ import PermissionsModel from "@insite/client-framework/Types/PermissionsModel";
 export default interface ContextState {
     session: Session;
     isSessionLoaded: boolean;
+    isSessionLoading?: boolean;
     punchOutSessionId?: string;
     website: Website;
     isWebsiteLoaded: boolean;
+    isWebsiteLoading?: boolean;
     settings: SettingsModel;
     areSettingsLoaded: boolean;
+    areSettingsLoading?: boolean;
     tokenExConfigs: Dictionary<TokenExConfig>;
     isSigningIn: boolean;
     selectedBrandPath?: string;

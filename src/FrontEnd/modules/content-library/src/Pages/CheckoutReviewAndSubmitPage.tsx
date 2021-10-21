@@ -38,11 +38,15 @@ const mapStateToProps = (state: ApplicationState) => {
     let isLoadDataNeeded = false;
     if (cartId) {
         const cartState = getCartState(state, cartId);
-        isLoadDataNeeded = (!cartState.value && !cartState.isLoading) || !getPromotionsDataView(state, cartId).value;
+        const promotionsDataView = getPromotionsDataView(state, cartId);
+        isLoadDataNeeded =
+            (!cartState.value && !cartState.isLoading) || (!promotionsDataView.value && !promotionsDataView.isLoading);
     } else {
         const currentCartState = getCurrentCartState(state);
+        const currentPromotionsDataView = getCurrentPromotionsDataView(state);
         isLoadDataNeeded =
-            (!currentCartState.value && !currentCartState.isLoading) || !getCurrentPromotionsDataView(state).value;
+            (!currentCartState.value && !currentCartState.isLoading) ||
+            (!currentPromotionsDataView.value && !currentPromotionsDataView.isLoading);
     }
     return {
         cartId,

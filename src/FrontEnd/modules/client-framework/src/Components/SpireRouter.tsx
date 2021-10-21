@@ -5,7 +5,7 @@ import ShellHoleConnect from "@insite/client-framework/Components/ShellHoleConne
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import setBreadcrumbs from "@insite/client-framework/Store/Components/Breadcrumbs/Handlers/SetBreadcrumbs";
 import { loadPage } from "@insite/client-framework/Store/Data/Pages/PagesActionCreators";
-import { getCurrentPage, getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { getLocation, getPageStateByPath } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { nullPage } from "@insite/client-framework/Store/Data/Pages/PagesState";
 import { loadPageLinks } from "@insite/client-framework/Store/Links/LinksActionCreators";
 import { AnyAction } from "@insite/client-framework/Store/Reducers";
@@ -14,11 +14,17 @@ import HistoryContext from "@insite/mobius/utilities/HistoryContext";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
 
-const mapStateToProps = (state: ApplicationState) => ({
-    pageLinks: state.links.pageLinks,
-    currentPage: getCurrentPage(state),
-    location: getLocation(state),
-});
+const mapStateToProps = (state: ApplicationState) => {
+    const location = getLocation(state);
+    const currentPageState = getPageStateByPath(state, location.pathname);
+    return {
+        pageLinks: state.links.pageLinks,
+        areLinksLoading: state.links.areLinksLoading,
+        currentPage: currentPageState.value || nullPage,
+        isCurrentPageLoading: currentPageState.isLoading,
+        location,
+    };
+};
 
 const setLocation = (location: Location): AnyAction => ({
     type: "Data/Pages/SetLocation",
@@ -38,7 +44,16 @@ const scrollPositionsKey = "scrollPositions";
 
 class SpireRouter extends React.Component<Props> {
     UNSAFE_componentWillMount() {
-        const { loadPage, loadPageLinks, pageLinks, currentPage, setBreadcrumbs, location } = this.props;
+        const {
+            loadPage,
+            loadPageLinks,
+            pageLinks,
+            currentPage,
+            setBreadcrumbs,
+            location,
+            areLinksLoading,
+            isCurrentPageLoading,
+        } = this.props;
 
         const windowIfDefined = typeof window === "undefined" ? undefined : (window as any);
         if (windowIfDefined) {
@@ -54,11 +69,11 @@ class SpireRouter extends React.Component<Props> {
             };
         }
 
-        if (currentPage === nullPage) {
+        if (currentPage === nullPage && !isCurrentPageLoading) {
             loadPage(location, this.historyContext.history);
         }
 
-        if (pageLinks.length === 0) {
+        if (pageLinks.length === 0 && !areLinksLoading) {
             loadPageLinks();
         }
     }

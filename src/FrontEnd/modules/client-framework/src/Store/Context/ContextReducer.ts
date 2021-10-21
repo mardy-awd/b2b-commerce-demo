@@ -40,9 +40,18 @@ const forcedContext = (() => {
 })();
 
 const reducer = {
+    "Context/BeginLoadWebsite": (draft: Draft<ContextState>) => {
+        draft.isWebsiteLoaded = false;
+        draft.isWebsiteLoading = true;
+    },
     "Context/CompleteLoadWebsite": (draft: Draft<ContextState>, action: { website: Website }) => {
         draft.website = action.website;
         draft.isWebsiteLoaded = true;
+        draft.isWebsiteLoading = false;
+    },
+    "Context/BeginLoadSession": (draft: Draft<ContextState>) => {
+        draft.isSessionLoaded = false;
+        draft.isSessionLoading = true;
     },
     "Context/CompleteLoadSession": (draft: Draft<ContextState>, action: { session: Session }) => {
         if (forcedContext) {
@@ -52,11 +61,18 @@ const reducer = {
         }
         assign(draft.session, action.session);
         draft.isSessionLoaded = true;
+        draft.isSessionLoading = false;
+    },
+    "Context/BeginLoadSettings": (draft: Draft<ContextState>) => {
+        draft.areSettingsLoading = true;
+        draft.areSettingsLoaded = false;
     },
     "Context/CompleteLoadSettings": (draft: Draft<ContextState>, action: { settings: SettingsModel }) => {
         draft.settings = action.settings;
         draft.areSettingsLoaded = true;
+        draft.areSettingsLoading = false;
     },
+
     "Context/CompleteLoadTokenExConfig": (
         draft: Draft<ContextState>,
         action: { tokenExConfig: TokenExConfig; token?: string },

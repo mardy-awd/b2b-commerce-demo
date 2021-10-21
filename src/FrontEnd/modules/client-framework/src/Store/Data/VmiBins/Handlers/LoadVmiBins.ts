@@ -6,7 +6,7 @@ import { VmiBinCollectionModel } from "@insite/client-framework/Types/ApiModels"
 type HandlerType = ApiHandler<GetVmiBinsApiParameter, VmiBinCollectionModel>;
 
 export const PopulateApiParameter: HandlerType = props => {
-    props.apiParameter = { ...props.parameter };
+    props.apiParameter = { ...props.parameter, expand: ["product"] };
 };
 
 export const DispatchBeginLoadVmiBins: HandlerType = props => {

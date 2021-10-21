@@ -70,6 +70,15 @@ export const SelectVariantProduct: HandlerType = props => {
             return;
         }
     }
+
+    // if we are here, it means that the selected product is not available for some reasons (discontinued)
+    // in this case we need to reset variant selection
+    props.variantSelection = {};
+    const product = getProductState(props.getState(), props.parameter.productId).value;
+    product?.variantTraits?.forEach(variantTrait => {
+        props.variantSelection[variantTrait.id] = "";
+    });
+    props.variantSelectionCompleted = false;
 };
 
 export const SetProductInfo: HandlerType = props => {

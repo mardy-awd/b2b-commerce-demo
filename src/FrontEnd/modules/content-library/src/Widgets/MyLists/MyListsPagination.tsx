@@ -66,6 +66,7 @@ const MyListsPagination: React.FC<Props> = ({ wishListsDataView, updateLoadParam
                 resultsPerPageOptions={pagination.pageSizeOptions}
                 onChangePage={changePage}
                 onChangeResultsPerPage={changeResultsPerPage}
+                pageSizeCookie="Lists-PageSize"
             />
         </StyledWrapper>
     );

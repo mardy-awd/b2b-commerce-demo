@@ -380,6 +380,9 @@
             <div id="tst_reviewAndPayPage_availabilityErrorMessage" ng-show="vm.cart.hasInsufficientInventory" class="availability-error-message">
                 [% siteMessage 'ReviewAndPay_NotEnoughInventoryForPickup' %]
             </div>
+            <div ng-show="vm.hasInvalidPrice" class="invalid-price-error-message">
+                [% siteMessage 'ReviewAndPay_HasProductsWithInvalidPrice' %]
+            </div>
             <div ng-show="vm.cart.taxFailureReason === 'InvalidAddress' && vm.canUpdateShipToAddress" class="taxes-invalid-address-error-message">
                 [% siteMessage 'ReviewAndPay_InvalidAddress_CannotCalculateTax_UpdateAddress' %]
             </div>
@@ -389,8 +392,8 @@
             <div class="btns">
                 <a id="tst_submitForApproval_button" href="" class="btn primary btn-submit-for-approval" ng-show="vm.cart.requiresApproval && vm.cart.hasApprover && !vm.submitting" ng-click="vm.submit('[% urlForPage 'OrderApprovalDetailPage' %]')">[% translate 'Submit for approval' %]</a>
                 <a id="tst_placeOrder_button" href="" class="btn primary btn-place-order" ng-hide="vm.cart.requiresApproval || vm.submitting || vm.cart.paymentMethod.isPaymentProfileExpired"
-                   ng-click="!vm.cart.hasInsufficientInventory && vm.submit('[% urlForPage 'OrderConfirmationPage' %]', '[% urlForPage 'SignInPage' %]')"
-                   ng-class="{'disabled': vm.cart.hasInsufficientInventory}">[% translate 'Place Order' %]</a>
+                   ng-click="!vm.cart.hasInsufficientInventory && !vm.hasInvalidPrice && vm.submit('[% urlForPage 'OrderConfirmationPage' %]', '[% urlForPage 'SignInPage' %]')"
+                   ng-class="{'disabled': vm.cart.hasInsufficientInventory || vm.hasInvalidPrice}">[% translate 'Place Order' %]</a>
                 <div id="tst_submitErrorMessage" style="color: red;" ng-bind="vm.submitErrorMessage"></div>
             </div>
         </div>

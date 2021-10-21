@@ -101,7 +101,7 @@ class LinkField extends ClickOutside<Props, State> {
         };
     }
 
-    UNSAFE_componentWillMount(): void {
+    componentDidMount(): void {
         if (!this.props.categories) {
             this.props.loadCategories();
         }

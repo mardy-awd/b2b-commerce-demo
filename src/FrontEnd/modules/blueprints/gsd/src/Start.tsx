@@ -1,6 +1,6 @@
 import "@example/Store/Reducers";
 import { addPagesFromContext, addWidgetsFromContext } from "@insite/client-framework/Configuration"; // Importing nothing to trigger the side effects, which in this case adds custom reducers.
-import { setPostStyleGuideTheme } from "@insite/client-framework/ThemeConfiguration";
+import { setPreStyleGuideTheme } from "@insite/client-framework/ThemeConfiguration";
 
 // load all widgets. Without this they won't be included in the bundle
 const widgets = require.context("./Widgets", true, /\.tsx$/);
@@ -21,7 +21,7 @@ const widgetExtensions = require.context("./WidgetExtensions", true);
 widgetExtensions.keys().forEach(key => widgetExtensions(key));
 
 // add some post styleguide customizations. These can't be overridden by the style guide
-setPostStyleGuideTheme({
+setPreStyleGuideTheme({
     breakpoints: {
         keys: ["xs", "sm", "md", "lg", "xl"],
         values: [0, 576, 768, 992, 1200],

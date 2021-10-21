@@ -19,10 +19,9 @@ import deleteWishList from "@insite/client-framework/Store/Pages/MyListDetails/H
 import deleteWishListLines from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/DeleteWishListLines";
 import exportWishList from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/ExportWishList";
 import loadWishListLines from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/LoadWishListLines";
+import loadWishLists from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/LoadWishLists";
 import setAllWishListLinesIsSelected from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/SetAllWishListLinesIsSelected";
 import updateLoadWishListLinesParameter from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/UpdateLoadWishListLinesParameter";
-import loadWishLists from "@insite/client-framework/Store/Pages/MyLists/Handlers/LoadWishLists";
-import updateLoadParameter from "@insite/client-framework/Store/Pages/MyLists/Handlers/UpdateLoadParameter";
 import translate from "@insite/client-framework/Translate";
 import { CartLineCollectionModel, CartLineModel, WishListLineModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
@@ -76,7 +75,6 @@ const mapDispatchToProps = {
     deleteWishListLines,
     loadWishLists,
     loadWishListLines: makeHandlerChainAwaitable(loadWishListLines),
-    updateLoadParameter,
     updateLoadWishListLinesParameter,
     setShareListModalIsOpen,
     setAllWishListLinesIsSelected,
@@ -299,15 +297,33 @@ class MyListsDetailsActions extends React.Component<Props, State> {
         }
 
         if (this.linesSelected()) {
-            const cartLines = this.props.wishListLinesDataView.value
-                .filter(o => this.props.selectedWishListLineIds.indexOf(o.id) > -1)
-                .map(o => (o as any) as CartLineModel);
+            const selectedLines = this.props.wishListLinesDataView.value.filter(
+                o => this.props.selectedWishListLineIds.indexOf(o.id) > -1,
+            );
+            const linesToAdd = selectedLines.filter(
+                o =>
+                    o.quoteRequired ||
+                    o.allowZeroPricing ||
+                    this.props.productInfosByWishListLineId[o.id]?.pricing?.unitNetPrice !== 0,
+            );
+
+            if (linesToAdd.length === 0) {
+                this.context.addToast({ body: siteMessage("Cart_InvalidPrice"), messageType: "danger" });
+                return;
+            }
+
             this.props.addLinesToCart({
                 apiParameter: {
                     cartId: API_URL_CURRENT_FRAGMENT,
-                    cartLineCollection: { cartLines } as CartLineCollectionModel,
+                    cartLineCollection: {
+                        cartLines: linesToAdd.map(o => (o as any) as CartLineModel),
+                    } as CartLineCollectionModel,
                 },
-                onSuccess: this.onAddToCartSuccess,
+                onSuccess: () => {
+                    this.onAddToCartSuccess({
+                        notAllAddedToCart: linesToAdd.length !== selectedLines.length,
+                    } as CartLineCollectionModel);
+                },
                 onComplete(resultProps) {
                     if (resultProps.apiResult) {
                         this.onSuccess?.();
@@ -339,11 +355,9 @@ class MyListsDetailsActions extends React.Component<Props, State> {
 
     onAddToCartSuccess = (apiResult?: CartLineCollectionModel) => {
         this.displayToast(
-            this.linesSelected()
-                ? translate("Added to Cart")
-                : apiResult?.notAllAddedToCart
+            apiResult?.notAllAddedToCart
                 ? siteMessage("Lists_Items_Not_All_Added_To_Cart")
-                : translate("List Added to Cart"),
+                : siteMessage("Cart_AllProductsAddedToCart"),
         );
     };
 
@@ -408,7 +422,6 @@ class MyListsDetailsActions extends React.Component<Props, State> {
     };
 
     copyClickHandler = () => {
-        this.props.updateLoadParameter({ pageSize: 999 });
         this.props.loadWishLists();
         this.setState({ copyListModalIsOpen: true });
     };

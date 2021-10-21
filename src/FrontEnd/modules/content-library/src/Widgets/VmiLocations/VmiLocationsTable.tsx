@@ -127,6 +127,13 @@ export const vmiLocationsTableStyles: VmiLocationsTableStyles = {
         `,
     },
     customerCells: {
+        css: css`
+            max-width: 650px;
+            span {
+                text-overflow: ellipsis;
+                display: block;
+            }
+        `,
         typographyProps: {
             ellipsis: true,
         },

@@ -89,6 +89,8 @@ export const headerStyles: OrderConfirmationHeaderStyles = {
         variant: "h2",
         as: "p",
         css: css`
+            margin: 0;
+
             @media print {
                 font-size: 11px;
             }

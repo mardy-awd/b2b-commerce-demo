@@ -15,8 +15,8 @@ interface Relay {
 // This code is always the first to access process.env.ISC_API_URL so it has to make sure it's right.
 let ISC_API_URL = process.env.ISC_API_URL;
 if (!ISC_API_URL) {
-    logger.warn("ISC_API_URL environment variable not found, defaulting to http://commerce.local.com/.");
-    ISC_API_URL = process.env.ISC_API_URL = "http://commerce.local.com/";
+    logger.warn("ISC_API_URL environment variable not found, defaulting to http://localhost:3010/.");
+    ISC_API_URL = process.env.ISC_API_URL = "http://localhost:3010/";
 } else if (!ISC_API_URL.startsWith("http")) {
     logger.warn("ISC_API_URL doesn't start with `http`, prefixing with `https://`.");
     ISC_API_URL = process.env.ISC_API_URL = `https://${process.env.ISC_API_URL}`;

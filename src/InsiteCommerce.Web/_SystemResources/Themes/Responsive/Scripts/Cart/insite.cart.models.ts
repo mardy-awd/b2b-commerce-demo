@@ -12,5 +12,6 @@ module insite.cart {
         status?: string;
         shipToId?: string;
         sort?: string;
+        vmiLocationId?: System.Guid;
     }
 }

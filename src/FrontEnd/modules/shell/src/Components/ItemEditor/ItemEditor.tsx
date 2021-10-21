@@ -51,6 +51,7 @@ const mapStateToProps = (state: ShellState) => {
         treeNodesByParentId: state.pageTree.treeNodesByParentId,
         headerTreeNodesByParentId: state.pageTree.headerTreeNodesByParentId,
         footerTreeNodesByParentId: state.pageTree.footerTreeNodesByParentId,
+        mobileTreeNodesByParentId: state.pageTree.mobileTreeNodesByParentId,
         pageId: currentPage.id,
     };
 };
@@ -145,6 +146,7 @@ class ItemEditor extends React.Component<Props, State> {
             treeNodesByParentId,
             headerTreeNodesByParentId,
             footerTreeNodesByParentId,
+            mobileTreeNodesByParentId,
         } = this.props;
 
         if (!item || !definition) {
@@ -159,13 +161,15 @@ class ItemEditor extends React.Component<Props, State> {
                 treeNodesByParentId[item.parentId],
                 headerTreeNodesByParentId[item.parentId],
                 footerTreeNodesByParentId[item.parentId],
+                mobileTreeNodesByParentId[item.parentId],
             );
 
             if (currentPageState) {
                 const childList =
                     treeNodesByParentId[currentPageState.nodeId] ||
                     headerTreeNodesByParentId[currentPageState.nodeId] ||
-                    footerTreeNodesByParentId[currentPageState.nodeId];
+                    footerTreeNodesByParentId[currentPageState.nodeId] ||
+                    mobileTreeNodesByParentId[currentPageState.nodeId];
 
                 let variantDefinition: LoadedPageDefinition | undefined;
                 for (const child of childList) {
@@ -264,6 +268,7 @@ class ItemEditor extends React.Component<Props, State> {
                     treeNodesByParentId[item.parentId],
                     headerTreeNodesByParentId[item.parentId],
                     footerTreeNodesByParentId[item.parentId],
+                    mobileTreeNodesByParentId[item.parentId],
                 );
                 itemType = currentPageState?.type || "";
             }

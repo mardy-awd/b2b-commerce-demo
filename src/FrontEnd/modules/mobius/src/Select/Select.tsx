@@ -64,12 +64,18 @@ export type SelectComponentProps = MobiusStyledComponentProps<
         selectProps?: object;
         /** reference to the HTML Select element provided by the refWrapper function below */
         selectRef?: React.Ref<HTMLSelectElement>;
+        /** Boolean value to prevent having aria-labeledBy when there is an html label with a for attribute */
+        hasLabel?: boolean;
     } & Partial<FormFieldComponentProps>
 >;
 
 export type SelectProps = SelectPresentationProps & SelectComponentProps;
 
 const SelectStyle = styled.select<InjectableCss>`
+    &&&& {
+        padding-right: 32px;
+        text-overflow: ellipsis;
+    }
     ${injectCss}
 `;
 
@@ -98,7 +104,7 @@ class Select extends React.Component<SelectProps & HasDisablerContext> {
         return (
             <ThemeConsumer>
                 {(theme?: BaseTheme) => {
-                    const { children, disable, disabled, error, hint, required, ...otherProps } = this.props;
+                    const { children, disable, disabled, error, hint, required, hasLabel, ...otherProps } = this.props;
 
                     // Because disabled html attribute doesn't accept undefined
                     // eslint-disable-next-line no-unneeded-ternary
@@ -107,7 +113,7 @@ class Select extends React.Component<SelectProps & HasDisablerContext> {
                     const descriptionId = `${uid}-description`;
                     const labelId = `${uid}-label`;
                     const inputLabelObj =
-                        otherProps.label === 0 || otherProps.label ? { "aria-labelledby": labelId } : {};
+                        otherProps.label === 0 || otherProps.label || !hasLabel ? { "aria-labelledby": labelId } : {};
 
                     const { spreadProps, applyProp, applyStyledProp } = applyPropBuilder(
                         { theme, ...this.props },
@@ -125,7 +131,6 @@ class Select extends React.Component<SelectProps & HasDisablerContext> {
                                 aria-describedby={hasDescription ? descriptionId : undefined}
                                 aria-invalid={!!error}
                                 aria-required={!isDisabled && required}
-                                aria-labelledby={labelId}
                                 onChange={this.onChangeWithValue}
                                 data-selected-index={this.state.value || ""}
                                 css={applyStyledProp("css", resolvedMergeCss)}

@@ -15,6 +15,12 @@ type HandlerType = ApiHandlerDiscreteParameter<
     Session
 >;
 
+export const DispatchBeginLoadSession: HandlerType = props => {
+    props.dispatch({
+        type: "Context/BeginLoadSession",
+    });
+};
+
 export const PopulateApiParameter: HandlerType = props => {
     const { onComplete, ...apiParameter } = props.parameter;
     props.apiParameter = apiParameter;
@@ -50,6 +56,7 @@ export const LoadCurrentShipTo: HandlerType = props => {
 };
 
 export const chain = [
+    DispatchBeginLoadSession,
     PopulateApiParameter,
     RequestDataFromApi,
     DispatchCompleteLoadSession,

@@ -16,7 +16,9 @@ const useAccessibleSubmit = (value: string, onSubmit: (value: string) => void, c
     };
 
     const blurHandler = () => {
-        onSubmit(stateValue);
+        if (value !== String(stateValue)) {
+            onSubmit(stateValue);
+        }
     };
 
     useEffect(() => {

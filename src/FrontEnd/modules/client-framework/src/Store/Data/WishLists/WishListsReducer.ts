@@ -54,6 +54,9 @@ const reducer = {
     "Data/WishLists/Reset": () => {
         return initialState;
     },
+    "Data/WishLists/ResetDataViews": (draft: Draft<WishListsState>) => {
+        draft.dataViews = {};
+    },
     "Data/WishLists/CompleteLoadWishListLines": (
         draft: Draft<WishListsState>,
         action: { parameter: GetWishListLinesApiParameter; result: WishListLineCollectionModel },

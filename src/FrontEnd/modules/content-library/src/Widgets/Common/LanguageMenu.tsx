@@ -91,7 +91,7 @@ export const LanguageMenu: FC<Props> = ({ languages, currentLanguage, fields, se
                     <Icon {...styles.languageIcon} />
                 ))}
             <VisuallyHidden as="label" htmlFor={menuId} id={`${menuId}-label`}>
-                {translate("Currency")}
+                {translate("Language")}
             </VisuallyHidden>
             <Select
                 {...styles.languageSelect}
@@ -99,6 +99,7 @@ export const LanguageMenu: FC<Props> = ({ languages, currentLanguage, fields, se
                 data-test-selector="languageSelector"
                 onChange={event => setLanguage({ languageId: event.currentTarget.value })}
                 value={currentLanguage?.id}
+                hasLabel
             >
                 {languages.map(c => (
                     <option value={c.id} key={c.id}>

@@ -6,9 +6,9 @@
 
 [% capture CheckoutButtons %]
 <a ng-if="vm.cart.properties['isPunchout']" ng-href="/api/v1/punchout/porequisition" isc-full-redirect class="btn primary btn-checkout">[% translate 'Checkout' %]</a>
-<a ng-if="vm.cart.canCheckOut && !vm.cart.properties['isPunchout']" class="btn primary btn-checkout tst_cartPage_checkout"
+<a ng-if="vm.cart.canCheckOut && !vm.invalidPriceAtCheckout && !vm.cart.properties['isPunchout']" class="btn primary btn-checkout tst_cartPage_checkout"
    ng-href="{{vm.cart.canBypassCheckoutAddress ? '[% urlForPage 'ReviewAndPayPage' %]' : '[% urlForPage 'CheckoutAddressPage' %]'}}{{vm.cartIdParam}}">[% translate 'Checkout' %]</a>
-<a ng-if="!vm.cart.canCheckOut && !vm.cart.properties['isPunchout'] && !vm.cart.canRequisition" class="btn primary btn-checkout tst_cartPage_checkoutDisabled disabled" href="javascript:void(0)">[% translate 'Checkout' %]</a>
+<a ng-if="(!vm.cart.canCheckOut || vm.invalidPriceAtCheckout) && !vm.cart.properties['isPunchout'] && !vm.cart.canRequisition" class="btn primary btn-checkout tst_cartPage_checkoutDisabled disabled" href="javascript:void(0)">[% translate 'Checkout' %]</a>
 <a ng-if="vm.cart.canRequestQuote" href="[% urlForPage 'RfqRequestQuotePage' %]" class="btn primary btn-request-quote tst_cartPage_submitQuote"
    ng-bind="vm.cart.isSalesperson ? '[% translate 'Create a Quote' EscapeSingleQuotes %]' : '[% translate 'Request a Quote' EscapeSingleQuotes %]'" ng-disabled="vm.cart.isAwaitingApproval"></a>
 <a ng-if="vm.cart.properties['isPunchout']" ng-href="/api/v1/punchout/porequisition?operation=cancel" isc-full-redirect class="btn primary btn-checkout">[% translate 'Cancel PunchOut' %]</a>
@@ -54,6 +54,9 @@
                 </div>
                 <div data-test-selector="tst_cartPage_productsCannotBePurchasedError" ng-show="vm.productsCannotBePurchased" class="messaging--error">
                     [% siteMessage 'Cart_ProductsCannotBePurchased' %]
+                </div>
+                <div ng-show="vm.invalidPriceAtCheckout" class="messaging--error">
+                    [% siteMessage 'Cart_InvalidPriceAtCheckout' %]
                 </div>
                 <div class="hide-for-medium-up btns hide-for-print">
                     [[CheckoutButtons]]

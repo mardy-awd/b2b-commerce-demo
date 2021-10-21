@@ -19,8 +19,11 @@ interface OwnProps {
 
 const mapStateToProps = (state: ApplicationState) => ({
     isWebsiteLoaded: state.context.isWebsiteLoaded,
+    isWebsiteLoading: state.context.isWebsiteLoading,
     isSessionLoaded: state.context.isSessionLoaded,
+    isSessionLoading: state.context.isSessionLoading,
     areSettingsLoaded: state.context.areSettingsLoaded,
+    areSettingsLoading: state.context.areSettingsLoading,
 });
 
 const setLocation = (location: Location): AnyAction => ({
@@ -57,11 +60,11 @@ class SessionLoader extends React.Component<Props> {
             props.setPunchOutSessionId({ punchOutSessionId });
         }
 
-        if (!props.isWebsiteLoaded) {
+        if (!props.isWebsiteLoaded && !props.isWebsiteLoading) {
             props.loadCurrentWebsite();
         }
 
-        if (!props.isSessionLoaded) {
+        if (!props.isSessionLoaded && !props.isSessionLoading) {
             props.loadSession({
                 setContextLanguageCode: parsedQuery.setcontextlanguagecode,
                 setContextCurrencyCode: parsedQuery.setcontextcurrencycode,
@@ -76,7 +79,7 @@ class SessionLoader extends React.Component<Props> {
             });
         }
 
-        if (!props.areSettingsLoaded) {
+        if (!props.areSettingsLoaded && !props.areSettingsLoading) {
             props.loadSettings();
         }
     }

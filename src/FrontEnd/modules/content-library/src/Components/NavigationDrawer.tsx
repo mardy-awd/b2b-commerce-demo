@@ -34,6 +34,7 @@ import PanelMenu, { PanelMenuPresentationProps } from "@insite/mobius/PanelMenu"
 import PanelRow, { PanelRowPresentationProps } from "@insite/mobius/PanelMenu/PanelRow";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import getColor from "@insite/mobius/utilities/getColor";
+import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import omitSingle from "@insite/mobius/utilities/omitSingle";
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
@@ -82,7 +83,7 @@ interface OwnProps {
     quickOrderLink: PageLinkModel | undefined;
 }
 
-type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasHistory;
 
 export interface NavigationDrawerStyles {
     menuTriggerButton?: ButtonPresentationProps;
@@ -289,6 +290,7 @@ const NavigationDrawer: FC<Props> = props => {
         fulfillmentLabel,
         isPunchOutSession,
         headerLinkListLinkFields,
+        history,
     } = props;
 
     const currentPageUrl = currentLocation.pathname;
@@ -337,6 +339,13 @@ const NavigationDrawer: FC<Props> = props => {
                             {...styles.mainNavigationRow}
                             isCurrent={currentPageUrl === signInUrl?.url}
                             onClick={closeDrawer}
+                            onKeyPress={(event: React.KeyboardEvent) => {
+                                if (event.key === " " && history && signInUrl?.url) {
+                                    event.preventDefault();
+                                    closeDrawer();
+                                    history.push(signInUrl.url);
+                                }
+                            }}
                             href={signInUrl?.url}
                         >
                             <StyledSpan {...styles.panelSectionWrapper}>
@@ -399,6 +408,13 @@ const NavigationDrawer: FC<Props> = props => {
                                 {...(styles.logoLinks && omitSingle(styles.logoLinks, "typographyProps"))}
                                 isCurrent={currentPageUrl === link.url}
                                 onClick={closeDrawer}
+                                onKeyPress={(event: React.KeyboardEvent) => {
+                                    if (event.key === " " && history && link?.url) {
+                                        event.preventDefault();
+                                        closeDrawer();
+                                        history.push(link.url);
+                                    }
+                                }}
                                 href={link.url}
                                 target={headerLinkListLinkFields[index].fields.openInNewWindow ? "_blank" : ""}
                             >
@@ -557,4 +573,4 @@ const SelectorMenu: React.FC<SelectorMenuProps> = ({
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavigationDrawer);
+export default connect(mapStateToProps, mapDispatchToProps)(withHistory(NavigationDrawer));

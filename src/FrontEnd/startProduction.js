@@ -56,7 +56,7 @@ const setupExpress = () => {
             // Domain error handling is based on https://nodejs.org/api/domain.html#domain_warning_don_t_ignore_errors
             createdDomain.on("error", error => {
                 // Unhandled errors are considered unrecoverable to Node, so the process should die.
-                logger.error(`Shutting down worker due to error: ${error && error.stack}`);
+                logger.error("Shutting down worker due to error:", error);
 
                 try {
                     // Use an unreferenced timer to kill the process after up to 30 seconds.
@@ -73,8 +73,8 @@ const setupExpress = () => {
 
                     // Try to send an error to the request that triggered the problem.
                     response.sendStatus(500).contentType("text/plain").send("Internal server error.");
-                } catch (er2) {
-                    logger.error(`Failed to send response to request that caused worker failure: ${er2.stack}`);
+                } catch (ex) {
+                    logger.error("Failed to send response to request that caused worker failure:", ex);
                 }
             });
         },

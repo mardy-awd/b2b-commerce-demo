@@ -11,7 +11,9 @@ const initialState: VmiUsersState = {
         sort: "UserName",
         roles: ["VMI_User", "VMI_Admin"],
     },
-    getVmiLocationsParameter: {},
+    getVmiLocationsParameter: {
+        expand: ["customerlabel"],
+    },
     selectedVmiLocations: {},
 };
 

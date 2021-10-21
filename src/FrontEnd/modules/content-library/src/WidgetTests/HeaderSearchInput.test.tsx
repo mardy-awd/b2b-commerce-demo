@@ -2,38 +2,14 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import HeaderSearchInputWidgetModule, {
     HeaderSearchInput,
 } from "@insite/content-library/Widgets/Header/HeaderSearchInput";
-import {
-    elementHasStyle,
-    elementIsRendering,
-    getWidgetProps,
-    mountApp,
-} from "@insite/content-library/WidgetTests/helpers";
+import { elementHasStyle, elementIsRendering, setupWidgetRendering } from "@insite/content-library/WidgetTests/helpers";
 import TextField from "@insite/mobius/TextField";
 import "jest-styled-components";
 import { css } from "styled-components";
 
-function composeDefaultFields() {
-    return HeaderSearchInputWidgetModule?.definition?.fieldDefinitions?.reduce((acc: any, field) => {
-        acc[field.name] = field.defaultValue;
-        return acc;
-    }, {});
-}
-
 describe("HeaderSearchInput Widget", () => {
-    const widgetProps = getWidgetProps({
-        fields: composeDefaultFields(),
-    });
-    const styles = {
-        headerSearchInput: {
-            searchInputStyles: {
-                input: {
-                    css: css`
-                        background: magenta;
-                    `,
-                },
-            },
-        },
-    };
+    const { renderWidget, useStyles } = setupWidgetRendering(HeaderSearchInput, HeaderSearchInputWidgetModule);
+
     const initialState = {
         context: {
             settings: {
@@ -49,16 +25,26 @@ describe("HeaderSearchInput Widget", () => {
             },
         },
     } as ApplicationState;
-    const app = mountApp(HeaderSearchInput, widgetProps, styles, initialState);
 
     test("Is rendering", () => {
-        const headerSearchInput = app.find(HeaderSearchInput);
+        const headerSearchInput = renderWidget().find(HeaderSearchInput);
 
         elementIsRendering(headerSearchInput);
     });
 
     test("StylesProvider styles are being passed", () => {
-        const textField = app.find(TextField);
+        const styles = useStyles();
+        styles.headerSearchInput = {
+            searchInputStyles: {
+                input: {
+                    css: css`
+                        background: magenta;
+                    `,
+                },
+            },
+        };
+
+        const textField = renderWidget().find(TextField);
         const styleRule = /background:\s?magenta;/;
 
         elementHasStyle(textField, styleRule);

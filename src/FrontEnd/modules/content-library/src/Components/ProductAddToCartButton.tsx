@@ -3,6 +3,8 @@ import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
 import { HasProductContext, withProductContext } from "@insite/client-framework/Components/ProductContext";
 import { makeHandlerChainAwaitable } from "@insite/client-framework/HandlerCreator";
+import { getUnitNetPrice } from "@insite/client-framework/Services/Helpers/ProductPriceService";
+import siteMessage from "@insite/client-framework/SiteMessage";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { canAddToCart, hasEnoughInventory } from "@insite/client-framework/Store/Data/Products/ProductsSelectors";
@@ -52,8 +54,8 @@ export const productAddToCartButtonStyles: ButtonPresentationProps = {};
 
 const ProductAddToCartButton = ({
     productContext: {
-        product: { id: productId },
-        productInfo: { qtyOrdered, unitOfMeasure },
+        product: { id: productId, allowZeroPricing, quoteRequired },
+        productInfo: { qtyOrdered, unitOfMeasure, pricing },
     },
     productSettings,
     hasEnoughInventory,
@@ -76,6 +78,11 @@ const ProductAddToCartButton = ({
     }
 
     const addToCartClickHandler = async () => {
+        if (!quoteRequired && !allowZeroPricing && pricing && getUnitNetPrice(pricing, 1).price === 0) {
+            toasterContext.addToast({ body: siteMessage("Cart_InvalidPrice"), messageType: "danger" });
+            return;
+        }
+
         const sectionOptions =
             configurationSelection && Object.values(configurationSelection).length > 0
                 ? Object.values(configurationSelection)

@@ -1,5 +1,6 @@
 /* eslint-disable spire/export-styles */
 import { createWidgetElement } from "@insite/client-framework/Components/ContentItemStore";
+import React from "react";
 
 interface OwnProps {
     title: string;

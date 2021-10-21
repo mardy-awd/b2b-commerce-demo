@@ -3,7 +3,10 @@ import { CartLineContext } from "@insite/client-framework/Components/CartLineCon
 import siteMessage from "@insite/client-framework/SiteMessage";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
-import { getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import {
+    getCurrentCartState,
+    hasProductsWithInvalidPrice,
+} from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import { getCurrentPromotionsDataView } from "@insite/client-framework/Store/Data/Promotions/PromotionsSelectors";
 import clearCurrentCart from "@insite/client-framework/Store/Pages/Cart/Handlers/ClearCurrentCart";
 import removeCartLine from "@insite/client-framework/Store/Pages/Cart/Handlers/RemoveCartLine";
@@ -277,10 +280,12 @@ const CartLines: FC<Props> = ({
                 loading={isLoadingCart || isUpdatingCartLine || !promotionsDataView.value}
             >
                 <CartLinesHeader
-                    totalItemCount={cartLines!.length}
+                    totalItemCount={cartLines.length}
                     isCondensed={isCondensed}
                     productsCannotBePurchased={productsCannotBePurchased}
                     cartNotPriced={cart.cartNotPriced}
+                    hasInsufficientInventory={cart.hasInsufficientInventory && cart.fulfillmentMethod === "Ship"}
+                    hasInvalidPrice={hasProductsWithInvalidPrice(cart)}
                     failedToGetRealTimeInventory={cart.failedToGetRealTimeInventory}
                     onIsCondensedChange={isCondensedChangeHandler}
                     onRemoveAllClick={removeAllClickHandler}
@@ -297,6 +302,8 @@ interface CartLinesHeaderProps {
     isCondensed: boolean;
     productsCannotBePurchased?: boolean;
     cartNotPriced?: boolean;
+    hasInsufficientInventory?: boolean;
+    hasInvalidPrice?: boolean;
     failedToGetRealTimeInventory?: boolean;
     onIsCondensedChange: CheckboxProps["onChange"];
     onRemoveAllClick: () => void;
@@ -307,6 +314,8 @@ const CartLinesHeader: FC<CartLinesHeaderProps> = ({
     isCondensed,
     productsCannotBePurchased,
     cartNotPriced,
+    hasInsufficientInventory,
+    hasInvalidPrice,
     failedToGetRealTimeInventory,
     onIsCondensedChange,
     onRemoveAllClick,
@@ -357,6 +366,20 @@ const CartLinesHeader: FC<CartLinesHeaderProps> = ({
                     <Typography {...headerStyles.warningText}>
                         {siteMessage("Cart_NoPriceAvailableAtCheckout")}
                     </Typography>
+                </StyledSection>
+            )}
+            {hasInsufficientInventory && (
+                <StyledSection {...headerStyles.warningSection}>
+                    <Icon {...headerStyles.warningIcon}></Icon>
+                    <Typography {...headerStyles.warningText}>
+                        {siteMessage("Cart_InsufficientInventoryAtCheckout")}
+                    </Typography>
+                </StyledSection>
+            )}
+            {hasInvalidPrice && (
+                <StyledSection {...headerStyles.warningSection}>
+                    <Icon {...headerStyles.warningIcon}></Icon>
+                    <Typography {...headerStyles.warningText}>{siteMessage("Cart_InvalidPriceAtCheckout")}</Typography>
                 </StyledSection>
             )}
             {failedToGetRealTimeInventory && (

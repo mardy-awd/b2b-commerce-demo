@@ -214,12 +214,14 @@ const reducer = {
                     draft.treeNodesByParentId[action.parentId],
                     draft.headerTreeNodesByParentId[action.parentId],
                     draft.footerTreeNodesByParentId[action.parentId],
+                    draft.mobileTreeNodesByParentId[action.parentId],
                 )) ||
             getPageStateFromDictionaries(
                 action.pageId,
                 draft.treeNodesByParentId,
                 draft.headerTreeNodesByParentId,
                 draft.footerTreeNodesByParentId,
+                draft.mobileTreeNodesByParentId,
             );
         if (!pageState) {
             return;
@@ -261,6 +263,7 @@ const reducer = {
             draft.treeNodesByParentId,
             draft.headerTreeNodesByParentId,
             draft.footerTreeNodesByParentId,
+            draft.mobileTreeNodesByParentId,
         );
 
         if (!pageState) {
@@ -339,7 +342,8 @@ const reducer = {
         const nodes =
             draft.treeNodesByParentId[action.parentId] ||
             draft.headerTreeNodesByParentId[action.parentId] ||
-            draft.footerTreeNodesByParentId[action.parentId];
+            draft.footerTreeNodesByParentId[action.parentId] ||
+            draft.mobileTreeNodesByParentId[action.parentId];
         if (nodes) {
             for (const node of nodes) {
                 node.isDefaultVariant = node.pageId === action.pageId;
@@ -444,7 +448,8 @@ const reducer = {
             const treeNodes =
                 draft.treeNodesByParentId[action.nodeId] ||
                 draft.headerTreeNodesByParentId[action.nodeId] ||
-                draft.footerTreeNodesByParentId[action.nodeId];
+                draft.footerTreeNodesByParentId[action.nodeId] ||
+                draft.mobileTreeNodesByParentId[action.nodeId];
             if (treeNodes) {
                 for (const treeNode of treeNodes) {
                     pages[treeNode.pageId] = treeNode;

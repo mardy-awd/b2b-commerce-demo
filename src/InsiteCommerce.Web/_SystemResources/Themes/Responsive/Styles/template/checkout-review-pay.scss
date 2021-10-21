@@ -214,6 +214,7 @@
     }
 
     .availability-error-message,
+    .invalid-price-error-message,
     .taxes-invalid-address-error-message {
         color: red;
 
@@ -221,6 +222,10 @@
             text-decoration: underline;
             color: red;
         }
+    }
+
+    .invalid-price {
+        color: red;
     }
 }
 

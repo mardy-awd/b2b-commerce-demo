@@ -490,6 +490,7 @@ module insite.catalog {
             this.product.minimumOrderQty = styledProduct.minimumOrderQty;
             this.product.productDetailUrl = styledProduct.productDetailUrl;
             this.product.cantBuy = styledProduct.cantBuy;
+            this.product.allowZeroPricing = styledProduct.allowZeroPricing;
 
             if (this.product.qtyOrdered < this.product.minimumOrderQty) {
                 this.product.qtyOrdered = this.product.minimumOrderQty;

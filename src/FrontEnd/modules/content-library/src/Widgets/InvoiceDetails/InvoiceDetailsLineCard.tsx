@@ -47,6 +47,7 @@ export interface InvoiceDetailsLineCardStyles {
     myPartItem?: GridItemProps;
     myPartStyles?: SmallHeadingAndTextStyles;
     mgfItem?: GridItemProps;
+    mgfGridContainer?: GridContainerProps;
     mgfStyles?: SmallHeadingAndTextStyles;
     notesItem?: GridItemProps;
     notesStyles?: SmallHeadingAndTextStyles;
@@ -138,6 +139,11 @@ export const cardStyles: InvoiceDetailsLineCardStyles = {
             flex-direction: column;
         `,
     },
+    priceStyles: {
+        text: {
+            weight: "bold",
+        },
+    },
     vatLabelText: {
         size: 12,
     },
@@ -154,6 +160,16 @@ export const cardStyles: InvoiceDetailsLineCardStyles = {
         css: css`
             font-weight: 600;
             flex-direction: column;
+        `,
+    },
+    productNameLink: {
+        css: css`
+            white-space: nowrap;
+        `,
+    },
+    mgfGridContainer: {
+        css: css`
+            padding: 4px;
         `,
     },
 };
@@ -206,22 +222,26 @@ const InvoiceDetailsLineCard = ({ invoiceLine, enableVat, vatPriceDisplay, exten
                                             extendedStyles={styles.myPartStyles}
                                         />
                                     </GridItem>
-                                    <GridItem {...styles.mgfItem}>
-                                        <SmallHeadingAndText
-                                            heading={translate("MFG #")}
-                                            text={invoiceLine.manufacturerItem}
-                                            extendedStyles={styles.mgfStyles}
-                                        />
-                                    </GridItem>
+                                    <GridContainer {...styles.mgfGridContainer}>
+                                        <GridItem {...styles.mgfItem}>
+                                            <SmallHeadingAndText
+                                                heading={translate("MFG #")}
+                                                text={invoiceLine.manufacturerItem}
+                                                extendedStyles={styles.mgfStyles}
+                                            />
+                                        </GridItem>
+                                    </GridContainer>
                                 </GridContainer>
                             </GridItem>
-                            <GridItem {...styles.notesItem}>
-                                <SmallHeadingAndText
-                                    heading={translate("Line Notes")}
-                                    text={invoiceLine.notes}
-                                    extendedStyles={styles.notesStyles}
-                                />
-                            </GridItem>
+                            {invoiceLine.notes && (
+                                <GridItem {...styles.notesItem}>
+                                    <SmallHeadingAndText
+                                        heading={translate("Line Notes")}
+                                        text={invoiceLine.notes}
+                                        extendedStyles={styles.notesStyles}
+                                    />
+                                </GridItem>
+                            )}
                         </GridContainer>
                     </GridItem>
                     <GridItem {...styles.infoRightColumn}>

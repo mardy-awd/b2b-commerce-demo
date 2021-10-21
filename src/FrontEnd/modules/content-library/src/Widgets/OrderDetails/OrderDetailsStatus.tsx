@@ -5,7 +5,7 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import { OrderDetailsPageContext } from "@insite/content-library/Pages/OrderDetailsPage";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
-import React, { FC, useContext } from "react";
+import React, { useContext } from "react";
 import { css } from "styled-components";
 
 export interface OrderDetailsStatusStyles {
@@ -21,20 +21,20 @@ export const statusStyles: OrderDetailsStatusStyles = {
         `,
     },
     titleText: {
-        variant: "h6",
-        as: "h2",
+        variant: "h3",
         css: css`
             @media print {
                 font-size: 12px;
             }
             margin-bottom: 5px;
+            font-size: 16px;
         `,
     },
 };
 
 const styles = statusStyles;
 
-const OrderDetailsStatus: FC = () => {
+const OrderDetailsStatus = () => {
     const { value: order } = useContext(OrderStateContext);
     if (!order || !order.statusDisplay) {
         return null;

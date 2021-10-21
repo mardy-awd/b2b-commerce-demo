@@ -8,5 +8,5 @@ export interface AccountShipTosState {
 interface DataView {
     readonly isLoading: boolean;
     pagination: PaginationModel | null;
-    value?: Readonly<AccountShipToModel>[];
+    value?: AccountShipToModel[];
 }

@@ -7,10 +7,11 @@ function doWork(isDevBuild, blueprint) {
     updateFile(
         path.resolve(__dirname, "../../modules/server-framework/Entry.ts"),
         `/* eslint-disable */
-import \"@insite/server-framework/Winston\";
-import \"../${blueprint}/src/Start\";
+import "@insite/server-framework/Winston";
+import "@insite/client-framework/LoadComponents";
+import "../${blueprint}/src/Start";
 
-export * from \"./src/StartServer\";
+export * from "./src/StartServer";
 `,
     );
 
@@ -18,21 +19,23 @@ export * from \"./src/StartServer\";
     const shellBlueprintExists = fs.existsSync(
         path.resolve(__dirname, `../../modules/${shellBlueprint}/src/Start.tsx`),
     );
-    const shellBlueprintImport = shellBlueprintExists ? `\nimport \"../${shellBlueprint}/src/Start\";` : "";
+    const shellBlueprintImport = shellBlueprintExists ? `\nimport "../${shellBlueprint}/src/Start";` : "";
 
     updateFile(
         path.resolve(__dirname, "../../modules/shell/Entry.ts"),
         `/* eslint-disable */${shellBlueprintImport}
-import \"../${blueprint}/src/Start\";
-import \"@insite/shell/ClientApp\";
+import "../${blueprint}/src/Start";
+import "@insite/shell/LoadComponents";
+import "@insite/shell/ClientApp";
 `,
     );
 
     updateFile(
         path.resolve(__dirname, "../../modules/client-framework/Entry.ts"),
         `/* eslint-disable */
-import \"../${blueprint}/src/Start\";
-import \"@insite/client-framework/ClientApp\";
+import "../${blueprint}/src/Start";
+import "@insite/client-framework/LoadComponents";
+import "@insite/client-framework/ClientApp";
 `,
     );
 }

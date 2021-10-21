@@ -9,7 +9,7 @@ module.exports = {
         IS_PRODUCTION: true,
         IS_SERVER_SIDE: false,
         "ts-jest": {
-            tsConfig: "../tsconfig.base.json",
+            tsconfig: "../tsconfig.base.json",
         },
     },
     setupFilesAfterEnv: ["./enzyme-setup.js"],

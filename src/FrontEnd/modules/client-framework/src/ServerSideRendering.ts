@@ -45,6 +45,7 @@ interface InsiteSession {
     translationsByKeyword: SafeDictionary<string>;
     displayErrorPage?: true | undefined;
     errorStatusCode?: number;
+    isWebCrawler: boolean;
     pageMetadata?: PreparedMetadata;
     initialPage?:
         | {
@@ -118,6 +119,7 @@ export const setDomain = (newDomain: typeof domain) => {
         trackedPromises: [],
         messagesByName: {},
         translationsByKeyword: {},
+        isWebCrawler: false,
     };
 
     domain = newDomain;
@@ -174,6 +176,14 @@ export function setStatusCode(statusCode: number) {
 
 export function getStatusCode() {
     return getSessionValue("statusCode");
+}
+
+export function setSSRIsWebCrawler(value: boolean) {
+    setSessionValue("isWebCrawler", value);
+}
+
+export function getSSRIsWebCrawler() {
+    return getSessionValue("isWebCrawler") ?? false;
 }
 
 export function setSessionCookies(cookies: SafeDictionary<string> | string | undefined) {

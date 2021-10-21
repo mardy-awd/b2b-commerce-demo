@@ -50,6 +50,7 @@ const mapStateToProps = (state: ApplicationState) => {
         location,
         websiteSettings: getSettingsCollection(state).websiteSettings,
         selectedProductId: state.pages.productDetails.selectedProductId,
+        isProductLoading: state.pages.productDetails.isProductLoading,
     };
 };
 
@@ -140,6 +141,7 @@ class ProductDetailsPage extends React.Component<Props, State> {
             productPath,
             lastProductPath,
             lastStyledOption,
+            isProductLoading,
         } = this.props;
         const queryParams = parseQueryString<{ option?: string; criteria?: string }>(search.replace("?", ""));
         const styledOption = (
@@ -153,6 +155,11 @@ class ProductDetailsPage extends React.Component<Props, State> {
         ) {
             return;
         }
+
+        if (isProductLoading) {
+            return;
+        }
+
         this.props.displayProduct({ path: productPath, styledOption });
     }
 

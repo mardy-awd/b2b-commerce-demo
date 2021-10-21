@@ -1,3 +1,5 @@
+import mergeToNew from "@insite/client-framework/Common/mergeToNew";
+import getLocalizedDateTime from "@insite/client-framework/Common/Utilities/getLocalizedDateTime";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { getBillToState } from "@insite/client-framework/Store/Data/BillTos/BillTosSelectors";
@@ -8,6 +10,7 @@ import { getShipToState } from "@insite/client-framework/Store/Data/ShipTos/Ship
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import SmallHeadingAndText, { SmallHeadingAndTextStyles } from "@insite/content-library/Components/SmallHeadingAndText";
 import { OrderConfirmationPageContext } from "@insite/content-library/Pages/OrderConfirmationPage";
 import OrderConfirmationBillingInformation, {
     OrderConfirmationBillingInformationStyles,
@@ -30,6 +33,7 @@ const mapStateToProps = (state: ApplicationState) => {
         shipTo: getShipToState(state, cart?.shipToId).value,
         pickUpWarehouse: state.context.session.pickUpWarehouse,
         enableVat: getSettingsCollection(state).productSettings.enableVat,
+        language: state.context.session.language,
     };
 };
 
@@ -53,6 +57,18 @@ export interface OrderConfirmationOrderInformationStyles {
     notesGridItem?: GridItemProps;
     notesTitle: TypographyProps;
     notesDescription?: TypographyPresentationProps;
+    orderDetailsGridContainer?: GridContainerProps;
+    orderInformationGridItems?: GridItemProps;
+    informationGridContainer?: GridContainerProps;
+    statusGridItem?: GridItemProps;
+    orderDateGridItem?: GridItemProps;
+    poNumberGridItem?: GridItemProps;
+    salespersonGridItem?: GridItemProps;
+    dueDateGridItem?: GridItemProps;
+    billingAddressGridItem?: GridItemProps;
+    shippingAddressGridItem?: GridItemProps;
+    orderNotesGridItem?: GridItemProps;
+    headingAndTextStyles?: SmallHeadingAndTextStyles;
 }
 
 export const orderInformationStyles: OrderConfirmationOrderInformationStyles = {
@@ -100,6 +116,55 @@ export const orderInformationStyles: OrderConfirmationOrderInformationStyles = {
             margin-bottom: 5px;
         `,
     },
+    headingAndTextStyles: {
+        heading: {
+            variant: "h6",
+            as: "h2",
+            css: css`
+                @media print {
+                    font-size: 12px;
+                }
+                margin-bottom: 5px;
+            `,
+        },
+    },
+    orderInformationGridItems: {
+        css: css`
+            @media print {
+                padding: 5px !important;
+            }
+        `,
+    },
+    statusGridItem: {
+        width: [6, 6, 6, 3, 3],
+    },
+    orderDateGridItem: {
+        width: [6, 6, 6, 3, 3],
+    },
+    poNumberGridItem: {
+        width: [6, 6, 6, 3, 3],
+    },
+    salespersonGridItem: {
+        width: [6, 6, 6, 3, 3],
+    },
+    dueDateGridItem: {
+        width: [6, 6, 6, 3, 3],
+    },
+    billingAddressGridItem: {
+        width: 6,
+    },
+    shippingAddressGridItem: {
+        width: 6,
+    },
+    orderNotesGridItem: {
+        width: 12,
+    },
+    orderDetailsGridContainer: {
+        css: css`
+            padding-left: 5px;
+            padding-bottom: 15px;
+        `,
+    },
 };
 
 type Props = WidgetProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
@@ -107,6 +172,7 @@ type Props = WidgetProps & ReturnType<typeof mapStateToProps> & ResolveThunks<ty
 const styles = orderInformationStyles;
 
 const OrderConfirmationOrderInformation: FC<Props> = props => {
+    const language = props.language;
     if (!props.cart) {
         return null;
     }
@@ -133,6 +199,41 @@ const OrderConfirmationOrderInformation: FC<Props> = props => {
                     </Typography>
                 </Typography>
             </GridItem>
+            <GridContainer {...styles.orderDetailsGridContainer}>
+                <GridItem {...mergeToNew(styles.orderInformationGridItems, styles.orderDateGridItem)}>
+                    <SmallHeadingAndText
+                        extendedStyles={styles.headingAndTextStyles}
+                        heading={translate("Order Date")}
+                        text={getLocalizedDateTime({
+                            dateTime: new Date(props.cart.orderDate as Date),
+                            language,
+                        })}
+                    />
+                </GridItem>
+                <GridItem {...mergeToNew(styles.orderInformationGridItems, styles.poNumberGridItem)}>
+                    <SmallHeadingAndText
+                        extendedStyles={styles.headingAndTextStyles}
+                        heading={translate("PO Number")}
+                        text={props.cart.poNumber}
+                    />
+                </GridItem>
+                <GridItem {...mergeToNew(styles.orderInformationGridItems, styles.statusGridItem)}>
+                    <SmallHeadingAndText
+                        extendedStyles={styles.headingAndTextStyles}
+                        heading={translate("Status")}
+                        text={props.cart.status}
+                    />
+                </GridItem>
+                {props.cart?.salespersonName && (
+                    <GridItem {...mergeToNew(styles.orderInformationGridItems, styles.salespersonGridItem)}>
+                        <SmallHeadingAndText
+                            extendedStyles={styles.headingAndTextStyles}
+                            heading={translate("Salesperson")}
+                            text={props.cart.salespersonName}
+                        />
+                    </GridItem>
+                )}
+            </GridContainer>
             <GridItem {...styles.shippingInformationGridItem}>
                 <OrderConfirmationShippingInformation
                     cart={props.cart}

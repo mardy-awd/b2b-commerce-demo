@@ -26,6 +26,7 @@ import { css } from "styled-components";
 
 const mapStateToProps = (state: ApplicationState) => ({
     parameter: state.pages.vmiUsers.getVmiUsersParameter,
+    searchText: state.pages.vmiUsers.getVmiUsersParameter.searchText,
 });
 
 const mapDispatchToProps = {
@@ -95,7 +96,7 @@ const styles = vmiUsersHeaderStyles;
 
 const searchMinimumCharacterLength = 3;
 
-const VmiUsersHeader = ({ id, parameter, updateSearchFields }: Props) => {
+const VmiUsersHeader = ({ id, parameter, updateSearchFields, searchText }: Props) => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [searchTimeoutId, setSearchTimeoutId] = useState<number | undefined>(undefined);
     const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
@@ -105,12 +106,14 @@ const VmiUsersHeader = ({ id, parameter, updateSearchFields }: Props) => {
         pageSize: 1000,
         page: 1,
     });
+    const [searchUserText, setSearchUserText] = useState(searchText);
 
     const searchTextChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (typeof searchTimeoutId === "number") {
             clearTimeout(searchTimeoutId);
         }
         const searchText = event.currentTarget.value;
+        setSearchUserText(searchText);
         if (searchText.length > 0 && searchText.length < searchMinimumCharacterLength) {
             return;
         }
@@ -184,6 +187,7 @@ const VmiUsersHeader = ({ id, parameter, updateSearchFields }: Props) => {
                     <TextField
                         placeholder={translate("Search Users")}
                         {...styles.searchText}
+                        value={searchUserText}
                         onChange={searchTextChangeHandler}
                     />
                 </GridItem>

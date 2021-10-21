@@ -18,6 +18,7 @@ export interface AddVmiBinApiParameter extends ApiParameter {
 export interface GetVmiBinsApiParameter extends ApiParameter, HasPagingParameters {
     vmiLocationId?: string;
     filter?: string;
+    expand?: "product"[];
 }
 
 export interface DeleteVmiBinsApiParameter extends ApiParameter {

@@ -14,7 +14,7 @@ export const DispatchBeginLoadVmiLocation: HandlerType = props => {
 export const PopulateApiParameter: HandlerType = props => {
     props.apiParameter = {
         id: props.parameter.id,
-        expand: ["customer"],
+        expand: ["customerlabel", "customer"],
     };
 };
 

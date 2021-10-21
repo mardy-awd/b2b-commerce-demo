@@ -370,10 +370,22 @@ const AssignBudgets = ({
     };
 
     const handleBudgetAmountChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = Number(event.currentTarget.value);
+        const value = event.currentTarget.value === "" ? undefined : Number(event.currentTarget.value);
         if (maintenanceInfo) {
             const currentBudget = cloneDeep(maintenanceInfo);
             currentBudget.budgetLineCollection![index].currentFiscalYearBudget = value;
+            updateMaintenanceInfo({ value: currentBudget });
+        }
+    };
+
+    const handleBudgetOnBlur = () => {
+        if (maintenanceInfo) {
+            const currentBudget = cloneDeep(maintenanceInfo);
+            currentBudget.budgetLineCollection?.map(budgetLine => {
+                if (!budgetLine.currentFiscalYearBudget) {
+                    budgetLine.currentFiscalYearBudget = 0;
+                }
+            });
             updateMaintenanceInfo({ value: currentBudget });
         }
     };
@@ -513,10 +525,12 @@ const AssignBudgets = ({
                                                     </Typography>
                                                     <TextField
                                                         type="number"
+                                                        defaultValue="0"
                                                         value={budgetAmount}
                                                         {...styles.budgetAmountTextField}
                                                         data-test-selector={`budgetAmountField_${index}`}
                                                         onChange={event => handleBudgetAmountChange(index, event)}
+                                                        onBlur={handleBudgetOnBlur}
                                                     />
                                                 </DataTableCell>
                                             </DataTableRow>

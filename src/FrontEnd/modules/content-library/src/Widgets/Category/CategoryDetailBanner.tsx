@@ -3,6 +3,7 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { HasCategoryContext, withCategory } from "@insite/client-framework/Components/CategoryContext";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { CategoryDetailsPageContext } from "@insite/content-library/Pages/CategoryDetailsPage";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import parse from "html-react-parser";
 import * as React from "react";
@@ -17,7 +18,7 @@ export const bannerStyles: CategoryDetailBannerStyles = {};
 
 const styles = bannerStyles;
 
-const CategoryDetailBanner: React.FC<Props> = ({ category }: Props) => {
+const CategoryDetailBanner = ({ category }: Props) => {
     if (!category || !category.htmlContent) {
         return null;
     }
@@ -30,6 +31,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Categories",
         icon: "Banner",
+        allowedContexts: [CategoryDetailsPageContext],
     },
 };
 

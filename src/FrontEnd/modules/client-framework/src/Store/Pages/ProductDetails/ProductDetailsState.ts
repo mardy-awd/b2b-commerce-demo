@@ -11,4 +11,5 @@ export default interface ProductDetailsState {
     variantSelectionCompleted: boolean;
     configurationSelection: SafeDictionary<string>;
     configurationCompleted: boolean;
+    isProductLoading?: boolean;
 }

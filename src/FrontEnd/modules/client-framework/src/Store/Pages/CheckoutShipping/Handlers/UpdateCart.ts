@@ -1,6 +1,7 @@
 import {
     ApiHandlerDiscreteParameter,
     createHandlerChainRunnerOptionalParameter,
+    Handler,
     HasOnSuccess,
 } from "@insite/client-framework/HandlerCreator";
 import {
@@ -20,15 +21,15 @@ import loadShipTo from "@insite/client-framework/Store/Data/ShipTos/Handlers/Loa
 import { getShipToState } from "@insite/client-framework/Store/Data/ShipTos/ShipTosSelectors";
 import { BaseAddressModel, BillToModel, ShipToModel } from "@insite/client-framework/Types/ApiModels";
 
-type HandlerType = ApiHandlerDiscreteParameter<
+type HandlerType = Handler<
     HasOnSuccess,
-    UpdateCartApiParameter,
-    CartResult,
     {
         shipTo?: ShipToModel;
         updatedBillTo?: BillToModel;
         updatedShipTo?: ShipToModel;
         cart: Cart;
+        apiParameter: UpdateCartApiParameter;
+        apiResult: CartResult;
     }
 >;
 
@@ -60,13 +61,13 @@ export const DispatchBeginUpdateCart: HandlerType = props => {
 
 export const PopulateCart: HandlerType = props => {
     const state = props.getState();
-    const { cartId } = state.pages.checkoutShipping;
+    const { cartId, editedCartNotes } = state.pages.checkoutShipping;
     const cart = cartId ? getCartState(state, cartId).value : getCurrentCartState(state).value;
     if (!cart) {
         throw new Error("There was no current cart available while trying to update the current cart.");
     }
 
-    const notes = state.pages.checkoutShipping.editedCartNotes || cart.notes;
+    const notes = typeof editedCartNotes === "undefined" ? cart.notes : editedCartNotes;
 
     props.cart = {
         ...cart,

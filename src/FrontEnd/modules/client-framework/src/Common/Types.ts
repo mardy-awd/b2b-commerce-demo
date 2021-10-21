@@ -18,3 +18,5 @@ export function getValueCaseInsensitive<T>(dictionary: SafeDictionary<T>, key: s
 
     return lowerCasedDictionary[key.toLowerCase()];
 }
+
+export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };

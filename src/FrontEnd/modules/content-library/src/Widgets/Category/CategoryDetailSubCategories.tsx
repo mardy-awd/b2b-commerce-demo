@@ -3,6 +3,7 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCategoryState } from "@insite/client-framework/Store/Data/Categories/CategoriesSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { CategoryDetailsPageContext } from "@insite/content-library/Pages/CategoryDetailsPage";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -11,7 +12,6 @@ import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import breakpointMediaQueries from "@insite/mobius/utilities/breakpointMediaQueries";
 import * as React from "react";
-import { useContext } from "react";
 import { connect } from "react-redux";
 import { css } from "styled-components";
 
@@ -102,18 +102,14 @@ export const categoryDetailSubCategoriesStyles: CategoryDetailSubCategoriesStyle
 
 const styles = categoryDetailSubCategoriesStyles;
 
-const CategoryDetailSubCategories: React.FC<Props> = props => {
-    if (!props.category || !props.category.subCategoryIds || props.category.subCategoryIds.length === 0) {
+const CategoryDetailSubCategories = ({ category, fields: { showImages } }: Props) => {
+    if (!category || !category.subCategoryIds || category.subCategoryIds.length === 0) {
         return null;
     }
 
-    const {
-        fields: { showImages },
-    } = props;
-
     return (
         <GridContainer {...styles.container}>
-            {props.category.subCategoryIds.map(subCategoryId => (
+            {category.subCategoryIds.map(subCategoryId => (
                 <GridItem key={subCategoryId} {...styles.subCategoryItem}>
                     <SubCategoryLink categoryId={subCategoryId} showImages={showImages} />
                 </GridItem>
@@ -179,6 +175,7 @@ const widgetModule: WidgetModule = {
                 sortOrder: 1,
             },
         ],
+        allowedContexts: [CategoryDetailsPageContext],
     },
 };
 

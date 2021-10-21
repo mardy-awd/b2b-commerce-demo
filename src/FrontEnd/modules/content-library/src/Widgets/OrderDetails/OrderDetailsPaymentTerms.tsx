@@ -37,7 +37,7 @@ const OrderDetailsPaymentTerms = () => {
 
     return (
         <StyledWrapper {...styles.wrapper}>
-            <Typography as="h2" {...styles.titleText}>
+            <Typography as="h3" {...styles.titleText}>
                 {translate("Terms")}
             </Typography>
             <Typography {...styles.termsText}>{order.terms}</Typography>

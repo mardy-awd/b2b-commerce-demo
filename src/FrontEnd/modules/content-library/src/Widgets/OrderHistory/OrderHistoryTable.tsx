@@ -29,11 +29,23 @@ import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
 const enum fields {
+    showOrderNumber = "showOrderNumber",
+    showDate = "showDate",
+    showOrderTotal = "showOrderTotal",
+    showStatus = "showStatus",
+    showShipTo = "showShipTo",
+    showPONumber = "showPONumber",
     showReorderProducts = "showReorderProducts",
 }
 
 interface OwnProps extends WidgetProps {
     fields: {
+        [fields.showOrderNumber]: boolean;
+        [fields.showDate]: boolean;
+        [fields.showOrderTotal]: boolean;
+        [fields.showStatus]: boolean;
+        [fields.showShipTo]: boolean;
+        [fields.showPONumber]: boolean;
         [fields.showReorderProducts]: boolean;
     };
 }
@@ -177,6 +189,17 @@ class OrderHistoryTable extends React.Component<Props> {
         return sorted as SortOrderOptions;
     };
 
+    reorderClick = (orderNumber: string, linkOrderNumber: string) =>
+        this.props.reorder({
+            orderNumber,
+            onSuccess: () => this.onReorderSuccess(orderNumber, linkOrderNumber),
+            onComplete(resultProps) {
+                if (resultProps.apiResult) {
+                    this.onSuccess?.();
+                }
+            },
+        });
+
     onReorderSuccess = (orderNumber: string, linkOrderNumber: string) => {
         if (!this.props.showAddToCartConfirmationDialog) {
             return;
@@ -235,47 +258,69 @@ class OrderHistoryTable extends React.Component<Props> {
             };
         });
 
+        const {
+            showOrderNumber,
+            showDate,
+            showOrderTotal,
+            showStatus,
+            showShipTo,
+            showPONumber,
+            showReorderProducts,
+        } = this.props.fields;
+
+        const isTrueOrUndefined = (value?: boolean) => value === true || value === undefined;
+
         return (
             <StyledWrapper {...styles.container} data-test-selector="orderHistoryTable">
                 <DataTable {...styles.dataTable}>
                     <DataTableHead>
-                        <DataTableHeader
-                            {...styles.orderNumberHeader}
-                            title={translate("Order Number")}
-                            sorted={this.sorted("webOrderNumber")}
-                            onSortClick={() => this.headerClick("webOrderNumber")}
-                        >
-                            {translate("Order #", "webOrderNumber")}
-                        </DataTableHeader>
-                        <DataTableHeader
-                            {...styles.orderDateHeader}
-                            sorted={this.sorted("orderDate")}
-                            onSortClick={() => this.headerClick("orderDate")}
-                        >
-                            {translate("Date", "orderDate")}
-                        </DataTableHeader>
-                        <DataTableHeader
-                            {...styles.orderTotalHeader}
-                            sorted={this.sorted("orderTotal")}
-                            onSortClick={() => this.headerClick("orderTotal")}
-                        >
-                            {translate("Order Total", "orderTotal")}
-                        </DataTableHeader>
-                        <DataTableHeader
-                            {...styles.statusHeader}
-                            sorted={this.sorted("status")}
-                            onSortClick={() => this.headerClick("status")}
-                        >
-                            {translate("Status", "status")}
-                        </DataTableHeader>
-                        <DataTableHeader
-                            {...styles.shipToHeader}
-                            sorted={this.sorted("stCompanyName")}
-                            onSortClick={() => this.headerClick("stCompanyName")}
-                        >
-                            {translate("Ship To / Pick Up", "stCompanyName")}
-                        </DataTableHeader>
-                        {this.props.showPoNumber && (
+                        {isTrueOrUndefined(showOrderNumber) && (
+                            <DataTableHeader
+                                {...styles.orderNumberHeader}
+                                title={translate("Order Number")}
+                                sorted={this.sorted("webOrderNumber")}
+                                onSortClick={() => this.headerClick("webOrderNumber")}
+                            >
+                                {translate("Order #", "webOrderNumber")}
+                            </DataTableHeader>
+                        )}
+                        {isTrueOrUndefined(showDate) && (
+                            <DataTableHeader
+                                {...styles.orderDateHeader}
+                                sorted={this.sorted("orderDate")}
+                                onSortClick={() => this.headerClick("orderDate")}
+                            >
+                                {translate("Date", "orderDate")}
+                            </DataTableHeader>
+                        )}
+                        {isTrueOrUndefined(showOrderTotal) && (
+                            <DataTableHeader
+                                {...styles.orderTotalHeader}
+                                sorted={this.sorted("orderTotal")}
+                                onSortClick={() => this.headerClick("orderTotal")}
+                            >
+                                {translate("Order Total", "orderTotal")}
+                            </DataTableHeader>
+                        )}
+                        {isTrueOrUndefined(showStatus) && (
+                            <DataTableHeader
+                                {...styles.statusHeader}
+                                sorted={this.sorted("status")}
+                                onSortClick={() => this.headerClick("status")}
+                            >
+                                {translate("Status", "status")}
+                            </DataTableHeader>
+                        )}
+                        {isTrueOrUndefined(showShipTo) && (
+                            <DataTableHeader
+                                {...styles.shipToHeader}
+                                sorted={this.sorted("stCompanyName")}
+                                onSortClick={() => this.headerClick("stCompanyName")}
+                            >
+                                {translate("Ship To / Pick Up", "stCompanyName")}
+                            </DataTableHeader>
+                        )}
+                        {isTrueOrUndefined(showPONumber) && this.props.showPoNumber && (
                             <DataTableHeader
                                 {...styles.customerPOHeader}
                                 title={translate("Purchase Order Number")}
@@ -285,57 +330,55 @@ class OrderHistoryTable extends React.Component<Props> {
                                 {translate("PO #", "customerPO")}
                             </DataTableHeader>
                         )}
-                        {this.props.fields.showReorderProducts && (
+                        {isTrueOrUndefined(showReorderProducts) && (
                             <DataTableHeader {...styles.reorderHeader} title={translate("Reorder")} />
                         )}
                     </DataTableHead>
                     <DataTableBody data-test-selector="orderHistoryTable_tableBody">
                         {rows.map(({ id, linkOrderNumber, date, orderNumber, shipTo, status, po, total }) => (
                             <DataTableRow key={id}>
-                                <DataTableCell
-                                    {...styles.orderNumberCells}
-                                    data-test-selector="orderHistoryTable_tableCell_orderNumber"
-                                >
-                                    <OrderDetailPageTypeLink title={orderNumber} orderNumber={linkOrderNumber} />
-                                </DataTableCell>
-                                <DataTableCell
-                                    {...styles.orderDateCells}
-                                    data-test-selector="orderHistoryTable_tableCell_date"
-                                >
-                                    {date}
-                                </DataTableCell>
-                                <DataTableCell {...styles.orderTotalCells}>{total}</DataTableCell>
-                                <DataTableCell
-                                    {...styles.statusCells}
-                                    data-test-selector="orderHistoryTable_tableCell_status"
-                                >
-                                    {status}
-                                </DataTableCell>
-                                <DataTableCell {...styles.shipToCells}>{shipTo}</DataTableCell>
-                                {this.props.showPoNumber && (
+                                {isTrueOrUndefined(showOrderNumber) && (
+                                    <DataTableCell
+                                        {...styles.orderNumberCells}
+                                        data-test-selector="orderHistoryTable_tableCell_orderNumber"
+                                    >
+                                        <OrderDetailPageTypeLink title={orderNumber} orderNumber={linkOrderNumber} />
+                                    </DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showDate) && (
+                                    <DataTableCell
+                                        {...styles.orderDateCells}
+                                        data-test-selector="orderHistoryTable_tableCell_date"
+                                    >
+                                        {date}
+                                    </DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showOrderTotal) && (
+                                    <DataTableCell {...styles.orderTotalCells}>{total}</DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showStatus) && (
+                                    <DataTableCell
+                                        {...styles.statusCells}
+                                        data-test-selector="orderHistoryTable_tableCell_status"
+                                    >
+                                        {status}
+                                    </DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showShipTo) && (
+                                    <DataTableCell {...styles.shipToCells}>{shipTo}</DataTableCell>
+                                )}
+                                {isTrueOrUndefined(showPONumber) && this.props.showPoNumber && (
                                     <DataTableCell {...styles.customerPOCells}>{po}</DataTableCell>
                                 )}
-                                {this.props.fields.showReorderProducts && (
+                                {isTrueOrUndefined(showReorderProducts) && (
                                     <DataTableCell {...styles.reorderCells}>
-                                        {this.props.isReordering[orderNumber] && (
+                                        {this.props.isReordering[orderNumber] ? (
                                             <LoadingSpinner {...styles.reorderButtonSpinner} />
-                                        )}
-                                        {!this.props.isReordering[orderNumber] && (
+                                        ) : (
                                             <Button
                                                 disabled={Object.keys(this.props.isReordering).length > 0}
                                                 {...styles.reorderButton}
-                                                onClick={() =>
-                                                    this.props.reorder({
-                                                        orderNumber,
-                                                        onSuccess: () =>
-                                                            this.onReorderSuccess(orderNumber, linkOrderNumber),
-                                                        onComplete(resultProps) {
-                                                            if (resultProps.apiResult) {
-                                                                this.onSuccess?.();
-                                                            }
-                                                        },
-                                                    })
-                                                }
+                                                onClick={() => this.reorderClick(orderNumber, linkOrderNumber)}
                                             >
                                                 {translate("Reorder")}
                                             </Button>
@@ -359,10 +402,61 @@ const widgetModule: WidgetModule = {
         allowedContexts: [OrderHistoryPageContext],
         fieldDefinitions: [
             {
-                name: fields.showReorderProducts,
+                name: fields.showOrderNumber,
+                displayName: "Order #",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                isEnabled: () => false,
+                fieldType: "General",
+                sortOrder: 0,
+            },
+            {
+                name: fields.showDate,
+                displayName: "Date",
                 editorTemplate: "CheckboxField",
                 defaultValue: true,
                 fieldType: "General",
+                sortOrder: 1,
+            },
+            {
+                name: fields.showOrderTotal,
+                displayName: "Order Total",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 2,
+            },
+            {
+                name: fields.showStatus,
+                displayName: "Status",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 3,
+            },
+            {
+                name: fields.showShipTo,
+                displayName: "Ship To/Pick Up",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 4,
+            },
+            {
+                name: fields.showPONumber,
+                displayName: "PO #",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 5,
+            },
+            {
+                name: fields.showReorderProducts,
+                displayName: "Reorder",
+                editorTemplate: "CheckboxField",
+                defaultValue: true,
+                fieldType: "General",
+                sortOrder: 6,
             },
         ],
     },

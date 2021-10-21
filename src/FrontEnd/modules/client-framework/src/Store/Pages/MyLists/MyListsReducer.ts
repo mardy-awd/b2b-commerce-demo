@@ -5,7 +5,7 @@ import MyListsState from "@insite/client-framework/Store/Pages/MyLists/MyListsSt
 import { Draft } from "immer";
 
 const initialState: MyListsState = {
-    getWishListsParameter: { page: 1, pageSize: 8, expand: ["top3products"], sort: "ModifiedOn DESC" },
+    getWishListsParameter: { page: 1, expand: ["top3products"], sort: "ModifiedOn DESC" },
 };
 
 const reducer = {

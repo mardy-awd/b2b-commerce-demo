@@ -4,22 +4,27 @@ import AccountCollectionModel = Insite.Account.WebApi.V1.ApiModels.AccountCollec
 import ExternalProviderLinkCollectionModel = Insite.IdentityServer.Models.ExternalProviderLinkCollectionModel;
 import AccountPaymentProfileModel = Insite.Account.WebApi.V1.ApiModels.AccountPaymentProfileModel;
 import AccountPaymentProfileCollectionModel = Insite.Account.WebApi.V1.ApiModels.AccountPaymentProfileCollectionModel;
+import VmiUserModel = Insite.Account.WebApi.V1.ApiModels.VmiUserModel;
 
 module insite.account {
     "use strict";
 
+    import VmiUserImportCollectionModel = Insite.Account.WebApi.V1.ApiModels.VmiUserImportCollectionModel;
+
     export interface IAccountService {
         expand: string;
         getAccountSettings(): ng.IPromise<AccountSettingsModel>;
-        getAccounts(searchText?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string): ng.IPromise<AccountCollectionModel>;
+        getAccounts(searchText?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string, roles?: string[], userNames?: string[]): ng.IPromise<AccountCollectionModel>;
         getAccount(accountId?: System.Guid): ng.IPromise<AccountModel>;
         getExternalProviders(): ng.IPromise<ExternalProviderLinkCollectionModel>;
         createAccount(account: AccountModel): ng.IPromise<AccountModel>;
         updateAccount(account: AccountModel, accountId?: System.Guid): ng.IPromise<AccountModel>;
+        updateVmiUser(vmiUser: VmiUserModel): ng.IPromise<VmiUserModel>;
         getPaymentProfiles(): ng.IPromise<AccountPaymentProfileCollectionModel>;
         addPaymentProfile(paymentProfile: AccountPaymentProfileModel): ng.IPromise<AccountPaymentProfileModel>;
         updatePaymentProfile(paymentProfileId: System.Guid, paymentProfile: AccountPaymentProfileModel): ng.IPromise<AccountPaymentProfileModel>;
         deletePaymentProfiles(paymentProfileId: System.Guid): ng.IPromise<void>;
+        importVmiUsers(vmiUserImportCollection: VmiUserImportCollectionModel): ng.IPromise<VmiUserImportCollectionModel>;
     }
 
     export class AccountService {
@@ -50,19 +55,21 @@ module insite.account {
         protected getAccountSettingsFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
         }
 
-        getAccounts(searchText?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string): ng.IPromise<AccountCollectionModel> {
+        getAccounts(searchText?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string, roles?: string[], userNames?: string[]): ng.IPromise<AccountCollectionModel> {
             return this.httpWrapperService.executeHttpRequest(
                 this,
-                this.$http({ url: this.serviceUri, method: "GET", params: this.getAccountsParams(searchText, pagination, sort) }),
+                this.$http({ url: this.serviceUri, method: "GET", params: this.getAccountsParams(searchText, pagination, sort, roles, userNames) }),
                 this.getAccountsCompleted,
                 this.getAccountsFailed
             );
         }
 
-        protected getAccountsParams(searchText?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string): any {
+        protected getAccountsParams(searchText?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string, roles?: string[], userNames?: string[]): any {
             const params = {
                 searchText: searchText,
-                sort: sort
+                sort: sort,
+                roles: roles,
+                userNames: userNames
             } as any;
 
             if (this.expand) {
@@ -147,6 +154,21 @@ module insite.account {
         protected updateAccountFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
         }
 
+        updateVmiUser(vmiUser: VmiUserModel): ng.IPromise<VmiUserModel> {
+            return this.httpWrapperService.executeHttpRequest(
+                this,
+                this.$http({ method: "PATCH", url: `${this.serviceUri}/vmi/${vmiUser.userId}`, data: vmiUser }),
+                this.updateVmiUserCompleted,
+                this.updateVmiUserFailed
+            );
+        }
+
+        protected updateVmiUserCompleted(response: ng.IHttpPromiseCallbackArg<VmiUserModel>): void {
+        }
+
+        protected updateVmiUserFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
+        }
+
         getPaymentProfiles(expand?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string): ng.IPromise<AccountPaymentProfileCollectionModel> {
             return this.httpWrapperService.executeHttpRequest(
                 this,
@@ -222,6 +244,21 @@ module insite.account {
         }
 
         protected deletePaymentProfileFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
+        }
+
+        importVmiUsers(vmiUserImportCollection: VmiUserImportCollectionModel): ng.IPromise<VmiUserImportCollectionModel>{
+            return this.httpWrapperService.executeHttpRequest(
+                this,
+                this.$http({ url: `${this.serviceUri}/vmi/import`, method: "POST", data: vmiUserImportCollection }),
+                this.importVmiUsersCompleted,
+                this.importVmiUsersFailed
+            );
+        }
+
+        protected importVmiUsersCompleted(response: ng.IHttpPromiseCallbackArg<VmiUserImportCollectionModel>): void {
+        }
+
+        protected importVmiUsersFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
         }
     }
 

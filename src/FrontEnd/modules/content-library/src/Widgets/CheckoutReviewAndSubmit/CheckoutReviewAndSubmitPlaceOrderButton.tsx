@@ -1,6 +1,10 @@
 /* eslint-disable spire/export-styles */
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import {
+    getCartState,
+    getCurrentCartState,
+    hasProductsWithInvalidPrice,
+} from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import translate from "@insite/client-framework/Translate";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import React, { FC } from "react";
@@ -18,6 +22,7 @@ const mapStateToProps = (state: ApplicationState) => {
             cartState.isLoading ||
             isPlacingOrder ||
             isCheckingOutWithPayPay ||
+            hasProductsWithInvalidPrice(cartState.value) ||
             cartState.value?.hasInsufficientInventory === true,
     };
 };

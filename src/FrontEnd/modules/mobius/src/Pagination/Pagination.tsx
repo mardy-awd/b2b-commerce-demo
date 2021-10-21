@@ -54,7 +54,7 @@ export type PaginationComponentProps = MobiusStyledComponentProps<
         /** String describing the "results per page" select */
         resultsPerPageLabel?: string;
         /** OnChange function passed to the select component governing the number of results per page. Receives the event as an argument. */
-        onChangeResultsPerPage: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+        onChangeResultsPerPage: (event: React.ChangeEvent<HTMLSelectElement>, resultsPerPage: number) => void;
         /** Function to build href passed to each button in the pagination button/link list. Receives the page index as an argument. */
         createHref?: (page: number) => void;
         /** OnChange function passed to each button in the pagination button/link list. Receives the page index as an argument. */
@@ -176,11 +176,12 @@ const Pagination: React.FC<PaginationProps> = withTheme(props => {
     const resultsPerPage = convertToNumberIfString(possibleStringResultsPerPage);
 
     const changeResultsPerPage = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = event.currentTarget.value;
         if (pageSizeCookie) {
-            setCookie(pageSizeCookie, event.currentTarget.value);
+            setCookie(pageSizeCookie, value);
         }
 
-        onChangeResultsPerPage(event);
+        onChangeResultsPerPage(event, parseInt(value, 10));
     };
 
     const { spreadProps, applyProp } = applyPropBuilder(otherProps, { component: "pagination" });

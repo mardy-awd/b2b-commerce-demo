@@ -54,6 +54,7 @@ module insite.cart {
         ppTokenExIframe: any;
         ppTokenExIframeIsLoaded: boolean;
         ppIsInvalidSecurityCode: boolean;
+        hasInvalidPrice = false;
 
         static $inject = [
             "$http",
@@ -276,6 +277,8 @@ module insite.cart {
             if (isInit) {
                 this.showQuoteRequiredProducts = this.cart.status !== "Cart";
             }
+
+            this.hasInvalidPrice = cart.cartLines.some(o => !o.isPromotionItem && !o.allowZeroPricing && o.pricing.unitNetPrice === 0 && o.pricing.unitRegularPrice === 0);
 
             this.cartIdParam = this.cart.id === "current" ? "" : `?cartId=${this.cart.id}`;
 

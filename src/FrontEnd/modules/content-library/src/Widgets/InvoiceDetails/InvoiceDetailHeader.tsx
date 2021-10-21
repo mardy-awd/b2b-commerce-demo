@@ -36,9 +36,6 @@ export interface InvoiceDetailHeaderStyles {
 export const headerStyles: InvoiceDetailHeaderStyles = {
     shareEntityButtonStyles: {
         button: {
-            css: css`
-                margin-left: 10px;
-            `,
             buttonType: "outline",
             variant: "secondary",
         },
@@ -46,6 +43,9 @@ export const headerStyles: InvoiceDetailHeaderStyles = {
     printButton: {
         buttonType: "outline",
         variant: "secondary",
+        css: css`
+            margin-left: 10px;
+        `,
     },
     buttonGridItem: {
         css: css`
@@ -87,13 +87,6 @@ const InvoiceDetailHeader: FC<WidgetProps> = ({ fields }) => {
             <GridItem {...styles.buttonGridItem}>
                 <Hidden {...styles.menuHiddenContainer}>
                     <OverflowMenu hasChildPortal position="end" {...styles.narrowOverflowMenu}>
-                        <Clickable
-                            {...styles.printClickable}
-                            onClick={openPrintDialog}
-                            data-test-selector="invoiceDetails_print"
-                        >
-                            {printLabel}
-                        </Clickable>
                         <ShareEntityButton
                             entityId={invoice.invoiceNumber}
                             variant="clickable"
@@ -101,18 +94,25 @@ const InvoiceDetailHeader: FC<WidgetProps> = ({ fields }) => {
                             extendedStyles={styles.shareEntityButtonStyles}
                             generateAttachmentFromWebpage={resolvedGenerateEmailAttachmentFromWebpage}
                         />
+                        <Clickable
+                            {...styles.printClickable}
+                            onClick={openPrintDialog}
+                            data-test-selector="invoiceDetails_print"
+                        >
+                            {printLabel}
+                        </Clickable>
                     </OverflowMenu>
                 </Hidden>
                 <Hidden {...styles.buttonsHiddenContainer}>
-                    <Button {...styles.printButton} onClick={openPrintDialog} data-test-selector="invoiceDetails_print">
-                        {printLabel}
-                    </Button>
                     <ShareEntityButton
                         entityId={invoice.invoiceNumber}
                         entityName="Invoice"
                         extendedStyles={styles.shareEntityButtonStyles}
                         generateAttachmentFromWebpage={resolvedGenerateEmailAttachmentFromWebpage}
                     />
+                    <Button {...styles.printButton} onClick={openPrintDialog} data-test-selector="invoiceDetails_print">
+                        {printLabel}
+                    </Button>
                 </Hidden>
             </GridItem>
         </GridContainer>

@@ -173,6 +173,7 @@ export const savePage = (
                 state.pageTree.treeNodesByParentId,
                 state.pageTree.headerTreeNodesByParentId,
                 state.pageTree.footerTreeNodesByParentId,
+                state.pageTree.mobileTreeNodesByParentId,
             );
 
             if (pageState?.isVariant || pageState?.isRootVariant) {
@@ -265,6 +266,7 @@ export const doneEditingItem = (): ShellThunkAction => (dispatch, getState) => {
             state.pageTree.treeNodesByParentId,
             state.pageTree.headerTreeNodesByParentId,
             state.pageTree.footerTreeNodesByParentId,
+            state.pageTree.mobileTreeNodesByParentId,
         );
         isVariant = !!pageState?.isVariant;
     }

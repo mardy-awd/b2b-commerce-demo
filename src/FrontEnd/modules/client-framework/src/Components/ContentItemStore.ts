@@ -1,4 +1,6 @@
 import { Dictionary } from "@insite/client-framework/Common/Types";
+import * as WebCrawler from "@insite/client-framework/Common/WebCrawler";
+import AsyncComponent from "@insite/client-framework/Components/AsyncComponent";
 import MissingComponent from "@insite/client-framework/Components/MissingComponent";
 import logger from "@insite/client-framework/Logger";
 import { nullPage } from "@insite/client-framework/Store/Data/Pages/PagesState";
@@ -10,7 +12,7 @@ import * as React from "react";
 
 type RequireContext = __WebpackModuleApi.RequireContext;
 
-interface FoundModule<T extends WidgetModule | PageModule> {
+export interface FoundModule<T extends WidgetModule | PageModule> {
     /** The default export is expected to be the component itself. */
     readonly default?: T;
 }
@@ -23,54 +25,52 @@ const pageComponents: Dictionary<React.ComponentType<HasFields>> = {};
  */
 export const pageDefinitions: Dictionary<PageDefinition> = {};
 
+export function registerPageModule(module: FoundModule<PageModule>, type: string) {
+    pageComponents[type] = module.default!.component;
+    pageDefinitions[type] = module.default!.definition;
+}
+
 function loadPages(foundItems: RequireContext) {
-    loadItems(foundItems, "Page", (component: FoundModule<PageModule>, type: string) => {
-        pageComponents[type] = component.default!.component;
-        pageDefinitions[type] = component.default!.definition;
-    });
+    loadItems(foundItems, "Page", registerPageModule);
+}
+
+export function registerWidgetModule(module: FoundModule<WidgetModule>, type: string) {
+    widgetComponents[type] = module.default!.component;
+    widgetDefinitions[type] = module.default!.definition;
 }
 
 function loadWidgets(foundItems: RequireContext) {
-    loadItems(foundItems, "Widget", (component: FoundModule<WidgetModule>, type: string) => {
-        widgetComponents[type] = component.default!.component;
-        widgetDefinitions[type] = component.default!.definition;
-    });
+    loadItems(foundItems, "Widget", registerWidgetModule);
 }
 
 function loadItems<T extends FoundModule<PageModule | WidgetModule>>(
     foundItems: RequireContext,
     itemType: string,
-    action: (component: T, type: string) => void,
+    action: (module: T, type: string) => void,
 ) {
     for (const foundItemKey of foundItems.keys()) {
-        if (foundItemKey.includes(".test.") || foundItemKey.includes("TestRendering/helpers.tsx")) {
-            continue;
-        }
-
         const type = foundItemKey.replace("./", "").replace(".tsx", "");
-        const component = foundItems<T>(foundItemKey);
+        const module = foundItems<T>(foundItemKey);
 
-        if (!component.default) {
+        if (!module.default) {
             continue;
         }
 
-        if (!component.default.component && component.default.definition) {
+        if (!module.default.component && module.default.definition) {
             logger.error(
                 `The ${itemType} at '${foundItemKey}' did not properly export a ${itemType}Module. It is missing a component property.`,
             );
             continue;
         }
 
-        if (component.default.component && !component.default.definition) {
+        if (module.default.component && !module.default.definition) {
             logger.error(
                 `The ${itemType} at '${foundItemKey}' did not properly export a ${itemType}Module. It is missing a definition property.`,
             );
             continue;
         }
 
-        if (component.default.component && component.default.definition) {
-            action(component, type);
-        }
+        action(module, type);
     }
 }
 
@@ -128,21 +128,6 @@ export function addPagesFromContext(pages: RequireContext) {
     return onHotPageReplace;
 }
 
-const widgets = require.context("../../../content-library/src/Widgets", true, /\.tsx$/);
-const onHotWidgetReplace = addWidgetsFromContext(widgets);
-
-const pages = require.context("../../../content-library/src/Pages", true, /\.tsx$/);
-const onHotPageReplace = addPagesFromContext(pages);
-
-if (module.hot) {
-    module.hot.accept(widgets.id, () =>
-        onHotWidgetReplace(require.context("../../../content-library/src/Widgets", true, /\.tsx$/)),
-    );
-    module.hot.accept(pages.id, () =>
-        onHotPageReplace(require.context("../../../content-library/src/Pages", true, /\.tsx$/)),
-    );
-}
-
 export function createPageElement(type: string, props: HasFields) {
     if (type === nullPage.type) {
         return null;
@@ -157,7 +142,7 @@ export function createPageElement(type: string, props: HasFields) {
 
 export function createWidgetElement(type: string, props: HasFields) {
     if (!widgetComponents[type]) {
-        return React.createElement(MissingComponent, { type, isWidget: true });
+        return React.createElement(AsyncComponent, { type, isWidget: true, ...props });
     }
 
     return React.createElement(widgetComponents[type], props);
@@ -200,18 +185,23 @@ export function getThePageDefinitions(): Dictionary<PageDefinition> {
     return pageDefinitions;
 }
 
-let isWebCrawler: boolean;
-
+/**
+ * @deprecated Use Webcrawler.setIsWebCrawler instead.
+ */
 export function setIsWebCrawler(value: boolean) {
-    isWebCrawler = value;
+    WebCrawler.setIsWebCrawler(value);
 }
 
+/**
+ * @deprecated Use Webcrawler.getIsWebCrawler instead.
+ */
 export function getIsWebCrawler() {
-    return isWebCrawler;
+    return WebCrawler.getIsWebCrawler();
 }
 
+/**
+ * @deprecated Use Webcrawler.checkIsWebCrawler instead.
+ */
 export function checkIsWebCrawler(userAgent: string): boolean {
-    const botString = /bot|crawler|baiduspider|80legs|ia_archiver|voyager|curl|wget|yahoo! slurp|mediapartners-google/;
-    const regExp = new RegExp(botString, "i");
-    return regExp.test(userAgent);
+    return WebCrawler.checkIsWebCrawler(userAgent);
 }

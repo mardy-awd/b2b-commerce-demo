@@ -19,7 +19,7 @@ type HandlerType = ApiHandlerDiscreteParameter<
 export const PopulateApiParameter: HandlerType = props => {
     const state = props.getState();
     const dealerState = getDealerState(state, props.parameter.dealerId);
-    if (!dealerState.value) {
+    if (!dealerState.value && !dealerState.isLoading) {
         props.apiParameter = { id: props.parameter.dealerId };
     }
 };

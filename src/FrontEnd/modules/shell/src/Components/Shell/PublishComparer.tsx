@@ -26,6 +26,7 @@ const mapStateToProps = (state: ShellState) => {
     const {
         publishModal: { pagePublishInfosState },
         compareModal: { compareVersions, publishedPageVersions, isSideBySide, isShowingLeftSide },
+        shellContext: { mobileCmsModeActive },
     } = state;
 
     const pageId = compareVersions?.pageId || getCurrentPage(state).id;
@@ -44,6 +45,7 @@ const mapStateToProps = (state: ShellState) => {
         publishedPageVersions,
         isSideBySide,
         isShowingLeftSide,
+        mobileCmsModeActive,
     };
 };
 
@@ -212,6 +214,7 @@ class PublishComparer extends React.Component<Props, State> {
             publishedPageVersions,
             isSideBySide,
             isShowingLeftSide,
+            mobileCmsModeActive,
         } = this.props;
 
         if (!compareVersions || !publishedPageVersions) {
@@ -252,7 +255,8 @@ class PublishComparer extends React.Component<Props, State> {
                 (!unpublished && rightVersion.versionId !== currentPublished.versionId));
 
         const forcedContext = `&languageId=${languageId}&deviceType=${deviceType}&personaId=${personaId}`;
-        const skipHeaderFooter = pageType === "Header" || pageType === "Footer" ? "&skipHeaderFooter=true" : "";
+        const skipHeaderFooter =
+            pageType === "Header" || pageType === "Footer" || mobileCmsModeActive ? "&skipHeaderFooter=true" : "";
 
         return (
             <FullScreenModal data-test-selector="publishCompareModal">
@@ -458,6 +462,7 @@ const FullScreenModal = styled.div`
     height: 100vh;
     display: flex;
     flex-direction: column;
+    z-index: 3;
 `;
 
 const VersionsHeader = styled.div<{ isSideBySide: boolean }>`
@@ -472,6 +477,7 @@ const PreviewRow = styled.div<{ isSideBySide: boolean }>`
     display: flex;
     flex-direction: row;
     height: 100%;
+    background-color: white;
 
     > div {
         width: ${props => (props.isSideBySide ? "50%" : "100%")};

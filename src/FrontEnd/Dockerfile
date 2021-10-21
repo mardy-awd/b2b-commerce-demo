@@ -74,6 +74,7 @@ COPY ./modules/ ./modules/
 # Tests, ESLint and Stylelint results don't vary by extension path but require all code to be present.
 RUN ["npm", "test"]
 RUN ["npm", "run", "eslint"]
+RUN ["npm", "run", "prettier:check"]
 RUN ["npm", "run", "stylelint"]
 
 # Copy this to get creators and other static files into the base build image.

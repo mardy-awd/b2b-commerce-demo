@@ -22,6 +22,9 @@ export interface ProductDetailsPageTitleStyles {
 export const pageTitleStyles: ProductDetailsPageTitleStyles = {
     container: {
         gap: 0,
+        offsetCss: css`
+            max-width: 100%;
+        `,
     },
     brandGridItem: {
         width: 12,

@@ -10,6 +10,12 @@ import {
 
 type HandlerType = ApiHandlerDiscreteParameter<{}, GetCurrentWebsiteApiParameter, Website>;
 
+export const DispatchBeginLoadCurrentWebsite: HandlerType = props => {
+    props.dispatch({
+        type: "Context/BeginLoadWebsite",
+    });
+};
+
 export const PopulateApiParameter: HandlerType = props => {
     props.apiParameter = {
         expand: ["languages", "currencies"],
@@ -27,7 +33,12 @@ export const DispatchCompleteLoadCurrentWebsite: HandlerType = props => {
     });
 };
 
-export const chain = [PopulateApiParameter, RequestDataFromApi, DispatchCompleteLoadCurrentWebsite];
+export const chain = [
+    DispatchBeginLoadCurrentWebsite,
+    PopulateApiParameter,
+    RequestDataFromApi,
+    DispatchCompleteLoadCurrentWebsite,
+];
 
 const loadCurrentWebsite = createHandlerChainRunnerOptionalParameter(chain, {}, "LoadCurrentWebsite");
 export default loadCurrentWebsite;

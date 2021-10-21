@@ -79,6 +79,7 @@
             "deleteListPopupService",
             "copyToListPopupService",
             "listQuantityAdjustmentPopupService",
+            "invalidPricePopupService",
         ];
 
         constructor(
@@ -105,7 +106,8 @@
             protected createListPopupService: ICreateListPopupService,
             protected deleteListPopupService: IDeleteListPopupService,
             protected copyToListPopupService: ICopyToListPopupService,
-            protected listQuantityAdjustmentPopupService: IListQuantityAdjustmentPopupService) {
+            protected listQuantityAdjustmentPopupService: IListQuantityAdjustmentPopupService,
+            protected invalidPricePopupService: cart.IInvalidPricePopupService) {
         }
 
         $onInit(): void {
@@ -706,15 +708,22 @@
         }
 
         addSelectedToCart(): void {
-            let lines = [];
+            let selectedLines = [];
             for (let i = 0; i < this.listModel.wishListLineCollection.length; i++) {
                 if (this.listModel.wishListLineCollection[i].canAddToCart &&
                     this.checkStorage[this.listModel.wishListLineCollection[i].id.toString()]) {
-                    lines.push(this.listModel.wishListLineCollection[i]);
+                    selectedLines.push(this.listModel.wishListLineCollection[i]);
                 }
             }
 
-            this.cartService.addLineCollection(lines, true).then(
+            const linesToAdd = selectedLines.filter(o => o.allowZeroPricing || o.pricing.unitNetPrice !== 0);
+
+            if (linesToAdd.length === 0) {
+                this.invalidPricePopupService.display({});
+                return;
+            }
+
+            this.cartService.addLineCollection(selectedLines, true, true, linesToAdd.length !== selectedLines.length).then(
                 (cartLineCollection: CartLineCollectionModel) => {
                     this.addLineCollectionCompleted(cartLineCollection);
                 },

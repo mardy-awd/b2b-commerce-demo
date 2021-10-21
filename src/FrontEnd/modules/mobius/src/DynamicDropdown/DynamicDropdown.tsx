@@ -201,7 +201,15 @@ const SelectedText = styled(Typography as any)<SizeVariant>`
     left: 0;
     white-space: nowrap;
     overflow: hidden;
-    width: 100%;
+    width: calc(100% - 32px);
+    text-overflow: ellipsis;
+    ${injectCss}
+`;
+
+const PopoverTriggerInput = styled.input`
+    &&&& {
+        padding-right: 30px;
+    }
     ${injectCss}
 `;
 
@@ -556,7 +564,7 @@ class DynamicDropdown extends React.Component<DynamicDropdownProps & HasDisabler
         }
 
         const popoverTrigger = (
-            <input
+            <PopoverTriggerInput
                 id={uid}
                 type="text"
                 role="searchbox"

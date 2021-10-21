@@ -26,6 +26,7 @@ import TextField, { TextFieldProps } from "@insite/mobius/TextField";
 import Typography, { TypographyPresentationProps, TypographyProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
+import { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -38,6 +39,7 @@ const mapStateToProps = (state: ApplicationState) => {
         language: session.language,
         getVmiOrdersParameter: state.pages.vmiLocationDetails.getVmiOrdersParameter,
         vmiOrdersDataView: getCartsDataView(state, state.pages.vmiLocationDetails.getVmiOrdersParameter),
+        orderNumber: state.pages.vmiLocationDetails.getVmiOrdersParameter.orderNumber,
     };
 };
 
@@ -148,7 +150,10 @@ const VmiLocationOrdersTab = ({
     updateOrderSearchFields,
     exportVmiOrders,
     selectVmiItems,
+    orderNumber,
 }: Props) => {
+    const [orderNumberText, setOrderNumberText] = useState(orderNumber);
+
     let searchTimeoutId: number | undefined;
     const searchMinimumCharacterLength = 3;
     const searchTextChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,6 +161,7 @@ const VmiLocationOrdersTab = ({
             clearTimeout(searchTimeoutId);
         }
         const searchText = event.currentTarget.value;
+        setOrderNumberText(searchText);
         if (searchText.length > 0 && searchText.length < searchMinimumCharacterLength) {
             return;
         }
@@ -229,6 +235,7 @@ const VmiLocationOrdersTab = ({
                     <TextField
                         placeholder={translate("Search Orders")}
                         {...styles.searchText}
+                        value={orderNumberText}
                         onChange={searchTextChangeHandler}
                     />
                 </GridItem>

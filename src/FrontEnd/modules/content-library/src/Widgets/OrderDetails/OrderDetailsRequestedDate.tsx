@@ -19,7 +19,7 @@ export interface OrderDetailsRequestedDateStyles {
 export const requestedDateStyles: OrderDetailsRequestedDateStyles = {
     titleText: {
         variant: "h6",
-        as: "h2",
+        as: "h3",
         css: css`
             @media print {
                 font-size: 12px;

@@ -317,6 +317,9 @@ export const mainNavigationStyles: MainNavigationStyles = {
     menuItemTypography: {
         variant: "headerSecondary",
         color: "secondary.contrast",
+        css: css`
+            font-weight: 800;
+        `,
     },
     megaMenu: {
         transitionDuration: "short",

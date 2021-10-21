@@ -1,5 +1,5 @@
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
-import { getIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
+import { getIsWebCrawler } from "@insite/client-framework/Common/WebCrawler";
 import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import setView from "@insite/client-framework/Store/Pages/ProductList/Handlers/SetView";

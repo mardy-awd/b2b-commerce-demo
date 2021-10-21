@@ -68,6 +68,7 @@ export function setupPageModel(
         widget.parentId = guidMap[widget.parentId];
 
         setFieldsToExistingValuesWithProperContext(widget, language.id, contextualId);
+
         const widgetDefinition = getWidgetDefinition(widget.type);
         if (!widgetDefinition) {
             if (!IS_PRODUCTION) {

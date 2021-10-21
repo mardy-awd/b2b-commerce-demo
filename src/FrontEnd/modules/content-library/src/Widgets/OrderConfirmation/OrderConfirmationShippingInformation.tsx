@@ -8,7 +8,7 @@ import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateT
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import { css } from "styled-components";
 
 interface OwnProps {
@@ -56,7 +56,7 @@ export const orderConfirmationShippingInformationStyles: OrderConfirmationShippi
                 font-size: 15px;
             }
             padding-top: 0;
-            margin-bottom: 5px;
+            margin-bottom: 0;
         `,
     },
     shippingInformationAddressGridItem: {
@@ -149,7 +149,7 @@ export const orderConfirmationShippingInformationStyles: OrderConfirmationShippi
 
 type Props = OwnProps;
 
-const OrderConfirmationShippingInformation: FC<Props> = ({ cart, shipTo, pickUpWarehouse, extendedStyles }) => {
+const OrderConfirmationShippingInformation = ({ cart, shipTo, pickUpWarehouse, extendedStyles }: Props) => {
     const [styles] = useState(() => mergeToNew(orderConfirmationShippingInformationStyles, extendedStyles));
 
     return (
@@ -215,10 +215,6 @@ const OrderConfirmationShippingInformation: FC<Props> = ({ cart, shipTo, pickUpW
                             <Typography {...styles.shippingServiceDescription}>{cart.shipVia?.description}</Typography>
                         </GridItem>
                     )}
-                    <GridItem {...styles.shippingInformationPoNumberGridItem}>
-                        <Typography {...styles.shippingPoNumberTitle}>{translate("PO Number")}</Typography>
-                        <Typography {...styles.shippingPoNumberText}>{cart.poNumber}</Typography>
-                    </GridItem>
                 </GridContainer>
             </GridItem>
         </GridContainer>

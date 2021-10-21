@@ -164,7 +164,13 @@ const VmiUsersTable = ({ accountsDataView, parameter, displayEmail, updateSearch
                         >
                             {translate("Username")}
                         </DataTableHeader>
-                        <DataTableHeader {...styles.firstNameHeader}>{translate("First Name")}</DataTableHeader>
+                        <DataTableHeader
+                            {...styles.firstNameHeader}
+                            sorted={sorted("FirstName")}
+                            onSortClick={() => headerClick("FirstName")}
+                        >
+                            {translate("First Name")}
+                        </DataTableHeader>
                         <DataTableHeader
                             {...styles.lastNameHeader}
                             sorted={sorted("LastName")}
@@ -173,7 +179,13 @@ const VmiUsersTable = ({ accountsDataView, parameter, displayEmail, updateSearch
                             {translate("Last Name")}
                         </DataTableHeader>
                         {displayEmail && (
-                            <DataTableHeader {...styles.emailHeader}>{translate("Email")}</DataTableHeader>
+                            <DataTableHeader
+                                {...styles.emailHeader}
+                                sorted={sorted("Email")}
+                                onSortClick={() => headerClick("Email")}
+                            >
+                                {translate("Email")}
+                            </DataTableHeader>
                         )}
                         <DataTableHeader
                             {...styles.roleHeader}

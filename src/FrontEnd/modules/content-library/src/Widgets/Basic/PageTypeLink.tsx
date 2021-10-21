@@ -29,7 +29,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps) => ({
 
 type Props = ReturnType<typeof mapStateToProps> & OwnProps;
 
-const PageTypeLink: React.FC<Props> = ({ pageLink, fields: { queryString, testSelector, overrideTitle } }) => {
+export const PageTypeLink: React.FC<Props> = ({ pageLink, fields: { queryString, testSelector, overrideTitle } }) => {
     if (!pageLink) {
         return null;
     }

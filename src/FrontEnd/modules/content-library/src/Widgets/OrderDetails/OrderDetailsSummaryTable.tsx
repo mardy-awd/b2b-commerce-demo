@@ -15,9 +15,11 @@ import { LazyImageProps } from "@insite/mobius/LazyImage";
 import { LinkPresentationProps } from "@insite/mobius/Link";
 import { OverflowMenuPresentationProps } from "@insite/mobius/OverflowMenu";
 import { TypographyProps } from "@insite/mobius/Typography";
+import getColor from "@insite/mobius/utilities/getColor";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
 import { connect } from "react-redux";
+import { css } from "styled-components";
 
 const mapStateToProps = (state: ApplicationState) => ({
     order: getOrderState(state, state.pages.orderDetails.orderNumber),
@@ -209,7 +211,20 @@ export interface OrderDetailSummaryTableStyles {
     productInfoTotalsGridItem?: GridItemProps;
 }
 
-export const summaryTableStyles: OrderDetailSummaryTableStyles = {};
+export const summaryTableStyles: OrderDetailSummaryTableStyles = {
+    orderLines: {
+        gridContainer: {
+            css: css`
+                .card_container__wrapper {
+                    border-top: 1px solid ${getColor("common.border")};
+                }
+                .card_container__wrapper ~ .card_container__wrapper {
+                    border-top: none;
+                }
+            `,
+        },
+    },
+};
 
 const styles = summaryTableStyles;
 

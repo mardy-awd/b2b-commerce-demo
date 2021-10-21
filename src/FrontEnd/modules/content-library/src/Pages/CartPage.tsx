@@ -22,11 +22,14 @@ const mapDispatchToProps = {
     setIsPreloadingData,
 };
 
-const mapStateToProps = (state: ApplicationState) => ({
-    cart: getCurrentCartState(state),
-    shouldLoadPromotions: !getCurrentPromotionsDataView(state).value,
-    isPreloadingData: state.pages.checkoutShipping.isPreloadingData,
-});
+const mapStateToProps = (state: ApplicationState) => {
+    const currentPromotionsDataView = getCurrentPromotionsDataView(state);
+    return {
+        cart: getCurrentCartState(state),
+        shouldLoadPromotions: !currentPromotionsDataView.value && !currentPromotionsDataView.isLoading,
+        isPreloadingData: state.pages.checkoutShipping.isPreloadingData,
+    };
+};
 
 type Props = OwnProps & ResolveThunks<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
 

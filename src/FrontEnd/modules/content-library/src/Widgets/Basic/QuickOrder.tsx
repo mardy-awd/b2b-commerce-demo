@@ -1,12 +1,13 @@
 import { ProductInfo } from "@insite/client-framework/Common/ProductInfo";
 import { makeHandlerChainAwaitable } from "@insite/client-framework/HandlerCreator";
+import { getUnitNetPrice } from "@insite/client-framework/Services/Helpers/ProductPriceService";
 import siteMessage from "@insite/client-framework/SiteMessage";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import addToCart from "@insite/client-framework/Store/Pages/Cart/Handlers/AddToCart";
 import translate from "@insite/client-framework/Translate";
-import { CartLineModel } from "@insite/client-framework/Types/ApiModels";
+import { CartLineModel, ProductModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { useMergeStyles } from "@insite/content-library/additionalStyles";
@@ -16,10 +17,10 @@ import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
-import { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
+import ToasterContext, { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import breakpointMediaQueries from "@insite/mobius/utilities/breakpointMediaQueries";
-import React, { FC } from "react";
+import React, { useContext, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -112,7 +113,7 @@ export const quickOrderStyles: QuickOrderStyles = {
     },
 };
 
-export const QuickOrder: FC<Props> = ({
+export const QuickOrder = ({
     canOrderUpload,
     showAddToCartConfirmationDialog,
     orderUploadPageNavLink,
@@ -120,8 +121,9 @@ export const QuickOrder: FC<Props> = ({
     toaster,
     addToCart,
     allowQuickOrder,
-}) => {
-    const [errorMessage, setErrorMessage] = React.useState<React.ReactNode>("");
+}: Props) => {
+    const toasterContext = useContext(ToasterContext);
+    const [errorMessage, setErrorMessage] = useState<React.ReactNode>("");
 
     if (!allowQuickOrder) {
         return null;
@@ -129,7 +131,17 @@ export const QuickOrder: FC<Props> = ({
 
     const styles = useMergeStyles("quickOrder", quickOrderStyles);
 
-    const addProductToCart = async (productInfo: ProductInfo) => {
+    const addProductToCart = async (productInfo: ProductInfo, product: ProductModel) => {
+        if (
+            !product.quoteRequired &&
+            !product.allowZeroPricing &&
+            productInfo.pricing &&
+            getUnitNetPrice(productInfo.pricing, 1).price === 0
+        ) {
+            toasterContext.addToast({ body: siteMessage("Cart_InvalidPrice"), messageType: "danger" });
+            return;
+        }
+
         const cartline = (await addToCart({
             productId: productInfo.productId,
             qtyOrdered: productInfo.qtyOrdered,

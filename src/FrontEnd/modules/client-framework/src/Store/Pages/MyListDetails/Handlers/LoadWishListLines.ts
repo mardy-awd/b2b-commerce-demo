@@ -165,12 +165,16 @@ export const DispatchCompleteLoadWishListLines: HandlerType = ({
     apiResult,
     productInfosByWishListLineId,
     dataViewParameter,
-    getState,
 }) => {
+    dispatch({
+        type: "Data/WishLists/ResetDataViews",
+    });
+
     dispatch({
         type: "Pages/MyListDetails/CompleteLoadProductInfos",
         productInfosByWishListLineId,
     });
+
     if (apiResult) {
         dispatch({
             type: "Data/WishListLines/CompleteLoadWishListLines",

@@ -5,6 +5,7 @@
         path: string;
         bypassFilters: boolean;
         experimentMode: boolean;
+        page: string;
     }
 
     export interface ISearchMicrositeStateParams extends angular.ui.IStateParamsService {
@@ -60,7 +61,7 @@
             // all pages are the same state and make requests for the partials on the server
             $stateProvider
                 .state("content", {
-                    url: "*path?stateChange&bypassFilters&experimentMode",
+                    url: "*path?stateChange&bypassFilters&experimentMode&page",
                     templateUrl: (stateParams: IContentPageStateParams) => {
                         let url = stateParams.path;
                         if (typeof (stateParams.bypassFilters) !== "undefined") {
@@ -68,6 +69,9 @@
                         }
                         if (typeof (stateParams.experimentMode) !== "undefined") {
                             url += (url.indexOf("?") >= 0 ? "&" : "?") + `experimentMode=${stateParams.experimentMode}`;
+                        }
+                        if (typeof (stateParams.page) !== "undefined") {
+                            url += (url.indexOf("?") >= 0 ? "&" : "?") + `page=${stateParams.page}`;
                         }
                         return url;
                     }

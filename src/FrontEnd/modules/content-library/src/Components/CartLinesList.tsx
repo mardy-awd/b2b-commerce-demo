@@ -88,6 +88,7 @@ const CartLinesList: FC<OwnProps> = ({
                             editable={editable}
                             showSavingsAmount={showSavingsAmount}
                             showSavingsPercent={showSavingsPercent}
+                            showInvalidPriceMessage={true}
                             extendedStyles={isCondensed ? styles.cardCondensed : styles.cardExpanded}
                         />
                     </CartLineContext.Provider>

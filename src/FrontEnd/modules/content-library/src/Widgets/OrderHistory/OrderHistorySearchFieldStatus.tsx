@@ -38,7 +38,7 @@ const styles = statusStyles;
 class OrderHistorySearchFieldStatus extends React.Component<Props> {
     handleChange = (event: React.FormEvent<HTMLSelectElement>) => {
         if (event.currentTarget.value) {
-            this.props.updateSearchFields({ status: [event.currentTarget.value] });
+            this.props.updateSearchFields({ status: event.currentTarget.value.split(",") });
         } else {
             this.props.updateSearchFields({ status: undefined });
         }
@@ -46,6 +46,13 @@ class OrderHistorySearchFieldStatus extends React.Component<Props> {
 
     render() {
         const options = this.props.orderStatusMappings || [];
+        const uniqueOptions = new Map<string, string[]>();
+        for (const option of options) {
+            const erpOrderStatuses = uniqueOptions.get(option.displayName) || [];
+            erpOrderStatuses.push(option.erpOrderStatus);
+            uniqueOptions.set(option.displayName, erpOrderStatuses);
+        }
+
         const value =
             this.props.parameter.status && this.props.parameter.status.length > 0 ? this.props.parameter.status[0] : "";
 
@@ -53,9 +60,9 @@ class OrderHistorySearchFieldStatus extends React.Component<Props> {
             <SearchFieldWrapper extendedStyles={styles.wrapper}>
                 <Select label={translate("Status")} {...styles.select} value={value} onChange={this.handleChange}>
                     <option value="">{translate("Select")}</option>
-                    {options.map(option => (
-                        <option key={option.erpOrderStatus} value={option.erpOrderStatus}>
-                            {option.displayName}
+                    {Array.from(uniqueOptions, ([name, values]) => ({ name, values })).map(option => (
+                        <option key={option.values.join(",")} value={option.values.join(",")}>
+                            {option.name}
                         </option>
                     ))}
                 </Select>

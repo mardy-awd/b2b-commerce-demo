@@ -59,14 +59,9 @@ type ShareEntityGenerateFromWebpageModel = {
     html: string;
 } & Omit<ShareEntityModel, "uri" | "properties">;
 
-export async function shareEntityGenerateFromWebpage(model: ShareEntityGenerateFromWebpageModel) {
-    const tokenData = await getAccessToken();
-    const headers = {
-        Authorization: `Bearer ${tokenData.access_token}`,
-    };
-    return fetch(`${internalContentUrl}ShareEntityGenerateFromWebpage`, {
+export function shareEntityGenerateFromWebpage(model: ShareEntityGenerateFromWebpageModel) {
+    return fetch("/api/v2/ShareEntityGenerateFromWebpage", {
         method: "POST",
-        headers,
         body: JSON.stringify(model),
     });
 }

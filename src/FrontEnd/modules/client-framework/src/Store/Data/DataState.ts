@@ -179,7 +179,7 @@ export function getDataView<T extends { id: string }, DataViewModel extends Data
     });
 }
 
-const idNotFound = Object.freeze({
+export const idNotFound = Object.freeze({
     isLoading: false,
     value: undefined,
     errorStatusCode: undefined,
@@ -202,12 +202,13 @@ export function getById<T>(dataViewState: HasById<T>, id: string | undefined, ma
     });
 }
 
-function getOrStoreCachedResult<ModelType, ResultType extends object>(
+export function getOrStoreCachedResult<ModelType, ResultType extends object>(
     dataViewState: HasById<ModelType>,
     key: string,
     createResult: () => ResultType,
 ) {
     const cached = cacheMap.get(dataViewState)?.[key];
+
     if (cached) {
         return cached as Readonly<ResultType>;
     }
@@ -220,10 +221,11 @@ function getOrStoreCachedResult<ModelType, ResultType extends object>(
     }
 
     dictionary[key] = result;
+
     return result;
 }
 
-export function getDataViewKey(parameter: object | undefined) {
+export function getDataViewKey(parameter?: object | undefined) {
     if (!parameter) {
         return "EMPTY_KEY";
     }

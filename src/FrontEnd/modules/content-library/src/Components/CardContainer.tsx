@@ -30,7 +30,7 @@ const CardContainer: FC<{
     const [styles] = React.useState(() => mergeToNew(cardContainerStyles, extendedStyles));
 
     return (
-        <StyledWrapper {...styles.cardDivider}>
+        <StyledWrapper {...styles.cardDivider} className="card_container__wrapper">
             <GridItem {...styles.gridItem}>{children}</GridItem>
         </StyledWrapper>
     );

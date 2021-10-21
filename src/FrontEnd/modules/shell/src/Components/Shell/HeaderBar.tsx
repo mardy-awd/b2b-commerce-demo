@@ -61,7 +61,7 @@ class HeaderBar extends React.Component<Props, State> {
         clearImmediate(this.intervalId);
     }
 
-    UNSAFE_componentWillMount(): void {
+    componentDidMount(): void {
         if (this.props.languages.length === 0) {
             this.props.loadShellContext();
         }
@@ -98,10 +98,10 @@ class HeaderBar extends React.Component<Props, State> {
             deviceTypes,
             currentPersonaId,
             currentDeviceType,
-            mobileCmsModeActive: mobileCms,
+            mobileCmsModeActive,
         } = this.props;
 
-        if (languages.length === 0 || mobileCms) {
+        if (languages.length === 0) {
             return null;
         }
 
@@ -129,12 +129,13 @@ class HeaderBar extends React.Component<Props, State> {
                     </select>
                     <ArrowDown color1={disableSelects ? commonDisabled : primaryMain} height={7} />
                 </SelectWrapper>
-                {hasDeviceSpecificContent && (
+                {hasDeviceSpecificContent && !mobileCmsModeActive && (
                     <>
                         <Icon src="Monitor" size={20} color={disableSelects ? commonDisabled : "primary.main"} />
                         <SelectWrapper>
                             <select
                                 onChange={this.onDeviceTypeChange}
+                                data-test-selector="headerBar_deviceTypeSelect"
                                 value={currentDeviceType}
                                 disabled={disableSelects}
                             >
@@ -148,7 +149,7 @@ class HeaderBar extends React.Component<Props, State> {
                         </SelectWrapper>
                     </>
                 )}
-                {hasPersonaSpecificContent && (
+                {hasPersonaSpecificContent && !mobileCmsModeActive && (
                     <>
                         <Icon src="Users" size={20} color={disableSelects ? commonDisabled : "primary.main"} />
                         <SelectWrapper>

@@ -16,6 +16,12 @@ type HandlerType = ApiHandlerDiscreteParameter<
     OrderModel
 >;
 
+export const DispatchBeginLoadOrder: HandlerType = props => {
+    props.dispatch({
+        type: "Pages/OrderStatus/BeginLoadOrder",
+    });
+};
+
 export const PopulateApiParameter: HandlerType = props => {
     props.apiParameter = {
         orderNumber: props.parameter.orderNumber,
@@ -44,7 +50,7 @@ export const DispatchCompleteLoadOrder: HandlerType = props => {
     });
 };
 
-export const chain = [PopulateApiParameter, RequestDataFromApi, DispatchCompleteLoadOrder];
+export const chain = [DispatchBeginLoadOrder, PopulateApiParameter, RequestDataFromApi, DispatchCompleteLoadOrder];
 
 const loadOrder = createHandlerChainRunner(chain, "LoadOrder");
 export default loadOrder;

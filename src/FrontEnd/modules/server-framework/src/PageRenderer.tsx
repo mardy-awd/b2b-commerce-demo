@@ -1,6 +1,6 @@
 import { contentModeCookieName, isSiteInShellCookieName } from "@insite/client-framework/Common/ContentMode";
 import { encodeCookie } from "@insite/client-framework/Common/Cookies";
-import { SafeDictionary } from "@insite/client-framework/Common/Types";
+import { Dictionary, SafeDictionary } from "@insite/client-framework/Common/Types";
 import { loadAndParseFontCss } from "@insite/client-framework/Common/Utilities/fontProcessing";
 import { getHeadTrackingScript, getNoscriptTrackingScript } from "@insite/client-framework/Common/Utilities/tracking";
 import { ShellContext } from "@insite/client-framework/Components/IsInShell";
@@ -239,6 +239,11 @@ export async function pageRenderer(request: Request, response: Response) {
                 <base href="/" />
                 <link href={fontFamilyImportUrl} rel="stylesheet" />
                 {sheet?.getStyleElement()}
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `if (document.domain === "localhost") { document.domain = "localhost"; }`,
+                    }}
+                ></script>
                 <script>{`if (window.parent !== window) {
     try {
         window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;
@@ -257,10 +262,8 @@ export async function pageRenderer(request: Request, response: Response) {
                 {noscriptTrackingScript && (
                     <noscript dangerouslySetInnerHTML={{ __html: noscriptTrackingScript }}></noscript>
                 )}
-                {/* eslint-disable react/no-danger */}
                 <div id="react-app" dangerouslySetInnerHTML={{ __html: rawHtml }}></div>
                 <script
-                    // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{
                         __html: `try{eval("(async()=>{})()");}catch(e){alert((typeof siteMessages !== 'undefined' && siteMessages.Browser_UnsupportedWarning) || 'This site does not support your current browser. Please update your browser to the most recent version of Chrome, Edge, Safari or Firefox.');}`,
                     }}
@@ -367,7 +370,7 @@ export async function generateDataIfNeeded(request: Request): Promise<GenerateDa
             }
         } catch (error) {
             if (IS_PRODUCTION) {
-                logger.error(`Site generation failed: ${error}`);
+                logger.error(`Site generation failed:`, error);
             } else {
                 throw error;
             }
@@ -379,7 +382,7 @@ export async function generateDataIfNeeded(request: Request): Promise<GenerateDa
         try {
             await generateTranslations();
         } catch (error) {
-            logger.error(`Translation generation failed: ${error}`);
+            logger.error(`Translation generation failed:`, error);
         }
         triedToGenerateTranslations = true;
     }
@@ -396,7 +399,11 @@ async function loadPageAndSetInitialCookies(request: Request, response: Response
         const endpoint = `/api/v2/content/pageByUrl?url=${encodeURIComponent(request.url)}${
             bypassFilters ? "&bypassfilters=true" : ""
         }`;
-        pageByUrlResponse = await rawRequest(endpoint, "GET", {}, undefined);
+        const headers: Dictionary<string> = {};
+        if (request.headers.referer) {
+            headers.referer = request.headers.referer;
+        }
+        pageByUrlResponse = await rawRequest(endpoint, "GET", headers, undefined);
     } catch (ex) {
         // if this fails just log and continue, the regular way to retrieve the page will deal with sending the user to the unhandled error page.
         logger.error(ex);

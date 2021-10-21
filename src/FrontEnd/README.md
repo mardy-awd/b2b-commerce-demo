@@ -52,7 +52,7 @@ Using the "start" option is equivalent to running the `npm run start` command vi
 1. Run `npm run start` from /FrontEnd. This launches Spire with the default blueprint and port. NOTE: This step is already setup in Visual Studio Code and Rider as a launch configuration.
 2. Navigate to http://localhost:3000.
 
-By default, API requests are forwarded to http://commerce.local.com. You can change this URL in the /FrontEnd/config/settings.js file.
+By default, API requests are forwarded to http://localhost:3010. You can change this URL in the /FrontEnd/config/settings.js file.
 
 ### Launch Spire with a Custom Blueprint
 

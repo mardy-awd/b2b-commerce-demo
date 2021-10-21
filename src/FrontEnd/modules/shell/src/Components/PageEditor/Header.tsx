@@ -27,7 +27,13 @@ type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispat
 
 const mapStateToProps = (state: ShellState, { page }: OwnProps) => {
     const {
-        pageTree: { treeNodesByParentId, headerTreeNodesByParentId, footerTreeNodesByParentId, futurePublishNodeIds },
+        pageTree: {
+            treeNodesByParentId,
+            headerTreeNodesByParentId,
+            footerTreeNodesByParentId,
+            mobileTreeNodesByParentId,
+            futurePublishNodeIds,
+        },
         shellContext: { contentMode, permissions },
     } = state;
 
@@ -37,12 +43,14 @@ const mapStateToProps = (state: ShellState, { page }: OwnProps) => {
             treeNodesByParentId[page.parentId],
             headerTreeNodesByParentId[page.parentId],
             footerTreeNodesByParentId[page.parentId],
+            mobileTreeNodesByParentId[page.parentId],
         ) ||
         getPageStateFromDictionaries(
             page.id,
             treeNodesByParentId,
             headerTreeNodesByParentId,
             footerTreeNodesByParentId,
+            mobileTreeNodesByParentId,
         );
 
     return {

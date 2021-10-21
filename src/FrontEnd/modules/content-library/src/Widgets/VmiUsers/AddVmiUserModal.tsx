@@ -257,6 +257,7 @@ const AddVmiUserModal = ({
                 userId: account.id,
                 page: 1,
                 pageSize: 1000,
+                expand: ["customerlabel"],
                 onComplete: result => {
                     const vmiLocationIds = result.apiResult?.vmiLocations?.map(o => o.id) || [];
                     toggleLocationCheck({ ids: vmiLocationIds });

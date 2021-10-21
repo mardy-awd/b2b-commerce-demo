@@ -3,15 +3,15 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCategoryState } from "@insite/client-framework/Store/Data/Categories/CategoriesSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { CategoryDetailsPageContext } from "@insite/content-library/Pages/CategoryDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import * as React from "react";
-import { useContext } from "react";
 import { connect } from "react-redux";
 import { css } from "styled-components";
 
-type OwnProps = WidgetProps & HasCategoryContext;
+type Props = WidgetProps & HasCategoryContext;
 
 export interface CategoryDetailLinkListStyles {
     container?: GridContainerProps;
@@ -33,7 +33,7 @@ export const categoryDetailLinkListStyles: CategoryDetailLinkListStyles = {
 
 const styles = categoryDetailLinkListStyles;
 
-const CategoryDetailLinkList: React.FunctionComponent<OwnProps> = ({ category }: OwnProps) => {
+const CategoryDetailLinkList = ({ category }: Props) => {
     if (!category || !category.subCategoryIds || category.subCategoryIds.length === 0) {
         return null;
     }
@@ -78,6 +78,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Categories",
         icon: "LinkList",
+        allowedContexts: [CategoryDetailsPageContext],
     },
 };
 

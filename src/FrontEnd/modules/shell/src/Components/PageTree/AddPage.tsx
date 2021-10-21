@@ -36,6 +36,7 @@ const mapStateToProps = (state: ShellState) => {
             treeNodesByParentId,
             headerTreeNodesByParentId,
             footerTreeNodesByParentId,
+            mobileTreeNodesByParentId,
             layoutTreeNodesByParentId,
         },
     } = state;
@@ -45,6 +46,7 @@ const mapStateToProps = (state: ShellState) => {
         treeNodesByParentId,
         headerTreeNodesByParentId,
         footerTreeNodesByParentId,
+        mobileTreeNodesByParentId,
         layouts: layoutTreeNodesByParentId[emptyGuid] || [],
     };
 };
@@ -153,13 +155,15 @@ class AddPage extends React.Component<Props, State> {
                 this.props.treeNodesByParentId[parentId],
                 this.props.headerTreeNodesByParentId[parentId],
                 this.props.footerTreeNodesByParentId[parentId],
+                this.props.mobileTreeNodesByParentId[parentId],
             );
 
             if (rootPageState?.isRootVariant) {
                 const childList =
                     this.props.treeNodesByParentId[rootPageState.nodeId] ||
                     this.props.headerTreeNodesByParentId[rootPageState.nodeId] ||
-                    this.props.footerTreeNodesByParentId[rootPageState.nodeId];
+                    this.props.footerTreeNodesByParentId[rootPageState.nodeId] ||
+                    this.props.mobileTreeNodesByParentId[rootPageState.nodeId];
 
                 for (const child of childList) {
                     if (!child.isVariant || !child.isDefaultVariant) {

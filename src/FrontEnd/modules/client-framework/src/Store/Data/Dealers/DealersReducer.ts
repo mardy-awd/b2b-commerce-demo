@@ -25,7 +25,7 @@ const reducer = {
         action: { parameter: GetDealersApiParameter; collection: DealerCollectionModel },
     ) => {
         if (
-            draft.defaultLocation.longitude !== action.collection.defaultLatitude ||
+            draft.defaultLocation.latitude !== action.collection.defaultLatitude ||
             draft.defaultLocation.longitude !== action.collection.defaultLongitude
         ) {
             draft.defaultLocation = {

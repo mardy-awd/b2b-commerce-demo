@@ -8,10 +8,13 @@ require("./setupTsconfigPathsFile");
 const webpack = require("webpack");
 const RemovePlugin = require("remove-files-webpack-plugin");
 const semver = require("semver");
+const createImportWidgetChunkFile = require("./createImportWidgetChunkFile");
 
 if (semver.lt(process.version, "12.12.0")) {
     throw new Error("Spire requires node 12.12+ to function properly.");
 }
+
+createImportWidgetChunkFile();
 
 exports.setupCommonConfig = (isDevBuild, env, target = "ES2017") => {
     let blueprint = env && env.BLUEPRINT && `blueprints/${env.BLUEPRINT}`;

@@ -1,4 +1,5 @@
 /* eslint-disable spire/export-styles */
+import { useShellContext } from "@insite/client-framework/Components/IsInShell";
 import { useGetLink } from "@insite/client-framework/Store/Links/LinksSelectors";
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
@@ -37,6 +38,7 @@ const wrapperStyles: InjectableCss = {};
 export const CmsButton: FC<OwnProps> = ({ fields }) => {
     const history = useHistory();
     const link = useGetLink(fields.link);
+    const { isInShell } = useShellContext();
 
     const onClick = () => {
         if (!link.url) {
@@ -44,6 +46,10 @@ export const CmsButton: FC<OwnProps> = ({ fields }) => {
         }
 
         if (link.url.startsWith("http")) {
+            if (isInShell) {
+                return;
+            }
+
             window.location.href = link.url;
         } else {
             history.push(link.url);

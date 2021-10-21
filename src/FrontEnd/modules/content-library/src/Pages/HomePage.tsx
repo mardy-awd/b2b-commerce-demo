@@ -1,5 +1,9 @@
 import Zone from "@insite/client-framework/Components/Zone";
 import {
+    ExcludeFromNavigation,
+    ExcludeFromSignInRequired,
+    HideFooter,
+    HideHeader,
     MetaDescription,
     MetaKeywords,
     OpenGraphImage,
@@ -32,7 +36,17 @@ const pageModule: PageModule = {
         hasEditableTitle: true,
         hasEditableUrlSegment: true,
         pageType: "System",
-        fieldDefinitions: [MetaKeywords, MetaDescription, OpenGraphTitle, OpenGraphUrl, OpenGraphImage],
+        fieldDefinitions: [
+            MetaKeywords,
+            MetaDescription,
+            OpenGraphTitle,
+            OpenGraphUrl,
+            OpenGraphImage,
+            HideHeader,
+            HideFooter,
+            ExcludeFromNavigation,
+            ExcludeFromSignInRequired,
+        ],
     },
 };
 

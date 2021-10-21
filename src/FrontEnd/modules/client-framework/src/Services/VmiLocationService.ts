@@ -15,11 +15,12 @@ export interface GetVmiLocationsApiParameter extends ApiParameter, HasPagingPara
     userId?: string;
     billToId?: string;
     filter?: string;
+    expand?: ("customerlabel" | "customer")[];
 }
 
 export interface GetVmiLocationApiParameter extends ApiParameter {
     id?: string;
-    expand?: "customer"[];
+    expand?: ("customerlabel" | "customer")[];
 }
 
 export interface AddVmiLocationApiParameter extends ApiParameter {

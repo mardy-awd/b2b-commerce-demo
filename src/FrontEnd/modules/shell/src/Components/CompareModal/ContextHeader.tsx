@@ -27,7 +27,7 @@ interface OwnProps {
 const mapStateToProps = (state: ShellState) => {
     const {
         compareModal: { compareVersions, isSideBySide },
-        shellContext: { languages, personas, deviceTypes },
+        shellContext: { languages, personas, deviceTypes, mobileCmsModeActive },
     } = state;
 
     return {
@@ -36,6 +36,7 @@ const mapStateToProps = (state: ShellState) => {
         languages,
         personas,
         deviceTypes,
+        mobileCmsModeActive,
     };
 };
 
@@ -72,7 +73,7 @@ class ContextHeader extends React.Component<Props> {
     };
 
     render() {
-        const { compareVersions, languages, personas, deviceTypes, isSideBySide } = this.props;
+        const { compareVersions, languages, personas, deviceTypes, isSideBySide, mobileCmsModeActive } = this.props;
 
         if (!compareVersions) {
             return null;
@@ -105,7 +106,7 @@ class ContextHeader extends React.Component<Props> {
                             </option>
                         ))}
                     </select>
-                    {hasDeviceSpecificContent && (
+                    {hasDeviceSpecificContent && !mobileCmsModeActive && (
                         <>
                             <Icon src="Monitor" size={20} color="#000" />
                             <select
@@ -121,7 +122,7 @@ class ContextHeader extends React.Component<Props> {
                             </select>
                         </>
                     )}
-                    {hasPersonaSpecificContent && (
+                    {hasPersonaSpecificContent && !mobileCmsModeActive && (
                         <>
                             <Icon src="Users" size={20} color="#000" />
                             <select
@@ -165,11 +166,15 @@ class ContextHeader extends React.Component<Props> {
                     >
                         Switch Versions
                     </SwitchButton>
-                    <Icon src={Spacer} color="custom.borderDividerColor" />
-                    {clicker("Phone")}
-                    {clicker("Tablet")}
-                    {clicker("Desktop")}
-                    <Icon src={Spacer} color="custom.borderDividerColor" />
+                    {!mobileCmsModeActive && (
+                        <>
+                            <Icon src={Spacer} color="custom.borderDividerColor" />
+                            {clicker("Phone")}
+                            {clicker("Tablet")}
+                            {clicker("Desktop")}
+                            <Icon src={Spacer} color="custom.borderDividerColor" />
+                        </>
+                    )}
                     <CloseButton
                         size={30}
                         data-test-selector="publishCompareModal_close"

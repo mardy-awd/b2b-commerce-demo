@@ -23,6 +23,7 @@ interface OwnProps {
     cart: Cart;
     promotions?: PromotionModel[];
     editable: boolean;
+    showInvalidPriceMessage?: boolean;
     extendedStyles?: CartLineCardCondensedStyles;
 }
 
@@ -121,7 +122,15 @@ export const cartLineCardCondensedStyles: CartLineCardCondensedStyles = {
     },
 };
 
-const CartLineCardCondensed = ({ cart, cartLine, editable, enableVat, vatPriceDisplay, extendedStyles }: Props) => {
+const CartLineCardCondensed = ({
+    cart,
+    cartLine,
+    editable,
+    enableVat,
+    vatPriceDisplay,
+    showInvalidPriceMessage,
+    extendedStyles,
+}: Props) => {
     const [styles] = React.useState(() => mergeToNew(cartLineCardCondensedStyles, extendedStyles));
 
     return (
@@ -151,6 +160,7 @@ const CartLineCardCondensed = ({ cart, cartLine, editable, enableVat, vatPriceDi
                                 <ProductPrice
                                     product={cartLine}
                                     currencySymbol={cart.currencySymbol}
+                                    showInvalidPriceMessage={showInvalidPriceMessage}
                                     extendedStyles={styles.price}
                                 />
                             </GridItem>

@@ -11,7 +11,13 @@ const mapStateToProps = (state: ShellState) => {
         publishModal: { pagePublishInfosState },
         shellContext: { currentLanguageId, currentPersonaId, currentDeviceType, contentMode },
         pageEditor: { isEditingNewPage },
-        pageTree: { treeNodesByParentId, headerTreeNodesByParentId, footerTreeNodesByParentId, futurePublishNodeIds },
+        pageTree: {
+            treeNodesByParentId,
+            headerTreeNodesByParentId,
+            footerTreeNodesByParentId,
+            mobileTreeNodesByParentId,
+            futurePublishNodeIds,
+        },
     } = state;
 
     const page = getCurrentPage(state);
@@ -23,8 +29,15 @@ const mapStateToProps = (state: ShellState) => {
             treeNodesByParentId[page.parentId],
             headerTreeNodesByParentId[page.parentId],
             footerTreeNodesByParentId[page.parentId],
+            mobileTreeNodesByParentId[page.parentId],
         ) ||
-        getPageStateFromDictionaries(pageId, treeNodesByParentId, headerTreeNodesByParentId, footerTreeNodesByParentId);
+        getPageStateFromDictionaries(
+            pageId,
+            treeNodesByParentId,
+            headerTreeNodesByParentId,
+            footerTreeNodesByParentId,
+            mobileTreeNodesByParentId,
+        );
 
     return {
         pageId,

@@ -5,6 +5,7 @@ export default interface LinksState {
     readonly pageLinks: readonly Readonly<PageLinkModel>[];
     readonly pageTypesToNodeId: Dictionary<string>;
     readonly nodeIdToPageLinkPath: Dictionary<readonly number[]>;
+    readonly areLinksLoading?: boolean;
 }
 
 export interface HasLinksState {

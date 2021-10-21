@@ -2,6 +2,7 @@ import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import { BannerStyles } from "@insite/content-library/Widgets/Basic/Banner";
 import { ButtonStyles } from "@insite/content-library/Widgets/Basic/Button";
 import { ImageStyles } from "@insite/content-library/Widgets/Basic/Image";
+import { ItemListStyles } from "@insite/content-library/Widgets/Basic/ItemList";
 import { LinkListStyles } from "@insite/content-library/Widgets/Basic/LinkList";
 import { LogoStyles } from "@insite/content-library/Widgets/Basic/Logo";
 import { QuickOrderStyles } from "@insite/content-library/Widgets/Basic/QuickOrder";
@@ -20,10 +21,11 @@ import { SecondaryNavigationStyles } from "@insite/content-library/Widgets/Heade
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
 
-interface Styles {
+export interface Styles {
     banner?: BannerStyles;
     button?: ButtonStyles;
     image?: ImageStyles;
+    itemList?: ItemListStyles;
     linkList?: LinkListStyles;
     logo?: LogoStyles;
     quickOrder?: QuickOrderStyles;
@@ -46,6 +48,7 @@ type ComponentStyles =
     | BannerStyles
     | ButtonStyles
     | ImageStyles
+    | ItemListStyles
     | LinkListStyles
     | LogoStyles
     | QuickOrderStyles
@@ -69,7 +72,10 @@ interface StylesContextType {
 
 export const StylesContext = React.createContext<StylesContextType>({});
 
-export const StylesProvider = ({ styles, children }: { styles: Styles; children: JSX.Element | JSX.Element[] }) => {
+export const StylesProvider = (
+    { styles, children }: { styles: Styles; children: JSX.Element | JSX.Element[] },
+    index: number,
+) => {
     return <StylesContext.Provider value={{ styles }}>{children}</StylesContext.Provider>;
 };
 

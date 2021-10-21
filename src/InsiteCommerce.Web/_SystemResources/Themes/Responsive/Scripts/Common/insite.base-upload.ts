@@ -28,6 +28,8 @@
         itemsToSearch: any[] = null;
         uploadedItemsCount = 0;
 
+        supportedExtensions = ["xls", "xlsx", "csv"];
+
         static $inject = ["$scope", "productService", "coreService", "settingsService"];
 
         constructor(
@@ -67,7 +69,7 @@
                 this.file = arg.files[0];
                 this.fileName = this.file.name;
                 const fileExtension = this.getFileExtension(this.file.name);
-                this.badFile = ["xls", "xlsx", "csv"].indexOf(fileExtension) === -1;
+                this.badFile = this.supportedExtensions.indexOf(fileExtension) === -1;
                 this.uploadLimitExceeded = false;
 
                 setTimeout(() => {
@@ -112,6 +114,14 @@
             };
         }
 
+        protected skipFirstCsvRowHeading(row: string[]): boolean {
+            return false;
+        }
+
+        protected rowMapper(row: string[]): any {
+            return { Name: row[0], Qty: row[1], UM: row[2] };
+        }
+
         protected processWb(wb): void {
             this.itemsToSearch = [];
             wb.SheetNames.forEach((sheetName) => {
@@ -125,7 +135,7 @@
                     if (this.limitExceeded(roa.length)) {
                         return;
                     }
-                    this.itemsToSearch = roa.map(r => ({Name: r[0], Qty: r[1], UM: r[2]}));
+                    this.itemsToSearch = roa.map(r => this.rowMapper(r));
                 }
             });
             this.batchGetProducts();
@@ -143,7 +153,7 @@
                 return;
             }
             let rows = results.data;
-            if (this.firstRowHeading) {
+            if (this.firstRowHeading || this.skipFirstCsvRowHeading(rows[0])) {
                 rows = rows.slice(1, rows.length);
             }
             if (this.limitExceeded(rows.length)) {
@@ -153,15 +163,7 @@
                 if (s[0] == null || s[0].length === 0) {
                     return;
                 }
-                const objectToAdd: any = {};
-                objectToAdd.Name = s[0];
-                if (s[1]) {
-                    objectToAdd.Qty = s[1];
-                }
-                if (s[2]) {
-                    objectToAdd.UM = s[2];
-                }
-                this.itemsToSearch.push(objectToAdd);
+                this.itemsToSearch.push(this.rowMapper(s));
             });
             this.batchGetProducts();
         }

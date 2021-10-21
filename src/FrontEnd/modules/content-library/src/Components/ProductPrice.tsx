@@ -29,6 +29,7 @@ interface OwnProps {
     showSavings?: boolean;
     showSavingsAmount?: boolean;
     showSavingsPercent?: boolean;
+    showInvalidPriceMessage?: boolean;
     extendedStyles?: ProductPriceStyles;
 }
 
@@ -48,6 +49,7 @@ export interface ProductPriceStyles {
     quoteMessage?: RequiresQuoteMessageStyle;
     priceWrapper?: InjectableCss;
     price?: PriceStyles;
+    invalidPriceText?: TypographyPresentationProps;
     secondaryPriceWrapper?: InjectableCss;
     secondaryPrice?: PriceStyles;
     packWrapper?: InjectableCss;
@@ -124,6 +126,9 @@ export const productPriceStyles: ProductPriceStyles = {
             `,
         },
     },
+    invalidPriceText: {
+        color: "danger",
+    },
     secondaryPriceWrapper: {
         css: css`
             margin-top: 5px;
@@ -196,6 +201,7 @@ const ProductPrice = ({
     showSavings = false,
     showSavingsAmount = false,
     showSavingsPercent = false,
+    showInvalidPriceMessage = false,
     enableVat,
     vatPriceDisplay,
     extendedStyles,
@@ -222,12 +228,16 @@ const ProductPrice = ({
         ? productContextModel.productInfo.qtyOrdered
         : cartLineModel.qtyOrdered;
 
-    let pricing;
-    if ("product" in pricingData) {
-        pricing = pricingData.productInfo.pricing;
-    } else {
-        pricing = pricingData.pricing;
-    }
+    const pricing = "product" in pricingData ? pricingData.productInfo.pricing : pricingData.pricing;
+    const allowZeroPricing =
+        "product" in pricingData ? pricingData.product.allowZeroPricing : pricingData.allowZeroPricing;
+    const isPromotionItem = "product" in pricingData ? false : pricingData.isPromotionItem;
+    const isInvalidPrice =
+        !quoteRequired &&
+        !isPromotionItem &&
+        !allowZeroPricing &&
+        pricing?.unitNetPrice === 0 &&
+        pricing?.unitRegularPrice === 0;
 
     const unitOfMeasure = unitOfMeasureDescription || unitOfMeasureDisplay;
     const showQtyPerBaseUnitOfMeasure =
@@ -292,6 +302,11 @@ const ProductPrice = ({
                         translate("Sale Price:")
                     }
                 />
+                {isInvalidPrice && showInvalidPriceMessage && (
+                    <Typography as="p" {...styles.invalidPriceText}>
+                        {translate("Invalid Price")}
+                    </Typography>
+                )}
             </StyledWrapper>
             {showSecondaryPrice && (
                 <StyledWrapper {...styles.secondaryPriceWrapper}>

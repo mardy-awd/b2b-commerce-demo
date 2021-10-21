@@ -214,29 +214,28 @@ class PageTreeFlyOut extends React.Component<Props> {
                     <>
                         {canAddChildPage(pageDefinition, permissions, flyOutNode) &&
                             flyOutOption(this.handleAddPage, <OverflowAddPage />, "Add Page")}
-                        {canAddVariant(pageDefinition, permissions) &&
-                            !flyOutNode.isVariant &&
-                            flyOutOption(this.handleCreateVariant, <OverflowAddPage />, "Create Variant")}
-                        {canAddVariant(pageDefinition, permissions) &&
-                            flyOutNode.isVariant &&
-                            !flyOutNode.isDefaultVariant &&
-                            flyOutOption(this.handleEditRules, <Edit />, "Edit Rules")}
-                        {canAddVariant(pageDefinition, permissions) &&
-                            flyOutNode.isVariant &&
-                            !flyOutNode.isDefaultVariant &&
-                            flyOutOption(this.handleMakeDefault, <Edit />, "Make Default")}
-                        {canCopyPage(pageDefinition, permissions, flyOutNode) &&
-                            flyOutOption(this.handleCopyPage, <OverflowCopyPage />, "Copy Page")}
-                        {flyOutNode.isRootVariant &&
-                            flyOutOption(this.handleReorderVariants, <Move />, "Reorder Variants")}
-                        {canDeletePage(this.props.futurePublishNodeIds, pageDefinition, permissions, flyOutNode) &&
-                            flyOutOption(
-                                this.handleDeletePage,
-                                <Trash color1="#9b9b9b" />,
-                                flyOutNode.isRootVariant ? "Delete Variants" : "Delete",
-                            )}
                     </>
                 )}
+                {canAddVariant(pageDefinition, permissions) &&
+                    !flyOutNode.isVariant &&
+                    flyOutOption(this.handleCreateVariant, <OverflowAddPage />, "Create Variant")}
+                {canAddVariant(pageDefinition, permissions) &&
+                    flyOutNode.isVariant &&
+                    !flyOutNode.isDefaultVariant &&
+                    flyOutOption(this.handleEditRules, <Edit />, "Edit Rules")}
+                {canAddVariant(pageDefinition, permissions) &&
+                    flyOutNode.isVariant &&
+                    !flyOutNode.isDefaultVariant &&
+                    flyOutOption(this.handleMakeDefault, <Edit />, "Make Default")}
+                {canCopyPage(pageDefinition, permissions, flyOutNode) &&
+                    flyOutOption(this.handleCopyPage, <OverflowCopyPage />, "Copy Page")}
+                {flyOutNode.isRootVariant && flyOutOption(this.handleReorderVariants, <Move />, "Reorder Variants")}
+                {canDeletePage(this.props.futurePublishNodeIds, pageDefinition, permissions, flyOutNode) &&
+                    flyOutOption(
+                        this.handleDeletePage,
+                        <Trash color1="#9b9b9b" />,
+                        flyOutNode.isRootVariant ? "Delete Variants" : "Delete",
+                    )}
             </PageTreeFlyOutMenu>
         );
     }

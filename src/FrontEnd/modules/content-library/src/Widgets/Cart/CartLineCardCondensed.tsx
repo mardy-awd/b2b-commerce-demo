@@ -202,6 +202,7 @@ const CartLineCardCondensed: FC<Props> = ({
                                         product={cartLine}
                                         currencySymbol={cart.currencySymbol}
                                         showSavings={false}
+                                        showInvalidPriceMessage={true}
                                         extendedStyles={styles.productPrice}
                                     />
                                 )}

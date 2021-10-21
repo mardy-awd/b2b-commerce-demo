@@ -40,6 +40,7 @@ const mapStateToProps = (state: ApplicationState) => {
         isVmiAdmin: isVmiAdmin(settings.orderSettings, session),
         getVmiBinsParameter: state.pages.vmiLocationDetails.getVmiBinsParameter,
         vmiBinsDataView: getVmiBinsDataView(state, state.pages.vmiLocationDetails.getVmiBinsParameter),
+        filter: state.pages.vmiLocationDetails.getVmiBinsParameter.filter,
     };
 };
 
@@ -181,8 +182,10 @@ const VmiLocationProductsTab = ({
     removeVmiBins,
     exportVmiProducts,
     selectVmiItems,
+    filter,
 }: Props) => {
     const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
+    const [filterText, setFilterText] = useState(filter);
 
     let searchTimeoutId: number | undefined;
     const searchMinimumCharacterLength = 3;
@@ -191,6 +194,7 @@ const VmiLocationProductsTab = ({
             clearTimeout(searchTimeoutId);
         }
         const searchText = event.currentTarget.value;
+        setFilterText(searchText);
         if (searchText.length > 0 && searchText.length < searchMinimumCharacterLength) {
             return;
         }
@@ -286,6 +290,7 @@ const VmiLocationProductsTab = ({
                     <TextField
                         placeholder={translate("Search Products")}
                         {...styles.searchText}
+                        value={filterText}
                         onChange={searchTextChangeHandler}
                     />
                 </GridItem>

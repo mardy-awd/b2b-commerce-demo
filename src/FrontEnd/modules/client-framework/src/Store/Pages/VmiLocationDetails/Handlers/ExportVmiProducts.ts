@@ -35,7 +35,12 @@ export const ExportData: HandlerType = async props => {
             }
         }
     } else {
-        const result = await getVmiBins({ ...state.pages.vmiLocationDetails.getVmiBinsParameter, pageSize: 9999 });
+        const result = await getVmiBins({
+            ...state.pages.vmiLocationDetails.getVmiBinsParameter,
+            page: 1,
+            pageSize: 9999,
+            expand: ["product"],
+        });
         if (result.vmiBins) {
             for (const row of result.vmiBins) {
                 data.push([

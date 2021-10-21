@@ -4,8 +4,10 @@ import { getAddressFieldsDataView } from "@insite/client-framework/Store/Data/Ad
 import loadAddressFields from "@insite/client-framework/Store/Data/AddressFields/Handlers/LoadAddressFields";
 import { getCurrentBillToState } from "@insite/client-framework/Store/Data/BillTos/BillTosSelectors";
 import loadCurrentBillTo from "@insite/client-framework/Store/Data/BillTos/Handlers/LoadCurrentBillTo";
-import { getCurrentCountries } from "@insite/client-framework/Store/Data/Countries/CountriesSelectors";
-import loadCurrentCountries from "@insite/client-framework/Store/Data/Countries/Handlers/LoadCurrentCountries";
+import { getCountriesDataView } from "@insite/client-framework/Store/Data/Countries/CountriesSelectors";
+import loadCurrentCountries, {
+    loadCurrentCountriesParameter,
+} from "@insite/client-framework/Store/Data/Countries/Handlers/LoadCurrentCountries";
 import loadCurrentShipTo from "@insite/client-framework/Store/Data/ShipTos/Handlers/LoadCurrentShipTo";
 import { getCurrentShipToState } from "@insite/client-framework/Store/Data/ShipTos/ShipTosSelectors";
 import PageModule from "@insite/client-framework/Types/PageModule";
@@ -14,12 +16,16 @@ import Page from "@insite/mobius/Page";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
 
-const mapStateToProps = (state: ApplicationState) => ({
-    currentBillToState: getCurrentBillToState(state),
-    currentShipToState: getCurrentShipToState(state),
-    shouldLoadAddressFields: !getAddressFieldsDataView(state).value,
-    shouldLoadCountries: !getCurrentCountries(state),
-});
+const mapStateToProps = (state: ApplicationState) => {
+    const addressFieldsDataView = getAddressFieldsDataView(state);
+    const countriesDataView = getCountriesDataView(state, loadCurrentCountriesParameter);
+    return {
+        currentBillToState: getCurrentBillToState(state),
+        currentShipToState: getCurrentShipToState(state),
+        shouldLoadAddressFields: !addressFieldsDataView.value && !addressFieldsDataView.isLoading,
+        shouldLoadCountries: !countriesDataView.value && !countriesDataView.isLoading,
+    };
+};
 
 const mapDispatchToProps = {
     loadCurrentBillTo,
@@ -43,10 +49,10 @@ class AddressesPage extends React.Component<Props> {
             loadCurrentCountries,
         } = this.props;
 
-        if (!currentBillToState.value) {
+        if (!currentBillToState.value && !currentBillToState.isLoading) {
             loadCurrentBillTo();
         }
-        if (!currentShipToState.value) {
+        if (!currentShipToState.value && !currentShipToState.isLoading) {
             loadCurrentShipTo();
         }
         if (shouldLoadAddressFields) {

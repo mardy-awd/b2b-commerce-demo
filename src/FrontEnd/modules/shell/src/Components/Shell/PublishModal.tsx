@@ -143,6 +143,7 @@ const PublishModal: React.FC = () => {
     const permissions = useShellSelector(state => state.shellContext.permissions);
     const stageMode = useShellSelector(state => state.shellContext.stageMode);
     const currentLanguageId = useShellSelector(state => state.shellContext.currentLanguageId);
+    const mobileCmsModeActive = useShellSelector(state => state.shellContext.mobileCmsModeActive);
 
     const dispatch = useShellDispatch();
 
@@ -245,16 +246,16 @@ const PublishModal: React.FC = () => {
 
         const pageId = selectedElement.pageId;
         const mainPageIndex = pagePublishInfosState.value.findIndex(
-            o => o.pageId === pageId && !o.published && !o.deviceType && !o.personaId && !o.languageId,
+            o => o.pageId === pageId && !o.deviceType && !o.personaId && !o.languageId,
         );
 
-        if (mainPageIndex) {
+        if (mainPageIndex >= 0) {
             dispatch(setIsSelected(mainPageIndex, value));
         }
     };
 
     const isMainPageDisabled = (page: PagePublishInfo): boolean => {
-        if (page.published || page.deviceType || page.personaId || page.languageId) {
+        if (page.deviceType || page.personaId || page.languageId) {
             return false;
         }
 
@@ -324,8 +325,8 @@ const PublishModal: React.FC = () => {
                                     </th>
                                     <th>Page</th>
                                     <th>Language</th>
-                                    <th>Device</th>
-                                    <th>Customer Segment</th>
+                                    {!mobileCmsModeActive && <th>Device</th>}
+                                    {!mobileCmsModeActive && <th>Customer Segment</th>}
                                     <th>Edited By</th>
                                     <th>Edited On</th>
                                     <th>Compare</th>
@@ -384,10 +385,16 @@ const PublishModal: React.FC = () => {
                                                     ? "All"
                                                     : languagesById[languageId]?.description ?? languageId}
                                             </td>
-                                            <td data-test-selector={`${testSelector}_device`}>{deviceType || "All"}</td>
-                                            <td data-test-selector={`${testSelector}_persona`}>
-                                                {!personaId ? "All" : personasById[personaId]?.name ?? personaId}
-                                            </td>
+                                            {!mobileCmsModeActive && (
+                                                <td data-test-selector={`${testSelector}_device`}>
+                                                    {deviceType || "All"}
+                                                </td>
+                                            )}
+                                            {!mobileCmsModeActive && (
+                                                <td data-test-selector={`${testSelector}_persona`}>
+                                                    {!personaId ? "All" : personasById[personaId]?.name ?? personaId}
+                                                </td>
+                                            )}
                                             <td data-test-selector={`${testSelector}_modifiedBy`}>{modifiedBy}</td>
                                             <td data-test-selector={`${testSelector}_modifiedOn`}>
                                                 {new Date(modifiedOn).toLocaleString()}

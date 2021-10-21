@@ -2,11 +2,10 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getShipTosDataView } from "@insite/client-framework/Store/Data/ShipTos/ShipTosSelectors";
 import updateSearchFields from "@insite/client-framework/Store/Pages/Addresses/Handlers/UpdateSearchFields";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
+import { AddressesPageContext } from "@insite/content-library/Pages/AddressesPage";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
-
-interface OwnProps {}
 
 const mapStateToProps = (state: ApplicationState) => ({
     shipTosDataView: getShipTosDataView(state, state.pages.addresses.getShipTosParameter),
@@ -16,7 +15,7 @@ const mapDispatchToProps = {
     updateSearchFields,
 };
 
-type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
+type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
 export interface AddressBookPaginationStyles {
     pagination?: PaginationPresentationProps;
@@ -26,7 +25,7 @@ export const addressBookPaginationStyles: AddressBookPaginationStyles = {};
 
 const styles = addressBookPaginationStyles;
 
-const AddressBookPagination: React.FunctionComponent<Props> = ({ shipTosDataView, updateSearchFields }: Props) => {
+const AddressBookPagination = ({ shipTosDataView, updateSearchFields }: Props) => {
     if (!shipTosDataView.value || !shipTosDataView.pagination) {
         return null;
     }
@@ -68,6 +67,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Addresses",
         icon: "LinkList",
+        allowedContexts: [AddressesPageContext],
     },
 };
 

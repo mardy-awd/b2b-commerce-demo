@@ -40,7 +40,11 @@ export const ExportData: HandlerType = async props => {
             }
         }
     } else {
-        const apiResult = await getCarts({ ...state.pages.vmiLocationDetails.getVmiOrdersParameter, pageSize: 9999 });
+        const apiResult = await getCarts({
+            ...state.pages.vmiLocationDetails.getVmiOrdersParameter,
+            page: 1,
+            pageSize: 9999,
+        });
         if (apiResult.successful && apiResult.result?.carts) {
             for (const row of apiResult.result.carts) {
                 data.push([

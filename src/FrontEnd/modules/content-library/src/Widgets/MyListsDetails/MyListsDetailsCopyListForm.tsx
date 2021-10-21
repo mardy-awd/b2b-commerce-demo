@@ -5,6 +5,7 @@ import {
     getWishListsDataView,
     getWishListState,
 } from "@insite/client-framework/Store/Data/WishLists/WishListsSelectors";
+import { wishListsParameter } from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/LoadWishLists";
 import addAllWishListLines from "@insite/client-framework/Store/Pages/MyLists/Handlers/AddAllWishListLines";
 import addWishList from "@insite/client-framework/Store/Pages/MyLists/Handlers/AddWishList";
 import translate from "@insite/client-framework/Translate";
@@ -35,7 +36,7 @@ interface State {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-    wishLists: getWishListsDataView(state, state.pages.myLists.getWishListsParameter).value,
+    wishLists: getWishListsDataView(state, wishListsParameter).value,
     wishList: getWishListState(state, state.pages.myListDetails.wishListId).value,
     wishListLines: getWishListLinesDataView(state, state.pages.myListDetails.loadWishListLinesParameter).value,
 });

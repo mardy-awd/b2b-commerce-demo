@@ -3,7 +3,7 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import translate from "@insite/client-framework/Translate";
 import { InvoiceModel } from "@insite/client-framework/Types/ApiModels";
 import AddressInfoDisplay, { AddressInfoDisplayStyles } from "@insite/content-library/Components/AddressInfoDisplay";
-import Typography, { TypographyProps } from "@insite/mobius/Typography";
+import Typography, { TypographyPresentationProps, TypographyProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
 import { css } from "styled-components";
@@ -14,12 +14,22 @@ interface OwnProps {
 }
 
 export interface InvoiceDetailsBillingAddressStyles {
+    headerText?: TypographyPresentationProps;
     titleText?: TypographyProps;
     addressDisplay?: AddressInfoDisplayStyles;
     wrapper?: InjectableCss;
 }
 
 export const billingAddressStyles: InvoiceDetailsBillingAddressStyles = {
+    headerText: {
+        variant: "h5",
+        css: css`
+            @media print {
+                font-size: 12px;
+            }
+            margin-bottom: 5px;
+        `,
+    },
     titleText: {
         variant: "h6",
         as: "h2",
@@ -32,7 +42,7 @@ export const billingAddressStyles: InvoiceDetailsBillingAddressStyles = {
     },
 };
 
-const InvoiceDetailsBillingAddress: React.FunctionComponent<OwnProps> = ({ invoice, extendedStyles }: OwnProps) => {
+const InvoiceDetailsBillingAddress = ({ invoice, extendedStyles }: OwnProps) => {
     if (!invoice) {
         return null;
     }
@@ -41,6 +51,9 @@ const InvoiceDetailsBillingAddress: React.FunctionComponent<OwnProps> = ({ invoi
 
     return (
         <StyledWrapper {...styles.wrapper}>
+            <Typography as="h2" {...styles.headerText}>
+                {translate("Billing Information")}
+            </Typography>
             <Typography {...styles.titleText}>{translate("Billing Address")}</Typography>
             <AddressInfoDisplay
                 companyName={invoice.btCompanyName}

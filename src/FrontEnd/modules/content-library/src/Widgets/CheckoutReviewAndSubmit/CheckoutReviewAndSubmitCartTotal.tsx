@@ -11,6 +11,7 @@ import {
     canSubmitForApprovalOrder,
     getCartState,
     getCurrentCartState,
+    hasProductsWithInvalidPrice,
 } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import {
     getCurrentPromotionsDataView,
@@ -77,6 +78,7 @@ const mapStateToProps = (state: ApplicationState) => {
         showPlaceOrderButton: canPlaceOrder(cartState.value),
         placeOrderErrorMessage: state.pages.checkoutReviewAndSubmit.placeOrderErrorMessage,
         showSubmitForApprovalOrder: canSubmitForApprovalOrder(cartState.value),
+        hasProductsWithInvalidPrice: hasProductsWithInvalidPrice(cartState.value),
         canUpdateShipToAddress:
             billTo?.isGuest ||
             shipTo?.oneTimeAddress ||
@@ -100,6 +102,8 @@ export interface CheckoutReviewAndSubmitCartTotalStyles {
     invalidEditableAddressErrorMessageText?: TypographyPresentationProps;
     invalidAddressErrorMessageGridItem?: GridItemProps;
     invalidAddressErrorMessageText?: TypographyPresentationProps;
+    invalidPriceErrorMessageGridItem?: GridItemProps;
+    invalidPriceErrorMessageText?: TypographyPresentationProps;
     placeOrderButton?: ButtonPresentationProps;
     submitForApprovalButton?: ButtonPresentationProps;
     findLocationModal?: FindLocationModalStyles;
@@ -152,6 +156,14 @@ export const cartTotalStyles: CheckoutReviewAndSubmitCartTotalStyles = {
     },
     invalidAddressErrorMessageGridItem: { width: 12 },
     invalidAddressErrorMessageText: {
+        color: "danger",
+        css: css`
+            margin-top: 5px;
+            margin-bottom: 15px;
+        `,
+    },
+    invalidPriceErrorMessageGridItem: { width: 12 },
+    invalidPriceErrorMessageText: {
         color: "danger",
         css: css`
             margin-top: 5px;
@@ -218,6 +230,7 @@ const CheckoutReviewAndSubmitCartTotal: FC<Props> = ({
     setFulfillmentMethod,
     showSubmitForApprovalOrder,
     canUpdateShipToAddress,
+    hasProductsWithInvalidPrice,
 }) => {
     const [isFindLocationOpen, setIsFindLocationOpen] = React.useState(false);
     const openWarehouseSelectionModal = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -362,6 +375,13 @@ const CheckoutReviewAndSubmitCartTotal: FC<Props> = ({
                 <GridItem {...styles.invalidAddressErrorMessageGridItem}>
                     <Typography {...styles.invalidAddressErrorMessageText}>
                         {siteMessage("ReviewAndPay_InvalidAddress_CannotCalculateTax")}
+                    </Typography>
+                </GridItem>
+            )}
+            {hasProductsWithInvalidPrice && (
+                <GridItem {...styles.invalidPriceErrorMessageGridItem}>
+                    <Typography {...styles.invalidPriceErrorMessageText}>
+                        {siteMessage("ReviewAndPay_HasProductsWithInvalidPrice")}
                     </Typography>
                 </GridItem>
             )}

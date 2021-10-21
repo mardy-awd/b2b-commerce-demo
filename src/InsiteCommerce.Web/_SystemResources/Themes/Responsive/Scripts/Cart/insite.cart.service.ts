@@ -26,7 +26,7 @@ module insite.cart {
         removeCart(cart: CartModel): ng.IPromise<CartModel>;
         addLine(cartLine: CartLineModel, toCurrentCart?: boolean, showAddToCartPopup?: boolean): ng.IPromise<CartLineModel>;
         addLineFromProduct(product: ProductDto, configuration?: ConfigSectionOptionDto[], productSubscription?: ProductSubscriptionDto, toCurrentCart?: boolean, showAddToCartPopup?: boolean): ng.IPromise<CartLineModel>;
-        addLineCollection(cartLines: any, toCurrentCart?: boolean, showAddToCartPopup?: boolean): ng.IPromise<CartLineCollectionModel>;
+        addLineCollection(cartLines: any, toCurrentCart?: boolean, showAddToCartPopup?: boolean, notAllAdded?: boolean): ng.IPromise<CartLineCollectionModel>;
         addLineCollectionFromProducts(products: ProductDto[], toCurrentCart?: boolean, showAddToCartPopup?: boolean): ng.IPromise<CartLineCollectionModel>;
         addWishListToCart(wishListId: string, showAddToCartPopup?: boolean, data?: IAddWishListToCartData): ng.IPromise<CartLineCollectionModel>;
         updateLine(cartLine: CartLineModel, refresh: boolean): ng.IPromise<CartLineModel>;
@@ -53,7 +53,7 @@ module insite.cart {
 
         private invalidAddressException = "Insite.Core.Exceptions.InvalidAddressException";
 
-        static $inject = ["$http", "$rootScope", "$q", "addressErrorPopupService", "addToCartPopupService", "apiErrorPopupService", "httpWrapperService"];
+        static $inject = ["$http", "$rootScope", "$q", "addressErrorPopupService", "addToCartPopupService", "apiErrorPopupService", "httpWrapperService", "productPriceService", "invalidPricePopupService"];
 
         constructor(
             protected $http: ng.IHttpService,
@@ -62,7 +62,9 @@ module insite.cart {
             protected addressErrorPopupService: cart.IAddressErrorPopupService,
             protected addToCartPopupService: IAddToCartPopupService,
             protected apiErrorPopupService: core.IApiErrorPopupService,
-            protected httpWrapperService: core.HttpWrapperService) {
+            protected httpWrapperService: core.HttpWrapperService,
+            protected productPriceService: catalog.IProductPriceService,
+            protected invalidPricePopupService: IInvalidPricePopupService) {
         }
 
         // returns the current cart if it is already loaded
@@ -204,6 +206,13 @@ module insite.cart {
         }
 
         addLine(cartLine: CartLineModel, toCurrentCart = false, showAddToCartPopup?: boolean): ng.IPromise<CartLineModel> {
+            if (!cartLine.quoteRequired && !cartLine.allowZeroPricing && cartLine.pricing && cartLine.pricing.unitNetPrice === 0) {
+                this.invalidPricePopupService.display({});
+                const defer = this.$q.defer<CartLineModel>();
+                defer.reject();
+                return defer.promise;
+            }
+
             const parsedQty = parseFloat(cartLine.qtyOrdered.toString());
             cartLine.qtyOrdered = parsedQty > 0 ? parsedQty : 1;
 
@@ -230,6 +239,13 @@ module insite.cart {
         }
 
         addLineFromProduct(product: ProductDto, configuration?: ConfigSectionOptionDto[], productSubscription?: ProductSubscriptionDto, toCurrentCart = false, showAddToCartPopup?: boolean): ng.IPromise<CartLineModel> {
+            if (!product.quoteRequired && !product.allowZeroPricing && this.productPriceService.getUnitNetPrice(product).price === 0) {
+                this.invalidPricePopupService.display({});
+                const defer = this.$q.defer<CartLineModel>();
+                defer.reject();
+                return defer.promise;
+            }
+
             const cartLine = {} as CartLineModel;
             cartLine.productId = product.id;
             cartLine.qtyOrdered = product.qtyOrdered;
@@ -248,7 +264,7 @@ module insite.cart {
             return this.addLine(cartLine, toCurrentCart, showAddToCartPopup);
         }
 
-        addLineCollection(cartLines: any, toCurrentCart = false, showAddToCartPopup?: boolean): ng.IPromise<CartLineCollectionModel> {
+        addLineCollection(cartLines: any, toCurrentCart = false, showAddToCartPopup?: boolean, notAllAdded?: boolean): ng.IPromise<CartLineCollectionModel> {
             const cartLineCollection = { cartLines: cartLines } as CartLineCollectionModel;
 
             cartLineCollection.cartLines.forEach((line) => {
@@ -261,17 +277,22 @@ module insite.cart {
             return this.httpWrapperService.executeHttpRequest(
                 this,
                 this.$http({ method: "POST", url: `${postUrl}/batch`, data: cartLineCollection, bypassErrorInterceptor: true }),
-                (response: ng.IHttpPromiseCallbackArg<CartLineCollectionModel>) => { this.addLineCollectionCompleted(response, showAddToCartPopup); },
+                (response: ng.IHttpPromiseCallbackArg<CartLineCollectionModel>) => { this.addLineCollectionCompleted(response, showAddToCartPopup, notAllAdded); },
                 this.addLineCollectionFailed);
         }
 
-        protected addLineCollectionCompleted(response: ng.IHttpPromiseCallbackArg<CartLineCollectionModel>, showAddToCartPopup?: boolean): void {
+        protected addLineCollectionCompleted(response: ng.IHttpPromiseCallbackArg<CartLineCollectionModel>, showAddToCartPopup?: boolean, notAllAdded?: boolean): void {
             const cartLineCollection = response.data;
             const isQtyAdjusted = cartLineCollection.cartLines.some((line) => {
                 return line.isQtyAdjusted;
             });
 
-            this.addToCartPopupService.display({ isAddAll: true, isQtyAdjusted: isQtyAdjusted, showAddToCartPopup: showAddToCartPopup });
+            this.addToCartPopupService.display({
+                 isAddAll: true, 
+                 notAllAdded: cartLineCollection.notAllAddedToCart || notAllAdded, 
+                 isQtyAdjusted: isQtyAdjusted, 
+                 showAddToCartPopup: showAddToCartPopup
+            });
 
             this.getCart();
             this.$rootScope.$broadcast("cartChanged");

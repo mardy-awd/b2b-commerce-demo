@@ -1,7 +1,7 @@
 import { contentModeCookieName, isSiteInShellCookieName } from "@insite/client-framework/Common/ContentMode";
 import { getCookie, setCookie } from "@insite/client-framework/Common/Cookies";
 import { getValueCaseInsensitive, SafeDictionary } from "@insite/client-framework/Common/Types";
-import { checkIsWebCrawler, setIsWebCrawler } from "@insite/client-framework/Components/ContentItemStore";
+import { checkIsWebCrawler, setIsWebCrawler } from "@insite/client-framework/Common/WebCrawler";
 import { ShellContext } from "@insite/client-framework/Components/IsInShell";
 import PreviewLogin from "@insite/client-framework/Components/PreviewLogin";
 import SessionLoader from "@insite/client-framework/Components/SessionLoader";

@@ -60,7 +60,7 @@ class PageTree extends ClickOutside<Props, State> {
         this.state = {};
     }
 
-    UNSAFE_componentWillMount(): void {
+    componentDidMount(): void {
         if (typeof this.props.nodesByParentId[""] === "undefined") {
             this.props.loadTreeNodes();
         }
@@ -163,6 +163,8 @@ class PageTree extends ClickOutside<Props, State> {
                             nodesByParentId={nodesByParentId}
                         />
                     )}
+                    <MakeDefaultVariantModal />
+                    <VariantRulesModal />
                 </PageTreeStyle>
             );
         }

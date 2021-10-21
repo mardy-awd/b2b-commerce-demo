@@ -30,6 +30,7 @@ interface OwnProps {
     showSavingsAmount: boolean;
     showSavingsPercent: boolean;
     editable: boolean;
+    showInvalidPriceMessage?: boolean;
     extendedStyles?: CartLineCardExpandedStyles;
 }
 
@@ -227,6 +228,7 @@ const CartLineCardExpanded = ({
     editable,
     enableVat,
     vatPriceDisplay,
+    showInvalidPriceMessage,
     extendedStyles,
 }: Props) => {
     const [styles] = React.useState(() => mergeToNew(cartLineCardExpandedStyles, extendedStyles));
@@ -276,6 +278,7 @@ const CartLineCardExpanded = ({
                                     showSavings={true}
                                     showSavingsAmount={showSavingsAmount}
                                     showSavingsPercent={showSavingsPercent}
+                                    showInvalidPriceMessage={showInvalidPriceMessage}
                                     extendedStyles={styles.price}
                                 />
                                 {promotions?.map(promotion => (

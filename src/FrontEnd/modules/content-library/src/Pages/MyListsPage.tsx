@@ -1,3 +1,4 @@
+import { getCookie } from "@insite/client-framework/Common/Cookies";
 import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getWishListsDataView } from "@insite/client-framework/Store/Data/WishLists/WishListsSelectors";
@@ -12,6 +13,7 @@ import { connect, ResolveThunks } from "react-redux";
 
 const mapStateToProps = (state: ApplicationState) => ({
     wishListsDataView: getWishListsDataView(state, state.pages.myLists.getWishListsParameter),
+    getWishListsParameter: state.pages.myLists.getWishListsParameter,
 });
 
 const mapDispatchToProps = {
@@ -21,8 +23,15 @@ const mapDispatchToProps = {
 
 type Props = ResolveThunks<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps> & PageProps;
 
-const MyListsPage = ({ id, wishListsDataView, loadWishLists }: Props) => {
+const MyListsPage = ({ id, wishListsDataView, getWishListsParameter, updateLoadParameter, loadWishLists }: Props) => {
     useEffect(() => {
+        const pageSizeCookie = getCookie("Lists-PageSize");
+        const pageSize = pageSizeCookie ? parseInt(pageSizeCookie, 10) : undefined;
+        if (pageSize && pageSize !== getWishListsParameter.pageSize) {
+            updateLoadParameter({ pageSize });
+            return;
+        }
+
         // if this is undefined it means someone changed the filters and we haven't loaded the new collection yet
         if (!wishListsDataView.isLoading && !wishListsDataView.value) {
             loadWishLists();

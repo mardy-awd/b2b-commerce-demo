@@ -8,7 +8,6 @@ import mobiusIconsObject from "@insite/mobius/Icons/commonIcons";
 import Modal, { ModalPresentationProps } from "@insite/mobius/Modal";
 import TextField from "@insite/mobius/TextField";
 import shellIconsObject from "@insite/shell/Components/Icons/CompatibleIcons/shellIcons";
-import Search from "@insite/shell/Components/Icons/Search";
 import { getWidgetDefinition, getWidgetDefinitions } from "@insite/shell/DefinitionLoader";
 import { LoadedWidgetDefinition } from "@insite/shell/DefinitionTypes";
 import { setupWidgetModel } from "@insite/shell/Services/WidgetCreation";
@@ -23,9 +22,7 @@ import styled, { css } from "styled-components";
 
 const iconsObject = { ...shellIconsObject, ...mobiusIconsObject };
 
-interface OwnProps {}
-
-type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & OwnProps;
+type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
 const mapStateToProps = (state: ShellState) => {
     const currentPage = getCurrentPage(state);
@@ -53,10 +50,15 @@ const mapStateToProps = (state: ShellState) => {
             continue;
         }
 
+        if (!widgetDefinition.group) {
+            continue;
+        }
+
         if (!widgetsByGroup[widgetDefinition.group]) {
             groups.push(widgetDefinition.group);
             widgetsByGroup[widgetDefinition.group] = [];
         }
+
         widgetsByGroup[widgetDefinition.group].push(widgetDefinition);
     }
 

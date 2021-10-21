@@ -209,7 +209,7 @@ module insite.catalog {
         }
 
         protected getProductPriceCompleted(response: ng.IHttpPromiseCallbackArg<ProductPriceModel>, product: ProductDto): void {
-            product.pricing = response.data;
+            product.pricing = response.data as any;
         }
 
         protected getProductPriceFailed(error: ng.IHttpPromiseCallbackArg<any>): void {

@@ -224,7 +224,8 @@ export const orderLinesListStyles: OrderLinesListStyles = {
         gap: 5,
     },
     orderLinePriceGridItem: {
-        width: [12, 12, 12, 4, 4],
+        width: [12, 12, 12, 12, 12],
+
         css: css`
             flex-direction: column;
         `,
@@ -246,9 +247,6 @@ export const orderLinesListStyles: OrderLinesListStyles = {
     productInfoSubtotalGridItem: {
         width: [12, 12, 4, 6, 6],
         printWidth: 4,
-        css: css`
-            flex-direction: column;
-        `,
     },
     orderLineNotes: {
         gridItemStyles: {
@@ -256,14 +254,99 @@ export const orderLinesListStyles: OrderLinesListStyles = {
         },
     },
     productInfoTotalsGridItem: {
-        width: [12, 12, 12, 8, 8],
+        width: [12, 12, 12, 12, 12],
+        css: css`
+            padding-top: 10px;
+        `,
     },
     productInfoTotalsGridContainer: {
         gap: 10,
     },
+    productInfoQtyOrderedHeadingAndText: {
+        extendedStyles: {
+            wrapper: {
+                css: css`
+                    padding-right: 10px;
+                `,
+            },
+            heading: {
+                variant: "legend",
+                weight: "bold",
+            },
+
+            text: {
+                css: css`
+                    text-align: center;
+                `,
+            },
+        },
+    },
+    productInfoQtyShippedHeadingAndText: {
+        extendedStyles: {
+            wrapper: {
+                css: css`
+                    padding-right: 10px;
+                `,
+            },
+            heading: {
+                variant: "legend",
+                weight: "bold",
+            },
+
+            text: {
+                css: css`
+                    text-align: center;
+                `,
+            },
+        },
+    },
     productInfoSubtotalHeadingAndText: {
+        wrapper: {
+            css: css`
+                padding-right: 10px;
+            `,
+        },
+        heading: {
+            variant: "legend",
+            weight: "bold",
+        },
+
         text: {
             weight: "bold",
+            css: css`
+                text-align: center;
+            `,
+        },
+    },
+    priceHeadingAndText: {
+        extendedStyles: {
+            heading: {
+                weight: "bold",
+            },
+            text: {
+                weight: "bold",
+            },
+        },
+    },
+    customerProductNumberHeadingAndText: {
+        extendedStyles: {
+            heading: {
+                weight: "bold",
+            },
+        },
+    },
+    erpNumberHeadingAndText: {
+        extendedStyles: {
+            heading: {
+                weight: "bold",
+            },
+        },
+    },
+    manufacturerHeadingAndText: {
+        extendedStyles: {
+            heading: {
+                weight: "bold",
+            },
         },
     },
 };
@@ -302,6 +385,15 @@ const OrderLineProductInfo = ({ orderLine, styles }: { orderLine: OrderLineModel
                 )}
                 <GridItem {...styles.productInfoPartNumbersGridItem}>
                     <GridContainer {...styles.productInfoPartNumbersGridContainer}>
+                        {orderLine.customerProductNumber && (
+                            <GridItem {...styles.productInfoCustomerProductGridItem}>
+                                <SmallHeadingAndText
+                                    {...styles.customerProductNumberHeadingAndText}
+                                    heading={translate("My Part #")}
+                                    text={orderLine.customerProductNumber}
+                                />
+                            </GridItem>
+                        )}
                         <GridItem {...styles.productInfoErpNumberGridItem}>
                             <SmallHeadingAndText
                                 {...styles.erpNumberHeadingAndText}
@@ -315,15 +407,6 @@ const OrderLineProductInfo = ({ orderLine, styles }: { orderLine: OrderLineModel
                                     {...styles.manufacturerHeadingAndText}
                                     heading={translate("MFG #")}
                                     text={orderLine.manufacturerItem}
-                                />
-                            </GridItem>
-                        )}
-                        {orderLine.customerProductNumber && (
-                            <GridItem {...styles.productInfoCustomerProductGridItem}>
-                                <SmallHeadingAndText
-                                    {...styles.customerProductNumberHeadingAndText}
-                                    heading={translate("My Part #")}
-                                    text={orderLine.customerProductNumber}
                                 />
                             </GridItem>
                         )}

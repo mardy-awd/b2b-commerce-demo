@@ -27,6 +27,7 @@ const reducer = {
         draft.lastProductPath = action.path;
         draft.lastStyledOption = action.styledOption;
         draft.selectedProductId = undefined;
+        draft.isProductLoading = true;
     },
     "Pages/ProductDetails/CompleteLoadProduct": (
         draft: Draft<ProductDetailsState>,
@@ -41,7 +42,11 @@ const reducer = {
         draft.productInfosById = action.productInfosById;
         draft.selectedImageIndex = 0;
         draft.variantSelection = action.variantSelection;
+        draft.isProductLoading = false;
         initConfigurationSelection(draft, action.configuration);
+    },
+    "Pages/ProductDetails/CancelLoadProduct": (draft: Draft<ProductDetailsState>) => {
+        draft.isProductLoading = false;
     },
     "Pages/ProductDetails/InitConfigurationSelection": (
         draft: Draft<ProductDetailsState>,

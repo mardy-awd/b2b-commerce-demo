@@ -40,6 +40,7 @@ const mapStateToProps = (state: ShellState) => ({
     nodesByParentId: state.pageTree.treeNodesByParentId,
     headerNodesByParentId: state.pageTree.headerTreeNodesByParentId,
     footerNodesByParentId: state.pageTree.footerTreeNodesByParentId,
+    mobileNodesByParentId: state.pageTree.mobileTreeNodesByParentId,
     updatedLayoutIds: state.pageEditor.updatedLayoutIds,
     futurePublishNodeIds: state.pageTree.futurePublishNodeIds,
 });
@@ -182,12 +183,14 @@ class SiteFrame extends React.Component<Props, State> {
                         this.props.nodesByParentId[data.parentId],
                         this.props.headerNodesByParentId[data.parentId],
                         this.props.footerNodesByParentId[data.parentId],
+                        this.props.mobileNodesByParentId[data.parentId],
                     ) ||
                     getPageStateFromDictionaries(
                         data.pageId,
                         this.props.nodesByParentId,
                         this.props.headerNodesByParentId,
                         this.props.footerNodesByParentId,
+                        this.props.mobileNodesByParentId,
                     );
 
                 const key =

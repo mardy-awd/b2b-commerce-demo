@@ -1,12 +1,12 @@
+import Button from "@insite/mobius/Button";
+import FormField from "@insite/mobius/FormField";
+import baseTheme from "@insite/mobius/globals/baseTheme";
+import Pagination from "@insite/mobius/Pagination/Pagination";
+import Select from "@insite/mobius/Select";
+import ThemeProvider from "@insite/mobius/ThemeProvider";
+import { mount } from "enzyme";
 import "jest-styled-components";
 import React from "react";
-import { mount } from "enzyme";
-import ThemeProvider from "../ThemeProvider";
-import Pagination from "./Pagination";
-import Button from "../Button";
-import Select from "../Select";
-import baseTheme from "../globals/baseTheme";
-import FormField from "../FormField";
 
 const themeGenerator = defaultProps => ({
     ...baseTheme,
@@ -106,8 +106,13 @@ describe("Pagination", () => {
                 ...propsBase,
                 onChangeResultsPerPage: fn,
             };
-            wrapper().find(Select).prop("onChange")(10);
-            expect(fn).toHaveBeenCalledWith(10);
+            const changeEvent = {
+                currentTarget: {
+                    value: 10,
+                },
+            };
+            wrapper().find(Select).prop("onChange")(changeEvent);
+            expect(fn).toHaveBeenCalledWith(changeEvent, 10);
         });
         test("calls onclick with appropriate argument for each button, or not at all for current page 'button'", () => {
             const fn = jest.fn();

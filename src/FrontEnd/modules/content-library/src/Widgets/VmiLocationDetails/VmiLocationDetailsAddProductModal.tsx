@@ -318,6 +318,7 @@ const VmiLocationDetailsAddProductModal = ({
                                     {...styles.binTextField}
                                     label={translate("Bin #")}
                                     onChange={binNumberChangeHandler}
+                                    maxLength={25}
                                     value={binNumber}
                                 />
                             </GridItem>

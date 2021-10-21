@@ -35,6 +35,7 @@ const mobileLinkListActionTypes = [
     { displayName: "Settings", value: "Settings" },
     { displayName: "Sign Out", value: "SignOut" },
     { displayName: "Custom", value: "Custom" },
+    { displayName: "Vendor Managed Inventory", value: "VendorManagedInventory" },
 ];
 
 const displayNameByTypeCache: SafeDictionary<string> = {};

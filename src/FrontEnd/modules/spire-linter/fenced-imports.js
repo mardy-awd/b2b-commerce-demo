@@ -57,7 +57,7 @@ const validShellImports = [
     "@optimizely/design-tokens/dist/js/typography",
     "@optimizely/design-tokens/dist/fonts/src/Inter-italic.var.woff2",
     "@optimizely/design-tokens/dist/fonts/src/Inter-roman.var.woff2",
-    "@episerver/platform-navigation"
+    "@episerver/platform-navigation",
 ];
 const allowedModules = {
     blueprints: [validClientImports, ["@insite/content-library", "@insite/client-framework", "@insite/mobius"]],

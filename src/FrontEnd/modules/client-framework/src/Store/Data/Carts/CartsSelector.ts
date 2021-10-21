@@ -31,10 +31,14 @@ export const isPunchOutOrder = (cart: Cart | undefined) => !!cart && !!cart.prop
 export const isCartEmpty = (cart: Cart | undefined) => cart && !!cart.cartLines && cart.cartLines.length === 0;
 
 export const canCheckoutWithCart = (cart: Cart | undefined) =>
-    cart && (cart.canCheckOut || hasRestrictedCartLines(cart));
+    cart && (cart.canCheckOut || hasRestrictedCartLines(cart) || hasProductsWithInvalidPrice(cart));
 
 export const isCartCheckoutDisabled = (cart: Cart | undefined) =>
-    cart && ((!cart.canCheckOut && !cart.canRequisition) || isCartEmpty(cart) || hasRestrictedCartLines(cart));
+    cart &&
+    ((!cart.canCheckOut && !cart.canRequisition) ||
+        isCartEmpty(cart) ||
+        hasRestrictedCartLines(cart) ||
+        hasProductsWithInvalidPrice(cart));
 
 export const canSaveOrder = (cart: Cart | undefined) => cart && cart.canSaveOrder && !isCartEmpty(cart);
 
@@ -64,3 +68,13 @@ export const hasQuoteRequiredProducts = (cart: Cart | undefined) =>
 
 export const hasOnlyQuoteRequiredProducts = (cart: Cart | undefined) =>
     cart?.cartLines?.every(cartLine => cartLine.quoteRequired);
+
+export const hasProductsWithInvalidPrice = (cart: Cart | undefined) =>
+    cart?.cartLines?.some(
+        cartLine =>
+            !cartLine.isPromotionItem &&
+            !cartLine.quoteRequired &&
+            !cartLine.allowZeroPricing &&
+            cartLine.pricing?.unitNetPrice === 0 &&
+            cartLine.pricing?.unitRegularPrice === 0,
+    );
