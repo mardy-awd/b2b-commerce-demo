@@ -14,7 +14,7 @@
     "@comment build:docker": "Building in parallel has caused occasional silent failures and doesn't appear to provide a significant benefits. Use build instead",
     "build:docker": "npm run build",
     "create-blueprint": "node ./scripts/createBlueprint",
-    "eslint": "eslint . --ext .ts,.tsx --max-warnings=0",
+    "eslint": "eslint . --ext .ts,.tsx --max-warnings=0 --ignore-pattern modules/blueprints/buildBreaker/src/BuildBreaker.tsx",
     "eslint:fix": "npm run eslint -- --fix",
     "@comment eslint:blueprint": "we run eslint across all folders for eslint:blueprint so that it includes all translations",
     "eslint:blueprint": "eslint . --ext .ts,.tsx -c ./.eslintrc-blueprint.js --no-eslintrc",

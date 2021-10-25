@@ -16,7 +16,6 @@ module.exports = {
             checkSyntacticErrors: true,
             tsconfig: "tsconfig.base.json",
             useTypescriptIncrementalApi: false,
-            eslint: true,
         }),
         new LicenseWebpackPlugin({
             perChunkOutput: false,
