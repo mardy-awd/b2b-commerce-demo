@@ -382,6 +382,7 @@ export const fetch: typeof window.fetch = (input, init) => {
             case "host":
             case "origin":
             case "referer":
+            case "accept": // Crawlers have been found sending problematic Accept headers, breaking API calls.
                 continue;
         }
 
