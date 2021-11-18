@@ -205,7 +205,7 @@ const AddVmiUserModal = ({
     const [removeUserModalIsOpen, setRemoveUserModalIsOpen] = useState(false);
 
     useEffect(() => {
-        if (isOpen && !editUserId && accountsDataView && !accountsDataView.value && !accountsDataView.isLoading) {
+        if (isOpen && !editUserId && accountsDataView && !accountsDataView.isLoading) {
             loadAccounts(getAccountsParameter);
         }
     }, [getAccountsParameter, isOpen]);
@@ -229,7 +229,9 @@ const AddVmiUserModal = ({
                 optionValue: c.id,
             }));
             setOptions(options);
-            if (!user && accountsDataView.value.length === 1) {
+            if (user) {
+                clearUserData();
+            } else if (accountsDataView.value.length === 1) {
                 selectUser(accountsDataView.value[0]);
             }
         }
@@ -326,12 +328,16 @@ const AddVmiUserModal = ({
 
     const resetState = () => {
         setUserSearchText("");
+        clearUserData();
+        setShowFormErrors(false);
+        setRemoveUserModalIsOpen(false);
+    };
+
+    const clearUserData = () => {
         setUser(undefined);
         setRole("VMI_User");
         clearSelectedVmiLocations();
         setUserErrorMessage("");
-        setShowFormErrors(false);
-        setRemoveUserModalIsOpen(false);
     };
 
     const roleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {

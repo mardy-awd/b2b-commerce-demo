@@ -8,6 +8,7 @@ import { CheckoutShippingPageContext } from "@insite/content-library/Pages/Check
 import TextArea, { TextAreaProps } from "@insite/mobius/TextArea";
 import React, { ChangeEvent, Component } from "react";
 import { connect, ResolveThunks } from "react-redux";
+import { css } from "styled-components";
 
 interface OwnProps extends WidgetProps {}
 
@@ -29,7 +30,15 @@ export interface CheckoutShippingOrderNotesEntryStyles {
     textArea?: TextAreaProps;
 }
 
-export const checkoutShippingOrderNotesEntryStyles: CheckoutShippingOrderNotesEntryStyles = {};
+export const checkoutShippingOrderNotesEntryStyles: CheckoutShippingOrderNotesEntryStyles = {
+    textArea: {
+        css: css`
+            min-width: 100%;
+            max-width: 100%;
+            min-height: 50px;
+        `,
+    },
+};
 
 const styles = checkoutShippingOrderNotesEntryStyles;
 

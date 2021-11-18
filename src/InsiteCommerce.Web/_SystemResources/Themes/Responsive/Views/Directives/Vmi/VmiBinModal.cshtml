@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="row btns">
-                        <a href="#" ng-click="vm.openImportModal()">[% translate 'Import CSV' %]</a>
+                        <a href="#" ng-if="vm.showImport" ng-click="vm.openImportModal()">[% translate 'Import CSV' %]</a>
                         <button ng-click="vm.closeModal()" class="btn tertiary btn-cancel" type="button">[% translate 'Cancel' %]</button>
                         <button ng-disabled="!vm.itemToAdd" class="btn primary" type="submit" ng-bind="vm.vmiBin.id ? '[% translate 'Save' EscapeSingleQuotes %]' : '[% translate 'Add Product' EscapeSingleQuotes %]'"></button>
                     </div>

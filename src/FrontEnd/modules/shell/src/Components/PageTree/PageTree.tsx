@@ -37,6 +37,7 @@ const mapStateToProps = (state: ShellState) => ({
     neverPublishedNodeIds: state.pageTree.neverPublishedNodeIds,
     futurePublishNodeIds: state.pageTree.futurePublishNodeIds,
     draftNodeIds: state.pageTree.draftNodeIds,
+    appliedTreeFilters: state.pageTree.appliedTreeFilters,
 });
 
 const mapDispatchToProps = {
@@ -133,6 +134,7 @@ class PageTree extends ClickOutside<Props, State> {
             neverPublishedNodeIds,
             futurePublishNodeIds,
             draftNodeIds,
+            appliedTreeFilters,
         } = this.props;
 
         if (mobileCmsModeActive) {
@@ -170,6 +172,7 @@ class PageTree extends ClickOutside<Props, State> {
         }
 
         const noPagesFound =
+            appliedTreeFilters.length > 0 &&
             Object.keys(headerNodesByParentId).length === 0 &&
             Object.keys(nodesByParentId).length === 0 &&
             Object.keys(footerNodesByParentId).length === 0;

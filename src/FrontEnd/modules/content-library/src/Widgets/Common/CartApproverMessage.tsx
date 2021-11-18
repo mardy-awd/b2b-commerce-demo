@@ -45,7 +45,7 @@ const CartApproverMessage = ({ cart }: Props) => {
 
     return (
         <StyledWrapper {...styles.approvingWrapper}>
-            <Typography {...styles.approvingText}>
+            <Typography {...styles.approvingText} data-test-selector="tst_cart_approvingOrderMessage">
                 {translate("Approving Order for {0}", cart.initiatedByUserName?.toUpperCase())}
             </Typography>
         </StyledWrapper>

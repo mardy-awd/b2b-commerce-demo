@@ -113,6 +113,7 @@ class ProductDetailsPage extends React.Component<Props, State> {
             openGraphTitle,
             openGraphUrl,
             title,
+            alternateLanguageUrls,
         } = catalogPageState.value;
 
         setPageMetadata(
@@ -126,6 +127,7 @@ class ProductDetailsPage extends React.Component<Props, State> {
                 canonicalPath: product.canonicalUrl,
                 title: title || product.productTitle,
                 websiteName,
+                alternateLanguageUrls: alternateLanguageUrls ?? undefined,
             },
             websiteSettings,
         );

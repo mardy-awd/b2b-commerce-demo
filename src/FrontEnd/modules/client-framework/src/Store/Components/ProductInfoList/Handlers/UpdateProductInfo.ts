@@ -14,8 +14,10 @@ export const LoadRealTimePricing: HandlerType = props => {
     if (!props.parameter.unitOfMeasure) {
         return;
     }
-    const productOption = props.getState().components.productInfoLists.productInfoListById[props.parameter.id]
-        ?.productInfoByProductId[props.parameter.productId];
+    const productOption =
+        props.getState().components.productInfoLists.productInfoListById[props.parameter.id]?.productInfoByProductId[
+            props.parameter.productId
+        ];
     if (props.parameter.unitOfMeasure === productOption?.unitOfMeasure) {
         return;
     }

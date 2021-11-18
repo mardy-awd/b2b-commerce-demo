@@ -3,7 +3,7 @@ const appRoot = require("app-root-path");
 
 console.log("Creating Widget Import Chunk File");
 
-let contents = `export default function importWidgetChunk(type: string, importCallback: (type: string, module?: any) => void) {
+let contents = `export default function importWidgetChunk(type: string) {
     switch (type) {\n`;
 
 const skippedDirectories = ["Common", "Basic", "Header", "Footer"];
@@ -24,20 +24,20 @@ const writeNewFile = () => {
             const switchImportString = `        case "${dir}/${file}":
             return import(
                 /* webpackChunkName: "${dir.toLowerCase()}Chunk" */ "@insite/content-library/Widgets/${dir}/${file}"
-            ).then((module?: any) => importCallback("${dir}/${file}", module));\n`;
+            );\n`;
             addFileContents(switchImportString);
         }
     }
 
     addFileContents(`        default:
-            // Calling callback with no argument will show the MissingComponent
-            return importCallback("");
+            // Async Component will use the MissingComponent
+            return null;
     }
 }
 `);
 
     fs.writeFileSync(`${appRoot}/modules/client-framework/src/Components/importWidgetChunk.tsx`, contents, "utf-8");
-    console.log("Writting Widget Chunk File");
+    console.log("Writing Widget Chunk File");
 };
 
 const addFileContents = addition => {

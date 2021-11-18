@@ -9,6 +9,7 @@ import SmallHeadingAndText, { SmallHeadingAndTextStyles } from "@insite/content-
 import TextField, { TextFieldPresentationProps } from "@insite/mobius/TextField";
 import React, { FC } from "react";
 import { connect } from "react-redux";
+import { css } from "styled-components";
 
 interface OwnProps {
     cart: Cart;
@@ -39,6 +40,11 @@ export const cartLineQuantityStyles: CartLineQuantityStyles = {
     editableQuantityTextField: {
         labelProps: {
             variant: "legend",
+            css: css`
+                font-size: 10px;
+                text-transform: uppercase;
+                font-weight: 600;
+            `,
         },
     },
 };

@@ -1,4 +1,4 @@
-import { Dictionary } from "@insite/client-framework/Common/Types";
+import { Dictionary, SafeDictionary } from "@insite/client-framework/Common/Types";
 import { request } from "@insite/client-framework/Services/ApiService";
 import { PaginationModel } from "@insite/client-framework/Types/ApiModels";
 import { PageModel } from "@insite/client-framework/Types/PageProps";
@@ -81,6 +81,7 @@ export interface RetrievePageResult {
     bypassedAuthorization?: boolean;
     isAuthenticatedOnServer: boolean;
     requiresAuthorization: boolean;
+    alternateLanguageUrls: SafeDictionary<string>;
 }
 
 export interface BasicLanguageModel {

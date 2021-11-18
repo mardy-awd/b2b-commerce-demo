@@ -64,6 +64,8 @@ export type ToastComponentProps = MobiusStyledComponentProps<
         messageTypeString?: string;
         /** The length of time in milliseconds for the toast to display. Themable in `Toaster`. */
         timeoutLength?: number;
+        /** Focus the close button on render */
+        isFocusAfterMount?: boolean;
         onClose?: () => void;
     }
 >;
@@ -181,6 +183,7 @@ const Toast: React.FC<{ toastId: number; in?: boolean } & ToastProps> = ({
     messageTypeString,
     onClose,
     toastId,
+    isFocusAfterMount,
     ...otherProps
 }) => {
     const { applyProp, spreadProps } = applyPropBuilder(otherProps, { component: "toast" });
@@ -201,6 +204,11 @@ const Toast: React.FC<{ toastId: number; in?: boolean } & ToastProps> = ({
                     css={cssOverrides.toast}
                     {...{ transitionState, transitionLength, messageType }}
                     data-test-selector={`toast${messageType}`}
+                    onKeyPress={e => {
+                        if (e.key === "Enter") {
+                            e.stopPropagation();
+                        }
+                    }}
                 >
                     <ToastBody css={cssOverrides.toastBody} data-id="toast-body">
                         <IconMemo
@@ -226,6 +234,7 @@ const Toast: React.FC<{ toastId: number; in?: boolean } & ToastProps> = ({
                                     onClose?.();
                                     removeToast(toastId);
                                 }}
+                                isFocusAfterMount={isFocusAfterMount}
                                 aria-labelledby={`close-toast${toastId}`}
                                 {...spreadProps("closeButtonProps")}
                             >

@@ -30,6 +30,7 @@ export const initialState: PagesState = {
     dataViews: {},
     bypassedAuthorization: {},
     requiresAuthorizationByPageId: {},
+    alternateLanguageUrlsByPageId: {},
 };
 
 interface SetPageIsLoaded {
@@ -212,6 +213,13 @@ export const reducer = {
         action: { pageDefinitionsByType: SafeDictionary<Pick<PageDefinition, "pageType">> },
     ) => {
         draft.pageDefinitionsByType = action.pageDefinitionsByType;
+    },
+
+    "Data/Pages/SetAlternateLanguageUrls": (
+        draft: Draft<PagesState>,
+        { pageId, alternateLanguageUrls }: { pageId: string; alternateLanguageUrls: SafeDictionary<string> },
+    ) => {
+        draft.alternateLanguageUrlsByPageId[pageId] = alternateLanguageUrls;
     },
 };
 

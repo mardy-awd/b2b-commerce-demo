@@ -213,9 +213,10 @@ const PopoverTriggerInput = styled.input`
     ${injectCss}
 `;
 
-const listCssBuilder = (additionalCss: StyledProp<ContentBodyProps>, sizeVariant: FormFieldSizeVariant) => css<
-    ContentBodyProps
->`
+const listCssBuilder = (
+    additionalCss: StyledProp<ContentBodyProps>,
+    sizeVariant: FormFieldSizeVariant,
+) => css<ContentBodyProps>`
     background: ${getColor("common.background")};
     border: 1px solid ${getColor("common.border")};
     padding-left: 0;

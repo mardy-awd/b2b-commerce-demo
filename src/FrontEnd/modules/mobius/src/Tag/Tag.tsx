@@ -77,17 +77,19 @@ const TagStyle = styled.div<
         color: ${({ _color, iconColor, theme }) =>
             iconColor ? resolveColor(iconColor, theme) : getContrastColor(_color, theme)};
         top: 0;
-        ${/* sc-block */ ({ theme, disabled, _color }) => {
-            const tagContrast = getContrastColor(_color, theme);
-            const tagBase = resolveColor(_color, theme);
-            return (
-                disabled &&
-                css`
-                    cursor: not-allowed;
-                    color: ${safeColor(tagContrast).rgb().mix(safeColor(tagBase), 0.3).toString()};
-                `
-            );
-        }}
+        ${
+            /* sc-block */ ({ theme, disabled, _color }) => {
+                const tagContrast = getContrastColor(_color, theme);
+                const tagBase = resolveColor(_color, theme);
+                return (
+                    disabled &&
+                    css`
+                        cursor: not-allowed;
+                        color: ${safeColor(tagContrast).rgb().mix(safeColor(tagBase), 0.3).toString()};
+                    `
+                );
+            }
+        }
     }
     ${injectCss}
 `;

@@ -15,7 +15,7 @@
     }
 
     export class VmiCountService implements IVmiCountService {
-        serviceUri = "/api/v1/vmilocations/{vmiLocationId}/vmibins/{vmiBinId}/bincounts";
+        serviceUri = "/api/v1/vmiLocations/{vmiLocationId}/bins/{vmiBinId}/binCounts";
 
         static $inject = ["$http", "httpWrapperService"];
 

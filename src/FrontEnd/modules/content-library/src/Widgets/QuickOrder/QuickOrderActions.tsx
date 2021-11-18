@@ -231,7 +231,12 @@ const QuickOrderActions: FC<Props> = ({
                 </Button>
             )}
             {productsExist && (
-                <Button {...styles.addToListButton} onClick={addToListClickHandler} disabled={!allQtysIsValid}>
+                <Button
+                    {...styles.addToListButton}
+                    onClick={addToListClickHandler}
+                    disabled={!allQtysIsValid}
+                    data-test-selector="tst_quickOrder_addAllProductsToList"
+                >
                     {translate("Add to List")}
                 </Button>
             )}

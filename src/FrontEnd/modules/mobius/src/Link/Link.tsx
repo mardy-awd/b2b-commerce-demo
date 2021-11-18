@@ -31,6 +31,8 @@ export type LinkPresentationProps = InjectableCss<ClickableComponentProps> & {
     /** Props to be passed down to the Typography component.
      * @themable */
     typographyProps?: TypographyPresentationProps;
+    /** Description for a link */
+    alt?: string;
 };
 
 export type LinkProps = LinkPresentationProps & ClickableLinkProps;
@@ -64,17 +66,16 @@ const StyledClickable = styled(Clickable)<any /* StyledClickableProps */>`
     &:hover {
         ${getProp("hoverStyle")}
         ${/* sc-selector */ StyledIcon}, ${/* sc-selector */ StyledTypography} {
-            color:
-                ${({ _color, theme, hoverMode }: StyledClickableProps & ThemeProps<BaseTheme>) => {
-                    if (!hoverMode && !_color) {
-                        return null;
-                    }
-                    const hoverColor = resolveColor(_color, theme);
-                    if (hoverMode) {
-                        return Color(hoverColor)[hoverMode](0.3).toString();
-                    }
-                    return hoverColor;
-                }};
+            color: ${({ _color, theme, hoverMode }: StyledClickableProps & ThemeProps<BaseTheme>) => {
+                if (!hoverMode && !_color) {
+                    return null;
+                }
+                const hoverColor = resolveColor(_color, theme);
+                if (hoverMode) {
+                    return Color(hoverColor)[hoverMode](0.3).toString();
+                }
+                return hoverColor;
+            }};
             ${getProp("hoverStyle")}
         }
     }

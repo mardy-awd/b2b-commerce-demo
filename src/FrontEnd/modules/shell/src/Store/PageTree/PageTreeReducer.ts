@@ -97,6 +97,10 @@ const reducer = {
         const futurePublishPageIds: Dictionary<Date> = {};
         const neverPublishedPageIds: Dictionary<boolean> = {};
         const treeNodesByNodeId: Dictionary<TreeNodeModel[]> = {};
+        const sharedNeverPublished = new Set();
+        const sharedIsDraftPage = new Set();
+        const sharedFuturePublishOn = new Set();
+
         for (const pageState of action.pageStates) {
             if (pageState.displayName === "Home" && pageState.pageId) {
                 draft.expandedNodes[pageState.pageId] = true;
@@ -118,19 +122,26 @@ const reducer = {
             };
 
             if (pageState.neverPublished) {
-                neverPublishedPageIds[pageState.pageId || "empty"] = draft.neverPublishedNodeIds[
-                    pageState.nodeId
-                ] = true;
+                neverPublishedPageIds[pageState.pageId || "empty"] = draft.neverPublishedNodeIds[pageState.nodeId] =
+                    true;
+                if (pageState.isShared) {
+                    sharedNeverPublished.add(pageState.nodeId);
+                }
             }
 
             if (pageState.isDraftPage) {
                 draftPageIds[pageState.pageId || "empty"] = draft.draftNodeIds[pageState.nodeId] = true;
+                if (pageState.isShared) {
+                    sharedIsDraftPage.add(pageState.nodeId);
+                }
             }
 
             if (pageState.futurePublishOn) {
-                futurePublishPageIds[pageState.pageId || "empty"] = draft.futurePublishNodeIds[
-                    pageState.nodeId
-                ] = new Date(pageState.futurePublishOn);
+                futurePublishPageIds[pageState.pageId || "empty"] = draft.futurePublishNodeIds[pageState.nodeId] =
+                    new Date(pageState.futurePublishOn);
+                if (pageState.isShared) {
+                    sharedFuturePublishOn.add(pageState.nodeId);
+                }
             }
 
             const nodes = treeNodesByNodeId[treeNode.nodeId];
@@ -152,9 +163,15 @@ const reducer = {
                 continue;
             }
 
-            delete draft.neverPublishedNodeIds[nodeId];
-            delete draft.futurePublishNodeIds[nodeId];
-            delete draft.draftNodeIds[nodeId];
+            if (!sharedNeverPublished.has(nodeId)) {
+                delete draft.neverPublishedNodeIds[nodeId];
+            }
+            if (!sharedFuturePublishOn.has(nodeId)) {
+                delete draft.futurePublishNodeIds[nodeId];
+            }
+            if (!sharedIsDraftPage.has(nodeId)) {
+                delete draft.draftNodeIds[nodeId];
+            }
 
             let sharedIndex = -1;
             for (let i = 0; i < nodes.length; ++i) {

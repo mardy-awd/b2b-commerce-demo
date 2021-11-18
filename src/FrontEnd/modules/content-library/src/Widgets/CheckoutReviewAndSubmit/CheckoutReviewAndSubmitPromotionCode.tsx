@@ -21,12 +21,8 @@ import { css } from "styled-components";
 const mapStateToProps = (state: ApplicationState) => {
     const { cartId } = state.pages.checkoutReviewAndSubmit;
     const cartState = cartId ? getCartState(state, cartId) : getCurrentCartState(state);
-    const {
-        isApplyingPromotion,
-        promotionErrorMessage,
-        promotionSuccessMessage,
-        isCheckingOutWithPayPay,
-    } = state.pages.checkoutReviewAndSubmit;
+    const { isApplyingPromotion, promotionErrorMessage, promotionSuccessMessage, isCheckingOutWithPayPay } =
+        state.pages.checkoutReviewAndSubmit;
     return {
         isApplyButtonDisabled: cartState.isLoading || isApplyingPromotion,
         canApplyPromosToCart: canApplyPromotionsToCart(getCurrentCartState(state).value) && !isCheckingOutWithPayPay,

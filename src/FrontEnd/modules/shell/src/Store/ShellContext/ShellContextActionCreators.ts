@@ -45,13 +45,15 @@ export const logOut = (): ShellThunkAction => dispatch => {
     window.location.reload();
 };
 
-export const toggleMobileCmsMode = (pageId: string, history: History): ShellThunkAction => dispatch => {
-    dispatch({
-        type: "ShellContext/ToggleMobileCmsMode",
-    });
+export const toggleMobileCmsMode =
+    (pageId: string, history: History): ShellThunkAction =>
+    dispatch => {
+        dispatch({
+            type: "ShellContext/ToggleMobileCmsMode",
+        });
 
-    history.push(`/ContentAdmin/Page/${pageId}`);
-};
+        history.push(`/ContentAdmin/Page/${pageId}`);
+    };
 
 export const toggleSearchDataModeActive = (): ShellThunkAction => dispatch => {
     dispatch({
@@ -59,26 +61,28 @@ export const toggleSearchDataModeActive = (): ShellThunkAction => dispatch => {
     });
 };
 
-export const setContentMode = (contentMode: ContentMode): ShellThunkAction => (dispatch, getState) => {
-    addTask(
-        (async function () {
-            await switchContentMode(contentMode);
-            sendToSite({
-                type: "Reload",
-            });
-            closeSiteHole();
-            const pageId = getCurrentPage(getState()).id;
-            // we need to clear out any already loaded pages so our editor doesn't show the wrong field values
-            dispatch({
-                type: "Data/Pages/Reset",
-            });
-            dispatch(loadPage({ pathname: `/Content/Page/${pageId}`, search: "" } as Location));
-            dispatch({
-                type: "ShellContext/SetContentMode",
-                contentMode,
-            });
-            dispatch(loadTreeNodes());
-            dispatch(loadPageLinks());
-        })(),
-    );
-};
+export const setContentMode =
+    (contentMode: ContentMode): ShellThunkAction =>
+    (dispatch, getState) => {
+        addTask(
+            (async function () {
+                await switchContentMode(contentMode);
+                sendToSite({
+                    type: "Reload",
+                });
+                closeSiteHole();
+                const pageId = getCurrentPage(getState()).id;
+                // we need to clear out any already loaded pages so our editor doesn't show the wrong field values
+                dispatch({
+                    type: "Data/Pages/Reset",
+                });
+                dispatch(loadPage({ pathname: `/Content/Page/${pageId}`, search: "" } as Location));
+                dispatch({
+                    type: "ShellContext/SetContentMode",
+                    contentMode,
+                });
+                dispatch(loadTreeNodes());
+                dispatch(loadPageLinks());
+            })(),
+        );
+    };

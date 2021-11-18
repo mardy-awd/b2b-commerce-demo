@@ -30,24 +30,26 @@ export const selectProduct = (path: string): AnyShellAction => ({
     type: "PageEditor/SelectProduct",
 });
 
-export const searchProducts = (search: string): ShellThunkAction => dispatch => {
-    addTask(
-        (async function () {
-            const autocompleteModel = await autocompleteSearch({
-                query: search,
-            });
+export const searchProducts =
+    (search: string): ShellThunkAction =>
+    dispatch => {
+        addTask(
+            (async function () {
+                const autocompleteModel = await autocompleteSearch({
+                    query: search,
+                });
 
-            dispatch({
-                type: "PageEditor/CompleteProductSearch",
-                productSearchResults: autocompleteModel.products!.map(o => ({
-                    path: o.url,
-                    id: o.id!,
-                    displayName: o.title,
-                })),
-            });
-        })(),
-    );
-};
+                dispatch({
+                    type: "PageEditor/CompleteProductSearch",
+                    productSearchResults: autocompleteModel.products!.map(o => ({
+                        path: o.url,
+                        id: o.id!,
+                        displayName: o.title,
+                    })),
+                });
+            })(),
+        );
+    };
 
 export const clearModelSelection = (): AnyShellAction => ({
     type: "PageEditor/ClearModelSelection",
@@ -58,24 +60,26 @@ export const selectBrand = (path: string): AnyShellAction => ({
     type: "PageEditor/SelectBrand",
 });
 
-export const searchBrands = (search: string): ShellThunkAction => dispatch => {
-    addTask(
-        (async function () {
-            const autocompleteModel = await autocompleteSearch({
-                query: search,
-            });
+export const searchBrands =
+    (search: string): ShellThunkAction =>
+    dispatch => {
+        addTask(
+            (async function () {
+                const autocompleteModel = await autocompleteSearch({
+                    query: search,
+                });
 
-            dispatch({
-                type: "PageEditor/CompleteBrandSearch",
-                brandSearchResults: autocompleteModel.brands!.map(o => ({
-                    path: o.url,
-                    id: o.id!,
-                    displayName: o.productLineName ? `${o.productLineName} in ${o.title}` : o.title,
-                })),
-            });
-        })(),
-    );
-};
+                dispatch({
+                    type: "PageEditor/CompleteBrandSearch",
+                    brandSearchResults: autocompleteModel.brands!.map(o => ({
+                        path: o.url,
+                        id: o.id!,
+                        displayName: o.productLineName ? `${o.productLineName} in ${o.title}` : o.title,
+                    })),
+                });
+            })(),
+        );
+    };
 
 export const loadBrands = (): ShellThunkAction => dispatch => {
     addTask(
@@ -90,55 +94,61 @@ export const loadBrands = (): ShellThunkAction => dispatch => {
     );
 };
 
-export const loadSelectBrands = (parameter?: AdminODataApiParameter): ShellThunkAction => dispatch => {
-    addTask(
-        (async function () {
-            const brands = await getAdminBrands(parameter);
+export const loadSelectBrands =
+    (parameter?: AdminODataApiParameter): ShellThunkAction =>
+    dispatch => {
+        addTask(
+            (async function () {
+                const brands = await getAdminBrands(parameter);
 
-            dispatch({
-                brands,
-                type: "PageEditor/CompleteLoadSelectBrands",
-            });
-        })(),
-    );
-};
+                dispatch({
+                    brands,
+                    type: "PageEditor/CompleteLoadSelectBrands",
+                });
+            })(),
+        );
+    };
 
-export const loadSelectedBrands = (parameter?: AdminODataApiParameter): ShellThunkAction => dispatch => {
-    addTask(
-        (async function () {
-            const brands = await getAdminBrands(parameter);
+export const loadSelectedBrands =
+    (parameter?: AdminODataApiParameter): ShellThunkAction =>
+    dispatch => {
+        addTask(
+            (async function () {
+                const brands = await getAdminBrands(parameter);
 
-            dispatch({
-                brands,
-                type: "PageEditor/CompleteLoadSelectedBrands",
-            });
-        })(),
-    );
-};
+                dispatch({
+                    brands,
+                    type: "PageEditor/CompleteLoadSelectedBrands",
+                });
+            })(),
+        );
+    };
 
 export const selectCategory = (path: string): AnyShellAction => ({
     categoryPath: path,
     type: "PageEditor/SelectCategory",
 });
 
-export const searchCategories = (search: string): ShellThunkAction => dispatch => {
-    addTask(
-        (async function () {
-            const autocompleteModel = await autocompleteSearch({
-                query: search,
-            });
+export const searchCategories =
+    (search: string): ShellThunkAction =>
+    dispatch => {
+        addTask(
+            (async function () {
+                const autocompleteModel = await autocompleteSearch({
+                    query: search,
+                });
 
-            dispatch({
-                type: "PageEditor/CompleteCategorySearch",
-                categorySearchResults: autocompleteModel.categories!.map(o => ({
-                    path: o.url,
-                    id: o.id!,
-                    displayName: o.title,
-                })),
-            });
-        })(),
-    );
-};
+                dispatch({
+                    type: "PageEditor/CompleteCategorySearch",
+                    categorySearchResults: autocompleteModel.categories!.map(o => ({
+                        path: o.url,
+                        id: o.id!,
+                        displayName: o.title,
+                    })),
+                });
+            })(),
+        );
+    };
 
 export const loadCategories = (): ShellThunkAction => dispatch => {
     addTask(
@@ -153,107 +163,107 @@ export const loadCategories = (): ShellThunkAction => dispatch => {
     );
 };
 
-export const savePage = (
-    isVariant?: boolean,
-    afterSavePage?: (response: SavePageResponseModel) => void,
-): ShellThunkAction => (dispatch, getState) => {
-    (async () => {
-        const state = getState();
-        const { shellContext } = state;
-        const currentPage = getCurrentPage(state);
-        const storablePage = getStorablePage(state, shellContext.websiteId);
+export const savePage =
+    (isVariant?: boolean, afterSavePage?: (response: SavePageResponseModel) => void): ShellThunkAction =>
+    (dispatch, getState) => {
+        (async () => {
+            const state = getState();
+            const { shellContext } = state;
+            const currentPage = getCurrentPage(state);
+            const storablePage = getStorablePage(state, shellContext.websiteId);
 
-        if (storablePage.generalFields["variantName"]) {
-            storablePage.variantName = storablePage.generalFields["variantName"];
-        }
-
-        if (isVariant === undefined) {
-            const pageState = getPageStateFromDictionaries(
-                storablePage.id,
-                state.pageTree.treeNodesByParentId,
-                state.pageTree.headerTreeNodesByParentId,
-                state.pageTree.footerTreeNodesByParentId,
-                state.pageTree.mobileTreeNodesByParentId,
-            );
-
-            if (pageState?.isVariant || pageState?.isRootVariant) {
-                isVariant = true;
+            if (storablePage.generalFields["variantName"]) {
+                storablePage.variantName = storablePage.generalFields["variantName"];
             }
-        }
 
-        if (storablePage.layoutPageId) {
-            storablePage.widgets = storablePage.widgets.filter(o => !o.isLayout);
-        }
-        const savePageResponse = await savePageApi(storablePage, !!isVariant);
+            if (isVariant === undefined) {
+                const pageState = getPageStateFromDictionaries(
+                    storablePage.id,
+                    state.pageTree.treeNodesByParentId,
+                    state.pageTree.headerTreeNodesByParentId,
+                    state.pageTree.footerTreeNodesByParentId,
+                    state.pageTree.mobileTreeNodesByParentId,
+                );
 
-        // just in case the siteFrame got out of sync, send the new page one last time
-        updatePageOnSite(getState());
+                if (pageState?.isVariant || pageState?.isRootVariant) {
+                    isVariant = true;
+                }
+            }
 
-        // needed to clean out any child page collections (news list displays child pages). Ideally this would only happen when we add a new page
-        // but if we do it in addPage it happens too soon and the news list will reload the old collection
-        // and we don't have a way to differentiate saving a page vs saving a new page here
-        sendToSite({ type: "ResetPageDataViews" });
+            if (storablePage.layoutPageId) {
+                storablePage.widgets = storablePage.widgets.filter(o => !o.isLayout);
+            }
+            const savePageResponse = await savePageApi(storablePage, !!isVariant);
 
-        if (storablePage.type === "Layout") {
-            dispatch({
-                type: "PageEditor/LayoutUpdated",
-                id: storablePage.id,
-            });
-        }
+            // just in case the siteFrame got out of sync, send the new page one last time
+            updatePageOnSite(getState());
 
-        dispatch(loadPublishInfo(currentPage.id));
+            // needed to clean out any child page collections (news list displays child pages). Ideally this would only happen when we add a new page
+            // but if we do it in addPage it happens too soon and the news list will reload the old collection
+            // and we don't have a way to differentiate saving a page vs saving a new page here
+            sendToSite({ type: "ResetPageDataViews" });
 
-        dispatch(loadPageLinks());
-        sendToSite({ type: "ReloadPageLinks" });
+            if (storablePage.type === "Layout") {
+                dispatch({
+                    type: "PageEditor/LayoutUpdated",
+                    id: storablePage.id,
+                });
+            }
 
-        afterSavePage?.(savePageResponse);
-    })();
-};
+            dispatch(loadPublishInfo(currentPage.id));
 
-export const editPageOptions = (
-    id: string,
-    isVariant?: boolean,
-    isNewPage?: boolean,
-    afterEditLoads?: () => void,
-): ShellThunkAction => (dispatch, getState) => {
-    const finished = () => {
-        const page = getCurrentPage(getState());
-        dispatch({
-            type: "PageEditor/EditItem",
-            id: page.id,
-            item: page,
-            isNewPage,
-            isVariant,
-        });
+            dispatch(loadPageLinks());
+            sendToSite({ type: "ReloadPageLinks" });
 
-        if (afterEditLoads) {
-            afterEditLoads();
-        }
+            afterSavePage?.(savePageResponse);
+        })();
     };
 
-    dispatch(loadPageIfNeeded(id, finished));
-};
+export const editPageOptions =
+    (id: string, isVariant?: boolean, isNewPage?: boolean, afterEditLoads?: () => void): ShellThunkAction =>
+    (dispatch, getState) => {
+        const finished = () => {
+            const page = getCurrentPage(getState());
+            dispatch({
+                type: "PageEditor/EditItem",
+                id: page.id,
+                item: page,
+                isNewPage,
+                isVariant,
+            });
 
-export const editWidget = (id: string, removeIfCanceled?: boolean): ShellThunkAction => (dispatch, getState) => {
-    dispatch({
-        type: "PageEditor/EditItem",
-        id,
-        removeIfCanceled,
-        item: getState().data.pages.widgetsById[id],
-    });
-};
+            if (afterEditLoads) {
+                afterEditLoads();
+            }
+        };
 
-export const reloadPage = (pageId: string): ShellThunkAction => dispatch => {
-    dispatch({
-        type: "PageEditor/LayoutUpdatedReset",
-    });
+        dispatch(loadPageIfNeeded(id, finished));
+    };
 
-    dispatch({
-        type: "Data/Pages/Reset",
-    });
+export const editWidget =
+    (id: string, removeIfCanceled?: boolean): ShellThunkAction =>
+    (dispatch, getState) => {
+        dispatch({
+            type: "PageEditor/EditItem",
+            id,
+            removeIfCanceled,
+            item: getState().data.pages.widgetsById[id],
+        });
+    };
 
-    dispatch(loadPage({ pathname: `/Content/Page/${pageId}`, search: "" } as Location));
-};
+export const reloadPage =
+    (pageId: string): ShellThunkAction =>
+    dispatch => {
+        dispatch({
+            type: "PageEditor/LayoutUpdatedReset",
+        });
+
+        dispatch({
+            type: "Data/Pages/Reset",
+        });
+
+        dispatch(loadPage({ pathname: `/Content/Page/${pageId}`, search: "" } as Location));
+    };
 
 export const doneEditingItem = (): ShellThunkAction => (dispatch, getState) => {
     const state = getState();

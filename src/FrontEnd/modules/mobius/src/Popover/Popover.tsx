@@ -215,11 +215,23 @@ class Popover extends React.Component<PopoverProps, State> {
         if (
             this.state.open &&
             !this.isTargetInsideRef(event.target as Node) &&
-            !this.isInsideChildPortalModal(event.target as Node)
+            !this.isInsideChildPortalModal(event.target as Node) &&
+            !this.isClickingScrollBar(event)
         ) {
             this.closePopover(event);
         }
         typeof this.props.handleClickOutside === "function" && this.props.handleClickOutside(event);
+    };
+
+    isClickingScrollBar = (event: MouseEvent) => {
+        const box = document.getElementById("popupBox");
+        if (box) {
+            const x = event.clientX - box.getBoundingClientRect().left;
+            if (x >= box.clientWidth && x <= box.clientWidth + 17) {
+                return true;
+            }
+        }
+        return false;
     };
 
     isInsideChildPortalModal = (target: Node) => {

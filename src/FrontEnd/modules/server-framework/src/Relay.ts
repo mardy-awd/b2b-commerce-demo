@@ -68,6 +68,11 @@ export async function relayRequest(request: Request, response: Response) {
 
     response.status(result.status);
 
+    if (result.status === 404 && request.originalUrl.toLowerCase().indexOf("/sitemap") === 0) {
+        response.redirect("/NotFoundErrorPage");
+        return;
+    }
+
     const headersCollection: Dictionary<string[]> = {};
 
     result.headers.forEach((value: string, key: string) => {

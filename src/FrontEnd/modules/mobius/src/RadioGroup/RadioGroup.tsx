@@ -72,9 +72,9 @@ const RadioGroupStyle = styled.fieldset<{ horizontal?: boolean }>`
             : css`
                   display: flex;
                   flex-direction: column;
-                   ${RadioStyle} + ${RadioStyle} {
-                        margin-top: 10px;
-                    }
+                  ${RadioStyle} + ${RadioStyle} {
+                      margin-top: 10px;
+                  }
               `}
     ${injectCss}
 `;
@@ -113,11 +113,6 @@ class RadioGroup extends React.Component<RadioGroupProps, State> {
         });
         const sizeVariant = applyProp("sizeVariant", "default") as keyof typeof checkboxSizes;
 
-        const labelProps: { as?: "div" } = {};
-        if (typeof children === "object") {
-            labelProps.as = "div";
-        }
-
         const resolvedMergeCss = mergeCss ?? this.props?.theme?.radio?.groupDefaultProps?.mergeCss;
 
         return (
@@ -130,7 +125,6 @@ class RadioGroup extends React.Component<RadioGroupProps, State> {
                 }}
             >
                 <RadioGroupStyle
-                    {...labelProps}
                     {...omitMultiple(otherProps, ["sizeVariant", "onChangeHandler"])}
                     horizontal={horizontal}
                     css={applyStyledProp("css", resolvedMergeCss)}

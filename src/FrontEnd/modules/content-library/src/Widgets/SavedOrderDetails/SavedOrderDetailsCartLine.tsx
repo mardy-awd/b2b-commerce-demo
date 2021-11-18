@@ -348,6 +348,7 @@ const SavedOrderDetailsCartLine: React.FC<Props> = ({
                                 {cartLine.canAddToWishlist && !cartLine.isRestricted && (
                                     <Button
                                         {...styles.savedOrderLineCardAddToListButton}
+                                        data-test-selector={`tst_savedOrderDetails_productLine_${cartLine.erpNumber}`}
                                         onClick={addToListClickHandler}
                                     >
                                         {translate("Add to List")}

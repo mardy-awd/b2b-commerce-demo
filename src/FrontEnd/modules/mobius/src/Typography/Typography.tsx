@@ -77,9 +77,12 @@ const Typography: React.FC<TypographyProps> = ({ color, ellipsis, size, theme, f
                 if (otherProps.variant?.startsWith("header")) {
                     newAs = headerSecondaryRegex.exec(otherProps.variant) ? "span" : "p";
                 }
-                const { color: variantColor, size: variantSize, css: variantCss, ...variantProps } = otherProps.variant
-                    ? theme!.typography[otherProps.variant]
-                    : ({} as TypographyProps);
+                const {
+                    color: variantColor,
+                    size: variantSize,
+                    css: variantCss,
+                    ...variantProps
+                } = otherProps.variant ? theme!.typography[otherProps.variant] : ({} as TypographyProps);
                 const Component = ellipsis ? TypographyEllipsis : TypographyStyle;
                 const componentProps: Omit<TypographyComponentProps, "theme"> = {
                     _color: color || variantColor,

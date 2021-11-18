@@ -22,6 +22,7 @@
 
         broadcastCreateStr: string;
         broadcastEditStr: string;
+        showImport: boolean;
         closeOnAdd: boolean;
 
         static $inject = ["$scope", "$rootScope", "vmiBinService", "coreService", "$timeout", "vmiBinModalService", "searchService", "productService", "importVmiBinsModalService"];
@@ -63,12 +64,13 @@
                 this.vmiBin = data.vmiBin;
                 this.broadcastCreateStr = data.broadcastCreateStr;
                 this.broadcastEditStr = data.broadcastEditStr;
+                this.showImport = data.showImport;
                 this.closeOnAdd = data.closeOnAdd;
                 this.clearMessages();
                 
                 if (this.vmiBin.id) {
                     this.itemToAdd = this.vmiBin.product;
-                    this.addingSearchTerm = this.itemToAdd.erpNumber;
+                    this.addingSearchTerm = this.itemToAdd.shortDescription;
                     this.binNumber = this.vmiBin.binNumber;
                     this.minimumQty = this.vmiBin.minimumQty;
                     this.maximumQty = this.vmiBin.maximumQty;

@@ -119,7 +119,7 @@ class TabGroup extends React.Component<Props, State> {
         this.setState({ currentTab: tabKey });
         // eslint-disable-next-line no-unused-expressions
         this.props.onTabChange && this.props.onTabChange(event, tabKey);
-        ((this.tabRefs[tabKey].current as unknown) as HTMLButtonElement).focus();
+        (this.tabRefs[tabKey].current as unknown as HTMLButtonElement).focus();
     };
 
     setContentRef = (content: HTMLDivElement | null) => {

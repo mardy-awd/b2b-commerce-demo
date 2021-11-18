@@ -51,232 +51,236 @@ export const resetPageDataViews = (): AnyAction => ({
     type: "Data/Pages/ResetDataViews",
 });
 
-export const changeContext = (languageId: string, personaId: string, deviceType: DeviceType): AppThunkAction => (
-    dispatch,
-    getState,
-) => {
-    const {
-        currentLanguageId,
-        currentPersonaIds,
-        currentDeviceType,
-        defaultLanguageId,
-        defaultPersonaId,
-    } = getContextData(getState());
+export const changeContext =
+    (languageId: string, personaId: string, deviceType: DeviceType): AppThunkAction =>
+    (dispatch, getState) => {
+        const { currentLanguageId, currentPersonaIds, currentDeviceType, defaultLanguageId, defaultPersonaId } =
+            getContextData(getState());
 
-    dispatch({
-        type: "Data/Pages/CompleteChangeContext",
-        languageId: languageId || currentLanguageId,
-        personaId: personaId || currentPersonaIds[0],
-        deviceType: deviceType || currentDeviceType,
-        defaultLanguageId,
-        defaultPersonaId,
-    });
-};
+        dispatch({
+            type: "Data/Pages/CompleteChangeContext",
+            languageId: languageId || currentLanguageId,
+            personaId: personaId || currentPersonaIds[0],
+            deviceType: deviceType || currentDeviceType,
+            defaultLanguageId,
+            defaultPersonaId,
+        });
+    };
 
-export const loadPageByType = (type: string): AppThunkAction => (dispatch, getState) => {
-    addTask(
-        (async function () {
-            dispatch({
-                type: "Data/Pages/BeginLoadPage",
-                key: type,
-            });
+export const loadPageByType =
+    (type: string): AppThunkAction =>
+    (dispatch, getState) => {
+        addTask(
+            (async function () {
+                dispatch({
+                    type: "Data/Pages/BeginLoadPage",
+                    key: type,
+                });
 
-            const state = getState();
-            const result = await getPageByType(type);
+                const state = getState();
+                const result = await getPageByType(type);
 
-            dispatch({
-                type: "Data/Pages/CompleteLoadPage",
-                page: result.page,
-                pageType: type,
-                ...getContextData(state),
-            });
-        })(),
-    );
-};
+                dispatch({
+                    type: "Data/Pages/CompleteLoadPage",
+                    page: result.page,
+                    pageType: type,
+                    ...getContextData(state),
+                });
+            })(),
+        );
+    };
 
-export const loadPagesForParent = (parameter: GetPagesByParentApiParameter): AppThunkAction => (dispatch, getState) => {
-    const tempParameter = { parentNodeId: parameter.parentNodeId };
+export const loadPagesForParent =
+    (parameter: GetPagesByParentApiParameter): AppThunkAction =>
+    (dispatch, getState) => {
+        const tempParameter = { parentNodeId: parameter.parentNodeId };
 
-    addTask(
-        (async function () {
-            dispatch({
-                type: "Data/Pages/BeginLoadPages",
-                parameter: tempParameter,
-            });
+        addTask(
+            (async function () {
+                dispatch({
+                    type: "Data/Pages/BeginLoadPages",
+                    parameter: tempParameter,
+                });
 
-            const pages = await getPagesByParent(tempParameter);
+                const pages = await getPagesByParent(tempParameter);
 
-            dispatch({
-                type: "Data/Pages/CompleteLoadPages",
-                parameter: tempParameter,
-                collection: pages,
-                links: getState().links,
-                ...getContextData(getState()),
-            });
-        })(),
-    );
-};
+                dispatch({
+                    type: "Data/Pages/CompleteLoadPages",
+                    parameter: tempParameter,
+                    collection: pages,
+                    links: getState().links,
+                    ...getContextData(getState()),
+                });
+            })(),
+        );
+    };
 
 export const updatePage = (page: PageModel): AnyAction => ({
     type: "Data/Pages/UpdatePage",
     page,
 });
 
-export const loadPage = (location: Location, history?: History, onSuccess?: () => void): AppThunkAction => (
-    dispatch,
-    getState,
-) => {
-    addTask(
-        (async function () {
-            const url = location.pathname + location.search;
+export const loadPage =
+    (location: Location, history?: History, onSuccess?: () => void): AppThunkAction =>
+    (dispatch, getState) => {
+        addTask(
+            (async function () {
+                const url = location.pathname + location.search;
 
-            const finishedLoadingPage = (page: PageProps) => {
-                sendToShell({
-                    type: "LoadPageComplete",
-                    pageId: page.id,
-                    parentId: page.parentId,
-                    layoutPageId: page.layoutPageId,
-                });
-                dispatch({
-                    type: "Data/Pages/SetLocation",
-                    location,
-                });
-                onSuccess?.();
-
-                const state = getState();
-                if (state.pages && state.context) {
-                    // product list and product details call trackPageChange when they get data
-                    if (
-                        page.type !== "ProductListPage" &&
-                        page.type !== "ProductDetailsPage" &&
-                        page.type !== "CategoryDetailsPage"
-                    ) {
-                        trackPageChange();
-                    }
-                }
-            };
-
-            const dispatchCompleteLoadPage = (page: PageModel) => {
-                dispatch({
-                    type: "Data/Pages/CompleteLoadPage",
-                    page,
-                    path: location.pathname,
-                    ...getContextData(getState()),
-                });
-            };
-
-            const currentState = getState();
-            const existingPage = getPageStateByPath(currentState, location.pathname);
-
-            // if a page requiresAuthorization we want to reload them in case the user has signed in
-            // so bypass the finished call
-            if (existingPage.value && !getRequiresAuthorization(currentState, existingPage.value.id)) {
-                finishedLoadingPage(existingPage.value);
-                return;
-            }
-
-            dispatch({
-                type: "Data/Pages/BeginLoadPage",
-                key: location.pathname,
-            });
-
-            let retrievePageResult: RetrievePageResult | undefined;
-            const bypassFilters = url.startsWith("/Content/Page/");
-
-            try {
-                const initialPage = getInitialPage();
-
-                if (initialPage && initialPage.result && url === initialPage.url) {
-                    retrievePageResult = initialPage.result;
-                    clearInitialPage();
-                } else if (location.pathname === getContentByVersionPath) {
-                    if (IS_SERVER_SIDE) {
-                        throw new Error("Server-side rendering is supposed to be disabled for this request.");
-                    }
-
-                    const pageVersion = await getPageByVersion(
-                        parseQueryString<{ pageVersionId: string }>(location.search).pageVersionId,
-                    );
-
-                    if (pageVersion.type.startsWith("Mobile/")) {
-                        await loadMobileComponents();
-                    }
-
-                    dispatchCompleteLoadPage(pageVersion);
-                    finishedLoadingPage(pageVersion);
-                    return;
-                } else {
-                    retrievePageResult = await getPageByUrl(url, bypassFilters);
-                }
-            } catch (ex) {
-                logger.error(ex);
-                const pageLink = getPageLinkByPageType(getState(), "UnhandledErrorPage");
-                if (pageLink) {
-                    performRedirectTo(pageLink.url);
-                }
-                return;
-            }
-
-            const {
-                statusCode,
-                redirectTo,
-                page,
-                authorizationFailed,
-                bypassedAuthorization,
-                isAuthenticatedOnServer,
-                requiresAuthorization,
-            } = retrievePageResult;
-
-            if (bypassedAuthorization && page) {
-                dispatch({
-                    type: "Data/Pages/SetBypassedAuthorization",
-                    pageId: page.id,
-                });
-            }
-
-            if (page) {
-                dispatch({
-                    type: "Data/Pages/SetRequiresAuthorization",
-                    pageId: page.id,
-                    requiresAuthorization,
-                });
-            }
-
-            setStatusCode(statusCode);
-
-            const session = getState().context?.session;
-
-            if (redirectTo) {
-                const isAuthenticated = session && (session.isAuthenticated || session.rememberMe) && !session.isGuest;
-                if (IS_SERVER_SIDE) {
-                    performRedirectTo(redirectTo);
-                } else if (redirectTo.startsWith("http") || (authorizationFailed && isAuthenticated)) {
-                    // authorizationFailed may mean auth session timed out - do a full refresh to update the header etc
-                    window.location.href = redirectTo;
-                } else if (history) {
-                    history.push(redirectTo);
-                }
-            } else if (page) {
-                const hasPageByType = getPageStateByType(currentState, page.type).value?.id === page.id;
-                if (!IS_SERVER_SIDE && !isAuthenticatedOnServer && session?.isAuthenticated === true) {
-                    // in case user opens page that does not require authentication
-                    window.location.reload();
-                } else if (hasPageByType) {
+                const finishedLoadingPage = (page: PageProps) => {
+                    sendToShell({
+                        type: "LoadPageComplete",
+                        pageId: page.id,
+                        parentId: page.parentId,
+                        layoutPageId: page.layoutPageId,
+                    });
                     dispatch({
-                        type: "Data/Pages/SetPageIsLoaded",
-                        pageType: page.type,
+                        type: "Data/Pages/SetLocation",
+                        location,
+                    });
+                    onSuccess?.();
+
+                    const state = getState();
+                    if (state.pages && state.context) {
+                        // product list and product details call trackPageChange when they get data
+                        if (
+                            page.type !== "ProductListPage" &&
+                            page.type !== "ProductDetailsPage" &&
+                            page.type !== "CategoryDetailsPage"
+                        ) {
+                            trackPageChange();
+                        }
+                    }
+                };
+
+                const dispatchCompleteLoadPage = (page: PageModel) => {
+                    dispatch({
+                        type: "Data/Pages/CompleteLoadPage",
                         page,
                         path: location.pathname,
+                        ...getContextData(getState()),
                     });
-                } else {
-                    dispatchCompleteLoadPage(page);
+                };
+
+                const currentState = getState();
+                const existingPage = getPageStateByPath(currentState, location.pathname);
+
+                // if a page requiresAuthorization we want to reload them in case the user has signed in
+                // so bypass the finished call
+                if (existingPage.value && !getRequiresAuthorization(currentState, existingPage.value.id)) {
+                    finishedLoadingPage(existingPage.value);
+                    return;
                 }
 
-                finishedLoadingPage(page);
-            }
-        })(),
-    );
-};
+                dispatch({
+                    type: "Data/Pages/BeginLoadPage",
+                    key: location.pathname,
+                });
+
+                let retrievePageResult: RetrievePageResult | undefined;
+                const bypassFilters = url.startsWith("/Content/Page/");
+
+                try {
+                    const initialPage = getInitialPage();
+
+                    if (initialPage && initialPage.result && url === initialPage.url) {
+                        retrievePageResult = initialPage.result;
+                        clearInitialPage();
+                    } else if (location.pathname === getContentByVersionPath) {
+                        if (IS_SERVER_SIDE) {
+                            throw new Error("Server-side rendering is supposed to be disabled for this request.");
+                        }
+
+                        const pageVersion = await getPageByVersion(
+                            parseQueryString<{ pageVersionId: string }>(location.search).pageVersionId,
+                        );
+
+                        if (pageVersion.type.startsWith("Mobile/")) {
+                            await loadMobileComponents();
+                        }
+
+                        dispatchCompleteLoadPage(pageVersion);
+                        finishedLoadingPage(pageVersion);
+                        return;
+                    } else {
+                        retrievePageResult = await getPageByUrl(url, bypassFilters);
+                    }
+                } catch (ex) {
+                    logger.error(ex);
+                    const pageLink = getPageLinkByPageType(getState(), "UnhandledErrorPage");
+                    if (pageLink) {
+                        performRedirectTo(pageLink.url);
+                    }
+                    return;
+                }
+
+                const {
+                    statusCode,
+                    redirectTo,
+                    page,
+                    authorizationFailed,
+                    bypassedAuthorization,
+                    isAuthenticatedOnServer,
+                    requiresAuthorization,
+                    alternateLanguageUrls,
+                } = retrievePageResult;
+
+                if (bypassedAuthorization && page) {
+                    dispatch({
+                        type: "Data/Pages/SetBypassedAuthorization",
+                        pageId: page.id,
+                    });
+                }
+
+                if (page) {
+                    dispatch({
+                        type: "Data/Pages/SetRequiresAuthorization",
+                        pageId: page.id,
+                        requiresAuthorization,
+                    });
+                    dispatch({
+                        type: "Data/Pages/SetAlternateLanguageUrls",
+                        pageId: page.id,
+                        alternateLanguageUrls: alternateLanguageUrls ?? undefined,
+                    });
+                }
+
+                setStatusCode(statusCode);
+
+                const session = getState().context?.session;
+
+                if (redirectTo) {
+                    const isAuthenticated =
+                        session && (session.isAuthenticated || session.rememberMe) && !session.isGuest;
+                    if (IS_SERVER_SIDE) {
+                        performRedirectTo(redirectTo);
+                    } else if (redirectTo.startsWith("http") || (authorizationFailed && isAuthenticated)) {
+                        // authorizationFailed may mean auth session timed out - do a full refresh to update the header etc
+                        window.location.href = redirectTo;
+                    } else if (history) {
+                        history.push(redirectTo);
+                    }
+                } else if (page) {
+                    const hasPageByType = getPageStateByType(currentState, page.type).value?.id === page.id;
+                    if (!IS_SERVER_SIDE && !isAuthenticatedOnServer && session?.isAuthenticated === true) {
+                        // in case user opens page that does not require authentication
+                        window.location.reload();
+                    } else if (hasPageByType) {
+                        dispatch({
+                            type: "Data/Pages/SetPageIsLoaded",
+                            pageType: page.type,
+                            page,
+                            path: location.pathname,
+                        });
+                    } else {
+                        dispatchCompleteLoadPage(page);
+                    }
+
+                    finishedLoadingPage(page);
+                }
+            })(),
+        );
+    };
 
 export const setPageDefinitions = (
     pageDefinitionsByType: SafeDictionary<Pick<PageDefinition, "pageType">>,
@@ -303,13 +307,9 @@ function getContextData(state: ApplicationState) {
     }
 
     // otherwise we are working in the shell so we need some hacky code
-    const {
-        defaultLanguageId,
-        currentLanguageId,
-        currentPersonaId,
-        currentDeviceType,
-        defaultPersonaId,
-    } = (state as any).shellContext as ShellContext;
+    const { defaultLanguageId, currentLanguageId, currentPersonaId, currentDeviceType, defaultPersonaId } = (
+        state as any
+    ).shellContext as ShellContext;
     return {
         defaultLanguageId,
         currentLanguageId,

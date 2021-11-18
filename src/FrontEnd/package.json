@@ -26,13 +26,14 @@
     "@comment start": "Optionally pass a blueprint name and port. IE npm run start example 8080",
     "setupTsconfigPaths": "node ./config/webpack/setupTsconfigPathsFile.js",
     "start:example": "node startDevelopment.js example 4000",
-    "start:prod": "CLS && SET ISC_API_URL=http://localhost:3010 && SET ISC_WORKER_COUNT=2 && SET ISC_FRONT_END_PORT=3000 && SET ACCEPT_RISKS_OF_USING_DEFAULT_SPIRE_CLIENT_SECRET=true && ECHO Starting... && node -r source-map-support/register startProduction.js",
+    "start:prod": "CLS && SET ISC_API_URL=http://commerce.local.com && SET ISC_WORKER_COUNT=2 && SET ISC_FRONT_END_PORT=3000 && SET ACCEPT_RISKS_OF_USING_DEFAULT_SPIRE_CLIENT_SECRET=true && ECHO Starting... && node -r source-map-support/register startProduction.js",
     "start:styleguide": "npm start --prefix ./modules/mobius-styleguide",
     "stylelint": "stylelint \"./modules/**/*.tsx\"",
     "test": "cd modules && jest",
     "test:content-library": "cd modules/content-library && jest",
     "test:mobius": "cd modules/mobius && jest",
-    "test:spire-linter": "cd modules/spire-linter && jest"
+    "test:spire-linter": "cd modules/spire-linter && jest",
+    "postinstall": "node validateLockFile.js"
   },
   "devDependencies": {
     "@babel/cli": "7.2.3",
@@ -130,7 +131,7 @@
     "papaparse": "5.3.0",
     "path-to-regexp": "0.1.7",
     "plop": "2.7.4",
-    "prettier": "2.0.5",
+    "prettier": "2.4.1",
     "qs": "6.9.4",
     "react": "16.13.1",
     "react-color": "2.18.1",

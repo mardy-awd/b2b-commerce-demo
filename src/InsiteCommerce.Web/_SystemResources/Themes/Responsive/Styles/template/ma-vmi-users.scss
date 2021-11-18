@@ -87,8 +87,12 @@
         .right-block {
             padding-right: 0;
 
-            .vmi-locations-search-block{
+            .vmi-locations-search-block {
                 padding-left: 0;
+            }
+
+            .info-tbl td {
+                word-break: break-all;
             }
         }
 

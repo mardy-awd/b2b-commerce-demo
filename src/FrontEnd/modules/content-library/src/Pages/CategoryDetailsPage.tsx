@@ -66,14 +66,8 @@ class CategoryDetailsPage extends React.Component<Props, State> {
             return;
         }
 
-        const {
-            metaDescription,
-            metaKeywords,
-            openGraphImage,
-            openGraphTitle,
-            openGraphUrl,
-            title,
-        } = catalogPageState.value;
+        const { metaDescription, metaKeywords, openGraphImage, openGraphTitle, openGraphUrl, title } =
+            catalogPageState.value;
 
         setPageMetadata(
             {
@@ -84,6 +78,7 @@ class CategoryDetailsPage extends React.Component<Props, State> {
                 openGraphUrl,
                 currentPath: location.pathname,
                 canonicalPath: catalogPageState.value.canonicalPath,
+                alternateLanguageUrls: catalogPageState.value.alternateLanguageUrls ?? undefined,
                 title: title || category.name,
                 websiteName,
             },

@@ -55,22 +55,24 @@ export const exportContent = (): ShellThunkAction => async (dispatch, getState) 
     });
 };
 
-export const importContent = (file: File): ShellThunkAction => async (dispatch, getState) => {
-    dispatch({
-        type: "ImportExportModal/BeginTask",
-    });
-
-    const { success, errorMessage } = await apiImportContent(file);
-
-    if (success) {
-        window.location.href = "/ContentAdmin/Page";
-    } else {
+export const importContent =
+    (file: File): ShellThunkAction =>
+    async (dispatch, getState) => {
         dispatch({
-            type: "ImportExportModal/SetErrorMessage",
-            errorMessage,
+            type: "ImportExportModal/BeginTask",
         });
-    }
-};
+
+        const { success, errorMessage } = await apiImportContent(file);
+
+        if (success) {
+            window.location.href = "/ContentAdmin/Page";
+        } else {
+            dispatch({
+                type: "ImportExportModal/SetErrorMessage",
+                errorMessage,
+            });
+        }
+    };
 
 export const confirmImport = (): AnyShellAction => ({
     type: "ImportExportModal/ConfirmImport",

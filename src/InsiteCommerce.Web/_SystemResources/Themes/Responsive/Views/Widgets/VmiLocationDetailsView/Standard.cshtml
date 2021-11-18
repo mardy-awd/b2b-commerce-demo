@@ -96,7 +96,7 @@
                                 <th class="col-select">
                                     <span class="sticky-first">
                                         <input type="checkbox" ng-checked="vm.allProductsSelected"
-                                               ng-click="vm.toggleSelectedAllProducts()" />
+                                               ng-click="vm.toggleSelectAllProducts()" />
                                     </span>
                                 </th>
                                 <th class="col-prod-name">
@@ -115,20 +115,20 @@
                                     [% translate 'Max' %]
                                 </th>
                             </tr>
-                            <tr class="tst_vmiLocationDetailsPage_product" ng-repeat="vmiProduct in vm.vmiBinList">
-                                <td class="col-select">
-                                    <span class="sticky-first">
-                                        <input type="checkbox" ng-checked="vm.isProductChecked(vmiProduct.id)"
-                                               ng-click="vm.toggleSelectedProduct(vmiProduct)" />
-                                    </span>
-                                </td>
-                                <td class="col-name"><a id="tst_productList_{{vmiProduct.id}}_descriptionLink" ng-href="{{vmiProduct.product.productDetailUrl}}">{{vmiProduct.product.shortDescription}}</a></td>
-                                <td class="col-part-number" ng-bind="vmiProduct.product.erpNumber"></td>
-                                <td class="col-bin-number" ng-bind="vmiProduct.binNumber"></td>
-                                <td class="col-min-qty" ng-bind="vmiProduct.minimumQty"></td>
-                                <td class="col-max-qty" ng-bind="vmiProduct.maximumQty"></td>
-                            </tr>
                         </thead>
+                        <tr class="tst_vmiLocationDetailsPage_product" ng-repeat="vmiProduct in vm.vmiBinList">
+                            <td class="col-select">
+                                <span class="sticky-first">
+                                    <input type="checkbox" ng-checked="vm.isProductChecked(vmiProduct.id)"
+                                            ng-click="vm.toggleSelectedProduct(vmiProduct)" />
+                                </span>
+                            </td>
+                            <td class="col-name"><a id="tst_productList_{{vmiProduct.id}}_descriptionLink" ng-href="{{vmiProduct.product.productDetailUrl}}">{{vmiProduct.product.shortDescription}}</a></td>
+                            <td class="col-part-number" ng-bind="vmiProduct.product.erpNumber"></td>
+                            <td class="col-bin-number" ng-bind="vmiProduct.binNumber"></td>
+                            <td class="col-min-qty" ng-bind="vmiProduct.minimumQty"></td>
+                            <td class="col-max-qty" ng-bind="vmiProduct.maximumQty"></td>
+                        </tr>
                     </table>
                 </div>
                 <isc-pager pagination="vm.vmiBinPagination" storage-key="vm.vmiBinPaginationStorageKey" bottom="true" update-data="vm.getVmiBinCollection()"></isc-pager>
@@ -183,7 +183,7 @@
                                 <th class="col-select">
                                     <span class="sticky-first">
                                         <input type="checkbox" ng-checked="vm.allOrdersSelected"
-                                               ng-click="vm.toggleSelectedAllOrders()" />
+                                               ng-click="vm.toggleSelectAllOrders()" />
                                     </span>
                                 </th>
                                 <th class="col-order-number">
@@ -199,19 +199,19 @@
                                     [% translate 'Status' %]
                                 </th>
                             </tr>
-                            <tr class="tst_vmiLocationDetailsPage_order" ng-repeat="vmiOrder in vm.vmiOrdersList">
-                                <td class="col-select">
-                                    <span class="sticky-first">
-                                        <input type="checkbox" ng-checked="vm.isOrderChecked(vmiOrder.id)"
-                                               ng-click="vm.toggleSelectedOrder(vmiOrder)" />
-                                    </span>
-                                </td>
-                                <td class="col-order-number"><a id="tst_orderList_{{vmiOrder.id}}_descriptionLink" ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ vmiOrder.erpOrderNumber || vmiOrder.orderNumber }}">{{vmiOrder.orderNumber}}</a></td>
-                                <td class="col-order-date" ng-bind="vmiOrder.orderDate | date:'shortDate'"></td>
-                                <td class="col-order-total" ng-bind="vmiOrder.orderGrandTotalDisplay"></td>
-                                <td class="col-order-status" ng-bind="vmiOrder.status"></td>
-                            </tr>
                         </thead>
+                        <tr class="tst_vmiLocationDetailsPage_order" ng-repeat="vmiOrder in vm.vmiOrdersList">
+                            <td class="col-select">
+                                <span class="sticky-first">
+                                    <input type="checkbox" ng-checked="vm.isOrderChecked(vmiOrder.id)"
+                                            ng-click="vm.toggleSelectedOrder(vmiOrder)" />
+                                </span>
+                            </td>
+                            <td class="col-order-number"><a id="tst_orderList_{{vmiOrder.id}}_descriptionLink" ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ vmiOrder.erpOrderNumber || vmiOrder.orderNumber }}">{{vmiOrder.orderNumber}}</a></td>
+                            <td class="col-order-date" ng-bind="vmiOrder.orderDate | date:'shortDate'"></td>
+                            <td class="col-order-total" ng-bind="vmiOrder.orderGrandTotalDisplay"></td>
+                            <td class="col-order-status" ng-bind="vmiOrder.status"></td>
+                        </tr>
                     </table>
                 </div>
                 <isc-pager pagination="vm.vmiOrdersPagination" storage-key="vm.vmiOrdersPaginationStorageKey" bottom="true" update-data="vm.getVmiOrderCollection()"></isc-pager>

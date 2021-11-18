@@ -5,7 +5,7 @@ export function testHandler<Parameter, Props>(handler: Handler<Parameter, Props>
     let state = {} as WriteableState;
     const getInitialProps = () => {
         return {
-            getState: () => (state as any) as ApplicationState,
+            getState: () => state as any as ApplicationState,
         } as HandlerProps<Parameter, Props>;
     };
     let props = getInitialProps();

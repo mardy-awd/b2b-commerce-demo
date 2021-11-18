@@ -22,7 +22,7 @@
     }
 
     export class VmiBinService implements IVmiBinService {
-        serviceUri = "/api/v1/vmilocations/{vmiLocationId}/vmibins";
+        serviceUri = "/api/v1/vmiLocations/{vmiLocationId}/bins";
 
         static $inject = ["$http", "httpWrapperService"];
 

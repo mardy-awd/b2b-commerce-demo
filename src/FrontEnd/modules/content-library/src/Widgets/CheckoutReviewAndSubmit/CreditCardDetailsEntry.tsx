@@ -339,7 +339,7 @@ const CreditCardDetailsEntry = ({
                         {resolvedShouldUseTokenEx ? (
                             <TokenExFrame
                                 {...styles.securityCodeTokenExFrame}
-                                label={translate("Security Code")}
+                                label={translate("Security code")}
                                 hint={securityCodeHint}
                                 tokenExIFrameContainer={
                                     <SecurityCodeTokenExFrameWrapper
@@ -355,7 +355,7 @@ const CreditCardDetailsEntry = ({
                         ) : (
                             <TextField
                                 {...styles.securityCodeText}
-                                label={translate("Security Code")}
+                                label={translate("Security code")}
                                 hint={securityCodeHint}
                                 value={securityCode}
                                 onChange={onSecurityCodeChange}

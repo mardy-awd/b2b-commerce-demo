@@ -6,10 +6,12 @@ import styled, { createGlobalStyle, GlobalStyleComponent } from "styled-componen
 
 export interface GlobalStyleProps {}
 
-const fontSize = () => ({ theme }: { theme: BaseTheme }) => {
-    const size = get(theme, "typography.body.size", 15);
-    return typeof size === "string" ? size : `${size}px`;
-};
+const fontSize =
+    () =>
+    ({ theme }: { theme: BaseTheme }) => {
+        const size = get(theme, "typography.body.size", 15);
+        return typeof size === "string" ? size : `${size}px`;
+    };
 
 /**
  * GlobalStyle is used to set the basic CSS for the site.

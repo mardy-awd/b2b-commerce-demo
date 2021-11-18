@@ -358,7 +358,7 @@ const StaticListProductListLine = ({
 };
 
 const mapWishListLineToProduct = (wishListLine: WishListLineModel) => {
-    const product = (cloneDeep(wishListLine) as any) as ProductModel;
+    const product = cloneDeep(wishListLine) as any as ProductModel;
     product.id = wishListLine.productId;
     product.productNumber = wishListLine.erpNumber;
     product.productTitle = wishListLine.shortDescription;

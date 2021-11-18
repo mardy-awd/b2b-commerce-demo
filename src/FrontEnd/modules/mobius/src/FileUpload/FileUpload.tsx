@@ -109,7 +109,8 @@ const AppearanceTransition = styled.div<{
 const FileUploadStyle = styled.div<{ sizeValues: VariantValues; border: "underline" | "rectangle" | "rounded" }>`
     position: relative;
     cursor: pointer;
-    &:focus-within, &:focus {
+    &:focus-within,
+    &:focus {
         ${AppearanceTransition} {
             ${({ border }) => border !== "underline" && "margin-top: -1px;"}
         }
@@ -253,9 +254,8 @@ class FileUpload extends React.Component<FileUploadProps & HasDisablerContext, F
                     const { css: buttonCss, ...otherButtonProps } = spreadProps("buttonProps");
                     const labelProps = spreadProps("labelProps");
                     labelProps.forwardAs = "span";
-                    const { inputSelect, formInputWrapper, appearanceTransition, ..._cssOverrides } = spreadProps(
-                        "cssOverrides",
-                    );
+                    const { inputSelect, formInputWrapper, appearanceTransition, ..._cssOverrides } =
+                        spreadProps("cssOverrides");
                     const sizeVariant: FormFieldSizeVariant = applyProp("sizeVariant", "default");
                     const sizeValues = sizeVariantValues[sizeVariant];
 

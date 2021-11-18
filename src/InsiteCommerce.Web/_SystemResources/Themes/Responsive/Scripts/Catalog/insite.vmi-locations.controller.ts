@@ -42,7 +42,7 @@ module insite.catalog {
             protected paginationService: core.IPaginationService,
             protected sessionService: account.ISessionService,
             protected vmiLocationsService: catalog.IVmiLocationsService,
-            protected deleteLocationPopupService: vmiLocation.IDeleteLocationPopupService        ) {
+            protected deleteLocationPopupService: vmiLocation.IDeleteLocationPopupService) {
         }
 
         $onInit(): void {
@@ -132,7 +132,7 @@ module insite.catalog {
                 this.sort = sort;
             }
 
-            this.getLocations();
+            this.getLocations(true);
         }
 
         isLocationChecked(locationId: System.Guid): boolean {
@@ -185,7 +185,11 @@ module insite.catalog {
             this.editingLocation = location;
         }
 
-        getLocations(): void {
+        getLocations(newSearch: boolean = false): void {
+            if (newSearch) {
+                this.pagination.page = 1;
+            }
+
             this.updateHistory();
 
             const filter: ISearchFilter = {

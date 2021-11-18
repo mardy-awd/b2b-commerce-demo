@@ -72,7 +72,8 @@ export function hasEnoughInventory(state: ApplicationState, productContext: Prod
         allowBackOrder ||
         product.isVariantParent ||
         !product.trackInventory ||
-        inventoryAvailability?.availability?.messageType !== AvailabilityMessageType.OutOfStock
+        (inventoryAvailability?.availability &&
+            inventoryAvailability.availability.messageType !== AvailabilityMessageType.OutOfStock)
     );
 }
 

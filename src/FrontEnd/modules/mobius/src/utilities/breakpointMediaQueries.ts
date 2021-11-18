@@ -70,6 +70,10 @@ export default function breakpointMediaQueries(
         return null;
     });
     /* stylelint-disable */
-    return css`${mediaRules[0]}${mediaRules[1]}${mediaRules[2]}${mediaRules[3]}${mediaRules[4]}`.join("\n");
+    return css`
+        ${mediaRules[0]}${mediaRules[1]}${mediaRules[2]}${mediaRules[3]}${mediaRules[4]}
+    `
+        .join("\n")
+        .trim();
     /* stylelint-enable */
 }

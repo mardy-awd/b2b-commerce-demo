@@ -24,6 +24,10 @@ export function getRequiresAuthorization(state: HasPagesState, pageId: string) {
     return state.data.pages.requiresAuthorizationByPageId[pageId];
 }
 
+export function getAlternateLanguageUrls(state: HasPagesState, pageId: string) {
+    return state.data.pages.alternateLanguageUrlsByPageId[pageId];
+}
+
 export function getFooter(state: ApplicationState) {
     return getPageStateByType(state, "Footer").value || nullPage;
 }

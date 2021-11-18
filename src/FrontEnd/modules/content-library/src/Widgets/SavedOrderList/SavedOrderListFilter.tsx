@@ -169,13 +169,13 @@ const SavedOrderListFilter = ({ isFilterOpen, getCartsApiParameter, updateSearch
 
     const fromDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
         updateSearchFields({
-            fromDate: selectedDay ? new Date(selectedDay.getTime() - tzOffset).toISOString().split("T")[0] : "",
+            fromDate: selectedDay ? selectedDay.toISOString() : "",
         });
     };
 
     const toDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
         updateSearchFields({
-            toDate: selectedDay ? new Date(selectedDay.getTime() - tzOffset).toISOString().split("T")[0] : "",
+            toDate: selectedDay ? selectedDay.toISOString() : "",
         });
     };
 
@@ -248,12 +248,8 @@ const SavedOrderListFilter = ({ isFilterOpen, getCartsApiParameter, updateSearch
         );
     }
 
-    const fromDate = getCartsApiParameter.fromDate
-        ? new Date(new Date(getCartsApiParameter.fromDate).getTime() + tzOffset)
-        : undefined;
-    const toDate = getCartsApiParameter.toDate
-        ? new Date(new Date(getCartsApiParameter.toDate).getTime() + tzOffset)
-        : undefined;
+    const fromDate = getCartsApiParameter.fromDate ? new Date(getCartsApiParameter.fromDate) : undefined;
+    const toDate = getCartsApiParameter.toDate ? new Date(getCartsApiParameter.toDate) : undefined;
 
     return (
         <GridContainer {...styles.container}>

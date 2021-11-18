@@ -46,6 +46,7 @@ interface InsiteSession {
     displayErrorPage?: true | undefined;
     errorStatusCode?: number;
     isWebCrawler: boolean;
+    isShareEntity: boolean;
     pageMetadata?: PreparedMetadata;
     initialPage?:
         | {
@@ -120,6 +121,7 @@ export const setDomain = (newDomain: typeof domain) => {
         messagesByName: {},
         translationsByKeyword: {},
         isWebCrawler: false,
+        isShareEntity: false,
     };
 
     domain = newDomain;
@@ -184,6 +186,14 @@ export function setSSRIsWebCrawler(value: boolean) {
 
 export function getSSRIsWebCrawler() {
     return getSessionValue("isWebCrawler") ?? false;
+}
+
+export function setIsShareEntity(value: boolean) {
+    setSessionValue("isShareEntity", value);
+}
+
+export function getIsShareEntity() {
+    return getSessionValue("isShareEntity") ?? false;
 }
 
 export function setSessionCookies(cookies: SafeDictionary<string> | string | undefined) {

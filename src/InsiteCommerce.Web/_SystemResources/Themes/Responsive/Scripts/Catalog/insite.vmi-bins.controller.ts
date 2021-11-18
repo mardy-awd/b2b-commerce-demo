@@ -87,10 +87,14 @@
                 this.searchFilter.sort = sort;
             }
 
-            this.getVmiBins();
+            this.getVmiBins(true);
         }
 
-        getVmiBins(): void {
+        getVmiBins(newSearch: boolean = false): void {
+            if (newSearch) {
+                this.pagination.page = 1;
+            }
+
             this.coreService.replaceState({ filter: this.searchFilter, pagination: this.pagination });
 
             this.spinnerService.show();

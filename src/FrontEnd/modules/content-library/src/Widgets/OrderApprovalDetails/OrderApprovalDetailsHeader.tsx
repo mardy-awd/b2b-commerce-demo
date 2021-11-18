@@ -58,7 +58,7 @@ const OrderApprovalDetailsHeader = ({ cart }: Props) => {
                 <Typography {...styles.title}>
                     <span aria-hidden>{translate("Order #")}&nbsp;</span>
                     <VisuallyHidden>{translate("Order Number")}</VisuallyHidden>
-                    <Typography {...styles.orderNumberText} data-test-selector="orderApprovalDetails_orderNumber">
+                    <Typography {...styles.orderNumberText} data-test-selector="tst_orderApprovalDetails_orderNumber">
                         {cart.orderNumber}
                     </Typography>
                 </Typography>

@@ -190,13 +190,11 @@ export const Banner: FC<OwnProps> = ({ fields, extendedStyles }) => {
             ${styles.overlayWrapper?.css || ""}
             background-color: ${fields.background === "image" ? fields.imageOverlay : ""};
             padding: ${fields.contentPadding}px;
-            ${
-                fields.centerTextVertically &&
-                `
+            ${fields.centerTextVertically &&
+            `
                                     display: flex;
                                     align-items: center;
-                                    justify-content: center;`
-            }
+                                    justify-content: center;`}
         `,
     };
 

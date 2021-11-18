@@ -111,14 +111,8 @@ class ItemEditor extends React.Component<Props, State> {
     };
 
     cancelEditingItem = () => {
-        const {
-            itemBeforeEditing,
-            cancelEditingItem,
-            removeItemIfCanceled,
-            removeWidget,
-            replaceItem,
-            pageId,
-        } = this.props;
+        const { itemBeforeEditing, cancelEditingItem, removeItemIfCanceled, removeWidget, replaceItem, pageId } =
+            this.props;
 
         cancelEditingItem();
         if (removeItemIfCanceled) {

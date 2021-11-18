@@ -34,6 +34,8 @@ export type ClickableButtonProps = MobiusStyledComponentProps<
             href: never;
             /** Never assigned to a button--distinguishes a button from a link. */
             target: never;
+            /** Description of the clickable element's role */
+            "aria-roledescription"?: string;
         }
 >;
 
@@ -43,6 +45,8 @@ export type ClickableLinkProps = MobiusStyledComponentProps<
         ClickablePresentationProps & {
             /** Never assigned to a link--distinguishes a link from a button. */
             disabled?: boolean;
+            /** Link target, defaults to self */
+            target?: HTMLAnchorElement["target"];
         }
 >;
 
@@ -106,6 +110,7 @@ const Clickable: React.FC<ClickableProps & HasDisablerContext> = withTheme(
                 const forwardProps: {
                     as?: "a" | "button" | "span";
                     href?: string;
+                    target?: "_blank" | "_self";
                     onClick?: React.EventHandler<React.MouseEvent>;
                     tabIndex: 0 | -1;
                 } = { tabIndex: 0 };
@@ -113,6 +118,7 @@ const Clickable: React.FC<ClickableProps & HasDisablerContext> = withTheme(
                 if (href) {
                     forwardProps.as = "a";
                     forwardProps.href = href;
+                    forwardProps.target = target ?? "_self";
                     forwardProps.onClick = e => {
                         stopPropagation && e.stopPropagation();
                         onClickIsFunction && onClick!(e as any);
@@ -152,7 +158,6 @@ const Clickable: React.FC<ClickableProps & HasDisablerContext> = withTheme(
                 return (
                     <StyledButton
                         className={className}
-                        target={target}
                         {...forwardProps}
                         {...otherProps}
                         css={applyStyledProp("css", resolvedMergeCss)}

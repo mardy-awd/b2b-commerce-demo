@@ -72,7 +72,7 @@ const CheckoutReviewAndSubmitSubmitForApprovalButton = ({
         <Button
             type="submit"
             disabled={isDisabled}
-            data-test-selector="checkoutReviewAndSubmit_submitForApproval"
+            data-test-selector="tst_checkoutReviewAndSubmit_submitForApproval"
             {...styles}
             onClick={handleClick}
         >

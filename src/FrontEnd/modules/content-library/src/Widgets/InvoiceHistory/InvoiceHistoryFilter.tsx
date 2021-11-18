@@ -369,6 +369,7 @@ class InvoiceHistoryFilter extends React.Component<Props, State> {
                             label={translate("Ship To")}
                             value={this.props.getInvoicesParameter.customerSequence}
                             onChange={event => this.shipToChangeHandler(event.target.value)}
+                            data-test-selector="invoiceHistory_invoiceShipToFilter"
                         >
                             {shipToOptions.map(shipTo => (
                                 <option key={shipTo.customerSequence} value={shipTo.customerSequence}>
@@ -396,6 +397,7 @@ class InvoiceHistoryFilter extends React.Component<Props, State> {
                             value={this.state.orderNumber}
                             label={translate("Order #")}
                             onChange={event => this.orderNumberChangeHandler(event.target.value)}
+                            data-test-selector="invoiceHistory_erpOrderNumberFilter"
                         />
                     </GridItem>
                 )}
@@ -406,6 +408,7 @@ class InvoiceHistoryFilter extends React.Component<Props, State> {
                             value={this.state.poNumber}
                             label={translate("PO #")}
                             onChange={event => this.poNumberChangeHandler(event.target.value)}
+                            data-test-selector="invoiceHistory_poNumberFilter"
                         />
                     </GridItem>
                 )}
@@ -447,6 +450,7 @@ class InvoiceHistoryFilter extends React.Component<Props, State> {
                             onChange={(_, value) => {
                                 this.showOpenOnlyChangeHandler(value);
                             }}
+                            data-test-selector="invoiceHistory_showOpenInvoicesFilter"
                         >
                             {translate("Show only open invoices")}
                         </Checkbox>

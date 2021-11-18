@@ -33,17 +33,20 @@ const reducer = {
     ) => {
         const { parameter, collection } = action;
         const { parentCategoryIdToChildrenIds, categoryDepthLoaded } = draft;
-        const { maxDepth, startCategoryId, includeStartCategory } = parameter;
+        const { startCategoryId, includeStartCategory } = parameter;
+        const maxDepth = parameter.maxDepth ?? 2;
 
         const loadCategories = (categoryIds: string[] | undefined, parentCategoryId: string, currentDepth: number) => {
             if (!categoryIds) {
                 return;
             }
-            if (maxDepth) {
-                categoryDepthLoaded[parentCategoryId] = maxDepth - currentDepth;
-            }
 
+            categoryDepthLoaded[parentCategoryId] = Math.max(
+                maxDepth - currentDepth,
+                categoryDepthLoaded[parentCategoryId] || 0,
+            );
             parentCategoryIdToChildrenIds[parentCategoryId] = categoryIds;
+
             for (const categoryId of categoryIds) {
                 const category = collection.categoriesById[categoryId]!;
                 if (category.subCategoryIds) {

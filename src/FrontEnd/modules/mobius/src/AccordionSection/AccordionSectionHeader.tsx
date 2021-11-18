@@ -20,7 +20,6 @@ export type AccordionSectionHeaderProps = MobiusStyledComponentProps<
 >;
 
 const AccordionSectionHeader = styled.dt.attrs((props: AccordionSectionHeaderProps) => ({
-    role: "heading",
     ariaLevel: props.headingLevel,
 }))`
     background: ${getColor("common.background")};

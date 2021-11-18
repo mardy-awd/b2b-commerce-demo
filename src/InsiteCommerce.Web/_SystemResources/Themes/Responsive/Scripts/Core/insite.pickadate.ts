@@ -27,7 +27,8 @@ module insite.core {
                 minDate: "=",
                 maxDate: "=",
                 pickADateOptions: "=", // options to pass through to the pick-a-date control
-                update: "&" // set this attribute to call a parent scope method when the date is updated
+                update: "&", // set this attribute to call a parent scope method when the date is updated
+                useLocalDate: "="
             },
             link: (scope: IPickADateScope, element: IPickADateElement) => {
                 let pad = (n: number) => {
@@ -51,7 +52,7 @@ module insite.core {
                             if (select && select.obj) {
                                 // pass the pick-a-date selection to the scope variable
                                 scope.innerDate = select.obj;
-                                scope.iscPickADate = `${select.obj.getFullYear()}-${pad(select.obj.getMonth() + 1)}-${pad(select.obj.getDate())}`;
+                                scope.iscPickADate = scope.useLocalDate ? select.obj.toISOString() : `${select.obj.getFullYear()}-${pad(select.obj.getMonth() + 1)}-${pad(select.obj.getDate())}`;
                                 element.prop("value", $filter("date")(select.obj, "shortDate"));
                             }
                         });

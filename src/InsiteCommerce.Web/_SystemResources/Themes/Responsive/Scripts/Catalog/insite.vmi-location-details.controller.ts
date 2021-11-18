@@ -44,7 +44,9 @@
             "vmiBinService",
             "deleteVmiBinsModalService",
             "deleteLocationPopupService",
-            "vmiBinModalService"
+            "vmiBinModalService",
+            "paginationService",
+            "$filter"
         ];
 
         constructor(
@@ -59,7 +61,9 @@
             protected vmiBinService: vmiBin.IVmiBinService,
             protected deleteVmiBinsModalService: vmiBin.IDeleteVmiBinsModalService,
             protected deleteLocationPopupService: vmiLocation.IDeleteLocationPopupService,
-            protected vmiBinModalService: vmiBin.IVmiBinModalService) {
+            protected vmiBinModalService: vmiBin.IVmiBinModalService,
+            protected paginationService: core.IPaginationService,
+            protected $filter: ng.IFilterService) {
         }
 
         $onInit(): void {
@@ -77,6 +81,8 @@
 
             this.vmiLocationId = this.getVmiLocationId();
             this.tableViewProducts = true;
+            this.vmiBinPagination = this.paginationService.getDefaultPagination(this.vmiBinPaginationStorageKey);
+            this.vmiOrdersPagination = this.paginationService.getDefaultPagination(this.vmiOrdersPaginationStorageKey);
 
             this.productTableSearchFilter = "";
             this.ordersTableSearchFilter = "";
@@ -87,7 +93,9 @@
             this.getVmiOrderCollection();
 
             this.$scope.$on("vmi-location-bins-were-deleted", () => {
-                this.vmiBinPagination = null;
+                if (this.vmiBinPagination) {
+                    this.vmiBinPagination.page = 1;
+                }
                 this.getVmiBinCollection();
             });
 
@@ -157,6 +165,7 @@
             this.vmiBinModalService.display({
                 vmiBin: { vmiLocationId: this.vmiLocationId },
                 broadcastCreateStr: "vmi-bin-item-was-created",
+                showImport: true,
                 closeOnAdd: true
             });
         }
@@ -246,7 +255,7 @@
             }
         }
 
-        toggleSelectedAllProducts(): void {
+        toggleSelectAllProducts(): void {
             if (this.allProductsSelected) {
                 this.checkProductStorage = {};
                 this.allProductsSelected = false;
@@ -304,10 +313,10 @@
             return {
                 fields: this.exportOrdersHeaders,
                 data: list.map(o => [
-                    o.orderNumber.toString(),
-                    o.orderDate.toString(),
+                    o.orderNumber,
+                    this.$filter("date")(o.orderDate, "shortDate"),
                     o.orderGrandTotal.toString(),
-                    o.status.toString(),
+                    o.status,
                 ]),
             };
         };
@@ -336,11 +345,7 @@
                 vmiLocationId: this.vmiLocationId
             };
 
-            let fullPaging = this.vmiOrdersPagination;
-            fullPaging.page = 0;
-            fullPaging.pageSize = this.vmiOrdersPagination.totalItemCount;
-
-            this.cartService.getCarts(searchFilter, fullPaging).then(
+            this.cartService.getCarts(searchFilter, { page: 1, pageSize: this.vmiOrdersPagination?.totalItemCount } as PaginationModel).then(
                 (result: CartCollectionModel) => { this.generateCsvOrders(result.carts) },
                 (error: any) => { this.getVmiOrderCollectionFailed(error); });
         }
@@ -358,7 +363,7 @@
             }
         }
 
-        toggleSelectedAllOrders(): void {
+        toggleSelectAllOrders(): void {
             if (this.allOrdersSelected) {
                 this.checkOrderStorage = {};
                 this.allOrdersSelected = false;
@@ -413,6 +418,7 @@
         }
 
         protected getVmiBinCollectionCompleted(result: VmiBinCollectionModel): void {
+            this.checkProductStorage = {};
             this.vmiBinList = result.vmiBins;
             this.vmiBinPagination = result.pagination;
         }
@@ -433,6 +439,7 @@
         }
 
         protected getVmiOrderCollectionCompleted(result: CartCollectionModel): void {
+            this.checkOrderStorage = {};
             this.vmiOrdersList = result.carts;
             this.vmiOrdersPagination = result.pagination;
         }

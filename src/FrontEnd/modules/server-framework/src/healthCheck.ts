@@ -31,7 +31,7 @@ const healthCheck = async (request: Request, response: Response) => {
         siteGeneration: !(await siteGeneration).websiteIsClassic,
     };
 
-    const allChecksPassed = ((Object.keys(checks) as unknown) as (keyof typeof checks)[]).reduce(
+    const allChecksPassed = (Object.keys(checks) as unknown as (keyof typeof checks)[]).reduce(
         (result, key) => result && checks[key],
         true,
     );

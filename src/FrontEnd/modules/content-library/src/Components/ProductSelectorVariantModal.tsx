@@ -26,12 +26,8 @@ interface OwnProps {
 }
 
 const mapStateToProps = (state: ApplicationState) => {
-    const {
-        variantModalIsOpen,
-        variantModalProductId,
-        variantSelection,
-        selectedVariantProductInfo,
-    } = getProductSelector(state);
+    const { variantModalIsOpen, variantModalProductId, variantSelection, selectedVariantProductInfo } =
+        getProductSelector(state);
     return {
         variantModalIsOpen,
         variantParentProduct: getProductState(state, variantModalProductId).value,

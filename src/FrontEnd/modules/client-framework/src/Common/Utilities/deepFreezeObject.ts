@@ -15,7 +15,7 @@ function deepFreezeObject<T extends object>(object: T | null | undefined, seen?:
         seen = new WeakSet();
     }
 
-    const propNames = (Object.getOwnPropertyNames(object) as unknown) as (keyof T)[];
+    const propNames = Object.getOwnPropertyNames(object) as unknown as (keyof T)[];
 
     for (const name of propNames) {
         const value = object[name] as unknown;

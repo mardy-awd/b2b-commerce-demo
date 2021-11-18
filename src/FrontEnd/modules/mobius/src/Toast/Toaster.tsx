@@ -152,6 +152,7 @@ class Toaster extends React.Component<ToasterProps & ThemeProps<BaseTheme>, Stat
             const newQueuedToasts = queuedToasts;
             if (displayToasts.length < topSlice) {
                 newDisplayToasts.unshift(toastId);
+
                 setTimeout(() => {
                     this.removeToast(toastId);
                 }, toastProps?.timeoutLength || this.applyProp("timeoutLength"));

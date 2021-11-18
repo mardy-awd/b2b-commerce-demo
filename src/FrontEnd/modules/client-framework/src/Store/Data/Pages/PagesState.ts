@@ -16,6 +16,7 @@ export interface PagesState extends DataViewState<PageProps> {
     readonly pageDefinitionsByType?: SafeDictionary<Pick<PageDefinition, "pageType">>;
     readonly bypassedAuthorization: SafeDictionary<true>;
     readonly requiresAuthorizationByPageId: SafeDictionary<boolean>;
+    readonly alternateLanguageUrlsByPageId: SafeDictionary<SafeDictionary<string>>;
 }
 
 const frozenEmptyObject = Object.freeze({});

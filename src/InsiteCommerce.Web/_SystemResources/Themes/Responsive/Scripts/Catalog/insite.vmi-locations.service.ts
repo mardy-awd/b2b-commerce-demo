@@ -21,7 +21,7 @@ module insite.catalog {
     }
 
     export class VmiLocationsService implements IVmiLocationsService {
-        serviceUri = "api/v1/vmilocations";
+        serviceUri = "api/v1/vmiLocations";
 
         static $inject = ["$http", "httpWrapperService"];
 

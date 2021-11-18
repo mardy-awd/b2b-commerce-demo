@@ -9,7 +9,7 @@ import {
 } from "@insite/client-framework/Services/ApiService";
 import { VmiLocationCollectionModel, VmiLocationModel } from "@insite/client-framework/Types/ApiModels";
 
-const vmiLocationsUrl = "/api/v1/vmilocations";
+const vmiLocationsUrl = "/api/v1/vmiLocations";
 
 export interface GetVmiLocationsApiParameter extends ApiParameter, HasPagingParameters {
     userId?: string;

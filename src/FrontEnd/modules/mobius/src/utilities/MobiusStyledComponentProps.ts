@@ -8,7 +8,7 @@ type ExtendSCProps<
     // Generic Types as in `MobiusStyledComponentProps`
     C extends keyof JSX.IntrinsicElements,
     O extends object = {},
-    A extends keyof any = never
+    A extends keyof any = never,
 > = Omit<
     StyledComponentProps<
         C,
@@ -34,7 +34,7 @@ type MobiusStyledComponentProps<
     // Other props of the component itself;
     O extends object = {},
     // Optional: If the styled component uses .attrs, the props that are made optional by that use.
-    A extends keyof any = never
+    A extends keyof any = never,
 > = ExtendSCProps<C, O, A>;
 
 export type MobiusStyledComponentPropsWithRef<
@@ -45,7 +45,7 @@ export type MobiusStyledComponentPropsWithRef<
     // Other props of the component itself;
     O extends object = {},
     // Optional: If the styled component uses .attrs, the props that are made optional by that use.
-    A extends keyof any = never
+    A extends keyof any = never,
 > = Omit<ExtendSCProps<C, O, A>, "ref"> & R;
 
 export default MobiusStyledComponentProps;

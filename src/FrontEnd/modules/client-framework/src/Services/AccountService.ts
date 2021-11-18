@@ -25,6 +25,7 @@ export interface GetAccountsApiParameter extends ApiParameter, HasPagingParamete
     expand?: "administration"[];
     additionalExpands?: string[];
     roles?: string[];
+    excludeRoles?: string[];
 }
 
 export interface GetAccountApiParameter extends ApiParameter {

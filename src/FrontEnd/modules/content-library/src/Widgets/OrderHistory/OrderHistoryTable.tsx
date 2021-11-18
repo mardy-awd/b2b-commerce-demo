@@ -258,15 +258,8 @@ class OrderHistoryTable extends React.Component<Props> {
             };
         });
 
-        const {
-            showOrderNumber,
-            showDate,
-            showOrderTotal,
-            showStatus,
-            showShipTo,
-            showPONumber,
-            showReorderProducts,
-        } = this.props.fields;
+        const { showOrderNumber, showDate, showOrderTotal, showStatus, showShipTo, showPONumber, showReorderProducts } =
+            this.props.fields;
 
         const isTrueOrUndefined = (value?: boolean) => value === true || value === undefined;
 

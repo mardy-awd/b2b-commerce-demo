@@ -9,6 +9,7 @@ import FormField, {
 import { sizeVariantValues } from "@insite/mobius/FormField/formStyles";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import { IconPresentationProps } from "@insite/mobius/Icon";
+import { TypographyPresentationProps } from "@insite/mobius/Typography";
 import applyPropBuilder from "@insite/mobius/utilities/applyPropBuilder";
 import { HasDisablerContext, withDisabler } from "@insite/mobius/utilities/DisablerContext";
 import InjectableCss, { StyledProp } from "@insite/mobius/utilities/InjectableCss";
@@ -18,7 +19,7 @@ import omitMultiple from "@insite/mobius/utilities/omitMultiple";
 import uniqueId from "@insite/mobius/utilities/uniqueId";
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
 import * as React from "react";
-import styled, { ThemeConsumer } from "styled-components";
+import styled, { css, ThemeConsumer } from "styled-components";
 
 export interface TextFieldPresentationProps extends FormFieldPresentationProps<TextFieldComponentProps> {
     /** Props to be passed into the Clickable component that will optionally wrap the icon.
@@ -38,6 +39,8 @@ export interface TextFieldPresentationProps extends FormFieldPresentationProps<T
     mergeCss?: boolean;
     /** Background color of the form element */
     backgroundColor?: string;
+    /** The props for the textfield label */
+    labelProps?: TypographyPresentationProps;
 }
 
 type TextFieldComponentProps = MobiusStyledComponentPropsWithRef<
@@ -157,6 +160,7 @@ const TextField: React.FC<TextFieldProps & HasDisablerContext> = React.forwardRe
                     { theme, ...otherProps },
                     { component: "textField", category: "formField" },
                 );
+                const labelProps = applyProp("labelProps");
                 const sizeVariant: FormFieldSizeVariant = applyProp("sizeVariant", "default");
                 const iconProps = spreadProps("iconProps");
                 const resolvedMergeCss = mergeCss ?? theme?.textField?.defaultProps?.mergeCss;
@@ -218,10 +222,10 @@ const TextField: React.FC<TextFieldProps & HasDisablerContext> = React.forwardRe
                         {formIcon}
                     </>
                 );
-
                 return (
                     <FormField
                         {...props}
+                        labelProps={labelProps}
                         descriptionId={descriptionId}
                         formInput={InputElement}
                         labelId={labelId}

@@ -367,9 +367,9 @@ const CalculatorCell = ({ css: cellCss, top, children, ...otherProps }: DataTabl
     return (
         <DataTableCell
             css={css`
-            ${cellCss}
-            top: ${top}px;
-        `}
+                ${cellCss}
+                top: ${top}px;
+            `}
             {...otherProps}
         >
             {children}

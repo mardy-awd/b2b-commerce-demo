@@ -148,7 +148,10 @@ const DateTimePickerStyle = styled.div<DateTimePickerStyleProps>`
         color: ${({ disabled, theme }) => (disabled ? theme.colors.text.disabled : theme.colors.text.main)};
         display: inline-flex;
         position: relative;
-        &, & *, & *::before, & *::after {
+        &,
+        & *,
+        & *::before,
+        & *::after {
             box-sizing: border-box;
         }
         &__wrapper {
@@ -194,7 +197,9 @@ const DateTimePickerStyle = styled.div<DateTimePickerStyleProps>`
             border: 0;
             background: transparent;
             padding: 0;
-            &:enabled { cursor: pointer; }
+            &:enabled {
+                cursor: pointer;
+            }
         }
         &__calendar {
             top: 100% !important;
@@ -228,7 +233,10 @@ const DateTimePickerStyle = styled.div<DateTimePickerStyleProps>`
         flex-direction: row;
         user-select: none;
 
-        &, & *, & *::before, & *::after {
+        &,
+        & *,
+        & *::before,
+        & *::after {
             box-sizing: border-box;
         }
 
@@ -262,10 +270,10 @@ const DateTimePickerStyle = styled.div<DateTimePickerStyleProps>`
                 margin: 2px;
             }
             &__next-button {
-                background-image: url('${`data:image/svg+xml;base64,${chevronRightString}`}');
+                background-image: url("${`data:image/svg+xml;base64,${chevronRightString}`}");
             }
             &__prev-button {
-                background-image: url('${`data:image/svg+xml;base64,${chevronLeftString}`}');
+                background-image: url("${`data:image/svg+xml;base64,${chevronLeftString}`}");
             }
             &__prev2-button,
             &__next2-button {
@@ -285,7 +293,9 @@ const DateTimePickerStyle = styled.div<DateTimePickerStyleProps>`
                 font-weight: 400;
                 color: ${getColor("text.accent")};
                 text-align: center;
-                abbr { text-decoration: none; }
+                abbr {
+                    text-decoration: none;
+                }
             }
 
             &__days {

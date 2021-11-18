@@ -82,6 +82,8 @@ interface ButtonComponentProps extends React.ButtonHTMLAttributes<HTMLButtonElem
     children?: React.ReactNode;
     /** @ignore */
     forwardAs?: keyof JSX.IntrinsicElements;
+    /** Focus the button on render */
+    isFocusAfterMount?: boolean;
 }
 
 export type ButtonProps = ButtonComponentProps & ButtonPresentationProps;
@@ -151,10 +153,12 @@ const Button: React.FC<ButtonProps & ButtonContextProps> = props => {
         theme,
         variant,
         mergeCss,
+        isFocusAfterMount,
         ...otherProps
     } = props as Omit<ButtonProps, "variant"> & Required<Pick<ButtonProps, "variant">> & ButtonContextProps; // Accounts for defaultProps.
     const position = icon?.position;
     const src = icon?.src;
+    const buttonRef = React.useRef<HTMLButtonElement | null>(null);
 
     let variantProps: ButtonPresentationProps = {};
     if (variant) {
@@ -168,11 +172,17 @@ const Button: React.FC<ButtonProps & ButtonContextProps> = props => {
     const size = applyProp("size", null) as number | null;
     const resolvedMergeCss = mergeCss ?? variantProps.mergeCss;
 
+    React.useEffect(() => {
+        if (isFocusAfterMount) {
+            buttonRef?.current?.focus();
+        }
+    }, []);
+
     return (
         <ButtonWrapper
             {...omitMultiple(variantProps, omitKeys)}
+            ref={buttonRef}
             as={forwardAs}
-            tabIndex={0}
             css={applyStyledProp("css", resolvedMergeCss)}
             _color={applyProp("color", "primary")}
             _shape={applyProp("shape", "rectangle")}

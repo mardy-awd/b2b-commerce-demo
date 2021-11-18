@@ -191,6 +191,9 @@ export type TokenExIframeConfig = {
     cvvOnly?: boolean;
     cvvContainerID?: string;
     cvvInputType?: "number" | "tel" | "text";
+    enableAriaRequired?: boolean;
+    customDataLabel?: string;
+    title?: string;
 };
 
 type TokenExPCIIframeConfig = TokenExIframeConfig & {
@@ -374,7 +377,11 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     const [runSubmitPayPal, setRunSubmitPayPal] = useState(false);
 
     // will exist after we are redirected back here from paypal
-    const { PayerID: payPalPayerId, token: payPalToken, cartId } = parseQueryString<{
+    const {
+        PayerID: payPalPayerId,
+        token: payPalToken,
+        cartId,
+    } = parseQueryString<{
         PayerID?: string;
         token?: string;
         cartId?: string;
@@ -575,6 +582,9 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             timestamp: config.timestamp,
             tokenExID: config.tokenExId,
             tokenScheme: config.tokenScheme,
+            enableAriaRequired: true,
+            title: translate("Credit card information"),
+            customDataLabel: translate("credit card number"),
         };
 
         tokenExIframe = new TokenEx.Iframe("tokenExCardNumber", iframeConfig);
@@ -634,6 +644,9 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             token: paymentMethodDto!.name,
             tokenExID: config.tokenExId,
             tokenScheme: paymentMethodDto!.tokenScheme,
+            enableAriaRequired: true,
+            title: translate("Security code"),
+            customDataLabel: translate("Security code"),
         };
 
         tokenExIframe = new TokenEx.Iframe("ppTokenExSecurityCode", iframeConfig);

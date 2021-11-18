@@ -97,15 +97,15 @@ function withPageType(pageType: "System" | "Content") {
 }
 
 function withCanDeletePage(canDeletePage: boolean) {
-    return ({
+    return {
         canDeletePage,
-    } as any) as PermissionsModel;
+    } as any as PermissionsModel;
 }
 
 function withCanCopyPage(canCopyPage: boolean) {
-    return ({
+    return {
         canCopyPage,
-    } as any) as PermissionsModel;
+    } as any as PermissionsModel;
 }
 
 function withTreeNode(treeNode: Partial<TreeNodeModel>) {

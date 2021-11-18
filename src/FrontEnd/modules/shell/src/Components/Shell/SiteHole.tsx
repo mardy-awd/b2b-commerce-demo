@@ -51,16 +51,15 @@ export const setSiteFrame = (frame: HTMLIFrameElement, handlers: Dictionary<(dat
     setupSiteHole(frame, siteHole, handlers);
 };
 
-export const siteHoleMessenger = (store: MiddlewareAPI<Dispatch, ShellState>) => (next: Dispatch) => (
-    action: Action,
-) => {
-    if (action.type && action.type.indexOf("SendToSite/") === 0) {
-        sendToSite({
-            ...action,
-            type: action.type.replace("SendToSite/", ""),
-        });
-        return null;
-    }
+export const siteHoleMessenger =
+    (store: MiddlewareAPI<Dispatch, ShellState>) => (next: Dispatch) => (action: Action) => {
+        if (action.type && action.type.indexOf("SendToSite/") === 0) {
+            sendToSite({
+                ...action,
+                type: action.type.replace("SendToSite/", ""),
+            });
+            return null;
+        }
 
-    return next(action);
-};
+        return next(action);
+    };

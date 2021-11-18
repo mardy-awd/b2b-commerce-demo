@@ -1,6 +1,8 @@
 ﻿module insite.layout {
     "use strict";
 
+    import OrderSettingsModel = Insite.Order.WebApi.V1.ApiModels.OrderSettingsModel;
+
     export interface ITopNavControllerAttributes extends ng.IAttributes {
         dashboardUrl: string;
     }
@@ -11,8 +13,12 @@
         session: any;
         dashboardUrl: string;
         accountSettings: AccountSettingsModel;
+        orderSettings: OrderSettingsModel;
+        displayModeSwitch: boolean;
+        currentNavigationMode: string;
+        NavigationModeCookieName = "NavigationMode";
 
-        static $inject = ["$scope", "$window", "$attrs", "sessionService", "websiteService", "coreService", "settingsService", "deliveryMethodPopupService"];
+        static $inject = ["$scope", "$window", "$attrs", "sessionService", "websiteService", "coreService", "settingsService", "deliveryMethodPopupService", "ipCookie"];
 
         constructor(
             protected $scope: ng.IScope,
@@ -22,7 +28,8 @@
             protected websiteService: websites.IWebsiteService,
             protected coreService: core.ICoreService,
             protected settingsService: core.ISettingsService,
-            protected deliveryMethodPopupService: account.IDeliveryMethodPopupService) {
+            protected deliveryMethodPopupService: account.IDeliveryMethodPopupService,
+            protected ipCookie: any) {
         }
 
         $onInit(): void {
@@ -40,6 +47,8 @@
             this.$scope.$on("updateHeaderSession", () => {
                 this.getSession();
             });
+
+            this.currentNavigationMode = this.ipCookie(this.NavigationModeCookieName) || "Storefront";
         }
 
         protected onSessionUpdated(session: SessionModel): void {
@@ -54,6 +63,7 @@
 
         protected getSessionCompleted(session: SessionModel): void {
             this.session = session;
+            this.setDisplayModeSwitch();
             this.getWebsite("languages,currencies");
         }
 
@@ -68,9 +78,20 @@
 
         protected getSettingsCompleted(settingsCollection: core.SettingsCollection): void {
             this.accountSettings = settingsCollection.accountSettings;
+            this.orderSettings = settingsCollection.orderSettings;
+            this.setDisplayModeSwitch();
         }
 
         protected getSettingsFailed(error: any): void {
+        }
+
+        protected setDisplayModeSwitch(): void {
+            if (!this.session || !this.orderSettings) {
+                return;
+            }
+
+            this.displayModeSwitch = this.session.isAuthenticated && this.orderSettings.vmiEnabled &&
+                this.session.userRoles && this.session.userRoles.toLowerCase().indexOf("vmi_") !== -1;
         }
 
         protected getWebsite(expand: string): void {
@@ -137,6 +158,11 @@
         }
 
         protected setCurrencyFailed(error: any): void {
+        }
+
+        setMode(mode: string): void {
+            this.ipCookie(this.NavigationModeCookieName, mode, { path: "/" });
+            this.$window.location.reload();
         }
 
         signOut(returnUrl: string): void {

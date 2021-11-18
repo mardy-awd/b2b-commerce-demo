@@ -1,3 +1,4 @@
+import { SafeDictionary } from "@insite/client-framework/Common/Types";
 import { getUrl, setServerPageMetadata } from "@insite/client-framework/ServerSideRendering";
 import { WebsiteSettingsModel } from "@insite/client-framework/Types/ApiModels";
 
@@ -8,6 +9,7 @@ export interface PreparedMetadata {
     openGraphTitle: string;
     openGraphUrl: string;
     canonicalUrl?: string;
+    alternateLanguageUrls?: SafeDictionary<string>;
     title: string;
 }
 
@@ -19,6 +21,7 @@ export interface Metadata {
     openGraphUrl?: string;
     currentPath: string;
     canonicalPath?: string;
+    alternateLanguageUrls?: SafeDictionary<string>;
     title?: string;
     websiteName: string;
 }
@@ -32,6 +35,7 @@ export default function setPageMetadata(
         openGraphUrl,
         currentPath,
         canonicalPath,
+        alternateLanguageUrls,
         title,
         websiteName,
     }: Metadata,
@@ -52,12 +56,23 @@ export default function setPageMetadata(
         return `${authority}${url.startsWith("/") ? url : `/${url}`}`;
     };
 
+    const cleanAlternateLanguageUrls = (alternateLanguageUrls?: SafeDictionary<string>) => {
+        const languageUrls: { [key: string]: string } = {};
+        alternateLanguageUrls &&
+            Object.entries(alternateLanguageUrls).forEach(([key, value]) => {
+                languageUrls[key] = cleanUrl(value);
+            });
+
+        return languageUrls;
+    };
+
     const currentUrl = cleanUrl(currentPath);
     const actualTitle = generatePageTitle(title || "", websiteName, websiteSettings);
     const ogTitle = openGraphTitle || actualTitle || "";
     const ogImage = cleanUrl(openGraphImage);
     const ogUrl = cleanUrl(openGraphUrl, currentUrl);
     const canonicalUrl = cleanUrl(canonicalPath, currentUrl);
+    const preparedAlternateLanguageUrls = cleanAlternateLanguageUrls(alternateLanguageUrls);
 
     if (IS_SERVER_SIDE) {
         setServerPageMetadata({
@@ -67,6 +82,7 @@ export default function setPageMetadata(
             openGraphTitle: ogTitle,
             openGraphImage: ogImage,
             canonicalUrl,
+            alternateLanguageUrls: preparedAlternateLanguageUrls,
             title: actualTitle,
         });
     } else {
@@ -77,6 +93,10 @@ export default function setPageMetadata(
         document.querySelector('meta[name="keywords"]')?.setAttribute("content", metaKeywords || "");
         document.querySelector('meta[name="description"]')?.setAttribute("content", metaDescription || "");
         document.querySelector('link[rel="canonical"]')?.setAttribute("href", canonicalUrl || "");
+        preparedAlternateLanguageUrls &&
+            Object.entries(preparedAlternateLanguageUrls)?.forEach(([key, value]) => {
+                document.querySelector(`link[rel="alternate"][hreflang="${key}"]`)?.setAttribute("href", value);
+            });
     }
 }
 

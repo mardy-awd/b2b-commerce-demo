@@ -4,8 +4,9 @@ import { HasCartLineContext, withCartLine } from "@insite/client-framework/Compo
 import { Cart } from "@insite/client-framework/Services/CartService";
 import translate from "@insite/client-framework/Translate";
 import SmallHeadingAndText, { SmallHeadingAndTextStyles } from "@insite/content-library/Components/SmallHeadingAndText";
-import Link, { LinkPresentationProps } from "@insite/mobius/Link";
+import { LinkPresentationProps } from "@insite/mobius/Link";
 import TextArea, { TextAreaProps } from "@insite/mobius/TextArea";
+import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React, { FC, useState } from "react";
 import { css } from "styled-components";
@@ -27,7 +28,9 @@ type Props = OwnProps & HasCartLineContext;
 
 export interface CartLineNotesStyles {
     wrapper?: InjectableCss;
+    /** @deprecated */
     toggleLink?: LinkPresentationProps;
+    label?: TypographyPresentationProps;
     editableNotesTextArea?: TextAreaProps;
     readOnlyNotesText?: SmallHeadingAndTextStyles;
 }
@@ -38,9 +41,23 @@ export const cartLineNotesStyles: CartLineNotesStyles = {
             width: 100%;
         `,
     },
-    toggleLink: {
+    editableNotesTextArea: {
         css: css`
-            margin-bottom: 10px;
+            min-width: 100%;
+            max-width: 100%;
+            min-height: 50px;
+        `,
+    },
+    label: {
+        css: css`
+            button {
+                color: #2e64b0;
+                background: none;
+                border: none;
+                padding: 0;
+                font-size: 15px;
+                cursor: pointer;
+            }
         `,
     },
 };
@@ -79,17 +96,21 @@ const CartLineNotes: FC<Props> = ({
     if (editable) {
         return (
             <StyledWrapper {...styles.wrapper}>
-                <Link
-                    {...styles.toggleLink}
+                <Typography
+                    {...styles.label}
+                    aria-expanded={showLineNotes}
+                    htmlFor={`notes-${cartLine.id}`}
+                    forwardAs="label"
                     onClick={lineNotesClickHandler}
                     data-test-selector="cartline_notesShowHideButton"
                 >
-                    {translate(heading)}
-                </Link>
+                    <button>{translate(heading)}</button>
+                </Typography>
                 {showLineNotes && (
                     <TextArea
                         {...styles.editableNotesTextArea}
                         value={notes}
+                        id={`notes-${cartLine.id}`}
                         disabled={!cart.canModifyOrder}
                         onChange={changeHandler}
                         onBlur={blurHandler}

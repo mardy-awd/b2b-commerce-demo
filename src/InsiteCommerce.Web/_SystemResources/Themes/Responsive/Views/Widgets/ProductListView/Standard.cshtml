@@ -56,8 +56,7 @@
 
                     <div id="tst_productList_container" class="right small-12 columns" ng-class="{ 'large-8 plist-right': !vm.noResults || vm.searchWithinTerms.length > 0}">
 
-
-                        <h3 class="results-count" ng-class="{ messaging: vm.noResults && vm.searchWithinTerms.length }">
+                        <h3 class="results-count" ng-if="vm.query || vm.searchCategory || vm.filterCategory.categoryId" ng-class="{ messaging: vm.noResults && vm.searchWithinTerms.length}">
                             <span class="result-num" ng-if="!vm.noResults">{{vm.products.pagination.totalItemCount}}</span>
                             <span class="result-lbl" ng-if="!vm.noResults && vm.products">{{'[% translate 'Items_pager' EscapeSingleQuotes %]'.toLowerCase()}}</span>
 

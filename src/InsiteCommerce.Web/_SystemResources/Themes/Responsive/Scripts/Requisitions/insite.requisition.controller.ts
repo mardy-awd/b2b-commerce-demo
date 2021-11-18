@@ -51,8 +51,9 @@
             this.requisitionCollection = requisitionCollection;
             this.pagination = requisitionCollection.pagination;
             this.requisitionCollection.requisitions.forEach(requisition => {
-                if (this.approvedRequisitionCollection[requisition.id]) {
+                if (this.approvedRequisitionCollection[requisition.id]) {                    
                     requisition.isApproved = true;
+                    this.approvedRequisitionCollection[requisition.id] = requisition;
                 }
             });
             this.spinnerService.hide();
@@ -88,6 +89,7 @@
             this.getRequisitions();
 
             if (requisition === null) {
+                delete this.approvedRequisitionCollection[this.requisition.id];
                 this.requisition.requisitionLineCollection = null;
             } else {
                 this.requisition = requisition;
@@ -117,6 +119,7 @@
 
             this.requisition.requisitionLineCollection.requisitionLines = this.requisition.requisitionLineCollection.requisitionLines.filter(o => o.id !== requisitionLine.id);
             if (this.requisition.requisitionLineCollection.requisitionLines.length === 0) {
+                delete this.approvedRequisitionCollection[this.requisition.id];
                 this.message = this.deleteOrderLineMessage;
                 return;
             }
@@ -130,6 +133,7 @@
             this.requisition = requisition;
 
             if (this.requisition.requisitionLineCollection.requisitionLines.length === 0) {
+                delete this.approvedRequisitionCollection[this.requisition.id];
                 this.message = this.deleteOrderLineMessage;
             } else {
                 this.message = this.deleteItemMessage;
@@ -154,12 +158,15 @@
 
             if (cartLines.length > 0) {
                 this.cartService.addLineCollection(cartLines).then(
-                    (cartLineCollection: CartLineCollectionModel) => { this.addLineCollectionCompleted(cartLineCollection); },
+                    (cartLineCollection: CartLineCollectionModel) => { this.addLineCollectionCompleted(cartLines, cartLineCollection); },
                     (error: any) => { this.addLineCollectionFailed(error); });
             }
         }
 
-        protected addLineCollectionCompleted(cartLineCollection: CartLineCollectionModel): void {
+        protected addLineCollectionCompleted(cartLines: Array<CartLineModel>, cartLineCollection: CartLineCollectionModel): void {
+            cartLines.forEach((cartLine: CartLineModel) => {
+                delete this.approvedRequisitionCollection[cartLine.id];
+            });
             this.getRequisitions();
         }
 

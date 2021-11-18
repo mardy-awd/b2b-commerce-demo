@@ -14,7 +14,11 @@ import {
 import loadBrandByPath from "@insite/client-framework/Store/Data/Brands/Handlers/LoadBrandByPath";
 import loadBrandCategories from "@insite/client-framework/Store/Data/Brands/Handlers/LoadBrandCategories";
 import loadBrandProductLines from "@insite/client-framework/Store/Data/Brands/Handlers/LoadBrandProductLines";
-import { getCurrentPage, getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import {
+    getAlternateLanguageUrls,
+    getCurrentPage,
+    getLocation,
+} from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { getHomePageUrl } from "@insite/client-framework/Store/Links/LinksSelectors";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
@@ -47,6 +51,7 @@ const mapStateToProps = (state: ApplicationState) => {
         getFeatured: true,
     };
     const brandProductLinesDataView = getBrandProductLinesDataView(state, brandProductLinesParameter);
+    const page = getCurrentPage(state);
 
     if (!brandState.isLoading && brandState.value) {
         shouldLoadBrandCategories = !brandCategoriesDataView.isLoading && !brandCategoriesDataView.value;
@@ -61,7 +66,7 @@ const mapStateToProps = (state: ApplicationState) => {
         brandProductLinesDataView,
         brandPath,
         homePageUrl,
-        parentNodeId: getCurrentPage(state).parentId,
+        parentNodeId: page.parentId,
         links: state.links,
         shouldLoadBrand: !brandState.isLoading && !brandState.value,
         breadcrumbLinks: state.components.breadcrumbs.links,
@@ -69,6 +74,7 @@ const mapStateToProps = (state: ApplicationState) => {
         shouldLoadBrandProductLine,
         websiteName: state.context.website.name,
         websiteSettings: getSettingsCollection(state).websiteSettings,
+        alternateLanguageUrls: getAlternateLanguageUrls(state, page.id),
     };
 };
 
@@ -148,6 +154,7 @@ class BrandDetailsPage extends React.Component<Props, State> {
             websiteName,
             brandPath,
             websiteSettings,
+            alternateLanguageUrls,
         } = this.props;
         if (!brand) {
             return;
@@ -159,6 +166,7 @@ class BrandDetailsPage extends React.Component<Props, State> {
                 currentPath: brandPath,
                 title: brand.pageTitle || brand.name,
                 websiteName,
+                alternateLanguageUrls,
             },
             websiteSettings,
         );

@@ -8,7 +8,7 @@ import {
 } from "@insite/client-framework/Services/ApiService";
 import { VmiBinCollectionModel, VmiBinModel } from "@insite/client-framework/Types/ApiModels";
 
-const vmiLocationBinsUrl = "api/v1/vmilocations/{vmiLocationId}/vmibins";
+const vmiLocationBinsUrl = "api/v1/vmiLocations/{vmiLocationId}/bins";
 
 export interface AddVmiBinApiParameter extends ApiParameter {
     vmiLocationId: string;

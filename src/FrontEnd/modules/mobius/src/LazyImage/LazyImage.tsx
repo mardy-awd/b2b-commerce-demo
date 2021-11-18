@@ -45,6 +45,8 @@ export type LazyImageProps = MobiusStyledComponentProps<
         onLoad?: () => void;
         /** Callback function that will be called if an error occurs when loading an image. */
         onError?: () => void;
+        /** Allows to detect pdf generation */
+        isShareEntity?: boolean;
     }
 >;
 
@@ -60,7 +62,7 @@ type State = {
     showPlaceholder: boolean;
 };
 
-const LazyImageStyle = styled.div<Pick<State, "error" | "imageShouldFade" | "loaded">>`
+const LazyImageStyle = styled.div<Pick<State, "error" | "imageShouldFade" | "loaded"> & { isShareEntity?: boolean }>`
     position: relative;
     display: inline-flex;
     flex-direction: column;
@@ -76,7 +78,7 @@ const LazyImageStyle = styled.div<Pick<State, "error" | "imageShouldFade" | "loa
         height: auto;
         will-change: opacity;
         transition: opacity ${({ imageShouldFade }) => (imageShouldFade ? ".2s ease" : "0s")};
-        opacity: ${({ loaded }) => (loaded ? 1 : 0)};
+        ${({ loaded, isShareEntity }) => (isShareEntity ? "" : loaded ? "opacity: 1;" : "opacity: 0;")}
         ${({ error }) => error && "padding: 3px;"}
     }
     .LazyImage-Placeholder {
@@ -85,7 +87,7 @@ const LazyImageStyle = styled.div<Pick<State, "error" | "imageShouldFade" | "loa
         position: absolute;
         will-change: opacity;
         transition: opacity ${({ imageShouldFade }) => (imageShouldFade ? ".2s ease" : "0s")};
-        opacity: ${({ loaded }) => (loaded ? 0 : 1)};
+        ${({ loaded, isShareEntity }) => (isShareEntity ? "" : loaded ? "opacity: 0;" : "opacity: 1;")}
     }
     p {
         text-align: center;
@@ -184,14 +186,14 @@ class LazyImage extends React.Component<LazyImageProps, State> {
     }
 
     render() {
-        const { css, src: propSrc, placeholder, imgProps, altText, ...otherProps } = this.props;
+        const { css, src: propSrc, placeholder, imgProps, altText, isShareEntity, ...otherProps } = this.props;
         const { error, imageShouldFade, loaded, showPlaceholder, src: stateSrc } = this.state;
 
         if (!propSrc) return null;
 
         const { spreadProps } = applyPropBuilder(this.props, { component: "lazyImage" });
         return (
-            <LazyImageStyle {...{ css, error, imageShouldFade, loaded }} {...otherProps}>
+            <LazyImageStyle {...{ css, error, imageShouldFade, loaded, isShareEntity }} {...otherProps}>
                 {showPlaceholder && <span className="LazyImage-Placeholder">{placeholder}</span>}
                 {loaded && error && <IconMemo {...spreadProps("errorIconProps")} title={altText} />}
                 {!error && (

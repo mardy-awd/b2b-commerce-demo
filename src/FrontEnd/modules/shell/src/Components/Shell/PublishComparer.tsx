@@ -184,12 +184,17 @@ class PublishComparer extends React.Component<Props, State> {
                         )}
                     </div>
                     <div>
-                        {"publishOn" in pageVersion && pageVersion.publishOn ? (
-                            <span>Published By:</span>
+                        {"publishedBy" in pageVersion && pageVersion.publishedBy ? (
+                            <>
+                                <span>Published By:</span>
+                                {pageVersion.publishedBy}
+                            </>
                         ) : (
-                            <span>Modified By:</span>
+                            <>
+                                <span>Modified By:</span>
+                                {pageVersion.modifiedBy}
+                            </>
                         )}
-                        {pageVersion.modifiedBy}
                     </div>
                 </PageVersionPublishInfo>
                 <div>

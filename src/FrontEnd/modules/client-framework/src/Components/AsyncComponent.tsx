@@ -14,19 +14,16 @@ class AsyncComponent extends React.Component<
         ComponentToBe: null,
     };
 
-    componentDidMount() {
-        importWidgetChunk(this.props.type, this.importCallback);
-    }
+    async componentDidMount() {
+        const module: FoundModule<WidgetModule> | null = await importWidgetChunk(this.props.type);
 
-    importCallback = (type: string, module?: FoundModule<WidgetModule>) => {
         if (!module?.default) {
-            this.setState({ ComponentToBe: MissingComponent });
-            return;
+            return this.setState({ ComponentToBe: MissingComponent });
         }
 
-        registerWidgetModule(module, type);
+        registerWidgetModule(module, this.props.type);
         this.setState({ ComponentToBe: module.default.component });
-    };
+    }
 
     render() {
         const ComponentToBe: any = this.state.ComponentToBe;

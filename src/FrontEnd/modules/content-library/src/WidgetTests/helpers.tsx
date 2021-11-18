@@ -121,7 +121,7 @@ const mountApp = <T extends object>(
     styles: Styles = {},
     initialState: DeepWriteable<RecursivePartial<ApplicationState>> | undefined = undefined,
 ) => {
-    const store = configureStore((initialState as any) as ApplicationState);
+    const store = configureStore(initialState as any as ApplicationState);
 
     return mount(
         <Provider store={store}>

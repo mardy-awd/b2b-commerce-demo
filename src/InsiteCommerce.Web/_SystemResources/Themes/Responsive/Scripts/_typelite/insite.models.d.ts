@@ -883,6 +883,10 @@ declare module Insite.Catalog.Services.Dtos {
 		unselectedValue: string;
 		sortOrder: number;
 		styleValues: Insite.Catalog.Services.Dtos.StyleValueDto[];
+		displayType: string;
+		numberOfSwatchesVisible: number;
+		useProductImageForSwatch: boolean;
+		displayTextWithSwatch: boolean;
 	}
 	interface StyleValueDto {
 		styleTraitName: string;
@@ -892,6 +896,9 @@ declare module Insite.Catalog.Services.Dtos {
 		valueDisplay: string;
 		sortOrder: number;
 		isDefault: boolean;
+		swatchType: string;
+		swatchImageValue: string;
+		swatchColorValue: string;
 	}
 	interface StyledProductDto {
 		productId: System.Guid;

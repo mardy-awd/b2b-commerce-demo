@@ -241,6 +241,7 @@ const InvoiceHistoryTable = (props: Props) => {
                             sorted={sorted("invoiceDate")}
                             {...styles.invoiceDateHeader}
                             onSortClick={() => headerClick("invoiceDate")}
+                            data-test-selector="invoiceHistory_invoiceHeader_date"
                         >
                             {translate("Invoice Date")}
                         </DataTableHeader>

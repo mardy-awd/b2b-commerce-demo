@@ -261,24 +261,17 @@ const LocationFinder: FC<Props> = ({
         };
     };
 
-    const {
-        doSearch,
-        locationSearchFilter,
-        setLocationSearchFilter,
-        page,
-        setPage,
-        pageSize,
-        setPageSize,
-    } = useLocationFilterSearch<DealerModel, GetDealersApiParameter>({
-        onSearch,
-        loadLocations: handleLoadLocations,
-        currentLocation,
-        defaultRadius,
-        selectedLocation: selectedDealer,
-        setSelectedLocation: location => setSelectedDealer(location),
-        setShowSelectedLocation: setShowSelectedDealer,
-        createFilter,
-    });
+    const { doSearch, locationSearchFilter, setLocationSearchFilter, page, setPage, pageSize, setPageSize } =
+        useLocationFilterSearch<DealerModel, GetDealersApiParameter>({
+            onSearch,
+            loadLocations: handleLoadLocations,
+            currentLocation,
+            defaultRadius,
+            selectedLocation: selectedDealer,
+            setSelectedLocation: location => setSelectedDealer(location),
+            setShowSelectedLocation: setShowSelectedDealer,
+            createFilter,
+        });
     React.useEffect(() => {
         if (!isGoogleMapsScriptsLoaded) {
             return;

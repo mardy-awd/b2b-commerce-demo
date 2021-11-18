@@ -19,7 +19,7 @@ import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinn
 import { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -101,6 +101,18 @@ const styles = vmiUsersTableStyles;
 const VmiUsersTable = ({ accountsDataView, parameter, displayEmail, updateSearchFields }: Props) => {
     const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
     const [userId, setUserId] = useState<string | undefined>();
+
+    useEffect(() => {
+        if (
+            accountsDataView &&
+            !accountsDataView.isLoading &&
+            accountsDataView?.value?.length === 0 &&
+            parameter.page &&
+            parameter.page > 1
+        ) {
+            updateSearchFields({ page: parameter.page - 1 });
+        }
+    }, [accountsDataView]);
 
     const headerClick = (sortField: string) => {
         const sort = parameter.sort === sortField ? `${sortField} DESC` : sortField;

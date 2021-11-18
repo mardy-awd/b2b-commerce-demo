@@ -18,17 +18,19 @@ export const setTheme = (theme: Partial<BaseTheme>, update: Updater): AnyShellAc
     theme: produce(theme, update),
 });
 
-export const saveTheme = (theme: Partial<BaseTheme>): ShellThunkAction => dispatch => {
-    addTask(
-        (async function () {
-            dispatch({ type: "StyleGuide/SaveStarted" });
+export const saveTheme =
+    (theme: Partial<BaseTheme>): ShellThunkAction =>
+    dispatch => {
+        addTask(
+            (async function () {
+                dispatch({ type: "StyleGuide/SaveStarted" });
 
-            await saveThemeApi(theme);
+                await saveThemeApi(theme);
 
-            dispatch({ type: "StyleGuide/SaveCompleted" });
-        })(),
-    );
-};
+                dispatch({ type: "StyleGuide/SaveCompleted" });
+            })(),
+        );
+    };
 
 export const loadTheme = (): ShellThunkAction => dispatch => {
     if (!IS_PRODUCTION && window.location.href.indexOf("shell=true") > 0) {

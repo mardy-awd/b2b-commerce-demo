@@ -43,7 +43,12 @@ const ProductDescription: FC<Props> = ({ product, extendedStyles }) => {
     const productDetailPath = "product" in product ? product.productInfo.productDetailPath : product.productUri;
 
     return productDetailPath && (!("isActiveProduct" in product) || product.isActiveProduct) ? (
-        <Link {...styles.productDetailLink} href={productDetailPath} data-test-selector="productDescriptionLink">
+        <Link
+            {...styles.productDetailLink}
+            href={productDetailPath}
+            alt={`See product details for ${description}`}
+            data-test-selector="productDescriptionLink"
+        >
             {description}
         </Link>
     ) : (

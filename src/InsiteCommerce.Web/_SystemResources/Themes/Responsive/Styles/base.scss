@@ -2823,6 +2823,81 @@ header div.head-cm {
 .sn-currency ul ul a:focus {
 }
 
+/* Mode menu */
+
+.sn-mode {
+    > ul {
+        > li {
+            > a {
+                outline: none;
+                display: block;
+                position: relative;
+                text-decoration: none;
+                height: 40px;
+                line-height: 40px;
+                padding: 0 1.25em !important;
+
+                &:hover, &:focus {
+                    background-color: #77BC1F;
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+
+    ul {
+        li {
+            > ul {
+                display: none;
+                width: 200px;
+                position: absolute;
+                top: auto;
+                margin: 0;
+                z-index: 999;
+                text-align: left;
+                background: #fff;
+                border: 1px solid #ddd;
+                -webkit-box-shadow: 0 3px 5px 0 rgba(25,25,25,0.2);
+                box-shadow: 0 3px 5px 0 rgba(25,25,25,0.2);
+
+                li {
+                    display: block;
+                    list-style: inside none;
+                    padding: 0;
+                    margin: 0;
+                    position: relative;
+                    border-top: 1px solid #eee;
+                    width: 100%;
+
+                    a {
+                        outline: none;
+                        display: block;
+                        position: relative;
+                        margin: 0;
+                        padding: .25em 10px;
+                        text-decoration: none;
+                    }
+
+                    &:hover, &:focus {
+                        background: #F6F6F6;
+                    }
+
+                    .mode-current {
+                        background: #F6F6F6;
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            &.has-sub:hover, &.has-sub:focus {
+                > ul {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
 /* Multi Account Menu */
 
 .sn-account > ul {
@@ -4602,7 +4677,7 @@ nav ul:not(.side-nav) li {
 }
 
 @media all and (max-width: 767px) {
-    nav ul:not(.side-nav) li[role="multi-lang"], nav ul:not(.side-nav) li[role="currency"] {
+    nav ul:not(.side-nav) li[role="multi-lang"], nav ul:not(.side-nav) li[role="currency"], nav ul:not(.side-nav) li[role="mode-switch"] {
         display: none;
     }
 }

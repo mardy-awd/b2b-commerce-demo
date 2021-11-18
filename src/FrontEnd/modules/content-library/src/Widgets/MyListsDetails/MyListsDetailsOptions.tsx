@@ -413,9 +413,8 @@ const MyListsDetailsOptions = ({
                                                 [UploadError.ConfigurableProduct]: siteMessage(
                                                     "ListUpload_CannotOrderConfigurable",
                                                 ),
-                                                [UploadError.StyledProduct]: siteMessage(
-                                                    "ListUpload_CannotOrderStyled",
-                                                ),
+                                                [UploadError.StyledProduct]:
+                                                    siteMessage("ListUpload_CannotOrderStyled"),
                                                 [UploadError.InvalidUnit]: translate("Invalid U/M"),
                                                 [UploadError.NotFound]: siteMessage("Product_NotFound"),
                                             }}

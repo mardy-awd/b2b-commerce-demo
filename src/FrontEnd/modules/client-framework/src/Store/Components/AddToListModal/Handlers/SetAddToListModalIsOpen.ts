@@ -16,7 +16,7 @@ export const wishListsParameter = {
     pageSize: 100,
 };
 
-export const LoadLists: HandlerType = async props => {
+export const LoadLists: HandlerType = props => {
     const state = props.getState();
     const getWishListsParameter = state.components.addToListModal.getWishListsParameter;
     const session = state.context.session;
@@ -26,13 +26,6 @@ export const LoadLists: HandlerType = async props => {
         !getWishListsDataView(state, getWishListsParameter).value
     ) {
         props.dispatch(loadWishLists(getWishListsParameter));
-
-        for (let x = 0; x < 200; x += 1) {
-            if (getWishListsDataView(state, getWishListsParameter).value) {
-                break;
-            }
-            await sleep(50);
-        }
     }
 };
 

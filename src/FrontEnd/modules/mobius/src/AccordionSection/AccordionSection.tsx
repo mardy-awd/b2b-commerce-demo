@@ -267,4 +267,4 @@ const TransitionIcon = ({
 
 // withTheme is currently incompatible with getDerivedStateFromProps, as unknown as FunctionComponent to get typescript to understand that this can have children
 /** @component */
-export default withTheme((AccordionSection as unknown) as React.FunctionComponent<Props>);
+export default withTheme(AccordionSection as unknown as React.FunctionComponent<Props>);

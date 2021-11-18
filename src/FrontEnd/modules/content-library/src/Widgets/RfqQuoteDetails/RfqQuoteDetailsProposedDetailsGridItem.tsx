@@ -181,6 +181,13 @@ export const rfqQuoteDetailsProposedDetailsGridItemStyles: RfqQuoteDetailsPropos
             margin-bottom: 10px;
         `,
     },
+    notesTextArea: {
+        css: css`
+            min-width: 100%;
+            max-width: 100%;
+            min-height: 50px;
+        `,
+    },
 };
 
 const styles = rfqQuoteDetailsProposedDetailsGridItemStyles;

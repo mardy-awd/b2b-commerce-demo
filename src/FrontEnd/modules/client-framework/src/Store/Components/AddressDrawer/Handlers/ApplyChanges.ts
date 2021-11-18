@@ -17,13 +17,8 @@ export const DispatchBeginApplyChanges: HandlerType = ({ dispatch }) => {
 };
 
 export const ChangeCustomerContext: HandlerType = async ({ dispatch, getState, parameter: { onError } }) => {
-    const {
-        fulfillmentMethod,
-        selectedBillTo,
-        selectedShipTo,
-        isDefault,
-        pickUpWarehouse,
-    } = getState().components.addressDrawer;
+    const { fulfillmentMethod, selectedBillTo, selectedShipTo, isDefault, pickUpWarehouse } =
+        getState().components.addressDrawer;
 
     const awaitableChangeCustomerContext = makeHandlerChainAwaitable(changeCustomerContext);
 

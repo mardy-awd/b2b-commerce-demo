@@ -82,7 +82,9 @@ const InvoiceDetailHeader: FC<WidgetProps> = ({ fields }) => {
     return (
         <GridContainer {...styles.headerGridContainer}>
             <GridItem {...styles.titleGridItem}>
-                <Typography {...styles.title}>{`${translate("Invoice")} ${invoice.invoiceNumber}`}</Typography>
+                <Typography {...styles.title} data-test-selector="tst_invoiceDetail_header">
+                    {`${translate("Invoice")} ${invoice.invoiceNumber}`}
+                </Typography>
             </GridItem>
             <GridItem {...styles.buttonGridItem}>
                 <Hidden {...styles.menuHiddenContainer}>

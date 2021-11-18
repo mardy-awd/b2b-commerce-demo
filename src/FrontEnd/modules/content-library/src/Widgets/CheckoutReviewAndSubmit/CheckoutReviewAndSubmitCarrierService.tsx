@@ -224,6 +224,9 @@ const CheckoutReviewAndSubmitCarrierService: FC<Props> = ({
                                 dateTimePickerProps={{
                                     minDate: new Date(),
                                     maxDate: addDays(new Date(), cartSettings.maximumDeliveryPeriod),
+                                    monthAriaLabel: translate("Request delivery date month"),
+                                    dayAriaLabel: translate("Request delivery date day"),
+                                    yearAriaLabel: translate("Request delivery date year"),
                                     ...styles.deliveryDatePicker?.dateTimePickerProps,
                                 }}
                                 onDayChange={handleRequestDeliveryDateChanged}

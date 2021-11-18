@@ -262,16 +262,18 @@ const SiteFrameStyle = styled.div<Pick<ShellState["shellContext"], "stageMode">>
     height: 100%;
     iframe {
         width: 100%;
-        height: ${/* sc-value */ ({ stageMode }) => {
-            switch (stageMode) {
-                case "Desktop":
-                    return "calc(100%)";
-                case "Tablet":
-                    return "1024px";
-                case "Phone":
-                    return "813px";
+        height: ${
+            /* sc-value */ ({ stageMode }) => {
+                switch (stageMode) {
+                    case "Desktop":
+                        return "calc(100%)";
+                    case "Tablet":
+                        return "1024px";
+                    case "Phone":
+                        return "813px";
+                }
             }
-        }};
+        };
         border: none;
     }
 `;

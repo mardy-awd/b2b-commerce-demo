@@ -8,26 +8,30 @@ import {
 import ErrorModal from "@insite/client-framework/Components/ErrorModal";
 import Footer from "@insite/client-framework/Components/Footer";
 import Header from "@insite/client-framework/Components/Header";
-import { HasShellContext, ShellContext, withIsInShell } from "@insite/client-framework/Components/IsInShell";
+import { HasShellContext, withIsInShell } from "@insite/client-framework/Components/IsInShell";
 import { sendToShell } from "@insite/client-framework/Components/ShellHole";
 import { getDisplayErrorPage, getErrorStatusCode, redirectTo } from "@insite/client-framework/ServerSideRendering";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
-import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { getAlternateLanguageUrls, getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 // eslint-disable-next-line spire/fenced-imports
 import PageLayout from "@insite/content-library/PageLayout";
 import * as React from "react";
 import { connect } from "react-redux";
 
-const mapStateToProps = (state: ApplicationState) => ({
-    page: getCurrentPage(state),
-    websiteName: state.context.website.name,
-    errorPageLink: getPageLinkByPageType(state, "UnhandledErrorPage"),
-    pathname: state.data.pages.location.pathname,
-    permissionsLoaded: !!state.context.permissions,
-    websiteSettings: getSettingsCollection(state).websiteSettings,
-});
+const mapStateToProps = (state: ApplicationState) => {
+    const page = getCurrentPage(state);
+    return {
+        page,
+        websiteName: state.context.website.name,
+        errorPageLink: getPageLinkByPageType(state, "UnhandledErrorPage"),
+        pathname: state.data.pages.location.pathname,
+        permissionsLoaded: !!state.context.permissions,
+        websiteSettings: getSettingsCollection(state).websiteSettings,
+        alternateLanguageUrls: getAlternateLanguageUrls(state, page.id),
+    };
+};
 
 type Props = ReturnType<typeof mapStateToProps> & HasShellContext;
 
@@ -71,7 +75,7 @@ class PublicPage extends React.Component<Props> {
     }
 
     setMetadata() {
-        const { page, websiteName, pathname, websiteSettings } = this.props;
+        const { page, websiteName, pathname, websiteSettings, alternateLanguageUrls } = this.props;
         if (!page) {
             return;
         }
@@ -85,6 +89,7 @@ class PublicPage extends React.Component<Props> {
                 title: page.fields["title"],
                 currentPath: pathname,
                 canonicalPath: pathname,
+                alternateLanguageUrls,
                 websiteName,
             },
             websiteSettings,

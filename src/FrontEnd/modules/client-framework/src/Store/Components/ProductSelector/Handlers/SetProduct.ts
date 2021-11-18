@@ -88,11 +88,13 @@ export const RequestDataFromApi: HandlerType = async props => {
             }
         }
     } else if (searchTerm) {
-        props.product = ((await executeAwaitableHandlerChain(
-            loadProducts,
-            { extendedNames: [searchTerm], expand: ["variantTraits"] },
-            props,
-        )) as ProductModel[])[0];
+        props.product = (
+            (await executeAwaitableHandlerChain(
+                loadProducts,
+                { extendedNames: [searchTerm], expand: ["variantTraits"] },
+                props,
+            )) as ProductModel[]
+        )[0];
     }
 };
 

@@ -14,7 +14,7 @@ module insite.account {
     export interface IAccountService {
         expand: string;
         getAccountSettings(): ng.IPromise<AccountSettingsModel>;
-        getAccounts(searchText?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string, roles?: string[], userNames?: string[]): ng.IPromise<AccountCollectionModel>;
+        getAccounts(searchText?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string, roles?: string[], userNames?: string[], excludeRoles?: string[]): ng.IPromise<AccountCollectionModel>;
         getAccount(accountId?: System.Guid): ng.IPromise<AccountModel>;
         getExternalProviders(): ng.IPromise<ExternalProviderLinkCollectionModel>;
         createAccount(account: AccountModel): ng.IPromise<AccountModel>;
@@ -55,21 +55,22 @@ module insite.account {
         protected getAccountSettingsFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
         }
 
-        getAccounts(searchText?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string, roles?: string[], userNames?: string[]): ng.IPromise<AccountCollectionModel> {
+        getAccounts(searchText?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string, roles?: string[], userNames?: string[], excludeRoles?: string[]): ng.IPromise<AccountCollectionModel> {
             return this.httpWrapperService.executeHttpRequest(
                 this,
-                this.$http({ url: this.serviceUri, method: "GET", params: this.getAccountsParams(searchText, pagination, sort, roles, userNames) }),
+                this.$http({ url: this.serviceUri, method: "GET", params: this.getAccountsParams(searchText, pagination, sort, roles, userNames, excludeRoles) }),
                 this.getAccountsCompleted,
                 this.getAccountsFailed
             );
         }
 
-        protected getAccountsParams(searchText?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string, roles?: string[], userNames?: string[]): any {
+        protected getAccountsParams(searchText?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string, roles?: string[], userNames?: string[], excludeRoles?: string[]): any {
             const params = {
                 searchText: searchText,
                 sort: sort,
                 roles: roles,
-                userNames: userNames
+                userNames: userNames,
+                excludeRoles: excludeRoles
             } as any;
 
             if (this.expand) {

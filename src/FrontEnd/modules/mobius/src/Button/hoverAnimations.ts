@@ -1,4 +1,5 @@
-const hoverBlock = (rules: string) => () => `
+const hoverBlock = (rules: string) => () =>
+    `
     transform: perspective(1px);
     &:hover{
         ${rules}

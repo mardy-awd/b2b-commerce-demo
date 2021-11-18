@@ -62,7 +62,7 @@ const InvoiceHistoryHeader = (props: Props) => {
             <Typography {...styles.heading}>{translate("Invoice History")}</Typography>
             <Zone contentId={props.id} zoneName="Content00" />
             <GridContainer {...styles.container}>
-                <GridItem {...styles.invoiceCountGridItem}>
+                <GridItem {...styles.invoiceCountGridItem} data-test-selector="invoiceHistory_invoiceTotal">
                     {invoicesCount} {translate("Invoices")}
                 </GridItem>
                 <GridItem {...styles.toggleFilterGridItem}>

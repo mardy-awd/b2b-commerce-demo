@@ -55,7 +55,7 @@ class BrandsPage extends React.Component<Props> {
 const pageModule: PageModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withIsInShell(BrandsPage)),
     definition: {
-        hasEditableUrlSegment: true,
+        hasEditableUrlSegment: false,
         hasEditableTitle: true,
         pageType: "System",
     },

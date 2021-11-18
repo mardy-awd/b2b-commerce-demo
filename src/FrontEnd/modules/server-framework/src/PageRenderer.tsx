@@ -236,6 +236,10 @@ export async function pageRenderer(request: Request, response: Response) {
                 <meta name="keywords" content={metadata?.metaKeywords} />
                 <meta name="description" content={metadata?.metaDescription} />
                 <link rel="canonical" href={metadata?.canonicalUrl} />
+                {metadata?.alternateLanguageUrls &&
+                    Object.entries(metadata.alternateLanguageUrls).map(([key, value]) => (
+                        <link key={key} rel="alternate" hrefLang={key} href={value} />
+                    ))}
                 <base href="/" />
                 <link href={fontFamilyImportUrl} rel="stylesheet" />
                 {sheet?.getStyleElement()}

@@ -87,10 +87,12 @@ const ProductListSearchWithin: FC<Props> = ({ loaded, addProductFilters, product
 
     return (
         <StyledWrapper {...styles.wrapper}>
-            <Typography {...styles.titleText}>{label}</Typography>
+            <Typography forwardAs="label" htmlFor="productsKeywordSearch" {...styles.titleText}>
+                {label}
+            </Typography>
             <TextField
                 {...styles.searchTextField}
-                iconClickableProps={{ onClick: doSearch }}
+                iconClickableProps={{ onClick: doSearch, "aria-roledescription": `Search within ${pageType}` }}
                 value={searchText}
                 onChange={event => setSearchText(event.currentTarget.value)}
                 onKeyDown={handleKeyDown}

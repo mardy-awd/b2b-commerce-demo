@@ -5,7 +5,11 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import setBreadcrumbs from "@insite/client-framework/Store/Components/Breadcrumbs/Handlers/SetBreadcrumbs";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { DealerStateContext, getDealerState } from "@insite/client-framework/Store/Data/Dealers/DealersSelectors";
-import { getCurrentPage, getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import {
+    getAlternateLanguageUrls,
+    getCurrentPage,
+    getLocation,
+} from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { getHomePageUrl, getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import displayDealer from "@insite/client-framework/Store/Pages/DealerDetails/Handlers/DisplayDealer";
 import PageModule from "@insite/client-framework/Types/PageModule";
@@ -22,17 +26,19 @@ const mapStateToProps = (state: ApplicationState) => {
     const parsedQuery = parseQueryString<{ id?: string; invite?: string }>(location.search);
     const id = parsedQuery.id;
     const homePageUrl = getHomePageUrl(state);
+    const page = getCurrentPage(state);
     return {
         homePageUrl,
         dealerId: id,
         dealerState: getDealerState(state, id),
         links: state.links,
         dealerDetailsPageLink: getPageLinkByPageType(state, "DealerDetailsPage"),
-        nodeId: getCurrentPage(state).nodeId,
+        nodeId: page.nodeId,
         breadcrumbLinks: state.components.breadcrumbs.links,
         websiteName: state.context.website.name,
         dealerPath: location.pathname,
         websiteSettings: getSettingsCollection(state).websiteSettings,
+        alternateLanguageUrls: getAlternateLanguageUrls(state, page.id),
     };
 };
 
@@ -88,6 +94,7 @@ class DealerDetailsPage extends React.Component<Props, State> {
             websiteName,
             dealerPath,
             websiteSettings,
+            alternateLanguageUrls,
         } = this.props;
         if (!dealer) {
             return;
@@ -98,6 +105,7 @@ class DealerDetailsPage extends React.Component<Props, State> {
                 currentPath: dealerPath,
                 title: dealer.name,
                 websiteName,
+                alternateLanguageUrls,
             },
             websiteSettings,
         );

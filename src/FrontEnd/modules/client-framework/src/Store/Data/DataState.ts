@@ -104,7 +104,7 @@ export function setDataViewLoading<T extends { id: string }>(dataViewState: Data
 export function setDataViewLoaded<
     T extends { id: string },
     DataViewModel extends DataView,
-    CollectionType extends { pagination?: PaginationModel | null; properties?: Dictionary<string> }
+    CollectionType extends { pagination?: PaginationModel | null; properties?: Dictionary<string> },
 >(
     draft: Draft<DataViewState<T>>,
     parameter: object,

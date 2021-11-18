@@ -68,15 +68,13 @@ function cleanCategory(category: CategoryModel, categoriesById: SafeDictionary<C
     const subCategories = category.subCategories;
     subCategories?.sort((a, b) => a.sortOrder - b.sortOrder || a.shortDescription.localeCompare(b.shortDescription));
     delete category.subCategories;
-    const actualCategory = (category as any) as Category;
-    if (subCategoryLevels > 0) {
+    const actualCategory = category as any as Category;
+    if (subCategoryLevels > 0 && subCategories) {
         const subCategoryIds = [];
-        if (subCategories) {
-            for (const subCategory of subCategories) {
-                subCategoryIds.push(subCategory.id);
-                cleanCategory(subCategory, categoriesById, subCategoryLevels - 1);
-                delete subCategory.htmlContent;
-            }
+        for (const subCategory of subCategories) {
+            subCategoryIds.push(subCategory.id);
+            cleanCategory(subCategory, categoriesById, subCategoryLevels - 1);
+            delete subCategory.htmlContent;
         }
         actualCategory.subCategoryIds = subCategoryIds;
     }

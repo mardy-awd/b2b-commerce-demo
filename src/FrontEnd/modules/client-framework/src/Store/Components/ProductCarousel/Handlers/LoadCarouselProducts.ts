@@ -32,6 +32,13 @@ interface Props {
 
 type HandlerType = Handler<Parameter, Props>;
 
+export const recentlyViewedGetProductCollectionParameter:
+    | GetProductCollectionApiV2Parameter
+    | GetRelatedProductCollectionApiV2Parameter = {
+    filter: "recentlyViewed",
+    pageSize: 999,
+};
+
 export const LoadRecentlyViewed: HandlerType = props => {
     const {
         parameter: { carouselType, isProductDetailsPage, productId },
@@ -40,7 +47,7 @@ export const LoadRecentlyViewed: HandlerType = props => {
         return;
     }
 
-    props.getProductCollectionParameter = { filter: "recentlyViewed", pageSize: 999 };
+    props.getProductCollectionParameter = recentlyViewedGetProductCollectionParameter;
 };
 
 export const LoadCrossSells: HandlerType = props => {

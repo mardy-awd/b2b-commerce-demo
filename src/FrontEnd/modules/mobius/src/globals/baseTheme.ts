@@ -476,7 +476,13 @@ const baseTheme: BaseTheme = {
         groupDefaultProps: {},
     },
     tag: { defaultProps: TagPresentationPropsDefault },
-    textField: { defaultProps: {} },
+    textField: {
+        defaultProps: {
+            labelProps: {
+                forwardAs: "label",
+            },
+        },
+    },
     tokenExFrame: { defaultProps: {} },
     textArea: { defaultProps: {} },
     toast: { defaultProps: ToastPropsDefault, toasterProps: toasterPropsDefault },

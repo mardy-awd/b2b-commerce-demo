@@ -83,7 +83,7 @@ const SavedPaymentProfileEntry = ({
             {resolvedShouldUseTokenEx ? (
                 <TokenExFrame
                     {...styles.tokenExFrame}
-                    label={translate("Security Code")}
+                    label={translate("Security code")}
                     hint={securityCodeHint}
                     tokenExIFrameContainer={
                         <TokenExFrameWrapper {...styles.tokenExFrameWrapper} id="ppTokenExSecurityCode" />
@@ -96,7 +96,7 @@ const SavedPaymentProfileEntry = ({
             ) : (
                 <TextField
                     {...styles.text}
-                    label={translate("Security Code")}
+                    label={translate("Security code")}
                     hint={securityCodeHint}
                     value={securityCode}
                     onChange={onSecurityCodeChange}

@@ -20,6 +20,7 @@ module insite.vmiUsers {
         vmiLocations: VmiLocationModel[];
         vmiLocationsPagination: PaginationModel;
         checkStorage: {} = {};
+        isPopupOpened = false;
 
         static $inject = [
             "$scope",
@@ -55,6 +56,7 @@ module insite.vmiUsers {
 
         protected closeModal(): void {
             this.coreService.closeModal("#popup-add-vmi-user");
+            this.isPopupOpened = false;
             this.resetPopup();
         }
 
@@ -72,6 +74,7 @@ module insite.vmiUsers {
         protected initVmiUserPopupEvents(): void {
             const popup = angular.element("#popup-add-vmi-user");
             this.addVmiUserPopupService.registerDisplayFunction((editUser?: AccountModel) => {
+                this.isPopupOpened = true;
                 this.user = editUser || this.user;
                 this.isEditUserModal = !!editUser;
                 this.coreService.displayModal(popup, () => {
@@ -109,8 +112,9 @@ module insite.vmiUsers {
         protected onUserAutocompleteRead(options: kendo.data.DataSourceTransportReadOptions): void {
             this.spinnerService.show();
             const pagination = {"page": 1, "pageSize": 20} as PaginationModel;
+            const excludeRoles = ["VMI_User", "VMI_Admin"];
             this.accountService.expand = "administration";
-            this.accountService.getAccounts(this.userSearchText, pagination, "UserName").then(
+            this.accountService.getAccounts(this.userSearchText, pagination, "UserName", null, null, excludeRoles).then(
                 (accountCollection: AccountCollectionModel) => {
                     this.getAccountsCompleted(options, accountCollection);
                 },

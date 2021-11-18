@@ -32,12 +32,14 @@ const Scrim = styled.div<ScrimProps>`
     bottom: 0;
     top: 0;
     left: 0;
-    ${/* sc-declaration */ ({ isClosing, transition }) =>
-        transition &&
-        css`
-            animation: ${isClosing ? transition.scrimExitKeyframes : transition.scrimEntryKeyframes}
-                ${transition.length}ms;
-        `}
+    ${
+        /* sc-declaration */ ({ isClosing, transition }) =>
+            transition &&
+            css`
+                animation: ${isClosing ? transition.scrimExitKeyframes : transition.scrimEntryKeyframes}
+                    ${transition.length}ms;
+            `
+    }
     ${injectCss}
 `;
 

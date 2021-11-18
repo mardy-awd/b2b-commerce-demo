@@ -28,13 +28,8 @@ const mapStateToProps = (state: ApplicationState) => {
         shipToId,
         pickUpWarehouse: currentPickUpWarehouse,
     } = getSession(state);
-    const {
-        fulfillmentMethod,
-        selectedBillTo,
-        selectedShipTo,
-        isApplyingChanges,
-        pickUpWarehouse,
-    } = state.components.addressDrawer;
+    const { fulfillmentMethod, selectedBillTo, selectedShipTo, isApplyingChanges, pickUpWarehouse } =
+        state.components.addressDrawer;
     const { value: currentBillTo } = getBillToState(state, billToId);
     const { value: currentShipTo } = getShipToState(state, shipToId);
     const isExistingUser = isAuthenticated && !isGuest;

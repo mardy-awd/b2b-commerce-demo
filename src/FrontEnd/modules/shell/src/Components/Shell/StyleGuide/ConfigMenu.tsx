@@ -1,7 +1,6 @@
 import Clickable from "@insite/mobius/Clickable";
 import Popover from "@insite/mobius/Popover";
 import Typography from "@insite/mobius/Typography";
-import getColor from "@insite/mobius/utilities/getColor";
 import uniqueId from "@insite/mobius/utilities/uniqueId";
 import * as React from "react";
 import styled, { css } from "styled-components";
@@ -39,11 +38,13 @@ class ConfigMenu extends React.Component<Props> {
                 contentBodyProps={{
                     css: css`
                         border-radius: 8px;
+                        overflow: initial;
                     `,
                     _height: "1200px",
                     _width: 400,
                     as: "span",
                 }}
+                id="popupBox"
                 knownHeight={40}
                 popoverTrigger={
                     <Clickable

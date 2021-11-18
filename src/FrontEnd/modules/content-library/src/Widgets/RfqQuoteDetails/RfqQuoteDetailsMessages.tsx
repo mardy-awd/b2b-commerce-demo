@@ -56,6 +56,11 @@ export const rfqQuoteDetailsMessagesStyles: RfqQuoteDetailsMessagesStyles = {
         variant: "h3",
     },
     messageTextArea: {
+        css: css`
+            min-width: 100%;
+            max-width: 100%;
+            min-height: 50px;
+        `,
         cssOverrides: {
             formField: css`
                 margin-bottom: 20px;

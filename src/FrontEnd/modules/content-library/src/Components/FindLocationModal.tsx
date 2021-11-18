@@ -430,22 +430,17 @@ const FindLocationModal = ({
     const [warehousesPagination, setWarehousesPagination] = useState<PaginationModel | undefined>();
 
     // Manage Loading Warehouses on State Changes
-    const {
-        doSearch,
-        warehouseSearchFilter,
-        setWarehouseSearchFilter,
-        setPage,
-        setPageSize,
-    } = useWarehouseFilterSearch({
-        loadWarehouses,
-        currentLocation,
-        setCurrentLocation,
-        setLocationKnown,
-        defaultRadius,
-        selectedWarehouse,
-        setSelectedWarehouse,
-        setShowSelectedWarehouse,
-    });
+    const { doSearch, warehouseSearchFilter, setWarehouseSearchFilter, setPage, setPageSize } =
+        useWarehouseFilterSearch({
+            loadWarehouses,
+            currentLocation,
+            setCurrentLocation,
+            setLocationKnown,
+            defaultRadius,
+            selectedWarehouse,
+            setSelectedWarehouse,
+            setShowSelectedWarehouse,
+        });
 
     // Manage Bounds of Map
     useEffect(() => {
@@ -461,20 +456,15 @@ const FindLocationModal = ({
     }, [googleMap, warehouses, selectedWarehouse, showSelectedWarehouse, currentLocation]);
 
     // Manage Map Markers
-    const {
-        mapMarkersElements,
-        currentLocationInfoWindow,
-        warehouseInfoWindow,
-        closeInfoWindows,
-        getWarehouseNumber,
-    } = useWarehouseGoogleMarkers({
-        warehouses,
-        warehouseSearchFilter,
-        warehousesPagination,
-        currentLocation,
-        selectedWarehouse,
-        showSelectedWarehouse,
-    });
+    const { mapMarkersElements, currentLocationInfoWindow, warehouseInfoWindow, closeInfoWindows, getWarehouseNumber } =
+        useWarehouseGoogleMarkers({
+            warehouses,
+            warehouseSearchFilter,
+            warehousesPagination,
+            currentLocation,
+            selectedWarehouse,
+            showSelectedWarehouse,
+        });
 
     useEffect(() => {
         if (!isGoogleMapsScriptsLoaded) {

@@ -128,9 +128,9 @@ class OverflowMenu extends React.Component<Props, State> {
         } = this.props;
         const { controlsId } = this.state;
         const { spreadProps, applyStyledProp } = applyPropBuilder(otherProps, { component: "overflowMenu" });
-        const cssOverrides = spreadProps("cssOverrides" as any) as Required<
-            OverflowMenuPresentationProps
-        >["cssOverrides"];
+        const cssOverrides = spreadProps(
+            "cssOverrides" as any,
+        ) as Required<OverflowMenuPresentationProps>["cssOverrides"];
         const resolvedMergeCss = mergeCss ?? otherProps?.theme?.overflowMenu?.defaultProps?.mergeCss;
         const iconProps = spreadProps("iconProps" as any);
         const menuItems: JSX.Element[] = React.Children.map(children, (menuChild, index) => {
@@ -181,6 +181,7 @@ class OverflowMenu extends React.Component<Props, State> {
                 onClose={onClose}
                 onOpen={onOpen}
                 zIndexKey="menu"
+                title={otherProps.theme.translate("Popover Menu")}
                 isOpen={isOpen}
                 insideRefs={[this.element]}
                 transitionDuration={transitionDuration}

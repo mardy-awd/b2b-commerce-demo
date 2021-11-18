@@ -367,7 +367,7 @@ class Drawer extends React.Component<DrawerProps, DrawerState> {
                 this.swipeInstance.isSwiping = isSwiping;
             } else {
                 // if it is not a swipe event, close the drawer.
-                this.closePersistedDrawer((event as unknown) as React.SyntheticEvent);
+                this.closePersistedDrawer(event as unknown as React.SyntheticEvent);
             }
         }
         if (this.swipeInstance.isSwiping) {
@@ -381,9 +381,9 @@ class Drawer extends React.Component<DrawerProps, DrawerState> {
     release = (event: TouchEvent) => {
         if (this.state.maybeSwiping && this.swipeInstance.isSwiping) {
             if (this.swipeInstance.dragDepth > -(this.props.size! * SNAP_OPEN_THRESHOLD)) {
-                this.openPersistedDrawer((event as unknown) as React.SyntheticEvent, true);
+                this.openPersistedDrawer(event as unknown as React.SyntheticEvent, true);
             } else {
-                this.closePersistedDrawer((event as unknown) as React.SyntheticEvent);
+                this.closePersistedDrawer(event as unknown as React.SyntheticEvent);
             }
         }
     };

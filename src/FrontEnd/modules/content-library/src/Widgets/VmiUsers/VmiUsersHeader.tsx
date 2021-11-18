@@ -105,6 +105,7 @@ const VmiUsersHeader = ({ id, parameter, updateSearchFields, searchText }: Props
         sort: "UserName",
         pageSize: 1000,
         page: 1,
+        excludeRoles: ["VMI_User", "VMI_Admin"],
     });
     const [searchUserText, setSearchUserText] = useState(searchText);
 

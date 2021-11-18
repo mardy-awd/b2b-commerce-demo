@@ -41,7 +41,7 @@ type customWindow = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const theWindow = (window as any) as customWindow;
+const theWindow = window as any as customWindow;
 
 setResolver(messageName => getValueCaseInsensitive(theWindow.siteMessages, messageName));
 setTranslationResolver(keyword => getValueCaseInsensitive(theWindow.translationDictionaries, keyword));

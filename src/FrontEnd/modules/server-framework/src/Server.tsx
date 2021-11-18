@@ -6,6 +6,7 @@ import {
     serverTranslationResolver,
     setDomain,
     setHeaders,
+    setIsShareEntity,
     setUrl,
 } from "@insite/client-framework/ServerSideRendering";
 import { getPageUrlByType } from "@insite/client-framework/Services/ContentService";
@@ -125,6 +126,7 @@ function setupSSR(request: Request, domain: Parameters<typeof setDomain>[0]) {
         request.socket.remoteAddress;
     headers["x-forwarded-for"] = ip;
     if (request.originalUrl === shareEntityRoute) {
+        setIsShareEntity(true);
         // This request is being "hijacked" and a different request (with a different body) is being sent instead.
         // Because of this, this header needs to be deleted so it's not inaccurate. If it's inaccurate, the web server
         // will throw an exception while trying to parse the body.

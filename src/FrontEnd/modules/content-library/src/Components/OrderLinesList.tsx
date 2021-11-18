@@ -1,6 +1,7 @@
 import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import { ProductInfo } from "@insite/client-framework/Common/ProductInfo";
 import { HasOnComplete } from "@insite/client-framework/HandlerCreator";
+import { getIsShareEntity } from "@insite/client-framework/ServerSideRendering";
 import siteMessage from "@insite/client-framework/SiteMessage";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import setAddToListModalIsOpen from "@insite/client-framework/Store/Components/AddToListModal/Handlers/SetAddToListModalIsOpen";
@@ -586,6 +587,8 @@ const OrderLineCard = (props: {
         setAddToListModalIsOpen({ modalIsOpen: true, productInfos: [productInfo] });
     };
 
+    const isShareEntity = getIsShareEntity();
+
     return (
         <GridContainer
             {...styles.orderLineCardGridContainer}
@@ -594,7 +597,11 @@ const OrderLineCard = (props: {
             <GridItem {...styles.orderLineCardImageGridItem}>
                 {orderLine.productUri && orderLine.isActiveProduct && (
                     <Link {...styles.productImageLink} href={orderLine.productUri}>
-                        <LazyImage {...styles.orderLineCardImage} src={orderLine.mediumImagePath} />
+                        <LazyImage
+                            {...styles.orderLineCardImage}
+                            src={orderLine.mediumImagePath}
+                            isShareEntity={isShareEntity}
+                        />
                     </Link>
                 )}
             </GridItem>

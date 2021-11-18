@@ -6,7 +6,6 @@
     export class DeleteVmiBinsModalController {
         vmiBins: VmiBinModel[];
         broadcastStr: string;
-        showImport: boolean;
 
         static $inject = ["$scope", "$rootScope","vmiBinService", "coreService", "deleteVmiBinsModalService"];
 
@@ -24,7 +23,6 @@
             this.deleteVmiBinsModalService.registerDisplayFunction(data => {
                 this.vmiBins = data.vmiBins;
                 this.broadcastStr = data.broadcastStr;
-                this.showImport = data.showImport;
                 this.coreService.displayModal(popup);
             });
         }

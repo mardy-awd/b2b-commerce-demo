@@ -219,7 +219,11 @@ const AddToListModal = ({
                 modalCloseHandler();
                 setCookie(LastUpdatedListIdCookieName, wishList.id);
                 setSelectedWishListId(wishList.id);
-                toasterContext.addToast({ body: siteMessage("Lists_ProductAdded"), messageType: "success" });
+                toasterContext.addToast({
+                    body: siteMessage("Lists_ProductAdded"),
+                    messageType: "success",
+                    isFocusAfterMount: true,
+                });
             },
             onError: errorMessage => {
                 setInProgress(false);

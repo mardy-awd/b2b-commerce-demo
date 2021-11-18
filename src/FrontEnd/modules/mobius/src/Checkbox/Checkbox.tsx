@@ -320,6 +320,6 @@ class Checkbox extends React.Component<Props & HasDisablerContext, State> {
 
 // withTheme is currently incompatible with getDerivedStateFromProps, as unknown as FunctionComponent needed to get typescript to understand that this can have children
 /** @component */
-export default withDisabler(withTheme((Checkbox as unknown) as React.FunctionComponent<Props & HasDisablerContext>));
+export default withDisabler(withTheme(Checkbox as unknown as React.FunctionComponent<Props & HasDisablerContext>));
 
 export { CheckboxStyle };

@@ -185,7 +185,9 @@ export const FormFieldStyle = styled.div<FormFieldStyleProps>`
     }
 
     /* Styling for the form element itself */
-    input, select, .mobiusFileUpload {
+    input,
+    select,
+    .mobiusFileUpload {
         height: ${({ _sizeVariant }) => sizeVariantValues[_sizeVariant].height}px;
     }
     input:not(.react-datetime-picker__inputGroup__input),
@@ -229,7 +231,8 @@ export const FormFieldStyle = styled.div<FormFieldStyleProps>`
         }}
         ${({ inputSelectCss }: any) => inputSelectCss}
     }
-    input::-ms-clear, input::-ms-reveal {
+    input::-ms-clear,
+    input::-ms-reveal {
         display: none;
     }
     textarea {
@@ -294,7 +297,6 @@ const FormField: React.ComponentType<FormFieldProps> = ({
                 labelPosition={labelPosition}
                 htmlFor={inputId}
                 id={labelId || null}
-                disabled
                 data-test-selector={`${(otherProps as any)["data-test-selector"]}-label`}
             >
                 {label}

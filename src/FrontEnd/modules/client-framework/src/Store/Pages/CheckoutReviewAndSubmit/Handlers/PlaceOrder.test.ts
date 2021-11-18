@@ -5,7 +5,7 @@ type propsType = Parameters<typeof SetCartStatus>[0];
 
 describe("SetCartStatus", () => {
     const getProps = (parameter?: RecursivePartial<propsType["parameter"]>): propsType => {
-        return ({
+        return {
             getState: () => ({
                 pages: {
                     checkoutReviewAndSubmit: {},
@@ -20,7 +20,7 @@ describe("SetCartStatus", () => {
                 },
             }),
             parameter: parameter ?? {},
-        } as RecursivePartial<propsType>) as propsType;
+        } as RecursivePartial<propsType> as propsType;
     };
 
     test("sets customerVatNumber to supplied vatNumber", () => {

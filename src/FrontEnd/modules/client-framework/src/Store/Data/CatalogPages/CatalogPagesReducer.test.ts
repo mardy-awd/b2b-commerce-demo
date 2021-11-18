@@ -78,5 +78,6 @@ function returnCatalogPageModel(): CatalogPage {
         productName: "test",
         redirectUrl: "test",
         title: "test",
+        alternateLanguageUrls: {},
     };
 }

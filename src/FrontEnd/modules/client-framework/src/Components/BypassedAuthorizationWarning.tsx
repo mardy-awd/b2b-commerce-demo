@@ -11,8 +11,7 @@ const BypassedAuthorizationWarning = () => {
     useEffect(() => {
         if (bypassedAuthorization) {
             toaster.addToast({
-                body:
-                    "The page you are viewing requires authorization and may not display correctly if you are not signed in.",
+                body: "The page you are viewing requires authorization and may not display correctly if you are not signed in.",
                 messageType: "warning",
                 timeoutLength: 6000,
             });

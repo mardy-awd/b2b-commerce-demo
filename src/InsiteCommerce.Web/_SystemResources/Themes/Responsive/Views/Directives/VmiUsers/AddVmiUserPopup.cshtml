@@ -5,7 +5,7 @@
             <form name="vm.vmiUserForm" novalidate>
                 <div class="row">
                     <div class="small-12 large-3 columns left-block">
-                        <div ng-if="!vm.isEditUserModal" class="select-step">
+                        <div ng-if="vm.isPopupOpened && !vm.isEditUserModal" class="select-step">
                             <label class="search-user-label">[% translate 'Search User' %]</label>
                             <input type="text" class="user-selector" id="select-user" name="selectedUser"
                                    ng-init="vm.userOptionsPlaceholder = '[% translate 'Search' EscapeSingleQuotes %]'" ng-click="vm.totalUsersCount && vm.openAutocomplete($event, '#select-user')"

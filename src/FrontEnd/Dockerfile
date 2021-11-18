@@ -46,7 +46,7 @@ FROM $NODE_BASE_IMAGE AS build-base
 
 # These files rarely change and are the minimum required for `npm install`.
 WORKDIR /app
-COPY ./episerver-platform-navigation-v0.8.7-rebrand-v2.tgz ./package.json ./package-lock.json ./
+COPY ./episerver-platform-navigation-v0.8.7-rebrand-v2.tgz ./package.json ./package-lock.json ./validateLockFile.js ./
 # spire linter needs to exist on disk when we use npm ci
 COPY ./modules/spire-linter ./modules/spire-linter
 

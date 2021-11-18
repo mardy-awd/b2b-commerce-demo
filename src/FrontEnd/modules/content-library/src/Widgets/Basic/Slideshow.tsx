@@ -350,17 +350,15 @@ export const Slideshow: FC<OwnProps> = ({ fields, extendedStyles }) => {
                         const slideOverlayWrapperStyles = {
                             css: css`
                                 ${styles.slideOverlayWrapper?.css || ""}
-                                background-color: ${
-                                    slide.fields.background === "image" ? slide.fields.imageOverlay : ""
-                                };
+                                background-color: ${slide.fields.background === "image"
+                                    ? slide.fields.imageOverlay
+                                    : ""};
                                 padding: ${slide.fields.contentPadding}px;
-                                ${
-                                    slide.fields.centerTextVertically &&
-                                    `
+                                ${slide.fields.centerTextVertically &&
+                                `
                                     display: flex;
                                     align-items: center;
-                                    justify-content: center;`
-                                }
+                                    justify-content: center;`}
                             `,
                         };
                         return (

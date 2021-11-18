@@ -1222,6 +1222,7 @@ export interface BrandAutocompleteModel extends BaseModel {
 }
 
 export interface CatalogPageModel extends BaseModel {
+    alternateLanguageUrls: { [key: string]: string } | null;
     brandId: string | null;
     breadCrumbs: BreadCrumbModel[] | null;
     canonicalPath: string;

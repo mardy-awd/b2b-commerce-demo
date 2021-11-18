@@ -92,9 +92,9 @@ type MenuWrapperProps = { canBeOpen: boolean; isOpen?: true } & InjectableCss;
 
 const MenuWrapper = styled.nav<MenuWrapperProps>`
     position: relative; /* stylelint-disable */
-        ${({ isOpen }) =>
-            isOpen &&
-            `& > ${MenuStyle} {
+    ${({ isOpen }) =>
+        isOpen &&
+        `& > ${MenuStyle} {
                 display: block;
             }
     `}

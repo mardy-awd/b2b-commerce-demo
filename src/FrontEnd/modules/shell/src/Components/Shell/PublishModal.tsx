@@ -11,6 +11,7 @@ import Typography from "@insite/mobius/Typography";
 import getColor from "@insite/mobius/utilities/getColor";
 import { useShellDispatch, useShellSelector } from "@insite/shell/Common/Hooks/reduxHooks";
 import BadgeDefault from "@insite/shell/Components/Icons/BadgeDefault";
+import BadgeVariant from "@insite/shell/Components/Icons/BadgeVariant";
 import { ContentContextModel, PagePublishInfo } from "@insite/shell/Services/ContentAdminService";
 import { configureComparison } from "@insite/shell/Store/CompareModal/CompareModalActionCreators";
 import {
@@ -24,7 +25,6 @@ import {
     togglePublishInTheFuture,
 } from "@insite/shell/Store/PublishModal/PublishModalActionCreators";
 import React, { useEffect } from "react";
-import { connect, ResolveThunks } from "react-redux";
 import styled, { css } from "styled-components";
 
 export interface PublishPageSelection {
@@ -343,6 +343,7 @@ const PublishModal: React.FC = () => {
                                         pageId,
                                         name,
                                         published,
+                                        isDefaultVariant,
                                     } = pagePublishInfo;
                                     const contextString = getContextualId(
                                         languageId,
@@ -377,7 +378,8 @@ const PublishModal: React.FC = () => {
                                             </td>
                                             <td data-test-selector={`${testSelector}_title`}>
                                                 <NameStyle>
-                                                    {isBulkPublish ? name : page.fields.title} <BadgeDefault />
+                                                    {name}
+                                                    {isDefaultVariant ? <BadgeDefault /> : <BadgeVariant />}
                                                 </NameStyle>
                                             </td>
                                             <td data-test-selector={`${testSelector}_language`}>
@@ -614,8 +616,7 @@ const PublishCancelButtonContainer = styled.div`
 `;
 
 const CancelButton = styled(Button)`
-    margin-top: 20px;
-    margin-right: 10px;
+    margin: 20px 10px 10px 0;
 `;
 
 const RemoveFuturePublishButton = styled(Button)`

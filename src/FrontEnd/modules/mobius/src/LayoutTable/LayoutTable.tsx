@@ -56,8 +56,8 @@ const LayoutTableStyle = styled.div<LayoutTableProps>`
         return css`
             grid-template-rows: repeat(${rowRepeat}, max-content);
             grid-template-columns: ${edgeColumnWidth} ${middleColumns} ${edgeColumnWidth};
-            -ms-grid-rows: ( max-content )[${rowRepeat}];
-            -ms-grid-columns: ( 1fr )[${columnRepeat}];
+            -ms-grid-rows: (max-content) [ ${rowRepeat}];
+            -ms-grid-columns: (1fr) [ ${columnRepeat}];
             ${allButFirstCellOfEachGroup}
             ${allButLastCellOfEachGroup}
             ${allButFirstGroup}

@@ -39,7 +39,24 @@
     }
 
     .col-select {
-        max-width: 10px;
+        input[type="checkbox"] {
+            margin-right: 0;
+        }
+    }
+
+    .col-name {
+        a {
+            max-width: 450px;
+            overflow: hidden;
+            display: block;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .col-part-number {
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 

@@ -214,13 +214,11 @@ export const createHandlerChainRunnerOptionalParameter = <Parameter, Props = {}>
 ) => {
     checkChainForDuplicates(chain);
 
-    return (parameter: Parameter = defaultParameter) => (
-        dispatch: StrictInputDispatch,
-        getState: () => ApplicationState,
-    ) => {
-        checkForSyntheticEvent(parameter, name);
-        addTask(runChain(parameter, dispatch, getState, chain, name));
-    };
+    return (parameter: Parameter = defaultParameter) =>
+        (dispatch: StrictInputDispatch, getState: () => ApplicationState) => {
+            checkForSyntheticEvent(parameter, name);
+            addTask(runChain(parameter, dispatch, getState, chain, name));
+        };
 };
 
 /** The standard pattern for parameters that report their success. */
@@ -246,18 +244,19 @@ export type HasOnComplete<Result = unknown> = {
 type Thunk<Result> = (dispatch: StrictInputDispatch, getState: () => ApplicationState) => Result;
 
 /**  Converts a handler chain that has an `onSuccess` method to return a `Promise` that can be used in conjunction with `await`. */
-export const makeHandlerChainAwaitable = <Parameter extends HasOnSuccess<Result>, Result>(
-    handlerChain: (parameter: Parameter) => Thunk<void>,
-) => (parameter: Omit<Parameter, "onSuccess">): Thunk<Promise<Result>> => dispatch =>
-    new Promise<Result>((resolve, reject) => {
-        dispatch(
-            handlerChain({
-                ...(parameter as Parameter),
-                onSuccess: resolve,
-                onException: reject,
-            }),
-        );
-    });
+export const makeHandlerChainAwaitable =
+    <Parameter extends HasOnSuccess<Result>, Result>(handlerChain: (parameter: Parameter) => Thunk<void>) =>
+    (parameter: Omit<Parameter, "onSuccess">): Thunk<Promise<Result>> =>
+    dispatch =>
+        new Promise<Result>((resolve, reject) => {
+            dispatch(
+                handlerChain({
+                    ...(parameter as Parameter),
+                    onSuccess: resolve,
+                    onException: reject,
+                }),
+            );
+        });
 
 export const executeAwaitableHandlerChain = <Parameter extends HasOnSuccess<Result>, Result>(
     handlerChain: (parameter: Parameter) => Thunk<void>,

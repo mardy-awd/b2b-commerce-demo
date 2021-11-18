@@ -156,13 +156,13 @@
                             <li class="has-sub">
                                 <a href="#">
                                     <img ng-cloak ng-if="::vm.session.language.imageFilePath" ng-src="{{::vm.session.language.imageFilePath}}"
-                                         alt="{{::vm.session.language.description}}"/>
+                                         alt="{{::vm.session.language.description}}" />
                                     <span ng-bind="::vm.session.language.description"></span>
                                 </a>
                                 <ul>
                                     <li ng-repeat="language in vm.languages" ng-class="{'lang-current': language.id === vm.session.language.id}">
                                         <a href="" ng-click="vm.setLanguage(language.id)" id="tst_languageMenu_{{language.id}}">
-                                            <img ng-cloak ng-if="::language.imageFilePath" ng-src="{{::language.imageFilePath}}" alt="{{::language.description}}"/>
+                                            <img ng-cloak ng-if="::language.imageFilePath" ng-src="{{::language.imageFilePath}}" alt="{{::language.description}}" />
                                             <span ng-bind="::language.description"></span>
                                         </a>
                                     </li>
@@ -184,6 +184,29 @@
                                         <a href="" ng-click="vm.setCurrency(currency.id)" id="tst_currencyMenu_{{currency.id}}">
                                             <span class="currency-symbol" ng-bind="::currency.currencySymbol"></span>
                                             <span class="currency-label" ng-bind="::currency.description"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li role="mode-switch" ng-cloak ng-show="::(vm.displayModeSwitch)">
+                    <div class="sn-mode">
+                        <ul>
+                            <li class="has-sub">
+                                <a href="#">
+                                    <span class="mode-desc">{{::(vm.currentNavigationMode === 'Vmi' ? '[% translate 'Vendor Managed Inventory' %]' : '[% translate 'Storefront' %]')}}</span>
+                                </a>
+                                <ul>
+                                    <li ng-class="{'mode-current': vm.currentNavigationMode === 'Storefront'}">
+                                        <a href="" ng-click="vm.setMode('Storefront')">
+                                            <span class="mode-desc">[% translate 'Storefront' %]</span>
+                                        </a>
+                                    </li>
+                                    <li ng-class="{'mode-current': vm.currentNavigationMode === 'Vmi'}">
+                                        <a href="" ng-click="vm.setMode('Vmi')">
+                                            <span class="mode-desc">[% translate 'Vendor Managed Inventory' %]</span>
                                         </a>
                                     </li>
                                 </ul>

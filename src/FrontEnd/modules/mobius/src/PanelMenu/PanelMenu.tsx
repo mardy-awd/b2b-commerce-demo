@@ -203,14 +203,8 @@ class PanelMenu extends React.Component<PanelMenuPropsCompleted> {
         return (
             <ThemeConsumer>
                 {theme => {
-                    const {
-                        currentUrl,
-                        descriptionId,
-                        menuItems,
-                        panelTrigger,
-                        closeOverlay,
-                        ...otherProps
-                    } = this.props;
+                    const { currentUrl, descriptionId, menuItems, panelTrigger, closeOverlay, ...otherProps } =
+                        this.props;
                     const propBuilder = applyPropBuilder({ ...this.props, theme }, { component: "panelMenu" });
                     const { translate } = theme;
                     const { layer, descriptionId: navId } = this.state;

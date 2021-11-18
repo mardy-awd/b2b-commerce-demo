@@ -1,4 +1,5 @@
 import mergeToNew from "@insite/client-framework/Common/mergeToNew";
+import { getIsShareEntity } from "@insite/client-framework/ServerSideRendering";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import translate from "@insite/client-framework/Translate";
@@ -177,11 +178,13 @@ export const cardStyles: InvoiceDetailsLineCardStyles = {
 const InvoiceDetailsLineCard = ({ invoiceLine, enableVat, vatPriceDisplay, extendedStyles }: Props) => {
     const [styles] = React.useState(() => mergeToNew(cardStyles, extendedStyles));
 
+    const isShareEntity = getIsShareEntity();
+
     return (
         <GridContainer {...styles.container}>
             <GridItem {...styles.imageItem}>
                 <Link href={invoiceLine.productUri} {...styles.imageLink}>
-                    <LazyImage src={invoiceLine.mediumImagePath} {...styles.image} />
+                    <LazyImage src={invoiceLine.mediumImagePath} {...styles.image} isShareEntity={isShareEntity} />
                 </Link>
             </GridItem>
             <GridItem {...styles.infoItem}>

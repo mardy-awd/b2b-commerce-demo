@@ -220,7 +220,7 @@ class ProductListPage extends React.Component<Props> {
         } = this.props;
 
         const { exactMatch, value: products } = this.props.productsDataView;
-        if (exactMatch && !this.props.stockedItemsOnly) {
+        if (exactMatch && !this.props.stockedItemsOnly && products.length) {
             let productDetailUrl = firstProductDetailPath ?? products[0].canonicalUrl;
             const parsedQuery = parseQueryString<{ query: string }>(search);
             const query = parsedQuery.query;
@@ -257,6 +257,7 @@ class ProductListPage extends React.Component<Props> {
             title,
             primaryImagePath,
             canonicalPath,
+            alternateLanguageUrls,
         } = productListCatalogPage;
 
         setPageMetadata(
@@ -269,6 +270,7 @@ class ProductListPage extends React.Component<Props> {
                 title,
                 currentPath: location.pathname,
                 canonicalPath,
+                alternateLanguageUrls: alternateLanguageUrls ?? undefined,
                 websiteName,
             },
             websiteSettings,
@@ -305,7 +307,7 @@ class ProductListPage extends React.Component<Props> {
 
     render() {
         if (
-            this.props.productsDataView.value &&
+            this.props.productsDataView.value?.length &&
             this.props.productsDataView.exactMatch &&
             !this.props.stockedItemsOnly
         ) {

@@ -213,7 +213,7 @@ export function updateWishListLine(parameter: UpdateWishListLineApiParameter) {
 export function updateWishListLines(parameter: UpdateWishListLinesApiParameter) {
     return patch<WishListLineCollectionModel>(
         `${wishListUrl}/${parameter.wishListId}/wishlistlines/batch`,
-        (parameter as unknown) as WishListLineCollectionModel,
+        parameter as unknown as WishListLineCollectionModel,
     );
 }
 
@@ -237,7 +237,7 @@ export function deleteWishListShare(parameter: DeleteWishListShareApiParameter) 
 }
 
 export function activateInvite(parameter: ActivateInviteApiParameter) {
-    return patch<WishListModel>(`${wishListUrl}/activateinvite`, (parameter as unknown) as WishListModel);
+    return patch<WishListModel>(`${wishListUrl}/activateinvite`, parameter as unknown as WishListModel);
 }
 
 function cleanWishList(wishList: WishListModel, parameter?: { expand?: string[]; exclude?: string[] }) {

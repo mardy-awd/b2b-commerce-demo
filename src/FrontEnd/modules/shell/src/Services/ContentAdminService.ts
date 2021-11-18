@@ -122,6 +122,8 @@ function cleanPagePublishInfoModel(model: PagePublishInfoModel, result?: PagePub
             name: model.name,
             unpublished: model.unpublished,
             published: model.published,
+            isVariant: model.isVariant,
+            isDefaultVariant: model.isDefaultVariant,
         });
     });
 
@@ -161,11 +163,14 @@ export type PageVersionInfoModel = {
     modifiedOn: string;
     publishOn: string;
     modifiedBy: string;
+    publishedBy: string;
 };
 
 export type PagePublishInfoModel = {
     pageId: string;
     name: string;
+    isVariant: boolean;
+    isDefaultVariant: boolean;
     unpublishedContexts: PublishableContentContextModel[];
     unpublished?: Omit<PageVersionInfoModel, "publishOn">;
     published?: PageVersionInfoModel;
@@ -182,7 +187,7 @@ export type RestorePageVersionModel = {
 };
 
 export type PagePublishInfo = PublishableContentContextModel &
-    Pick<PagePublishInfoModel, "pageId" | "name" | "unpublished" | "published">;
+    Pick<PagePublishInfoModel, "pageId" | "name" | "unpublished" | "published" | "isVariant" | "isDefaultVariant">;
 
 export type PublishResultModel = {
     success: boolean;

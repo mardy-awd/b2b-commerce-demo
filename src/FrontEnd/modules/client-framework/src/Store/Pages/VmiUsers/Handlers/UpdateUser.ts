@@ -52,7 +52,7 @@ export const ExecuteOnErrorCallback: HandlerType = props => {
 export const DispatchLoadAccounts: HandlerType = props => {
     if (props.parameter.reloadVmiUsers) {
         const getVmiUsersParameter = props.getState().pages.vmiUsers.getVmiUsersParameter;
-        props.dispatch(loadAccounts({ ...getVmiUsersParameter, page: 1 }));
+        props.dispatch(loadAccounts(getVmiUsersParameter));
     }
 };
 

@@ -316,7 +316,7 @@ class MyListsDetailsActions extends React.Component<Props, State> {
                 apiParameter: {
                     cartId: API_URL_CURRENT_FRAGMENT,
                     cartLineCollection: {
-                        cartLines: linesToAdd.map(o => (o as any) as CartLineModel),
+                        cartLines: linesToAdd.map(o => o as any as CartLineModel),
                     } as CartLineCollectionModel,
                 },
                 onSuccess: () => {
@@ -333,9 +333,8 @@ class MyListsDetailsActions extends React.Component<Props, State> {
         } else {
             const changedSharedListLinesQuantities: Dictionary<number> = {};
             for (const wishListLineId in this.props.productInfosByWishListLineId) {
-                changedSharedListLinesQuantities[wishListLineId] = this.props.productInfosByWishListLineId[
-                    wishListLineId
-                ]!.qtyOrdered;
+                changedSharedListLinesQuantities[wishListLineId] =
+                    this.props.productInfosByWishListLineId[wishListLineId]!.qtyOrdered;
             }
 
             this.props.addWishListToCart({

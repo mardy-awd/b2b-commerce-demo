@@ -11,6 +11,7 @@ import {
 import { getProductByPath } from "@insite/client-framework/Services/ProductServiceV2";
 import loadRealTimeInventory from "@insite/client-framework/Store/CommonHandlers/LoadRealTimeInventory";
 import loadRealTimePricing from "@insite/client-framework/Store/CommonHandlers/LoadRealTimePricing";
+import { recentlyViewedGetProductCollectionParameter } from "@insite/client-framework/Store/Components/ProductCarousel/Handlers/LoadCarouselProducts";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import loadProductByPath from "@insite/client-framework/Store/Data/Products/Handlers/LoadProductByPath";
 import loadVariantChildren from "@insite/client-framework/Store/Data/Products/Handlers/LoadVariantChildren";
@@ -84,6 +85,12 @@ export const LoadProductIfNeeded: HandlerType = async props => {
                                 configuration,
                             });
                         }
+
+                        props.dispatch({
+                            type: "Data/Products/ReplaceDataView",
+                            parameter: recentlyViewedGetProductCollectionParameter,
+                            dataView: {},
+                        });
                     },
                 }),
             );
