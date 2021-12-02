@@ -62,6 +62,7 @@ const mapStateToProps = (state: ApplicationState) => {
         category: getCategoryState(state, catalogPage?.categoryIdWithBrandId ?? catalogPage?.categoryId).value,
         websiteSettings: getSettingsCollection(state).websiteSettings,
         searchDataModeActive: getSearchDataModeActive(state),
+        searchPath: getSettingsCollection(state).searchSettings.searchPath,
     };
 };
 
@@ -96,7 +97,7 @@ class ProductListPage extends React.Component<Props> {
     }
 
     isSearchPath() {
-        return !!this.props.path.match(/^\/search\b/i);
+        return !!this.props.path.toLowerCase().startsWith(`/${this.props.searchPath.toLowerCase()}`);
     }
 
     UNSAFE_componentWillMount(): void {
@@ -144,7 +145,6 @@ class ProductListPage extends React.Component<Props> {
             isLoading,
             filterQuery,
             location: { pathname, search },
-            firstProductDetailPath,
             productListCatalogPage,
             searchDataModeActive,
         } = this.props;

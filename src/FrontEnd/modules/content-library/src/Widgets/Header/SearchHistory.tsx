@@ -21,6 +21,7 @@ interface OwnProps {
 
 const mapStateToProps = (state: ApplicationState) => ({
     searchHistoryEnabled: getSettingsCollection(state).searchSettings.searchHistoryEnabled,
+    searchPath: getSettingsCollection(state).searchSettings.searchPath,
 });
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps>;
@@ -140,7 +141,9 @@ class SearchHistory extends React.Component<Props> {
                             {...(this.props.focusedQuery === searchHistoryItem.query
                                 ? styles.focusedLink
                                 : styles.link)}
-                            onClick={() => this.props.goToUrl(`/Search?query=${searchHistoryItem.query}`)}
+                            onClick={() =>
+                                this.props.goToUrl(`/${this.props.searchPath}?query=${searchHistoryItem.query}`)
+                            }
                         >
                             {searchHistoryItem.query}
                         </Link>

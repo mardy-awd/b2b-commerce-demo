@@ -81,4 +81,5 @@ export interface SearchSettingsModel extends BaseModel {
     searchHistoryLimit: number;
     enableBoostingByPurchaseHistory: boolean;
     allowFilteringForPreviouslyPurchasedProducts: boolean;
+    searchPath: string;
 }

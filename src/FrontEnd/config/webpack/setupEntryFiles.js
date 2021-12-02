@@ -24,8 +24,8 @@ export * from "./src/StartServer";
     updateFile(
         path.resolve(__dirname, "../../modules/shell/Entry.ts"),
         `/* eslint-disable */${shellBlueprintImport}
-import "../${blueprint}/src/Start";
 import "@insite/shell/LoadComponents";
+import "../${blueprint}/src/Start";
 import "@insite/shell/ClientApp";
 `,
     );
@@ -33,8 +33,8 @@ import "@insite/shell/ClientApp";
     updateFile(
         path.resolve(__dirname, "../../modules/client-framework/Entry.ts"),
         `/* eslint-disable */
-import "../${blueprint}/src/Start";
 import "@insite/client-framework/LoadComponents";
+import "../${blueprint}/src/Start";
 import "@insite/client-framework/ClientApp";
 `,
     );

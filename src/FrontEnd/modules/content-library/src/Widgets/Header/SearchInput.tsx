@@ -1,6 +1,5 @@
 import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
-import { trackAutocompleteSearchResultEvent } from "@insite/client-framework/Common/Utilities/tracking";
 import {
     addSearchHistory,
     getSearchHistory,
@@ -58,13 +57,14 @@ interface OwnProps {
 
 const mapStateToProps = (state: ApplicationState) => {
     const {
-        searchSettings: { autocompleteEnabled, searchHistoryEnabled, searchHistoryLimit },
+        searchSettings: { autocompleteEnabled, searchHistoryEnabled, searchHistoryLimit, searchPath },
     } = getSettingsCollection(state);
     return {
         autocompleteEnabled,
         searchHistoryEnabled,
         searchHistoryLimit,
         location: getLocation(state),
+        searchPath,
     };
 };
 
@@ -185,7 +185,7 @@ class SearchInput extends React.Component<Props, State> {
     componentDidUpdate(prevProps: Props, prevState: State) {
         if (this.props.location.pathname !== prevProps.location.pathname) {
             // clear the search box on navigate away from search
-            if (!this.props.location.pathname.toLowerCase().startsWith("/search")) {
+            if (!this.props.location.pathname.toLowerCase().startsWith(`/${this.props.searchPath.toLowerCase()}`)) {
                 // TODO ISC-12679 - Redesign so that this can be moved to a field of the class rather than state.
                 // eslint-disable-next-line react/no-did-update-set-state
                 this.setState({ query: "" });
@@ -246,7 +246,7 @@ class SearchInput extends React.Component<Props, State> {
         if (this.state.autoCompleteModel?.products?.length === 1) {
             this.goToUrl(this.state.autoCompleteModel?.products[0].url);
         } else {
-            this.goToUrl(`/Search?query=${this.state.query}`, false);
+            this.goToUrl(`/${this.props.searchPath}?query=${this.state.query}`, false);
         }
         if (this.props.searchHistoryEnabled) {
             addSearchHistory(this.state.query, this.props.searchHistoryLimit);
