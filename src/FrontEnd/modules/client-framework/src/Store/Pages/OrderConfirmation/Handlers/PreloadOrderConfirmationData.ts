@@ -33,11 +33,12 @@ export const DispatchBeginLoadCart: HandlerType = props => {
 
 export const PreloadData: HandlerType = props => {
     const state = props.getState();
-
-    if (!getCartState(state, props.parameter.cartId).value) {
+    const cartState = getCartState(state, props.parameter.cartId);
+    if (!cartState.value && !cartState.isLoading) {
         props.dispatch(loadCart({ cartId: props.parameter.cartId }));
     }
-    if (!getPromotionsDataView(state, props.parameter.cartId).value) {
+    const promotionsState = getPromotionsDataView(state, props.parameter.cartId);
+    if (!promotionsState.value && !promotionsState.isLoading) {
         props.dispatch(loadPromotions({ cartId: props.parameter.cartId }));
     }
 };

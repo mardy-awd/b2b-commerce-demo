@@ -249,7 +249,7 @@ module insite.catalog {
                 this,
                 this.$http({ method: "POST", url: this.realTimePricingUri, data: this.getProductRealTimePricesParams(products), bypassErrorInterceptor: true }),
                 (response: ng.IHttpPromiseCallbackArg<RealTimePricingModel>) => { this.getProductRealTimePricesCompleted(response, products); },
-                this.getProductRealTimePricesFailed
+                (error: ng.IHttpPromiseCallbackArg<any>) => { this.getProductRealTimePricesFailedV2(error, products); }
             );
         }
 
@@ -270,11 +270,16 @@ module insite.catalog {
                 const product = products.find((p: ProductDto) => p.id === productPrice.productId && p.selectedUnitOfMeasure === productPrice.unitOfMeasure);
                 if (product) {
                     product.pricing = productPrice;
+                    product.pricing.additionalResults["failedToGetRealTimeInventory"] = undefined;
                 }
             });
         }
 
         protected getProductRealTimePricesFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
+        }
+
+        protected getProductRealTimePricesFailedV2(error: ng.IHttpPromiseCallbackArg<any>, products: ProductDto[]): void {
+            products.forEach(o => { o.pricing.additionalResults["failedToGetRealTimeInventory"] = "true"; });
         }
 
         getProductRealTimePrice(product: ProductDto, configuration?: string[]): ng.IPromise<RealTimePricingModel> {
@@ -288,7 +293,7 @@ module insite.catalog {
                 this,
                 this.$http({ method: "POST", url: this.realTimePricingUri, data: this.getProductRealTimePriceParams(product, configuration), bypassErrorInterceptor: true }),
                 (response: ng.IHttpPromiseCallbackArg<RealTimePricingModel>) => { this.getProductRealTimePriceCompleted(response, product); },
-                this.getProductRealTimePriceFailed
+                (error: ng.IHttpPromiseCallbackArg<any>) => { this.getProductRealTimePriceFailedV2(error, product); }
             );
         }
 
@@ -309,11 +314,16 @@ module insite.catalog {
             response.data.realTimePricingResults.forEach((productPrice: ProductPriceDto) => {
                 if (product.id === productPrice.productId) {
                     product.pricing = productPrice;
+                    product.pricing.additionalResults["failedToGetRealTimeInventory"] = undefined;
                 }
             });
         }
 
         protected getProductRealTimePriceFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
+        }
+
+        protected getProductRealTimePriceFailedV2(error: ng.IHttpPromiseCallbackArg<any>, product: ProductDto): void {
+            product.pricing.additionalResults["failedToGetRealTimeInventory"] = "true";
         }
 
         getProductRealTimeInventory(products: ProductDto[], expand?: string[], configuration?: { [key: string]: string[] }): ng.IPromise<RealTimeInventoryModel> {

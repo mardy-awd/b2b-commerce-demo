@@ -325,7 +325,8 @@ module insite.catalog {
         }
 
         protected getAutocompleteSearchHistoryTemplate(suggestion: any): string {
-            return `<div class="group-${suggestion.type}">${suggestion.q.replace(/</g, "&lt").replace(/>/g, "&gt")}</div>`;
+            let query = suggestion.q ?? "";
+            return `<div class="group-${suggestion.type}">${query.replace(/</g, "&lt").replace(/>/g, "&gt")}</div>`;
         }
 
         protected getAutocompleteCategoryTemplate(suggestion: any, pattern: string): string {

@@ -71,7 +71,7 @@ class MyListsCreateListButton extends React.Component<Props, State> {
                     <Button
                         {...styles.createListButton}
                         onClick={this.buttonClickHandler}
-                        data-test-selector="myListsCreateListButton"
+                        data-test-selector="tst_MyLists_CreateListButton"
                     >
                         {translate("Create List")}
                     </Button>

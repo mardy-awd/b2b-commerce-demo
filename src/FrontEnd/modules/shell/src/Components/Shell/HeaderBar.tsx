@@ -196,6 +196,13 @@ const SelectWrapper = styled.div`
     height: 100%;
     display: flex;
     select {
+        @media (max-width: 1200px) {
+            max-width: 120px;
+        }
+
+        @media (max-width: 1100px) {
+            max-width: 100px;
+        }
         background-color: transparent;
         border: none;
         font-size: 14px;
@@ -223,5 +230,8 @@ const SelectWrapper = styled.div`
         top: 17px;
         right: 5px;
         pointer-events: none;
+    }
+    &:last-child {
+        margin-right: 0;
     }
 `;

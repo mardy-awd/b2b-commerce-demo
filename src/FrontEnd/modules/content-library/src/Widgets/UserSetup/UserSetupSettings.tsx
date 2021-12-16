@@ -65,7 +65,7 @@ const UserSetupSettings = ({ editingUser, setUserFields }: Props) => {
 
     return (
         <>
-            <Typography as="h2" {...styles.title}>
+            <Typography as="h2" {...styles.title} data-test-selector="tst_userSetupSetting_title">
                 {translate("Settings")}
             </Typography>
             <StyledFieldSet {...styles.fieldset}>
@@ -75,6 +75,7 @@ const UserSetupSettings = ({ editingUser, setUserFields }: Props) => {
                         label={translate("User Role")}
                         value={editingUser.role}
                         onChange={userRoleChangeHandler}
+                        data-test-selector="tst_userSetupSetting_userRole"
                     >
                         <option value="">{translate("Select User Role")}</option>
                         {editingUser.availableRoles?.map(role => (
@@ -90,6 +91,7 @@ const UserSetupSettings = ({ editingUser, setUserFields }: Props) => {
                         label={translate("Assign Approver")}
                         value={editingUser.approver}
                         onChange={approverChangeHandler}
+                        data-test-selector="tst_userSetupSetting_assignApprover"
                     >
                         <option value="">{translate("Select an Approver")}</option>
                         {editingUser.availableApprovers?.map(approver => (

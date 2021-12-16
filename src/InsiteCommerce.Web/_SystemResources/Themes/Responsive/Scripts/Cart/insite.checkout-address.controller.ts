@@ -306,7 +306,7 @@
         protected convertValidationToJQueryRules(rules: FieldValidationDto, fieldName?: string): JQueryValidation.RulesDictionary {
             let isRequired = false;
             if (fieldName === "ststate" && this.selectedShipTo) {
-                isRequired = this.selectedShipTo.country && this.selectedShipTo.country.states.length > 0;
+                isRequired = !!this.selectedShipTo.country && this.selectedShipTo.country.states.length > 0;
             }
 
             if (rules.maxLength) {

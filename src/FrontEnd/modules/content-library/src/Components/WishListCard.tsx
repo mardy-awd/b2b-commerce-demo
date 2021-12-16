@@ -86,6 +86,7 @@ export const wishListCardStyles: WishListCardStyles = {
     },
     detailLinkGridItem: { width: 12 },
     descriptionGridItem: { width: 12 },
+    descriptionText: { ellipsis: true },
     lastUpdatedGridItem: { width: 12 },
     extendedInfoGridItem: {
         width: [12, 12, 7, 8, 8],

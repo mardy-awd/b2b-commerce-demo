@@ -7,6 +7,7 @@ import {
     ConfigurationModel,
     ProductInventoryDto,
     ProductPriceDto,
+    ProductSubscriptionDto,
     RealTimeInventoryModel,
 } from "@insite/client-framework/Types/ApiModels";
 import { Draft } from "immer";
@@ -42,6 +43,7 @@ const reducer = {
         draft.productInfosById = action.productInfosById;
         draft.selectedImageIndex = 0;
         draft.variantSelection = action.variantSelection;
+        draft.subscription = undefined;
         draft.isProductLoading = false;
         initConfigurationSelection(draft, action.configuration);
     },
@@ -98,6 +100,12 @@ const reducer = {
     },
     "Pages/ProductDetails/SetSelectedImageIndex": (draft: Draft<ProductDetailsState>, action: { index: number }) => {
         draft.selectedImageIndex = action.index;
+    },
+    "Pages/ProductDetails/UpdateSubscription": (
+        draft: Draft<ProductDetailsState>,
+        action: { subscription: ProductSubscriptionDto },
+    ) => {
+        draft.subscription = action.subscription;
     },
     "Pages/ProductDetails/CompleteLoadRealTimePricing": (
         draft: Draft<ProductDetailsState>,

@@ -7,6 +7,7 @@ import ContactUsFormReducer from "@insite/client-framework/Store/Components/Cont
 import FindLocationModalReducer from "@insite/client-framework/Store/Components/FindLocationModal/FindLocationModalReducer";
 import ManageShareListModalReducer from "@insite/client-framework/Store/Components/ManageShareListModal/ManageShareListModalReducer";
 import OrderUploadReducer from "@insite/client-framework/Store/Components/OrderUpload/OrderUploadReducer";
+import ProductDeliveryScheduleReducer from "@insite/client-framework/Store/Components/ProductDeliverySchedule/ProductDeliveryScheduleReducer";
 import ProductInfoListsReducer from "@insite/client-framework/Store/Components/ProductInfoList/ProductInfoListsReducer";
 import ProductSelectorReducer from "@insite/client-framework/Store/Components/ProductSelector/ProductSelectorReducer";
 import ReCaptchaReducer from "@insite/client-framework/Store/Components/ReCaptcha/ReCaptchaReducer";
@@ -22,6 +23,7 @@ const reducers = {
     findLocationModal: FindLocationModalReducer,
     manageShareListModal: ManageShareListModalReducer,
     orderUpload: OrderUploadReducer,
+    productDeliverySchedule: ProductDeliveryScheduleReducer,
     productInfoLists: ProductInfoListsReducer,
     productSelector: ProductSelectorReducer,
     reCaptcha: ReCaptchaReducer,

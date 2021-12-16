@@ -20,7 +20,7 @@
             <div class="location-name-input">
                 <div class="location-name">
                     <div class="ship-select">
-                        <input type="text" ng-model="vm.locationName" name="locationName" class="location-name" data-test-selector="tst_vmiLocationPopUp_enterLocationName" placeholder="[% translate 'Enter location name' %]" autofocus="autofocus" isc-limit-number-of-characters="255" ng-maxlength="255" required />
+                        <input type="text" ng-model="vm.locationName" name="locationName" class="location-name" data-test-selector="tst_vmiLocationPopUp_enterLocationName" placeholder="[% translate 'Enter location name' %]" autofocus="autofocus" isc-limit-number-of-characters="255" ng-maxlength="255" maxlength="255" required />
                     </div>
                     <div class="max-field-tooltip spacer-element">
                         <isc-characters-left-counter form-element="vm.vmiLocationForm.locationName" field-model="vm.locationName" limit="255"></isc-characters-left-counter>

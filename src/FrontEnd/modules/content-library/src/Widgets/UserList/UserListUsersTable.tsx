@@ -180,7 +180,12 @@ const UserListUsersTable = ({
                                 {translate("Email")}
                             </DataTableHeader>
                         )}
-                        <DataTableHeader {...styles.statusHeader}>{translate("Status")}</DataTableHeader>
+                        <DataTableHeader
+                            {...styles.statusHeader}
+                            data-test-selector="tst_userListUsersTable_statusHeader"
+                        >
+                            {translate("Status")}
+                        </DataTableHeader>
                         <DataTableHeader
                             {...styles.roleHeader}
                             sorted={sorted("Role")}
@@ -189,7 +194,12 @@ const UserListUsersTable = ({
                         >
                             {translate("Role")}
                         </DataTableHeader>
-                        <DataTableHeader {...styles.lastSignInHeader}>{translate("Last Sign In")}</DataTableHeader>
+                        <DataTableHeader
+                            {...styles.lastSignInHeader}
+                            data-test-selector="tst_userListUsersTable_lastSignInHeader"
+                        >
+                            {translate("Last Sign In")}
+                        </DataTableHeader>
                     </DataTableHead>
                     <DataTableBody {...styles.dataTableBody}>
                         {accountsDataView.value.map(account => (

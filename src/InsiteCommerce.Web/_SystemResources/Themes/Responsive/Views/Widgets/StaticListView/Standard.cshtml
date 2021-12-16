@@ -95,7 +95,7 @@
                                         <span>[% translate 'New List Name' %]:</span>
                                     </div>
                                     <div class="large-8 columns">
-                                        <input id="tst_staticListView_listName" type="text" ng-model="vm.listName" name="listName" placeholder="[% translate 'Enter list name' %]" autofocus="autofocus" ng-maxlength="255" required />
+                                        <input id="tst_staticListView_listName" type="text" ng-model="vm.listName" name="listName" placeholder="[% translate 'Enter list name' %]" autofocus="autofocus" ng-maxlength="255" maxlength="255" required />
                                     </div>
                                 </div>
                                 <div id="error" class="error" ng-show="vm.saveListForm.$submitted && (vm.errorMessage || vm.saveListForm.listName.$error.required || vm.saveListForm.listName.$error.maxlength)">

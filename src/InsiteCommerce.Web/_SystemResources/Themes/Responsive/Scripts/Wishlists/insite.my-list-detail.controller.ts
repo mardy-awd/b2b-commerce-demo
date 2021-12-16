@@ -975,10 +975,11 @@
         }
 
         protected validateProduct(product: ProductDto): boolean {
-            if (product.canConfigure || (product.isConfigured && !product.isFixedConfiguration)) {
+            if (product.canConfigure || product.isConfigured) {
                 this.setErrorMessage(angular.element("#messageConfigurableProduct").val());
                 return false;
             }
+
             if (product.isStyleProductParent) {
                 this.setErrorMessage(angular.element("#messageStyledProduct").val());
                 return false;

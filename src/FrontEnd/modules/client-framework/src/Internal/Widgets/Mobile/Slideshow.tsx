@@ -2,7 +2,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import Button, { ButtonIcon } from "@insite/mobius/Button";
 import ChevronLeft from "@insite/mobius/Icons/ChevronLeft";
 import ChevronRight from "@insite/mobius/Icons/ChevronRight";
-import Typography from "@insite/mobius/Typography";
 import { useEmblaCarousel } from "embla-carousel/react";
 import React, { useEffect, useState } from "react";
 
@@ -165,7 +164,7 @@ const widgetModule: WidgetModule = {
                 tab: contentTab,
                 getDisplay: ({ fields: { heading, subheading, link } }) => heading || subheading || link || "Slide",
                 defaultValue: [],
-                fieldType: "General",
+                fieldType: "Translatable",
                 fieldDefinitions: [
                     {
                         name: "background",

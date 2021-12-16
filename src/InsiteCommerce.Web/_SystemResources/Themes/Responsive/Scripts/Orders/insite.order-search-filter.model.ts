@@ -15,5 +15,7 @@
         status: string[];
         statusDisplay: string;
         productErpNumber: string;
+        vmiOrdersOnly: boolean;
+        vmiLocationId: System.Guid;
     }
 }

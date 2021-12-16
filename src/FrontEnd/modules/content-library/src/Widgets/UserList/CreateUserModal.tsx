@@ -1,3 +1,4 @@
+import { parserOptions } from "@insite/client-framework/Common/BasicSelectors";
 import { getStyledWrapper } from "@insite/client-framework/Common/StyledWrapper";
 import validateEmail from "@insite/client-framework/Common/Utilities/validateEmail";
 import siteMessage from "@insite/client-framework/SiteMessage";
@@ -9,18 +10,24 @@ import translate from "@insite/client-framework/Translate";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
+import Icon, { IconPresentationProps } from "@insite/mobius/Icon";
+import HelpCircle from "@insite/mobius/Icons/HelpCircle";
 import Modal, { ModalPresentationProps } from "@insite/mobius/Modal";
 import Select, { SelectPresentationProps } from "@insite/mobius/Select";
 import TextField, { TextFieldPresentationProps } from "@insite/mobius/TextField";
 import { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
+import Tooltip, { TooltipPresentationProps } from "@insite/mobius/Tooltip";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
+import parse from "html-react-parser";
 import React, { PureComponent, ReactNode } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
 interface OwnProps {
     isOpen?: boolean;
+    assignApproverHelpMessage?: string;
+    roleInformation?: string;
     onClickCancel: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onClose: (event?: React.SyntheticEvent<Element, Event>) => void;
 }
@@ -56,8 +63,11 @@ export interface CreateUserModalStyles {
     settingsHeadingText?: TypographyPresentationProps;
     roleGridItem?: GridItemProps;
     roleSelect?: SelectPresentationProps;
+    roleSelectHelpIcon?: IconPresentationProps;
+    roleSelectHelpModal?: ModalPresentationProps;
     approverGridItem?: GridItemProps;
     approverSelect?: SelectPresentationProps;
+    approverSelectTooltip?: TooltipPresentationProps;
     buttonsGridItem?: GridItemProps;
     cancelButton?: ButtonPresentationProps;
     submitButton?: ButtonPresentationProps;
@@ -77,7 +87,22 @@ export const createUserModalStyles: CreateUserModalStyles = {
     settingsHeadingGridItem: { width: 12 },
     settingsHeadingText: { variant: "h5" },
     roleGridItem: { width: [12, 12, 12, 6, 6] },
+    roleSelectHelpIcon: {
+        src: HelpCircle,
+        size: 18,
+        css: css`
+            margin-left: 5px;
+            cursor: pointer;
+        `,
+    },
     approverGridItem: { width: [12, 12, 12, 6, 6] },
+    approverSelectTooltip: {
+        iconProps: {
+            css: css`
+                margin-left: 5px;
+            `,
+        },
+    },
     buttonsGridItem: {
         css: css`
             justify-content: flex-end;
@@ -110,6 +135,7 @@ class CreateUserModal extends PureComponent<
         firstNameErrorMessage?: ReactNode;
         lastNameErrorMessage?: ReactNode;
         showFormErrors: boolean;
+        roleInformationModalIsOpen: boolean;
     }
 > {
     state = {
@@ -124,6 +150,7 @@ class CreateUserModal extends PureComponent<
         firstNameErrorMessage: undefined,
         lastNameErrorMessage: undefined,
         showFormErrors: false,
+        roleInformationModalIsOpen: false,
     };
 
     usernameChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -251,12 +278,43 @@ class CreateUserModal extends PureComponent<
         const userNameGridItemStyles = this.props.showUserName
             ? styles.userNameVisibleGridItem
             : styles.userNameHiddenGridItem;
+
+        const roleSelectLabel = this.props.roleInformation ? (
+            <>
+                {translate("Assign User Role")}
+                <Icon
+                    {...styles.roleSelectHelpIcon}
+                    onClick={() => this.setState({ roleInformationModalIsOpen: true })}
+                />
+                <Modal
+                    {...styles.roleSelectHelpModal}
+                    headline={translate("User Roles")}
+                    isOpen={this.state.roleInformationModalIsOpen}
+                    handleClose={() => this.setState({ roleInformationModalIsOpen: false })}
+                >
+                    {parse(this.props.roleInformation, parserOptions)}
+                </Modal>
+            </>
+        ) : (
+            translate("Assign User Role")
+        );
+
+        const approverLabel = this.props.assignApproverHelpMessage ? (
+            <>
+                {translate("Assign Approver")}
+                <Tooltip {...styles.approverSelectTooltip} text={this.props.assignApproverHelpMessage} />
+            </>
+        ) : (
+            translate("Assign Approver")
+        );
+
         return (
             <Modal
                 {...styles.modal}
                 handleClose={this.closeModalHandler}
                 headline={translate("Create User")}
                 isOpen={this.props.isOpen}
+                data-test-selector="tst_ModalTitle"
             >
                 <StyledForm
                     {...styles.form}
@@ -320,7 +378,7 @@ class CreateUserModal extends PureComponent<
                             <GridItem {...styles.roleGridItem}>
                                 <Select
                                     {...styles.roleSelect}
-                                    label={translate("Assign User Role")}
+                                    label={roleSelectLabel}
                                     onChange={this.roleChangeHandler}
                                     value={role}
                                     data-test-selector="userEditForm_userRoleSelect"
@@ -338,7 +396,7 @@ class CreateUserModal extends PureComponent<
                             <GridItem {...styles.approverGridItem}>
                                 <Select
                                     {...styles.approverSelect}
-                                    label={translate("Assign Approver")}
+                                    label={approverLabel}
                                     onChange={this.approverChangeHandler}
                                     value={approver}
                                     data-test-selector="userEditForm_approverSelect"

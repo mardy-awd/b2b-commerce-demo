@@ -10,15 +10,17 @@ import addToWishList from "@insite/client-framework/Store/Data/WishLists/Handler
 import removeCartLine from "@insite/client-framework/Store/Pages/Cart/Handlers/RemoveCartLine";
 import updateCartLine from "@insite/client-framework/Store/Pages/Cart/Handlers/UpdateCartLine";
 import translate from "@insite/client-framework/Translate";
-import { ProductSettingsModel, PromotionModel } from "@insite/client-framework/Types/ApiModels";
+import { ProductSettingsModel, ProductSubscriptionDto, PromotionModel } from "@insite/client-framework/Types/ApiModels";
 import ProductAvailability, { ProductAvailabilityStyles } from "@insite/content-library/Components/ProductAvailability";
 import ProductBrand, { ProductBrandStyles } from "@insite/content-library/Components/ProductBrand";
+import ProductDeliveryScheduleButton from "@insite/content-library/Components/ProductDeliveryScheduleButton";
 import ProductDescription, { ProductDescriptionStyles } from "@insite/content-library/Components/ProductDescription";
 import ProductImage, { ProductImageStyles } from "@insite/content-library/Components/ProductImage";
 import ProductPartNumbers, { ProductPartNumbersStyles } from "@insite/content-library/Components/ProductPartNumbers";
 import ProductPrice, { ProductPriceStyles } from "@insite/content-library/Components/ProductPrice";
 import CartLineNotes, { CartLineNotesStyles } from "@insite/content-library/Widgets/Cart/CartLineNotes";
 import CartLineQuantity, { CartLineQuantityStyles } from "@insite/content-library/Widgets/Cart/CartLineQuantity";
+import { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable from "@insite/mobius/Clickable";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -96,6 +98,7 @@ export interface CartLineCardExpandedStyles {
     promotionNameText?: TypographyProps;
     productAvailability?: ProductAvailabilityStyles;
     addToListLink?: LinkPresentationProps;
+    deliveryScheduleButton?: ButtonPresentationProps;
     costCodeGridItem?: GridItemProps;
     costCodeLabelText?: TypographyPresentationProps;
     costCodeSelect?: SelectPresentationProps;
@@ -186,6 +189,11 @@ export const cartLineCardExpandedStyles: CartLineCardExpandedStyles = {
         `,
     },
     addToListLink: {
+        css: css`
+            margin-top: 20px;
+        `,
+    },
+    deliveryScheduleButton: {
         css: css`
             margin-top: 20px;
         `,
@@ -320,6 +328,17 @@ const CartLineCardExpanded: FC<Props> = ({
         }
 
         setAddToListModalIsOpen({ modalIsOpen: true, productInfos: [productInfo] });
+    };
+
+    const saveScheduleHandler = (updatedSubscription: ProductSubscriptionDto) => {
+        updateCartLine({
+            cartLine: {
+                ...cartLine,
+                properties: {
+                    productSubscription: JSON.stringify(updatedSubscription),
+                },
+            },
+        });
     };
 
     const sumQtyPerUom = cart.cartLines!.reduce((sum, current) => {
@@ -474,6 +493,23 @@ const CartLineCardExpanded: FC<Props> = ({
                             <Link {...styles.addToListLink} onClick={addToListClickHandler}>
                                 {translate("Add to List")}
                             </Link>
+                        )}
+                        {cartLine.isSubscription && cartLine.productSubscription && (
+                            <ProductDeliveryScheduleButton
+                                subscription={
+                                    cartLine.properties.productSubscription
+                                        ? JSON.parse(cartLine.properties.productSubscription)
+                                        : cartLine.productSubscription
+                                }
+                                disabled={
+                                    !cart.canModifyOrder ||
+                                    cartLine.isPromotionItem ||
+                                    !cartLine.qtyOrdered ||
+                                    cartLine.qtyOrdered <= 0
+                                }
+                                onSave={saveScheduleHandler}
+                                extendedStyles={styles.deliveryScheduleButton}
+                            />
                         )}
                     </GridItem>
                     {cart.showCostCode && !cartLine.isPromotionItem && (

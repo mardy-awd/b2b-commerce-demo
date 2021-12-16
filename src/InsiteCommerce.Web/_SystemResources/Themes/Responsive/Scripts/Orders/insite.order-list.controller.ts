@@ -2,9 +2,11 @@
 
 module insite.order {
     "use strict";
-
+    
     export class OrderListController {
         orderHistory: OrderCollectionModel;
+        selectedIds = {};
+        isAllSelected = false;
         pagination: PaginationModel;
         paginationStorageKey = "DefaultPagination-OrderList";
         searchFilter: OrderSearchFilter = {
@@ -20,16 +22,23 @@ module insite.order {
             ordertotal: "",
             status: [],
             statusDisplay: "",
-            productErpNumber: ""
+            productErpNumber: "",
+            vmiOrdersOnly: false,
+            vmiLocationId: ""
         };
         appliedSearchFilter = new OrderSearchFilter();
         shipTos: ShipToModel[];
+        vmiLocations: VmiLocationModel[];
         validationMessage: string;
         orderStatusMappings: KeyValuePair<string, string[]>;
         settings: Insite.Order.WebApi.V1.ApiModels.OrderSettingsModel;
         autocompleteOptions: AutoCompleteOptions;
-
-        static $inject = ["orderService", "customerService", "coreService", "paginationService", "settingsService", "searchService"];
+        Papa: any;
+        isVmiOrdersPage: boolean;
+        orderDetailsPageUrl : string;
+        exportHeaders: {};
+        
+        static $inject = ["orderService", "customerService", "coreService", "paginationService", "settingsService", "searchService", "vmiLocationsService", "spinnerService", "$scope", "$filter"];
 
         constructor(
             protected orderService: order.IOrderService,
@@ -37,25 +46,51 @@ module insite.order {
             protected coreService: core.ICoreService,
             protected paginationService: core.IPaginationService,
             protected settingsService: core.ISettingsService,
-            protected searchService: catalog.ISearchService) {
+            protected searchService: catalog.ISearchService,
+            protected vmiLocationsService : catalog.IVmiLocationsService,
+            protected spinnerService: core.ISpinnerService,
+			protected $scope: ng.IScope,
+            protected $filter: ng.IFilterService) {
         }
 
         $onInit(): void {
-            this.settingsService.getSettings().then(
-                (settingsCollection: core.SettingsCollection) => { this.getSettingsCompleted(settingsCollection); },
-                (error: any) => { this.getSettingsFailed(error); });
+            if (typeof (Papa) === "undefined") {
+                $.getScript("/SystemResources/Scripts/Libraries/papaparse/4.1/papaparse.min.js", () => {
+                    this.Papa = Papa;
+                });
+            }
+            else {
+                this.Papa = Papa;
+            }
+            
+            this.$scope.$watch(() => this.isVmiOrdersPage, () => {
+                if(this.isVmiOrdersPage) {
+                    this.searchFilter.vmiOrdersOnly = true;
+                    const vmiLocationsFilter: insite.catalog.ISearchFilter = {
+                        page: 1,
+                        pageSize: 9999
+                    };
+                    this.vmiLocationsService.getVmiLocations(vmiLocationsFilter).then(
+                        (locationCollection: VmiLocationCollectionModel) => { this.getLocationsCompleted(locationCollection); },
+                        (error: any) => { this.getLocationsFailed(error); });
+                }
 
-            this.customerService.getShipTos().then(
-                (shipToCollection: ShipToCollectionModel) => { this.getShipTosCompleted(shipToCollection); },
-                (error: any) => { this.getShipTosFailed(error); });
+                this.settingsService.getSettings().then(
+                    (settingsCollection: core.SettingsCollection) => { this.getSettingsCompleted(settingsCollection); },
+                    (error: any) => { this.getSettingsFailed(error); });
 
-            this.orderService.getOrderStatusMappings().then(
-                (orderStatusMappingCollection: OrderStatusMappingCollectionModel) => { this.getOrderStatusMappingCompleted(orderStatusMappingCollection); },
-                (error: any) => { this.getOrderStatusMappingFailed(error); });
+                this.customerService.getShipTos().then(
+                    (shipToCollection: ShipToCollectionModel) => { this.getShipTosCompleted(shipToCollection); },
+                    (error: any) => { this.getShipTosFailed(error); });
+
+                this.orderService.getOrderStatusMappings().then(
+                    (orderStatusMappingCollection: OrderStatusMappingCollectionModel) => { this.getOrderStatusMappingCompleted(orderStatusMappingCollection); },
+                    (error: any) => { this.getOrderStatusMappingFailed(error); });                
+            });
 
             this.initializeAutocomplete();
         }
-
+                
         protected getSettingsCompleted(settingsCollection: core.SettingsCollection): void {
             this.settings = settingsCollection.orderSettings;
             this.initFromDate(settingsCollection.orderSettings.lookBackDays);
@@ -85,6 +120,13 @@ module insite.order {
         }
 
         protected getOrderStatusMappingFailed(error: any): void {
+        }
+
+        protected getLocationsCompleted(locationCollection: VmiLocationCollectionModel): void {
+            this.vmiLocations = locationCollection.vmiLocations;
+        }
+
+        protected getLocationsFailed(error: any): void {
         }
 
         protected initializeAutocomplete(): void {
@@ -131,7 +173,8 @@ module insite.order {
             this.searchFilter.status = [];
             this.searchFilter.statusDisplay = "";
             this.searchFilter.productErpNumber = "";
-
+            this.searchFilter.vmiLocationId = "";
+            
             this.prepareSearchFilter();
             this.getOrders();
         }
@@ -150,7 +193,10 @@ module insite.order {
             if (this.pagination) {
                 this.pagination.page = 1;
             }
-
+            
+            this.selectedIds = {};
+            this.isAllSelected = false;
+            
             this.prepareSearchFilter();
             this.getOrders();
         }
@@ -207,6 +253,81 @@ module insite.order {
                         this.searchFilter.statusDisplay = "";
                     }
                 }
+            }
+        }
+
+        exportOrders(allOrders: boolean): void {
+            this.spinnerService.show();
+            if(!allOrders) {
+                this.generateCsv(this.orderHistory.orders.filter(f => this.selectedIds.hasOwnProperty(f.id)));
+                this.spinnerService.hide();
+            } else {
+                this.orderService.getOrders(this.appliedSearchFilter, { ...this.pagination, ...{ page: 1, pageSize: 9999 } } , true).then(
+                    (orderCollection: OrderCollectionModel) => {
+                        this.generateCsv(orderCollection.orders);
+                        this.spinnerService.hide();
+                    },
+                    (error: any) => { this.spinnerService.hide(); });
+            }
+        }
+
+        areNoneSelected(): boolean {
+            return Object.keys(this.selectedIds).length === 0;
+        }
+
+        selectUnselectAll(selectAll: boolean): void {
+            if(selectAll) {
+                this.selectedIds = {};
+                for (let x = 0; x < this.orderHistory.orders.length; x++) {
+                    this.selectedIds[this.orderHistory.orders[x].id] = true;
+                }
+                this.isAllSelected = true;
+            } else {
+                this.selectedIds = {};
+                this.isAllSelected = false;
+            }
+        }
+
+        updateSelected($event, id): void {
+            const checkbox = $event.target;
+            if (checkbox.checked) {
+                this.selectedIds[id] = true;
+            } else {
+                delete this.selectedIds[id];
+            }
+            this.isAllSelected = Object.keys(this.selectedIds).length === this.orderHistory.orders.length;
+        }
+
+        protected generateCsv(orders: OrderModel[]): void {
+            if (!orders?.length) {
+                return;
+            }
+
+            const data = orders.map(o => {
+                const row = {};
+                row[this.exportHeaders["date"]] = this.$filter("date")(o.orderDate, "shortDate");
+                row[this.exportHeaders["orderNumber"]] = o.erpOrderNumber;
+                row[this.exportHeaders["shipToPickUp"]] = o.stCompanyName;
+                row[this.exportHeaders["status"]] = o.statusDisplay;
+                if (this.settings.showWebOrderNumber) row[this.exportHeaders["webOrderNumber"]] = o.webOrderNumber;
+                if (this.settings.showPoNumber) row[this.exportHeaders["poNumber"]] = o.customerPO;
+                row[this.exportHeaders["total"]] = o.orderTotalDisplay;
+
+                return row;
+            });
+
+            const csv = this.Papa.unparse(data);
+            const csvBlob = new Blob([`\uFEFF${csv}`], { type: "text/csv;charset=utf-8;" });
+            const now = new Date();
+            const fileName = `VmiOrderHistory_${now.getFullYear()}_${now.getMonth() + 1}_${now.getDate()}.csv`;
+
+            if (navigator.msSaveBlob) {
+                navigator.msSaveBlob(csvBlob, fileName);
+            } else {
+                const downloadLink = document.createElement("a");
+                downloadLink.href = window.URL.createObjectURL(csvBlob);
+                downloadLink.setAttribute("download", fileName);
+                downloadLink.click();
             }
         }
     }

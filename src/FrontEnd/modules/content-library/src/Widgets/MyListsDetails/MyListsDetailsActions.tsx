@@ -558,7 +558,7 @@ class MyListsDetailsActions extends React.Component<Props, State> {
                             <Button
                                 {...styles.removeSelectedButton}
                                 onClick={this.removeSelectedClickHandler}
-                                data-test-selector="removeSelected"
+                                data-test-selector="tst_ListDetail_removeSelected"
                             >
                                 {translate("Remove Selected")}
                             </Button>
@@ -567,7 +567,7 @@ class MyListsDetailsActions extends React.Component<Props, State> {
                             disabled={!this.enableAddToCart() || !showAddToCart}
                             {...styles.addListButton}
                             onClick={this.addToCartClickHandler}
-                            data-test-selector="addListToCart"
+                            data-test-selector="tst_ListDetail_addToCart"
                         >
                             {addListToCartButtonText}
                         </Button>

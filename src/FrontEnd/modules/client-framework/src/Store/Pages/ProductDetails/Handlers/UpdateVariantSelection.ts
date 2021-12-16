@@ -54,10 +54,11 @@ export const SelectVariantProduct: HandlerType = props => {
     const variantChildren = getVariantChildrenDataView(props.getState(), props.parameter.productId).value!;
 
     for (const variantChild of variantChildren) {
-        let matches = true;
-        if (!variantChild.childTraitValues) {
-            break;
+        if (!variantChild.childTraitValues || variantChild.childTraitValues.length === 0) {
+            continue;
         }
+
+        let matches = true;
         for (const childTraitValue of variantChild.childTraitValues) {
             if (props.variantSelection[childTraitValue.styleTraitId] !== childTraitValue.id) {
                 matches = false;

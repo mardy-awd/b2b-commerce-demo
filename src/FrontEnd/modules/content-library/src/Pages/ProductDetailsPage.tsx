@@ -2,7 +2,7 @@ import parseQueryString from "@insite/client-framework/Common/Utilities/parseQue
 import setPageMetadata from "@insite/client-framework/Common/Utilities/setPageMetadata";
 import { trackPageChange } from "@insite/client-framework/Common/Utilities/tracking";
 import { ParentProductIdContext } from "@insite/client-framework/Components/ParentProductContext";
-import { HasProduct, ProductContext, ProductContextModel } from "@insite/client-framework/Components/ProductContext";
+import { ProductContext, ProductContextModel } from "@insite/client-framework/Components/ProductContext";
 import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSelectedProductPath, getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";

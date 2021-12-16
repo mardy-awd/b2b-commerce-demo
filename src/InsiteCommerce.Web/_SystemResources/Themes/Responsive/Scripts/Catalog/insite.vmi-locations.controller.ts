@@ -176,15 +176,6 @@ module insite.catalog {
             return "";
         }
 
-        setEditModal(location: VmiLocationModel): void {
-            this.useBin = location.useBins;
-            if (this.billTo && this.billTo.shipTos.find(x => x.id === String(location.customer.id))) {
-                this.shipTo = this.billTo.shipTos.find(x => x.id === location.customer.id);
-            }
-            this.locationName = location.name;
-            this.editingLocation = location;
-        }
-
         getLocations(newSearch: boolean = false): void {
             if (newSearch) {
                 this.pagination.page = 1;
@@ -278,7 +269,7 @@ module insite.catalog {
             return {
                 fields: this.exportHeaders,
                 data: list.map(o => [
-                    o.customer.id.toString(),
+                    o.shipToId.toString(),
                     o.name,
                     o.useBins.toString(),
                     o.isPrimaryLocation.toString(),

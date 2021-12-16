@@ -29,6 +29,7 @@ interface Parameter {
     searchTerm?: string;
     validateProduct?: boolean;
     skipInventoryValidation?: boolean;
+    denyFixedConfiguration?: boolean;
 }
 
 interface Props {
@@ -168,7 +169,8 @@ export const ValidateProduct: HandlerType = ({ parameter, product, productInfo, 
 
     if (
         product.canConfigure ||
-        (product.configurationType !== ConfigurationType.Fixed && product.configurationType !== ConfigurationType.None)
+        (product.configurationType !== ConfigurationType.None &&
+            (product.configurationType !== ConfigurationType.Fixed || parameter.denyFixedConfiguration))
     ) {
         dispatch({
             type: "Components/ProductSelector/SetErrorType",

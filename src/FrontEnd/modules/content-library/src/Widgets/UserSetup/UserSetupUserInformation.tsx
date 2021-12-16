@@ -91,7 +91,7 @@ const UserSetupUserInformation = ({
 
     return (
         <>
-            <Typography as="h2" {...styles.title}>
+            <Typography as="h2" {...styles.title} data-test-selector="tst_userSetupInfo_title">
                 {translate("User Information")}
             </Typography>
             <StyledWrapper {...styles.wrapper}>
@@ -101,6 +101,7 @@ const UserSetupUserInformation = ({
                     {...styles.userNameTextField}
                     disabled={true}
                     aria-labelledby="userName"
+                    data-test-selector="tst_userSetupInfo_userName"
                 />
             </StyledWrapper>
             <StyledWrapper {...styles.wrapper}>
@@ -113,6 +114,7 @@ const UserSetupUserInformation = ({
                     onChange={emailChangeHandler}
                     onBlur={emailBlurHandler}
                     error={emailErrorMessage}
+                    data-test-selector="tst_userSetupInfo_email"
                 />
             </StyledWrapper>
             <StyledWrapper {...styles.wrapper}>
@@ -124,6 +126,7 @@ const UserSetupUserInformation = ({
                     required
                     onChange={firstNameChangeHandler}
                     error={firstNameErrorMessage}
+                    data-test-selector="tst_userSetupInfo_firstName"
                 />
             </StyledWrapper>
             <StyledWrapper {...styles.wrapper}>
@@ -135,6 +138,7 @@ const UserSetupUserInformation = ({
                     required
                     onChange={lastNameChangeHandler}
                     error={lastNameErrorMessage}
+                    data-test-selector="tst_userSetupInfo_lastName"
                 />
             </StyledWrapper>
         </>

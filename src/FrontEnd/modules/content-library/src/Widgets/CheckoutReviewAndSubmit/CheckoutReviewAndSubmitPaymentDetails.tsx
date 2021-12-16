@@ -12,6 +12,7 @@ import loadTokenExConfig from "@insite/client-framework/Store/Context/Handlers/L
 import { getBillToState } from "@insite/client-framework/Store/Data/BillTos/BillTosSelectors";
 import loadBillTo from "@insite/client-framework/Store/Data/BillTos/Handlers/LoadBillTo";
 import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import resetCurrentCartId from "@insite/client-framework/Store/Data/Carts/Handlers/ResetCurrentCartId";
 import { getCurrentCountries } from "@insite/client-framework/Store/Data/Countries/CountriesSelectors";
 import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
@@ -85,6 +86,7 @@ const mapDispatchToProps = {
     loadBillTo,
     loadPaymetricConfig,
     getPaymetricResponsePacket,
+    resetCurrentCartId,
 };
 
 type Props = ReturnType<typeof mapStateToProps> &
@@ -313,6 +315,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     loadPaymetricConfig,
     usePaymetricGateway,
     getPaymetricResponsePacket,
+    resetCurrentCartId,
     enableVat,
 }: Props) => {
     const [paymentMethod, setPaymentMethod] = useState("");
@@ -440,6 +443,14 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                 onSuccess: (cartId: string) => {
                     if (!orderConfirmationPageLink) {
                         return;
+                    }
+
+                    if (cart?.isAwaitingApproval) {
+                        resetCurrentCartId({});
+                        toaster.addToast({
+                            body: siteMessage("OrderApproval_OrderPlaced"),
+                            messageType: "success",
+                        });
                     }
 
                     history.push(`${orderConfirmationPageLink.url}?cartId=${cartId}`);
@@ -1087,6 +1098,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                         cartId,
                         onSuccess: () => {
                             if (cart?.isAwaitingApproval) {
+                                resetCurrentCartId({});
                                 toaster.addToast({
                                     body: siteMessage("OrderApproval_OrderPlaced"),
                                     messageType: "success",

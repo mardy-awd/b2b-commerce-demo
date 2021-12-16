@@ -198,6 +198,12 @@ export async function updateVmiUser(parameter: UpdateVmiUserApiParameter): Promi
                 errorMessage: error.errorJson.message,
             };
         }
+        if ("status" in error && error.status === 404) {
+            return {
+                successful: false,
+                errorMessage: error.errorMessage,
+            };
+        }
         throw error;
     }
 }

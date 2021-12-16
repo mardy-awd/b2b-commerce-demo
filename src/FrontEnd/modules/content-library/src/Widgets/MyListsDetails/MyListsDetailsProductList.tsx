@@ -328,7 +328,7 @@ const MyListsDetailsProductList: React.FC<Props> = ({
     if (!wishListLines || wishListLines.length === 0 || Object.keys(productInfosByWishListLineId).length === 0) {
         return (
             <StyledWrapper {...styles.centeringWrapper}>
-                <Typography {...styles.messageText} data-test-selector="noItemsMessage">
+                <Typography {...styles.messageText} data-test-selector="tst_ListDetail_noItemsMessage">
                     {loadWishListLinesParameter.query
                         ? siteMessage("Lists_NoResultsMessage")
                         : siteMessage("Lists_NoItemsInList")}

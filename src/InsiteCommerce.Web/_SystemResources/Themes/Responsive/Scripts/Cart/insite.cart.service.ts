@@ -17,6 +17,7 @@ module insite.cart {
         alsoPurchasedMaxResults: number;
         forceRecalculation: boolean;
         allowInvalidAddress: boolean;
+        getCartInProgress: boolean;
 
         getCarts(filter?: IQueryStringFilter, pagination?: PaginationModel): ng.IPromise<CartCollectionModel>;
         getCart(cartId?: string, suppressApiErrors?: boolean): ng.IPromise<CartModel>;
@@ -48,6 +49,7 @@ module insite.cart {
         alsoPurchasedMaxResults = 0;
         forceRecalculation = false;
         allowInvalidAddress = false;
+        getCartInProgress = false;
 
         currentCart: CartModel = null;
 
@@ -109,6 +111,7 @@ module insite.cart {
 
             const uri = `${this.serviceUri}/${cartId}`;
 
+            this.getCartInProgress = true;
             return this.httpWrapperService.executeHttpRequest(
                 this,
                 this.$http({ method: "GET", url: uri, params: this.getCartParams(), bypassErrorInterceptor: true }),
@@ -138,6 +141,7 @@ module insite.cart {
         }
 
         protected getCartCompleted(response: ng.IHttpPromiseCallbackArg<CartModel>, cartId: string): void {
+            this.getCartInProgress = false;
             const cart = response.data;
             this.cartLinesUri = cart.cartLinesUri;
             if (cartId === "current") {
@@ -148,9 +152,11 @@ module insite.cart {
         }
 
         protected getCartFailedSuppressErrors(error: ng.IHttpPromiseCallbackArg<any>): void {
+            this.getCartInProgress = false;
         }
 
         protected getCartFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
+            this.getCartInProgress = false;
             this.showCartError(error.data);
         }
 
@@ -206,7 +212,12 @@ module insite.cart {
         }
 
         addLine(cartLine: CartLineModel, toCurrentCart = false, showAddToCartPopup?: boolean): ng.IPromise<CartLineModel> {
-            if (!cartLine.quoteRequired && !cartLine.allowZeroPricing && cartLine.pricing && cartLine.pricing.unitNetPrice === 0) {
+            if (!cartLine.quoteRequired
+                && !cartLine.allowZeroPricing
+                && cartLine.pricing
+                && cartLine.pricing.additionalResults["failedToGetRealTimeInventory"] !== "true"
+                && cartLine.pricing.unitNetPrice === 0
+            ) {
                 this.invalidPricePopupService.display({});
                 const defer = this.$q.defer<CartLineModel>();
                 defer.reject();
@@ -239,7 +250,11 @@ module insite.cart {
         }
 
         addLineFromProduct(product: ProductDto, configuration?: ConfigSectionOptionDto[], productSubscription?: ProductSubscriptionDto, toCurrentCart = false, showAddToCartPopup?: boolean): ng.IPromise<CartLineModel> {
-            if (!product.quoteRequired && !product.allowZeroPricing && this.productPriceService.getUnitNetPrice(product).price === 0) {
+            if (!product.quoteRequired
+                && !product.allowZeroPricing
+                && product.pricing.additionalResults["failedToGetRealTimeInventory"] !== "true"
+                && this.productPriceService.getUnitNetPrice(product).price === 0
+            ) {
                 this.invalidPricePopupService.display({});
                 const defer = this.$q.defer<CartLineModel>();
                 defer.reject();
@@ -288,10 +303,10 @@ module insite.cart {
             });
 
             this.addToCartPopupService.display({
-                 isAddAll: true, 
-                 notAllAdded: cartLineCollection.notAllAddedToCart || notAllAdded, 
-                 isQtyAdjusted: isQtyAdjusted, 
-                 showAddToCartPopup: showAddToCartPopup
+                isAddAll: true,
+                notAllAdded: cartLineCollection.notAllAddedToCart || notAllAdded,
+                isQtyAdjusted: isQtyAdjusted,
+                showAddToCartPopup: showAddToCartPopup
             });
 
             this.getCart();

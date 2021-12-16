@@ -6,11 +6,9 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import Select, { SelectPresentationProps } from "@insite/mobius/Select";
-import React, { FC } from "react";
+import React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
-
-interface OwnProps extends WidgetProps {}
 
 const mapStateToProps = (state: ApplicationState) => ({
     pagination: getProductListDataViewProperty(state, "pagination"),
@@ -20,7 +18,7 @@ const mapDispatchToProps = {
     addProductFilters,
 };
 
-type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & OwnProps;
+type Props = WidgetProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
 export interface ProductListSortSelectStyles {
     select?: SelectPresentationProps;
@@ -43,12 +41,10 @@ export const sortSelectStyles: ProductListSortSelectStyles = {
 
 const styles = sortSelectStyles;
 
-const ProductListSortSelect: FC<Props> = ({ addProductFilters, pagination }) => {
+const ProductListSortSelect = ({ addProductFilters, pagination }: Props) => {
     if (!pagination) {
         return null;
     }
-
-    const sortOptions = pagination.sortOptions;
 
     const onChangeSortHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
         addProductFilters({ sort: event.currentTarget.value });
@@ -58,12 +54,12 @@ const ProductListSortSelect: FC<Props> = ({ addProductFilters, pagination }) => 
         <Select
             {...styles.select}
             label={translate("Sort by")}
-            value={pagination!.sortType}
+            value={pagination.sortType}
             labelPosition="left"
             onChange={onChangeSortHandler}
             data-test-selector="productListSortSelect"
         >
-            {sortOptions.map(sortOption => (
+            {pagination.sortOptions.map(sortOption => (
                 <option key={sortOption.sortType} value={sortOption.sortType}>
                     {sortOption.displayName}
                 </option>

@@ -1,4 +1,3 @@
-import { setCookie } from "@insite/client-framework/Common/Cookies";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import addProductFilters from "@insite/client-framework/Store/Pages/ProductList/Handlers/AddProductFilters";
 import { getProductListDataViewProperty } from "@insite/client-framework/Store/Pages/ProductList/ProductListSelectors";
@@ -6,10 +5,8 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
-import React, { FC } from "react";
+import React from "react";
 import { connect, ResolveThunks } from "react-redux";
-
-interface OwnProps extends WidgetProps {}
 
 const mapStateToProps = (state: ApplicationState) => ({
     pagination: getProductListDataViewProperty(state, "pagination"),
@@ -19,7 +16,7 @@ const mapDispatchToProps = {
     addProductFilters,
 };
 
-type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & OwnProps;
+type Props = WidgetProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
 export interface ProductListPaginationStyles {
     pagination?: PaginationPresentationProps;
@@ -29,7 +26,7 @@ export const paginationStyles: ProductListPaginationStyles = {};
 
 const styles = paginationStyles;
 
-const ProductListPagination: FC<Props> = ({ addProductFilters, pagination }) => {
+const ProductListPagination = ({ addProductFilters, pagination }: Props) => {
     const changePage = (newPageIndex: number) => {
         addProductFilters({ page: newPageIndex });
     };
@@ -46,10 +43,10 @@ const ProductListPagination: FC<Props> = ({ addProductFilters, pagination }) => 
     return (
         <Pagination
             {...styles.pagination}
-            resultsCount={pagination!.totalItemCount}
-            currentPage={pagination!.page}
-            resultsPerPage={pagination!.pageSize}
-            resultsPerPageOptions={pagination!.pageSizeOptions}
+            resultsCount={pagination.totalItemCount}
+            currentPage={pagination.page}
+            resultsPerPage={pagination.pageSize}
+            resultsPerPageOptions={pagination.pageSizeOptions}
             onChangePage={changePage}
             onChangeResultsPerPage={changeResultsPerPage}
             pageSizeCookie="ProductList-PageSize"

@@ -223,6 +223,19 @@ export const DispatchLoadProducts: HandlerType = async props => {
     props.result.products = await executeAwaitableHandlerChain(loadProducts, props.apiParameter, props);
 };
 
+export const ResetSortTypeIfNeeded: HandlerType = props => {
+    const productsDataView = getProductsDataView(props.getState(), props.apiParameter);
+    if (!productsDataView.value || !productsDataView.pagination) {
+        return;
+    }
+
+    if (props.apiParameter.sort !== productsDataView.pagination.sortType) {
+        setCookie(productListSortTypeCookie, "1");
+        props.dispatch(displayProducts(props.parameter));
+        return false;
+    }
+};
+
 export const GetUnfilteredProducts: HandlerType = async props => {
     const unfilteredApiParameter = { ...props.apiParameter };
     delete unfilteredApiParameter.searchWithin;
@@ -398,6 +411,7 @@ export const chain = [
     HandleSortOrderDefault,
     DispatchSetParameter,
     DispatchLoadProducts,
+    ResetSortTypeIfNeeded,
     GetUnfilteredProducts,
     SetUpProductInfos,
     DispatchUpdateIdByPath,

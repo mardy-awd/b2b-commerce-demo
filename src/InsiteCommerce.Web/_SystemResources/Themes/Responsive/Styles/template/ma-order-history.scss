@@ -29,6 +29,18 @@
         display: block;
         width: 100%;
     }
+
+    .export-header {
+        display: flex;
+        justify-content: space-between;
+        .count {
+            display: flex;
+            align-self: center;
+        }
+        .btn {
+            margin-left: 1em;
+        }
+    }
 }
 
 .widget-order-history {

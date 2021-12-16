@@ -205,6 +205,7 @@ class MyListsDetailsCopyListForm extends React.Component<Props, State> {
                     <GridItem {...styles.nameGridItem}>
                         <TextField
                             label={translate("List Name")}
+                            data-test-selector="tst_CopyList_ListName"
                             {...styles.nameTextField}
                             name="name"
                             error={this.state.nameError}

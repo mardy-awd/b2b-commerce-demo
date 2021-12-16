@@ -46,7 +46,7 @@ import breakpointMediaQueries from "@insite/mobius/utilities/breakpointMediaQuer
 import getColor from "@insite/mobius/utilities/getColor";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import debounce from "lodash/debounce";
-import React, { ChangeEvent, useCallback, useContext, useState } from "react";
+import React, { ChangeEvent, useCallback, useContext, useEffect, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -253,6 +253,11 @@ const MyListsDetailsOptions = ({
     const [query, setQuery] = useState(loadWishListLinesParameter.query);
     const [addItemsToListIsOpen, setAddItemsToListIsOpen] = useState(false);
     const [uploadItemsModalIsOpen, setUploadItemsModalIsOpen] = useState(false);
+
+    useEffect(() => {
+        setQuery("");
+    }, []);
+
     const debouncedSearch = useCallback(
         debounce((query: string) => {
             if (!wishListDataView.value) {
@@ -365,7 +370,7 @@ const MyListsDetailsOptions = ({
                                 <Link
                                     {...styles.addItemsLink}
                                     onClick={addItemsToListClickHandler}
-                                    data-test-selector="addItems"
+                                    data-test-selector="tst_ListDetailPage_addItems"
                                 >
                                     {translate("Add Items To List")}
                                 </Link>
@@ -379,6 +384,7 @@ const MyListsDetailsOptions = ({
                             <ProductSelector
                                 selectButtonTitle={translate("Add to List")}
                                 skipInventoryValidation={true}
+                                denyFixedConfiguration={true}
                                 onSelectProduct={selectProductHandler}
                                 productIsConfigurableMessage={siteMessage("ListUpload_CannotOrderConfigurable")}
                                 productIsUnavailableMessage={siteMessage("Product_NotFound")}

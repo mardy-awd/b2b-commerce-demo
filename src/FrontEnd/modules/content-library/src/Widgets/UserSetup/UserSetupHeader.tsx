@@ -95,13 +95,18 @@ const UserSetupHeader = ({ editingUser, disableSaveButton }: Props) => {
                             onClick={(event: React.MouseEvent<HTMLElement, MouseEvent>) =>
                                 assignShipToAddressClickHandler(event)
                             }
-                            data-test-selector="userSetup_assignShipToAddress"
+                            data-test-selector="tst_userSetup_assignShipToAddress"
                         >
                             {translate("Assign Ship To Address")}
                         </Button>
                     </Hidden>
                     <Hidden {...styles.actionButtonsHidden} below="md">
-                        <Button {...styles.saveButton} type="submit" disabled={disableSaveButton}>
+                        <Button
+                            {...styles.saveButton}
+                            type="submit"
+                            disabled={disableSaveButton}
+                            data-test-selector="tst_userSetupHeader_saveButton"
+                        >
                             {translate("Save")}
                         </Button>
                     </Hidden>

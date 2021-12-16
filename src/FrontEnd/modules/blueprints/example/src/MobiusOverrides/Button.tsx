@@ -24,7 +24,7 @@ export interface ButtonIconPresentationProps extends IconPresentationProps {}
 export interface ButtonPresentationProps {
     /** How the color changes when the button is clicked.
      * @themable */
-    activeMode?: "darken" | "lighten";
+    activeMode?: "darken" | "lighten" | "none";
     /** Allows for fine-tuning of the active (clicked) state of the button.
      * @themable */
     activeStyle?: React.CSSProperties;
@@ -45,7 +45,7 @@ export interface ButtonPresentationProps {
     hoverAnimation?: "grow" | "shrink" | "float";
     /** How the color changes when the button is hovered over.
      * @themable */
-    hoverMode?: "darken" | "lighten";
+    hoverMode?: "darken" | "lighten" | "none";
     /** Allows for fine-tuning of the hovered state of the button.
      * @themable */
     hoverStyle?: React.CSSProperties;

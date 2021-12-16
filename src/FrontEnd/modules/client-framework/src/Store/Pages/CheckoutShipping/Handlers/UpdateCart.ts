@@ -168,7 +168,7 @@ export const LoadCart: HandlerType = props => {
     if (cartId) {
         props.dispatch(loadCart({ cartId }));
     } else {
-        props.dispatch(loadCurrentCart());
+        props.dispatch(loadCurrentCart({ getPromotions: true }));
     }
 };
 

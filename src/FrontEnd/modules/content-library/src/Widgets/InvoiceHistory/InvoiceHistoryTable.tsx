@@ -52,6 +52,7 @@ interface OwnProps extends WidgetProps {
 
 const mapStateToProps = (state: ApplicationState) => ({
     getInvoicesParameter: state.pages.invoiceHistory.getInvoicesParameter,
+    failedToLoadInvoices: state.data.invoices.failedToLoadInvoices,
     language: state.context.session.language,
 });
 
@@ -164,6 +165,10 @@ const InvoiceHistoryTable = (props: Props) => {
         }
         return sorted as SortOrderOptions;
     };
+
+    if (props.failedToLoadInvoices) {
+        return null;
+    }
 
     const invoicesDataView = useContext(InvoicesDataViewContext);
     if (!invoicesDataView.value) {

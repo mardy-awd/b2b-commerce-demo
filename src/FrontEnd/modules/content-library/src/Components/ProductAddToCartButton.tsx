@@ -10,7 +10,7 @@ import { getSettingsCollection } from "@insite/client-framework/Store/Context/Co
 import { canAddToCart, hasEnoughInventory } from "@insite/client-framework/Store/Data/Products/ProductsSelectors";
 import addToCart from "@insite/client-framework/Store/Pages/Cart/Handlers/AddToCart";
 import translate from "@insite/client-framework/Translate";
-import { CartLineModel } from "@insite/client-framework/Types/ApiModels";
+import { CartLineModel, ProductSubscriptionDto } from "@insite/client-framework/Types/ApiModels";
 import ProductAddedToCartMessage from "@insite/content-library/Components/ProductAddedToCartMessage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import ToasterContext from "@insite/mobius/Toast/ToasterContext";
@@ -24,6 +24,7 @@ interface OwnProps {
     configurationSelection?: SafeDictionary<string>;
     configurationCompleted?: boolean;
     variantSelectionCompleted?: boolean;
+    subscription?: ProductSubscriptionDto;
 }
 
 type Props = OwnProps &
@@ -68,6 +69,7 @@ const ProductAddToCartButton = ({
     configurationSelection,
     configurationCompleted,
     variantSelectionCompleted,
+    subscription,
     ...otherProps
 }: Props) => {
     const toasterContext = useContext(ToasterContext);
@@ -95,6 +97,7 @@ const ProductAddToCartButton = ({
             unitOfMeasure,
             notes,
             sectionOptions,
+            subscription,
         })) as CartLineModel;
 
         if (productSettings.showAddToCartConfirmationDialog) {

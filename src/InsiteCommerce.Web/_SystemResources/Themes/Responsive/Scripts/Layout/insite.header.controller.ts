@@ -7,7 +7,7 @@
         isVisibleSearchInput = false;
         accountSettings: AccountSettingsModel;
 
-        static $inject = ["$scope", "$timeout", "cartService", "sessionService", "$window", "settingsService", "deliveryMethodPopupService"];
+        static $inject = ["$scope", "$timeout", "cartService", "sessionService", "$window", "settingsService", "deliveryMethodPopupService", "$interval"];
 
         constructor(
             protected $scope: ng.IScope,
@@ -16,7 +16,8 @@
             protected sessionService: account.ISessionService,
             protected $window: ng.IWindowService,
             protected settingsService: core.ISettingsService,
-            protected deliveryMethodPopupService: account.IDeliveryMethodPopupService) {
+            protected deliveryMethodPopupService: account.IDeliveryMethodPopupService,
+            protected $interval: ng.IIntervalService) {
         }
 
         $onInit(): void {
@@ -74,9 +75,17 @@
         }
 
         protected getCart(): void {
-            this.cartService.getCart().then(
-                (cart: CartModel) => { this.getCartCompleted(cart); },
-                (error: any) => { this.getCartFailed(error); });
+            let times = 0;
+            const interval = this.$interval(() => {
+                ++times;
+                if (this.cartService.getCartInProgress && times * 25 < 1000) {
+                    return;
+                }
+                this.$interval.cancel(interval);
+                this.cartService.getCart().then(
+                    (cart: CartModel) => { this.getCartCompleted(cart); },
+                    (error: any) => { this.getCartFailed(error); });
+            }, 25);
         }
 
         protected getCartCompleted(cart: CartModel): void {

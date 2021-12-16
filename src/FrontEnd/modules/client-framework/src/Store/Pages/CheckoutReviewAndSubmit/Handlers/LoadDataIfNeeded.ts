@@ -33,7 +33,8 @@ export const LoadData: HandlerType = props => {
         if (!cartState.value && !cartState.isLoading) {
             props.dispatch(loadCart({ cartId: props.parameter.cartId }));
         }
-        if (!getPromotionsDataView(state, props.parameter.cartId).value) {
+        const promotionsState = getPromotionsDataView(state, props.parameter.cartId);
+        if (!promotionsState.value && !promotionsState.isLoading) {
             props.dispatch(loadPromotions({ cartId: props.parameter.cartId }));
         }
     } else {
@@ -41,7 +42,8 @@ export const LoadData: HandlerType = props => {
         if (!currentCartState.value && !currentCartState.isLoading) {
             props.dispatch(loadCurrentCart());
         }
-        if (!getCurrentPromotionsDataView(state).value) {
+        const currentPromotionsState = getCurrentPromotionsDataView(state);
+        if (!currentPromotionsState.value && !currentPromotionsState.isLoading) {
             props.dispatch(loadCurrentPromotions());
         }
     }

@@ -18,6 +18,7 @@ import {
     CartModel,
     CreditCardDto,
     PaginationModel,
+    ProductSubscriptionDto,
     PromotionCollectionModel,
     PromotionModel,
     SectionOptionDto,
@@ -98,6 +99,7 @@ export interface AddProductApiParameter extends ApiParameter {
     unitOfMeasure: string;
     notes?: string;
     sectionOptions?: Partial<SectionOptionDto>[];
+    subscription?: ProductSubscriptionDto;
 }
 
 export interface AddCartPromotionApiParameter extends ApiParameter {
@@ -296,6 +298,12 @@ export function addProduct(parameter: AddProductApiParameter) {
         sectionOptions: parameter.sectionOptions,
     } as CartLineModel;
 
+    if (parameter.subscription) {
+        cartLine.properties = {
+            productSubscription: JSON.stringify(parameter.subscription),
+        };
+    }
+
     return post(`${cartsUrl}/${API_URL_CURRENT_FRAGMENT}/cartlines`, cartLine);
 }
 
@@ -307,6 +315,12 @@ export async function addProductWithResult(parameter: AddProductApiParameter): P
         notes: parameter.notes,
         sectionOptions: parameter.sectionOptions,
     } as CartLineModel;
+
+    if (parameter.subscription) {
+        cartLine.properties = {
+            productSubscription: JSON.stringify(parameter.subscription),
+        };
+    }
 
     try {
         const cartLineModel = await post(`${cartsUrl}/${API_URL_CURRENT_FRAGMENT}/cartlines`, cartLine);

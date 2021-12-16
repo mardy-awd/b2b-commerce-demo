@@ -163,7 +163,7 @@ class MyListsList extends React.Component<Props, State> {
         if (this.props.wishLists.value.length === 0) {
             return (
                 <StyledWrapper {...styles.centeringWrapper}>
-                    <Typography {...styles.messageText}>
+                    <Typography {...styles.messageText} data-test-selector="tst_MyList_NoListsFound">
                         {this.props.getWishListsParameter.query
                             ? siteMessage("Lists_NoResultsMessage")
                             : siteMessage("Lists_NoListsFound")}

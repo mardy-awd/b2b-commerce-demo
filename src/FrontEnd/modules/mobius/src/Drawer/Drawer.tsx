@@ -127,8 +127,8 @@ const drawerBodyStyles = (position: Position, cssOverrides: any, depth?: number,
     return css`
         width: ${width};
         height: ${height};
-        position: ${position === "left" ? "relative" : "absolute"};
-        ${position !== "left" && `${position}: 0;`}
+        position: fixed;
+        ${position}: 0;
         background: ${getColor("common.accent")};
         box-shadow: ${getProp("theme.shadows.3")};
         overflow-x: hidden;

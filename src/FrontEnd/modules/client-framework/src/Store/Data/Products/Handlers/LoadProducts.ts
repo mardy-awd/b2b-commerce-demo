@@ -4,6 +4,7 @@ import {
     createHandlerChainRunner,
     executeAwaitableHandlerChain,
     Handler,
+    HasOnError,
     HasOnException,
     HasOnSuccess,
 } from "@insite/client-framework/HandlerCreator";
@@ -19,7 +20,7 @@ import sortBy from "lodash/sortBy";
 
 type Parameter = (GetProductCollectionApiV2Parameter | GetRelatedProductCollectionApiV2Parameter) &
     HasOnSuccess<ProductModel[]> &
-    HasOnException<string>;
+    HasOnError<string>;
 type Props = {
     apiParameter: GetProductCollectionApiV2Parameter | GetRelatedProductCollectionApiV2Parameter;
     apiResult: ProductCollectionModel;
@@ -35,7 +36,7 @@ export const DispatchBeginLoadProducts: HandlerType = props => {
 };
 
 export const PopulateApiParameter: HandlerType = props => {
-    const { onSuccess, onException, ...parameter } = props.parameter;
+    const { onSuccess, onError, ...parameter } = props.parameter;
     props.apiParameter = parameter;
 };
 
@@ -48,7 +49,7 @@ export const RequestDataFromApi: HandlerType = async props => {
         }
     } catch (error) {
         if (isApiError(error) && error.status === 400) {
-            props.parameter.onException?.(error.errorJson.message);
+            props.parameter.onError?.(error.errorJson.message);
             return false;
         }
 

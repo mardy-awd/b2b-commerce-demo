@@ -32,6 +32,14 @@ const reducer = {
             collection => collection.invoices!,
             order => storeIdByInvoiceNumber(draft, order),
         );
+
+        if (draft.failedToLoadInvoices) {
+            draft.failedToLoadInvoices = false;
+        }
+    },
+
+    "Data/Invoices/FailedToLoadInvoices": (draft: Draft<InvoicesState>) => {
+        draft.failedToLoadInvoices = true;
     },
 
     "Data/Invoices/BeginLoadInvoiceByInvoiceNumber": (

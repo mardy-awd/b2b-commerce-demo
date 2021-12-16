@@ -376,7 +376,7 @@ const CartLinesHeader: FC<CartLinesHeaderProps> = ({
                     </Typography>
                 </StyledSection>
             )}
-            {hasInvalidPrice && (
+            {!cartNotPriced && hasInvalidPrice && (
                 <StyledSection {...headerStyles.warningSection}>
                     <Icon {...headerStyles.warningIcon}></Icon>
                     <Typography {...headerStyles.warningText}>{siteMessage("Cart_InvalidPriceAtCheckout")}</Typography>

@@ -112,6 +112,7 @@ class Tooltip extends React.Component<TooltipProps> {
     }
 
     openTooltip = (event: React.SyntheticEvent) => {
+        event.preventDefault();
         /** For accssibility reasons, the tooltip can only be closed by blur or escape, if the tooltip is open,
          * it will close and then re-open after a discrete interval. */
         if (this.state.visible) {

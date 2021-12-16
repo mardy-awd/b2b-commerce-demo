@@ -56,7 +56,10 @@ export function setupPageModel(
         language.hasPersonaSpecificContent ? personaId : defaultPersonaId,
     );
 
-    setFieldsToExistingValuesWithProperContext(pageModel, language.id, contextualId);
+    if (!isVariant) {
+        setFieldsToExistingValuesWithProperContext(pageModel, language.id, contextualId);
+    }
+
     const pageDefinition = getPageDefinition(pageModel.type);
     if (!pageDefinition) {
         throw new Error(`There was no PageDefinition found for the type ${pageModel.type}`);

@@ -58,7 +58,9 @@ const ProductDetailsKitSectionOptions: React.FC<Props> = ({ configuration }) => 
                     configSection =>
                         !!configSection.sectionOptions?.length && (
                             <StyledWrapper {...styles.configSectionWrapper} key={configSection.id}>
-                                <Typography {...styles.configSectionLabel}>{configSection.sectionName}:</Typography>
+                                <Typography {...styles.configSectionLabel}>
+                                    {configSection.label || configSection.sectionName}:
+                                </Typography>
                                 {configSection.sectionOptions?.map(sectionOption => (
                                     <Typography {...styles.sectionOptionText} key={sectionOption.id}>
                                         {sectionOption.description}

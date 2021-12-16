@@ -68,10 +68,13 @@ const Switcher: React.FC<Props> = ({ disabled, mobileCmsModeActive, stageMode, c
 };
 
 const SwitcherStyle = styled.div`
-    margin-left: 5px;
     display: flex;
     align-items: center;
-    margin-right: 30px;
+    margin: 0 30px 0 auto;
+
+    @media (max-width: 1100px) {
+        margin-left: 0;
+    }
 `;
 
 const StyledA = styled.a`

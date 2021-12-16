@@ -1,14 +1,9 @@
-import { ButtonPresentationProps } from "@insite/mobius/Button";
-import Select from "@insite/mobius/Select";
 import get from "@insite/mobius/utilities/get";
-import ColorPicker from "@insite/shell/Components/Elements/ColorPicker";
 import CheckboxConfig from "@insite/shell/Components/Shell/StyleGuide/CheckboxConfig";
 import ColorPickerConfig from "@insite/shell/Components/Shell/StyleGuide/ColorPickerConfig";
 import ConfigMenu from "@insite/shell/Components/Shell/StyleGuide/ConfigMenu";
-import DisabledInCodeTooltip from "@insite/shell/Components/Shell/StyleGuide/DisabledInCodeTooltip";
 import { createSetParentIfUndefined } from "@insite/shell/Components/Shell/StyleGuide/Helpers";
 import SelectConfig from "@insite/shell/Components/Shell/StyleGuide/SelectConfig";
-import { configFormFieldStyles } from "@insite/shell/Components/Shell/StyleGuide/Styles";
 import { PresetHelpers } from "@insite/shell/Components/Shell/StyleGuide/Types";
 import TypographyConfig from "@insite/shell/Components/Shell/StyleGuide/TypographyConfig";
 import * as React from "react";
@@ -70,7 +65,7 @@ const ButtonConfig: React.FunctionComponent<
                 "Active Mode",
                 `${locationInTheme}.activeMode`,
                 <>
-                    <option value="" hidden disabled></option>
+                    <option value="none">None</option>
                     <option value="darken">Darken</option>
                     <option value="lighten">Lighten</option>
                 </>,
@@ -79,7 +74,7 @@ const ButtonConfig: React.FunctionComponent<
                 "Hover Mode",
                 `${locationInTheme}.hoverMode`,
                 <>
-                    <option value="" hidden disabled></option>
+                    <option value="none">None</option>
                     <option value="darken">Darken</option>
                     <option value="lighten">Lighten</option>
                 </>,
@@ -88,7 +83,7 @@ const ButtonConfig: React.FunctionComponent<
                 "Hover Animation",
                 `${locationInTheme}.hoverAnimation`,
                 <>
-                    <option value="" hidden disabled></option>
+                    <option value="none">None</option>
                     <option value="grow">Grow</option>
                     <option value="shrink">Shrink</option>
                     <option value="float">Float</option>

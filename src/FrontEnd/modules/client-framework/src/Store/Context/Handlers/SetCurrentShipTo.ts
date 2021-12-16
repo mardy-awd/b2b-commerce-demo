@@ -46,7 +46,7 @@ export const DispatchCompleteLoadSession: HandlerType = props => {
 
 export const ReloadData: HandlerType = props => {
     props.dispatch(loadCurrentShipTo());
-    props.dispatch(loadCurrentCart());
+    props.dispatch(loadCurrentCart({ getPromotions: true }));
 };
 
 export const ExecuteOnSuccessCallback: HandlerType = props => {

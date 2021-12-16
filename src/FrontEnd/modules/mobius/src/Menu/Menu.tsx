@@ -249,7 +249,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
                             <MenuStyle width={otherProps.width} css={cssOverrides?.menu}>
                                 {childMenuItems
                                     ?.filter(item => !item.excludeFromNavigation)
-                                    .map(item => {
+                                    .map((item, index) => {
                                         const hasChildren =
                                             item.children?.some(o => !o.excludeFromNavigation) &&
                                             currentDepth < maxDepth;
@@ -266,7 +266,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
                                             <MenuItemStyle
                                                 width={otherProps.width}
                                                 css={cssOverrides?.menuItem}
-                                                key={item.title}
+                                                key={`${item.title}_${index}`}
                                                 data-test-selector="menuItem"
                                                 onClick={() => {
                                                     this.closeMenuWithoutChildren(hasChildren);

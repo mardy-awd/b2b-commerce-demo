@@ -1191,6 +1191,28 @@ export interface ProductModel extends BaseModel {
     cantBuy: boolean;
 }
 
+export interface ProductSubscriptionModel extends BaseModel {
+    subscriptionAddToInitialOrder: boolean;
+    subscriptionAllMonths: boolean;
+    subscriptionApril: boolean;
+    subscriptionAugust: boolean;
+    subscriptionCyclePeriod: string;
+    subscriptionDecember: boolean;
+    subscriptionFebruary: boolean;
+    subscriptionFixedPrice: boolean;
+    subscriptionJanuary: boolean;
+    subscriptionJuly: boolean;
+    subscriptionJune: boolean;
+    subscriptionMarch: boolean;
+    subscriptionMay: boolean;
+    subscriptionNovember: boolean;
+    subscriptionOctober: boolean;
+    subscriptionPeriodsPerCycle: number;
+    subscriptionSeptember: boolean;
+    subscriptionShipViaId: string | null;
+    subscriptionTotalCycles: number;
+}
+
 export interface AutocompleteItemModel extends BaseModel {
     id: string | null;
     image: string;
@@ -1556,6 +1578,7 @@ export interface DetailModel {
     isGiftCard: boolean;
     isHazardousGood: boolean;
     isSpecialOrder: boolean;
+    isSubscription: boolean;
     modelNumber: string;
     multipleSaleQty: number;
     name: string;
@@ -1570,6 +1593,7 @@ export interface DetailModel {
     shippingWidth: number;
     sku: string;
     sortOrder: number;
+    subscription: ProductSubscriptionModel | null;
     taxCategory: string;
     taxCode1: string;
     taxCode2: string;
@@ -1586,6 +1610,7 @@ export interface ConfigurationModel {
 
 export interface ConfigSectionModel {
     id: string;
+    label: string;
     sectionName: string;
     sectionOptions: SectionOptionModel[] | null;
     sortOrder: number;

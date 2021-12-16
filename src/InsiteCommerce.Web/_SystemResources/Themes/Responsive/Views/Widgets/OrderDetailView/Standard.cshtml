@@ -222,6 +222,7 @@
                                     <span class="item-num-sku" ng-bind="line.productErpNumber"></span>
                                     <span class="item-num-mfg" ng-if="line.manufacturerItem">[% translate 'MFG #' %]:{{ line.manufacturerItem }}</span>
                                     <span class="item-num-my" ng-if="line.customerProductNumber">[% translate 'My Part #' %]:{{ line.customerProductNumber }}</span>
+                                    <span class="item-num-vbn" ng-if="line.vmiBinNumber">[% translate 'Bin #' %]:{{ line.vmiBinNumber }}</span>
                                 </div>
                                 <div class="row promo-applied" ng-repeat="promotion in vm.order.orderPromotions | filter: {orderHistoryLineId : line.id}">
                                     <div class="small-6 columns sub-label">

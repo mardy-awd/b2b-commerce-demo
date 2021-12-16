@@ -102,7 +102,10 @@ export const LoadCart: HandlerType = async props => {
     if (cartId) {
         props.dispatch(loadCart({ cartId }));
     } else {
-        await makeHandlerChainAwaitable(loadCurrentCart)({ OnSuccess: () => {} })(props.dispatch, props.getState);
+        await makeHandlerChainAwaitable(loadCurrentCart)({ OnSuccess: () => {}, getPromotions: true })(
+            props.dispatch,
+            props.getState,
+        );
     }
 };
 

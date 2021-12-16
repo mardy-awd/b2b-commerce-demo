@@ -219,8 +219,13 @@ const CartTotal: FC<Props> = ({
         }
 
         preloadCheckoutShippingData({
+            cartId: cart?.isAwaitingApproval ? cart.id : undefined,
             onSuccess: () => {
-                history.push(checkoutShippingPageUrl!);
+                history.push(
+                    cart?.isAwaitingApproval
+                        ? `${checkoutShippingPageUrl}?cartId=${cart.id}`
+                        : checkoutShippingPageUrl!,
+                );
             },
         });
     };

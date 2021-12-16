@@ -22,6 +22,18 @@ import React, { Component } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
+const enum fields {
+    assignApproverHelpMessage = "assignApproverHelpMessage",
+    roleInformation = "roleInformation",
+}
+
+interface OwnProps extends WidgetProps {
+    fields: {
+        [fields.assignApproverHelpMessage]: string;
+        [fields.roleInformation]: string;
+    };
+}
+
 const mapStateToProps = (state: ApplicationState) => ({
     accountsDataView: getAccountsDataView(state, state.pages.userList.getAccountsParameter),
     parameter: state.pages.userList.getAccountsParameter,
@@ -31,7 +43,7 @@ const mapDispatchToProps = {
     updateSearchFields,
 };
 
-type Props = WidgetProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
 export interface UserListHeaderStyles {
     wrapper?: InjectableCss;
@@ -145,7 +157,7 @@ class UserListHeader extends Component<Props, { query: string; isCreateUserModal
     };
 
     render() {
-        const { id, accountsDataView } = this.props;
+        const { id, accountsDataView, fields } = this.props;
         const createNewUserText = translate("Create New User");
 
         return (
@@ -213,6 +225,8 @@ class UserListHeader extends Component<Props, { query: string; isCreateUserModal
                 </StyledWrapper>
                 <CreateUserModal
                     isOpen={this.state.isCreateUserModalOpen}
+                    assignApproverHelpMessage={fields.assignApproverHelpMessage}
+                    roleInformation={fields.roleInformation}
                     onClickCancel={this.closeCreateUserModal}
                     onClose={this.closeCreateUserModal}
                 />
@@ -226,6 +240,68 @@ const widgetModule: WidgetModule = {
     definition: {
         allowedContexts: [UserListPageContext],
         group: "User List",
+        fieldDefinitions: [
+            {
+                name: fields.assignApproverHelpMessage,
+                displayName: "Assign Approver Help Message",
+                editorTemplate: "TextField",
+                defaultValue: "Requisitioner, Buyer Level 1 and Buyer Level 2 require approver assignment.",
+                fieldType: "Translatable",
+            },
+            {
+                name: fields.roleInformation,
+                displayName: "Role Information",
+                editorTemplate: "RichTextField",
+                defaultValue: `
+                <div>
+                    <h5>User Administrator: </h5>
+                    <ul>
+                        <li>Full access to My Account. </li>
+                        <li>Can order over budget.</li>
+                        <li>Can see invoices and orders for users that User Administrator is assigned to.</li>
+                        <li>Default approver if none is assigned to a user.</li>
+                        <li>Can approve requisitions.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Buyer Level 3:</h5>
+                    <ul>
+                        <li>Can order over budget without approval.</li>
+                        <li>Can see orders and invoices.</li>
+                        <li>Cannot access User Administration or Budget Management. </li>
+                        <li>Can approve requisitions. </li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Buyer Level 2:</h5>
+                    <ul>
+                        <li>Over budget orders require approval.</li>
+                        <li>Can see orders.</li>
+                        <li>Cannot see invoices.</li>
+                        <li>Cannot access User Administration, Budget Management, or Requisition Approval. </li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Buyer Level 1:</h5>
+                    <ul>
+                        <li>Cannot be assigned as an approver.</li>
+                        <li>All orders require approval.</li>
+                        <li>Can see orders.</li>
+                        <li>Cannot see invoices.</li>
+                        <li>Cannot access Order Approval, User Administration, Budget Management, or Requisition Approval. </li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Requisitioner:</h5>
+                    <ul>
+                        <li>Can only place requisition requests.</li>
+                        <li>Cannot place orders.</li>
+                        <li>Cannot access Order History, Invoice History, Order Approval, User Administration, Budget Management, or Requisition Approval. </li>
+                    </ul>
+                </div>`,
+                fieldType: "Translatable",
+            },
+        ],
     },
 };
 

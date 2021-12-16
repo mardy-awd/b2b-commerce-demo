@@ -69,6 +69,8 @@
 
         protected addWishListCompleted(wishList: WishListModel): void {
             this.closeModal();
+            this.listName = "";
+            this.listDescription = "";
             this.$rootScope.$broadcast("list-was-created", wishList);
         }
 

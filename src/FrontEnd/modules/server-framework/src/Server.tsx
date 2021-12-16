@@ -99,14 +99,12 @@ addRoute("/.spire/fonts/getFont", getFontContent);
 
 export default function server(request: Request, response: Response, domain: Parameters<typeof setDomain>[0]) {
     setupSSR(request, domain);
+    setSecurityHeaders(response);
 
     const loweredPath = request.path.toLowerCase();
-
     for (const route of routes) {
         if (
-            (typeof route.path === "string" && route.makeLowerCase
-                ? route.path === loweredPath
-                : route.path === request.path) ||
+            (typeof route.path === "string" && route.path === (route.makeLowerCase ? loweredPath : request.path)) ||
             (typeof route.path !== "string" && loweredPath.match(route.path))
         ) {
             return route.handler(request, response);
@@ -138,4 +136,8 @@ function setupSSR(request: Request, domain: Parameters<typeof setDomain>[0]) {
 
     const protocol = headers["x-forwarded-proto"]?.toString().toLowerCase() === "https" ? "https" : request.protocol;
     setUrl(`${protocol}://${request.get("host")}${request.originalUrl}`);
+}
+
+function setSecurityHeaders(response: Response) {
+    response.setHeader("X-Content-Type-Options", "nosniff");
 }

@@ -72,13 +72,15 @@ const ProductDetailsBundleSectionOptions: React.FC<Props> = ({
                             <Select
                                 {...styles.select}
                                 key={configSection.id}
-                                label={configSection.sectionName}
+                                label={configSection.label || configSection.sectionName}
                                 value={configurationSelection[configSection.id]}
                                 onChange={event => {
                                     sectionOptionChangeHandler(configSection.id, event.currentTarget.value);
                                 }}
                             >
-                                <option value="">{`${translate("Select")} ${configSection.sectionName}`}</option>
+                                <option value="">{`${translate("Select")} ${
+                                    configSection.label || configSection.sectionName
+                                }`}</option>
                                 {configSection.sectionOptions?.map(sectionOption => (
                                     <option value={`${sectionOption.id}`} key={`${sectionOption.id}`}>
                                         {sectionOption.description}

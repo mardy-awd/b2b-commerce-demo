@@ -112,7 +112,7 @@ const UserSetupStatus = ({ editingUser, toaster, setUserFields, sendActivationEm
 
     return (
         <>
-            <Typography as="h2" {...styles.title}>
+            <Typography as="h2" {...styles.title} data-test-selector="tst_UserSetupStatus_statusLabel">
                 {translate("Status")}
             </Typography>
             <StyledWrapper {...styles.wrapper}>
@@ -120,16 +120,27 @@ const UserSetupStatus = ({ editingUser, toaster, setUserFields, sendActivationEm
                     {...styles.activationStatus}
                     checked={!!editingUser.isApproved}
                     onChange={activationStatusChangeHandler}
+                    data-test-selector="tst_userSetupStatus_activationStatus"
                 >
                     {translate("Activation Status")}
                 </Checkbox>
             </StyledWrapper>
             <StyledWrapper {...styles.wrapper}>
-                <Typography as="p" {...styles.lastSignInLabel} id="lastSignIn">
+                <Typography
+                    as="p"
+                    {...styles.lastSignInLabel}
+                    id="lastSignIn"
+                    data-test-selector="tst_userSetupStatus_lastSignIn"
+                >
                     {translate("Last Sign In")}
                 </Typography>
                 {editingUser.lastLoginOn && (
-                    <Typography as="p" {...styles.lastSignInText} aria-labelledby="lastSignIn">
+                    <Typography
+                        as="p"
+                        {...styles.lastSignInText}
+                        aria-labelledby="lastSignIn"
+                        data-test-selector="tst_UserSetupStatus_lastSignInText"
+                    >
                         <LocalizedDateTime
                             dateTime={editingUser.lastLoginOn}
                             options={{ year: "numeric", month: "numeric", day: "numeric" }}
@@ -149,7 +160,11 @@ const UserSetupStatus = ({ editingUser, toaster, setUserFields, sendActivationEm
                         {(activationEmailSent || editingUser.activationStatus === "EmailSent") &&
                             siteMessage("User_Admin_EmailSent")}
                     </Typography>
-                    <Button {...styles.sendActivationEmailButton} onClick={sendActivationEmailClickHandler}>
+                    <Button
+                        {...styles.sendActivationEmailButton}
+                        onClick={sendActivationEmailClickHandler}
+                        data-test-selector="tst_userSetupStatus_sendActivationEmail"
+                    >
                         {translate(
                             activationEmailSent || editingUser.activationStatus === "EmailSent"
                                 ? "Resend Activation Email"

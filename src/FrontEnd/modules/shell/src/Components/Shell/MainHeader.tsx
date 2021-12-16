@@ -33,5 +33,4 @@ const MainHeaderStyle = styled.div`
 const HeaderBarStyle = styled.div`
     height: ${({ theme }) => theme.headerHeight};
     display: flex;
-    flex-grow: 1;
 `;

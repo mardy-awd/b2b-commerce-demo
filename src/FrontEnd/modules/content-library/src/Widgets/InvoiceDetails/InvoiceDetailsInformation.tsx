@@ -32,6 +32,7 @@ export interface InvoiceDetailsInformationStyles {
     invoiceInformationGridItems?: GridItemProps;
     informationGridContainer?: GridContainerProps;
     statusGridItem?: GridItemProps;
+    shippingMethodGridItem?: GridItemProps;
     invoiceDateGridItem?: GridItemProps;
     termsGridItem?: GridItemProps;
     poNumberGridItem?: GridItemProps;
@@ -88,6 +89,9 @@ export const informationStyles: InvoiceDetailsInformationStyles = {
     salespersonGridItem: {
         width: [6, 6, 6, 3, 3],
     },
+    shippingMethodGridItem: {
+        width: [6, 6, 6, 3, 3],
+    },
     dueDateGridItem: {
         width: [6, 6, 6, 3, 3],
     },
@@ -139,6 +143,13 @@ const InvoiceDetailsInformation = ({ language }: Props) => {
                             extendedStyles={styles.headingAndTextStyles}
                             heading={translate("Status")}
                             text={invoice.status}
+                        />
+                    </GridItem>
+                    <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.shippingMethodGridItem)}>
+                        <SmallHeadingAndText
+                            extendedStyles={styles.headingAndTextStyles}
+                            heading={translate("Shipping Method")}
+                            text={invoice.shipViaDescription || invoice.shipCode}
                         />
                     </GridItem>
                     <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.termsGridItem)}>

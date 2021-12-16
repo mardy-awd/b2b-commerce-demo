@@ -86,16 +86,42 @@
         }
 
         protected addProductCompleted(productCollection: ProductCollectionModel): void {
-            this.findingProduct = false;
-
-            this.getRealTimeInventory(productCollection.products[0]).then(() => {
-                this.validateAndSetProduct(productCollection);
+            this.getRealTimePrices(productCollection.products[0]).then(() => {
+                this.getRealTimeInventory(productCollection.products[0]).then(() => {
+                    this.findingProduct = false;
+                    this.validateAndSetProduct(productCollection);
+                });
             });
         }
 
         protected addProductFailed(error: any): void {
             this.findingProduct = false;
             this.errorMessage = angular.element("#messageNotFound").val();
+        }
+
+        protected getRealTimePrices(product: ProductDto): ng.IPromise<void> {
+            const deferred = this.$q.defer<void>();
+            if (product.quoteRequired) {
+                deferred.resolve();
+            }
+
+            if (this.productSettings.realTimePricing) {
+                this.productService.getProductRealTimePrices([product]).then(
+                    (realTimePricing: RealTimePricingModel) => this.getProductRealTimePricesCompleted(realTimePricing, deferred),
+                    (error: any) => this.getProductRealTimePricesFailed(error, deferred));
+            } else {
+                deferred.resolve();
+            }
+
+            return deferred.promise;
+        }
+
+        protected getProductRealTimePricesCompleted(realTimePricing: RealTimePricingModel, deferred: ng.IDeferred<void>): void {
+            deferred.resolve();
+        }
+
+        protected getProductRealTimePricesFailed(error: any, deferred: ng.IDeferred<void>): void {
+            deferred.resolve();
         }
 
         protected getRealTimeInventory(product: ProductDto): ng.IPromise<void> {
@@ -208,14 +234,16 @@
         }
 
         protected addToCartCompleted(productCollection: ProductCollectionModel): void {
-            this.findingProduct = false;
-            this.addingToCart = false;
+            this.getRealTimePrices(productCollection.products[0]).then(() => {
+                this.getRealTimeInventory(productCollection.products[0]).then(() => {
+                    this.findingProduct = false;
+                    this.addingToCart = false;
 
-            this.getRealTimeInventory(productCollection.products[0]).then(() => {
-                if (this.validateAndSetProduct(productCollection)) {
-                    this.product.qtyOrdered = this.selectedQty;
-                    this.addToCartAndClearInput(this.product);
-                }
+                    if (this.validateAndSetProduct(productCollection)) {
+                        this.product.qtyOrdered = this.selectedQty;
+                        this.addToCartAndClearInput(this.product);
+                    }
+                });
             });
         }
 

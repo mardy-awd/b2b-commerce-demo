@@ -1,5 +1,4 @@
 /* eslint-disable spire/export-styles */
-import { setMainNavigation } from "@insite/client-framework/Components/ShellHoleConnect";
 import { MainNavigationStyles, MappedLink } from "@insite/content-library/Widgets/Header/MainNavigation";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer from "@insite/mobius/GridContainer";
@@ -101,6 +100,7 @@ class MainNavigationItem extends React.Component<Props> {
                 />
             );
         }
+
         if (isMega) {
             menuItem = (
                 <Popover
@@ -118,10 +118,16 @@ class MainNavigationItem extends React.Component<Props> {
                             const parentPosition = this.props.container.current.getBoundingClientRect();
                             const rect = element.current?.getBoundingClientRect();
                             const top = rect ? rect.top + (rect.height > 100 ? styles.menuHeight : rect.height) : 0;
+                            const cartWidth = 150;
                             const breakpointMaxWidth = maxWidths.find((value: number, index: number) => {
-                                return parentPosition.width <= value && parentPosition.width > maxWidths[index - 1];
+                                return (
+                                    parentPosition.width + cartWidth <= value &&
+                                    parentPosition.width + cartWidth > maxWidths[index - 1]
+                                );
                             });
+
                             const width = breakpointMaxWidth ? breakpointMaxWidth - 30 : parentPosition.width;
+
                             return {
                                 top,
                                 position: "fixed",

@@ -1,7 +1,6 @@
 import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import { ProductInfo } from "@insite/client-framework/Common/ProductInfo";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
-import getBoldededText from "@insite/client-framework/Common/Utilities/getPatternBolded";
 import { ProductContext } from "@insite/client-framework/Components/ProductContext";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import clearProduct from "@insite/client-framework/Store/Components/ProductSelector/Handlers/ClearProduct";
@@ -34,6 +33,7 @@ import { css } from "styled-components";
 interface OwnProps {
     onSelectProduct: (productInfo: ProductInfo, product: ProductModel) => void;
     skipInventoryValidation?: boolean;
+    denyFixedConfiguration?: boolean;
     selectButtonTitle?: string;
     productIsConfigurableMessage?: ReactNode;
     productIsUnavailableMessage?: ReactNode;
@@ -159,6 +159,7 @@ const ENTER_KEY = 13;
 const ProductSelector = ({
     onSelectProduct,
     skipInventoryValidation,
+    denyFixedConfiguration,
     selectButtonTitle,
     searchProducts,
     isSearching,
@@ -241,12 +242,14 @@ const ProductSelector = ({
                     variantId: value,
                     validateProduct: true,
                     skipInventoryValidation,
+                    denyFixedConfiguration,
                 });
             } else {
                 setProduct({
                     productId: value,
                     validateProduct: true,
                     skipInventoryValidation,
+                    denyFixedConfiguration,
                 });
             }
         }
@@ -294,7 +297,7 @@ const ProductSelector = ({
             if (selectedProductInfo) {
                 selectProduct();
             } else if (searchTerm && (!searchResults || searchResults.length === 0)) {
-                setProduct({ searchTerm, skipInventoryValidation });
+                setProduct({ searchTerm, skipInventoryValidation, denyFixedConfiguration });
             }
         }
     };

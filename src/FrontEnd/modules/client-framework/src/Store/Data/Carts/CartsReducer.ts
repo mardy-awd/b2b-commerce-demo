@@ -37,6 +37,10 @@ const reducer = {
         }
     },
 
+    "Data/Carts/ResetCurrentCartId": (draft: Draft<CartsState>, action: { cartId: string }) => {
+        draft.currentId = action.cartId;
+    },
+
     "Data/Carts/Reset": () => {
         return initialState;
     },

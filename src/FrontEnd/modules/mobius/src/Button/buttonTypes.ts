@@ -12,7 +12,7 @@ type ButtonTypesProps = ThemeProps<BaseTheme> &
     };
 
 const calculateHoverColor = ({ _color, hoverMode = "darken", hoverStyle, theme = baseTheme }: ButtonTypesProps) => {
-    if (hoverMode === null) {
+    if (hoverMode === null || hoverMode === "none") {
         return _color;
     }
     if (hoverStyle?.color) {
@@ -22,7 +22,7 @@ const calculateHoverColor = ({ _color, hoverMode = "darken", hoverStyle, theme =
 };
 
 const calculateActiveColor = ({ _color, activeMode = "darken", activeStyle, theme = baseTheme }: ButtonTypesProps) => {
-    if (activeMode === null) {
+    if (activeMode === null || activeMode === "none") {
         return _color;
     }
     if (activeStyle?.color) {

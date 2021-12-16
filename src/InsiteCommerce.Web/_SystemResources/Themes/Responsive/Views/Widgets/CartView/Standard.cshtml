@@ -55,7 +55,7 @@
                 <div data-test-selector="tst_cartPage_productsCannotBePurchasedError" ng-show="vm.productsCannotBePurchased" class="messaging--error">
                     [% siteMessage 'Cart_ProductsCannotBePurchased' %]
                 </div>
-                <div ng-show="vm.invalidPriceAtCheckout" class="messaging--error">
+                <div ng-show="!vm.cart.cartNotPriced && vm.invalidPriceAtCheckout" class="messaging--error">
                     [% siteMessage 'Cart_InvalidPriceAtCheckout' %]
                 </div>
                 <div class="hide-for-medium-up btns hide-for-print">

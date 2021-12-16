@@ -29,7 +29,8 @@ export const DispatchLoadOrderIfNeeded: HandlerType = props => {
 
 export const PreloadData: HandlerType = props => {
     const state = props.getState();
-    if (!getPromotionsDataView(state, props.parameter.cartId).value) {
+    const promotionsState = getPromotionsDataView(state, props.parameter.cartId);
+    if (!promotionsState.value && !promotionsState.isLoading) {
         props.dispatch(loadPromotions({ cartId: props.parameter.cartId }));
     }
 };

@@ -3,7 +3,6 @@ import useRecursiveTimeout from "@insite/client-framework/Common/Hooks/useRecurs
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { responsiveStyleRules } from "@insite/client-framework/Common/Utilities/responsive";
 import { useGetLinks } from "@insite/client-framework/Store/Links/LinksSelectors";
-import { HasFields } from "@insite/client-framework/Types/ContentItemModel";
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
@@ -570,11 +569,9 @@ const widgetModule: WidgetModule = {
                 name: fields.slides,
                 editorTemplate: "ListField",
                 tab: contentTab,
-                getDisplay: (item: HasFields) => {
-                    return item.fields.slideTitle;
-                },
+                getDisplay: ({ fields: { slideTitle } }) => slideTitle || "Slide",
                 defaultValue: [],
-                fieldType: "General",
+                fieldType: "Translatable",
                 fieldDefinitions: [
                     {
                         name: "slideTitle",

@@ -64,6 +64,7 @@ export interface InvoiceDetailsLineCardStyles {
     vatLabelText?: TypographyPresentationProps;
     secondaryPriceText?: TypographyPresentationProps;
     secondaryVatLabelText?: TypographyPresentationProps;
+    productDescriptionText?: TypographyPresentationProps;
 }
 
 export const cardStyles: InvoiceDetailsLineCardStyles = {
@@ -201,13 +202,24 @@ const InvoiceDetailsLineCard = ({ invoiceLine, enableVat, vatPriceDisplay, exten
                                 </GridItem>
                             )}
                             <GridItem {...styles.productNameItem}>
-                                <Link
-                                    {...styles.productNameLink}
-                                    href={invoiceLine.productUri}
-                                    data-test-selector="invoiceLine_product"
-                                >
-                                    {invoiceLine.shortDescription}
-                                </Link>
+                                {invoiceLine.productUri && (
+                                    <Link
+                                        {...styles.productNameLink}
+                                        href={invoiceLine.productUri}
+                                        data-test-selector="invoiceLine_product"
+                                    >
+                                        {invoiceLine.shortDescription || invoiceLine.description}
+                                    </Link>
+                                )}
+                                {!invoiceLine.productUri && (
+                                    <Typography
+                                        as="p"
+                                        data-test-selector="invoiceLine_product"
+                                        {...styles.productDescriptionText}
+                                    >
+                                        {invoiceLine.shortDescription || invoiceLine.description}
+                                    </Typography>
+                                )}
                             </GridItem>
                             <GridItem {...styles.numbersItem}>
                                 <GridContainer {...styles.numbersInnerContainer}>

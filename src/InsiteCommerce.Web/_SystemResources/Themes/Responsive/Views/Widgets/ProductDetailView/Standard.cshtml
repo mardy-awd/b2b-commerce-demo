@@ -33,7 +33,7 @@
             <div class="pd-cm-wrap">
                 <div ng-show="vm.product.isConfigured && vm.product.configurationDto && vm.product.configurationDto.isKit">
                     <div ng-repeat="section in vm.product.configurationDto.sections" class="pd-kit">
-                        <div ng-show="section.sectionName" class="pd-kit-name" style="font-weight: bold">{{section.sectionName}}:</div>
+                        <div ng-show="section.label || section.sectionName" class="pd-kit-name" style="font-weight: bold">{{section.label || section.sectionName}}:</div>
                         <div ng-repeat="option in section.options" class="pd-kit-value">
                             {{option.description}}
                         </div>
@@ -56,10 +56,10 @@
                     <!-- Configuration part -->
                     <div ng-show="vm.product.isConfigured && vm.product.configurationDto != null && !vm.product.configurationDto.isKit">
                         <div ng-repeat="section in vm.product.configurationDto.sections" class="pd-kit">
-                            <span>{{section.sectionName}}</span>
+                            <span>{{section.label || section.sectionName}}</span>
                             <select ng-model="vm.configurationSelection[$index]" name="tst_productDetail_configurationSection_{{section.sectionName}}" ng-change="vm.configChanged()"
                                     ng-options="option.description for option in section.options track by option.sectionOptionId">
-                                <option value="">Select {{section.sectionName}}</option>
+                                <option value="">[% translate 'Select' %] {{section.label || section.sectionName}}</option>
                             </select>
                         </div>
                     </div>

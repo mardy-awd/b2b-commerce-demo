@@ -27,6 +27,7 @@ const validClientImports = [
     "whatwg-fetch",
     "xlsx",
     "ismobilejs",
+    "jsdom",
 ];
 const validMobiusImports = [...validClientImports, "enzyme", "jest-styled-components"];
 const validServerImports = [

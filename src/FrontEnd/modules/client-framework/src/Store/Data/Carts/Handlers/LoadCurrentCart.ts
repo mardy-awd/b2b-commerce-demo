@@ -6,11 +6,13 @@ import {
 import { API_URL_CURRENT_FRAGMENT } from "@insite/client-framework/Services/ApiService";
 import { CartResult, getCart, GetCartApiParameter } from "@insite/client-framework/Services/CartService";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import loadCurrentPromotions from "@insite/client-framework/Store/Data/Promotions/Handlers/LoadCurrentPromotions";
 
 type HandlerType = Handler<
     {
         shouldLoadFullCart?: boolean;
         replaceCart?: boolean;
+        getPromotions?: boolean;
     } & HasOnSuccess,
     {
         apiParameter: GetCartApiParameter;
@@ -41,7 +43,7 @@ export const PopulateApiParameter: HandlerType = props => {
     const pageType = getCurrentPage(props.getState()).type;
     props.apiParameter = {
         cartId: API_URL_CURRENT_FRAGMENT,
-        expand: ["validation"],
+        expand: ["validation", "shipping"],
     };
 
     if (props.needFullCart) {
@@ -51,7 +53,6 @@ export const PopulateApiParameter: HandlerType = props => {
             ...(props.apiParameter.expand || []),
             "cartLines",
             "restrictions",
-            "shipping",
             "tax",
             "carriers",
             "paymentOptions",
@@ -109,6 +110,12 @@ export const DispatchLoadCustomers: HandlerType = props => {
     }
 };
 
+export const DispatchLoadPromotions: HandlerType = props => {
+    if (props.parameter.getPromotions) {
+        props.dispatch(loadCurrentPromotions());
+    }
+};
+
 export const ExecuteOnSuccessCallback: HandlerType = props => {
     props.parameter.onSuccess?.();
 };
@@ -121,6 +128,7 @@ export const chain = [
     SetCarrier,
     DispatchCompleteLoadCart,
     DispatchLoadCustomers,
+    DispatchLoadPromotions,
     ExecuteOnSuccessCallback,
 ];
 

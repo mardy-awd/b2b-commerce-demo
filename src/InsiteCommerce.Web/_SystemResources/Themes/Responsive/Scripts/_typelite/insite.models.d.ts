@@ -860,6 +860,7 @@ declare module Insite.Catalog.Services.Dtos {
 	}
 	interface ConfigSectionDto {
 		sectionName: string;
+		label: string;
 		options: Insite.Catalog.Services.Dtos.ConfigSectionOptionDto[];
 	}
 	interface ConfigSectionOptionDto {
@@ -2058,6 +2059,7 @@ declare module Insite.Order.WebApi.V1.ApiModels {
 		netPriceWithVatDisplay: string;
 		unitPriceWithVat: number;
 		unitPriceWithVatDisplay: string;
+		vmiBinNumber: string;
 	}
 	interface OrderPromotionModel extends Insite.Core.WebApi.BaseModel {
 		id: string;

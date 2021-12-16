@@ -209,6 +209,14 @@
     {
       "parentId": "e7fe40cc-040b-46a6-8ea2-69274def5be1",
       "zone": "Content1",
+      "type": "ProductDetails/ProductDetailsDeliveryScheduleButton",
+      "id": "539c6e0b-0e85-4903-acfa-0830f4855bca",
+      "fields": {},
+      "translatableFields": {}
+    },
+    {
+      "parentId": "e7fe40cc-040b-46a6-8ea2-69274def5be1",
+      "zone": "Content1",
       "type": "ProductDetails/ProductDetailsAddToListLink",
       "id": "fd2477d8-c262-4a3d-a5af-4b2819b436de",
       "fields": {},
@@ -296,6 +304,14 @@
       "zone": "Content1",
       "type": "ProductDetails/ProductDetailsAddToCartButton",
       "id": "3726736a-d7ca-4d75-b22b-2182fe80864f",
+      "fields": {},
+      "translatableFields": {}
+    },
+    {
+      "parentId": "e7fe40cc-040b-46a6-8ea2-69274def5be1",
+      "zone": "Content3",
+      "type": "ProductDetails/ProductDetailsDeliveryScheduleButton",
+      "id": "30993995-4599-4c46-9491-ffca0e406deb",
       "fields": {},
       "translatableFields": {}
     },

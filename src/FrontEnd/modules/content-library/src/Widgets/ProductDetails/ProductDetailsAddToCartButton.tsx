@@ -15,6 +15,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: HasProduct) => ({
     configurationSelection: state.pages.productDetails.configurationSelection,
     configurationCompleted: state.pages.productDetails.configurationCompleted,
     variantSelectionCompleted: state.pages.productDetails.variantSelectionCompleted,
+    subscription: state.pages.productDetails.subscription,
 });
 
 export interface ProductDetailsAddToCartButtonStyles {
@@ -35,12 +36,14 @@ const ProductDetailsAddToCartButton = ({
     configurationSelection,
     configurationCompleted,
     variantSelectionCompleted,
+    subscription,
 }: Props) => {
     return (
         <ProductAddToCartButton
             configurationSelection={configurationSelection}
             configurationCompleted={configurationCompleted}
             variantSelectionCompleted={variantSelectionCompleted}
+            subscription={subscription}
             extendedStyles={styles.button}
             data-test-selector="addProductToCart"
         />

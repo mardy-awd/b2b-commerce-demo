@@ -87,20 +87,18 @@ export const headerStyles: MyListsDetailsHeaderStyles = {
                 )}
         `,
     },
-    lastUpdateText: {
-        css: css`
-            padding-right: 30px;
-        `,
-    },
     sharingStatus: {
         statusText: {
             css: css`
-                padding-right: 30px;
+                padding-left: 30px;
             `,
         },
     },
     totalText: {
         weight: "bold",
+        css: css`
+            padding-left: 30px;
+        `,
     },
     totalVatLabelText: {
         size: 12,
@@ -120,7 +118,7 @@ export const headerStyles: MyListsDetailsHeaderStyles = {
             margin-left: 5px;
         `,
     },
-    descriptionGridItem: { width: 6 },
+    descriptionGridItem: { width: 12 },
 };
 
 const styles = headerStyles;

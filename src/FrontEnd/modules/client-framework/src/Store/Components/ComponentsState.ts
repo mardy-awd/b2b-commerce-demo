@@ -7,6 +7,7 @@ import ContactUsFormState from "@insite/client-framework/Store/Components/Contac
 import FindLocationModalState from "@insite/client-framework/Store/Components/FindLocationModal/FindLocationModalState";
 import ManageShareListModalState from "@insite/client-framework/Store/Components/ManageShareListModal/ManageShareListModalState";
 import OrderUploadState from "@insite/client-framework/Store/Components/OrderUpload/OrderUploadState";
+import ProductDeliveryScheduleState from "@insite/client-framework/Store/Components/ProductDeliverySchedule/ProductDeliveryScheduleState";
 import ProductInfoListsState from "@insite/client-framework/Store/Components/ProductInfoList/ProductInfoListsState";
 import ProductSelectorState from "@insite/client-framework/Store/Components/ProductSelector/ProductSelectorState";
 import ReCaptchaState from "@insite/client-framework/Store/Components/ReCaptcha/ReCaptchaState";
@@ -21,6 +22,7 @@ export default interface ComponentsState {
     readonly findLocationModal: FindLocationModalState;
     readonly manageShareListModal: ManageShareListModalState;
     readonly orderUpload: OrderUploadState;
+    readonly productDeliverySchedule: ProductDeliveryScheduleState;
     readonly productInfoLists: ProductInfoListsState;
     readonly productSelector: ProductSelectorState;
     readonly reCaptcha: ReCaptchaState;
