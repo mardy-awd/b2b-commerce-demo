@@ -174,7 +174,7 @@
     <Reference Include="Flurl, Version=1.0.10.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Flurl.1.0.10\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
     </Reference>
-    <Reference Include="GemBox.Spreadsheet, Version=47.0.1345, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="GemBox.Spreadsheet, Version=47.0.0.1345, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GemBox.Spreadsheet.47.0.1345\lib\net35\GemBox.Spreadsheet.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.8.7.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
@@ -993,7 +993,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="_SystemResources\readme.txt" />
     <None Include="_SystemResources\**\*.css" />
     <None Include="_SystemResources\**\*.scss" />
     <None Include="_SystemResources\**\*.cshtml" />

@@ -366,7 +366,7 @@
     <Reference Include="FluentValidation, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
-    <Reference Include="GemBox.Spreadsheet, Version=47.0.1345, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="GemBox.Spreadsheet, Version=47.0.0.1345, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GemBox.Spreadsheet.47.0.1345\lib\net35\GemBox.Spreadsheet.dll</HintPath>
     </Reference>
     <Reference Include="Schema.NET, Version=6.0.0.0, Culture=neutral, PublicKeyToken=fc5550082a9c642c, processorArchitecture=MSIL">
