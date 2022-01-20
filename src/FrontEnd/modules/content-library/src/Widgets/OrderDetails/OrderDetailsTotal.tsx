@@ -1,7 +1,6 @@
 import { OrderStateContext } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import OrderTotalDisplay, { OrderTotalDisplayStyles } from "@insite/content-library/Components/OrderTotalDisplay";
-import { OrderDetailsPageContext } from "@insite/content-library/Pages/OrderDetailsPage";
 import { GridContainerProps } from "@insite/mobius/GridContainer";
 import { GridItemProps } from "@insite/mobius/GridItem";
 import { TypographyProps } from "@insite/mobius/Typography";
@@ -128,7 +127,7 @@ const OrderDetailsTotal: FC = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsTotal,
     definition: {
-        allowedContexts: [OrderDetailsPageContext],
+        allowedContexts: ["OrderDetailsPage"],
         group: "Order Details",
     },
 };

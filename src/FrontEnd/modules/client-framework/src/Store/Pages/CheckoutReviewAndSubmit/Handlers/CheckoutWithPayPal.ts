@@ -1,5 +1,9 @@
 import { createHandlerChainRunner, Handler } from "@insite/client-framework/HandlerCreator";
-import { CartResult, updateCart, UpdateCartApiParameter } from "@insite/client-framework/Services/CartService";
+import {
+    CartResult,
+    UpdateCartApiParameter,
+    updateCartWithResult,
+} from "@insite/client-framework/Services/CartService";
 import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import { Draft } from "immer";
 import cloneDeep from "lodash/cloneDeep";
@@ -37,7 +41,16 @@ export const PopulateApiParameter: HandlerType = props => {
 };
 
 export const UpdateCartForPayPal: HandlerType = async props => {
-    props.apiResult = await updateCart(props.apiParameter);
+    const result = await updateCartWithResult(props.apiParameter);
+    if (result.successful) {
+        props.apiResult = result.result;
+    } else {
+        props.dispatch({
+            type: "Pages/CheckoutReviewAndSubmit/SetPayPalCheckoutErrorMessage",
+            errorMessage: result.errorMessage,
+        });
+        return false;
+    }
 };
 
 export const DispatchAuthenticatedRedirectToPayPal: HandlerType = props => {

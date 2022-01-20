@@ -7,7 +7,6 @@ import translate from "@insite/client-framework/Translate";
 import { FacetModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import { productListCategoryFiltersStyles } from "@insite/content-library/Widgets/ProductList/ProductListCategoryFilters";
 import ProductListFiltersAccordionSection from "@insite/content-library/Widgets/ProductList/ProductListFilterAccordionSection";
 import React, { FC } from "react";
@@ -79,7 +78,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Stocked Items Filter",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
     },
 };
 

@@ -113,10 +113,10 @@
 <div ng-if="vm.listModel.wishListLineCollection.length > 0">
     <div class="row multi-actions-block" ng-class="{ 'needs-border': !vm.canReorderList() }">
         <div class="medium-5 columns items-multi-actions hide-for-small">
-                    <input id="select_all" type="checkbox" ng-click="vm.selectAll()" ng-checked="vm.isAllSelected()" />
+                    <input id="select_all" type="checkbox" ng-click="vm.selectAll()" ng-checked="vm.isAllSelected()" data-test-selector="tst_myListDetailView_topSelectAll" />
                     <label for="select_all">[% translate 'Select All' %]</label>
                     <button type="button" ng-disabled="!vm.canPutAnySelectedToCart" class="btn secondary" ng-click="vm.addSelectedToCart()">[% translate 'Add To Cart' %]</button>
-                    <button id="tst_myListDetailView_deleteItemBtn" type="button" ng-if="vm.listModel.allowEdit || !vm.listModel.isSharedList" ng-click="vm.deleteSelectedItems()" data-reveal-id="popup-delete-item" ng-disabled="vm.checkedItemsCount === 0" class="btn secondary">
+                    <button id="tst_myListDetailView_deleteItemBtn" type="button" ng-if="vm.listModel.allowEdit || !vm.listModel.isSharedList" ng-click="vm.deleteSelectedItems()" data-reveal-id="popup-delete-item" ng-disabled="vm.checkedItemsCount === 0" class="btn secondary" data-test-selector="tst_myListDetailView_topDeleteItemBtn">
                         [% translate 'Delete' %]
                     </button>
                 </div>
@@ -270,10 +270,10 @@
             <div ng-if="vm.listModel.wishListLineCollection.length > 0">
                 <div class="row multi-actions-block">
                     <div class="medium-5 columns items-multi-actions hide-for-small">
-                        <input id="select_all" type="checkbox" ng-click="vm.selectAll()" ng-checked="vm.isAllSelected()" />
+                        <input id="select_all" type="checkbox" ng-click="vm.selectAll()" ng-checked="vm.isAllSelected()" data-test-selector="tst_myListDetailView_bottomSelectAll" />
                         <label for="select_all">[% translate 'Select All' %]</label>
                         <button type="button" ng-disabled="!vm.canPutAnySelectedToCart" class="btn secondary" ng-click="vm.addSelectedToCart()">[% translate 'Add To Cart' %]</button>
-                        <button id="tst_myListDetailView_deleteItemBtn" type="button" ng-if="vm.listModel.allowEdit || !vm.listModel.isSharedList" ng-click="vm.deleteSelectedItems()" data-reveal-id="popup-delete-item" ng-disabled="vm.checkedItemsCount === 0" class="btn secondary">
+                        <button id="tst_myListDetailView_deleteItemBtn" type="button" ng-if="vm.listModel.allowEdit || !vm.listModel.isSharedList" ng-click="vm.deleteSelectedItems()" data-reveal-id="popup-delete-item" ng-disabled="vm.checkedItemsCount === 0" class="btn secondary" data-test-selector="tst_myListDetailView_bottomDeleteItemBtn">
                             [% translate 'Delete' %]
                         </button>
         </div>

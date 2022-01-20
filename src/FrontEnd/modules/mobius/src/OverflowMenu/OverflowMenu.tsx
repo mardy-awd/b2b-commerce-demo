@@ -44,6 +44,10 @@ export interface OverflowMenuPresentationProps {
     maxHeight?: string;
     /** Boolean value indicating that there is a portal modal inside the menu, which affects popover click outside functionality */
     hasChildPortal?: boolean;
+    /** Custom icon component */
+    customIcon?: React.ReactElement<any, any>;
+    /** Pixel width of overflow menu */
+    _width?: number;
 }
 
 export type OverflowMenuComponentProps = MobiusStyledComponentProps<
@@ -115,6 +119,7 @@ class OverflowMenu extends React.Component<Props, State> {
     render() {
         const {
             children,
+            customIcon,
             isOpen,
             onClose,
             onOpen,
@@ -164,7 +169,7 @@ class OverflowMenu extends React.Component<Props, State> {
                 type="button"
                 data-test-selector={otherProps["data-test-selector"] ?? "popoverOverflowTrigger"}
             >
-                {iconProps.color ? <IconMemo {...iconProps} /> : <ButtonIcon {...iconProps} />}
+                {customIcon || (iconProps.color ? <IconMemo {...iconProps} /> : <ButtonIcon {...iconProps} />)}
                 <VisuallyHidden>{otherProps.theme.translate("Menu")}</VisuallyHidden>
             </OverflowButton>
         );

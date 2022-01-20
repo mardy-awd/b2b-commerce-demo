@@ -143,6 +143,7 @@ const widgetModule: WidgetModule = {
         displayName: "Fulfillment Method Selector",
         fieldDefinitions: [],
         group: "Header",
+        icon: "truck",
     },
 };
 export default widgetModule;

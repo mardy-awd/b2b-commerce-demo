@@ -19,7 +19,6 @@ import translate from "@insite/client-framework/Translate";
 import { AccountModel, ShipToModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { BudgetManagementPageContext } from "@insite/content-library/Pages/BudgetManagementPage";
 import EnforcementLevelDisplay, {
     EnforcementLevelDisplayStyles,
 } from "@insite/content-library/Widgets/Budget/EnforcementLevelDisplay";
@@ -387,7 +386,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(ReviewBudget),
     definition: {
         group: "BudgetManagement",
-        allowedContexts: [BudgetManagementPageContext],
+        allowedContexts: ["BudgetManagementPage"],
         fieldDefinitions: [],
     },
 };

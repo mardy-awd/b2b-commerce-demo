@@ -11,7 +11,6 @@
     "name": "Requisition Confirmation",
     "urlSegment": "Requisition/Confirmation",
     "horizontalRule": "",
-    "excludeFromNavigation": true,
     "tags": []
   },
   "translatableFields": {

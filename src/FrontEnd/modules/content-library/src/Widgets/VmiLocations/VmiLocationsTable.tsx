@@ -15,7 +15,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import VmiLocationDetailTypeLink from "@insite/content-library/Components/VmiLocationDetailTypeLink";
-import { LocationsPageContext } from "@insite/content-library/Pages/VmiLocationsPage";
 import AddVmiLocationModal from "@insite/content-library/Widgets/VmiLocations/AddVmiLocationModal";
 import Checkbox, { CheckboxPresentationProps } from "@insite/mobius/Checkbox";
 import DataTable, { DataTableProps, SortOrderOptions } from "@insite/mobius/DataTable";
@@ -318,7 +317,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "VMI Locations",
         displayName: "Search Results Table",
-        allowedContexts: [LocationsPageContext],
+        allowedContexts: ["VmiLocationsPage"],
     },
 };
 

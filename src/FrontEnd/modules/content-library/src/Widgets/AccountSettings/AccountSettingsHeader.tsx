@@ -6,7 +6,6 @@ import setInitialValues from "@insite/client-framework/Store/Pages/AccountSettin
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { AccountSettingsPageContext } from "@insite/content-library/Pages/AccountSettingsPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import GridContainer from "@insite/mobius/GridContainer";
@@ -149,7 +148,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(AccountSettingsHeader),
     definition: {
         group: "Account Settings",
-        allowedContexts: [AccountSettingsPageContext],
+        allowedContexts: ["AccountSettingsPage"],
         displayName: "Header",
     },
 };

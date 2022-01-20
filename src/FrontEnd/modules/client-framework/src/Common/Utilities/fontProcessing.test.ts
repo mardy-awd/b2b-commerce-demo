@@ -194,8 +194,8 @@ test("getFontContent should load font file", async () => {
     expect(response.statusCode).toBe(200);
 });
 
-test("getFontContent should return 404 when url is unknown", async () => {
-    const fontUrl = "https://fonts.gstatic.com/hack.woff2";
+test("getFontContent should return font when unknown url is passed in", async () => {
+    const fontUrl = "https://fonts.gstatic.com/hacking.woff2";
     const base64EncodedUrl = convertToBase64(fontUrl);
 
     const headers: Dictionary<string> = {};
@@ -208,10 +208,47 @@ test("getFontContent should return 404 when url is unknown", async () => {
     } as ExpressRequest;
 
     const resultContent = jest.fn((content: string) => {});
+    const resultContentType = jest.fn((type: string) => {});
 
     const response: ExpressResponse = {
         send: resultContent as unknown,
         statusCode: 200,
+        contentType: resultContentType as unknown,
+    } as ExpressResponse;
+
+    await getFontContent(request, response);
+
+    expect(resultContent).toHaveBeenCalledWith("font");
+    expect(response.statusCode).toBe(200);
+});
+
+test("getFontContent should return 404 when fontResponse is not 200", async () => {
+    const fontUrl = "https://fonts.gstatic.com/hack.woff2";
+    const base64EncodedUrl = convertToBase64(fontUrl);
+
+    const headers: Dictionary<string> = {};
+    headers["user-agent"] = "Firefox";
+
+    const request: ExpressRequest = {
+        query: { path: base64EncodedUrl },
+        headers,
+        method: "GET",
+    } as ExpressRequest;
+
+    global.fetch = jest.fn(() =>
+        Promise.resolve({
+            status: 404,
+            buffer: () => Promise.resolve("font"),
+        } as any),
+    );
+
+    const resultContent = jest.fn((content: string) => {});
+    const resultContentType = jest.fn((type: string) => {});
+
+    const response: ExpressResponse = {
+        send: resultContent as unknown,
+        statusCode: 200,
+        contentType: resultContentType as unknown,
     } as ExpressResponse;
 
     await getFontContent(request, response);

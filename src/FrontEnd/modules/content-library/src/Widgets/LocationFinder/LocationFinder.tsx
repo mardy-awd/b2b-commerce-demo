@@ -29,7 +29,6 @@ import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { DistanceUnitOfMeasure } from "@insite/content-library/Components/DistanceDisplay";
 import LocationGoogleMap, { LocationGoogleMapStyles } from "@insite/content-library/Components/LocationGoogleMap";
 import LocationSearchForm, { LocationSearchFormStyles } from "@insite/content-library/Components/LocationSearchForm";
-import { CreateAccountPageContext } from "@insite/content-library/Pages/CreateAccountPage";
 import LocationFinderDealerDisplay, {
     LocationFinderDealerDisplayPresentationProps,
 } from "@insite/content-library/Widgets/LocationFinder/LocationFinderDealerDisplay";
@@ -465,7 +464,7 @@ const LocationFinder: FC<Props> = ({
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(withDynamicGoogleMaps(LocationFinder))),
     definition: {
-        allowedContexts: [CreateAccountPageContext],
+        allowedContexts: ["CreateAccountPage"],
         group: "Location Finder",
     },
 };

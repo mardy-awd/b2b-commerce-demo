@@ -3,7 +3,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductQuantityOrdered from "@insite/content-library/Components/ProductQuantityOrdered";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import { TextFieldProps } from "@insite/mobius/TextField";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -47,7 +46,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Quantity Ordered",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

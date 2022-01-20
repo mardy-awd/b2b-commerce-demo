@@ -11,7 +11,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import SmallHeadingAndText, { SmallHeadingAndTextStyles } from "@insite/content-library/Components/SmallHeadingAndText";
-import { OrderConfirmationPageContext } from "@insite/content-library/Pages/OrderConfirmationPage";
 import OrderConfirmationBillingInformation, {
     OrderConfirmationBillingInformationStyles,
 } from "@insite/content-library/Widgets/OrderConfirmation/OrderConfirmationBillingInformation";
@@ -271,7 +270,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(OrderConfirmationOrderInformation),
     definition: {
         displayName: "Order Information",
-        allowedContexts: [OrderConfirmationPageContext],
+        allowedContexts: ["OrderConfirmationPage"],
         group: "Order Confirmation",
     },
 };

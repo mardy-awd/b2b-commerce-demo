@@ -1,7 +1,7 @@
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import { TypographyComponentProps, TypographyPresentationProps } from "@insite/mobius/Typography/Typography";
 import resolveColor from "@insite/mobius/utilities/resolveColor";
-import styled, { ThemeProps } from "styled-components";
+import styled, { css as scCss, ThemeProps } from "styled-components";
 
 /**
  * This is a highly simplified version of the styled-components internal utility functions `flatten` and `interleave`.
@@ -10,14 +10,15 @@ import styled, { ThemeProps } from "styled-components";
  * as well as support for nonstandard types of tagged interpolations. This is used only to render styles within the
  * rich text editor, and therefore ideally should not require as robust of functionality.
  *  */
-const hydrateCssTaggedTemplate = (css: TypographyPresentationProps["css"], theme: BaseTheme) => {
+const hydrateCssTaggedTemplate = (css: TypographyPresentationProps["css"], theme: BaseTheme, iteration = 0) => {
     const hydratedSegments: string[] = [];
     if (typeof css === "object") {
         css.forEach((segment: any) => {
-            if (typeof segment === "function") {
-                hydratedSegments.push(segment({ theme }));
+            if (typeof segment === "function" && iteration < 10) {
+                hydratedSegments.push(hydrateCssTaggedTemplate(scCss({}, segment({ theme })), theme, iteration + 1));
+            } else {
+                hydratedSegments.push(segment);
             }
-            hydratedSegments.push(segment);
         });
     }
     return hydratedSegments.join("");

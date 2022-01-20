@@ -83,7 +83,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(LastName),
     definition: {
         group: "Contact Us",
-        icon: "FormField",
+        icon: "input-pipe",
         fieldDefinitions: [
             {
                 name: fields.label,

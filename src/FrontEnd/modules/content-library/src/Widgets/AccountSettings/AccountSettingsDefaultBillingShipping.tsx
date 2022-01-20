@@ -14,7 +14,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import AddressInfoDisplay, { AddressInfoDisplayStyles } from "@insite/content-library/Components/AddressInfoDisplay";
 import FindLocationModal, { FindLocationModalStyles } from "@insite/content-library/Components/FindLocationModal";
-import { AccountSettingsPageContext } from "@insite/content-library/Pages/AccountSettingsPage";
 import DefaultBillingAddress from "@insite/content-library/Widgets/AccountSettings/DefaultBillingAddress";
 import DefaultShippingAddress from "@insite/content-library/Widgets/AccountSettings/DefaultShippingAddress";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -371,7 +370,7 @@ const WarehouseAddressInfoDisplay = ({ warehouse }: WarehouseAddressInfoDisplayP
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(AccountSettingsDefaultBillingShipping),
     definition: {
-        allowedContexts: [AccountSettingsPageContext],
+        allowedContexts: ["AccountSettingsPage"],
         group: "Account Settings",
         displayName: "Default Billing & Shipping",
     },

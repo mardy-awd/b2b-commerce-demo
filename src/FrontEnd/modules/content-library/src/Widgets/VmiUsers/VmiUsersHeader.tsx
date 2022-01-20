@@ -6,7 +6,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/VmiUsers/Ha
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { VmiUsersPageContext } from "@insite/content-library/Pages/VmiUsersPage";
 import AddVmiUserModal from "@insite/content-library/Widgets/VmiUsers/AddVmiUserModal";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
@@ -232,7 +231,7 @@ const VmiUsersHeader = ({ id, parameter, updateSearchFields, searchText }: Props
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(VmiUsersHeader),
     definition: {
-        allowedContexts: [VmiUsersPageContext],
+        allowedContexts: ["VmiUsersPage"],
         group: "VMI Users",
     },
 };

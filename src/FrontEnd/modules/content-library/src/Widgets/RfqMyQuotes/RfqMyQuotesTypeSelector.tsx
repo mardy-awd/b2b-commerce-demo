@@ -5,7 +5,6 @@ import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/Link
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqMyQuotesPageContext } from "@insite/content-library/Pages/RfqMyQuotesPage";
 import Radio, { RadioComponentProps } from "@insite/mobius/Radio";
 import RadioGroup, { RadioGroupProps } from "@insite/mobius/RadioGroup";
 import FieldSetPresentationProps from "@insite/mobius/utilities/fieldSetProps";
@@ -82,7 +81,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "RFQ My Quotes",
         displayName: "Quote Type Selector",
-        allowedContexts: [RfqMyQuotesPageContext],
+        allowedContexts: ["RfqMyQuotesPage"],
         fieldDefinitions: [],
     },
 };

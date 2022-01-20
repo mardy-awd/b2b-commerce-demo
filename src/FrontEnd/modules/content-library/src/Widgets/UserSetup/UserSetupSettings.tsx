@@ -4,7 +4,6 @@ import setUserFields from "@insite/client-framework/Store/Pages/UserSetup/Handle
 import { getCurrentEditingUser } from "@insite/client-framework/Store/Pages/UserSetup/UserSetupSelectors";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
-import { UserSetupPageContext } from "@insite/content-library/Pages/UserSetupPage";
 import Select, { SelectPresentationProps, SelectProps } from "@insite/mobius/Select";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
@@ -65,7 +64,7 @@ const UserSetupSettings = ({ editingUser, setUserFields }: Props) => {
 
     return (
         <>
-            <Typography as="h2" {...styles.title} data-test-selector="tst_userSetupSetting_title">
+            <Typography as="h2" {...styles.title} data-test-selector="userSetupSetting_title">
                 {translate("Settings")}
             </Typography>
             <StyledFieldSet {...styles.fieldset}>
@@ -75,7 +74,7 @@ const UserSetupSettings = ({ editingUser, setUserFields }: Props) => {
                         label={translate("User Role")}
                         value={editingUser.role}
                         onChange={userRoleChangeHandler}
-                        data-test-selector="tst_userSetupSetting_userRole"
+                        data-test-selector="userSetupSetting_userRole"
                     >
                         <option value="">{translate("Select User Role")}</option>
                         {editingUser.availableRoles?.map(role => (
@@ -91,7 +90,7 @@ const UserSetupSettings = ({ editingUser, setUserFields }: Props) => {
                         label={translate("Assign Approver")}
                         value={editingUser.approver}
                         onChange={approverChangeHandler}
-                        data-test-selector="tst_userSetupSetting_assignApprover"
+                        data-test-selector="userSetupSetting_assignApprover"
                     >
                         <option value="">{translate("Select an Approver")}</option>
                         {editingUser.availableApprovers?.map(approver => (
@@ -111,7 +110,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "User Setup",
         displayName: "Settings",
-        allowedContexts: [UserSetupPageContext],
+        allowedContexts: ["UserSetupPage"],
     },
 };
 

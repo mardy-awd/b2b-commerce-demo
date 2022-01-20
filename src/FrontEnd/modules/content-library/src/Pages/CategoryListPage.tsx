@@ -49,4 +49,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "CategoryListPage" instead of this constant.
+ */
 export const CategoryListPageContext = "CategoryListPage";

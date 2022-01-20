@@ -54,6 +54,17 @@ import { ServerStyleSheet } from "styled-components";
 let checkedForSiteGeneration = false;
 let triedToGenerateTranslations = false;
 
+const safeRequest = <T extends unknown>(func: () => Promise<T>, defaultValue: T) => {
+    return (async () => {
+        try {
+            return await func();
+        } catch (e) {
+            logger.error(e);
+        }
+        return defaultValue;
+    })();
+};
+
 export async function pageRenderer(request: Request, response: Response) {
     const { websiteIsClassic } = await generateDataIfNeeded(request);
     if (websiteIsClassic) {
@@ -81,17 +92,6 @@ export async function pageRenderer(request: Request, response: Response) {
     }
 
     let sheet: ServerStyleSheet | undefined;
-
-    const safeRequest = <T extends unknown>(func: () => Promise<T>, defaultValue: T) => {
-        return (async () => {
-            try {
-                return await func();
-            } catch (e) {
-                logger.error(e);
-            }
-            return defaultValue;
-        })();
-    };
 
     const getThemePromiseOrDefault = safeRequest(
         async () =>
@@ -230,12 +230,18 @@ export async function pageRenderer(request: Request, response: Response) {
                 <title>{metadata?.title}</title>
                 {favicon && <link rel="icon" href={favicon} type="image/x-icon" />}
                 <meta property="og:type" content="website" />
-                <meta id="ogTitle" property="og:title" content={metadata?.openGraphTitle} />
-                <meta id="ogImage" property="og:image" content={metadata?.openGraphImage} />
-                <meta id="ogUrl" property="og:url" content={metadata?.openGraphUrl} />
-                <meta name="keywords" content={metadata?.metaKeywords} />
-                <meta name="description" content={metadata?.metaDescription} />
-                <link rel="canonical" href={metadata?.canonicalUrl} />
+                {metadata?.openGraphTitle && (
+                    <meta id="ogTitle" property="og:title" content={metadata?.openGraphTitle} />
+                )}
+                {metadata?.openGraphImage && (
+                    <meta id="ogImage" property="og:image" content={metadata?.openGraphImage} />
+                )}
+
+                {metadata?.openGraphUrl && <meta id="ogUrl" property="og:url" content={metadata?.openGraphUrl} />}
+                {metadata?.metaKeywords && <meta name="keywords" content={metadata?.metaKeywords} />}
+                {metadata?.metaDescription && <meta name="description" content={metadata?.metaDescription} />}
+
+                {metadata?.canonicalUrl && <link rel="canonical" href={metadata?.canonicalUrl} />}
                 {metadata?.alternateLanguageUrls &&
                     Object.entries(metadata.alternateLanguageUrls).map(([key, value]) => (
                         <link key={key} rel="alternate" hrefLang={key} href={value} />

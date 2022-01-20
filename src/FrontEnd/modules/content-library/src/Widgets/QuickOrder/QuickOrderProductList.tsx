@@ -23,7 +23,6 @@ import ProductDescription, { ProductDescriptionStyles } from "@insite/content-li
 import ProductImage, { ProductImageStyles } from "@insite/content-library/Components/ProductImage";
 import ProductPrice, { ProductPriceStyles } from "@insite/content-library/Components/ProductPrice";
 import ProductQuantityOrdered from "@insite/content-library/Components/ProductQuantityOrdered";
-import { QuickOrderPageContext } from "@insite/content-library/Pages/QuickOrderPage";
 import Clickable, { ClickableProps } from "@insite/mobius/Clickable";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -320,7 +319,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Quick Order",
         icon: "List",
-        allowedContexts: [QuickOrderPageContext],
+        allowedContexts: ["QuickOrderPage"],
     },
 };
 

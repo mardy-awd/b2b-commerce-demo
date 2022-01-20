@@ -5,7 +5,6 @@ import updateAccountSettings from "@insite/client-framework/Store/Pages/AccountS
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { AccountSettingsPageContext } from "@insite/content-library/Pages/AccountSettingsPage";
 import GridContainer from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Link from "@insite/mobius/Link";
@@ -116,7 +115,7 @@ const AccountSettingsUserInformation = ({
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(AccountSettingsUserInformation),
     definition: {
-        allowedContexts: [AccountSettingsPageContext],
+        allowedContexts: ["AccountSettingsPage"],
         group: "Account Settings",
         displayName: "User Information",
     },

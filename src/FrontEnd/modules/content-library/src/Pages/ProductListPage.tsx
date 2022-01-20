@@ -32,8 +32,12 @@ import { connect, ResolveThunks } from "react-redux";
 const mapStateToProps = (state: ApplicationState) => {
     const location = getLocation(state);
     const selectedCategoryPath = getSelectedCategoryPath(state);
+    const pathnameLowerCase = location.pathname.toLowerCase();
     const path =
-        selectedCategoryPath || (location.pathname.toLowerCase().startsWith("/content/") ? "" : location.pathname);
+        selectedCategoryPath ||
+        (pathnameLowerCase.startsWith("/content/") || pathnameLowerCase.startsWith("/.spire/")
+            ? ""
+            : location.pathname);
     const {
         pages: {
             productList: { isLoading, productFilters, parameter, isSearchPage, filterQuery, productInfosByProductId },
@@ -138,6 +142,7 @@ class ProductListPage extends React.Component<Props> {
 
     componentWillUnmount(): void {
         this.props.clearProducts();
+        this.props.setBreadcrumbs({ links: undefined });
     }
 
     componentDidUpdate(prevProps: Props): void {
@@ -341,4 +346,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "ProductListPage" instead of this constant.
+ */
 export const ProductListPageContext = "ProductListPage";

@@ -10,7 +10,7 @@ interface StyleProps {
 const ClickerStyle = styled(Clickable)`
     display: inline;
     width: 30px;
-    height: 36px;
+    height: 100%;
     padding-top: 7px;
     text-align: center;
     cursor: ${(props: StyleProps) => (props.clickable ? "pointer" : "default")};

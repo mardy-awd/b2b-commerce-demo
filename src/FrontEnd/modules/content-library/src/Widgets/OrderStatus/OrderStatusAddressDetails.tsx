@@ -5,7 +5,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import AddressInfoDisplay, { AddressInfoDisplayStyles } from "@insite/content-library/Components/AddressInfoDisplay";
-import { OrderStatusPageContext } from "@insite/content-library/Pages/OrderStatusPage";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React, { FC } from "react";
@@ -96,7 +95,7 @@ const OrderStatusAddressDetails: FC<Props> = ({ order }) => {
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(OrderStatusAddressDetails),
     definition: {
-        allowedContexts: [OrderStatusPageContext],
+        allowedContexts: ["OrderStatusPage"],
         displayName: "Address Details",
         group: "Order Status",
     },

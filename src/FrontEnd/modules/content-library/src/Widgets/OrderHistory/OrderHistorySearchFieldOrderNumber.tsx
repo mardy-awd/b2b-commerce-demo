@@ -1,6 +1,5 @@
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderHistoryPageContext } from "@insite/content-library/Pages/OrderHistoryPage";
 import SearchTextField, { SearchTextFieldStyles } from "@insite/content-library/Widgets/OrderHistory/SearchTextField";
 import * as React from "react";
 
@@ -24,7 +23,7 @@ const widgetModule: WidgetModule = {
     component: OrderHistorySearchFieldOrderNumber,
     definition: {
         group: "Order History",
-        allowedContexts: [OrderHistoryPageContext],
+        allowedContexts: ["OrderHistoryPage"],
         displayName: "Order Number",
     },
 };

@@ -8,7 +8,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
 import UserSetupPageTypeLink from "@insite/content-library/Components/UserSetupPageTypeLink";
-import { UserListPageContext } from "@insite/content-library/Pages/UserListPage";
 import DataTable, { DataTablePresentationProps, SortOrderOptions } from "@insite/mobius/DataTable";
 import DataTableBody, { DataTableBodyProps } from "@insite/mobius/DataTable/DataTableBody";
 import DataTableCell, { DataTableCellProps } from "@insite/mobius/DataTable/DataTableCell";
@@ -180,10 +179,7 @@ const UserListUsersTable = ({
                                 {translate("Email")}
                             </DataTableHeader>
                         )}
-                        <DataTableHeader
-                            {...styles.statusHeader}
-                            data-test-selector="tst_userListUsersTable_statusHeader"
-                        >
+                        <DataTableHeader {...styles.statusHeader} data-test-selector="userListUsersTable_statusHeader">
                             {translate("Status")}
                         </DataTableHeader>
                         <DataTableHeader
@@ -196,7 +192,7 @@ const UserListUsersTable = ({
                         </DataTableHeader>
                         <DataTableHeader
                             {...styles.lastSignInHeader}
-                            data-test-selector="tst_userListUsersTable_lastSignInHeader"
+                            data-test-selector="userListUsersTable_lastSignInHeader"
                         >
                             {translate("Last Sign In")}
                         </DataTableHeader>
@@ -288,7 +284,7 @@ const UserListUsersTable = ({
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(UserListUsersTable),
     definition: {
-        allowedContexts: [UserListPageContext],
+        allowedContexts: ["UserListPage"],
         group: "User List",
     },
 };

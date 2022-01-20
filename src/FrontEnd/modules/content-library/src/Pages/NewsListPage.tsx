@@ -54,4 +54,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "NewsListPage" instead of this constant.
+ */
 export const NewsListPageContext = "NewsListPage";

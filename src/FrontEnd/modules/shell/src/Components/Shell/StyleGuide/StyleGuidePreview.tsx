@@ -17,6 +17,7 @@ import Pagination from "@insite/mobius/Pagination";
 import Radio from "@insite/mobius/Radio";
 import RadioGroup from "@insite/mobius/RadioGroup";
 import Select from "@insite/mobius/Select";
+import SwatchComponent, { SwatchProps, SwatchTypeValues } from "@insite/mobius/Swatch";
 import Tag from "@insite/mobius/Tag";
 import TextArea from "@insite/mobius/TextArea";
 import TextField from "@insite/mobius/TextField";
@@ -383,6 +384,16 @@ const ConnectableStyleGuidePreview: React.FunctionComponent<ReturnType<typeof ma
                         <PageStage>
                             <LoadingSpinner />
                         </PageStage>
+                        <PreviewH3>Swatch</PreviewH3>
+                        <PageStage>
+                            {swatchesList.map((swatch, idx) => {
+                                return (
+                                    <div key={String(idx)} style={{ display: "flex", alignItems: "center" }}>
+                                        <SwatchComponent {...swatch} />
+                                    </div>
+                                );
+                            })}
+                        </PageStage>
                         <PreviewH3>Overflow Menu</PreviewH3>
                         <PageStage>
                             <OverflowMenu
@@ -582,6 +593,28 @@ const breadCrumbLinks = [
         children: "Current Page",
     },
 ] as const;
+
+const swatchesList: SwatchProps[] = [
+    {
+        isDisabled: false,
+        type: SwatchTypeValues.Color,
+        value: "111",
+        caption: "Item 1",
+    },
+    {
+        isDisabled: true,
+        type: SwatchTypeValues.Color,
+        value: "222",
+        caption: "Item 2 (Disabled)",
+    },
+    {
+        isDisabled: false,
+        isSelected: true,
+        type: SwatchTypeValues.Color,
+        value: "333",
+        caption: "Item 3 (Selected)",
+    },
+];
 
 const HeadingQualifier = styled.span`
     font-weight: 300;

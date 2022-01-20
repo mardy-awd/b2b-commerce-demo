@@ -41,7 +41,7 @@
 
         <ul id="tst_dealerResultsList" data-test-selector='tst_dealerResultsList' class="sl-list">
             <li ng-repeat="dealer in vm.dealers">
-                <div class="result-num">{{::vm.getDealerNumber($index)}}</div>
+                <div class="result-num" data-test-selector="tst_dealerResultNum_{{dealer.id}}">{{::vm.getDealerNumber($index)}}</div>
                 <div class="dealer-deetz">
                     <div class="dealer-name">
                         <a ng-href="[% urlForPage 'DealerPage' %]?dealerId={{dealer.id}}" ng-cloak>{{dealer.name}}</a>

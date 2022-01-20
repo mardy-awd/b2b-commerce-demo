@@ -2,7 +2,6 @@ import { HasProduct, withProduct } from "@insite/client-framework/Components/Pro
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductBrand, { ProductBrandStyles } from "@insite/content-library/Components/ProductBrand";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
@@ -75,7 +74,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Page Title",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

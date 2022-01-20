@@ -1,0 +1,8 @@
+﻿<div name="{{'tst_styleButtonGroup_' + styleTrait.name}}">
+    <button id="{{'tst_styleButton_' + style.valueDisplay}}" ng-repeat="style in styleTrait.styleValues" ng-click="clickHandler({ style: style, index: index })"
+            role="button" title="{{style.valueDisplay}}" 
+            ng-class="styleSelection[index].styleTraitValueId === style.styleTraitValueId ? 'btn secondary btn-swatch' : 'btn tertiary btn-swatch'" 
+            ng-disabled="isStyleTraitDisabled({ styleTraitValueId: style.styleTraitValueId })">
+        {{ style.valueDisplay }}
+    </button>
+</div>

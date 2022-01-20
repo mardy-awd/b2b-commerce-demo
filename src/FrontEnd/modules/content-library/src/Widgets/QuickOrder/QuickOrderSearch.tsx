@@ -6,7 +6,6 @@ import { ProductModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductSelector, { ProductSelectorStyles } from "@insite/content-library/Components/ProductSelector";
-import { QuickOrderPageContext } from "@insite/content-library/Pages/QuickOrderPage";
 import ToasterContext from "@insite/mobius/Toast/ToasterContext";
 import React, { FC } from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -47,7 +46,7 @@ const widgetModule: WidgetModule = {
     component: connect(null, mapDispatchToProps)(QuickOrderSearch),
     definition: {
         group: "Quick Order",
-        allowedContexts: [QuickOrderPageContext],
+        allowedContexts: ["QuickOrderPage"],
     },
 };
 

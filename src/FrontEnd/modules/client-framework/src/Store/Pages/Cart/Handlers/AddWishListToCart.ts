@@ -46,6 +46,12 @@ export const LoadCart: HandlerType = props => {
     props.dispatch(loadCurrentCart());
 };
 
+export const DispatchResetPromotionsData: HandlerType = props => {
+    props.dispatch({
+        type: "Data/Promotions/Reset",
+    });
+};
+
 export const ExecuteOnSuccessCallback: HandlerType = props => {
     markSkipOnCompleteIfOnSuccessIsSet(props);
     props.parameter.onSuccess?.(props.apiResult);
@@ -57,6 +63,7 @@ export const chain = [
     RequestDataFromApi,
     DispatchCompleteAddingProductToCart,
     LoadCart,
+    DispatchResetPromotionsData,
     ExecuteOnSuccessCallback,
 ];
 

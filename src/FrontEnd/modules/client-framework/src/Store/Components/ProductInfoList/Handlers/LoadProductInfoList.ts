@@ -25,6 +25,7 @@ interface Parameter {
     };
     forceLoad?: boolean;
     excludeProductId?: string;
+    isShellEdit?: boolean;
 }
 
 interface Props {
@@ -32,6 +33,7 @@ interface Props {
     productInfos?: ProductInfo[];
     pricingLoaded?: true;
     errorMessage?: string;
+    dataViewHasProducts?: boolean;
 }
 
 type HandlerType = Handler<Parameter, Props>;
@@ -43,6 +45,7 @@ export const LoadProducts: HandlerType = async props => {
     }
 
     props.products = getProductsDataView(props.getState(), parameter).value;
+    props.dataViewHasProducts = !!props.products;
 
     if (props.products && !props.parameter.forceLoad) {
         return;
@@ -107,6 +110,10 @@ export const SetUpProductInfos: HandlerType = props => {
 };
 
 export const DispatchCompleteLoadPurchasedProducts: HandlerType = props => {
+    if (props.dataViewHasProducts && props.parameter.isShellEdit) {
+        return;
+    }
+
     props.dispatch({
         type: "Components/ProductInfoLists/CompleteLoadProductInfoList",
         id: props.parameter.id,
@@ -116,7 +123,11 @@ export const DispatchCompleteLoadPurchasedProducts: HandlerType = props => {
 };
 
 export const LoadRealTimePrices: HandlerType = async props => {
-    if (!props.productInfos || props.productInfos.length === 0) {
+    if (
+        !props.productInfos ||
+        props.productInfos.length === 0 ||
+        (props.dataViewHasProducts && props.parameter.isShellEdit)
+    ) {
         return;
     }
 
@@ -154,7 +165,11 @@ export const LoadRealTimePrices: HandlerType = async props => {
 };
 
 export const LoadRealTimeInventory: HandlerType = props => {
-    if (!props.productInfos || props.productInfos.length === 0) {
+    if (
+        !props.productInfos ||
+        props.productInfos.length === 0 ||
+        (props.dataViewHasProducts && props.parameter.isShellEdit)
+    ) {
         return;
     }
 

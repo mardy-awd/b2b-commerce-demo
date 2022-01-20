@@ -67,5 +67,9 @@ const pageModule: PageModule = {
     },
 };
 
-export const OrderConfirmationPageContext = "OrderConfirmationPage";
 export default pageModule;
+
+/**
+ * @deprecated Use string literal "OrderConfirmationPage" instead of this constant.
+ */
+export const OrderConfirmationPageContext = "OrderConfirmationPage";

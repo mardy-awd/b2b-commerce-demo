@@ -78,7 +78,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(LinkList),
     definition: {
         group: "Mobile",
-        icon: "LinkList",
+        icon: "list-ul",
         fieldDefinitions: [
             {
                 name: fields.layout,
@@ -105,7 +105,7 @@ const widgetModule: WidgetModule = {
                     return item.fields.text || mobileLinkListActionDisplayNameByType(item.fields.type);
                 },
                 defaultValue: [],
-                fieldType: "General",
+                fieldType: "Translatable",
                 fieldDefinitions: [
                     {
                         name: "icon",

@@ -16,7 +16,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { CardContainerStyles } from "@insite/content-library/Components/CardContainer";
 import { CardListStyles } from "@insite/content-library/Components/CardList";
-import { CartPageContext } from "@insite/content-library/Pages/CartPage";
 import CartLineCardCondensed, {
     CartLineCardCondensedStyles,
 } from "@insite/content-library/Widgets/Cart/CartLineCardCondensed";
@@ -415,7 +414,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(CartLines),
     definition: {
         group: "Cart",
-        allowedContexts: [CartPageContext],
+        allowedContexts: ["CartPage"],
         fieldDefinitions: [
             {
                 name: fields.showLineNotes,

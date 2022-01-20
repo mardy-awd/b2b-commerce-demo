@@ -14,7 +14,6 @@ import PageProps from "@insite/client-framework/Types/PageProps";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
-import { NewsListPageContext } from "@insite/content-library/Pages/NewsListPage";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
@@ -254,7 +253,7 @@ const widgetModule: WidgetModule = {
     component: withHistory(connect(mapStateToProps, mapDispatchToProps)(NewsListView)),
     definition: {
         group: "News List",
-        allowedContexts: [NewsListPageContext],
+        allowedContexts: ["NewsListPage"],
         fieldDefinitions: [
             {
                 name: fields.defaultPageSize,

@@ -66,6 +66,7 @@ module insite.catalog {
             this.getSession();
 
             this.$scope.$on("vmi-locations-were-deleted", () => {
+                this.allSelected = false;
                 this.getLocations();
             });
         }
@@ -196,8 +197,16 @@ module insite.catalog {
         }
 
         protected getLocationsCompleted(locationCollection: VmiLocationCollectionModel): void {
-            this.savedLocations = locationCollection.vmiLocations;
-            this.pagination = locationCollection.pagination;
+            if (locationCollection.vmiLocations.length === 0
+                && this.pagination.page
+                && this.pagination.page > 1) {
+                this.pagination.page = this.pagination.page - 1;
+                this.getLocations();
+            }
+            else {
+                this.savedLocations = locationCollection.vmiLocations;
+                this.pagination = locationCollection.pagination;
+            }
         }
 
         protected getLocationsFailed(error: any): void {

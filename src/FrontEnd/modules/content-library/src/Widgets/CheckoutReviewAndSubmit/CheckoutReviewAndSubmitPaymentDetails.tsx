@@ -22,7 +22,6 @@ import placeOrder from "@insite/client-framework/Store/Pages/CheckoutReviewAndSu
 import preloadOrderConfirmationData from "@insite/client-framework/Store/Pages/OrderConfirmation/Handlers/PreloadOrderConfirmationData";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
-import { CheckoutReviewAndSubmitPageContext } from "@insite/content-library/Pages/CheckoutReviewAndSubmitPage";
 import CreditCardBillingAddressEntry, {
     CreditCardBillingAddressEntryStyles,
 } from "@insite/content-library/Widgets/CheckoutReviewAndSubmit/CreditCardBillingAddressEntry";
@@ -71,6 +70,7 @@ const mapStateToProps = (state: ApplicationState) => {
         signInPageLink: getPageLinkByPageType(state, "SignInPage"),
         checkoutReviewAndSubmitPageLink: getPageLinkByPageType(state, "CheckoutReviewAndSubmitPage"),
         payPalRedirectUri: state.pages.checkoutReviewAndSubmit.payPalRedirectUri,
+        payPalCheckoutErrorMessage: state.pages.checkoutReviewAndSubmit.payPalCheckoutErrorMessage,
         location: getLocation(state),
         usePaymetricGateway: settingsCollection.websiteSettings.usePaymetricGateway,
         paymetricConfig: state.context.paymetricConfig,
@@ -121,6 +121,8 @@ export interface CheckoutReviewAndSubmitPaymentDetailsStyles {
     creditCardAddress?: CreditCardBillingAddressEntryStyles;
     payPalButton?: PayPalButtonStyles;
     eCheckDetailsEntryStyles?: ECheckDetailsEntryStyles;
+    paypalCheckoutErrorWrapper?: InjectableCss;
+    paypalCheckoutErrorText?: TypographyPresentationProps;
 }
 
 export const checkoutReviewAndSubmitPaymentDetailsStyles: CheckoutReviewAndSubmitPaymentDetailsStyles = {
@@ -167,6 +169,14 @@ export const checkoutReviewAndSubmitPaymentDetailsStyles: CheckoutReviewAndSubmi
             flex-direction: column;
         `,
     },
+    paypalCheckoutErrorWrapper: {
+        css: css`
+            display: flex;
+            width: 100%;
+            padding-top: 1em;
+        `,
+    },
+    paypalCheckoutErrorText: { color: "danger" },
 };
 
 // TokenEx doesn't provide an npm package or type definitions for using the iframe solution.
@@ -304,6 +314,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     history,
     checkoutWithPayPal,
     payPalRedirectUri,
+    payPalCheckoutErrorMessage,
     preloadOrderConfirmationData,
     loadTokenExConfig,
     theme,
@@ -564,7 +575,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     }, [tokenExConfig, typeof TokenEx]);
 
     const setUpTokenEx = () => {
-        if (!tokenExConfig || !paymentMethodDto) {
+        if (!tokenExConfig || !paymentMethodDto || !cart?.showCreditCard || cart.requiresApproval) {
             return;
         }
 
@@ -1160,6 +1171,13 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                         {translate("Payment Method: PayPal")}
                     </Typography>
                 )}
+                {isPayPal && payPalCheckoutErrorMessage && (
+                    <StyledWrapper {...styles.paypalCheckoutErrorWrapper}>
+                        <Typography {...styles.paypalCheckoutErrorText} data-test-selector="payPalCheckoutErrorMessage">
+                            {payPalCheckoutErrorMessage}
+                        </Typography>
+                    </StyledWrapper>
+                )}
                 {!isPayPal && (
                     <GridContainer {...styles.paymentMethodAndPONumberContainer}>
                         <GridItem {...styles.paymentMethodGridItem}>
@@ -1178,7 +1196,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                                         <option value="">{translate("Select Payment Method")}</option>
                                         {paymentMethods.map(method => (
                                             <option key={method.name} value={method.name}>
-                                                {method.description}
+                                                {method.description || method.name}
                                             </option>
                                         ))}
                                     </Select>
@@ -1374,7 +1392,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Checkout - Review & Submit",
         displayName: "Payment Details",
-        allowedContexts: [CheckoutReviewAndSubmitPageContext],
+        allowedContexts: ["CheckoutReviewAndSubmitPage"],
     },
 };
 

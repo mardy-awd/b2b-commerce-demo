@@ -1,6 +1,5 @@
 Avalara.AvaTax.Adapter
 DotLiquid
-GemBox.Spreadsheet
 Insite.Account
 Insite.Brands
 Insite.Budget

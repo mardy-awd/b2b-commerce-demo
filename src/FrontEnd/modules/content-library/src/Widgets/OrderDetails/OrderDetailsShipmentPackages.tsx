@@ -3,7 +3,6 @@ import { OrderStateContext } from "@insite/client-framework/Store/Data/Orders/Or
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
-import { OrderDetailsPageContext } from "@insite/content-library/Pages/OrderDetailsPage";
 import DataTable, { DataTableProps } from "@insite/mobius/DataTable";
 import DataTableBody, { DataTableBodyProps } from "@insite/mobius/DataTable/DataTableBody";
 import DataTableCell, { DataTableCellProps } from "@insite/mobius/DataTable/DataTableCell";
@@ -75,7 +74,7 @@ const OrderDetailsShipmentPackages: React.FC = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsShipmentPackages,
     definition: {
-        allowedContexts: [OrderDetailsPageContext],
+        allowedContexts: ["OrderDetailsPage"],
         group: "Order Details",
     },
 };

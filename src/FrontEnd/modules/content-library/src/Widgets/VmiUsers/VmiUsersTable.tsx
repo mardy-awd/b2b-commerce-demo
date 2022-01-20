@@ -6,7 +6,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/VmiUsers/Ha
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { VmiUsersPageContext } from "@insite/content-library/Pages/VmiUsersPage";
 import AddVmiUserModal from "@insite/content-library/Widgets/VmiUsers/AddVmiUserModal";
 import DataTable, { DataTablePresentationProps, SortOrderOptions } from "@insite/mobius/DataTable";
 import DataTableBody, { DataTableBodyProps } from "@insite/mobius/DataTable/DataTableBody";
@@ -251,7 +250,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "VMI Users",
         displayName: "Search Results Table",
-        allowedContexts: [VmiUsersPageContext],
+        allowedContexts: ["VmiUsersPage"],
     },
 };
 

@@ -8,7 +8,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ShareEntityButton, { ShareEntityButtonStyles } from "@insite/content-library/Components/ShareEntityButton";
-import { OrderStatusPageContext } from "@insite/content-library/Pages/OrderStatusPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -244,7 +243,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order Status",
         displayName: "Header",
-        allowedContexts: [OrderStatusPageContext],
+        allowedContexts: ["OrderStatusPage"],
         fieldDefinitions: [
             {
                 name: fields.generateEmailAttachmentFromWebpage,

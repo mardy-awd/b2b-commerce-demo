@@ -1,5 +1,5 @@
 import ContentMode from "@insite/client-framework/Common/ContentMode";
-import Icon from "@insite/mobius/Icon";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import ClickerStyle from "@insite/shell/Components/Shell/ClickerStyle";
 import shellTheme from "@insite/shell/ShellTheme";
 import { setContentMode } from "@insite/shell/Store/ShellContext/ShellContextActionCreators";
@@ -15,7 +15,7 @@ const mapDispatchToProps = {
     setContentMode,
 };
 
-type OwnProps = { targetContentMode: ContentMode; icon: React.FC | string; disabled?: boolean };
+type OwnProps = { targetContentMode: ContentMode; icon: string; disabled?: boolean };
 
 type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & OwnProps;
 
@@ -52,7 +52,7 @@ class ContentModeClicker extends React.Component<Props> {
                 disabled={disabled}
                 title={contentModeLabel[targetContentMode]}
             >
-                <Icon src={icon} color={iconColor} />
+                <AxiomIcon src={icon} color={iconColor} size={20} />
             </ClickerStyle>
         );
     }

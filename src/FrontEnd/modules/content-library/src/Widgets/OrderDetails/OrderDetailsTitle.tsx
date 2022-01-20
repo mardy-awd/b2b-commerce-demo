@@ -1,7 +1,6 @@
 import { OrderStateContext } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
-import { OrderDetailsPageContext } from "@insite/content-library/Pages/OrderDetailsPage";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
 import * as React from "react";
 import { useContext } from "react";
@@ -37,7 +36,7 @@ const OrderDetailsTitle: React.FC = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsTitle,
     definition: {
-        allowedContexts: [OrderDetailsPageContext],
+        allowedContexts: ["OrderDetailsPage"],
         group: "Order Details",
     },
 };

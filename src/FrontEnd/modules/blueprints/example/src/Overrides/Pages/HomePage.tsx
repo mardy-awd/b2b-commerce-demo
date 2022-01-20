@@ -27,5 +27,3 @@ const pageModule: PageModule = {
 };
 
 export default pageModule;
-
-export const HomePageContext = "HomePage";

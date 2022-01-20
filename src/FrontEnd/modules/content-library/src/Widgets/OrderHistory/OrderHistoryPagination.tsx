@@ -2,7 +2,6 @@ import { OrdersDataViewContext } from "@insite/client-framework/Store/Data/Order
 import updateSearchFields from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/UpdateSearchFields";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderHistoryPageContext } from "@insite/content-library/Pages/OrderHistoryPage";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
 import React, { FC, useContext } from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -69,7 +68,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Pagination",
         group: "Order History",
-        allowedContexts: [OrderHistoryPageContext],
+        allowedContexts: ["OrderHistoryPage"],
     },
 };
 

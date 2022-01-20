@@ -2,7 +2,6 @@ import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import { GetShipTosApiParameter } from "@insite/client-framework/Services/CustomersService";
 import { FulfillmentMethod } from "@insite/client-framework/Services/SessionService";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { getShipTosDataView } from "@insite/client-framework/Store/Data/ShipTos/ShipTosSelectors";
 import translate from "@insite/client-framework/Translate";
 import { ShipToModel } from "@insite/client-framework/Types/ApiModels";
@@ -62,7 +61,14 @@ const ChangeCustomerShipToSelector: FC<Props> = ({
         dropdownPlaceholder = translate("Search or Select Recipient Address");
     }
 
-    useEffect(() => setLoadShipTosParameter(), [billToId]);
+    useEffect(() => {
+        setSearchText("");
+        setParameter({ ...parameter, billToId, filter: undefined });
+    }, [billToId]);
+
+    useEffect(() => {
+        setParameter({ ...parameter, filter: searchText || undefined });
+    }, [searchText]);
 
     useEffect(() => {
         if (shipTosDataView.value) {
@@ -88,16 +94,6 @@ const ChangeCustomerShipToSelector: FC<Props> = ({
 
     const searchTextChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchText(event.currentTarget.value);
-        setLoadShipTosParameter();
-    };
-
-    const setLoadShipTosParameter = () => {
-        const apiParameter: GetShipTosApiParameter = {
-            ...parameter,
-            billToId,
-            filter: searchText || undefined,
-        };
-        setParameter(apiParameter);
     };
 
     return (
@@ -110,6 +106,7 @@ const ChangeCustomerShipToSelector: FC<Props> = ({
             placeholder={dropdownPlaceholder}
             isLoading={isLoading}
             options={options}
+            search={searchText}
             data-test-selector="changeCustomerShipToSelector"
         />
     );

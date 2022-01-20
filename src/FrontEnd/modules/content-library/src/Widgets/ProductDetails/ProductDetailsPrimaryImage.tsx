@@ -9,7 +9,6 @@ import ProductImageCarousel, {
     ProductImageCarouselStyles,
 } from "@insite/content-library/Components/ProductImageCarousel";
 import ProductPrimaryImage, { ProductPrimaryImageStyles } from "@insite/content-library/Components/ProductPrimaryImage";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import { LazyImageProps } from "@insite/mobius/LazyImage";
 import { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
 import Modal, { ModalPresentationProps } from "@insite/mobius/Modal";
@@ -158,7 +157,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Primary Image",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

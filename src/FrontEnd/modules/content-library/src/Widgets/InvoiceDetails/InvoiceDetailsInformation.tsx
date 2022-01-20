@@ -5,7 +5,6 @@ import { InvoiceStateContext } from "@insite/client-framework/Store/Data/Invoice
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import SmallHeadingAndText, { SmallHeadingAndTextStyles } from "@insite/content-library/Components/SmallHeadingAndText";
-import { InvoiceDetailsPageContext } from "@insite/content-library/Pages/InvoiceDetailsPage";
 import InvoiceDetailsBillingAddress, {
     InvoiceDetailsBillingAddressStyles,
 } from "@insite/content-library/Widgets/InvoiceDetails/InvoiceDetailsBillingAddress";
@@ -214,7 +213,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Invoice History",
         displayName: "Information",
-        allowedContexts: [InvoiceDetailsPageContext],
+        allowedContexts: ["InvoiceDetailsPage"],
     },
 };
 

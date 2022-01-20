@@ -189,7 +189,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(PurchasedProducts),
     definition: {
         group: "Common",
-        icon: "List",
+        icon: "list-ul",
         isSystem: true,
         fieldDefinitions: [
             {

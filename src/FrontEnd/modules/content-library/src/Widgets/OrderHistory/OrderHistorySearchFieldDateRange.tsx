@@ -4,7 +4,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/OrderHistor
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderHistoryPageContext } from "@insite/content-library/Pages/OrderHistoryPage";
 import SearchFieldWrapper, {
     SearchFieldWrapperStyles,
 } from "@insite/content-library/Widgets/OrderHistory/SearchFieldWrapper";
@@ -93,7 +92,6 @@ const OrderHistorySearchFieldDateRange: React.FunctionComponent<Props> = props =
         <SearchFieldWrapper extendedStyles={styles.searchFieldWrapper}>
             <StyledWrapper {...styles.datePickersWrapper} data-test-selector="tst_orderHistory_filterDateRange">
                 <DatePicker
-                    data-test-selector="orderHistory_filterFromDate"
                     {...styles.fromDate}
                     label={translate("Date Range")}
                     selectedDay={fromDate}
@@ -105,7 +103,6 @@ const OrderHistorySearchFieldDateRange: React.FunctionComponent<Props> = props =
                     }}
                 />
                 <DatePicker
-                    data-test-selector="orderHistory_filterToDate"
                     {...styles.toDate}
                     label={translate("To")}
                     selectedDay={toDate}
@@ -125,7 +122,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(OrderHistorySearchFieldDateRange),
     definition: {
         group: "Order History",
-        allowedContexts: [OrderHistoryPageContext],
+        allowedContexts: ["OrderHistoryPage"],
         displayName: "Date Range",
     },
 };

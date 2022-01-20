@@ -32,6 +32,7 @@ export interface IconThemableProps {
 
 export interface IconPresentationProps extends IconThemableProps {
     src?: React.ComponentType | string;
+    title?: string;
 }
 
 type IconComponentProps = MobiusStyledComponentProps<
@@ -121,7 +122,9 @@ class Icon extends React.Component<IconProps> {
                         return null;
                     }
 
-                    let Component: React.ComponentType | React.ReactElement = () => (
+                    let Component:
+                        | React.ComponentType<IconPresentationProps>
+                        | React.ReactElement<IconPresentationProps> = () => (
                         <svg
                             focusable="false"
                             xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +162,7 @@ class Icon extends React.Component<IconProps> {
                             css={applyStyledProp("css", resolvedMergeCss)}
                             {...omitMultiple(otherProps, ["color", "size", "height", "width", "css"])}
                         >
-                            <Component />
+                            <Component title={this.props.title} />
                         </IconWrapper>
                     );
                 }}

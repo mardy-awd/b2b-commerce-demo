@@ -2,7 +2,6 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { BrandStateContext } from "@insite/client-framework/Store/Data/Brands/BrandsSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { BrandDetailsPageContext } from "@insite/content-library/Pages/BrandDetailsPage";
 import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
@@ -65,9 +64,9 @@ const widgetModule: WidgetModule = {
     component: BrandDetailsLogo,
     definition: {
         group: "Brand Details",
-        icon: "Logo",
+        icon: "diamond",
         displayName: "Brand Logo",
-        allowedContexts: [BrandDetailsPageContext],
+        allowedContexts: ["BrandDetailsPage"],
     },
 };
 

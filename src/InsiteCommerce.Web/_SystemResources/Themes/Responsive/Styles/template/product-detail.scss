@@ -90,6 +90,278 @@
         margin-bottom: 20px;
     }
 
+    .btn-swatch {
+        width: 45% !important;
+        font-size: 0.875rem;
+        font-weight: 400;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-right: 5px !important;
+        padding: .7em .7em !important;
+    }
+
+    .swatch {
+        position: absolute;
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        border-radius: 100%;
+    }
+
+    .swatch-current-container {
+        font-weight: 600;
+        background: #F6F6F6 !important;
+    }
+
+    .swatch-current {
+        border: 2px solid #00A3FF !important;
+        border-radius: 100%;
+    }
+
+    .swatch-disabled {
+        svg {
+            position: absolute;
+            opacity: .75;
+            top: 2px;
+            left: 2px;
+        }
+    }
+
+    .style-trait-label-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    // swatch dropdown
+    .swatch-dropdown {
+        position: relative;
+        display: inline-block;
+        height: 2.7em;
+        width: 100%;
+    }
+
+    .swatch-dropdown-selected-swatch {
+        display: flex;
+    }
+
+    .swatch-dropdown-select {
+        height: 2.7em;
+        width: 100%;
+        border-style: solid;
+        border-width: 1px;
+        border-color: rgb(204, 204, 204);
+        font-size: 14px;
+        font-weight: 400;
+        font-family: 'sourcesanspro';
+        color: rgba(0, 0, 0, 0.75);
+        background-color: #FFFFFF !important;
+        padding: 0.1em 0.5em;
+        text-align: left;
+        margin-bottom: 0;
+    }
+
+    .swatch-dropdown-text {
+        display: flex;
+        align-items: center;
+        margin-left: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .swatch-dropdown-option {
+        height: 2.7em;
+        width: 100%;
+        font-size: 14px;
+        font-weight: 400;
+        font-family: 'sourcesanspro';
+        color: rgba(0, 0, 0, 0.75);
+        background-color: #FFFFFF;
+        padding: 0.1em 0.5em;
+        text-align: left;
+        margin-bottom: 0;
+    }
+
+    .swatch-dropdown-option:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    button.swatch-dropdown-option:hover:enabled {
+        background: #F6F6F6 !important;
+    }
+
+    button.swatch-dropdown-option:hover:disabled {
+        background: none !important;
+        color: rgba(16, 16, 16, 0.3);
+    }
+
+    .swatch-dropdown-list {
+        display: none;
+        position: absolute;
+        background-color: #FFFFFF;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .show-dropdown-list {
+        display: block;
+        max-height: 300px;
+        width: 100%;
+    }
+
+    .dropbtn:hover, .dropbtn:focus {
+        background-color: #2980B9;
+    }
+
+    .swatch-dropdown-item {
+        display: flex;
+        align-content: center;
+    }
+
+    .swatch-dropdown-container {
+        position: relative;
+        display: inline-block;
+        min-width: 33px;
+        min-height: 33px;
+        padding: 2px;
+        background: transparent;
+        border-radius: 100%;
+        border: 2px solid transparent;
+    }
+    // swatch grid
+    .swatch-grid > ul {
+        overflow-y: auto;
+        max-height: 300px;
+        display: inline-block;
+        width: 100%;
+        margin-left: auto;
+    }
+
+    .swatch-grid-item {
+        display: inline-block;
+        width: 40%;
+        text-align: center;
+        margin: 10px 5px;
+    }
+
+    .swatch-grid-option {
+        height: 100%;
+        width: 100%;
+        font-size: 14px;
+        font-weight: 400;
+        font-family: 'sourcesanspro';
+        color: rgba(0, 0, 0, 0.75);
+        background-color: #FFFFFF;
+        padding: 0.1em 0.5em;
+        text-align: left;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .swatch-grid-option:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    .swatch-grid-container {
+        position: relative;
+        display: inline-block;
+        min-width: 33px;
+        min-height: 33px;
+        padding: 2px;
+        background: transparent;
+        border-radius: 100%;
+        border: 2px solid transparent;
+    }
+
+    .swatch-grid-text {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    button.swatch-grid-option:hover:enabled {
+        background: #F6F6F6 !important;
+    }
+
+    button.swatch-grid-option:hover:disabled {
+        background: none !important;
+        color: rgba(16, 16, 16, 0.3);
+    }
+    // swatch list
+    .swatch-list > ul {
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: 300px;
+        width: 100%;
+        margin-left: auto;
+    }
+
+    .swatch-list-item {
+        display: inline-block;
+        width: 90%;
+        margin: 10px 0px;
+    }
+
+    .swatch-list-option {
+        height: 100%;
+        width: 100%;
+        font-size: 14px;
+        font-weight: 400;
+        font-family: 'sourcesanspro';
+        color: rgba(0, 0, 0, 0.75);
+        background-color: #FFFFFF;
+        padding: 0.1em 0.5em;
+        text-align: left;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .swatch-list-option:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    button.swatch-list-option:hover:enabled {
+        background: #F6F6F6 !important;
+    }
+
+    button.swatch-list-option:hover:disabled {
+        background: none !important;
+        color: rgba(16, 16, 16, 0.3);
+    }
+
+    .swatch-list-container {
+        position: relative;
+        display: inline-block;
+        min-width: 33px;
+        min-height: 33px;
+        padding: 2px;
+        background: transparent;
+        border-radius: 100%;
+        border: 2px solid transparent;
+    }
+
+    .swatch-list-text {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        margin-left: 5px;
+    }
+
     .detail-share {
         text-align: center;
     }
@@ -150,6 +422,10 @@
     .detail-options .panel {
         border: 1px solid #e0e7ea;
         background: none;
+
+        .section-label {
+            word-break: break-word;
+        }
     }
 
     .pd-buttons, .secondary-button {

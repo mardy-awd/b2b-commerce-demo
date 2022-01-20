@@ -138,6 +138,7 @@ class RichTextEditor extends React.Component<Props, State> {
                 (window as any).CKFinder.modal({
                     chooseFiles: true,
                     chooseFilesClosePopup: true,
+                    resizeImages: false,
                     onInit: (finder: any) => {
                         document.getElementById("ckf-modal-close")?.addEventListener("click", hideOverlay);
                         finder.on("files:choose", (evt: any) => {
@@ -194,6 +195,7 @@ class RichTextEditor extends React.Component<Props, State> {
                 (window as any).CKFinder.modal({
                     chooseFiles: true,
                     chooseFilesClosePopup: true,
+                    resizeImages: false,
                     onInit: (finder: any) => {
                         document.getElementById("ckf-modal-close")?.addEventListener("click", hideOverlay);
                         finder.on("files:choose", (evt: any) => {

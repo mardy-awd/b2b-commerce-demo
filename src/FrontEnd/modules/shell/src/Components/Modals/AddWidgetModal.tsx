@@ -1,13 +1,12 @@
 import { AddWidgetData } from "@insite/client-framework/Common/FrameHole";
 import { Dictionary } from "@insite/client-framework/Common/Types";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { AllowedContexts } from "@insite/client-framework/Types/AllowedContexts";
 import WidgetGroups, { WidgetGroup } from "@insite/client-framework/Types/WidgetGroups";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import Icon from "@insite/mobius/Icon";
-import mobiusIconsObject from "@insite/mobius/Icons/commonIcons";
 import Modal, { ModalPresentationProps } from "@insite/mobius/Modal";
 import TextField from "@insite/mobius/TextField";
-import shellIconsObject from "@insite/shell/Components/Icons/CompatibleIcons/shellIcons";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import { getWidgetDefinition, getWidgetDefinitions } from "@insite/shell/DefinitionLoader";
 import { LoadedWidgetDefinition } from "@insite/shell/DefinitionTypes";
 import { setupWidgetModel } from "@insite/shell/Services/WidgetCreation";
@@ -19,8 +18,6 @@ import sortBy from "lodash/sortBy";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled, { css } from "styled-components";
-
-const iconsObject = { ...shellIconsObject, ...mobiusIconsObject };
 
 type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
@@ -35,7 +32,10 @@ const mapStateToProps = (state: ShellState) => {
             continue;
         }
 
-        if (widgetDefinition.allowedContexts && widgetDefinition.allowedContexts.indexOf(pageType) < 0) {
+        if (
+            widgetDefinition.allowedContexts &&
+            widgetDefinition.allowedContexts.indexOf(pageType as AllowedContexts) < 0
+        ) {
             continue;
         }
 
@@ -226,7 +226,7 @@ class AddWidgetModal extends React.Component<Props, State> {
                                                     onClick={() => this.addWidget(widgetDefinition)}
                                                     data-test-selector={`addWidgetModal_${widgetDefinition.displayName}`}
                                                 >
-                                                    <Icon src={iconsObject[widgetDefinition.icon || "NoIcon"]} />
+                                                    <AxiomIcon src={provideFallback(widgetDefinition.icon)} size={20} />
                                                     {widgetDefinition.displayName}
                                                 </WidgetListItemStyle>
                                             ))}
@@ -239,6 +239,13 @@ class AddWidgetModal extends React.Component<Props, State> {
             </Modal>
         );
     }
+}
+
+function provideFallback(src?: string): any {
+    if (!src || src.match(/[A-Z]/)) {
+        return "puzzle-piece";
+    }
+    return src;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddWidgetModal);

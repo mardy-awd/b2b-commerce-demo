@@ -113,4 +113,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "CategoryDetailsPage" instead of this constant.
+ */
 export const CategoryDetailsPageContext = "CategoryDetailsPage";

@@ -2,7 +2,6 @@ import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CheckoutShippingPageContext } from "@insite/content-library/Pages/CheckoutShippingPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import LoadingOverlay, { LoadingOverlayProps } from "@insite/mobius/LoadingOverlay";
@@ -113,7 +112,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Page Container",
         group: "Checkout - Shipping",
-        allowedContexts: [CheckoutShippingPageContext],
+        allowedContexts: ["CheckoutShippingPage"],
     },
 };
 

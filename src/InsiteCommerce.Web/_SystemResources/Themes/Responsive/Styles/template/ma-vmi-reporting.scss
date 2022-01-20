@@ -1,0 +1,136 @@
+﻿.ma-vmi-reporting {
+    .btns {
+        margin-top: .5em;
+        float: left;
+        width: 100%;
+    }
+
+    .btns .btn {
+        float: right;
+    }
+
+    .search-vmi-reporting {
+        margin-top: 20px;
+    }
+
+    .search-date {
+        position: relative;
+    }
+
+    .picker {
+        right: 0% !important;
+    }
+
+    .search-date-to .picker__holder {
+        right: 0% !important;
+    }
+
+    .search-vmi-reporting {
+        .search-date {
+            em {
+                display: block;
+            }
+        }
+    }
+
+    .search-no-results {
+        background-color: #F2F2F2;
+        text-align: center;
+        padding: 70px 0;
+    }
+
+    .results-count {
+        display: inline-block;
+        padding: 0.5em 0 0.5em;
+    }
+
+    .btn-group {
+        display: inline-block;
+        padding: 0.5em .75em;
+        float: right;
+    }
+
+    .overflow-table {
+         overflow: auto;
+
+         .col-check {
+             input {
+                 margin: 0;
+             }
+         }
+     }
+
+    .vmi-reporting-filter {
+        .products-filter {
+            float: left;
+
+            .filter-label-block {
+                display: flex;
+
+                .reset-button {
+                    margin-left: 100px;
+                }
+            }
+
+            .filter-block {
+                display: flex;
+                align-items: center;
+
+                .filter-label {
+                    line-height: 20px;
+                }
+
+                .filter-input {
+                    width: 46px;
+                    margin: 0 0 0 10px;
+                }
+            }
+        }
+    }
+}
+
+@media all and (max-width: 767px) {
+    .ma-vmi-reporting {
+        .btns .btn {
+            width: 100%;
+            margin-bottom: 1em;
+        }
+    }
+}
+
+@media all and (min-width: 768px) {
+    .ma-vmi-reporting {
+        .btns .btn {
+            margin-left: 1em;
+        }
+
+        label.accord-head {
+            display: inline-block;
+        }
+
+        .search-vmi-reporting {
+            .search-date {
+                input {
+                    width: 90px;
+                    display: inline-block;
+                }
+
+                em {
+                    display: inline-block;
+                    float: left;
+                    line-height: 38px;
+                    margin-right: .75em;
+                }
+
+                .row .small-6 {
+                    width: auto;
+                }
+
+                [class*="column"] + [class*="column"]:last-child {
+                    float: left;
+                    padding: 0;
+                }
+            }
+        }
+    }
+}

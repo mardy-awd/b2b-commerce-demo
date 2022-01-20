@@ -74,7 +74,7 @@ const widgetModule: WidgetModule = {
     component: Image,
     definition: {
         group: "Basic",
-        icon: "Image",
+        icon: "image",
         fieldDefinitions: [
             {
                 name: fields.imageUrl,

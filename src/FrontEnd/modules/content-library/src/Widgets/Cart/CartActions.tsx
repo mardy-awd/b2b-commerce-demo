@@ -13,7 +13,6 @@ import addToWishList from "@insite/client-framework/Store/Data/WishLists/Handler
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CartPageContext } from "@insite/content-library/Pages/CartPage";
 import CartSaveOrderButton from "@insite/content-library/Widgets/Cart/CartSaveOrderButton";
 import { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
@@ -176,7 +175,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(CartActions),
     definition: {
         group: "Cart",
-        allowedContexts: [CartPageContext],
+        allowedContexts: ["CartPage"],
     },
 };
 

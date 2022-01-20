@@ -5,7 +5,7 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { getWidgetsByIdAndZone } from "@insite/client-framework/Store/Data/Widgets/WidgetSelectors";
 import { dragLeaveZone, dragWidgetOverZone, dropWidgetOnZone } from "@insite/client-framework/WidgetReordering";
-import Icon from "@insite/mobius/Icon";
+import AsyncAxiomIcon from "@insite/shell/Components/Icons/AxiomIcon/AsyncAxiomIcon";
 import * as React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -142,7 +142,7 @@ class Zone extends React.Component<Props> {
                                 (permissions?.canAddSystemWidget && pageDefinition?.pageType === "System")) && (
                                 <AddContainer fullHeight={widgets.length === 0}>
                                     <AddButton onClick={this.add} data-test-selector={`shell_addWidget_${zoneName}`}>
-                                        <Icon src="PlusCircle" size={26} color="#4A4A4A" />
+                                        <AsyncAxiomIcon src="plus" size={26} color="#4A4A4A" />
                                     </AddButton>
                                 </AddContainer>
                             )}

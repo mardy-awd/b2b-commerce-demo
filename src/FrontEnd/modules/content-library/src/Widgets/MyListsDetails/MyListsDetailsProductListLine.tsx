@@ -452,7 +452,7 @@ const MyListsDetailsProductListLine: React.FC<Props> = ({
                             {...styles.selectedCheckbox}
                             checked={isSelected}
                             onChange={selectChangeHandler}
-                            data-test-selector="selectItem"
+                            data-test-selector="myListDetails_selectRowCheckbox"
                         />
                     </Hidden>
                     <StyledWrapper {...styles.imageWrapper}>

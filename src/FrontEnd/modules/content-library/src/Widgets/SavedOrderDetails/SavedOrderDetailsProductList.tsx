@@ -4,7 +4,6 @@ import { CartLineContext } from "@insite/client-framework/Components/CartLineCon
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { CardContainerStyles } from "@insite/content-library/Components/CardContainer";
-import { SavedOrderDetailsPageContext } from "@insite/content-library/Pages/SavedOrderDetailsPage";
 import SavedOrderDetailsCartLine from "@insite/content-library/Widgets/SavedOrderDetails/SavedOrderDetailsCartLine";
 import getColor from "@insite/mobius/utilities/getColor";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
@@ -47,7 +46,7 @@ const SavedOrderDetailsProductList: React.FunctionComponent<Props> = ({ cart }) 
 const widgetModule: WidgetModule = {
     component: withCart(SavedOrderDetailsProductList),
     definition: {
-        allowedContexts: [SavedOrderDetailsPageContext],
+        allowedContexts: ["SavedOrderDetailsPage"],
         group: "Saved Order Details",
     },
 };

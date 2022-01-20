@@ -14,7 +14,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { TwoButtonModalStyles } from "@insite/content-library/Components/TwoButtonModal";
-import { OrderConfirmationPageContext } from "@insite/content-library/Pages/OrderConfirmationPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable, { ClickableProps } from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -201,7 +200,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(OrderConfirmationHeader)),
     definition: {
         displayName: "Page Header",
-        allowedContexts: [OrderConfirmationPageContext],
+        allowedContexts: ["OrderConfirmationPage"],
         group: "Order Confirmation",
     },
 };

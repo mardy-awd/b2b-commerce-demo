@@ -4,7 +4,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
-import { OrderStatusPageContext } from "@insite/content-library/Pages/OrderStatusPage";
 import DataTable, { DataTableProps } from "@insite/mobius/DataTable";
 import DataTableCell from "@insite/mobius/DataTable/DataTableCell";
 import { DataTableCellBaseProps } from "@insite/mobius/DataTable/DataTableCellBase";
@@ -74,7 +73,7 @@ const OrderStatusShipmentPackages: FC<Props> = ({ order }) => {
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(OrderStatusShipmentPackages),
     definition: {
-        allowedContexts: [OrderStatusPageContext],
+        allowedContexts: ["OrderStatusPage"],
         displayName: "Shipment Packages",
         group: "Order Status",
     },

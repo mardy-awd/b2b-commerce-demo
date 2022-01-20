@@ -23,6 +23,7 @@ const initialState: ContextState = {
     isErrorModalOpen: false,
     isUnauthorizedError: false,
     isSearchDataModeActive: false,
+    wasSetMetadataCalled: false,
 };
 
 const forcedContext = (() => {
@@ -124,6 +125,9 @@ const reducer = {
     },
     "Context/SetSearchDataModeActive": (draft: Draft<ContextState>, action: { isSearchDataModeActive: boolean }) => {
         draft.isSearchDataModeActive = action.isSearchDataModeActive;
+    },
+    "Context/CalledSetMetadata": (draft: Draft<ContextState>) => {
+        draft.wasSetMetadataCalled = true;
     },
     "Context/CompleteLoadPaymetricConfig": (
         draft: Draft<ContextState>,

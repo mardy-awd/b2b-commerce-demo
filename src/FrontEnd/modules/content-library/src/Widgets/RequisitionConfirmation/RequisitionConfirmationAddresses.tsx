@@ -6,7 +6,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import AddressInfoDisplay, { AddressInfoDisplayStyles } from "@insite/content-library/Components/AddressInfoDisplay";
-import { RequisitionConfirmationPageContext } from "@insite/content-library/Pages/RequisitionConfirmationPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
@@ -120,7 +119,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(RequisitionConfirmationAddresses),
     definition: {
         displayName: "Addresses",
-        allowedContexts: [RequisitionConfirmationPageContext],
+        allowedContexts: ["RequisitionConfirmationPage"],
         group: "Requisition Confirmation",
     },
 };

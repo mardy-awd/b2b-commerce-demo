@@ -13,7 +13,6 @@ import translate from "@insite/client-framework/Translate";
 import { CarrierDto, ShipViaDto } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CheckoutReviewAndSubmitPageContext } from "@insite/content-library/Pages/CheckoutReviewAndSubmitPage";
 import DatePicker, { DatePickerPresentationProps, DatePickerState } from "@insite/mobius/DatePicker";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -271,7 +270,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Carrier & Service",
         group: "Checkout - Review & Submit",
-        allowedContexts: [CheckoutReviewAndSubmitPageContext],
+        allowedContexts: ["CheckoutReviewAndSubmitPage"],
     },
 };
 

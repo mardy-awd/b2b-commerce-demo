@@ -52,6 +52,12 @@ const StaticListPage = ({
     setBreadcrumbs,
 }: Props) => {
     useEffect(() => {
+        return () => {
+            setBreadcrumbs({ links: undefined });
+        };
+    }, []);
+
+    useEffect(() => {
         if (wishListId && !wishListState.value && !wishListState.isLoading) {
             loadWishListIfNeeded({ wishListId });
         }
@@ -86,4 +92,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "StaticListPage" instead of this constant.
+ */
 export const StaticListPageContext = "StaticListPage";

@@ -3,7 +3,7 @@ import Zone from "@insite/client-framework/Components/Zone";
 import siteMessage from "@insite/client-framework/SiteMessage";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { PaymentProfilesContext, SavedPaymentsPageContext } from "@insite/content-library/Pages/SavedPaymentsPage";
+import { PaymentProfilesContext } from "@insite/content-library/Pages/SavedPaymentsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Icon, { IconProps } from "@insite/mobius/Icon";
@@ -146,7 +146,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "View",
         group: "Saved Payments",
-        allowedContexts: [SavedPaymentsPageContext],
+        allowedContexts: ["SavedPaymentsPage"],
     },
 };
 

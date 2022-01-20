@@ -3,7 +3,6 @@ import { getQuotesDataView } from "@insite/client-framework/Store/Data/Quotes/Qu
 import updateSearchFields from "@insite/client-framework/Store/Pages/RfqMyQuotes/Handlers/UpdateSearchFields";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqMyQuotesPageContext } from "@insite/content-library/Pages/RfqMyQuotesPage";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
 import React, { ChangeEvent } from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -68,7 +67,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "RFQ My Quotes",
         displayName: "Pagination",
-        allowedContexts: [RfqMyQuotesPageContext],
+        allowedContexts: ["RfqMyQuotesPage"],
     },
 };
 

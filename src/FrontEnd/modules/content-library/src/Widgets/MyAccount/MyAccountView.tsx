@@ -1,7 +1,6 @@
 import Zone from "@insite/client-framework/Components/Zone";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { MyAccountPageContext } from "@insite/content-library/Pages/MyAccountPage";
 import AccountMessages from "@insite/content-library/Widgets/MyAccount/AccountMessages";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -53,7 +52,7 @@ class MyAccountView extends React.PureComponent<Props> {
 const myAccountViewWidget: WidgetModule = {
     component: MyAccountView,
     definition: {
-        allowedContexts: [MyAccountPageContext],
+        allowedContexts: ["MyAccountPage"],
         group: "My Account",
     },
 };

@@ -6,7 +6,6 @@ import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductImageCarousel, {
     ProductImageCarouselStyles,
 } from "@insite/content-library/Components/ProductImageCarousel";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import { ButtonProps } from "@insite/mobius/Button";
 import { GridContainerProps } from "@insite/mobius/GridContainer";
 import { GridItemProps } from "@insite/mobius/GridItem";
@@ -72,7 +71,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Image Carousel",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

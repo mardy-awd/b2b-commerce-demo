@@ -11,7 +11,6 @@
     "name": "Quote Confirmation",
     "urlSegment": "Confirmation",
     "horizontalRule": "",
-    "excludeFromNavigation": true,
     "tags": []
   },
   "translatableFields": {

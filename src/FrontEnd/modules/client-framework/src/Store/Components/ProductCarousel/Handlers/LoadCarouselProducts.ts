@@ -23,6 +23,7 @@ interface Parameter {
     category?: Category;
     isBrandDetailsPage: boolean;
     brand?: BrandModel;
+    isShellEdit?: boolean;
 }
 
 interface Props {
@@ -206,6 +207,7 @@ export const LoadProducts: HandlerType = props => {
             extraProductOptions,
             excludeProductId: isRecentlyViewedOnPDP ? props.parameter.productId : undefined,
             forceLoad: isRecentlyViewedOnPDP,
+            isShellEdit: props.parameter.isShellEdit,
         }),
     );
 };

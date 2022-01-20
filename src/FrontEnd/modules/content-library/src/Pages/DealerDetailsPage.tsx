@@ -88,6 +88,10 @@ class DealerDetailsPage extends React.Component<Props, State> {
         }
     }
 
+    componentWillUnmount() {
+        this.props.setBreadcrumbs({ links: undefined });
+    }
+
     setMetadata(isUpdate: boolean) {
         const {
             dealerState: { value: dealer },
@@ -153,4 +157,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "DealerDetailsPage" instead of this constant.
+ */
 export const DealerDetailsPageContext = "DealerDetailsPage";

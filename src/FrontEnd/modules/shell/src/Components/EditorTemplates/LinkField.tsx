@@ -5,7 +5,6 @@ import { getPageLinkByNodeId } from "@insite/client-framework/Store/Links/LinksS
 import translate from "@insite/client-framework/Translate";
 import { LinkFieldDefinition, LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import Button from "@insite/mobius/Button";
-import Icon from "@insite/mobius/Icon";
 import Tab, { TabProps } from "@insite/mobius/Tab";
 import TabGroup from "@insite/mobius/TabGroup";
 import TextField from "@insite/mobius/TextField";
@@ -13,9 +12,7 @@ import StandardControl from "@insite/shell-public/Components/StandardControl";
 import { EditorTemplateProps } from "@insite/shell-public/EditorTemplateProps";
 import { isValidUrl } from "@insite/shell/Common/IsValidUrl";
 import ClickOutside from "@insite/shell/Components/ClickOutside";
-import ArrowDown from "@insite/shell/Components/Icons/ArrowDown";
-import ArrowRight from "@insite/shell/Components/Icons/ArrowRight";
-import Link from "@insite/shell/Components/Icons/Link";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import NeverPublishedModal from "@insite/shell/Components/Modals/NeverPublishedModal";
 import shellTheme, { ShellThemeProps } from "@insite/shell/ShellTheme";
 import { showNeverPublishedModal } from "@insite/shell/Store/NeverPublishedModal/NeverPublishedModalActionCreators";
@@ -85,8 +82,8 @@ const mapDispatchToProps = {
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
-const StandardIconPropsSource: React.FC = () => <Link color1={shellTheme.colors.text.main} />;
-const ClearIconPropsSource: React.FC = () => <Icon src="X" />;
+const StandardIconPropsSource: React.FC = () => <AxiomIcon src="link" color={shellTheme.colors.text.main} />;
+const ClearIconPropsSource: React.FC = () => <AxiomIcon color="#000" src="times" />;
 
 class LinkField extends ClickOutside<Props, State> {
     constructor(props: Props) {
@@ -184,7 +181,11 @@ class LinkField extends ClickOutside<Props, State> {
                             >
                                 {hasChildren && (
                                     <ArrowContainer isExpanded={isExpanded} onClick={this.clickExpand}>
-                                        {isExpanded ? <ArrowDown height={6} /> : <ArrowRight width={6} />}
+                                        {isExpanded ? (
+                                            <AxiomIcon src="chevron-down" size={12} />
+                                        ) : (
+                                            <AxiomIcon src="chevron-right" size={12} />
+                                        )}
                                     </ArrowContainer>
                                 )}
                                 <span onClick={this.clickPage}>{page.title}</span>
@@ -214,7 +215,11 @@ class LinkField extends ClickOutside<Props, State> {
                             <TitleStyle className="link-selector" data-id={category.id}>
                                 {hasChildren && (
                                     <ArrowContainer isExpanded={isExpanded} onClick={this.clickExpand}>
-                                        {isExpanded ? <ArrowDown height={6} /> : <ArrowRight width={6} />}
+                                        {isExpanded ? (
+                                            <AxiomIcon size={12} src="chevron-down" />
+                                        ) : (
+                                            <AxiomIcon size={12} src="chevron-right" />
+                                        )}
                                     </ArrowContainer>
                                 )}
                                 <span onClick={this.clickCategory}>{category.shortDescription}</span>

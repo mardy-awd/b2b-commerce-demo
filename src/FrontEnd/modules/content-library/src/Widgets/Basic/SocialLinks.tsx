@@ -179,11 +179,12 @@ export const SocialLinks: FC<OwnProps> = ({ fields }) => {
                                         margin: 5px;
                                     `,
                                     src: showIcon ? GetIcon(fields.links[index].fields.icon) : undefined,
+                                    title: fields.links[index].fields.title,
                                 },
                                 position: fields.alignment,
                             }}
                         >
-                            {showLabel && link.title}
+                            {showLabel && fields.links[index].fields.title}
                         </Link>
                     )}
                 </StyledWrapper>
@@ -203,7 +204,7 @@ const settingsTab = {
 
 const definition: WidgetDefinition = {
     group: "Basic",
-    icon: "Link",
+    icon: "thumbs-up",
     isSystem: true,
     fieldDefinitions: [
         {

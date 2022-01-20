@@ -1,8 +1,7 @@
 import { changeContext } from "@insite/client-framework/Store/Data/Pages/PagesActionCreators";
 import { DeviceType } from "@insite/client-framework/Types/ContentItemModel";
-import Icon from "@insite/mobius/Icon";
 import getColor from "@insite/mobius/utilities/getColor";
-import ArrowDown from "@insite/shell/Components/Icons/ArrowDown";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import { updateShellContext } from "@insite/shell/Services/ContentAdminService";
 import shellTheme from "@insite/shell/ShellTheme";
 import { loadShellContext } from "@insite/shell/Store/ShellContext/ShellContextActionCreators";
@@ -113,7 +112,7 @@ class HeaderBar extends React.Component<Props, State> {
 
         return (
             <HeaderBarStyle data-test-selector="headerBar">
-                <Icon src="Globe" size={20} color={disableSelects ? commonDisabled : "primary.main"} />
+                <AxiomIcon src="language" size={20} color={disableSelects ? commonDisabled : "primary.main"} />
                 <SelectWrapper>
                     <select
                         onChange={this.onLanguageChange}
@@ -127,11 +126,11 @@ class HeaderBar extends React.Component<Props, State> {
                             </option>
                         ))}
                     </select>
-                    <ArrowDown color1={disableSelects ? commonDisabled : primaryMain} height={7} />
+                    <AxiomIcon color={disableSelects ? commonDisabled : primaryMain} src="chevron-down" size={12} />
                 </SelectWrapper>
                 {hasDeviceSpecificContent && !mobileCmsModeActive && (
                     <>
-                        <Icon src="Monitor" size={20} color={disableSelects ? commonDisabled : "primary.main"} />
+                        <AxiomIcon src="display" size={20} color={disableSelects ? commonDisabled : "primary.main"} />
                         <SelectWrapper>
                             <select
                                 onChange={this.onDeviceTypeChange}
@@ -145,13 +144,17 @@ class HeaderBar extends React.Component<Props, State> {
                                     </option>
                                 ))}
                             </select>
-                            <ArrowDown color1={disableSelects ? commonDisabled : primaryMain} height={7} />
+                            <AxiomIcon
+                                color={disableSelects ? commonDisabled : primaryMain}
+                                src="chevron-down"
+                                size={12}
+                            />
                         </SelectWrapper>
                     </>
                 )}
                 {hasPersonaSpecificContent && !mobileCmsModeActive && (
                     <>
-                        <Icon src="Users" size={20} color={disableSelects ? commonDisabled : "primary.main"} />
+                        <AxiomIcon src="users" size={20} color={disableSelects ? commonDisabled : "primary.main"} />
                         <SelectWrapper>
                             <select
                                 onChange={this.onPersonaChange}
@@ -165,7 +168,11 @@ class HeaderBar extends React.Component<Props, State> {
                                     </option>
                                 ))}
                             </select>
-                            <ArrowDown color1={disableSelects ? commonDisabled : primaryMain} height={7} />
+                            <AxiomIcon
+                                color={disableSelects ? commonDisabled : primaryMain}
+                                src="chevron-down"
+                                size={12}
+                            />
                         </SelectWrapper>
                     </>
                 )}
@@ -175,13 +182,6 @@ class HeaderBar extends React.Component<Props, State> {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderBar);
-
-const SpacerBar: React.FC = () => (
-    <svg focusable="false" viewBox="0 0 32 24" width="32" height="24">
-        <line x1="16" x2="16" y1="0" y2="24" stroke="currentColor" strokeWidth="2" />
-    </svg>
-);
-export const Spacer = React.memo(SpacerBar);
 
 const HeaderBarStyle = styled.div`
     height: 100%;
@@ -225,9 +225,9 @@ const SelectWrapper = styled.div`
             color: ${getColor("common.disabled")};
         }
     }
-    svg {
+    i {
         position: absolute;
-        top: 17px;
+        top: 14px;
         right: 5px;
         pointer-events: none;
     }

@@ -2,7 +2,6 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { HasProduct, withProduct } from "@insite/client-framework/Components/ProductContext";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import { IconMemo, IconProps } from "@insite/mobius/Icon";
@@ -80,7 +79,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Documents",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

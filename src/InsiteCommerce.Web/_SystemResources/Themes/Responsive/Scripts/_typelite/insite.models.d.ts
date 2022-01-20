@@ -423,6 +423,9 @@ declare module Insite.Catalog.WebApi.V1.ApiModels {
 		pagination: Insite.Core.WebApi.PaginationModel;
 		vmiBins: Insite.Catalog.WebApi.V1.ApiModels.VmiBinModel[];
 	}
+	interface VmiBinCountModel extends Insite.Core.WebApi.BaseModel {
+		count: number;
+	}
 	interface VmiBinModel extends Insite.Core.WebApi.BaseModel {
 		id: System.Guid;
 		vmiLocationId: System.Guid;
@@ -886,7 +889,6 @@ declare module Insite.Catalog.Services.Dtos {
 		styleValues: Insite.Catalog.Services.Dtos.StyleValueDto[];
 		displayType: string;
 		numberOfSwatchesVisible: number;
-		useProductImageForSwatch: boolean;
 		displayTextWithSwatch: boolean;
 	}
 	interface StyleValueDto {

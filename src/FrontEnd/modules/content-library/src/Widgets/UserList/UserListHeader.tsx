@@ -6,7 +6,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/UserList/Ha
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { UserListPageContext } from "@insite/content-library/Pages/UserListPage";
 import CreateUserModal from "@insite/content-library/Widgets/UserList/CreateUserModal";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable from "@insite/mobius/Clickable";
@@ -238,7 +237,7 @@ class UserListHeader extends Component<Props, { query: string; isCreateUserModal
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(UserListHeader),
     definition: {
-        allowedContexts: [UserListPageContext],
+        allowedContexts: ["UserListPage"],
         group: "User List",
         fieldDefinitions: [
             {

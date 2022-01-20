@@ -6,7 +6,6 @@ import { getPageLinkByNodeId } from "@insite/client-framework/Store/Links/LinksS
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ChangeCustomerPageContext } from "@insite/content-library/Pages/ChangeCustomerPage";
 import Link from "@insite/mobius/Link";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -65,7 +64,7 @@ export const NavigationList = (props: Props) => {
             .filter(pageLink => {
                 return (
                     !pageLink.excludeFromNavigation &&
-                    !(pageLink.type === ChangeCustomerPageContext && !props.displayChangeCustomerLink)
+                    !(pageLink.type === "ChangeCustomerPage" && !props.displayChangeCustomerLink)
                 );
             })
             .map(pageLink => {
@@ -103,7 +102,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(NavigationList),
     definition: {
         group: "Basic",
-        icon: "NavigationList",
+        icon: "link-simple",
         fieldDefinitions: [
             {
                 name: fields.depth,

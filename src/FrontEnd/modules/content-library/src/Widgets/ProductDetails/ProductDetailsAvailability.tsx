@@ -5,7 +5,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { ProductAvailabilityStyles } from "@insite/content-library/Components/ProductAvailability";
 import ProductContextAvailability from "@insite/content-library/Components/ProductContextAvailability";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import * as React from "react";
 import { connect } from "react-redux";
 
@@ -42,7 +41,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Availability",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

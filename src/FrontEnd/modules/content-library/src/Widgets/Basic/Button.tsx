@@ -78,7 +78,7 @@ const widgetModule: WidgetModule = {
     component: CmsButton,
     definition: {
         group: "Basic",
-        icon: "Button",
+        icon: "rectangle-wide",
         fieldDefinitions: [
             {
                 name: fields.variant,

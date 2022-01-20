@@ -6,8 +6,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import SkipNav, { SkipNavStyles } from "@insite/content-library/Components/SkipNav";
-import { BrandsPageContext } from "@insite/content-library/Pages/BrandsPage";
-import { HomePageContext } from "@insite/content-library/Pages/HomePage";
 import FlexItem, { FlexItemProps } from "@insite/content-library/Widgets/Brand/FlexItem";
 import FlexWrapContainer, { FlexWrapContainerProps } from "@insite/content-library/Widgets/Brand/FlexWrapContainer";
 import Clickable from "@insite/mobius/Clickable";
@@ -198,9 +196,9 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(BrandGallery),
     definition: {
         group: "Brands",
-        icon: "Image",
+        icon: "image",
         displayName: "Brand Gallery",
-        allowedContexts: [BrandsPageContext, HomePageContext],
+        allowedContexts: ["BrandsPage", "HomePage"],
         fieldDefinitions: [
             {
                 name: fields.title,

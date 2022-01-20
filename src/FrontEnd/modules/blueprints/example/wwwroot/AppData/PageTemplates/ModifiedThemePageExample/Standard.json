@@ -12,8 +12,6 @@
         "hideFooter": false,
         "hideFromSearchEngines": false,
         "hideFromSiteSearch": false,
-        "excludeFromNavigation": false,
-        "excludeFromSignInRequired": false,
         "tags": []
     },
     "translatableFields": {

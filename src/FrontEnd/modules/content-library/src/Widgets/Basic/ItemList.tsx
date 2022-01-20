@@ -110,7 +110,7 @@ const widgetModule: WidgetModule = {
     component: ItemList,
     definition: {
         group: "Basic",
-        icon: "NavigationList",
+        icon: "link-simple",
         fieldDefinitions: [
             {
                 name: fields.overrideTitle,

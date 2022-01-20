@@ -101,7 +101,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(RecentQuotes),
     definition: {
         group: "Common",
-        icon: "List",
+        icon: "list-ul",
     },
 };
 

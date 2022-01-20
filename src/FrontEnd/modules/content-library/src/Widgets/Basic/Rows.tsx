@@ -31,7 +31,7 @@ const widgetModule: WidgetModule = {
     component: Rows,
     definition: {
         group: "Basic",
-        icon: "Row",
+        icon: "distribute-spacing-vertical",
         fieldDefinitions: [
             {
                 name: "rowCount",

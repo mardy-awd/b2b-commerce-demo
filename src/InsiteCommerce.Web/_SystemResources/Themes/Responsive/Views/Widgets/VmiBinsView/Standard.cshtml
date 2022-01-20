@@ -1,10 +1,16 @@
 ﻿<div ng-controller="VmiBinsController as vm" ng-cloak
     ng-init="vm.exportHeaders = [
-        '[% translate 'Vmi Location ID' %]',
-        '[% translate 'Product ID' %]',
-        '[% translate 'Bin Number' %]',
-        '[% translate 'Min Qty' %]',
-        '[% translate 'Max Qty' %]'
+        '[% translate 'Product Name' %]',
+        '[% translate 'Part #' %]',
+        '[% translate 'My Part #' %]',
+        '[% translate 'Manufacturer Part #' %]',
+        '[% translate 'Bin #' %]',
+        '[% translate 'Min' %]',
+        '[% translate 'Max' %]',
+        '[% translate 'Previous Count Date' %]',
+        '[% translate 'Previous Count Quantity' %]',
+        '[% translate 'Previous Order' %]',
+        '[% translate 'Image Source URL' %]'
         ];">
     <div ng-if="!vm.failedToLoadVmiBins">
         <div class="row top-actions-block">

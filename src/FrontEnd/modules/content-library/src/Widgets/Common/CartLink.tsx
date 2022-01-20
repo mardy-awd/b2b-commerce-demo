@@ -128,7 +128,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(CartLink),
     definition: {
         displayName: "Cart",
-        icon: "Link",
+        icon: "cart-shopping",
         fieldDefinitions: [
             {
                 name: fields.visibilityState,

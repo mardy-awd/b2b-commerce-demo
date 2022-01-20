@@ -1,6 +1,7 @@
 import * as React from "react";
+import { IconPresentationProps } from "../Icon/Icon";
 
-const Video: React.FC = () => {
+const Video: React.FC<IconPresentationProps> = props => {
     return (
         <svg
             focusable="false"
@@ -13,7 +14,9 @@ const Video: React.FC = () => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            role="img"
         >
+            {props.title && <title>{props.title}</title>}
             <polygon points="23 7 16 12 23 17 23 7"></polygon>
             <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
         </svg>

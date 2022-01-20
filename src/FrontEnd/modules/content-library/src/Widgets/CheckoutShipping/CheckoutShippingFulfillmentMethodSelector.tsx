@@ -5,7 +5,6 @@ import setFulfillmentMethod from "@insite/client-framework/Store/Context/Handler
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CheckoutShippingPageContext } from "@insite/content-library/Pages/CheckoutShippingPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Radio, { RadioComponentProps, RadioStyle } from "@insite/mobius/Radio";
@@ -120,7 +119,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Checkout - Shipping",
         displayName: "Fulfillment Method Selector",
-        allowedContexts: [CheckoutShippingPageContext],
+        allowedContexts: ["CheckoutShippingPage"],
     },
 };
 

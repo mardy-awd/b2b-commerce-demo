@@ -1,22 +1,20 @@
 import PageProps from "@insite/client-framework/Types/PageProps";
-import Icon from "@insite/mobius/Icon";
-import DebugMenu from "@insite/shell/Components/Icons/DebugMenu";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import BrandSelection from "@insite/shell/Components/PageEditor/BrandSelection";
 import CategorySelection from "@insite/shell/Components/PageEditor/CategorySelection";
 import ProductSelection from "@insite/shell/Components/PageEditor/ProductSelection";
 import PublishDropDown from "@insite/shell/Components/PageEditor/PublishDropDown";
-import { Spacer } from "@insite/shell/Components/Shell/HeaderBar";
 import HeaderPublishStatus from "@insite/shell/Components/Shell/HeaderPublishStatus";
 import { LoadedPageDefinition } from "@insite/shell/DefinitionTypes";
 import { getPageState, getPageStateFromDictionaries } from "@insite/shell/Services/ContentAdminService";
 import { getAutoUpdatedPageTypes } from "@insite/shell/Services/SpireService";
-import shellTheme, { ShellThemeProps } from "@insite/shell/ShellTheme";
+import { ShellThemeProps } from "@insite/shell/ShellTheme";
 import { editPageOptions, openPageTemplateModal } from "@insite/shell/Store/PageEditor/PageEditorActionCreators";
 import { setContentMode } from "@insite/shell/Store/ShellContext/ShellContextActionCreators";
 import ShellState from "@insite/shell/Store/ShellState";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 interface OwnProps {
     page: PageProps;
@@ -106,19 +104,40 @@ class Header extends React.Component<Props, State> {
         return (
             <PageHeaderStyle>
                 <PageHeaderTitle data-test-selector="shell_title">{page.name}</PageHeaderTitle>
-                <Icon src={Spacer} color="custom.borderDividerColor" />
-                <Icon src="Calendar" size={20} color={shellTheme.colors.primary.main} />
+                <AxiomIcon
+                    src="pipe"
+                    color="custom.borderDividerColor"
+                    size={16}
+                    css={css`
+                        width: 24px;
+                        height: 24px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    `}
+                />
                 <HeaderPublishStatus />
                 {contentMode === "Editing" && (
                     <>
-                        <Icon src={Spacer} color="custom.borderDividerColor" />
+                        <AxiomIcon
+                            src="pipe"
+                            size={16}
+                            color="custom.borderDividerColor"
+                            css={css`
+                                width: 24px;
+                                height: 24px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                            `}
+                        />
                         {permissions?.canEditWidget && (!futurePublishOn || futurePublishOn < new Date()) && (
                             <PageHeaderButton onClick={this.editPageOptions} data-test-selector="shell_editPage">
-                                <Icon src="Edit" size={20} color={shellTheme.colors.primary.main} />
+                                <AxiomIcon src="edit" size={16} />
                             </PageHeaderButton>
                         )}
                         <PageHeaderButton onClick={openPageTemplateModal}>
-                            <DebugMenu color1={shellTheme.colors.primary.main} size={16} />
+                            <AxiomIcon src="bug" size={16} />
                         </PageHeaderButton>
                     </>
                 )}

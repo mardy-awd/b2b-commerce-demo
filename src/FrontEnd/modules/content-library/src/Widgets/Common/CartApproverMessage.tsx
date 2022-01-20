@@ -56,6 +56,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(CartApproverMessage),
     definition: {
         displayName: "Cart Approver Message",
+        icon: "cart-circle-check",
         group: "Common",
     },
 };

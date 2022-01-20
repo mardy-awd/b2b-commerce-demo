@@ -5,7 +5,6 @@ import { getProductListDataView } from "@insite/client-framework/Store/Pages/Pro
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import Search from "@insite/mobius/Icons/Search";
 import TextField, { TextFieldPresentationProps } from "@insite/mobius/TextField";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
@@ -110,7 +109,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Search Within",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
     },
 };
 

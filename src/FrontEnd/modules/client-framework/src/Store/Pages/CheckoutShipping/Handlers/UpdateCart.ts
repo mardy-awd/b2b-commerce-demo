@@ -138,6 +138,9 @@ export const UpdateBillTo: HandlerType = async props => {
         });
 
         dispatch(loadBillTo({ billToId: billTo.id }));
+        if (cart.shipToId === billTo.id) {
+            dispatch(loadShipTo({ shipToId: cart.shipToId, billToId: billTo.id }));
+        }
 
         props.apiParameter.cart.billToId = props.updatedBillTo.id;
     }

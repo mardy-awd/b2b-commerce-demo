@@ -66,6 +66,7 @@ export const getShellContext = () =>
         defaultLanguageId: string;
         currentLanguageId: string;
         websiteId: string;
+        websiteFavicon: string;
         cmsType: string;
         homePageId: string;
         mobileHomePageId: string;

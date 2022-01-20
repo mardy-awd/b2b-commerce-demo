@@ -4,7 +4,6 @@ import { getSettingsCollection } from "@insite/client-framework/Store/Context/Co
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import CartLinesList, { CartLinesListStyles } from "@insite/content-library/Components/CartLinesList";
-import { OrderApprovalDetailsPageContext } from "@insite/content-library/Pages/OrderApprovalDetailsPage";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React, { useState } from "react";
 import { connect } from "react-redux";
@@ -62,7 +61,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(withCart(OrderApprovalDetailsProductList)),
     definition: {
         displayName: "Product List",
-        allowedContexts: [OrderApprovalDetailsPageContext],
+        allowedContexts: ["OrderApprovalDetailsPage"],
         group: "Order Approval Details",
     },
 };

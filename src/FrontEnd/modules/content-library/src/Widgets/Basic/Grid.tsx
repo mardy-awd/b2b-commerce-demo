@@ -71,7 +71,7 @@ const gridModule: WidgetModule = {
     component: Grid,
     definition: {
         group: "Basic",
-        icon: "Grid",
+        icon: "border-all",
         fieldDefinitions: [
             {
                 name: fields.extraLargeColumnCount,

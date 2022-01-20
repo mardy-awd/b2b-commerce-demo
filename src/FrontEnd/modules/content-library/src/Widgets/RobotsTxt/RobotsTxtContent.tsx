@@ -2,7 +2,6 @@
 import PageProps from "@insite/client-framework/Types/PageProps";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RobotsTxtPageContext } from "@insite/content-library/Pages/RobotsTxtPage";
 import Typography from "@insite/mobius/Typography";
 import React, { FC } from "react";
 
@@ -40,7 +39,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Robots Txt",
         displayName: "Content",
-        allowedContexts: [RobotsTxtPageContext],
+        allowedContexts: ["RobotsTxtPage"],
         fieldDefinitions: [
             {
                 name: "disallow",

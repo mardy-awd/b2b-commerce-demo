@@ -6,7 +6,6 @@ import updateConfigurationSelection from "@insite/client-framework/Store/Pages/P
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import Select, { SelectProps } from "@insite/mobius/Select";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
@@ -97,7 +96,7 @@ const widgetModule: WidgetModule = {
     component: withParentProductId(connect(mapStateToProps, mapDispatchToProps)(ProductDetailsBundleSectionOptions)),
     definition: {
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

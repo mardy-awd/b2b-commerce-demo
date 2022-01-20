@@ -2,7 +2,6 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { OrderStateContext } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
-import { OrderDetailsPageContext } from "@insite/content-library/Pages/OrderDetailsPage";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import { useContext } from "react";
@@ -48,7 +47,7 @@ const OrderDetailsPaymentTerms = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsPaymentTerms,
     definition: {
-        allowedContexts: [OrderDetailsPageContext],
+        allowedContexts: ["OrderDetailsPage"],
         group: "Order Details",
     },
 };

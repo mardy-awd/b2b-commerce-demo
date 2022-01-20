@@ -1,6 +1,5 @@
-import Button, { ButtonIcon } from "@insite/mobius/Button";
-import ChevronDown from "@insite/mobius/Icons/ChevronDown";
-import ChevronUp from "@insite/mobius/Icons/ChevronUp";
+import Button from "@insite/mobius/Button";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import PublishModal from "@insite/shell/Components/Shell/PublishModal";
 import {
     setPublishButtonExpanded,
@@ -79,7 +78,7 @@ class PublishDropDown extends React.Component<Props> {
                         style={{ width: "100%" }}
                         onClick={this.toggle}
                     >
-                        <ButtonIcon src={visible ? ChevronUp : ChevronDown} size={14} />
+                        <AxiomIcon src="chevron-down" rotation={visible ? "flip" : "none"} size={12} />
                     </PublishDropDownButton>
                     {!visible ? null : (
                         <InlinePopUpOuterWrapper>

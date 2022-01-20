@@ -18,7 +18,6 @@ import updateShipTo from "@insite/client-framework/Store/Pages/CheckoutShipping/
 import translate from "@insite/client-framework/Translate";
 import { BillToModel, ShipToModel, WarehouseModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
-import { CheckoutShippingPageContext } from "@insite/content-library/Pages/CheckoutShippingPage";
 import BillingAddress, { BillingAddressStyles } from "@insite/content-library/Widgets/CheckoutShipping/BillingAddress";
 import PickUpAddress, { PickUpAddressStyles } from "@insite/content-library/Widgets/CheckoutShipping/PickUpAddress";
 import ShippingAddress, {
@@ -258,7 +257,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(CheckoutShippingAddresses)),
     definition: {
         group: "Checkout - Shipping",
-        allowedContexts: [CheckoutShippingPageContext],
+        allowedContexts: ["CheckoutShippingPage"],
         displayName: "Addresses",
     },
 };

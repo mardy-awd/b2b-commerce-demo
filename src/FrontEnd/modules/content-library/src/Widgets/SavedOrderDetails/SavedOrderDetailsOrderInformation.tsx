@@ -4,7 +4,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import AddressInfoDisplay, { AddressInfoDisplayStyles } from "@insite/content-library/Components/AddressInfoDisplay";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
-import { SavedOrderDetailsPageContext } from "@insite/content-library/Pages/SavedOrderDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
@@ -141,7 +140,7 @@ const widgetModule: WidgetModule = {
     component: withCart(SavedOrderDetailsOrderInformation),
     definition: {
         displayName: "Saved Order Information",
-        allowedContexts: [SavedOrderDetailsPageContext],
+        allowedContexts: ["SavedOrderDetailsPage"],
         group: "Saved Order Details",
     },
 };

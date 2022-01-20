@@ -1,8 +1,7 @@
 import Button from "@insite/mobius/Button";
-import Icon from "@insite/mobius/Icon";
 import LoadingSpinner from "@insite/mobius/LoadingSpinner";
 import Modal from "@insite/mobius/Modal";
-import Drag from "@insite/shell/Components/Icons/Drag";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import ButtonBar from "@insite/shell/Components/Modals/ButtonBar";
 import { PageReorderModel } from "@insite/shell/Services/ContentAdminService";
 import shellTheme, { ShellThemeProps } from "@insite/shell/ShellTheme";
@@ -247,7 +246,14 @@ class ReorderPagesModal extends React.Component<Props> {
                                     onDragEnd={this.dragEnd}
                                     onDrag={this.drag}
                                 >
-                                    <Drag color1={shellTheme.colors.text.accent} height={18} />
+                                    <AxiomIcon
+                                        src="grip-vertical"
+                                        color={shellTheme.colors.text.accent}
+                                        size={18}
+                                        css={css`
+                                            margin: 0 8px 0 5px;
+                                        `}
+                                    />
                                     {page.variantName ? `${page.name} - ${page.variantName}` : page.name}
                                 </TitleStyle>
                                 {this.renderTreeChunk(page.id)}
@@ -277,7 +283,14 @@ class ReorderPagesModal extends React.Component<Props> {
                     <>
                         {!this.props.isVariantReorder && (
                             <ReorderTreeWarningStyle>
-                                <Icon src="AlertTriangle" />
+                                <AxiomIcon
+                                    src="exclamation-triangle"
+                                    size={16}
+                                    color="#000"
+                                    css={css`
+                                        padding-right: 5px;
+                                    `}
+                                />
                                 Warning: Moving pages will change their URL. Make sure to set up any necessary redirects
                                 for relocated pages.
                             </ReorderTreeWarningStyle>
@@ -330,14 +343,11 @@ const LoadingStyle = styled.div`
 `;
 
 const TitleStyle = styled.h3`
+    font-size: 20px !important;
     cursor: grab;
-    position: relative;
-    font-size: 18px;
-    svg {
-        position: absolute;
-        top: 5px;
-        left: 6px;
-    }
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 `;
 
 const ReorderTreeStyle = styled.div<{ isVariantReorder: boolean }>`
@@ -349,7 +359,8 @@ const ReorderTreeStyle = styled.div<{ isVariantReorder: boolean }>`
         border: 1px solid ${(props: ShellThemeProps) => props.theme.colors.text.accent};
         border-radius: 3px;
         margin: 2px 0;
-        padding: 0 8px 0 22px;
+        padding: 0 8px 0 5px;
+        margin-top: 8px;
     }
 `;
 
@@ -372,11 +383,11 @@ const ReorderTreeItemStyle = styled.li`
             height: 100%;
             background-color: rgb(216, 216, 216);
             position: absolute;
-            top: 4px;
+            top: 8px;
             left: 0;
         }
         li:last-child::before {
-            height: 10px;
+            height: 21px;
         }
         li::after {
             content: "";
@@ -384,7 +395,7 @@ const ReorderTreeItemStyle = styled.li`
             height: 2px;
             background-color: rgb(216, 216, 216);
             position: absolute;
-            top: 14px;
+            top: 28px;
             left: 0;
         }
     }

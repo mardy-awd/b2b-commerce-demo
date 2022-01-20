@@ -2,7 +2,6 @@ import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import React, { FC } from "react";
@@ -63,7 +62,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Columns",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
     },
 };
 

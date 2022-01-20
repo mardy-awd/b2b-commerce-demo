@@ -139,5 +139,9 @@ const pageModule: PageModule = {
     },
 };
 
-export const CheckoutShippingPageContext = "CheckoutShippingPage";
 export default pageModule;
+
+/**
+ * @deprecated Use string literal "CheckoutShippingPage" instead of this constant.
+ */
+export const CheckoutShippingPageContext = "CheckoutShippingPage";

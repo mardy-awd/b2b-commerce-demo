@@ -4,7 +4,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductShareLink, { ProductShareLinkStyles } from "@insite/content-library/Components/ProductShareLink";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -49,7 +48,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Share Link",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

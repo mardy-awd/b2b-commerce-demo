@@ -52,6 +52,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(AddressDrawerSelectCustomer),
     definition: {
         displayName: "Customer Selector",
+        icon: "users",
         fieldDefinitions: [],
         group: "Header",
     },

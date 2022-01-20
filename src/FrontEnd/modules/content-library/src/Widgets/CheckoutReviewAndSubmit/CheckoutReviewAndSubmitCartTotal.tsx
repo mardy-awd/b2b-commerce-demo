@@ -27,7 +27,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import CartTotalDisplay, { CartTotalDisplayStyles } from "@insite/content-library/Components/CartTotalDisplay";
 import FindLocationModal, { FindLocationModalStyles } from "@insite/content-library/Components/FindLocationModal";
-import { CheckoutReviewAndSubmitPageContext } from "@insite/content-library/Pages/CheckoutReviewAndSubmitPage";
 import PlaceOrderButton from "@insite/content-library/Widgets/CheckoutReviewAndSubmit/CheckoutReviewAndSubmitPlaceOrderButton";
 import SubmitForApprovalButton from "@insite/content-library/Widgets/CheckoutReviewAndSubmit/CheckoutReviewAndSubmitSubmitForApprovalButton";
 import { ButtonPresentationProps } from "@insite/mobius/Button";
@@ -393,7 +392,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(CheckoutReviewAndSubmitCartTotal),
     definition: {
         group: "Checkout - Review & Submit",
-        allowedContexts: [CheckoutReviewAndSubmitPageContext],
+        allowedContexts: ["CheckoutReviewAndSubmitPage"],
         displayName: "Cart Total",
     },
 };

@@ -4,7 +4,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RequisitionConfirmationPageContext } from "@insite/content-library/Pages/RequisitionConfirmationPage";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import LoadingSpinner from "@insite/mobius/LoadingSpinner";
 import breakpointMediaQueries from "@insite/mobius/utilities/breakpointMediaQueries";
@@ -145,7 +144,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(RequisitionConfirmationPageContainer),
     definition: {
         group: "Requisition Confirmation",
-        allowedContexts: [RequisitionConfirmationPageContext],
+        allowedContexts: ["RequisitionConfirmationPage"],
         displayName: "Page Container",
     },
 };

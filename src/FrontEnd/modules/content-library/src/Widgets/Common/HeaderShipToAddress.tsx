@@ -188,7 +188,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withIsInShell(HeaderShipToAddress)),
     definition: {
         displayName: "Header Ship To Address Menu",
-        icon: "MapPin",
+        icon: "location-dot",
         group: "Common",
     },
 };

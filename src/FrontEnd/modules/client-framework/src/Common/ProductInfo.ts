@@ -15,7 +15,8 @@ export function createFromProduct(product: ProductModel): ProductInfo {
     return {
         productId: product.id,
         qtyOrdered: Math.max(product.minimumOrderQty, 1),
-        unitOfMeasure: product.unitOfMeasures?.find(o => o.isDefault)?.unitOfMeasure ?? "",
+        unitOfMeasure:
+            product.customerUnitOfMeasure ?? product.unitOfMeasures?.find(o => o.isDefault)?.unitOfMeasure ?? "",
         productDetailPath: product.canonicalUrl,
     };
 }

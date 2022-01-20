@@ -3,7 +3,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
-import { OrderApprovalDetailsPageContext } from "@insite/content-library/Pages/OrderApprovalDetailsPage";
 import OrderApprovalDetailsBillingInformation, {
     OrderApprovalDetailsBillingInformationStyles,
 } from "@insite/content-library/Widgets/OrderApprovalDetails/OrderApprovalDetailsBillingInformation";
@@ -200,7 +199,7 @@ const widgetModule: WidgetModule = {
     component: withCart(OrderApprovalDetailsOrderInformation),
     definition: {
         displayName: "Order Approval Information",
-        allowedContexts: [OrderApprovalDetailsPageContext],
+        allowedContexts: ["OrderApprovalDetailsPage"],
         group: "Order Approval Details",
     },
 };

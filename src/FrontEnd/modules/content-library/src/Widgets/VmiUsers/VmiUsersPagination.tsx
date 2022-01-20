@@ -3,7 +3,6 @@ import { getAccountsDataView } from "@insite/client-framework/Store/Data/Account
 import updateSearchFields from "@insite/client-framework/Store/Pages/VmiUsers/Handlers/UpdateSearchFields";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { VmiUsersPageContext } from "@insite/content-library/Pages/VmiUsersPage";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
 import React from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -70,7 +69,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Pagination",
         group: "VMI Users",
-        allowedContexts: [VmiUsersPageContext],
+        allowedContexts: ["VmiUsersPage"],
     },
 };
 

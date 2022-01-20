@@ -9,6 +9,7 @@ const webpack = require("webpack");
 const RemovePlugin = require("remove-files-webpack-plugin");
 const semver = require("semver");
 const createImportWidgetChunkFile = require("./createImportWidgetChunkFile");
+const createAllowedContext = require("./createAllowedContext");
 
 if (semver.lt(process.version, "12.12.0")) {
     throw new Error("Spire requires node 12.12+ to function properly.");
@@ -32,6 +33,8 @@ exports.setupCommonConfig = (isDevBuild, env, target = "ES2017") => {
     if (!blueprint) {
         blueprint = "content-library";
     }
+
+    createAllowedContext(blueprint);
 
     console.log(`Blueprint is ${blueprint}.`);
 

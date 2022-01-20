@@ -2,7 +2,6 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { InvoiceStateContext } from "@insite/client-framework/Store/Data/Invoices/InvoicesSelectors";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
-import { InvoiceDetailsPageContext } from "@insite/content-library/Pages/InvoiceDetailsPage";
 import InvoiceDetailsLineCard, {
     InvoiceDetailsLineCardStyles,
 } from "@insite/content-library/Widgets/InvoiceDetails/InvoiceDetailsLineCard";
@@ -120,7 +119,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Invoice History",
         displayName: "Summary Table",
-        allowedContexts: [InvoiceDetailsPageContext],
+        allowedContexts: ["InvoiceDetailsPage"],
     },
 };
 

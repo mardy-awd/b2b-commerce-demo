@@ -5,7 +5,6 @@ import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSe
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CheckoutShippingPageContext } from "@insite/content-library/Pages/CheckoutShippingPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -102,7 +101,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Page Header",
         group: "Checkout - Shipping",
-        allowedContexts: [CheckoutShippingPageContext],
+        allowedContexts: ["CheckoutShippingPage"],
     },
 };
 

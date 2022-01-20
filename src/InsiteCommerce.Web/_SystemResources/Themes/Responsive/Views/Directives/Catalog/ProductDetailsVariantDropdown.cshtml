@@ -1,0 +1,6 @@
+﻿<div>
+    <select name="{{'tst_styleSelect_' + styleTrait.name}}" ng-model="styleSelection[index]" ng-change="styleChange(styleSelection[index], {{index}})"
+            ng-options="style.valueDisplay disable when isStyleTraitDisabled({ styleTraitValueId: style.styleTraitValueId }) for style in styleTrait.styleValues | orderBy: 'sortOrder' track by style.styleTraitValueId">
+        <option value="">{{styleTrait.unselectedValue ? "" : "Select"}} {{styleTrait.unselectedValue ? styleTrait.unselectedValue : styleTrait.nameDisplay}}</option>
+    </select>
+</div>

@@ -22,4 +22,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "RobotsTxtPage" instead of this constant.
+ */
 export const RobotsTxtPageContext = "RobotsTxtPage";

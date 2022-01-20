@@ -53,6 +53,8 @@ export interface DynamicDropdownPresentationProps
     /** Text for empty input field.
      * @themable */
     placeholder?: string;
+    /** Bool to be used to disable typing in dropdown field */
+    selectOnly?: boolean;
     /** Props to be passed into the inner LoadingSpinner component when loading.
      * @themable */
     spinnerProps?: LoadingSpinnerProps;
@@ -111,6 +113,8 @@ interface DynamicDropdownComponentProps extends Partial<FormFieldComponentProps>
     onKeyPress?: (event: React.KeyboardEvent) => void;
     /** If the user has not typed anything into the field to search, and there are no options, this lets you hide the "no options" item */
     hideNoOptionsIfEmptySearch?: boolean;
+    /** Value of the search text */
+    search?: string;
 }
 
 interface DynamicDropdownState {
@@ -256,7 +260,7 @@ class DynamicDropdown extends React.Component<DynamicDropdownProps & HasDisabler
             focusedOption: undefined,
             uid: props.uid || uniqueId(),
             selected: props.selected || undefined,
-            typedInput: "",
+            typedInput: props.search || "",
         };
     }
 
@@ -275,6 +279,9 @@ class DynamicDropdown extends React.Component<DynamicDropdownProps & HasDisabler
         }
         if (nextProps.options !== this.props.options) {
             this.setState({ focusable: nextProps.options }, this.buildMenuOptions);
+        }
+        if (nextProps.search !== this.props.search && nextProps.search !== this.state.typedInput) {
+            this.setState({ typedInput: nextProps.search || "" });
         }
     }
 
@@ -495,6 +502,7 @@ class DynamicDropdown extends React.Component<DynamicDropdownProps & HasDisabler
             onKeyPress,
             options,
             placeholder,
+            selectOnly,
             sizeVariant,
             theme,
             hideNoOptionsIfEmptySearch,
@@ -569,6 +577,7 @@ class DynamicDropdown extends React.Component<DynamicDropdownProps & HasDisabler
                 id={uid}
                 type="text"
                 role="searchbox"
+                readOnly={selectOnly}
                 aria-autocomplete="list"
                 autoComplete="no"
                 aria-activedescendant={focusedOption && `${uid}-${focusedOption.optionText}`}

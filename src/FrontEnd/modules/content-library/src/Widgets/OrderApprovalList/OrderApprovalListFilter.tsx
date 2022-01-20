@@ -7,7 +7,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/OrderApprov
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderApprovalListPageContext } from "@insite/content-library/Pages/OrderApprovalListPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import DatePicker, { DatePickerPresentationProps, DatePickerState } from "@insite/mobius/DatePicker";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -431,7 +430,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order Approval List",
         displayName: "Search Results Filter",
-        allowedContexts: [OrderApprovalListPageContext],
+        allowedContexts: ["OrderApprovalListPage"],
         isSystem: true,
     },
 };

@@ -2,7 +2,6 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CartReminderUnsubscribePageContext } from "@insite/content-library/Pages/CartReminderUnsubscribePage";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React from "react";
@@ -73,7 +72,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Cart Reminder Unsubscribe",
         displayName: "Unsubscribe Message",
-        allowedContexts: [CartReminderUnsubscribePageContext],
+        allowedContexts: ["CartReminderUnsubscribePage"],
         fieldDefinitions: [
             {
                 name: fields.unsubscribeMessage,

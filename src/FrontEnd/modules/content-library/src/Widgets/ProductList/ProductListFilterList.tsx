@@ -9,7 +9,7 @@ import { AttributeTypeFacetModel } from "@insite/client-framework/Types/ApiModel
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import SkipNav, { SkipNavStyles } from "@insite/content-library/Components/SkipNav";
-import { ProductListPageContext, ProductListPageDataContext } from "@insite/content-library/Pages/ProductListPage";
+import { ProductListPageDataContext } from "@insite/content-library/Pages/ProductListPage";
 import { formatPriceRangeFacet } from "@insite/content-library/Widgets/ProductList/ProductListPriceFilters";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import Tag, { TagPresentationProps } from "@insite/mobius/Tag";
@@ -321,7 +321,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Filter List",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
     },
 };
 

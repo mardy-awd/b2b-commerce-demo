@@ -78,7 +78,7 @@ const widgetModule: WidgetModule = {
     component: HeaderLinkList,
     definition: {
         group: "Header",
-        icon: "LinkList",
+        icon: "list-ul",
         fieldDefinitions: [
             {
                 name: fields.links,

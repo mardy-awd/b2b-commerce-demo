@@ -2,7 +2,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getShipTosDataView } from "@insite/client-framework/Store/Data/ShipTos/ShipTosSelectors";
 import updateSearchFields from "@insite/client-framework/Store/Pages/Addresses/Handlers/UpdateSearchFields";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
-import { AddressesPageContext } from "@insite/content-library/Pages/AddressesPage";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -66,8 +65,8 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(AddressBookPagination),
     definition: {
         group: "Addresses",
-        icon: "LinkList",
-        allowedContexts: [AddressesPageContext],
+        icon: "house",
+        allowedContexts: ["AddressesPage"],
     },
 };
 

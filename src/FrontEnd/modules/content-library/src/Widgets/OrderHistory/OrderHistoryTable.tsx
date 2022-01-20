@@ -9,7 +9,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import OrderDetailPageTypeLink from "@insite/content-library/Components/OrderDetailPageTypeLink";
-import { OrderHistoryPageContext } from "@insite/content-library/Pages/OrderHistoryPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { ClickableProps } from "@insite/mobius/Clickable";
 import DataTable, { DataTableProps, SortOrderOptions } from "@insite/mobius/DataTable";
@@ -392,7 +391,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Search Results Table",
-        allowedContexts: [OrderHistoryPageContext],
+        allowedContexts: ["OrderHistoryPage"],
         fieldDefinitions: [
             {
                 name: fields.showOrderNumber,

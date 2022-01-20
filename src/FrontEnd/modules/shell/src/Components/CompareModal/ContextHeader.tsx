@@ -1,10 +1,9 @@
 import { DeviceType } from "@insite/client-framework/Types/ContentItemModel";
 import Button from "@insite/mobius/Button/Button";
-import Icon from "@insite/mobius/Icon";
 import Typography from "@insite/mobius/Typography";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import FullWidth from "@insite/shell/Components/Icons/FullWidth";
 import SplitScreen from "@insite/shell/Components/Icons/SplitScreen";
-import { Spacer } from "@insite/shell/Components/Shell/HeaderBar";
 import ViewPortClicker from "@insite/shell/Components/Shell/ViewPortClicker";
 import shellTheme from "@insite/shell/ShellTheme";
 import {
@@ -18,7 +17,7 @@ import { CompareModalState } from "@insite/shell/Store/CompareModal/CompareModal
 import ShellState from "@insite/shell/Store/ShellState";
 import React from "react";
 import { connect, ResolveThunks } from "react-redux";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 interface OwnProps {
     closeModal: () => void;
@@ -94,7 +93,14 @@ class ContextHeader extends React.Component<Props> {
             <ContextHeaderStyle>
                 <ContextSelects>
                     <TitleStyle variant="h3">Comparing: {name}</TitleStyle>
-                    <Icon src="Globe" size={20} color="#000" />
+                    <AxiomIcon
+                        src="language"
+                        size={20}
+                        color="#000"
+                        css={css`
+                            margin-right: 3px;
+                        `}
+                    />
                     <select
                         onChange={this.onLanguageChange}
                         data-test-selector="publishCompareModal_languageSelect"
@@ -108,7 +114,14 @@ class ContextHeader extends React.Component<Props> {
                     </select>
                     {hasDeviceSpecificContent && !mobileCmsModeActive && (
                         <>
-                            <Icon src="Monitor" size={20} color="#000" />
+                            <AxiomIcon
+                                src="display"
+                                size={20}
+                                color="#000"
+                                css={css`
+                                    margin-right: 3px;
+                                `}
+                            />
                             <select
                                 onChange={this.onDeviceTypeChange}
                                 value={deviceType}
@@ -124,7 +137,14 @@ class ContextHeader extends React.Component<Props> {
                     )}
                     {hasPersonaSpecificContent && !mobileCmsModeActive && (
                         <>
-                            <Icon src="Users" size={20} color="#000" />
+                            <AxiomIcon
+                                src="users"
+                                size={20}
+                                color="#000"
+                                css={css`
+                                    margin-right: 3px;
+                                `}
+                            />
                             <select
                                 onChange={this.onPersonaChange}
                                 data-test-selector="publishCompareModal_personaSelect"
@@ -168,11 +188,33 @@ class ContextHeader extends React.Component<Props> {
                     </SwitchButton>
                     {!mobileCmsModeActive && (
                         <>
-                            <Icon src={Spacer} color="custom.borderDividerColor" />
+                            <AxiomIcon
+                                src="pipe"
+                                size={16}
+                                css={css`
+                                    width: 24px;
+                                    height: 24px;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                `}
+                                color="custom.borderDividerColor"
+                            />
                             {clicker("Phone")}
                             {clicker("Tablet")}
                             {clicker("Desktop")}
-                            <Icon src={Spacer} color="custom.borderDividerColor" />
+                            <AxiomIcon
+                                src="pipe"
+                                size={16}
+                                css={css`
+                                    width: 24px;
+                                    height: 24px;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                `}
+                                color="custom.borderDividerColor"
+                            />
                         </>
                     )}
                     <CloseButton

@@ -3,7 +3,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CheckoutReviewAndSubmitPageContext } from "@insite/content-library/Pages/CheckoutReviewAndSubmitPage";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -199,7 +198,10 @@ const CheckoutReviewAndSubmitPageContainer: FC<Props> = ({ id, isPreloadingData,
                         <GridItem {...styles.paymentDetailsGridItem}>
                             <Zone zoneName="Content03" contentId={id} />
                         </GridItem>
-                        <Hidden {...styles.hiddenShippingInfoAndProductListWide}>
+                        <Hidden
+                            {...styles.hiddenShippingInfoAndProductListWide}
+                            data-test-selector="checkoutReviewAndSubmit_content"
+                        >
                             <GridItem {...styles.shippingInfoGridItemWide}>
                                 <Zone zoneName="Content04" contentId={id} />
                             </GridItem>
@@ -243,7 +245,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(CheckoutReviewAndSubmitPageContainer),
     definition: {
         group: "Checkout - Review & Submit",
-        allowedContexts: [CheckoutReviewAndSubmitPageContext],
+        allowedContexts: ["CheckoutReviewAndSubmitPage"],
         displayName: "Page Container",
     },
 };

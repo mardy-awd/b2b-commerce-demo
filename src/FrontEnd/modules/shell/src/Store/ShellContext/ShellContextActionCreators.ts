@@ -21,6 +21,14 @@ export const loadShellContext = (): ShellThunkAction => dispatch => {
                 type: "ShellContext/CompleteLoadShellContext",
             });
 
+            const links = document.querySelectorAll("link[rel~='icon']") as NodeListOf<HTMLAnchorElement>;
+            if (shellContext.websiteFavicon && links) {
+                for (const link of links) {
+                    link.href = shellContext.websiteFavicon;
+                    link.type = "";
+                }
+            }
+
             dispatch({
                 type: "Data/Pages/CompleteChangeContext",
                 languageId: shellContext.currentLanguageId,

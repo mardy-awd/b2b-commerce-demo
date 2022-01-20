@@ -1,5 +1,5 @@
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
-import DoubleArrow from "@insite/shell/Components/Icons/DoubleArrow";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import ClickerStyle from "@insite/shell/Components/Shell/ClickerStyle";
 import shellTheme from "@insite/shell/ShellTheme";
 import { configureComparison } from "@insite/shell/Store/CompareModal/CompareModalActionCreators";
@@ -67,7 +67,7 @@ const CompareVersionClicker = ({
                 });
             }}
         >
-            <DoubleArrow width={24} color1={shellTheme.colors.text.main} />
+            <AxiomIcon size={20} color={shellTheme.colors.text.main} src="exchange" />
         </ClickerStyle>
     );
 };

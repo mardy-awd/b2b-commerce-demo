@@ -9,7 +9,6 @@ import {
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import CartTotalDisplay, { CartTotalDisplayStyles } from "@insite/content-library/Components/CartTotalDisplay";
-import { OrderApprovalDetailsPageContext } from "@insite/content-library/Pages/OrderApprovalDetailsPage";
 import React from "react";
 import { connect } from "react-redux";
 
@@ -53,7 +52,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(withCart(OrderApprovalDetailsTotal)),
     definition: {
         group: "Order Approval Details",
-        allowedContexts: [OrderApprovalDetailsPageContext],
+        allowedContexts: ["OrderApprovalDetailsPage"],
         displayName: "Order Approval Total",
     },
 };

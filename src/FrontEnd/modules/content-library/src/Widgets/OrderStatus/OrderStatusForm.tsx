@@ -5,7 +5,6 @@ import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelec
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderStatusPageContext } from "@insite/content-library/Pages/OrderStatusPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import TextField, { TextFieldPresentationProps } from "@insite/mobius/TextField";
 import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext";
@@ -125,7 +124,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order Status",
         displayName: "Form",
-        allowedContexts: [OrderStatusPageContext],
+        allowedContexts: ["OrderStatusPage"],
     },
 };
 

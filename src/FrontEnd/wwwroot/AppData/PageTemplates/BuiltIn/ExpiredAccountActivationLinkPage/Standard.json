@@ -13,8 +13,6 @@
         "hideFooter": false,
         "hideFromSearchEngines": false,
         "hideFromSiteSearch": false,
-        "excludeFromNavigation": false,
-        "excludeFromSignInRequired": true,
         "tags": [],
         "hideBreadcrumbs": false
     },

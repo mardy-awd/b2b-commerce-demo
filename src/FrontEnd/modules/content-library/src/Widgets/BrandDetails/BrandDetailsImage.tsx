@@ -2,7 +2,6 @@ import { BrandStateContext } from "@insite/client-framework/Store/Data/Brands/Br
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { BrandDetailsPageContext } from "@insite/content-library/Pages/BrandDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
@@ -151,9 +150,9 @@ const widgetModule: WidgetModule = {
     component: BrandDetailsImage,
     definition: {
         group: "Brand Details",
-        icon: "Image",
+        icon: "image",
         displayName: "Brand Image",
-        allowedContexts: [BrandDetailsPageContext],
+        allowedContexts: ["BrandDetailsPage"],
     },
 };
 

@@ -1,0 +1,18 @@
+﻿<div ng-controller="VmiRecentNotesController as vm" ng-cloak class="vmi-recent-notes">
+    <section class="accordion">
+        <div>
+            <input type="checkbox" id="accord-1" class="accord-check"/>
+            <label for="accord-1" class="accord-head">[% translate 'Recent Notes' %]</label>
+            <article class="accord-content orders-content-block">
+                <div ng-repeat="order in vm.orders" class="order-row">
+                    <div class="vmi-location-name" ng-bind="order.vmiLocationName"></div>
+                    <div>
+                        <a ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{order.erpOrderNumber || order.webOrderNumber}}">{{order.erpOrderNumber || order.webOrderNumber}}</a>
+                    </div>
+                    <div ng-bind="order.notes"></div>
+                    <div ng-bind="order.orderDate | date:'shortDate'"></div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>

@@ -9,7 +9,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import TwoButtonModal, { TwoButtonModalStyles } from "@insite/content-library/Components/TwoButtonModal";
-import { LocationsPageContext } from "@insite/content-library/Pages/VmiLocationsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
@@ -132,7 +131,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(VmiLocationsActions),
     definition: {
         group: "VMI Locations",
-        allowedContexts: [LocationsPageContext],
+        allowedContexts: ["VmiLocationsPage"],
     },
 };
 

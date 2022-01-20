@@ -2,7 +2,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RequestRmaPageContext } from "@insite/content-library/Pages/RequestRmaPage";
 import RequestRmaButtons, {
     RequestRmaButtonsStyles,
 } from "@insite/content-library/Widgets/RequestRma/RequestRmaButtons";
@@ -62,7 +61,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, null)(RequestRmaHeader),
     definition: {
         displayName: "Page Header",
-        allowedContexts: [RequestRmaPageContext],
+        allowedContexts: ["RequestRmaPage"],
         fieldDefinitions: [],
         group: "Return Request (RMA)",
     },

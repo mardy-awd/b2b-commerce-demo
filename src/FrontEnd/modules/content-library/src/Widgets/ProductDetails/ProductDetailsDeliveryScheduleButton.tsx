@@ -10,7 +10,6 @@ import { ProductSubscriptionDto } from "@insite/client-framework/Types/ApiModels
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductDeliveryScheduleButton from "@insite/content-library/Components/ProductDeliveryScheduleButton";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import { ButtonPresentationProps } from "@insite/mobius/Button";
 import * as React from "react";
 import { useDispatch } from "react-redux";
@@ -81,7 +80,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Delivery Schedule Button",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

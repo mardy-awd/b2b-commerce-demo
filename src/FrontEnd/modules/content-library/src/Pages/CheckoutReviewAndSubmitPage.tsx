@@ -1,16 +1,12 @@
-import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import { getReviewAndPayCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import loadCurrentCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCurrentCart";
 import { getCurrentCountries } from "@insite/client-framework/Store/Data/Countries/CountriesSelectors";
 import loadCurrentCountries from "@insite/client-framework/Store/Data/Countries/Handlers/LoadCurrentCountries";
-import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { getQueryStrings } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import loadCurrentPromotions from "@insite/client-framework/Store/Data/Promotions/Handlers/LoadCurrentPromotions";
-import {
-    getCurrentPromotionsDataView,
-    getPromotionsDataView,
-} from "@insite/client-framework/Store/Data/Promotions/PromotionsSelectors";
+import { getReviewAndPayPromotions } from "@insite/client-framework/Store/Data/Promotions/PromotionsSelectors";
 import clearMessages from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/ClearMessages";
 import loadDataIfNeeded from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/LoadDataIfNeeded";
 import setCartId from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/SetCartId";
@@ -33,21 +29,13 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state: ApplicationState) => {
-    const parsedQuery = parseQueryString<{ cartId?: string }>(getLocation(state).search);
-    const cartId = parsedQuery.cartId;
-    let isLoadDataNeeded = false;
-    if (cartId) {
-        const cartState = getCartState(state, cartId);
-        const promotionsDataView = getPromotionsDataView(state, cartId);
-        isLoadDataNeeded =
-            (!cartState.value && !cartState.isLoading) || (!promotionsDataView.value && !promotionsDataView.isLoading);
-    } else {
-        const currentCartState = getCurrentCartState(state);
-        const currentPromotionsDataView = getCurrentPromotionsDataView(state);
-        isLoadDataNeeded =
-            (!currentCartState.value && !currentCartState.isLoading) ||
-            (!currentPromotionsDataView.value && !currentPromotionsDataView.isLoading);
-    }
+    const { cartId } = getQueryStrings(state);
+    const cartState = getReviewAndPayCartState(state);
+    const promotionsDataView = getReviewAndPayPromotions(state);
+
+    const isLoadDataNeeded =
+        (!cartState.value && !cartState.isLoading) || (!promotionsDataView.value && !promotionsDataView.isLoading);
+
     return {
         cartId,
         isLoadDataNeeded: isLoadDataNeeded || !getCurrentCountries(state),
@@ -57,14 +45,13 @@ const mapStateToProps = (state: ApplicationState) => {
 type Props = PageProps & ResolveThunks<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
 
 class CheckoutReviewAndSubmitPage extends Component<Props> {
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         this.props.setCartId({ cartId: this.props.cartId });
+
         if (this.props.isLoadDataNeeded) {
             this.props.loadDataIfNeeded({ cartId: this.props.cartId });
         }
-    }
 
-    componentDidMount() {
         this.props.setPlaceOrderErrorMessage({});
         this.props.clearMessages();
     }
@@ -88,5 +75,9 @@ const pageModule: PageModule = {
     },
 };
 
-export const CheckoutReviewAndSubmitPageContext = "CheckoutReviewAndSubmitPage";
 export default pageModule;
+
+/**
+ * @deprecated Use string literal "CheckoutReviewAndSubmitPage" instead of this constant.
+ */
+export const CheckoutReviewAndSubmitPageContext = "CheckoutReviewAndSubmitPage";

@@ -129,7 +129,18 @@ class AutocompleteProducts extends React.Component<Props> {
                         </GridItem>
                         <GridItem {...styles.infoGridItem}>
                             <Link {...styles.titleLink}>{product.displayTitle}</Link>
-                            <Typography {...styles.erpNumberText}>{product.displayErpNumber}</Typography>
+                            <Typography {...styles.erpNumberText}>
+                                {product.isNameCustomerOverride ? (
+                                    translate("My Part #{0}", product.name)
+                                ) : (
+                                    <>
+                                        {translate("Part #")}
+                                        {product.displayErpNumber}
+                                    </>
+                                )}
+                                {product.manufacturerItemNumber &&
+                                    translate("MFG #{0}", product.manufacturerItemNumber)}
+                            </Typography>
                         </GridItem>
                     </GridContainer>
                 ))}

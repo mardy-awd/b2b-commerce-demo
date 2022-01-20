@@ -12,7 +12,6 @@ import ProductBrand, { ProductBrandStyles } from "@insite/content-library/Compon
 import ProductDescription, { ProductDescriptionStyles } from "@insite/content-library/Components/ProductDescription";
 import ProductPartNumbers, { ProductPartNumbersStyles } from "@insite/content-library/Components/ProductPartNumbers";
 import SmallHeadingAndText from "@insite/content-library/Components/SmallHeadingAndText";
-import { RequestRmaPageContext } from "@insite/content-library/Pages/RequestRmaPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
@@ -334,7 +333,7 @@ const RequestRmaProductList: FC<Props> = ({ orderLines, setOrderLines, setCanSen
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(RequestRmaProductList),
     definition: {
-        allowedContexts: [RequestRmaPageContext],
+        allowedContexts: ["RequestRmaPage"],
         group: "Return Request (RMA)",
         fieldDefinitions: [],
     },

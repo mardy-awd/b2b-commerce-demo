@@ -7,6 +7,7 @@ import {
     getProductState,
     getVariantChildrenDataView,
 } from "@insite/client-framework/Store/Data/Products/ProductsSelectors";
+import { UnitOfMeasureModel } from "@insite/client-framework/Types/ApiModels";
 import cloneDeep from "lodash/cloneDeep";
 
 interface Parameter {
@@ -117,10 +118,12 @@ export const SetProductInfo: HandlerType = props => {
             getSettingsCollection(state).productSettings.alternateUnitsOfMeasure &&
             product.unitOfMeasures!.some(o => o.unitOfMeasure === currentProductInfo.unitOfMeasure)
                 ? currentProductInfo.unitOfMeasure
-                : newProductInfo.unitOfMeasure,
+                : newProductInfo.unitOfMeasure || getDefaultUnitOfMeasure(product.unitOfMeasures!),
         qtyOrdered: Math.max(currentProductInfo.qtyOrdered, product.minimumOrderQty),
     };
 };
+
+const getDefaultUnitOfMeasure = (uoms: UnitOfMeasureModel[]) => (uoms.find(o => o.isDefault) || uoms[0]).unitOfMeasure;
 
 export const LoadRealTimePricing: HandlerType = props => {
     const { productInfo, selectedProductId: productId } = props;

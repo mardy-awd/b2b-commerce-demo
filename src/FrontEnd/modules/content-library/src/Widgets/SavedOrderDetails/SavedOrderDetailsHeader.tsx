@@ -2,7 +2,6 @@ import { HasCartContext, withCart } from "@insite/client-framework/Components/Ca
 import Zone from "@insite/client-framework/Components/Zone";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { SavedOrderDetailsPageContext } from "@insite/content-library/Pages/SavedOrderDetailsPage";
 import SavedOrderDetailsActionButtons, {
     SavedOrderDetailsActionButtonsStyles,
 } from "@insite/content-library/Widgets/SavedOrderDetails/SavedOrderDetailsActionButtons";
@@ -52,7 +51,7 @@ const widgetModule: WidgetModule = {
     component: withCart(SavedOrderDetailsHeader),
     definition: {
         displayName: "Page Header",
-        allowedContexts: [SavedOrderDetailsPageContext],
+        allowedContexts: ["SavedOrderDetailsPage"],
         group: "Saved Order Details",
     },
 };

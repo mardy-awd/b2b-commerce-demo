@@ -1,7 +1,6 @@
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderHistoryPageContext } from "@insite/content-library/Pages/OrderHistoryPage";
 import SearchTextField, { SearchTextFieldStyles } from "@insite/content-library/Widgets/OrderHistory/SearchTextField";
 import * as React from "react";
 
@@ -26,7 +25,7 @@ const widgetModule: WidgetModule = {
         isDeprecated: true,
         group: "Order History",
         displayName: "Product ERP Number",
-        allowedContexts: [OrderHistoryPageContext],
+        allowedContexts: ["OrderHistoryPage"],
     },
 };
 

@@ -4,7 +4,6 @@ import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/Link
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqJobQuotesPageContext } from "@insite/content-library/Pages/RfqJobQuotesPage";
 import Radio, { RadioComponentProps } from "@insite/mobius/Radio";
 import RadioGroup, { RadioGroupProps } from "@insite/mobius/RadioGroup";
 import FieldSetPresentationProps from "@insite/mobius/utilities/fieldSetProps";
@@ -76,7 +75,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "RFQ Job Quotes",
         displayName: "Quote Type Selector",
-        allowedContexts: [RfqJobQuotesPageContext],
+        allowedContexts: ["RfqJobQuotesPage"],
         fieldDefinitions: [],
     },
 };

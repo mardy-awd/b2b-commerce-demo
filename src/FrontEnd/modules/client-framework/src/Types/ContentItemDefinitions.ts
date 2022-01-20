@@ -1,10 +1,11 @@
 import { SettingsModel } from "@insite/client-framework/Services/SettingsService";
+import { AllowedContexts } from "@insite/client-framework/Types/AllowedContexts";
 import FieldDefinition from "@insite/client-framework/Types/FieldDefinition";
 import PermissionsModel from "@insite/client-framework/Types/PermissionsModel";
 import { WidgetGroup } from "@insite/client-framework/Types/WidgetGroups";
 
 export interface WidgetDefinition<T = FieldDefinition> extends ContentItemDefinition<T> {
-    allowedContexts?: string[];
+    allowedContexts?: AllowedContexts[];
     isDeprecated?: true;
     group: WidgetGroup;
     icon?: string;

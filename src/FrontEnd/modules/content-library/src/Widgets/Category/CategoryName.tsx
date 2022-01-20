@@ -5,9 +5,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CategoryDetailsPageContext } from "@insite/content-library/Pages/CategoryDetailsPage";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import Typography from "@insite/mobius/Typography";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -36,8 +33,8 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(withCategory(CategoryName)),
     definition: {
         group: "Categories",
-        icon: "PageTitle",
-        allowedContexts: [CategoryDetailsPageContext, ProductDetailsPageContext, ProductListPageContext],
+        icon: "folder-bookmark",
+        allowedContexts: ["CategoryDetailsPage", "ProductDetailsPage", "ProductListPage"],
     },
 };
 

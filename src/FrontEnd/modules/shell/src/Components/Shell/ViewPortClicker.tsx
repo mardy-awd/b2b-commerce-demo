@@ -1,5 +1,5 @@
 import { DeviceType } from "@insite/client-framework/Types/ContentItemModel";
-import Icon from "@insite/mobius/Icon";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import ClickerStyle from "@insite/shell/Components/Shell/ClickerStyle";
 import shellTheme from "@insite/shell/ShellTheme";
 import * as React from "react";
@@ -35,7 +35,7 @@ class ViewPortClicker extends React.Component<Props> {
             iconColor = text.main;
         }
 
-        const icon = targetStageMode === "Phone" ? "Smartphone" : targetStageMode === "Tablet" ? "Tablet" : "Monitor";
+        const icon = targetStageMode === "Phone" ? "mobile" : targetStageMode === "Tablet" ? "tablet" : "display";
 
         return (
             <ClickerStyle
@@ -45,7 +45,7 @@ class ViewPortClicker extends React.Component<Props> {
                 disabled={disabled}
                 title={`${targetStageMode} Preview`}
             >
-                <Icon src={icon} color={iconColor} />
+                <AxiomIcon src={icon} color={iconColor} size={20} />
             </ClickerStyle>
         );
     }

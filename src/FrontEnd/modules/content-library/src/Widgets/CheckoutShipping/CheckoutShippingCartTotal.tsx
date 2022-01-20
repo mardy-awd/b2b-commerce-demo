@@ -11,7 +11,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import CartTotalDisplay, { CartTotalDisplayStyles } from "@insite/content-library/Components/CartTotalDisplay";
-import { CheckoutShippingPageContext } from "@insite/content-library/Pages/CheckoutShippingPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -124,7 +123,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(CheckoutShippingCartTotal),
     definition: {
         group: "Checkout - Shipping",
-        allowedContexts: [CheckoutShippingPageContext],
+        allowedContexts: ["CheckoutShippingPage"],
         displayName: "Cart Total",
     },
 };

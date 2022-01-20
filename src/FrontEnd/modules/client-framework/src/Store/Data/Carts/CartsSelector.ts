@@ -2,6 +2,7 @@ import { API_URL_CURRENT_FRAGMENT } from "@insite/client-framework/Services/ApiS
 import { Cart, GetCartsApiParameter } from "@insite/client-framework/Services/CartService";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getById, getDataView } from "@insite/client-framework/Store/Data/DataState";
+import { getQueryStrings } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { CartLineModel } from "@insite/client-framework/Types/ApiModels";
 import { createContext } from "react";
 
@@ -78,3 +79,11 @@ export const hasProductsWithInvalidPrice = (cart: Cart | undefined) =>
             cartLine.pricing?.unitNetPrice === 0 &&
             cartLine.pricing?.unitRegularPrice === 0,
     );
+
+export function getReviewAndPayCartState(state: ApplicationState) {
+    const { cartId } = getQueryStrings(state);
+    if (cartId) {
+        return getCartState(state, cartId);
+    }
+    return getCurrentCartState(state);
+}

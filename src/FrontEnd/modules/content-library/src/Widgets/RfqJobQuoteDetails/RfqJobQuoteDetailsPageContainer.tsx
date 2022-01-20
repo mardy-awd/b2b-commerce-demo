@@ -4,7 +4,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getJobQuoteState } from "@insite/client-framework/Store/Data/JobQuotes/JobQuotesSelector";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqJobQuoteDetailsPageContext } from "@insite/content-library/Pages/RfqJobQuoteDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
@@ -73,7 +72,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "RFQ Job Quote Details",
         displayName: "Page Container",
-        allowedContexts: [RfqJobQuoteDetailsPageContext],
+        allowedContexts: ["RfqJobQuoteDetailsPage"],
         fieldDefinitions: [],
     },
 };

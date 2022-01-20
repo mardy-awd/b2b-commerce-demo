@@ -3,8 +3,7 @@ import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSe
 import Typography from "@insite/mobius/Typography";
 import ClickOutside from "@insite/shell/Components/ClickOutside";
 import Add from "@insite/shell/Components/Icons/Add";
-import Move from "@insite/shell/Components/Icons/Move";
-import SectionCollapse from "@insite/shell/Components/Icons/SectionCollapse";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import PageTreeFlyOut from "@insite/shell/Components/PageTree/PageTreeFlyOut";
 import PageTreePages from "@insite/shell/Components/PageTree/PageTreePages";
 import MakeDefaultVariantModal from "@insite/shell/Components/Shell/MakeDefaultVariantModal";
@@ -184,12 +183,12 @@ class PageTree extends ClickOutside<Props, State> {
                         {noPagesFound ? "No pages found" : "Pages"}
                         {hasExpandedNodes && (
                             <CollapseTreeStyle onClick={this.closeAll}>
-                                <SectionCollapse />
+                                <AxiomIcon src="compress" size={20} />
                             </CollapseTreeStyle>
                         )}
                         {allowRootAddPage && permissions?.canMovePages && (
                             <ReorderStyle onClick={this.reorderPages}>
-                                <Move height={19} />
+                                <AxiomIcon src="line-height" size={19} rotation="flip" />
                             </ReorderStyle>
                         )}
                     </Typography>
@@ -318,8 +317,8 @@ const ReorderStyle = styled(TreeIcon)`
 
 const CollapseTreeStyle = styled.div`
     position: absolute;
-    top: 2px;
-    left: -22px;
+    top: -2px;
+    left: -25px;
     cursor: pointer;
 `;
 

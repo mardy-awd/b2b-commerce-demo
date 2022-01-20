@@ -138,6 +138,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(withIsInShell(AddressDrawerContainer)),
     definition: {
         group: "Header",
+        icon: "house",
     },
 };
 

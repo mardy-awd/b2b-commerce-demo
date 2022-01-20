@@ -4,7 +4,6 @@ import { getProductListDataViewProperty } from "@insite/client-framework/Store/P
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React, { FC } from "react";
@@ -81,7 +80,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Product List Count",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
     },
 };
 

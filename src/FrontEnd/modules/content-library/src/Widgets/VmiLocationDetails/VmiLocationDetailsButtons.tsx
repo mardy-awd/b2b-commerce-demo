@@ -14,7 +14,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import TwoButtonModal, { TwoButtonModalStyles } from "@insite/content-library/Components/TwoButtonModal";
-import { VmiLocationDetailsPageContext } from "@insite/content-library/Pages/VmiLocationDetailsPage";
 import VmiLocationDetailsAddProductModal from "@insite/content-library/Widgets/VmiLocationDetails/VmiLocationDetailsAddProductModal";
 import AddVmiLocationModal from "@insite/content-library/Widgets/VmiLocations/AddVmiLocationModal";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
@@ -211,7 +210,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(VmiLocationDetailsButtons)),
     definition: {
         group: "VMI Location Details",
-        allowedContexts: [VmiLocationDetailsPageContext],
+        allowedContexts: ["VmiLocationDetailsPage"],
     },
 };
 

@@ -31,7 +31,6 @@ import ScheduleReminderModal, {
     ScheduleReminderModalStyles,
 } from "@insite/content-library/Components/ScheduleReminderModal";
 import TwoButtonModal, { TwoButtonModalStyles } from "@insite/content-library/Components/TwoButtonModal";
-import { MyListsDetailsPageContext } from "@insite/content-library/Pages/MyListsDetailsPage";
 import MyListsEditListForm from "@insite/content-library/Widgets/MyLists/MyListsEditListForm";
 import MyListsDetailsCopyListForm from "@insite/content-library/Widgets/MyListsDetails/MyListsDetailsCopyListForm";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
@@ -464,7 +463,7 @@ class MyListsDetailsActions extends React.Component<Props, State> {
         if (!wishList) {
             return null;
         }
-        const showEdit = wishList.allowEdit || !wishList.isSharedList;
+        const showEdit = !wishList.isSharedList;
         const showShare =
             !wishList.isSharedList && wishListSettings.allowMultipleWishLists && wishListSettings.allowListSharing;
         const showRemoveSelected = (wishList.allowEdit || !wishList.isSharedList) && this.linesSelected();
@@ -659,7 +658,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "My Lists Details",
         displayName: "Actions",
-        allowedContexts: [MyListsDetailsPageContext],
+        allowedContexts: ["MyListsDetailsPage"],
     },
 };
 

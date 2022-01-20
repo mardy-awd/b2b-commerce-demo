@@ -5,7 +5,7 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import TwoButtonModal, { TwoButtonModalStyles } from "@insite/content-library/Components/TwoButtonModal";
-import { PaymentProfilesContext, SavedPaymentsPageContext } from "@insite/content-library/Pages/SavedPaymentsPage";
+import { PaymentProfilesContext } from "@insite/content-library/Pages/SavedPaymentsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
@@ -298,7 +298,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Default Card",
         group: "Saved Payments",
-        allowedContexts: [SavedPaymentsPageContext],
+        allowedContexts: ["SavedPaymentsPage"],
     },
 };
 

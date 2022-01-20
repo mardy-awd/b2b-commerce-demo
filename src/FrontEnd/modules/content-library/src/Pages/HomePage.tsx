@@ -52,4 +52,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "HomePage" instead of this constant.
+ */
 export const HomePageContext = "HomePage";

@@ -4,7 +4,6 @@ import { getProductListDataViewProperty } from "@insite/client-framework/Store/P
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import Select, { SelectPresentationProps } from "@insite/mobius/Select";
 import React from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -73,7 +72,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Sort Select",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
     },
 };
 

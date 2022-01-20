@@ -6,7 +6,6 @@ import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/Link
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderConfirmationPageContext } from "@insite/content-library/Pages/OrderConfirmationPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
@@ -118,7 +117,7 @@ const OrderConfirmationAccountSignUpMessage = ({ createAccountUrl, showCreateAcc
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(withHistory(OrderConfirmationAccountSignUpMessage)),
     definition: {
-        allowedContexts: [OrderConfirmationPageContext],
+        allowedContexts: ["OrderConfirmationPage"],
         displayName: "Account Sign Up Message",
         group: "Order Confirmation",
     },

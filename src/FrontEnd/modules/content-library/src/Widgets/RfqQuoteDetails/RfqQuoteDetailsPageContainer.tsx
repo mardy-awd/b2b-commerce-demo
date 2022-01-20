@@ -4,7 +4,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getQuoteState } from "@insite/client-framework/Store/Data/Quotes/QuotesSelector";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqQuoteDetailsPageContext } from "@insite/content-library/Pages/RfqQuoteDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import LoadingSpinner from "@insite/mobius/LoadingSpinner";
@@ -86,7 +85,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "RFQ Quote Details",
         displayName: "Page Container",
-        allowedContexts: [RfqQuoteDetailsPageContext],
+        allowedContexts: ["RfqQuoteDetailsPage"],
         fieldDefinitions: [],
     },
 };

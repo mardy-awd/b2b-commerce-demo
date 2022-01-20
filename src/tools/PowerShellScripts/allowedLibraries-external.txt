@@ -5,6 +5,7 @@ Elasticsearch.Net
 EntityFramework
 EntityFramework.SqlServer
 FluentValidation
+GemBox.Spreadsheet
 IdentityServer3
 Microsoft.AspNet.Identity.Core
 Microsoft.AspNet.Identity.EntityFramework

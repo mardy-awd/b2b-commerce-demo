@@ -8,7 +8,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/InvoiceHist
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { InvoiceHistoryPageContext } from "@insite/content-library/Pages/InvoiceHistoryPage";
 import Button, { ButtonProps } from "@insite/mobius/Button";
 import Checkbox, { CheckboxProps } from "@insite/mobius/Checkbox";
 import DatePicker, { DatePickerPresentationProps, DatePickerState } from "@insite/mobius/DatePicker";
@@ -475,7 +474,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Invoice History",
         displayName: "Search Results Filter",
-        allowedContexts: [InvoiceHistoryPageContext],
+        allowedContexts: ["InvoiceHistoryPage"],
         fieldDefinitions: [
             {
                 name: fields.showShipTo,

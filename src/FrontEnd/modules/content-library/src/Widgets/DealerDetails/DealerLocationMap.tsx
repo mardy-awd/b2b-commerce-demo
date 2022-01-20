@@ -7,7 +7,6 @@ import { DealerStateContext } from "@insite/client-framework/Store/Data/Dealers/
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import { DistanceUnitOfMeasure } from "@insite/content-library/Components/DistanceDisplay";
 import LocationGoogleMap, { LocationGoogleMapStyles } from "@insite/content-library/Components/LocationGoogleMap";
-import { DealerDetailsPageContext } from "@insite/content-library/Pages/DealerDetailsPage";
 import { HasHistory } from "@insite/mobius/utilities/HistoryContext";
 import React, { useContext } from "react";
 import { connect } from "react-redux";
@@ -67,7 +66,7 @@ const DealerLocationMap: React.FC<Props> = ({ googleMapsApiKey, useLoadScript })
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(withDynamicGoogleMaps(DealerLocationMap)),
     definition: {
-        allowedContexts: [DealerDetailsPageContext],
+        allowedContexts: ["DealerDetailsPage"],
         group: "Dealer Details",
     },
 };

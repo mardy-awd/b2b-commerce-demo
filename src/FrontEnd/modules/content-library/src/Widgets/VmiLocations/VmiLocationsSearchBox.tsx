@@ -3,7 +3,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/VmiLocation
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { LocationsPageContext } from "@insite/content-library/Pages/VmiLocationsPage";
 import Search from "@insite/mobius/Icons/Search";
 import TextField, { TextFieldProps } from "@insite/mobius/TextField";
 import * as React from "react";
@@ -85,7 +84,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(VmiLocationsSearchBox),
     definition: {
         group: "VMI Locations",
-        allowedContexts: [LocationsPageContext],
+        allowedContexts: ["VmiLocationsPage"],
     },
 };
 

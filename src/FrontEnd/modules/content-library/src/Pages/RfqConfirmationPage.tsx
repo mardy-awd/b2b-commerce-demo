@@ -50,4 +50,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "RfqConfirmationPage" instead of this constant.
+ */
 export const RfqConfirmationPageContext = "RfqConfirmationPage";

@@ -1,6 +1,7 @@
 import { API_URL_CURRENT_FRAGMENT } from "@insite/client-framework/Services/ApiService";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getDataView } from "@insite/client-framework/Store/Data/DataState";
+import { getQueryStrings } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { PromotionModel } from "@insite/client-framework/Types/ApiModels";
 
 export function getCurrentPromotionsDataView(state: ApplicationState) {
@@ -24,6 +25,14 @@ export function getShippingPromotions(promotions: PromotionModel[]) {
             promotion.promotionResultType === "AmountOffShipping" ||
             promotion.promotionResultType === "PercentOffShipping",
     );
+}
+
+export function getReviewAndPayPromotions(state: ApplicationState) {
+    const { cartId } = getQueryStrings(state);
+    if (cartId) {
+        return getPromotionsDataView(state, cartId);
+    }
+    return getCurrentPromotionsDataView(state);
 }
 
 export function getDiscountTotal(promotions: PromotionModel[]) {

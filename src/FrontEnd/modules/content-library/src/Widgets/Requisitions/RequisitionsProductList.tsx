@@ -6,7 +6,6 @@ import updateGetRequisitionsParameter from "@insite/client-framework/Store/Pages
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RequisitionsPageContext } from "@insite/content-library/Pages/RequisitionsPage";
 import RequisitionsProductListLine from "@insite/content-library/Widgets/Requisitions/RequisitionsProductListLine";
 import Checkbox, { CheckboxPresentationProps, CheckboxProps } from "@insite/mobius/Checkbox";
 import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
@@ -169,7 +168,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(RequisitionsProductList),
     definition: {
         displayName: "Product List",
-        allowedContexts: [RequisitionsPageContext],
+        allowedContexts: ["RequisitionsPage"],
         group: "Requisitions",
     },
 };

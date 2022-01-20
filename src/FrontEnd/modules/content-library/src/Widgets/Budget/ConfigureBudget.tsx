@@ -16,7 +16,6 @@ import { BillToModel, BudgetCalendarModel } from "@insite/client-framework/Types
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import TwoButtonModal, { TwoButtonModalStyles } from "@insite/content-library/Components/TwoButtonModal";
-import { BudgetManagementPageContext } from "@insite/content-library/Pages/BudgetManagementPage";
 import BudgetYearSelector, {
     BudgetYearSelectorStyles,
 } from "@insite/content-library/Widgets/Budget/BudgetYearSelector";
@@ -565,7 +564,11 @@ const ConfigureBudget: React.FC<Props> = ({
                     <Button {...styles.cancelButton} onClick={handleCancelButtonClick}>
                         {translate("Cancel")}
                     </Button>
-                    <Button {...styles.saveButton} onClick={handleSaveButtonClick}>
+                    <Button
+                        {...styles.saveButton}
+                        onClick={handleSaveButtonClick}
+                        data-test-selector="budgetConfigureBudget_saveButton"
+                    >
                         {translate("Save")}
                     </Button>
                 </GridItem>
@@ -747,7 +750,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(ConfigureBudget),
     definition: {
         group: "BudgetManagement",
-        allowedContexts: [BudgetManagementPageContext],
+        allowedContexts: ["BudgetManagementPage"],
     },
 };
 

@@ -3,7 +3,6 @@ import { HasProduct, withProduct } from "@insite/client-framework/Components/Pro
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
@@ -79,7 +78,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Attributes",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

@@ -95,6 +95,7 @@ const widgetModule: WidgetModule = {
         displayName: "Punch Out Address",
         fieldDefinitions: [],
         group: "Header",
+        icon: "house",
     },
 };
 

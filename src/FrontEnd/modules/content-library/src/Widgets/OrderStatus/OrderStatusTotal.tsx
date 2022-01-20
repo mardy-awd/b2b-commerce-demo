@@ -2,7 +2,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import OrderTotalDisplay, { OrderTotalDisplayStyles } from "@insite/content-library/Components/OrderTotalDisplay";
-import { OrderStatusPageContext } from "@insite/content-library/Pages/OrderStatusPage";
 import React, { FC } from "react";
 import { connect } from "react-redux";
 
@@ -31,7 +30,7 @@ const OrderStatusTotal: FC<Props> = ({ order }) => {
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(OrderStatusTotal),
     definition: {
-        allowedContexts: [OrderStatusPageContext],
+        allowedContexts: ["OrderStatusPage"],
         group: "Order Status",
     },
 };

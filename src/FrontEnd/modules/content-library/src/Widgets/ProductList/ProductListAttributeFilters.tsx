@@ -5,7 +5,6 @@ import { getProductListDataViewProperty } from "@insite/client-framework/Store/P
 import { FacetModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import { productListCategoryFiltersStyles } from "@insite/content-library/Widgets/ProductList/ProductListCategoryFilters";
 import ProductListFiltersAccordionSection, {
     ProductListFilterAccordionSectionStyles,
@@ -85,7 +84,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Attribute Filters",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
         fieldDefinitions: [
             {
                 name: fields.expandByDefault,

@@ -26,7 +26,7 @@ const widgetModule: WidgetModule = {
     component: withIsInShell(LayoutZone),
     definition: {
         group: "Basic",
-        icon: "Banner",
+        icon: "image-landscape",
         allowedContexts: ["Layout"],
         fieldDefinitions: [],
     },

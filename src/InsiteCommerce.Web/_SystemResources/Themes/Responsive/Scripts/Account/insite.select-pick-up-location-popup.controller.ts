@@ -159,7 +159,9 @@
         protected getWarehouseCollectionCompleted(warehouseCollection: WarehouseCollectionModel, filter: IWarehouseFilter): void {
             this.warehouses = warehouseCollection.warehouses;
             this.pagination = warehouseCollection.pagination;
-            this.distanceUnitOfMeasure = warehouseCollection.distanceUnitOfMeasure === "Metric" ? 1 : 0;
+            if (typeof (this.distanceUnitOfMeasure) === "undefined") {
+                this.distanceUnitOfMeasure = warehouseCollection.distanceUnitOfMeasure === "Metric" ? 1 : 0;
+            }
 
             if (!this.center || this.center.lat() === 0 && this.center.lng() === 0) {
                 this.center = new google.maps.LatLng(warehouseCollection.defaultLatitude, warehouseCollection.defaultLongitude);

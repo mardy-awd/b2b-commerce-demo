@@ -7,7 +7,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/RfqMyQuotes
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqMyQuotesPageContext } from "@insite/content-library/Pages/RfqMyQuotesPage";
 import Clickable from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -164,7 +163,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "RFQ My Quotes",
         displayName: "Page Header",
-        allowedContexts: [RfqMyQuotesPageContext],
+        allowedContexts: ["RfqMyQuotesPage"],
     },
 };
 

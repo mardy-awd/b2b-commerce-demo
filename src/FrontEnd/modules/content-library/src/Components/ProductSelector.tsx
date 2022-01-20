@@ -197,7 +197,7 @@ const ProductSelector = ({
             optionText: product.title,
             optionValue: product.id || undefined,
             rowChildren: (
-                <StyledWrapper {...styles.optionWrapper}>
+                <StyledWrapper {...styles.optionWrapper} data-test-selector={`productSelector_search_${product.id}`}>
                     <StyledWrapper {...styles.imageWrapper}>
                         <LazyImage {...styles.productImage} src={product.image} />
                     </StyledWrapper>

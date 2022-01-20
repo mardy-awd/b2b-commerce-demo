@@ -1,4 +1,6 @@
+import AsyncComponent from "@insite/client-framework/Components/AsyncComponent";
 import Zone from "@insite/client-framework/Components/Zone";
+import { GetPaymentProfilesApiParameter } from "@insite/client-framework/Services/AccountService";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCurrentCountries } from "@insite/client-framework/Store/Data/Countries/CountriesSelectors";
 import loadCurrentCountries from "@insite/client-framework/Store/Data/Countries/Handlers/LoadCurrentCountries";
@@ -6,7 +8,6 @@ import loadPaymentProfiles from "@insite/client-framework/Store/Data/PaymentProf
 import { getPaymentProfilesDataView } from "@insite/client-framework/Store/Data/PaymentProfiles/PaymentProfilesSelectors";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
-import SavedPaymentsEditCardModal from "@insite/content-library/Widgets/SavedPayments/SavedPaymentsEditCardModal";
 import Page from "@insite/mobius/Page";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -23,7 +24,7 @@ const mapDispatchToProps = {
 
 type Props = PageProps & ResolveThunks<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
 
-const parameter = {};
+const parameter: GetPaymentProfilesApiParameter = { pageSize: 999 };
 
 class SavedPaymentsPage extends React.Component<Props> {
     componentDidMount() {
@@ -49,7 +50,9 @@ class SavedPaymentsPage extends React.Component<Props> {
             <Page>
                 <PaymentProfilesContext.Provider value={this.props.paymentProfilesDataView}>
                     <Zone contentId={this.props.id} zoneName="Content" />
-                    {this.props.countries && <SavedPaymentsEditCardModal />}
+                    {this.props.countries && (
+                        <AsyncComponent isWidget={true} type="SavedPayments/SavedPaymentsEditCardModal" />
+                    )}
                 </PaymentProfilesContext.Provider>
             </Page>
         );
@@ -71,4 +74,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "SavedPaymentsPage" instead of this constant.
+ */
 export const SavedPaymentsPageContext = "SavedPaymentsPage";

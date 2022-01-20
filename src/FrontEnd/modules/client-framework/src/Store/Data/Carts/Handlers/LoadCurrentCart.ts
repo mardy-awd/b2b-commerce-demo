@@ -5,6 +5,7 @@ import {
 } from "@insite/client-framework/HandlerCreator";
 import { API_URL_CURRENT_FRAGMENT } from "@insite/client-framework/Services/ApiService";
 import { CartResult, getCart, GetCartApiParameter } from "@insite/client-framework/Services/CartService";
+import { getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import loadCurrentPromotions from "@insite/client-framework/Store/Data/Promotions/Handlers/LoadCurrentPromotions";
 
@@ -22,6 +23,9 @@ type HandlerType = Handler<
 >;
 
 export const DispatchBeginLoadCart: HandlerType = props => {
+    if (getCurrentCartState(props.getState()).isLoading) {
+        return false;
+    }
     props.dispatch({
         type: "Data/Carts/BeginLoadCart",
         id: API_URL_CURRENT_FRAGMENT,

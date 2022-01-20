@@ -14,7 +14,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import VmiLocationOrdersTab from "@insite/content-library/Components/VmiLocationOrdersTab";
 import VmiLocationProductsTab from "@insite/content-library/Components/VmiLocationProductsTab";
-import { VmiLocationDetailsPageContext } from "@insite/content-library/Pages/VmiLocationDetailsPage";
 import Tab, { TabPresentationProps } from "@insite/mobius/Tab";
 import TabGroup from "@insite/mobius/TabGroup";
 import { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
@@ -159,7 +158,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "VMI Location Details",
         displayName: "Vmi Location Tabbed Table",
-        allowedContexts: [VmiLocationDetailsPageContext],
+        allowedContexts: ["VmiLocationDetailsPage"],
     },
 };
 

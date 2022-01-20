@@ -85,7 +85,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(Logo),
     definition: {
         group: "Basic",
-        icon: "Logo",
+        icon: "diamond",
         fieldDefinitions: [
             {
                 name: fields.logoImage,

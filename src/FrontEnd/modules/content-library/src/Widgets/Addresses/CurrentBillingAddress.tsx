@@ -9,7 +9,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import AddressInfoDisplay from "@insite/content-library/Components/AddressInfoDisplay";
 import CustomerAddressForm from "@insite/content-library/Components/CustomerAddressForm";
-import { AddressesPageContext } from "@insite/content-library/Pages/AddressesPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
@@ -142,7 +141,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(CurrentBillingAddress),
     definition: {
         group: "Addresses",
-        allowedContexts: [AddressesPageContext],
+        allowedContexts: ["AddressesPage"],
     },
 };
 

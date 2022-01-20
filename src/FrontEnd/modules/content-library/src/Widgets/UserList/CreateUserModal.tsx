@@ -314,14 +314,9 @@ class CreateUserModal extends PureComponent<
                 handleClose={this.closeModalHandler}
                 headline={translate("Create User")}
                 isOpen={this.props.isOpen}
-                data-test-selector="tst_ModalTitle"
+                data-test-selector="createUserModal"
             >
-                <StyledForm
-                    {...styles.form}
-                    data-test-selector="userAddForm"
-                    noValidate
-                    onSubmit={this.formSubmitHandler}
-                >
+                <StyledForm {...styles.form} noValidate onSubmit={this.formSubmitHandler}>
                     <GridContainer {...styles.container}>
                         {this.props.showUserName && (
                             <GridItem {...userNameGridItemStyles}>
@@ -332,7 +327,7 @@ class CreateUserModal extends PureComponent<
                                     onChange={this.usernameChangeHandler}
                                     required
                                     value={userName}
-                                    data-test-selector="userEditForm_userNameText"
+                                    data-test-selector="createUserModal_userNameText"
                                 />
                             </GridItem>
                         )}
@@ -344,7 +339,7 @@ class CreateUserModal extends PureComponent<
                                 onChange={this.emailChangeHandler}
                                 required
                                 value={email}
-                                data-test-selector="userEditForm_emailText"
+                                data-test-selector="createUserModal_emailText"
                             />
                         </GridItem>
                         <GridItem {...styles.firstNameGridItem}>
@@ -355,7 +350,7 @@ class CreateUserModal extends PureComponent<
                                 onChange={this.firstNameChangeHandler}
                                 required
                                 value={firstName}
-                                data-test-selector="userEditForm_firstNameText"
+                                data-test-selector="createUserModal_firstNameText"
                             />
                         </GridItem>
                         <GridItem {...styles.lastNameGridItem}>
@@ -366,7 +361,7 @@ class CreateUserModal extends PureComponent<
                                 onChange={this.lastNameChangeHandler}
                                 required
                                 value={lastName}
-                                data-test-selector="userEditForm_lastNameText"
+                                data-test-selector="createUserModal_lastNameText"
                             />
                         </GridItem>
                         <GridItem {...styles.settingsHeadingGridItem}>
@@ -381,7 +376,7 @@ class CreateUserModal extends PureComponent<
                                     label={roleSelectLabel}
                                     onChange={this.roleChangeHandler}
                                     value={role}
-                                    data-test-selector="userEditForm_userRoleSelect"
+                                    data-test-selector="createUserModal_userRoleSelect"
                                 >
                                     <option value="">{translate("Select User Role")}</option>
                                     {availableRoles.map(o => (
@@ -399,7 +394,7 @@ class CreateUserModal extends PureComponent<
                                     label={approverLabel}
                                     onChange={this.approverChangeHandler}
                                     value={approver}
-                                    data-test-selector="userEditForm_approverSelect"
+                                    data-test-selector="createUserModal_approverSelect"
                                 >
                                     <option value="">{translate("Select an Approver")}</option>
                                     {availableApprovers.map(o => (
@@ -413,13 +408,17 @@ class CreateUserModal extends PureComponent<
                         <GridItem {...styles.buttonsGridItem}>
                             <Button
                                 {...styles.cancelButton}
-                                data-test-selector="userAddForm_cancelButton"
+                                data-test-selector="createUserModal_cancelButton"
                                 onClick={this.cancelFormHandler}
                                 type="button"
                             >
                                 {translate("Cancel")}
                             </Button>
-                            <Button {...styles.submitButton} data-test-selector="userAddForm_saveButton" type="submit">
+                            <Button
+                                {...styles.submitButton}
+                                data-test-selector="createUserModal_createUserButton"
+                                type="submit"
+                            >
                                 {translate("Create User")}
                             </Button>
                         </GridItem>

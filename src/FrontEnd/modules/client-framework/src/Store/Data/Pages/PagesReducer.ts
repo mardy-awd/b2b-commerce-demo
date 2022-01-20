@@ -239,7 +239,9 @@ function finishLoadPage(
     const { fields, generalFields } = page;
     if (fields) {
         fields["variantName"] = page.variantName;
-        generalFields["variantName"] = page.variantName;
+        if (page.variantName) {
+            generalFields["variantName"] = page.variantName;
+        }
     }
 
     draft.widgetIdsByPageId[page.id] = [];

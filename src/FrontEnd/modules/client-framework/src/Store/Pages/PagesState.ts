@@ -41,6 +41,7 @@ import UserListState from "@insite/client-framework/Store/Pages/UserList/UserLis
 import UserSetupState from "@insite/client-framework/Store/Pages/UserSetup/UserSetupState";
 import VmiLocationDetailsState from "@insite/client-framework/Store/Pages/VmiLocationDetails/VmiLocationDetailsState";
 import VmiLocationsState from "@insite/client-framework/Store/Pages/VmiLocations/VmiLocationsState";
+import VmiReportingState from "@insite/client-framework/Store/Pages/VmiReporting/VmiReportingState";
 import VmiUsersState from "@insite/client-framework/Store/Pages/VmiUsers/VmiUsersState";
 
 export default interface PagesState {
@@ -87,5 +88,6 @@ export default interface PagesState {
     readonly userSetup: UserSetupState;
     readonly vmiLocationDetails: VmiLocationDetailsState;
     readonly vmiLocations: VmiLocationsState;
+    readonly vmiReporting: VmiReportingState;
     readonly vmiUsers: VmiUsersState;
 }

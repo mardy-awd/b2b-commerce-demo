@@ -3,7 +3,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import updateSearchFields from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/UpdateSearchFields";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderHistoryPageContext } from "@insite/content-library/Pages/OrderHistoryPage";
 import SearchTextField, { SearchTextFieldStyles } from "@insite/content-library/Widgets/OrderHistory/SearchTextField";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -61,7 +60,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Search Field",
-        allowedContexts: [OrderHistoryPageContext],
+        allowedContexts: ["OrderHistoryPage"],
         fieldDefinitions: [
             {
                 name: fields.parameterField,

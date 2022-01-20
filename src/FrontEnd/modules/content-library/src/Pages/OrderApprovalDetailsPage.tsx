@@ -6,10 +6,12 @@ import { getCurrentAccountState } from "@insite/client-framework/Store/Data/Acco
 import loadCurrentAccount from "@insite/client-framework/Store/Data/Accounts/Handlers/LoadCurrentAccount";
 import { getOrderApprovalsState } from "@insite/client-framework/Store/Data/OrderApprovals/OrderApprovalsSelectors";
 import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import displayOrder from "@insite/client-framework/Store/Pages/OrderApprovalDetails/Handlers/DisplayOrder";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
 import Page from "@insite/mobius/Page";
+import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext";
 import React, { useEffect } from "react";
 import { connect, ResolveThunks } from "react-redux";
 
@@ -25,6 +27,7 @@ const mapStateToProps = (state: ApplicationState) => {
         cartId,
         orderApprovalsState: getOrderApprovalsState(state, cartId),
         shouldLoadAccount: !getCurrentAccountState(state).value,
+        orderApprovalListPageLink: getPageLinkByPageType(state, "OrderApprovalListPage"),
     };
 };
 
@@ -33,15 +36,17 @@ const mapDispatchToProps = {
     loadCurrentAccount,
 };
 
-type Props = PageProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
+type Props = PageProps & HasHistory & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
 const OrderApprovalDetailsPage = ({
     id,
     cartId,
+    history,
     orderApprovalsState,
     displayOrder,
     shouldLoadAccount,
     loadCurrentAccount,
+    orderApprovalListPageLink,
 }: Props) => {
     useEffect(() => {
         if (cartId) {
@@ -53,6 +58,12 @@ const OrderApprovalDetailsPage = ({
         }
     }, [shouldLoadAccount, cartId]);
 
+    useEffect(() => {
+        if (orderApprovalListPageLink && orderApprovalsState?.value?.status === "Submitted") {
+            history.push(orderApprovalListPageLink.url);
+        }
+    }, [orderApprovalsState]);
+
     return (
         <Page>
             <CartContext.Provider value={orderApprovalsState?.value}>
@@ -63,7 +74,7 @@ const OrderApprovalDetailsPage = ({
 };
 
 const pageModule: PageModule = {
-    component: connect(mapStateToProps, mapDispatchToProps)(OrderApprovalDetailsPage),
+    component: connect(mapStateToProps, mapDispatchToProps)(withHistory(OrderApprovalDetailsPage)),
     definition: {
         hasEditableUrlSegment: true,
         hasEditableTitle: true,
@@ -73,4 +84,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "OrderApprovalDetailsPage" instead of this constant.
+ */
 export const OrderApprovalDetailsPageContext = "OrderApprovalDetailsPage";

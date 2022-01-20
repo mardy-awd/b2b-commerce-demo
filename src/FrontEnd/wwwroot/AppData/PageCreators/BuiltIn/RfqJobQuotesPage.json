@@ -1,7 +1,5 @@
 {
     "name": "Job Quotes",
     "parentType": "MyAccountPage",
-    "urlSegment": "JobQuotes",
-    "excludeFromNavigation": true
+    "urlSegment": "JobQuotes"
   }
-  

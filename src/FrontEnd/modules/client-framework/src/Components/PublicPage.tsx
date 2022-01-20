@@ -1,4 +1,3 @@
-import setPageMetadata from "@insite/client-framework/Common/Utilities/setPageMetadata";
 import BypassedAuthorizationWarning from "@insite/client-framework/Components/BypassedAuthorizationWarning";
 import {
     createPageElement,
@@ -12,28 +11,30 @@ import { HasShellContext, withIsInShell } from "@insite/client-framework/Compone
 import { sendToShell } from "@insite/client-framework/Components/ShellHole";
 import { getDisplayErrorPage, getErrorStatusCode, redirectTo } from "@insite/client-framework/ServerSideRendering";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
-import { getAlternateLanguageUrls, getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { setMetadata } from "@insite/client-framework/Store/CommonHandlers/SetMetadata";
+import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 // eslint-disable-next-line spire/fenced-imports
 import PageLayout from "@insite/content-library/PageLayout";
 import * as React from "react";
-import { connect } from "react-redux";
+import { connect, ResolveThunks } from "react-redux";
 
 const mapStateToProps = (state: ApplicationState) => {
     const page = getCurrentPage(state);
     return {
         page,
         websiteName: state.context.website.name,
+        wasSetMetadataCalled: state.context.wasSetMetadataCalled,
         errorPageLink: getPageLinkByPageType(state, "UnhandledErrorPage"),
-        pathname: state.data.pages.location.pathname,
         permissionsLoaded: !!state.context.permissions,
-        websiteSettings: getSettingsCollection(state).websiteSettings,
-        alternateLanguageUrls: getAlternateLanguageUrls(state, page.id),
     };
 };
 
-type Props = ReturnType<typeof mapStateToProps> & HasShellContext;
+const mapDispatchToProps = {
+    setMetadata,
+};
+
+type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasShellContext;
 
 class PublicPage extends React.Component<Props> {
     componentDidMount() {
@@ -51,7 +52,9 @@ class PublicPage extends React.Component<Props> {
     }
 
     UNSAFE_componentWillMount() {
-        this.setMetadata();
+        if (!this.props.wasSetMetadataCalled) {
+            this.props.setMetadata();
+        }
     }
 
     componentWillUnmount() {
@@ -61,39 +64,9 @@ class PublicPage extends React.Component<Props> {
     }
 
     componentDidUpdate(prevProps: Props) {
-        const { page } = this.props;
-        if (page.id !== prevProps.page?.id) {
-            // product list and product details call setMetadata when they get data
-            if (
-                page.type !== "ProductListPage" &&
-                page.type !== "ProductDetailsPage" &&
-                page.type !== "CategoryDetailsPage"
-            ) {
-                this.setMetadata();
-            }
+        if (this.props.page.id !== prevProps.page?.id) {
+            this.props.setMetadata();
         }
-    }
-
-    setMetadata() {
-        const { page, websiteName, pathname, websiteSettings, alternateLanguageUrls } = this.props;
-        if (!page) {
-            return;
-        }
-        setPageMetadata(
-            {
-                metaKeywords: page.fields["metaKeywords"],
-                metaDescription: page.fields["metaDescription"],
-                openGraphUrl: page.fields["openGraphUrl"],
-                openGraphTitle: page.fields["openGraphTitle"],
-                openGraphImage: page.fields["openGraphImage"],
-                title: page.fields["title"],
-                currentPath: pathname,
-                canonicalPath: pathname,
-                alternateLanguageUrls,
-                websiteName,
-            },
-            websiteSettings,
-        );
     }
 
     wrapContent(content: ReturnType<typeof createPageElement>) {
@@ -163,4 +136,4 @@ class PublicPage extends React.Component<Props> {
     }
 }
 
-export default connect(mapStateToProps)(withIsInShell(PublicPage));
+export default connect(mapStateToProps, mapDispatchToProps)(withIsInShell(PublicPage));

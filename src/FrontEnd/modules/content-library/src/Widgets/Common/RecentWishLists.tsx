@@ -137,7 +137,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(RecentWishLists),
     definition: {
         group: "Common",
-        icon: "List",
+        icon: "list-ul",
         fieldDefinitions: [
             {
                 name: fields.numberOfRecords,

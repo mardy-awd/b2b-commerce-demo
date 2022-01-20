@@ -66,4 +66,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "VmiLocationsPage" instead of this constant.
+ */
 export const LocationsPageContext = "VmiLocationsPage";

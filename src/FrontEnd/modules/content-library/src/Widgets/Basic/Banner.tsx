@@ -229,7 +229,7 @@ const banner: WidgetModule = {
     component: Banner,
     definition: {
         group: "Basic",
-        icon: "Banner",
+        icon: "image-landscape",
         fieldDefinitions: [
             {
                 fieldType: "General",

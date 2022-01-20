@@ -3,7 +3,6 @@ import { getSettingsCollection } from "@insite/client-framework/Store/Context/Co
 import { InvoiceStateContext } from "@insite/client-framework/Store/Data/Invoices/InvoicesSelectors";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
-import { InvoiceDetailsPageContext } from "@insite/content-library/Pages/InvoiceDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
@@ -175,7 +174,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Invoice History",
         displayName: "Total",
-        allowedContexts: [InvoiceDetailsPageContext],
+        allowedContexts: ["InvoiceDetailsPage"],
     },
 };
 

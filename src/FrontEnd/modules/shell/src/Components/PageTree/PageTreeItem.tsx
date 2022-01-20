@@ -1,10 +1,6 @@
 import { Dictionary } from "@insite/client-framework/Common/Types";
 import PermissionsModel from "@insite/client-framework/Types/PermissionsModel";
-import Icon from "@insite/mobius/Icon";
-import ChevronDown from "@insite/mobius/Icons/ChevronDown";
-import ChevronRight from "@insite/mobius/Icons/ChevronRight";
-import Page from "@insite/shell/Components/Icons/Page";
-import TreeOverflow from "@insite/shell/Components/Icons/TreeOverflow";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import { pageTreeFlyOutMenuHasItems } from "@insite/shell/Components/PageTree/PageTreeFlyOut";
 import PageTreePages from "@insite/shell/Components/PageTree/PageTreePages";
 import { loadPageOnSite } from "@insite/shell/Store/Data/Pages/PagesHelpers";
@@ -57,13 +53,13 @@ class PageTreeItem extends React.Component<Props> {
         } = this.props;
 
         const isExpanded = expandedNodes[node.key] && !node.isVariant;
-        const expandIcon = isExpanded ? ChevronDown : ChevronRight;
+        const expandIcon = isExpanded ? "none" : "right";
 
         let flyOutMenu: null | JSX.Element = null;
         if (node === flyOutNode) {
             flyOutMenu = (
                 <PageTreeFlyOutActive isActivePage={selectedPageId === node.pageId} onClick={this.handleFlyOutClick}>
-                    <TreeOverflow color1="#00000087" />
+                    <AxiomIcon src="ellipsis" size={24} color="#00000087" />
                 </PageTreeFlyOutActive>
             );
         } else if (isEditMode) {
@@ -74,7 +70,7 @@ class PageTreeItem extends React.Component<Props> {
                     title="More Options"
                     data-test-selector={`pageTreeFlyOut_${node.displayName}`}
                 >
-                    <TreeOverflow color1="#00000087" />
+                    <AxiomIcon src="ellipsis" size={24} color="#00000087" />
                 </PageTreeFlyout>
             );
         }
@@ -97,17 +93,30 @@ class PageTreeItem extends React.Component<Props> {
                     data-test-selector={`pageTreeTitle_${node.displayName}`}
                 >
                     {children && !node.isVariant && (
-                        <ExpandStyle
-                            src={expandIcon}
-                            size={20}
+                        <AxiomIcon
+                            size={16}
+                            src="chevron-down"
+                            rotation={expandIcon}
                             onClick={this.handleExpandClick}
                             data-test-selector={`pageTreeExpand_${node.displayName}`}
+                            css={css`
+                                top: 1px;
+                                left: -18px;
+                                position: absolute;
+                                cursor: pointer;
+                                &:hover {
+                                    i {
+                                        color: #777;
+                                    }
+                                }
+                            `}
                         />
                     )}
                     <NodeIcon>
-                        <Page
-                            height={18}
-                            color1={node.isVariant ? (node.isDefaultVariant ? "#4A90E2" : "#FFA500") : "#D8D8D8"}
+                        <AxiomIcon
+                            src="file"
+                            size={16}
+                            color={node.isVariant ? (node.isDefaultVariant ? "#4A90E2" : "#FFA500") : "#000"}
                         />
                     </NodeIcon>
                     <a
@@ -141,19 +150,9 @@ class PageTreeItem extends React.Component<Props> {
 
 export default PageTreeItem;
 
-const ExpandStyle = styled(Icon)`
-    top: 11px;
-    left: -23px;
-    position: absolute;
-    cursor: pointer;
-    &:hover {
-        color: #777;
-    }
-`;
-
 const NodeIcon = styled.span`
-    top: 3px;
-    left: 5px;
+    top: 0;
+    left: 3px;
     position: absolute;
     width: 12px;
     text-align: center;
@@ -163,10 +162,10 @@ const PageTreeFlyout = styled.button<{ isActivePage: boolean }>`
     ${props => (!props.isActivePage ? "display: none;" : "")}
     cursor: pointer;
     position: absolute;
-    width: 20px;
+    width: 30px;
     text-align: center;
     right: 0;
-    top: 8px;
+    top: 9px;
     background-color: transparent;
     border: none;
     padding: 0;
@@ -198,8 +197,10 @@ const PageTreeTitle = styled.h3<{
                       width: 22px;
                       left: -22px;
                   }
-                  ${ExpandStyle} {
-                      color: ${props.theme.colors.primary.main};
+                  ${AxiomIcon} {
+                      svg {
+                        color: ${props.theme.colors.primary.main};
+                      }
                   }
               `
             : ""}
@@ -226,6 +227,7 @@ const PageTreeTitle = styled.h3<{
     margin: 0;
     &:hover ${PageTreeFlyout} {
         display: block;
+        background: ${props => props.theme.colors.custom.activeBackground};
     }
     && {
         font-size: 0.9rem;

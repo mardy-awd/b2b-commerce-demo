@@ -1,0 +1,64 @@
+{
+    "nodeId": "53cba436-dbd0-42d6-a262-13df65db3afd",
+    "name": "VMI Reporting",
+    "type": "VmiReportingPage",
+    "parentId": "249dbebd-3eae-4a8f-b4af-cb61405da22c",
+    "sortOrder": 0,
+    "websiteId": "c2c53320-98dc-4eca-8022-9efc00dea0dc",
+    "variantName": null,
+    "layoutPageId": null,
+    "templateHash": "65ab15308acbfe1a7cbcfc0e58fe7e917f21b6afbd290530c88fd446bbd43b05",
+    "id": "09900e2b-cdc3-40c1-955b-2769d94645ee",
+    "generalFields": {
+        "horizontalRule": "",
+        "tags": [],
+        "hideBreadcrumbs": false,
+        "variantName": null,
+        "layoutPage": ""
+    },
+    "translatableFields": {
+        "title": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": "VMI Reporting"
+        },
+        "urlSegment": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": "VmiReporting"
+        }
+    },
+    "contextualFields": {},
+    "widgets": [
+        {
+            "parentId": "09900e2b-cdc3-40c1-955b-2769d94645ee",
+            "type": "VmiReporting/VmiReportingHeader",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "7464c1e3-e8e3-4dbc-b1f4-cd4db48b0fc9",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "09900e2b-cdc3-40c1-955b-2769d94645ee",
+            "type": "VmiReporting/VmiBinsFilter",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "9792bf1f-df01-4f8d-9755-51c2d1b9e425",
+            "generalFields": {
+                "showProduct": true,
+                "showBinRange": true,
+                "showDateRange": true
+            },
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "09900e2b-cdc3-40c1-955b-2769d94645ee",
+            "type": "VmiReporting/VmiBinsMetricFilter",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "ec83bf0a-1bd6-4f4c-9e7d-4512bc8bbabd",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        }
+    ]
+}

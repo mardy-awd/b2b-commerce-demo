@@ -2,7 +2,6 @@ import { HasProduct, withProduct } from "@insite/client-framework/Components/Pro
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
 import * as React from "react";
 import { css } from "styled-components";
@@ -49,7 +48,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Manufacturing Part Number",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

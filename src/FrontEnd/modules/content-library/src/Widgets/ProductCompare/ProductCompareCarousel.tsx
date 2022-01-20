@@ -21,7 +21,6 @@ import ProductCompareCarouselComponent, {
     CarouselStyles,
     ProductCarouselSlideDetails,
 } from "@insite/content-library/Components/ProductCompareCarousel";
-import { ProductComparePageContext } from "@insite/content-library/Pages/ProductComparePage";
 import Button, { ButtonIcon, ButtonIconPresentationProps, ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -114,7 +113,9 @@ const mapProductsToSlideAttributeTypes = (products: ProductModel[]) =>
         .reduce((acc, current) => {
             return [...(acc || []), ...current];
         }, [])
-        .filter((current, index, self) => index === self.findIndex(a => a.name === current.name));
+        .filter(
+            (current, index, self) => current.isComparable && index === self.findIndex(a => a.name === current.name),
+        );
 
 const mapProductsToSlides = (
     products: ProductModel[],
@@ -274,7 +275,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product Compare",
         icon: "List",
-        allowedContexts: [ProductComparePageContext],
+        allowedContexts: ["ProductComparePage"],
     },
 };
 

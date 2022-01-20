@@ -4,7 +4,6 @@ import loadExternalProviders from "@insite/client-framework/Store/Pages/SignIn/H
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { SignInPageContext } from "@insite/content-library/Pages/SignInPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography/Typography";
@@ -102,7 +101,7 @@ const Divider = styled.hr`
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(SignInExternalProviders),
     definition: {
-        allowedContexts: [SignInPageContext],
+        allowedContexts: ["SignInPage"],
         group: "Sign In",
         displayName: "External Providers",
     },

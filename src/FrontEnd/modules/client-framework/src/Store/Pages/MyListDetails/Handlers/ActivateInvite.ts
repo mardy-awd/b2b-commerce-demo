@@ -26,7 +26,7 @@ export const RequestActivateInvite: HandlerType = async props => {
     try {
         props.result.wishList = await activateInviteApi({ invite: props.parameter.invite });
     } catch (error) {
-        if (error.status === 404) {
+        if (error.status === 400 || error.status === 404) {
             props.result.errorMessage = error.errorMessage;
             return;
         }

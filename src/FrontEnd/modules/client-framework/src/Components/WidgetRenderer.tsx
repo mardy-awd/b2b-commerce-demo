@@ -9,7 +9,7 @@ import logger from "@insite/client-framework/Logger";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { beginDraggingWidget, endDraggingWidget } from "@insite/client-framework/Store/Data/Pages/PagesActionCreators";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
-import Icon from "@insite/mobius/Icon";
+import AsyncAxiomIcon from "@insite/shell/Components/Icons/AxiomIcon/AsyncAxiomIcon";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
@@ -255,7 +255,7 @@ class WidgetRenderer extends React.PureComponent<Props, State> {
                                         data-test-selector="widgetHover_edit"
                                         title="Edit"
                                     >
-                                        <Icon src="Edit" size={20} color="#fff" />
+                                        <AsyncAxiomIcon src="pen" size={20} color="#fff" />
                                     </IconLink>
                                 )}
                                 {!fixed && this.canDeleteWidget() && (
@@ -264,7 +264,7 @@ class WidgetRenderer extends React.PureComponent<Props, State> {
                                         title="Delete"
                                         data-test-selector="widgetHover_delete"
                                     >
-                                        <Icon src="Trash2" size={20} color="#fff" />
+                                        <AsyncAxiomIcon src="trash-can" size={20} color="#fff" />
                                     </IconLink>
                                 )}
                             </HoverStyle>

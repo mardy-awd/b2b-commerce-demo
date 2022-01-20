@@ -28,7 +28,6 @@ import Icon, { IconProps } from "@insite/mobius/Icon";
 import Globe from "@insite/mobius/Icons/Globe";
 import MapPin from "@insite/mobius/Icons/MapPin";
 import Menu from "@insite/mobius/Icons/Menu";
-import User from "@insite/mobius/Icons/User";
 import { MappedLink } from "@insite/mobius/Menu";
 import PanelMenu, { PanelMenuPresentationProps } from "@insite/mobius/PanelMenu";
 import PanelRow, { PanelRowPresentationProps } from "@insite/mobius/PanelMenu/PanelRow";
@@ -183,7 +182,7 @@ export const navigationDrawerStyles: NavigationDrawerStyles = {
         `,
     },
     mainNavigationRowIcon: {
-        src: User,
+        src: "User",
         color: "common.background",
         size: 22,
         css: css`
@@ -196,7 +195,7 @@ export const navigationDrawerStyles: NavigationDrawerStyles = {
         `,
     },
     punchOutNavigationRowIcon: {
-        src: User,
+        src: "User",
         color: "common.background",
         size: 22,
         css: css`

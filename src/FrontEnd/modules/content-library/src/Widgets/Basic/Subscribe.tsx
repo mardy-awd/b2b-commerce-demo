@@ -189,6 +189,7 @@ const widgetModule: WidgetModule = {
     component: connect(null, mapDispatchToProps)(CmsSubscribe),
     definition: {
         group: "Basic",
+        icon: "bell",
         fieldDefinitions: [
             {
                 name: fields.alignment,

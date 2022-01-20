@@ -14,7 +14,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import OrderDetailPageTypeLink from "@insite/content-library/Components/OrderDetailPageTypeLink";
 import ShareEntityButton, { ShareEntityButtonStyles } from "@insite/content-library/Components/ShareEntityButton";
-import { OrderDetailsPageContext } from "@insite/content-library/Pages/OrderDetailsPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -269,7 +268,7 @@ const OrderDetailsButtonSet: React.FC<Props> = ({
                             {...styles.reorderButton}
                             onClick={onClickReorder}
                             disabled={isReordering}
-                            data-test-selector="orderDetailsReorderButton"
+                            data-test-selector="orderDetails_reorderButton"
                         >
                             {translate("Reorder")}
                         </Button>
@@ -347,7 +346,7 @@ const OrderDetailsButtonSet: React.FC<Props> = ({
 
     return (
         <StyledWrapper {...styles.buttonsWrapper}>
-            <Hidden {...styles.buttonHidden}>
+            <Hidden {...styles.buttonHidden} data-test-selector="orderDetails_standardButtons">
                 {buttonsToRender.map((button, index) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <StyledWrapper {...styles.buttonWrapper} key={index}>
@@ -390,7 +389,7 @@ const OrderDetailsButtonSet: React.FC<Props> = ({
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(OrderDetailsButtonSet)),
     definition: {
-        allowedContexts: [OrderDetailsPageContext],
+        allowedContexts: ["OrderDetailsPage"],
         displayName: "Order Details Button Set",
         group: "Order Details",
         fieldDefinitions: [

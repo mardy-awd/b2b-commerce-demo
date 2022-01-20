@@ -3,7 +3,6 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { HasCategoryContext, withCategory } from "@insite/client-framework/Components/CategoryContext";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CategoryDetailsPageContext } from "@insite/content-library/Pages/CategoryDetailsPage";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import parse from "html-react-parser";
 import * as React from "react";
@@ -30,8 +29,8 @@ const widgetModule: WidgetModule = {
     component: withCategory(CategoryDetailBanner),
     definition: {
         group: "Categories",
-        icon: "Banner",
-        allowedContexts: [CategoryDetailsPageContext],
+        icon: "image-landscape",
+        allowedContexts: ["CategoryDetailsPage"],
     },
 };
 

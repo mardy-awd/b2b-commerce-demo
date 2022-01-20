@@ -54,7 +54,7 @@ const widgetModule: WidgetModule = {
     component: RichContent,
     definition: {
         group: "Basic",
-        icon: "Rtf",
+        icon: "text",
         fieldDefinitions: [
             {
                 fieldType: "General",

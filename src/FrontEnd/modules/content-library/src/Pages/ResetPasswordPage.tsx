@@ -21,4 +21,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "ResetPasswordPage" instead of this constant.
+ */
 export const ResetPasswordPageContext = "ResetPasswordPage";

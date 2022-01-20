@@ -3,7 +3,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCategoryState } from "@insite/client-framework/Store/Data/Categories/CategoriesSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CategoryDetailsPageContext } from "@insite/content-library/Pages/CategoryDetailsPage";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -164,7 +163,7 @@ const widgetModule: WidgetModule = {
     component: withCategory(CategoryDetailSubCategories),
     definition: {
         group: "Categories",
-        icon: "LinkList",
+        icon: "list-ul",
         fieldDefinitions: [
             {
                 name: fields.showImages,
@@ -175,7 +174,7 @@ const widgetModule: WidgetModule = {
                 sortOrder: 1,
             },
         ],
-        allowedContexts: [CategoryDetailsPageContext],
+        allowedContexts: ["CategoryDetailsPage"],
     },
 };
 

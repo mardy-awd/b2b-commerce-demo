@@ -199,6 +199,7 @@ export interface ComponentThemeProps {
         groupDefaultProps?: FieldSetGroupPresentationProps<RadioGroupProps>;
     };
     select: { defaultProps?: FormFieldPresentationProps<SelectProps> & SelectPresentationProps };
+    swatch: { borderRadius: { round: string; square: string; roundedSquare: string }; borderType: string };
     tab: {
         defaultProps?: TabPresentationProps;
         groupDefaultProps?: TabGroupPresentationProps;
@@ -305,11 +306,11 @@ const baseTheme: BaseTheme = {
     },
     globalStyle: {},
     typography: {
-        fontFamilyImportUrl: "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&display=swap",
+        fontFamilyImportUrl: "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&display=optional",
         body: {
             size: "15px",
             weight: 400,
-            fontFamily: "'Open Sans', 'Roboto', 'Lato', sans-serif",
+            fontFamily: "'Open Sans', sans-serif, 'Roboto', 'Lato'",
         },
         p: {
             size: "15px",
@@ -471,6 +472,14 @@ const baseTheme: BaseTheme = {
     panelMenu: { defaultProps: PanelMenuDefaultProps },
     radio: { defaultProps: {}, groupDefaultProps: {} },
     select: { defaultProps: SelectPresentationPropsDefault },
+    swatch: {
+        borderType: "roundedSquare",
+        borderRadius: {
+            round: "100%",
+            square: "0%",
+            roundedSquare: "25%",
+        },
+    },
     tab: {
         defaultProps: {},
         groupDefaultProps: {},

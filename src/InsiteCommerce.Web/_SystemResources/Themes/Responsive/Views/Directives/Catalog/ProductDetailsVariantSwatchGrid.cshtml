@@ -1,0 +1,35 @@
+﻿<div class="swatch-grid">
+    <ul>
+        <li class="swatch-grid-item" ng-repeat="style in styleTrait.styleValues">
+            <button ng-click="clickHandler({ style: style, index: index })" id="tst_swatchGrid_{{style.styleTraitValueId}}" 
+                    ng-class="{'swatch-current-container': style.styleTraitValueId === styleSelection[index].styleTraitValueId}" 
+                    class="swatch-grid-option"
+                    ng-disabled="isStyleTraitDisabled({ styleTraitValueId: style.styleTraitValueId })">
+                <div class="swatch-grid-container" ng-class="{'swatch-current': style.styleTraitValueId === styleSelection[index].styleTraitValueId}">
+                    <img ng-if="style.swatchType === 'Image'" ng-src="{{ style.swatchImageValue ? style.swatchImageValue : '' }}"
+                            alt="{{ style.valueDisplay }}" class="swatch"/>
+                    <span ng-if="style.swatchType === 'Color' || !style.swatchType" class="swatch"
+                            ng-style="{'background-color': style.swatchColorValue ? '#{{style.swatchColorValue}}' : '#36454F'}"
+                            title="{{ style.valueDisplay }}"/>
+                    <span ng-if="isStyleTraitDisabled({ styleTraitValueId: style.styleTraitValueId })" class="swatch-disabled">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="26"
+                            height="26"
+                            viewBox="0 0 25 25"
+                            fill="none"
+                            stroke="black"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                        </svg>
+                    </span>
+                </div>
+                <span ng-if="styleTrait.displayTextWithSwatch" class="swatch-grid-text">{{style.valueDisplay}}</span>
+            </button>
+        </li>
+    </ul>
+</div>

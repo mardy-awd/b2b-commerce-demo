@@ -2,7 +2,6 @@ import parseQueryString from "@insite/client-framework/Common/Utilities/parseQue
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getById } from "@insite/client-framework/Store/Data/DataState";
 import { nullPage, PagesState } from "@insite/client-framework/Store/Data/Pages/PagesState";
-import PageProps, { cleanPage, PageModel } from "@insite/client-framework/Types/PageProps";
 
 interface HasPagesState {
     data: {
@@ -62,4 +61,9 @@ export function removeAbsoluteUrl(returnUrl: string | undefined) {
     }
 
     return returnUrl;
+}
+
+export function getQueryStrings(state: ApplicationState): { [key: string]: string | undefined } {
+    const { search } = getLocation(state);
+    return parseQueryString(search);
 }

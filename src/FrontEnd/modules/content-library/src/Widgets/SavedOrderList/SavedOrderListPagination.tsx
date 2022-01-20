@@ -3,7 +3,6 @@ import { InvoicesDataViewContext } from "@insite/client-framework/Store/Data/Inv
 import updateSearchFields from "@insite/client-framework/Store/Pages/SavedOrderList/Handlers/UpdateSearchFields";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { SavedOrderListPageContext } from "@insite/content-library/Pages/SavedOrderListPage";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
 import React, { FC, useContext } from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -66,7 +65,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Saved Order List",
         displayName: "Pagination",
-        allowedContexts: [SavedOrderListPageContext],
+        allowedContexts: ["SavedOrderListPage"],
     },
 };
 

@@ -5,7 +5,6 @@ import loadAccountsReceivable from "@insite/client-framework/Store/Pages/Invoice
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import SmallHeadingAndText from "@insite/content-library/Components/SmallHeadingAndText";
-import { InvoiceHistoryPageContext } from "@insite/content-library/Pages/InvoiceHistoryPage";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -94,7 +93,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Invoice History",
         displayName: "Aging Buckets",
-        allowedContexts: [InvoiceHistoryPageContext],
+        allowedContexts: ["InvoiceHistoryPage"],
     },
 };
 

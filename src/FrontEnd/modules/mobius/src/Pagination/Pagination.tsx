@@ -277,7 +277,7 @@ const Pagination: React.FC<PaginationProps> = withTheme(props => {
                         labelPosition="left"
                         value={resultsPerPage}
                         {...spreadProps("selectProps" as any)}
-                        data-test-selector="paginationPerPageSelect"
+                        data-test-selector="pagination_resultsPerPage"
                     >
                         {resultsPerPageOptions.map((n: string) => (
                             <option key={n} value={n}>
@@ -291,7 +291,7 @@ const Pagination: React.FC<PaginationProps> = withTheme(props => {
                 role="navigation"
                 aria-label={translate("Pagination navigation")}
                 css={cssOverrides.linkList}
-                data-test-selector={`paginationCurrentPage${currentPage}`}
+                data-test-selector={`pagination_currentPage_${currentPage}`}
             >
                 <ul>
                     <li>
@@ -300,7 +300,7 @@ const Pagination: React.FC<PaginationProps> = withTheme(props => {
                             navIconsSrc.firstPage,
                             translate("First page"),
                             backDisabled,
-                            "paginationButtonFirst",
+                            "pagination_firstButton",
                         )}
                     </li>
                     <li>
@@ -309,7 +309,7 @@ const Pagination: React.FC<PaginationProps> = withTheme(props => {
                             navIconsSrc.previousPage,
                             translate("Previous page"),
                             backDisabled,
-                            "paginationButtonPrevious",
+                            "pagination_previousButton",
                         )}
                     </li>
                     {paginationButtons}
@@ -319,7 +319,7 @@ const Pagination: React.FC<PaginationProps> = withTheme(props => {
                             navIconsSrc.nextPage,
                             translate("Next page"),
                             forwardDisabled,
-                            "paginationButtonNext",
+                            "pagination_nextButton",
                         )}
                     </li>
                     <li>
@@ -328,7 +328,7 @@ const Pagination: React.FC<PaginationProps> = withTheme(props => {
                             navIconsSrc.lastPage,
                             translate("Last page"),
                             forwardDisabled,
-                            "paginationButtonLast",
+                            "pagination_lastButton",
                         )}
                     </li>
                 </ul>

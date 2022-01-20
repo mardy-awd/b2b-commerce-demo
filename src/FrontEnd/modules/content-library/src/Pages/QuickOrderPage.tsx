@@ -23,4 +23,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "QuickOrderPage" instead of this constant.
+ */
 export const QuickOrderPageContext = "QuickOrderPage";

@@ -10,7 +10,6 @@ import OrderUpload, { OrderUploadStyles } from "@insite/content-library/Componen
 import OrderUploadErrorsModal, {
     OrderUploadErrorsModalStyles,
 } from "@insite/content-library/Components/OrderUploadErrorsModal";
-import { OrderUploadPageContext } from "@insite/content-library/Pages/OrderUploadPage";
 import React, { FC } from "react";
 import { connect, ResolveThunks } from "react-redux";
 
@@ -66,7 +65,7 @@ const widgetModule: WidgetModule = {
     component: connect(null, mapDispatchToProps)(OrderUploadFileUpload),
     definition: {
         group: "Order Upload",
-        allowedContexts: [OrderUploadPageContext],
+        allowedContexts: ["OrderUploadPage"],
     },
 };
 

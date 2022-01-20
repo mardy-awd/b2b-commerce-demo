@@ -8,7 +8,6 @@ import { MessageModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
-import { RfqQuoteDetailsPageContext } from "@insite/content-library/Pages/RfqQuoteDetailsPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import GridContainer, { GridContainerProps, GridOffset } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps, GridItemStyle } from "@insite/mobius/GridItem";
@@ -168,7 +167,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(RfqQuoteDetailsMessages),
     definition: {
         displayName: "Messages",
-        allowedContexts: [RfqQuoteDetailsPageContext],
+        allowedContexts: ["RfqQuoteDetailsPage"],
         fieldDefinitions: [],
         group: "RFQ Quote Details",
     },

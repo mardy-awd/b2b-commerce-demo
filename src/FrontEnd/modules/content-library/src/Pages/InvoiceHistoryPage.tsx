@@ -98,4 +98,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "InvoiceHistoryPage" instead of this constant.
+ */
 export const InvoiceHistoryPageContext = "InvoiceHistoryPage";

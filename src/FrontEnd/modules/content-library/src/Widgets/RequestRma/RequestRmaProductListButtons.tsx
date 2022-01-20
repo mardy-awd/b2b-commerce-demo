@@ -1,5 +1,4 @@
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
-import { RequestRmaPageContext } from "@insite/content-library/Pages/RequestRmaPage";
 import RequestRmaButtons, {
     RequestRmaButtonsStyles,
 } from "@insite/content-library/Widgets/RequestRma/RequestRmaButtons";
@@ -39,7 +38,7 @@ const widgetModule: WidgetModule = {
     component: RequestRmaProductListButtons,
     definition: {
         displayName: "Product List Buttons",
-        allowedContexts: [RequestRmaPageContext],
+        allowedContexts: ["RequestRmaPage"],
         fieldDefinitions: [],
         group: "Return Request (RMA)",
     },

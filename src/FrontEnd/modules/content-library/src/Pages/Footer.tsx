@@ -29,4 +29,8 @@ const pageModule: PageModule = {
 };
 
 export default pageModule;
+
+/**
+ * @deprecated Use string literal "Footer" instead of this constant.
+ */
 export const FooterContext = "Footer";

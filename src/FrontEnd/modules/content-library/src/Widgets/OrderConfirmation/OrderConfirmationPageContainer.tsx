@@ -1,7 +1,6 @@
 import Zone from "@insite/client-framework/Components/Zone";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderConfirmationPageContext } from "@insite/content-library/Pages/OrderConfirmationPage";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -114,7 +113,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Page Container",
         group: "Order Confirmation",
-        allowedContexts: [OrderConfirmationPageContext],
+        allowedContexts: ["OrderConfirmationPage"],
     },
 };
 export default widgetModule;

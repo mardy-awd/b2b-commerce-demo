@@ -10,7 +10,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { useMergeStyles } from "@insite/content-library/additionalStyles";
-import { ChangeCustomerPageContext } from "@insite/content-library/Pages/ChangeCustomerPage";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import Icon, { IconPresentationProps } from "@insite/mobius/Icon/Icon";
 import User from "@insite/mobius/Icons/User";
@@ -18,7 +17,7 @@ import Menu from "@insite/mobius/Menu";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography/Typography";
 import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
-import React, { FC } from "react";
+import React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -93,7 +92,7 @@ interface OwnProps extends WidgetProps {
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasHistory;
 
-let icon: React.ComponentType;
+let icon: React.ComponentType<IconPresentationProps>;
 export const HeaderSignIn = ({
     userName,
     isSignInPage,
@@ -117,7 +116,7 @@ export const HeaderSignIn = ({
 
     const styles = useMergeStyles("headerSignIn", headerSignInStyles);
 
-    const onSignInHandler = () => {
+    const onSignInHandler = (e: React.MouseEvent) => {
         if ((!userName || currentUserIsGuest) && !isSignInPage) {
             if (!signInUrl) {
                 logger.warn("No url was found for SignInPage, defaulting to /SignIn");
@@ -130,6 +129,7 @@ export const HeaderSignIn = ({
                     history.push(`${signInUrl}?returnUrl=${encodeURIComponent(returnUrl)}`);
                 }
             }
+            e.preventDefault();
         }
     };
 
@@ -149,7 +149,7 @@ export const HeaderSignIn = ({
                     descriptionId="accountMenu"
                     menuItems={
                         myAccountPageLink?.children?.filter(
-                            pageLink => !(pageLink.type === ChangeCustomerPageContext && !displayChangeCustomerLink),
+                            pageLink => !(pageLink.type === "ChangeCustomerPage" && !displayChangeCustomerLink),
                         ) ?? []
                     }
                     displayChangeCustomerLink={displayChangeCustomerLink}
@@ -174,7 +174,12 @@ export const HeaderSignIn = ({
                 />
             )}
             {(!fields.includeAccountMenu || !userName || (userName && currentUserIsGuest)) && (
-                <Clickable {...styles.titleClickable} onClick={onSignInHandler} data-test-selector="header_signIn">
+                <Clickable
+                    {...styles.titleClickable}
+                    onClick={onSignInHandler}
+                    href={!signInUrl ? "/MyAccount/SignIn" : signInUrl}
+                    data-test-selector="header_signIn"
+                >
                     {showIcon && <Icon {...styles.titleIcon} src={icon} />}
                     {showLabel && <Typography {...styles.titleTypography}>{signInStatusText}</Typography>}
                 </Clickable>
@@ -196,7 +201,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(HeaderSignIn)),
     definition: {
         displayName: "Header Sign In",
-        icon: "User",
+        icon: "arrow-right-to-bracket",
         fieldDefinitions: [
             {
                 name: fields.visibilityState,

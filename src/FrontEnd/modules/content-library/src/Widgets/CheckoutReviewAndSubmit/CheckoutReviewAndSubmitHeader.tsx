@@ -12,7 +12,6 @@ import preloadCheckoutShippingData from "@insite/client-framework/Store/Pages/Ch
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CheckoutReviewAndSubmitPageContext } from "@insite/content-library/Pages/CheckoutReviewAndSubmitPage";
 import PlaceOrderButton from "@insite/content-library/Widgets/CheckoutReviewAndSubmit/CheckoutReviewAndSubmitPlaceOrderButton";
 import SubmitForApprovalButton from "@insite/content-library/Widgets/CheckoutReviewAndSubmit/CheckoutReviewAndSubmitSubmitForApprovalButton";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
@@ -193,7 +192,7 @@ const CheckoutReviewAndSubmitHeader: FC<Props> = ({
     };
 
     return (
-        <GridContainer {...styles.container}>
+        <GridContainer {...styles.container} data-test-selector="checkoutReviewAndSubmit_header">
             <GridItem {...styles.gridItem}>
                 <Typography {...styles.headingText} as="h1">
                     {pageTitle}
@@ -204,7 +203,7 @@ const CheckoutReviewAndSubmitHeader: FC<Props> = ({
                             {...styles.backButton}
                             onClick={backClickHandler}
                             disabled={isBackButtonDisabled}
-                            data-test-selector="checkoutReviewAndSubmitHeader_backButton"
+                            data-test-selector="checkoutReviewAndSubmit_backButton"
                         >
                             {translate("Back")}
                         </Button>
@@ -223,7 +222,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(CheckoutReviewAndSubmitHeader)),
     definition: {
         group: "Checkout - Review & Submit",
-        allowedContexts: [CheckoutReviewAndSubmitPageContext],
+        allowedContexts: ["CheckoutReviewAndSubmitPage"],
         displayName: "Page Header",
     },
 };

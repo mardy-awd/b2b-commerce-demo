@@ -89,4 +89,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "CartPage" instead of this constant.
+ */
 export const CartPageContext = "CartPage";

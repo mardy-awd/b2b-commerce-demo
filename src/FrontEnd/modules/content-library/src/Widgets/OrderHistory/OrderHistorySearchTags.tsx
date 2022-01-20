@@ -4,7 +4,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/OrderHistor
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderHistoryPageContext } from "@insite/content-library/Pages/OrderHistoryPage";
 import Tag, { horizontalStyles, TagPresentationProps } from "@insite/mobius/Tag";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
@@ -135,7 +134,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Tags",
-        allowedContexts: [OrderHistoryPageContext],
+        allowedContexts: ["OrderHistoryPage"],
     },
 };
 

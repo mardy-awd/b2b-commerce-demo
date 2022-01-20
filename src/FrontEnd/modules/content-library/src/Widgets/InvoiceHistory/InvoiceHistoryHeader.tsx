@@ -4,7 +4,6 @@ import toggleFiltersOpen from "@insite/client-framework/Store/Pages/InvoiceHisto
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { InvoiceHistoryPageContext } from "@insite/content-library/Pages/InvoiceHistoryPage";
 import Clickable from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -62,7 +61,7 @@ const InvoiceHistoryHeader = (props: Props) => {
             <Typography {...styles.heading}>{translate("Invoice History")}</Typography>
             <Zone contentId={props.id} zoneName="Content00" />
             <GridContainer {...styles.container}>
-                <GridItem {...styles.invoiceCountGridItem} data-test-selector="invoiceHistory_invoiceTotal">
+                <GridItem {...styles.invoiceCountGridItem}>
                     {invoicesCount} {translate("Invoices")}
                 </GridItem>
                 <GridItem {...styles.toggleFilterGridItem}>
@@ -80,7 +79,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Invoice History",
         displayName: "Page Header",
-        allowedContexts: [InvoiceHistoryPageContext],
+        allowedContexts: ["InvoiceHistoryPage"],
     },
 };
 

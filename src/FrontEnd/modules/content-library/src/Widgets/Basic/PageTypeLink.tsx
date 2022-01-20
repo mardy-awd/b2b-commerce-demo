@@ -48,7 +48,7 @@ const pageTypeLink: WidgetModule = {
     component: connect(mapStateToProps)(PageTypeLink),
     definition: {
         group: "Basic",
-        icon: "Link",
+        icon: "link",
         fieldDefinitions: [
             {
                 fieldType: "General",

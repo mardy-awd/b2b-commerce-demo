@@ -6,7 +6,6 @@ import { getWishListState } from "@insite/client-framework/Store/Data/WishLists/
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { StaticListPageContext } from "@insite/content-library/Pages/StaticListPage";
 import StaticListProductListLine from "@insite/content-library/Widgets/StaticList/StaticListProductListLine";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
@@ -87,7 +86,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Static List",
         displayName: "Product List",
-        allowedContexts: [StaticListPageContext],
+        allowedContexts: ["StaticListPage"],
     },
 };
 

@@ -40,8 +40,8 @@ function Img(props: ImgProps) {
             loading={loading || "lazy"}
             src={src}
             alt={altText}
-            width={dimensions.width}
-            height={dimensions.height}
+            width={dimensions.width || otherProps.width}
+            height={dimensions.height || otherProps.height}
         />
     );
 }

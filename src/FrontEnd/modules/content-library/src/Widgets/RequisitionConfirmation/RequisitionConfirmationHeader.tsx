@@ -4,7 +4,6 @@ import { getHomePageUrl } from "@insite/client-framework/Store/Links/LinksSelect
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RequisitionConfirmationPageContext } from "@insite/content-library/Pages/RequisitionConfirmationPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable, { ClickableProps } from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -118,7 +117,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(withHistory(RequisitionConfirmationHeader)),
     definition: {
         displayName: "Page Header",
-        allowedContexts: [RequisitionConfirmationPageContext],
+        allowedContexts: ["RequisitionConfirmationPage"],
         group: "Requisition Confirmation",
     },
 };

@@ -3,7 +3,6 @@ import { getJobQuotesDataView } from "@insite/client-framework/Store/Data/JobQuo
 import updateSearchFields from "@insite/client-framework/Store/Pages/RfqJobQuotes/Handlers/UpdateSearchFields";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqJobQuotesPageContext } from "@insite/content-library/Pages/RfqJobQuotesPage";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
 import React, { ChangeEvent } from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -68,7 +67,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "RFQ Job Quotes",
         displayName: "Pagination",
-        allowedContexts: [RfqJobQuotesPageContext],
+        allowedContexts: ["RfqJobQuotesPage"],
     },
 };
 

@@ -8,7 +8,6 @@ import updateCartLine from "@insite/client-framework/Store/Pages/Cart/Handlers/U
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqRequestQuotePageContext } from "@insite/content-library/Pages/RfqRequestQuotePage";
 import CartLineCardExpanded, {
     CartLineCardExpandedStyles,
 } from "@insite/content-library/Widgets/Cart/CartLineCardExpanded";
@@ -91,7 +90,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "RFQ Request Quote",
         displayName: "Product List",
-        allowedContexts: [RfqRequestQuotePageContext],
+        allowedContexts: ["RfqRequestQuotePage"],
         fieldDefinitions: [],
     },
 };

@@ -4,7 +4,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ShareEntityButton, { ShareEntityButtonStyles } from "@insite/content-library/Components/ShareEntityButton";
-import { InvoiceDetailsPageContext } from "@insite/content-library/Pages/InvoiceDetailsPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable, { ClickableProps } from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -125,7 +124,7 @@ const widgetModule: WidgetModule = {
     component: InvoiceDetailHeader,
     definition: {
         displayName: "Page Header",
-        allowedContexts: [InvoiceDetailsPageContext],
+        allowedContexts: ["InvoiceDetailsPage"],
         group: "Invoice History",
         fieldDefinitions: [
             {

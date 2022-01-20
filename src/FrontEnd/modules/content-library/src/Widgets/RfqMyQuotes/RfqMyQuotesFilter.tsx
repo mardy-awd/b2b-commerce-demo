@@ -11,7 +11,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/RfqMyQuotes
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqMyQuotesPageContext } from "@insite/content-library/Pages/RfqMyQuotesPage";
 import Button, { ButtonProps } from "@insite/mobius/Button";
 import DatePicker, { DatePickerPresentationProps, DatePickerState } from "@insite/mobius/DatePicker";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -518,7 +517,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "RFQ My Quotes",
         displayName: "Search Results Filter",
-        allowedContexts: [RfqMyQuotesPageContext],
+        allowedContexts: ["RfqMyQuotesPage"],
     },
 };
 

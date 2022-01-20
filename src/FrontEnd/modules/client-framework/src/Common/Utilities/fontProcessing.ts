@@ -119,34 +119,32 @@ export const getFontContent = async (request: Request, response: Response) => {
         return;
     }
 
-    if (fontsStorage[path] !== undefined) {
-        const fontData = fontsStorage[path];
-        if (fontData) {
-            if (fontData.contentType) {
-                response.contentType(fontData.contentType);
-            }
-            response.send(fontData.content);
-            return;
+    const fontData = fontsStorage[path];
+    if (fontData) {
+        if (fontData.contentType) {
+            response.contentType(fontData.contentType);
         }
+        response.send(fontData.content);
+        return;
+    }
 
-        const requestInit: RequestInit = {
-            method: "GET",
+    const requestInit: RequestInit = {
+        method: "GET",
+    };
+
+    const fontResponse = await fetch(Buffer.from(path, "base64").toString(), requestInit);
+    if (fontResponse.status === 200) {
+        const body = await (fontResponse as any).buffer(); // node-fetch
+        const contentType = fontResponse.headers.get("content-type");
+        fontsStorage[path] = {
+            content: body,
+            contentType,
         };
-
-        const fontResponse = await fetch(Buffer.from(path, "base64").toString(), requestInit);
-        if (fontResponse.status === 200) {
-            const body = await (fontResponse as any).buffer(); // node-fetch
-            const contentType = fontResponse.headers.get("content-type");
-            fontsStorage[path] = {
-                content: body,
-                contentType,
-            };
-            if (contentType) {
-                response.contentType(contentType);
-            }
-            response.send(body);
-            return;
+        if (contentType) {
+            response.contentType(contentType);
         }
+        response.send(body);
+        return;
     }
 
     response.statusCode = 404;

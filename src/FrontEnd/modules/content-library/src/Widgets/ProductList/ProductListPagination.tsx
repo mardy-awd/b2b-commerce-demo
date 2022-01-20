@@ -3,7 +3,6 @@ import addProductFilters from "@insite/client-framework/Store/Pages/ProductList/
 import { getProductListDataViewProperty } from "@insite/client-framework/Store/Pages/ProductList/ProductListSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
 import React from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -50,6 +49,7 @@ const ProductListPagination = ({ addProductFilters, pagination }: Props) => {
             onChangePage={changePage}
             onChangeResultsPerPage={changeResultsPerPage}
             pageSizeCookie="ProductList-PageSize"
+            data-test-selector="productList_pagination"
         />
     );
 };
@@ -59,7 +59,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Pagination",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
     },
 };
 

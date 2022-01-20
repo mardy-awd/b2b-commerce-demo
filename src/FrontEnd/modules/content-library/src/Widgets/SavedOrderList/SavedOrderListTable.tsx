@@ -7,7 +7,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/SavedOrderL
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { SavedOrderListPageContext } from "@insite/content-library/Pages/SavedOrderListPage";
 import DataTable, { DataTableProps, SortOrderOptions } from "@insite/mobius/DataTable";
 import DataTableBody, { DataTableBodyProps } from "@insite/mobius/DataTable/DataTableBody";
 import DataTableCell from "@insite/mobius/DataTable/DataTableCell";
@@ -181,14 +180,17 @@ const SavedOrderListTable = ({
                 </DataTableHead>
                 <DataTableBody {...styles.dataTableBody}>
                     {rows.map(({ id, date, shipToLabel, subtotal }) => (
-                        <DataTableRow data-test-selector="savedOrderList_orderLine" key={id} {...styles.dataTableRow}>
-                            <DataTableCell data-test-selector="savedOrderList_orderLine_date" {...styles.orderDateCell}>
+                        <DataTableRow
+                            data-test-selector="savedOrderList_orderLine"
+                            data-test-key={id}
+                            key={id}
+                            {...styles.dataTableRow}
+                        >
+                            <DataTableCell {...styles.orderDateCell}>
                                 <Link href={`${savedOrderDetailsLink?.url}?cartId=${id}`}>{date}</Link>
                             </DataTableCell>
                             <DataTableCell {...styles.shipToLabelCell}>{shipToLabel}</DataTableCell>
-                            <DataTableCell data-test-selector="savedOrderList_orderLine_total" {...styles.subtotalCell}>
-                                {subtotal}
-                            </DataTableCell>
+                            <DataTableCell {...styles.subtotalCell}>{subtotal}</DataTableCell>
                         </DataTableRow>
                     ))}
                 </DataTableBody>
@@ -202,7 +204,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Saved Order List",
         displayName: "Search Results Table",
-        allowedContexts: [SavedOrderListPageContext],
+        allowedContexts: ["SavedOrderListPage"],
         isSystem: true,
     },
 };

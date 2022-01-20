@@ -2,7 +2,6 @@ import clearSearch from "@insite/client-framework/Store/Pages/OrderHistory/Handl
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderHistoryPageContext } from "@insite/content-library/Pages/OrderHistoryPage";
 import SearchFieldWrapper, {
     SearchFieldWrapperStyles,
 } from "@insite/content-library/Widgets/OrderHistory/SearchFieldWrapper";
@@ -60,7 +59,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Clear Filters Button",
-        allowedContexts: [OrderHistoryPageContext],
+        allowedContexts: ["OrderHistoryPage"],
     },
 };
 

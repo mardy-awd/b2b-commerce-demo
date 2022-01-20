@@ -3,7 +3,6 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { BrandStateContext } from "@insite/client-framework/Store/Data/Brands/BrandsSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { BrandDetailsPageContext } from "@insite/content-library/Pages/BrandDetailsPage";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import parse from "html-react-parser";
 import React, { FC, useContext } from "react";
@@ -53,7 +52,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Brand Details",
         displayName: "Content",
-        allowedContexts: [BrandDetailsPageContext],
+        allowedContexts: ["BrandDetailsPage"],
     },
 };
 

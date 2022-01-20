@@ -111,7 +111,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(CurrencyMenu),
     definition: {
         displayName: "Currency Menu",
-        icon: "Menu",
+        icon: "money-bill",
         fieldDefinitions: [
             {
                 name: fields.showIcon,

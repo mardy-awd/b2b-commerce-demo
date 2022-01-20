@@ -3,7 +3,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductAddToCartButton from "@insite/content-library/Components/ProductAddToCartButton";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import { ButtonPresentationProps } from "@insite/mobius/Button";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -55,7 +54,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Add to Cart Button",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

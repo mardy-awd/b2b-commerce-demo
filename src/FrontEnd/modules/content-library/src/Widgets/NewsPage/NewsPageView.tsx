@@ -5,7 +5,6 @@ import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSe
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
-import { NewsPageContext } from "@insite/content-library/Pages/NewsPage";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import parse from "html-react-parser";
@@ -80,7 +79,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(NewsPageView),
     definition: {
         group: "News Page",
-        allowedContexts: [NewsPageContext],
+        allowedContexts: ["NewsPage"],
     },
 };
 

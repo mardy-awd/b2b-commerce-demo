@@ -6,7 +6,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import CartLinesList, { CartLinesListStyles } from "@insite/content-library/Components/CartLinesList";
-import { RfqConfirmationPageContext } from "@insite/content-library/Pages/RfqConfirmationPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import LoadingSpinner from "@insite/mobius/LoadingSpinner";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
@@ -102,7 +101,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(RfqConfirmationProductList),
     definition: {
         displayName: "Product List",
-        allowedContexts: [RfqConfirmationPageContext],
+        allowedContexts: ["RfqConfirmationPage"],
         fieldDefinitions: [],
         group: "RFQ Quote Confirmation",
     },

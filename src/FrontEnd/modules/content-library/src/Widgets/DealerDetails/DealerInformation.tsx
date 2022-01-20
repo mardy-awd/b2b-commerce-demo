@@ -11,7 +11,6 @@ import AddressInfoCondensedDisplay, {
 } from "@insite/content-library/Components/AddressInfoCondensedDisplay";
 import DistanceDisplay, { DistanceUnitOfMeasure } from "@insite/content-library/Components/DistanceDisplay";
 import GoogleMapsDirectionLink from "@insite/content-library/Components/GoogleMapsDirectionLink";
-import { DealerDetailsPageContext } from "@insite/content-library/Pages/DealerDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Icon, { IconPresentationProps } from "@insite/mobius/Icon";
@@ -181,7 +180,7 @@ const DealerInformation: React.FC<Props> = ({ history, locationFinderUrl }) => {
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(withHistory(DealerInformation)),
     definition: {
-        allowedContexts: [DealerDetailsPageContext],
+        allowedContexts: ["DealerDetailsPage"],
         group: "Dealer Details",
     },
 };

@@ -2,7 +2,6 @@ import { VmiLocationStateContext } from "@insite/client-framework/Store/Data/Vmi
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import AddressInfoDisplay from "@insite/content-library/Components/AddressInfoDisplay";
-import { VmiLocationDetailsPageContext } from "@insite/content-library/Pages/VmiLocationDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
@@ -76,7 +75,7 @@ const VmiLocationDetailsCustomerInfo = () => {
 const widgetModule: WidgetModule = {
     component: VmiLocationDetailsCustomerInfo,
     definition: {
-        allowedContexts: [VmiLocationDetailsPageContext],
+        allowedContexts: ["VmiLocationDetailsPage"],
         group: "VMI Location Details",
     },
 };

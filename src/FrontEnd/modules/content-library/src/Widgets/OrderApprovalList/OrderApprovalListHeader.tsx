@@ -4,7 +4,6 @@ import toggleFiltersOpen from "@insite/client-framework/Store/Pages/OrderApprova
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderApprovalListPageContext } from "@insite/content-library/Pages/OrderApprovalListPage";
 import Clickable from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -85,7 +84,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order Approval List",
         displayName: "Page Header",
-        allowedContexts: [OrderApprovalListPageContext],
+        allowedContexts: ["OrderApprovalListPage"],
         isSystem: true,
     },
 };

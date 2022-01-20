@@ -5,6 +5,7 @@
 
     export interface ITopNavControllerAttributes extends ng.IAttributes {
         dashboardUrl: string;
+        vmiDashboardUrl: string;
     }
 
     export class TopNavController {
@@ -12,6 +13,7 @@
         currencies: any[];
         session: any;
         dashboardUrl: string;
+        vmiDashboardUrl: string;
         accountSettings: AccountSettingsModel;
         orderSettings: OrderSettingsModel;
         displayModeSwitch: boolean;
@@ -34,6 +36,7 @@
 
         $onInit(): void {
             this.dashboardUrl = this.$attrs.dashboardUrl;
+            this.vmiDashboardUrl = this.$attrs.vmiDashboardUrl;
             // TODO ISC-4406
             // TODO ISC-2937 SPA kill all of the things that depend on broadcast for session and convert them to this, assuming we can properly cache this call
             // otherwise determine some method for a child to say "I expect my parent to have a session, and I want to use it" broadcast will not work for that
@@ -91,7 +94,7 @@
             }
 
             this.displayModeSwitch = this.session.isAuthenticated && this.orderSettings.vmiEnabled &&
-                this.session.userRoles && this.session.userRoles.toLowerCase().indexOf("vmi_") !== -1;
+                this.session.userRoles && this.session.userRoles.toLowerCase().indexOf("vmi_admin") !== -1;
         }
 
         protected getWebsite(expand: string): void {
@@ -162,7 +165,11 @@
 
         setMode(mode: string): void {
             this.ipCookie(this.NavigationModeCookieName, mode, { path: "/" });
-            this.$window.location.reload();
+            if (mode === "Vmi") {
+                this.$window.location.href = this.vmiDashboardUrl;
+            } else {
+                this.$window.location.reload();
+            }
         }
 
         signOut(returnUrl: string): void {

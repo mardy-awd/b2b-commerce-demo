@@ -6,6 +6,7 @@ export default function useFilteredVariantTraits(
     variantTraits: VariantTraitModel[],
     variantChildren: ProductModel[],
     variantSelection: SafeDictionary<string>,
+    returnDisabled?: boolean,
 ) {
     const filteredVariantTraits = cloneDeep(variantTraits.slice());
     const childTraitValueLists = variantChildren.map(o => o.childTraitValues!);
@@ -33,9 +34,18 @@ export default function useFilteredVariantTraits(
                 filteredValuesIds.push(currentValue.id);
             }
         });
-        variantTrait.traitValues = variantTrait
-            .traitValues!.filter(traitValue => filteredValuesIds.indexOf(traitValue.id) > -1)
-            .sort((a, b) => a.sortOrder - b.sortOrder);
+        if (returnDisabled) {
+            variantTrait.traitValues!.forEach(traitValue => {
+                if (filteredValuesIds.indexOf(traitValue.id) < 0) {
+                    traitValue.isDisabled = true;
+                }
+            });
+            variantTrait.traitValues!.sort((a, b) => a.sortOrder - b.sortOrder);
+        } else {
+            variantTrait.traitValues = variantTrait
+                .traitValues!.filter(traitValue => filteredValuesIds.indexOf(traitValue.id) > -1)
+                .sort((a, b) => a.sortOrder - b.sortOrder);
+        }
     });
 
     return filteredVariantTraits.sort((a, b) => a.sortOrder - b.sortOrder);

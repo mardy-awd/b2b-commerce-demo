@@ -19,7 +19,7 @@
     insite.navAdjustments = [];
 </script>
 
-<div ng-controller="TopNavController as vm" class="top-nav-container" ng-cloak dashboard-url="[% urlForPage 'MyAccountPage' %]">
+<div ng-controller="TopNavController as vm" class="top-nav-container" ng-cloak dashboard-url="[% urlForPage 'MyAccountPage' %]" vmi-dashboard-url="[% urlForPage 'VmiDashboardPage' %]">
     <input type="hidden" id="tst_currentLanguage" value="{{::vm.session.language.id}}" />
     <div ng-if="vm.session.hasRfqUpdates" ng-cloak>
         <div class="head-msg">

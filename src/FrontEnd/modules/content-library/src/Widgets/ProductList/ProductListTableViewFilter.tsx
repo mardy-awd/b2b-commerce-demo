@@ -8,7 +8,6 @@ import {
 } from "@insite/client-framework/Store/Pages/ProductList/ProductListSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import ProductListColumnsDrawer from "@insite/content-library/Widgets/ProductList/ProductListColumnsDrawer";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import Drawer, { DrawerPresentationProps } from "@insite/mobius/Drawer";
@@ -174,7 +173,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Table View Filter",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
     },
 };
 

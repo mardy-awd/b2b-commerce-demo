@@ -115,7 +115,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(LanguageMenu),
     definition: {
         displayName: "Language Menu",
-        icon: "Menu",
+        icon: "language",
         fieldDefinitions: [
             {
                 name: fields.showIcon,

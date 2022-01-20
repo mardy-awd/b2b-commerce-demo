@@ -18,6 +18,14 @@ export interface AddVmiBinApiParameter extends ApiParameter {
 export interface GetVmiBinsApiParameter extends ApiParameter, HasPagingParameters {
     vmiLocationId?: string;
     filter?: string;
+    binNumberFrom?: string;
+    binNumberTo?: string;
+    previousCountFromDate?: string;
+    previousCountToDate?: string;
+    isBelowMinimum?: boolean;
+    numberOfTimesMinQtyReached?: number;
+    numberOfPreviousOrders?: number;
+    numberOfVisits?: number;
     expand?: "product"[];
 }
 

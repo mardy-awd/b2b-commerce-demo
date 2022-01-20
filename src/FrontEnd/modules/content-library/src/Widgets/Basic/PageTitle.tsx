@@ -24,7 +24,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(PageTitle),
     definition: {
         group: "Basic",
-        icon: "PageTitle",
+        icon: "heading",
     },
 };
 

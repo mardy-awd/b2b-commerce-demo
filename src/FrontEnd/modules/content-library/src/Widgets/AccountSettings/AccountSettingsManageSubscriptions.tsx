@@ -4,7 +4,6 @@ import updateAccountSettings from "@insite/client-framework/Store/Pages/AccountS
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { AccountSettingsPageContext } from "@insite/content-library/Pages/AccountSettingsPage";
 import Checkbox, { CheckboxProps } from "@insite/mobius/Checkbox/Checkbox";
 import CheckboxGroup, { CheckboxGroupComponentProps } from "@insite/mobius/CheckboxGroup/CheckboxGroup";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
@@ -71,7 +70,7 @@ const AccountSettingsManageSubscriptions = ({ allowSubscribeToNewsLetter, accoun
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(AccountSettingsManageSubscriptions),
     definition: {
-        allowedContexts: [AccountSettingsPageContext],
+        allowedContexts: ["AccountSettingsPage"],
         group: "Account Settings",
         displayName: "Manage Subscriptions",
     },

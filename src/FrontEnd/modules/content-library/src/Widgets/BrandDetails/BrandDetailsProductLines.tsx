@@ -4,7 +4,6 @@ import { BrandProductLinesStateContext } from "@insite/client-framework/Store/Da
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { BrandDetailsPageContext } from "@insite/content-library/Pages/BrandDetailsPage";
 import Button, { ButtonProps } from "@insite/mobius/Button";
 import { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -245,7 +244,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Brand Details",
         displayName: "Brand Product Lines",
-        allowedContexts: [BrandDetailsPageContext],
+        allowedContexts: ["BrandDetailsPage"],
         fieldDefinitions: [
             {
                 name: fields.title,

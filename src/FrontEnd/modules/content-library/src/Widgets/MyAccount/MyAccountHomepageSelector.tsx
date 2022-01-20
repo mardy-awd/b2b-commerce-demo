@@ -3,7 +3,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import setDashboardIsHomepage from "@insite/client-framework/Store/Context/Handlers/SetDashboardIsHomepage";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { MyAccountPageContext } from "@insite/content-library/Pages/MyAccountPage";
 import Checkbox, { CheckboxPresentationProps } from "@insite/mobius/Checkbox";
 import CheckboxGroup, { CheckboxGroupComponentProps } from "@insite/mobius/CheckboxGroup";
 import { FieldSetGroupPresentationProps } from "@insite/mobius/utilities/fieldSetProps";
@@ -57,7 +56,7 @@ const MyAccountHomepageSelector = ({ dashboardIsHomepage, setDashboardIsHomepage
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(MyAccountHomepageSelector),
     definition: {
-        allowedContexts: [MyAccountPageContext],
+        allowedContexts: ["MyAccountPage"],
         group: "My Account",
         displayName: "Homepage Selector",
     },

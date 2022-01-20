@@ -28,6 +28,7 @@ const MainHeaderStyle = styled.div`
     flex-wrap: wrap;
     border-bottom: 1px solid #dedede;
     min-width: 748px;
+    overflow: hidden;
 `;
 
 const HeaderBarStyle = styled.div`

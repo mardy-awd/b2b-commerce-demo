@@ -1,6 +1,5 @@
 import { VmiLocationStateContext } from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
-import { VmiLocationDetailsPageContext } from "@insite/content-library/Pages/VmiLocationDetailsPage";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import * as React from "react";
 import { useContext } from "react";
@@ -33,7 +32,7 @@ const VmiLoationDetailsTitle = () => {
 const widgetModule: WidgetModule = {
     component: VmiLoationDetailsTitle,
     definition: {
-        allowedContexts: [VmiLocationDetailsPageContext],
+        allowedContexts: ["VmiLocationDetailsPage"],
         group: "VMI Location Details",
     },
 };

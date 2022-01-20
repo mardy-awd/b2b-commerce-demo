@@ -6,7 +6,6 @@ import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/Link
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqMyQuotesPageContext } from "@insite/content-library/Pages/RfqMyQuotesPage";
 import DataTable, { DataTableProps } from "@insite/mobius/DataTable";
 import DataTableBody, { DataTableBodyProps } from "@insite/mobius/DataTable/DataTableBody";
 import DataTableCell, { DataTableCellProps } from "@insite/mobius/DataTable/DataTableCell";
@@ -241,7 +240,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "RFQ My Quotes",
         displayName: "Search Results Table",
-        allowedContexts: [RfqMyQuotesPageContext],
+        allowedContexts: ["RfqMyQuotesPage"],
     },
 };
 

@@ -5,7 +5,6 @@ import setReturnNotes from "@insite/client-framework/Store/Pages/RequestRma/Hand
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RequestRmaPageContext } from "@insite/content-library/Pages/RequestRmaPage";
 import TextArea, { TextAreaProps } from "@insite/mobius/TextArea";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React, { FC, useContext } from "react";
@@ -64,7 +63,7 @@ const RequestRmaNotes: FC<Props> = ({ returnNotes, setReturnNotes }) => {
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(RequestRmaNotes),
     definition: {
-        allowedContexts: [RequestRmaPageContext],
+        allowedContexts: ["RequestRmaPage"],
         group: "Return Request (RMA)",
         displayName: "Notes",
         fieldDefinitions: [],

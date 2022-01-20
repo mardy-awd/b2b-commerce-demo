@@ -9,7 +9,6 @@ import applyPromotion from "@insite/client-framework/Store/Pages/CheckoutReviewA
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CheckoutReviewAndSubmitPageContext } from "@insite/content-library/Pages/CheckoutReviewAndSubmitPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import TextField, { TextFieldPresentationProps } from "@insite/mobius/TextField";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
@@ -117,7 +116,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(CheckoutReviewAndSubmitPromotionCode),
     definition: {
         group: "Checkout - Review & Submit",
-        allowedContexts: [CheckoutReviewAndSubmitPageContext],
+        allowedContexts: ["CheckoutReviewAndSubmitPage"],
         displayName: "Promotion Code Form",
     },
 };

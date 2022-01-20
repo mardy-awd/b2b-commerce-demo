@@ -8,7 +8,6 @@ import generateOrder from "@insite/client-framework/Store/Pages/RfqJobQuoteDetai
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqJobQuoteDetailsPageContext } from "@insite/content-library/Pages/RfqJobQuoteDetailsPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -158,7 +157,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(RfqJobQuoteDetailsHeader)),
     definition: {
         displayName: "Page Header",
-        allowedContexts: [RfqJobQuoteDetailsPageContext],
+        allowedContexts: ["RfqJobQuoteDetailsPage"],
         fieldDefinitions: [],
         group: "RFQ Job Quote Details",
     },

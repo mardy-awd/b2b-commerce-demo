@@ -4,7 +4,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getProductState } from "@insite/client-framework/Store/Data/Products/ProductsSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
@@ -77,7 +76,7 @@ const widgetModule: WidgetModule = {
     component: withParentProductId(connect(mapStateToProps)(ProductDetailsKitSectionOptions)),
     definition: {
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

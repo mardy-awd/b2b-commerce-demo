@@ -1,0 +1,40 @@
+{
+    "nodeId": "5b2dd088-424d-4147-a5e0-6b00e8dfc149",
+    "name": "VMI Dashboard",
+    "type": "VmiDashboardPage",
+    "parentId": "567f3901-9812-4d9d-a450-a274c3e3268a",
+    "sortOrder": 0,
+    "websiteId": "c2c53320-98dc-4eca-8022-9efc00dea0dc",
+    "variantName": null,
+    "layoutPageId": null,
+    "templateHash": "ef3e883e3c6d844c26428d0a2073d008cabeebe762871b80db72f9b3f538bb91",
+    "id": "7a7007e5-2521-4efb-90a7-573a7d10f3c9",
+    "generalFields": {
+        "horizontalRule": "",
+        "tags": [],
+        "hideBreadcrumbs": false,
+        "variantName": null,
+        "layoutPage": ""
+    },
+    "translatableFields": {
+        "title": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": "VMI Dashboard"
+        },
+        "urlSegment": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": "VmiDashboard"
+        }
+    },
+    "contextualFields": {},
+    "widgets": [
+        {
+            "parentId": "7a7007e5-2521-4efb-90a7-573a7d10f3c9",
+            "type": "Basic/PageTitle",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "3f20c3a1-b10b-4f74-97ee-24c644ce06a8",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        }
+    ]
+}

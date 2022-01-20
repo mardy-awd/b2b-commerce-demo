@@ -2,6 +2,7 @@
     "use strict";
     import VmiBinCollectionModel = Insite.Catalog.WebApi.V1.ApiModels.VmiBinCollectionModel;
     import VmiBinModel = Insite.Catalog.WebApi.V1.ApiModels.VmiBinModel;
+    import VmiBinCountModel = Insite.Catalog.WebApi.V1.ApiModels.VmiBinCountModel;
 
     export interface ISearchFilter {
         filter?: string;
@@ -10,11 +11,23 @@
         previousCountFromDate?: string;
         previousCountToDate?: string;
         sort?: string;
+        isBelowMinimum?: boolean;
+        numberOfPreviousOrders?: number;
+        numberOfTimesMinQtyReached?: number;
+        numberOfVisits?: number;
+    }
+
+    export interface IVmiBinCountFilter {
+        isBelowMinimum?: boolean;
+        numberOfPreviousOrders?: number;
+        numberOfTimesMinQtyReached?: number;
+        numberOfVisits?: number;
     }
 
     export interface IVmiBinService {
         getVmiBins(vmiLocationId: System.Guid, filter: ISearchFilter, pagination: PaginationModel): ng.IPromise<VmiBinCollectionModel>;
         getVmiBin(vmiLocationId: System.Guid, vmiBinId: System.Guid): ng.IPromise<VmiBinModel>;
+        getVmiBinCount(filter: IVmiBinCountFilter): ng.IPromise<VmiBinCountModel>;
         deleteVmiBinCollection(vmiLocationId: System.Guid, vmiBins: VmiBinModel[]): ng.IPromise<VmiBinCollectionModel>;
         addVmiBinCollection(vmiLocationId: System.Guid, vmiBin: VmiBinModel[]): ng.IPromise<VmiBinCollectionModel>;
         addVmiBin(vmiBin: VmiBinModel): ng.IPromise<VmiBinModel>;
@@ -76,6 +89,25 @@
         }
 
         protected getVmiBinFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
+        }
+
+        getVmiBinCount(filter: IVmiBinCountFilter): ng.IPromise<VmiBinCountModel> {
+            return this.httpWrapperService.executeHttpRequest(
+                this,
+                this.$http({
+                    url: "api/v1/vmiBins/count",
+                    method: "GET",
+                    params: JSON.parse(JSON.stringify(filter))
+                }),
+                this.getVmiBinCountCompleted,
+                this.getVmiBinCountFailed
+            );
+        }
+
+        protected getVmiBinCountCompleted(response: ng.IHttpPromiseCallbackArg<VmiBinCountModel>): void {
+        }
+
+        protected getVmiBinCountFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
         }
 
         deleteVmiBinCollection(vmiLocationId: System.Guid, vmiBins: VmiBinModel[]): ng.IPromise<VmiBinCollectionModel> {

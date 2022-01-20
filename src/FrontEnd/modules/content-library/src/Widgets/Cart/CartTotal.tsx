@@ -28,7 +28,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import CartTotalDisplay, { CartTotalDisplayStyles } from "@insite/content-library/Components/CartTotalDisplay";
 import TwoButtonModal from "@insite/content-library/Components/TwoButtonModal";
-import { CartPageContext } from "@insite/content-library/Pages/CartPage";
 import CartSaveOrderButton from "@insite/content-library/Widgets/Cart/CartSaveOrderButton";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
@@ -323,8 +322,8 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(CartTotal)),
     definition: {
         group: "Cart",
-        icon: "ShoppingCart",
-        allowedContexts: [CartPageContext],
+        icon: "cart-shopping",
+        allowedContexts: ["CartPage"],
     },
 };
 

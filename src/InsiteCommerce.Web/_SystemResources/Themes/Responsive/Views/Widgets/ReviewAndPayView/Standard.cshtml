@@ -123,7 +123,7 @@
                             <select id="paymentMethod" name="paymentMethod"
                                     data-rule-required="true" data-msg-required="[% translate 'Payment Method is required.' %]"
                                     ng-model="vm.cart.paymentMethod"
-                                    ng-options="PaymentMethod.description for PaymentMethod in vm.cart.paymentOptions.paymentMethods">
+                                    ng-options="pm.description || pm.name for pm in vm.cart.paymentOptions.paymentMethods">
                                 <option value="">[% translate 'Select Payment Method' %]</option>
                             </select>
                             <span ng-show="vm.cart.paymentMethod.isPaymentProfile && !vm.cart.paymentMethod.isPaymentProfileExpired" class="payment-billing-address">

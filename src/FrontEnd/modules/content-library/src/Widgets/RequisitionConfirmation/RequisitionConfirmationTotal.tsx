@@ -9,7 +9,6 @@ import {
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import CartTotalDisplay, { CartTotalDisplayStyles } from "@insite/content-library/Components/CartTotalDisplay";
-import { RequisitionConfirmationPageContext } from "@insite/content-library/Pages/RequisitionConfirmationPage";
 import React from "react";
 import { connect } from "react-redux";
 
@@ -50,7 +49,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(RequisitionConfirmationTotal),
     definition: {
         displayName: "Total",
-        allowedContexts: [RequisitionConfirmationPageContext],
+        allowedContexts: ["RequisitionConfirmationPage"],
         group: "Requisition Confirmation",
     },
 };

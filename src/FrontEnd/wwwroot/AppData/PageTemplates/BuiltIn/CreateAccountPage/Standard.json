@@ -8,8 +8,7 @@
     "websiteId": "c2c53320-98dc-4eca-8022-9efc00dea0dc",
     "generalFields": {
         "horizontalRule": "",
-        "tags": [],
-        "excludeFromSignInRequired": true
+        "tags": []
     },
     "translatableFields": {},
     "contextualFields": {},

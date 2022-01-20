@@ -71,7 +71,7 @@ const widgetModule: WidgetModule = {
     component: Row,
     definition: {
         group: "Basic",
-        icon: "Row",
+        icon: "distribute-spacing-vertical",
         fieldDefinitions: [
             {
                 name: fields.columns,

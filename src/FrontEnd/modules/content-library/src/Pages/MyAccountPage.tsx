@@ -25,4 +25,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "MyAccountPage" instead of this constant.
+ */
 export const MyAccountPageContext = "MyAccountPage";

@@ -12,7 +12,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import AddressInfoDisplay, { AddressInfoDisplayStyles } from "@insite/content-library/Components/AddressInfoDisplay";
 import FindLocationModal, { FindLocationModalStyles } from "@insite/content-library/Components/FindLocationModal";
-import { CartPageContext } from "@insite/content-library/Pages/CartPage";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import Radio, { RadioComponentProps } from "@insite/mobius/Radio";
 import RadioGroup, { RadioGroupComponentProps } from "@insite/mobius/RadioGroup";
@@ -215,7 +214,8 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Cart",
         displayName: "Fulfillment Method Selector",
-        allowedContexts: [CartPageContext],
+        icon: "truck",
+        allowedContexts: ["CartPage"],
     },
 };
 

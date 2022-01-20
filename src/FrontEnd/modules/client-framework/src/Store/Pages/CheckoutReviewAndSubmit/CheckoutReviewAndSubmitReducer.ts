@@ -45,6 +45,13 @@ const reducer = {
     },
     "Pages/CheckoutReviewAndSubmit/BeginCheckoutWithPayPal": (draft: Draft<CheckoutReviewAndSubmitState>) => {
         draft.isCheckingOutWithPayPay = true;
+        draft.payPalCheckoutErrorMessage = undefined;
+    },
+    "Pages/CheckoutReviewAndSubmit/SetPayPalCheckoutErrorMessage": (
+        draft: Draft<CheckoutReviewAndSubmitState>,
+        action: { errorMessage?: string },
+    ) => {
+        draft.payPalCheckoutErrorMessage = action.errorMessage;
     },
     "Pages/CheckoutReviewAndSubmit/CompleteCheckoutWithPayPal": (
         draft: Draft<CheckoutReviewAndSubmitState>,

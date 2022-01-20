@@ -5,7 +5,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqRequestQuotePageContext } from "@insite/content-library/Pages/RfqRequestQuotePage";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import LoadingSpinner from "@insite/mobius/LoadingSpinner";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
@@ -161,7 +160,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "RFQ Request Quote",
         displayName: "Page Container",
-        allowedContexts: [RfqRequestQuotePageContext],
+        allowedContexts: ["RfqRequestQuotePage"],
         fieldDefinitions: [],
     },
 };

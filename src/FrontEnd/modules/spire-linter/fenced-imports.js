@@ -66,7 +66,10 @@ const allowedModules = {
         validClientImports,
         ["@insite/content-library", "@insite/client-framework", "@insite/mobius", "@insite/shell-public"],
     ],
-    "client-framework": [validClientImports, ["@insite/client-framework", "@insite/mobius"]],
+    "client-framework": [
+        validClientImports,
+        ["@insite/client-framework", "@insite/mobius", "@insite/shell/Components/Icons/AxiomIcon/AsyncAxiomIcon"],
+    ],
     "content-library": [
         validClientImports,
         ["@insite/content-library", "@insite/client-framework", "@insite/mobius", "enzyme", "jest-styled-components"],

@@ -1,7 +1,6 @@
 import Zone from "@insite/client-framework/Components/Zone";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import Accordion, { AccordionPresentationProps } from "@insite/mobius/Accordion";
 import React, { FC } from "react";
 import { css } from "styled-components";
@@ -37,7 +36,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Filters Accordion",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
     },
 };
 

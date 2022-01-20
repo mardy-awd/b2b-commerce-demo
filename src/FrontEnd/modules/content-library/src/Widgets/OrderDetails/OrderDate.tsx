@@ -3,7 +3,6 @@ import { OrderStateContext } from "@insite/client-framework/Store/Data/Orders/Or
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
-import { OrderDetailsPageContext } from "@insite/content-library/Pages/OrderDetailsPage";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React, { FC, useContext } from "react";
@@ -59,7 +58,7 @@ const OrderDate: FC = () => {
 const widgetModule: WidgetModule = {
     component: OrderDate,
     definition: {
-        allowedContexts: [OrderDetailsPageContext],
+        allowedContexts: ["OrderDetailsPage"],
         group: "Order Details",
     },
 };

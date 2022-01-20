@@ -5,7 +5,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
 import SmallHeadingAndText, { SmallHeadingAndTextStyles } from "@insite/content-library/Components/SmallHeadingAndText";
-import { RfqQuoteDetailsPageContext } from "@insite/content-library/Pages/RfqQuoteDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
@@ -110,7 +109,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(RfqJobQuoteDetailsInformation),
     definition: {
         displayName: "Details",
-        allowedContexts: [RfqQuoteDetailsPageContext],
+        allowedContexts: ["RfqQuoteDetailsPage"],
         fieldDefinitions: [],
         group: "RFQ Job Quote Details",
     },

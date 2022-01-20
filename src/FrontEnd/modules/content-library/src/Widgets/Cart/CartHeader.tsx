@@ -1,7 +1,6 @@
 import Zone from "@insite/client-framework/Components/Zone";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CartPageContext } from "@insite/content-library/Pages/CartPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import React, { FC } from "react";
@@ -56,7 +55,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Cart",
         displayName: "Page Header",
-        allowedContexts: [CartPageContext],
+        allowedContexts: ["CartPage"],
     },
 };
 

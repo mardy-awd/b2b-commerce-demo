@@ -11,7 +11,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import LocalizedCurrency from "@insite/content-library/Components/LocalizedCurrency";
-import { RfqJobQuoteDetailsPageContext } from "@insite/content-library/Pages/RfqJobQuoteDetailsPage";
 import RfqJobQuoteDetailsProductCard from "@insite/content-library/Widgets/RfqJobQuoteDetails/RfqJobQuoteDetailsProductCard";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import getColor from "@insite/mobius/utilities/getColor";
@@ -162,7 +161,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(RfqJobQuoteDetailsProductList),
     definition: {
         displayName: "Product List",
-        allowedContexts: [RfqJobQuoteDetailsPageContext],
+        allowedContexts: ["RfqJobQuoteDetailsPage"],
         group: "RFQ Job Quote Details",
     },
 };

@@ -7,10 +7,15 @@ import {
     getVariantChildrenDataView,
 } from "@insite/client-framework/Store/Data/Products/ProductsSelectors";
 import updateVariantSelection from "@insite/client-framework/Store/Pages/ProductDetails/Handlers/UpdateVariantSelection";
-import translate from "@insite/client-framework/Translate";
+import { VariantDisplayTypeValues, VariantTraitModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
+import ProductDetailsVariantButton from "@insite/content-library/Widgets/ProductDetails/ProductDetailsVariantButton";
+import ProductDetailsVariantDropdown from "@insite/content-library/Widgets/ProductDetails/ProductDetailsVariantDropdown";
+import ProductDetailsVariantSwatchDropdown from "@insite/content-library/Widgets/ProductDetails/ProductDetailsVariantSwatchDropdown";
+import ProductDetailsVariantSwatchGrid from "@insite/content-library/Widgets/ProductDetails/ProductDetailsVariantSwatchGrid";
+import ProductDetailsVariantSwatchList from "@insite/content-library/Widgets/ProductDetails/ProductDetailsVariantSwatchList";
 import Select, { SelectProps } from "@insite/mobius/Select";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
@@ -38,7 +43,6 @@ const mapDispatchToProps = {
 
 export interface ProductDetailsVariantOptionsStyles {
     wrapper?: InjectableCss;
-    select?: SelectProps;
 }
 
 export const variantOptionsStyles: ProductDetailsVariantOptionsStyles = {
@@ -46,13 +50,6 @@ export const variantOptionsStyles: ProductDetailsVariantOptionsStyles = {
         css: css`
             width: 100%;
         `,
-    },
-    select: {
-        cssOverrides: {
-            formField: css`
-                margin-top: 10px;
-            `,
-        },
     },
 };
 
@@ -84,35 +81,62 @@ const ProductDetailsVariantOptions: React.FC<Props> = ({
         return null;
     }
 
-    const filteredVariantTraits = useFilteredVariantTraits(variantTraits, variantChildren, variantSelection);
+    const filteredVariantTraits = useFilteredVariantTraits(variantTraits, variantChildren, variantSelection, true);
+
+    const renderVariant = (variantTrait: VariantTraitModel) => {
+        switch (variantTrait.displayType) {
+            case VariantDisplayTypeValues.Button:
+                return (
+                    <ProductDetailsVariantButton
+                        key={variantTrait.id}
+                        variantSelection={variantSelection}
+                        updateVariantSelection={variantChangeHandler}
+                        variantTrait={variantTrait}
+                    />
+                );
+            case VariantDisplayTypeValues.SwatchDropdown:
+                return (
+                    <ProductDetailsVariantSwatchDropdown
+                        key={variantTrait.id}
+                        variantSelection={variantSelection}
+                        updateVariantSelection={variantChangeHandler}
+                        variantTrait={variantTrait}
+                    />
+                );
+            case VariantDisplayTypeValues.SwatchGrid:
+                return (
+                    <ProductDetailsVariantSwatchGrid
+                        key={variantTrait.id}
+                        variantSelection={variantSelection}
+                        updateVariantSelection={variantChangeHandler}
+                        variantTrait={variantTrait}
+                    />
+                );
+            case VariantDisplayTypeValues.SwatchList:
+                return (
+                    <ProductDetailsVariantSwatchList
+                        key={variantTrait.id}
+                        variantSelection={variantSelection}
+                        updateVariantSelection={variantChangeHandler}
+                        variantTrait={variantTrait}
+                    />
+                );
+            default:
+                return (
+                    <ProductDetailsVariantDropdown
+                        key={variantTrait.id}
+                        variantSelection={variantSelection}
+                        updateVariantSelection={variantChangeHandler}
+                        variantTrait={variantTrait}
+                    />
+                );
+        }
+    };
 
     return (
         <StyledWrapper {...styles.wrapper}>
             {filteredVariantTraits.map(
-                variantTrait =>
-                    !!variantTrait.traitValues?.length && (
-                        <Select
-                            {...styles.select}
-                            key={variantTrait.id}
-                            label={variantTrait.nameDisplay}
-                            value={variantSelection[variantTrait.id]}
-                            onChange={event => {
-                                variantChangeHandler(event.currentTarget.value, variantTrait.id);
-                            }}
-                            data-test-selector={`styleSelect_${variantTrait.name}`}
-                        >
-                            <option value="">
-                                {variantTrait.unselectedValue
-                                    ? variantTrait.unselectedValue
-                                    : `${translate("Select")} ${variantTrait.nameDisplay}`}
-                            </option>
-                            {variantTrait.traitValues?.map(traitValue => (
-                                <option value={`${traitValue.id}`} key={`${traitValue.id}`}>
-                                    {traitValue.valueDisplay}
-                                </option>
-                            ))}
-                        </Select>
-                    ),
+                variantTrait => !!variantTrait.traitValues?.length && renderVariant(variantTrait as VariantTraitModel),
             )}
         </StyledWrapper>
     );
@@ -122,7 +146,7 @@ const widgetModule: WidgetModule = {
     component: withParentProductId(connect(mapStateToProps, mapDispatchToProps)(ProductDetailsVariantOptions)),
     definition: {
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

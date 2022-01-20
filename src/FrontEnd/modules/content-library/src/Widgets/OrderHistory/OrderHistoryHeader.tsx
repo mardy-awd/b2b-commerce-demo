@@ -2,7 +2,6 @@ import Zone from "@insite/client-framework/Components/Zone";
 import toggleFiltersOpen from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/ToggleFiltersOpen";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderHistoryPageContext } from "@insite/content-library/Pages/OrderHistoryPage";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -75,7 +74,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Header",
-        allowedContexts: [OrderHistoryPageContext],
+        allowedContexts: ["OrderHistoryPage"],
     },
 };
 

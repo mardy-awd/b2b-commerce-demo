@@ -6,7 +6,6 @@ import { getPromotionsDataView } from "@insite/client-framework/Store/Data/Promo
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import CartLinesList, { CartLinesListStyles } from "@insite/content-library/Components/CartLinesList";
-import { OrderConfirmationPageContext } from "@insite/content-library/Pages/OrderConfirmationPage";
 import LoadingSpinner from "@insite/mobius/LoadingSpinner";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React, { FC, useState } from "react";
@@ -70,7 +69,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(OrderConfirmationProductList),
     definition: {
         displayName: "Product List",
-        allowedContexts: [OrderConfirmationPageContext],
+        allowedContexts: ["OrderConfirmationPage"],
         group: "Order Confirmation",
     },
 };

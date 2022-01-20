@@ -198,6 +198,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withToaster(QuickOrder)),
     definition: {
         group: "Basic",
+        icon: "cart-shopping-fast",
     },
 };
 

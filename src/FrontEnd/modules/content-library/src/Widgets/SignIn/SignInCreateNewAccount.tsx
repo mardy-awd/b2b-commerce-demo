@@ -6,7 +6,6 @@ import signInAsGuest from "@insite/client-framework/Store/Pages/SignIn/Handlers/
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { SignInPageContext } from "@insite/content-library/Pages/SignInPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -183,7 +182,7 @@ const SignInCreateNewAccount: FC<Props> = ({
 const widgetModule: WidgetModule = {
     component: withHistory(connect(mapStateToProps, mapDispatchToProps)(SignInCreateNewAccount)),
     definition: {
-        allowedContexts: [SignInPageContext],
+        allowedContexts: ["SignInPage"],
         group: "Sign In",
         icon: "User",
         fieldDefinitions: [

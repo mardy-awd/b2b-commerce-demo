@@ -100,6 +100,10 @@ class VmiLocationDetailsPage extends React.PureComponent<Props> {
         this.checkState(prevProps);
     }
 
+    componentWillUnmount() {
+        this.props.setBreadcrumbs({ links: undefined });
+    }
+
     render() {
         const styles = vmiLocationDetailsPageStyles;
         return (
@@ -129,4 +133,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "VmiLocationDetailsPage" instead of this constant.
+ */
 export const VmiLocationDetailsPageContext = "VmiLocationDetailsPage";

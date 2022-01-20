@@ -468,7 +468,7 @@ const Carousel = ({
                 <Typography {...styles.titleText}>{title}</Typography>
             )}
 
-            <GridContainer {...styles.mainContainer} data-test-selector="productCompareCarousel_gridContainer">
+            <GridContainer {...styles.mainContainer} data-test-selector="productCompareCarousel">
                 <GridItem {...styles.prevArrowGridItem}>
                     {slideDetails.slides.length > slidesToScroll && (
                         <Button
@@ -500,7 +500,8 @@ const Carousel = ({
                                                 <StyledWrapper
                                                     {...styles.carouselSlideInner}
                                                     id={`slide_${slide.id}`}
-                                                    data-test-selector="slideContainer"
+                                                    data-test-key={slide.id}
+                                                    data-test-selector="carousel_slide"
                                                 >
                                                     {slide.renderComponent({})}
                                                 </StyledWrapper>

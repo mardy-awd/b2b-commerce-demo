@@ -15,7 +15,6 @@ import { WishListLineModel, WishListModel } from "@insite/client-framework/Types
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import TwoButtonModal from "@insite/content-library/Components/TwoButtonModal";
-import { MyListsDetailsPageContext } from "@insite/content-library/Pages/MyListsDetailsPage";
 import MyListsDetailsProductListLine from "@insite/content-library/Widgets/MyListsDetails/MyListsDetailsProductListLine";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -540,7 +539,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "My Lists Details",
         displayName: "Product List",
-        allowedContexts: [MyListsDetailsPageContext],
+        allowedContexts: ["MyListsDetailsPage"],
     },
 };
 

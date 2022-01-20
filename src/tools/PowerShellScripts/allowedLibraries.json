@@ -81,6 +81,17 @@
         }
     },
     {
+        "Name":  "GemBox.Spreadsheet",
+        "Value":  {
+			"PackageName":  "GemBox.Spreadsheet",
+			"PackageVersion":  "47.0.1345",
+			"PackageFramework":  "NA",
+			"Libraries":  {
+				"GemBox.Spreadsheet":  "47.0.1345"
+			}
+		}
+    },
+    {
         "Name": "IdentityServer3",
         "Value": {
             "PackageName": "IdentityServer3",
@@ -100,7 +111,6 @@
             "Libraries": {
                 "Avalara.AvaTax.Adapter": "5.7.3.1",
                 "DotLiquid": "2.0.24.0",
-                "GemBox.Spreadsheet": "33.3.30.1062",
                 "Insite.Account": null,
                 "Insite.Brands": null,
                 "Insite.Budget": null,
@@ -469,10 +479,10 @@
         "Name": "Portable.BouncyCastle",
         "Value": {
             "PackageName": "Portable.BouncyCastle",
-            "PackageVersion": "1.8.5.2",
+            "PackageVersion": "1.8.9",
             "PackageFramework": "net40",
             "Libraries": {
-                "BouncyCastle.Crypto": "1.8.5.0"
+                "BouncyCastle.Crypto": "1.8.9.0"
             }
         }
     },

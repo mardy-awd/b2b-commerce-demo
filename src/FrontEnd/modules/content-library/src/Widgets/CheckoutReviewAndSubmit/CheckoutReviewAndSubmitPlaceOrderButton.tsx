@@ -1,10 +1,12 @@
 /* eslint-disable spire/export-styles */
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
+import { getBillToState } from "@insite/client-framework/Store/Data/BillTos/BillTosSelectors";
 import {
     getCartState,
     getCurrentCartState,
     hasProductsWithInvalidPrice,
 } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import { getShipToState } from "@insite/client-framework/Store/Data/ShipTos/ShipTosSelectors";
 import translate from "@insite/client-framework/Translate";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import React, { FC } from "react";
@@ -17,9 +19,17 @@ interface OwnProps {
 const mapStateToProps = (state: ApplicationState) => {
     const { cartId, isPlacingOrder, isCheckingOutWithPayPay } = state.pages.checkoutReviewAndSubmit;
     const cartState = cartId ? getCartState(state, cartId) : getCurrentCartState(state);
+    const billToState = getBillToState(state, cartState.value?.billToId);
+    const shipToState = getShipToState(state, cartState.value?.shipToId);
     return {
         isDisabled:
             cartState.isLoading ||
+            billToState.isLoading ||
+            !billToState.value ||
+            shipToState.isLoading ||
+            !shipToState.value ||
+            !billToState.value.address1 ||
+            !shipToState.value.address1 ||
             isPlacingOrder ||
             isCheckingOutWithPayPay ||
             hasProductsWithInvalidPrice(cartState.value) ||

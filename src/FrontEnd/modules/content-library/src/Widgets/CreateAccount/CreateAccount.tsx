@@ -12,7 +12,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ReCaptcha from "@insite/content-library/Components/ReCaptcha";
-import { CreateAccountPageContext } from "@insite/content-library/Pages/CreateAccountPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Checkbox from "@insite/mobius/Checkbox";
 import CheckboxGroup from "@insite/mobius/CheckboxGroup";
@@ -468,7 +467,7 @@ const CreateAccount = ({
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(CreateAccount),
     definition: {
-        allowedContexts: [CreateAccountPageContext],
+        allowedContexts: ["CreateAccountPage"],
         group: "Create Account",
     },
 };

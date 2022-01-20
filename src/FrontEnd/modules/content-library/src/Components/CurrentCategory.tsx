@@ -65,6 +65,10 @@ class CurrentCategory extends React.Component<Props> {
         }
     }
 
+    componentWillUnmount() {
+        this.props.setBreadcrumbs({ links: undefined });
+    }
+
     setBreadcrumbs() {
         this.props.setBreadcrumbs({
             links: this.props.catalogPageState.value!.breadCrumbs!.map(o => ({ children: o.text, href: o.url })),

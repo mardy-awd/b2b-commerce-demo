@@ -170,7 +170,7 @@ const widgetModule: WidgetModule = {
     component: connect(null, mapDispatchToProps)(ContactForm),
     definition: {
         group: "Contact Us",
-        icon: "FormField",
+        icon: "input-pipe",
         fieldDefinitions: [
             {
                 name: fields.emailRecipients,

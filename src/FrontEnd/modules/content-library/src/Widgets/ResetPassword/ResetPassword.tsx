@@ -10,7 +10,6 @@ import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/Link
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ResetPasswordPageContext } from "@insite/content-library/Pages/ResetPasswordPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -345,7 +344,7 @@ const ResetPassword = ({
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(ResetPassword)),
     definition: {
-        allowedContexts: [ResetPasswordPageContext],
+        allowedContexts: ["ResetPasswordPage"],
         group: "Reset Password",
     },
 };

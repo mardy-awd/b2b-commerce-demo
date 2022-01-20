@@ -2,7 +2,6 @@ import { OrderApprovalsDataViewContext } from "@insite/client-framework/Store/Da
 import updateSearchFields from "@insite/client-framework/Store/Pages/OrderApprovalList/Handlers/UpdateSearchFields";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderApprovalListPageContext } from "@insite/content-library/Pages/OrderApprovalListPage";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
 import React, { useContext } from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -64,7 +63,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order Approval List",
         displayName: "Pagination",
-        allowedContexts: [OrderApprovalListPageContext],
+        allowedContexts: ["OrderApprovalListPage"],
         isSystem: true,
     },
 };

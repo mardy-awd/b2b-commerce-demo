@@ -5,7 +5,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
-import { OrderStatusPageContext } from "@insite/content-library/Pages/OrderStatusPage";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React from "react";
@@ -145,7 +144,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order Status",
         displayName: "Information",
-        allowedContexts: [OrderStatusPageContext],
+        allowedContexts: ["OrderStatusPage"],
     },
 };
 

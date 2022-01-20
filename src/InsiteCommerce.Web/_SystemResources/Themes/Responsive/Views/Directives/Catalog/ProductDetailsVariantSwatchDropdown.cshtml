@@ -1,0 +1,59 @@
+﻿<div id="swatch_dropdown_id" class="swatch-dropdown">
+    <button ng-if="!styleSelection[index]" class="swatch-dropdown-select" ng-click="toggleSwatchDropdown({ elementId: styleTrait.styleTraitId })">
+        <div>
+            <span>{{styleTrait.unselectedValue ? "" : "Select"}} {{styleTrait.unselectedValue ? styleTrait.unselectedValue : styleTrait.nameDisplay}}</span>
+        </div>
+    </button>
+    <button ng-if="styleSelection[index]" class="swatch-dropdown-select" ng-click="toggleSwatchDropdown({ elementId: styleTrait.styleTraitId })">
+        <div class="swatch-dropdown-selected-swatch">
+            <div class="swatch-dropdown-container">
+                <img ng-if="styleSelection[index].swatchType === 'Image'" ng-src="{{ styleSelection[index].swatchImageValue }}"
+                        alt="{{ styleSelection[index].valueDisplay }}" class="swatch" />
+                <span ng-if="styleSelection[index].swatchType === 'Color' || !styleSelection[index].swatchType" class="swatch"
+                        ng-style="{'background-color': styleSelection[index].swatchColorValue ? '#{{styleSelection[index].swatchColorValue}}' : '#36454F'}"
+                        title="{{ styleSelection[index].valueDisplay }}" />
+            </div>
+            <span class="swatch-dropdown-text">{{styleSelection[index].valueDisplay}}</span>
+        </div>
+    </button>
+    <div id="swatchDropdownList_{{styleTrait.styleTraitId}}" class="swatch-dropdown-list swatch-dropdown-selected-item">
+        <div>
+            <button ng-click="clickHandler({ style: undefined, index: index })" class="swatch-dropdown-option">
+                <span>{{styleTrait.unselectedValue ? "" : "Select"}} {{styleTrait.unselectedValue ? styleTrait.unselectedValue : styleTrait.nameDisplay}}</span>
+            </button>
+        </div>
+        <div ng-repeat="style in styleTrait.styleValues">
+            <button ng-click="clickHandler({ style: style, index: index })" id="tst_swatchDropdown_{{style.styleTraitValueId}}" 
+                    ng-class="{'swatch-current-container': style.styleTraitValueId === styleSelection[index].styleTraitValueId}" 
+                    class="swatch-dropdown-option"
+                    ng-disabled="isStyleTraitDisabled({ styleTraitValueId: style.styleTraitValueId })">
+                <div class="swatch-dropdown-item">
+                    <div class="swatch-dropdown-container" ng-class="{'swatch-current': style.styleTraitValueId === styleSelection[index].styleTraitValueId}">
+                        <img ng-if="style.swatchType === 'Image'" ng-src="{{ style.swatchImageValue ? style.swatchImageValue : '' }}"
+                                alt="{{ style.valueDisplay }}" class="swatch"/>
+                        <span ng-if="style.swatchType === 'Color' || !style.swatchType" class="swatch"
+                                ng-style="{'background-color': style.swatchColorValue ? '#{{style.swatchColorValue}}' : '#36454F'}"
+                                title="{{ style.valueDisplay }}"/>
+                        <span ng-if="isStyleTraitDisabled({ styleTraitValueId: style.styleTraitValueId })" class="swatch-disabled">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="26"
+                                    height="26"
+                                    viewBox="0 0 25 25"
+                                    fill="none"
+                                    stroke="black"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                                </svg>
+                        </span>
+                    </div>
+                    <span class="swatch-dropdown-text">{{style.valueDisplay}}</span>
+                </div>
+            </button>
+        </div>
+    </div>
+</div>

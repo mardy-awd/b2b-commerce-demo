@@ -7,7 +7,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/OrderApprov
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderApprovalListPageContext } from "@insite/content-library/Pages/OrderApprovalListPage";
 import DataTable, { DataTableProps, SortOrderOptions } from "@insite/mobius/DataTable";
 import DataTableBody, { DataTableBodyProps } from "@insite/mobius/DataTable/DataTableBody";
 import DataTableCell from "@insite/mobius/DataTable/DataTableCell";
@@ -193,16 +192,16 @@ const OrderApprovalListTable = (props: Props) => {
                 </DataTableHead>
                 <DataTableBody {...styles.dataTableBody}>
                     {rows.map(({ id, orderNumber, date, shipToLabel, approverReason, total }) => (
-                        <DataTableRow data-test-selector="orderApproval_orderLine" key={id} {...styles.dataTableRow}>
-                            <DataTableCell
-                                data-test-selector="orderApproval_orderLine_number"
-                                {...styles.orderNumberCell}
-                            >
+                        <DataTableRow
+                            data-test-selector="orderApproval_orderLine"
+                            data-test-key={id}
+                            key={id}
+                            {...styles.dataTableRow}
+                        >
+                            <DataTableCell {...styles.orderNumberCell}>
                                 <Link href={`${props.orderApprovalDetailsLink?.url}?cartId=${id}`}>{orderNumber}</Link>
                             </DataTableCell>
-                            <DataTableCell data-test-selector="orderApproval_orderLine_date" {...styles.orderDateCell}>
-                                {date}
-                            </DataTableCell>
+                            <DataTableCell {...styles.orderDateCell}>{date}</DataTableCell>
                             <DataTableCell {...styles.shipToLabelCell}>{shipToLabel}</DataTableCell>
                             <DataTableCell {...styles.approverReasonCell}>{approverReason}</DataTableCell>
                             <DataTableCell {...styles.totalCell}>{total}</DataTableCell>
@@ -219,7 +218,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order Approval List",
         displayName: "Search Results Table",
-        allowedContexts: [OrderApprovalListPageContext],
+        allowedContexts: ["OrderApprovalListPage"],
         isSystem: true,
     },
 };

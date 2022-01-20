@@ -5,7 +5,6 @@ import loadWishListLines from "@insite/client-framework/Store/Pages/MyListDetail
 import updateLoadWishListLinesParameter from "@insite/client-framework/Store/Pages/MyListDetails/Handlers/UpdateLoadWishListLinesParameter";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { MyListsDetailsPageContext } from "@insite/content-library/Pages/MyListsDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
@@ -86,7 +85,7 @@ const MyListDetailsPagination: React.FC<Props> = ({
 
     return (
         <GridContainer {...styles.paginationContainer}>
-            <GridItem {...styles.paginationGridItem} data-test-selector="pagination">
+            <GridItem {...styles.paginationGridItem} data-test-selector="myListDetails_pagination">
                 <Pagination
                     {...styles.pagination}
                     currentPage={pagination.currentPage}
@@ -106,7 +105,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "My Lists Details",
         displayName: "Pagination",
-        allowedContexts: [MyListsDetailsPageContext],
+        allowedContexts: ["MyListsDetailsPage"],
     },
 };
 

@@ -12,7 +12,7 @@ import CardContainerMultiColumn, {
     CardContainerMultiColumnStyles,
 } from "@insite/content-library/Components/CardContainerMultiColumn";
 import CardList, { CardListStyles } from "@insite/content-library/Components/CardList";
-import { ProductListPageContext, ProductListPageDataContext } from "@insite/content-library/Pages/ProductListPage";
+import { ProductListPageDataContext } from "@insite/content-library/Pages/ProductListPage";
 import ProductListProductCard from "@insite/content-library/Widgets/ProductList/ProductListProductCard";
 import ProductListProductContext from "@insite/content-library/Widgets/ProductList/ProductListProductContext";
 import ProductListProductGridCard from "@insite/content-library/Widgets/ProductList/ProductListProductGridCard";
@@ -64,7 +64,6 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps) => {
     return {
         isLoading: state.pages.productList.isLoading,
         productsDataView: getProductListDataView(state),
-        // TODO ISC-13448 we no need ProductListSettings DefaultView, besause we use widget property productListDefaultView instead
         view: state.pages.productList.view || ownProps.fields.productListDefaultView,
         isSearchPage,
     };
@@ -186,7 +185,7 @@ const ProductListCardList: FC<Props> = ({ isLoading, productsDataView, view, fie
             </ProductListPageDataContext.Consumer>
             <LoadingOverlay loading={isLoading}>
                 <Hidden below="md">
-                    <CardList extendedStyles={styles.cardList} data-test-selector={`productListCardContainer${view}`}>
+                    <CardList extendedStyles={styles.cardList} data-test-selector={`productListCards_${view}`}>
                         {view === "Table" ? (
                             <ProductListTable products={products} {...overriddenProps} />
                         ) : (
@@ -223,7 +222,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Card List",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
         fieldDefinitions: [
             {
                 name: fields.showImage,

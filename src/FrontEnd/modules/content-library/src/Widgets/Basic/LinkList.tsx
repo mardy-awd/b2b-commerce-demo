@@ -106,7 +106,7 @@ const widgetModule: WidgetModule = {
     component: LinkList,
     definition: {
         group: "Basic",
-        icon: "LinkList",
+        icon: "list-ul",
         fieldDefinitions: [
             {
                 name: fields.direction,

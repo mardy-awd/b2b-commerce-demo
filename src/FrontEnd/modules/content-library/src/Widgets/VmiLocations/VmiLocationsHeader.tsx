@@ -8,7 +8,6 @@ import { isVmiAdmin } from "@insite/client-framework/Store/Data/VmiLocations/Vmi
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { LocationsPageContext } from "@insite/content-library/Pages/VmiLocationsPage";
 import AddVmiLocationModal from "@insite/content-library/Widgets/VmiLocations/AddVmiLocationModal";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable from "@insite/mobius/Clickable";
@@ -128,7 +127,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(VmiLocationsHeader),
     definition: {
         group: "VMI Locations",
-        allowedContexts: [LocationsPageContext],
+        allowedContexts: ["VmiLocationsPage"],
     },
 };
 

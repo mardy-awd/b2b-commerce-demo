@@ -10,4 +10,5 @@ export default interface CheckoutReviewAndSubmitState {
     requestedPickupDate?: Date | null;
     placeOrderErrorMessage?: string;
     isPreloadingData: boolean;
+    payPalCheckoutErrorMessage?: string;
 }

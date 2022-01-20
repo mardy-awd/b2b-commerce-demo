@@ -2,7 +2,6 @@ import { HasCartContext, withCart } from "@insite/client-framework/Components/Ca
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderApprovalDetailsPageContext } from "@insite/content-library/Pages/OrderApprovalDetailsPage";
 import OrderApprovalDetailsActionButtons, {
     OrderApprovalDetailsActionButtonsStyles,
 } from "@insite/content-library/Widgets/OrderApprovalDetails/OrderApprovalDetailsActionButtons";
@@ -77,7 +76,7 @@ const widgetModule: WidgetModule = {
     component: withCart(OrderApprovalDetailsHeader),
     definition: {
         displayName: "Page Header",
-        allowedContexts: [OrderApprovalDetailsPageContext],
+        allowedContexts: ["OrderApprovalDetailsPage"],
         group: "Order Approval Details",
     },
 };

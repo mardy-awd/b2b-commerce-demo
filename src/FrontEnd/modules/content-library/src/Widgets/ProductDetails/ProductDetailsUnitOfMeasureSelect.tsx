@@ -2,7 +2,6 @@ import { HasProduct, withProduct } from "@insite/client-framework/Components/Pro
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductUnitOfMeasureSelect from "@insite/content-library/Components/ProductUnitOfMeasureSelect";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import { SelectPresentationProps } from "@insite/mobius/Select";
 import * as React from "react";
 import { css } from "styled-components";
@@ -38,7 +37,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Unit of Measure Select",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

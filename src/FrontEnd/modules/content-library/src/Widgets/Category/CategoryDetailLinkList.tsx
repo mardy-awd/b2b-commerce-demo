@@ -3,7 +3,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getCategoryState } from "@insite/client-framework/Store/Data/Categories/CategoriesSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CategoryDetailsPageContext } from "@insite/content-library/Pages/CategoryDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
@@ -77,8 +76,8 @@ const widgetModule: WidgetModule = {
     component: withCategory(CategoryDetailLinkList),
     definition: {
         group: "Categories",
-        icon: "LinkList",
-        allowedContexts: [CategoryDetailsPageContext],
+        icon: "list-ul",
+        allowedContexts: ["CategoryDetailsPage"],
     },
 };
 

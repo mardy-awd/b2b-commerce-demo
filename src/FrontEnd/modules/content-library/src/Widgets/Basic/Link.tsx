@@ -43,7 +43,7 @@ const widgetModule: WidgetModule = {
     component: Link,
     definition: {
         group: "Basic",
-        icon: "Link",
+        icon: "link",
         fieldDefinitions: [
             {
                 name: fields.destination,

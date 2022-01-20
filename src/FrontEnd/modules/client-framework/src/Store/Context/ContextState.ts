@@ -28,4 +28,5 @@ export default interface ContextState {
     addingProductToCart?: boolean;
     isSearchDataModeActive: boolean;
     paymetricConfig?: PaymetricConfig;
+    wasSetMetadataCalled: boolean;
 }

@@ -3,7 +3,6 @@ import updateEditModal from "@insite/client-framework/Store/Pages/SavedPayments/
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { SavedPaymentsPageContext } from "@insite/content-library/Pages/SavedPaymentsPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable from "@insite/mobius/Clickable";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
@@ -63,7 +62,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Add Card Button",
         group: "Saved Payments",
-        allowedContexts: [SavedPaymentsPageContext],
+        allowedContexts: ["SavedPaymentsPage"],
     },
 };
 

@@ -5,7 +5,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
 import SmallHeadingAndText, { SmallHeadingAndTextStyles } from "@insite/content-library/Components/SmallHeadingAndText";
-import { RfqConfirmationPageContext } from "@insite/content-library/Pages/RfqConfirmationPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
@@ -161,7 +160,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(RfqConfirmationDetails),
     definition: {
         displayName: "Details",
-        allowedContexts: [RfqConfirmationPageContext],
+        allowedContexts: ["RfqConfirmationPage"],
         fieldDefinitions: [],
         group: "RFQ Quote Confirmation",
     },

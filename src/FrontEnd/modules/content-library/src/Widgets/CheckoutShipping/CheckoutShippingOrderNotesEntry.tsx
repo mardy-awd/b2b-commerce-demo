@@ -4,7 +4,6 @@ import setNotes from "@insite/client-framework/Store/Pages/CheckoutShipping/Hand
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CheckoutShippingPageContext } from "@insite/content-library/Pages/CheckoutShippingPage";
 import TextArea, { TextAreaProps } from "@insite/mobius/TextArea";
 import React, { ChangeEvent, Component } from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -94,7 +93,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Checkout - Shipping",
         displayName: "Order Notes Entry",
-        allowedContexts: [CheckoutShippingPageContext],
+        allowedContexts: ["CheckoutShippingPage"],
     },
 };
 

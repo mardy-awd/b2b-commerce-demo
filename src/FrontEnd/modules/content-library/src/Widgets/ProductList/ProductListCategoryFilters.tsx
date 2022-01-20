@@ -6,7 +6,6 @@ import translate from "@insite/client-framework/Translate";
 import { FacetModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import ProductListFiltersAccordionSection, {
     ProductListFilterAccordionSectionStyles,
 } from "@insite/content-library/Widgets/ProductList/ProductListFilterAccordionSection";
@@ -82,7 +81,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Category Filters",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
         fieldDefinitions: [
             {
                 name: fields.expandByDefault,

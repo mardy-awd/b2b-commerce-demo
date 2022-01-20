@@ -24,7 +24,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import AddressInfoDisplay, { AddressInfoDisplayStyles } from "@insite/content-library/Components/AddressInfoDisplay";
 import CustomerAddressForm from "@insite/content-library/Components/CustomerAddressForm";
-import { AddressesPageContext } from "@insite/content-library/Pages/AddressesPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -404,7 +403,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(AddressBook),
     definition: {
         group: "Addresses",
-        allowedContexts: [AddressesPageContext],
+        allowedContexts: ["AddressesPage"],
     },
 };
 

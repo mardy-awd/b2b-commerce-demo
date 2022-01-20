@@ -543,6 +543,18 @@ const ConnectableStyleGuideEditor: React.FunctionComponent<Props> = props => {
                                 {...presetHelpers}
                             />
                         </SideBarAccordionSection>
+                        <SideBarAccordionSection title="Swatch">
+                            {selectConfig(
+                                "Swatch Type",
+                                "swatch.borderType",
+                                <>
+                                    <option value="" hidden disabled></option>
+                                    <option value="square">Square</option>
+                                    <option value="roundedSquare">Rounded Square</option>
+                                    <option value="round">Round</option>
+                                </>,
+                            )}
+                        </SideBarAccordionSection>
                         <SideBarAccordionSection title="Overflow Menu">
                             {buttonConfig(
                                 "Primary Button",

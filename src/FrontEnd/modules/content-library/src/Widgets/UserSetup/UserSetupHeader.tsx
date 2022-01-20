@@ -4,7 +4,6 @@ import { getCurrentEditingUser, hasChanges } from "@insite/client-framework/Stor
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { UserSetupPageContext } from "@insite/content-library/Pages/UserSetupPage";
 import AssignShipToAddressModal from "@insite/content-library/Widgets/UserSetup/AssignShipToAddressModal";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
@@ -95,7 +94,7 @@ const UserSetupHeader = ({ editingUser, disableSaveButton }: Props) => {
                             onClick={(event: React.MouseEvent<HTMLElement, MouseEvent>) =>
                                 assignShipToAddressClickHandler(event)
                             }
-                            data-test-selector="tst_userSetup_assignShipToAddress"
+                            data-test-selector="userSetup_assignShipToAddress"
                         >
                             {translate("Assign Ship To Address")}
                         </Button>
@@ -105,7 +104,7 @@ const UserSetupHeader = ({ editingUser, disableSaveButton }: Props) => {
                             {...styles.saveButton}
                             type="submit"
                             disabled={disableSaveButton}
-                            data-test-selector="tst_userSetupHeader_saveButton"
+                            data-test-selector="userSetupHeader_saveButton"
                         >
                             {translate("Save")}
                         </Button>
@@ -147,7 +146,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "User Setup",
         displayName: "Header",
-        allowedContexts: [UserSetupPageContext],
+        allowedContexts: ["UserSetupPage"],
     },
 };
 

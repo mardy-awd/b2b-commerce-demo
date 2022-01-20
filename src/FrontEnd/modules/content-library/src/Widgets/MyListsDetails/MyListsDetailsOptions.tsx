@@ -26,7 +26,6 @@ import OrderUploadErrorsModal, {
 } from "@insite/content-library/Components/OrderUploadErrorsModal";
 import ProductSelector, { ProductSelectorStyles } from "@insite/content-library/Components/ProductSelector";
 import ProductSelectorVariantModal from "@insite/content-library/Components/ProductSelectorVariantModal";
-import { MyListsDetailsPageContext } from "@insite/content-library/Pages/MyListsDetailsPage";
 import Checkbox, { CheckboxProps } from "@insite/mobius/Checkbox";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
@@ -471,7 +470,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "My Lists Details",
         displayName: "Options",
-        allowedContexts: [MyListsDetailsPageContext],
+        allowedContexts: ["MyListsDetailsPage"],
     },
 };
 

@@ -7,7 +7,7 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import React from "react";
 
 class AsyncComponent extends React.Component<
-    { isWidget: boolean; type: string } & HasFields,
+    { isWidget: boolean; type: string } & Partial<HasFields>,
     { ComponentToBe: null | any }
 > {
     state = {
@@ -22,7 +22,7 @@ class AsyncComponent extends React.Component<
         }
 
         registerWidgetModule(module, this.props.type);
-        this.setState({ ComponentToBe: module.default.component });
+        this.setState({ ComponentToBe: module.default.component || module.default });
     }
 
     render() {

@@ -1157,6 +1157,7 @@ export interface ProductModel extends BaseModel {
     configurationType: string;
     content?: ContentModel;
     customerProductNumber: string;
+    customerUnitOfMeasure: string;
     detail?: DetailModel;
     documents?: DocumentModel[];
     id: string;
@@ -1493,11 +1494,22 @@ export interface WarehouseModel {
     qtyAvailable: number;
 }
 
+export enum VariantDisplayTypeValues {
+    Dropdown = "Dropdown",
+    Button = "Button",
+    SwatchDropdown = "SwatchDropdown",
+    SwatchGrid = "SwatchGrid",
+    SwatchList = "SwatchList",
+}
+
 export interface VariantTraitModel {
     id: string;
     name: string;
     nameDisplay: string;
     sortOrder: number;
+    displayType: VariantDisplayTypeValues;
+    numberOfSwatchesVisible: number;
+    displayTextWithSwatch: boolean;
     traitValues: TraitValueModel[] | null;
     unselectedValue: string;
 }
@@ -1507,7 +1519,11 @@ export interface TraitValueModel {
     isDefault: boolean;
     sortOrder: number;
     value: string;
+    swatchType: string;
+    swatchImageValue: string;
+    swatchColorValue: string;
     valueDisplay: string;
+    isDisabled?: boolean;
 }
 
 export interface UnitOfMeasureModel {

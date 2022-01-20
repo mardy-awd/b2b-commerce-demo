@@ -33,14 +33,6 @@
             this.orderApprovalService.getCart(cartId).then(
                 (cart: CartModel) => { this.orderApprovalServiceGetCartCompleted(cart); },
                 (error: any) => { this.orderApprovalServiceGetCartFailed(error); });
-
-            this.promotionService.getCartPromotions(cartId).then(
-                (promotionCollection: PromotionCollectionModel) => {
-                    this.getCartPromotionsCompleted(promotionCollection);
-                },
-                (error: any) => {
-                    this.getCartPromotionsFailed(error);
-                });
         }
 
         protected initEvents(): void {
@@ -60,6 +52,14 @@
             if (cart.status !== "AwaitingApproval") {
                 this.coreService.redirectToPath(this.listPageUri);
             }
+
+            this.promotionService.getCartPromotions(cart.id).then(
+                (promotionCollection: PromotionCollectionModel) => {
+                    this.getCartPromotionsCompleted(promotionCollection);
+                },
+                (error: any) => {
+                    this.getCartPromotionsFailed(error);
+                });
 
             this.cart = cart;
             this.canApproveOrders();

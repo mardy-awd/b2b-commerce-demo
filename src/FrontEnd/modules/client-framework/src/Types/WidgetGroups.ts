@@ -65,6 +65,7 @@ const WidgetGroups = [
     "News Page",
     "VMI Locations",
     "VMI Location Details",
+    "VMI Reporting",
     "VMI Users",
 ] as const;
 

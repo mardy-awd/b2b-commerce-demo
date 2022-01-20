@@ -13,7 +13,6 @@ import { CartLineCollectionModel } from "@insite/client-framework/Types/ApiModel
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductAddedToCartMessage from "@insite/content-library/Components/ProductAddedToCartMessage";
-import { QuickOrderPageContext } from "@insite/content-library/Pages/QuickOrderPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable from "@insite/mobius/Clickable";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
@@ -235,7 +234,7 @@ const QuickOrderActions: FC<Props> = ({
                     {...styles.addToListButton}
                     onClick={addToListClickHandler}
                     disabled={!allQtysIsValid}
-                    data-test-selector="tst_quickOrder_addAllProductsToList"
+                    data-test-selector="quickOrder_addAllProductsToList"
                 >
                     {translate("Add to List")}
                 </Button>
@@ -247,7 +246,7 @@ const QuickOrderActions: FC<Props> = ({
         <StyledWrapper {...styles.wrapper}>
             {fields.useOverflowMenu && (
                 <>
-                    <Hidden below="lg" {...styles.buttonsHidden}>
+                    <Hidden below="lg" {...styles.buttonsHidden} data-test-selector="quickOrder_buttons">
                         {buttons}
                     </Hidden>
                     <Hidden above="sm" {...styles.buttonsHidden}>
@@ -283,7 +282,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(QuickOrderActions)),
     definition: {
         group: "Quick Order",
-        allowedContexts: [QuickOrderPageContext],
+        allowedContexts: ["QuickOrderPage"],
         displayName: "Actions",
         fieldDefinitions: [
             {

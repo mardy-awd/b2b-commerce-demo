@@ -14,7 +14,6 @@ import { CartLineCollectionModel } from "@insite/client-framework/Types/ApiModel
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductAddedToCartMessage from "@insite/content-library/Components/ProductAddedToCartMessage";
-import { StaticListPageContext } from "@insite/content-library/Pages/StaticListPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -333,7 +332,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Static List",
         displayName: "Page Header",
-        allowedContexts: [StaticListPageContext],
+        allowedContexts: ["StaticListPage"],
     },
 };
 

@@ -4,7 +4,6 @@ import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductQuantityBreakPricing, {
     ProductQuantityBreakPricingStyles,
 } from "@insite/content-library/Components/ProductQuantityBreakPricing";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import * as React from "react";
 import { css } from "styled-components";
 
@@ -39,7 +38,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Quantity Break Pricing",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

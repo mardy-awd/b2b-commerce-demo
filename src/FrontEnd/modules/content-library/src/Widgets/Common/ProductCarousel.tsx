@@ -279,6 +279,7 @@ const ProductCarousel: React.FC<Props> = ({
 
     React.useEffect(() => {
         loadCarouselProducts({
+            isShellEdit: shellContext.isInShell && shellContext.isEditing,
             carouselId: id,
             carouselType: fields.carouselType,
             relatedProductType: fields.relatedProductType,
@@ -444,7 +445,8 @@ const ProductCarousel: React.FC<Props> = ({
                                         <StyledWrapper
                                             {...styles.carouselSlideInner}
                                             id={`product_${product.id}`}
-                                            data-test-selector="productContainer"
+                                            data-test-key={product.id}
+                                            data-test-selector="carousel_slide"
                                         >
                                             <ProductCarouselProduct
                                                 carouselId={id}
@@ -495,7 +497,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withIsInShell(withTheme(ProductCarousel))),
     definition: {
         group: "Common",
-        icon: "Carousel",
+        icon: "gallery-thumbnails",
         fieldDefinitions: [
             {
                 name: fields.title,

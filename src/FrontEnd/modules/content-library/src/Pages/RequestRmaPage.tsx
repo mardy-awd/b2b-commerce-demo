@@ -60,6 +60,10 @@ const RequestRmaPage = ({
         if (orderNumber) {
             displayOrder({ orderNumber });
         }
+
+        return () => {
+            setBreadcrumbs({ links: undefined });
+        };
     }, []);
 
     useEffect(() => {
@@ -98,4 +102,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "RequestRmaPage" instead of this constant.
+ */
 export const RequestRmaPageContext = "RequestRmaPage";

@@ -1,5 +1,6 @@
 import { Dictionary } from "@insite/client-framework/Common/Types";
 import logger from "@insite/client-framework/Logger";
+import { pageRenderer } from "@insite/server-framework/PageRenderer";
 import { Request, Response } from "express";
 // eslint-disable-next-line spire/fenced-imports
 import spireRoutes from "../../../config/spire_routes.json";
@@ -68,9 +69,16 @@ export async function relayRequest(request: Request, response: Response) {
 
     response.status(result.status);
 
-    if (result.status === 404 && request.originalUrl.toLowerCase().indexOf("/sitemap") === 0) {
-        response.redirect("/NotFoundErrorPage");
-        return;
+    if (result.status === 404) {
+        const originalUrlLowerCase = request.originalUrl.toLowerCase();
+        if (originalUrlLowerCase.indexOf("/sitemap") === 0) {
+            response.redirect("/NotFoundErrorPage");
+            return;
+        }
+        if (originalUrlLowerCase.indexOf("/userfiles") === 0) {
+            pageRenderer(request, response);
+            return;
+        }
     }
 
     const headersCollection: Dictionary<string[]> = {};

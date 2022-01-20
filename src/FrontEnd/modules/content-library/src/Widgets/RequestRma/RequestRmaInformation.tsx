@@ -4,7 +4,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import AddressInfoDisplay, { AddressInfoDisplayStyles } from "@insite/content-library/Components/AddressInfoDisplay";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
-import { RequestRmaPageContext } from "@insite/content-library/Pages/RequestRmaPage";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
@@ -113,7 +112,7 @@ const RequestRmaInformation: FC = () => {
 const widgetModule: WidgetModule = {
     component: RequestRmaInformation,
     definition: {
-        allowedContexts: [RequestRmaPageContext],
+        allowedContexts: ["RequestRmaPage"],
         group: "Return Request (RMA)",
         fieldDefinitions: [],
     },

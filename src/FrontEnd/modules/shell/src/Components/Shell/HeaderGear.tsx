@@ -3,6 +3,7 @@ import Modal from "@insite/mobius/Modal";
 import OverflowMenu, { OverflowMenuProps } from "@insite/mobius/OverflowMenu";
 import getColor from "@insite/mobius/utilities/getColor";
 import { StyledProp } from "@insite/mobius/utilities/InjectableCss";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import About from "@insite/shell/Components/Shell/About";
 import shellTheme from "@insite/shell/ShellTheme";
 import {
@@ -99,16 +100,14 @@ const HeaderGear = ({
                         }
                     `,
                 }}
-                iconProps={{
-                    src: "Settings",
-                    color: "primary.main",
-                }}
+                customIcon={<AxiomIcon src="gear" size={20} />}
                 cssOverrides={{
                     menuItem: menuItemStyles,
                     wrapper: wrapperStyles,
                 }}
-                maxHeight="300px"
+                maxHeight="400px"
                 data-test-selector="expand_shellSettings"
+                _width={235}
             >
                 {enableMobileCms && (
                     <Clickable

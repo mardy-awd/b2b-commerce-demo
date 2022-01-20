@@ -1,7 +1,6 @@
 import Zone from "@insite/client-framework/Components/Zone";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { MyListsPageContext } from "@insite/content-library/Pages/MyListsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import * as React from "react";
@@ -64,7 +63,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "My Lists",
         displayName: "Header",
-        allowedContexts: [MyListsPageContext],
+        allowedContexts: ["MyListsPage"],
     },
 };
 

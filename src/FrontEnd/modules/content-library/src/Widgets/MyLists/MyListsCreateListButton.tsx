@@ -2,7 +2,6 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { MyListsPageContext } from "@insite/content-library/Pages/MyListsPage";
 import MyListsEditListForm from "@insite/content-library/Widgets/MyLists/MyListsEditListForm";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable from "@insite/mobius/Clickable";
@@ -97,7 +96,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "My Lists",
         displayName: "Create List Button",
-        allowedContexts: [MyListsPageContext],
+        allowedContexts: ["MyListsPage"],
     },
 };
 

@@ -65,4 +65,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "RfqRequestQuotePage" instead of this constant.
+ */
 export const RfqRequestQuotePageContext = "RfqRequestQuotePage";

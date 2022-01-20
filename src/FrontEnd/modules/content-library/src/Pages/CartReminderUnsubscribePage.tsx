@@ -51,4 +51,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "CartReminderUnsubscribePage" instead of this constant.
+ */
 export const CartReminderUnsubscribePageContext = "CartReminderUnsubscribePage";

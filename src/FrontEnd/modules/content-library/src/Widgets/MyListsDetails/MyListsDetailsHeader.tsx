@@ -15,7 +15,6 @@ import SmallHeadingAndText, { SmallHeadingAndTextStyles } from "@insite/content-
 import WishListSharingStatus, {
     WishListSharingStatusStyles,
 } from "@insite/content-library/Components/WishListSharingStatus";
-import { MyListsDetailsPageContext } from "@insite/content-library/Pages/MyListsDetailsPage";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -215,7 +214,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "My Lists Details",
         displayName: "Header",
-        allowedContexts: [MyListsDetailsPageContext],
+        allowedContexts: ["MyListsDetailsPage"],
     },
 };
 

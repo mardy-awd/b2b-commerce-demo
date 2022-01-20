@@ -7,7 +7,6 @@ import { ProductListViewType } from "@insite/client-framework/Store/Pages/Produc
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import Icon, { IconPresentationProps } from "@insite/mobius/Icon";
 import Grid from "@insite/mobius/Icons/Grid";
@@ -144,7 +143,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "View Select",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
     },
 };
 

@@ -184,6 +184,7 @@ function returnProductModel(): ProductModel {
         canShowUnitOfMeasure: false,
         configurationType: "test",
         customerProductNumber: "test",
+        customerUnitOfMeasure: "test",
         id: "test",
         imageAltText: "test",
         isDiscontinued: false,

@@ -99,7 +99,7 @@ const secondaryNavigation: WidgetModule = {
     component: connect(mapStateToProps)(SecondaryNavigation),
     definition: {
         group: "Common",
-        icon: "NavigationList",
+        icon: "link-simple",
     },
 };
 

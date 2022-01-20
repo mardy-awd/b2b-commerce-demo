@@ -204,11 +204,17 @@
             return {
                 fields: this.exportProductHeaders,
                 data: list.map(o => [
-                    o.vmiLocationId.toString(),
-                    o.productId.toString(),
+                    o.product.shortDescription,
+                    o.product.erpNumber,
+                    o.product.customerName,
+                    o.product.manufacturerItem,
                     o.binNumber,
-                    o.minimumQty.toString(),
-                    o.maximumQty.toString(),
+                    o.minimumQty ? o.minimumQty.toString() : '',
+                    o.maximumQty ? o.maximumQty.toString() : '',
+                    o.previousCountDate ? o.previousCountDate.toString() : '',
+                    o.previousCountQty ? o.previousCountQty.toString() : '',
+                    o.lastOrderErpOrderNumber ? o.lastOrderErpOrderNumber : o.lastOrderWebOrderNumber ? o.lastOrderWebOrderNumber : '',
+                    o.product.largeImagePath ? o.product.largeImagePath : '',
                 ]),
             };
         };

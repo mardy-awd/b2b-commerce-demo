@@ -148,6 +148,10 @@ class BrandDetailsPage extends React.Component<Props, State> {
         }
     }
 
+    componentWillUnmount() {
+        this.props.setBreadcrumbs({ links: undefined });
+    }
+
     setMetadata() {
         const {
             brandState: { value: brand },

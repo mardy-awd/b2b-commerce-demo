@@ -63,6 +63,10 @@ class UserListPage extends Component<Props> {
         }
     }
 
+    componentWillUnmount() {
+        this.props.updateSearchFields({ type: "Initialize" });
+    }
+
     render() {
         return (
             <Page data-test-selector="userAdministrationPage">
@@ -72,7 +76,7 @@ class UserListPage extends Component<Props> {
     }
 }
 
-const page: PageModule = {
+const pageModule: PageModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(UserListPage)),
     definition: {
         hasEditableTitle: true,
@@ -81,5 +85,9 @@ const page: PageModule = {
     },
 };
 
+export default pageModule;
+
+/**
+ * @deprecated Use string literal "UserListPage" instead of this constant.
+ */
 export const UserListPageContext = "UserListPage";
-export default page;

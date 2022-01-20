@@ -4,7 +4,6 @@ import { OrderStateContext } from "@insite/client-framework/Store/Data/Orders/Or
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import AddressInfoDisplay, { AddressInfoDisplayStyles } from "@insite/content-library/Components/AddressInfoDisplay";
-import { OrderDetailsPageContext } from "@insite/content-library/Pages/OrderDetailsPage";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React, { useContext } from "react";
@@ -69,7 +68,7 @@ const OrderDetailsShippingAddress: React.FunctionComponent = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsShippingAddress,
     definition: {
-        allowedContexts: [OrderDetailsPageContext],
+        allowedContexts: ["OrderDetailsPage"],
         group: "Order Details",
     },
 };

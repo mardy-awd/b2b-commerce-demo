@@ -109,7 +109,9 @@
         protected getDealerCollectionCompleted(dealerCollection: DealerCollectionModel): void {
             this.dealers = dealerCollection.dealers;
             this.pagination = dealerCollection.pagination;
-            this.distanceUnitOfMeasure = dealerCollection.distanceUnitOfMeasure === "Metric" ? 1 : 0;
+            if (typeof (this.distanceUnitOfMeasure) === "undefined") {
+                this.distanceUnitOfMeasure = dealerCollection.distanceUnitOfMeasure === "Metric" ? 1 : 0;
+            }
 
             if (!this.center || this.center.lat() === 0 && this.center.lng() === 0) {
                 this.center = new google.maps.LatLng(dealerCollection.defaultLatitude, dealerCollection.defaultLongitude);

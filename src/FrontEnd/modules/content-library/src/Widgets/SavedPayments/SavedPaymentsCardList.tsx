@@ -7,7 +7,7 @@ import { AccountPaymentProfileModel } from "@insite/client-framework/Types/ApiMo
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import TwoButtonModal, { TwoButtonModalStyles } from "@insite/content-library/Components/TwoButtonModal";
-import { PaymentProfilesContext, SavedPaymentsPageContext } from "@insite/content-library/Pages/SavedPaymentsPage";
+import { PaymentProfilesContext } from "@insite/content-library/Pages/SavedPaymentsPage";
 import Accordion from "@insite/mobius/Accordion";
 import { ManagedAccordionSection } from "@insite/mobius/AccordionSection";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
@@ -437,7 +437,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Card List",
         group: "Saved Payments",
-        allowedContexts: [SavedPaymentsPageContext],
+        allowedContexts: ["SavedPaymentsPage"],
     },
 };
 

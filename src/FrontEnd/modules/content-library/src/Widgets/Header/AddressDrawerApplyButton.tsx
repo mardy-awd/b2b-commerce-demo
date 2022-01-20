@@ -119,9 +119,9 @@ const AddressDrawerApplyButton = ({
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withToaster(AddressDrawerApplyButton)),
     definition: {
-        // allowedContexts: [HeaderContext],
         fieldDefinitions: [],
         group: "Header",
+        icon: "house",
     },
 };
 

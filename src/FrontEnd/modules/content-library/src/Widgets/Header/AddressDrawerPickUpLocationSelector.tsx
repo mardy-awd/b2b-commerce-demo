@@ -106,6 +106,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(AddressDrawerPickUpLocationSelector),
     definition: {
         group: "Header",
+        icon: "store",
     },
 };
 

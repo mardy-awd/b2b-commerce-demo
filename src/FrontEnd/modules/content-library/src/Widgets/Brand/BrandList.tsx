@@ -10,7 +10,6 @@ import VerticalColumnCell, { VerticalColumnCellProps } from "@insite/content-lib
 import VerticalColumnContainer, {
     VerticalColumnContainerProps,
 } from "@insite/content-library/Components/VerticalColumnContainer";
-import { BrandsPageContext } from "@insite/content-library/Pages/BrandsPage";
 import BrandAlphabetNavigation, {
     BrandAlphabetNavigationStyles,
 } from "@insite/content-library/Widgets/Brand/BrandAlphabetNavigation";
@@ -301,7 +300,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Brands",
         icon: "List",
-        allowedContexts: [BrandsPageContext],
+        allowedContexts: ["BrandsPage"],
     },
 };
 

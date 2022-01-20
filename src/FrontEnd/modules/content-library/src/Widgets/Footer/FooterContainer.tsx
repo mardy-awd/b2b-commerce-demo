@@ -3,7 +3,6 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import Zone from "@insite/client-framework/Components/Zone";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { FooterContext } from "@insite/content-library/Pages/Footer";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
@@ -112,7 +111,7 @@ const footerContainer: WidgetModule = {
     component: FooterContainer,
     definition: {
         group: "Footer",
-        allowedContexts: [FooterContext],
+        allowedContexts: ["Footer"],
     },
 };
 

@@ -9,7 +9,6 @@ import { getLocation, removeAbsoluteUrl } from "@insite/client-framework/Store/D
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { SignInPageContext } from "@insite/content-library/Pages/SignInPage";
 import SignInChangePasswordForm from "@insite/content-library/Widgets/SignIn/SignInChangePasswordForm";
 import SignInResetPasswordForm from "@insite/content-library/Widgets/SignIn/SignInResetPasswordForm";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
@@ -325,7 +324,7 @@ const SignInExistingAccount = ({ signIn, fields, accountSettings, externalError 
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(SignInExistingAccount),
     definition: {
-        allowedContexts: [SignInPageContext],
+        allowedContexts: ["SignInPage"],
         group: "Sign In",
         icon: "LogIn",
         fieldDefinitions: [

@@ -110,7 +110,7 @@ const logoLinksSearch: WidgetModule = {
     component: LogoLinksSearch,
     definition: {
         group: "Common",
-        icon: "Filter",
+        icon: "magnifying-glass",
     },
 };
 

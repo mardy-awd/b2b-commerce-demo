@@ -6,7 +6,6 @@ import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSe
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ChangePasswordPageContext } from "@insite/content-library/Pages/ChangePasswordPage";
 import ChangePasswordActions from "@insite/content-library/Widgets/ChangePassword/ChangePasswordActions";
 import ChangePasswordHeader from "@insite/content-library/Widgets/ChangePassword/ChangePasswordHeader";
 import Checkbox, { CheckboxPresentationProps } from "@insite/mobius/Checkbox";
@@ -257,7 +256,7 @@ const ChangePasswordView = ({ accountSettings, pageTitle, validatePassword }: Pr
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(ChangePasswordView),
     definition: {
-        allowedContexts: [ChangePasswordPageContext],
+        allowedContexts: ["ChangePasswordPage"],
         group: "Change Password",
     },
 };

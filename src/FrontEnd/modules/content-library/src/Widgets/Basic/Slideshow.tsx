@@ -437,7 +437,7 @@ const widgetModule: WidgetModule = {
     component: Slideshow,
     definition: {
         group: "Basic",
-        icon: "Carousel",
+        icon: "presentation-screen",
         fieldDefinitions: [
             {
                 name: fields.height,

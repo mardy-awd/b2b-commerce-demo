@@ -302,7 +302,7 @@ const Carousel = ({ shellContext, theme, id, extendedStyles, title, maxNumberOfC
                 destination={afterCarousel}
             />
             <Typography {...styles.titleText}>{title}</Typography>
-            <GridContainer {...styles.mainContainer} data-test-selector="carousel_gridContainer">
+            <GridContainer {...styles.mainContainer} data-test-selector="carousel">
                 <GridItem {...styles.prevArrowGridItem}>
                     {slides.length > slidesToScroll && (
                         <Button
@@ -327,8 +327,9 @@ const Carousel = ({ shellContext, theme, id, extendedStyles, title, maxNumberOfC
                                     >
                                         <StyledWrapper
                                             {...styles.carouselSlideInner}
+                                            data-test-key={slide.id}
                                             id={`slide_${slide.id}`}
-                                            data-test-selector="slideContainer"
+                                            data-test-selector="carousel_slide"
                                         >
                                             {slide.renderComponent({})}
                                         </StyledWrapper>

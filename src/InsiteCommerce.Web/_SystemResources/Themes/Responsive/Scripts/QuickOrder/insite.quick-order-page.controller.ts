@@ -127,7 +127,11 @@
         }
 
         protected getProductFailed(error: any): void {
-            this.errorMessage = angular.element("#messageNotFound").val();
+            if (!this.searchTerm || (this.searchTerm && this.searchTerm.trim().length === 0)) {
+                this.errorMessage = angular.element("#enterProductName").val();
+            } else {
+                this.errorMessage = angular.element("#messageNotFound").val();
+            }
         }
 
         protected lookupAndAddProductBySearchTerm(searchTerm: string): void {
@@ -147,7 +151,11 @@
         }
 
         protected getProductsFailed(error: any): void {
-            this.errorMessage = angular.element("#messageNotFound").val();
+            if (!this.searchTerm || (this.searchTerm && this.searchTerm.trim().length === 0)) {
+                this.errorMessage = angular.element("#enterProductName").val();
+            } else {
+                this.errorMessage = angular.element("#messageNotFound").val();
+            }
         }
 
         protected validateAndSetProduct(product: ProductDto): boolean {

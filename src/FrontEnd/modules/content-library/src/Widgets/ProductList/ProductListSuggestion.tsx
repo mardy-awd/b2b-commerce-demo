@@ -5,7 +5,6 @@ import { getProductListDataView } from "@insite/client-framework/Store/Pages/Pro
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductListPageContext } from "@insite/content-library/Pages/ProductListPage";
 import Link from "@insite/mobius/Link";
 import Typography from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
@@ -66,7 +65,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Product List",
         displayName: "Suggestion",
-        allowedContexts: [ProductListPageContext],
+        allowedContexts: ["ProductListPage"],
     },
 };
 

@@ -6,7 +6,6 @@ import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductAddToListLink, {
     ProductAddToListLinkStyles,
 } from "@insite/content-library/Components/ProductAddToListLink";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -51,7 +50,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Add to List Link",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
     },
 };
 

@@ -27,6 +27,7 @@ export default class ImagePickerField extends React.Component<Props, State> {
         (window as any).CKFinder.modal({
             chooseFiles: true,
             chooseFilesClosePopup: true,
+            resizeImages: false,
             onInit: (finder: any) => {
                 const hideOverlay = () => this.setState({ imagePickerIsOpen: undefined });
 

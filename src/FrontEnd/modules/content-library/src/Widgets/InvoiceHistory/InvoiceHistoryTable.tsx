@@ -7,7 +7,6 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import InvoiceDetailPageTypeLink from "@insite/content-library/Components/InvoiceDetailPageTypeLink";
-import { InvoiceHistoryPageContext } from "@insite/content-library/Pages/InvoiceHistoryPage";
 import { ClickableProps } from "@insite/mobius/Clickable";
 import DataTable, { DataTableProps, SortOrderOptions } from "@insite/mobius/DataTable";
 import DataTableBody, { DataTableBodyProps } from "@insite/mobius/DataTable/DataTableBody";
@@ -340,6 +339,7 @@ const InvoiceHistoryTable = (props: Props) => {
                                 key={id}
                                 {...styles.dataTableRow}
                                 data-test-selector="invoiceHistory_invoiceLine"
+                                data-test-key={id}
                             >
                                 {isTrueOrUndefined(showInvoiceNumber) && (
                                     <DataTableCell
@@ -395,7 +395,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Invoice History",
         displayName: "Search Results Table",
-        allowedContexts: [InvoiceHistoryPageContext],
+        allowedContexts: ["InvoiceHistoryPage"],
         fieldDefinitions: [
             {
                 name: fields.showInvoiceNumber,

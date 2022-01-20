@@ -106,7 +106,8 @@ class MyListsDetailsPage extends React.Component<Props, State> {
                 onComplete(wishListProps) {
                     if (wishListProps.result?.wishList) {
                         this.onSuccess?.(wishListProps.result.wishList);
-                    } else if (wishListProps.result?.errorMessage) {
+                    } else if (wishListProps.result?.errorMessage !== undefined) {
+                        // possible empty string error here
                         this.onError?.(wishListProps.result.errorMessage);
                     }
                 },
@@ -129,6 +130,10 @@ class MyListsDetailsPage extends React.Component<Props, State> {
         }
 
         this.checkState();
+    }
+
+    componentWillUnmount() {
+        this.props.setBreadcrumbs({ links: undefined });
     }
 
     render() {
@@ -163,4 +168,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "MyListsDetailsPage" instead of this constant.
+ */
 export const MyListsDetailsPageContext = "MyListsDetailsPage";

@@ -8,7 +8,6 @@ import translate from "@insite/client-framework/Translate";
 import { CostCodeModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { BudgetManagementPageContext } from "@insite/content-library/Pages/BudgetManagementPage";
 import Button, { ButtonProps } from "@insite/mobius/Button";
 import DataTable, { DataTableProps } from "@insite/mobius/DataTable";
 import DataTableBody, { DataTableBodyProps } from "@insite/mobius/DataTable/DataTableBody";
@@ -277,7 +276,11 @@ const CostCodes: React.FC<Props> = ({ displayedWidgetName, billToState, setDispl
                     <Button {...styles.cancelButton} onClick={handleCancelButtonClick}>
                         {translate("Cancel")}
                     </Button>
-                    <Button {...styles.saveButton} onClick={handleSaveButtonClick}>
+                    <Button
+                        {...styles.saveButton}
+                        onClick={handleSaveButtonClick}
+                        data-test-selector="budgetCostCodes_saveButton"
+                    >
                         {translate("Save")}
                     </Button>
                 </GridItem>
@@ -391,7 +394,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(CostCodes),
     definition: {
         group: "BudgetManagement",
-        allowedContexts: [BudgetManagementPageContext],
+        allowedContexts: ["BudgetManagementPage"],
     },
 };
 

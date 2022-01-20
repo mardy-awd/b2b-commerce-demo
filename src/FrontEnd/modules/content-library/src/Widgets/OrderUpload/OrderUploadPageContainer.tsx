@@ -1,7 +1,6 @@
 import Zone from "@insite/client-framework/Components/Zone";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { OrderUploadPageContext } from "@insite/content-library/Pages/OrderUploadPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import React, { FC } from "react";
@@ -36,7 +35,7 @@ const widgetModule: WidgetModule = {
     component: OrderUploadPageContainer,
     definition: {
         group: "Order Upload",
-        allowedContexts: [OrderUploadPageContext],
+        allowedContexts: ["OrderUploadPage"],
         displayName: "Page Container",
     },
 };

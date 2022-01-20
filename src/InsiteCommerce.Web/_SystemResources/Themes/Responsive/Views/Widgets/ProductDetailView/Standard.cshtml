@@ -56,7 +56,7 @@
                     <!-- Configuration part -->
                     <div ng-show="vm.product.isConfigured && vm.product.configurationDto != null && !vm.product.configurationDto.isKit">
                         <div ng-repeat="section in vm.product.configurationDto.sections" class="pd-kit">
-                            <span>{{section.label || section.sectionName}}</span>
+                            <span class="section-label">{{section.label || section.sectionName}}</span>
                             <select ng-model="vm.configurationSelection[$index]" name="tst_productDetail_configurationSection_{{section.sectionName}}" ng-change="vm.configChanged()"
                                     ng-options="option.description for option in section.options track by option.sectionOptionId">
                                 <option value="">[% translate 'Select' %] {{section.label || section.sectionName}}</option>
@@ -64,12 +64,49 @@
                         </div>
                     </div>
                     <!-- Style part -->
-                    <div class="small-12 columns pd-style-opt" ng-repeat="styleTrait in vm.styleTraitFiltered | orderBy: 'sortOrder'">
-                        <span>{{styleTrait.nameDisplay}}</span>
-                        <select name="{{'tst_styleSelect_' + styleTrait.name}}" ng-model="vm.styleSelection[$index]" ng-change="vm.styleChange(vm.styleSelection[$index], {{$index}})"
-                                ng-options="style.valueDisplay for style in styleTrait.styleValues | orderBy: 'sortOrder' track by style.styleTraitValueId">
-                            <option value=""> {{styleTrait.unselectedValue ? "" : "Select"}} {{styleTrait.unselectedValue ? styleTrait.unselectedValue : styleTrait.nameDisplay}}</option>
-                        </select>
+                    <div class="small-12 columns pd-style-opt" ng-repeat="styleTrait in vm.styleTraitFiltered | orderBy: 'sortOrder'" ng-init="styleIndex = $index">
+                        <div class="style-trait-label-wrapper">
+                            <span class="section-label">{{styleTrait.nameDisplay}}</span>
+                            <a  ng-if="styleTrait.displayType === 'Button' || styleTrait.displayType === 'SwatchGrid' || styleTrait.displayType === 'SwatchList'" 
+                                href="javascript:void(0);" ng-click="vm.selectStyle(null, styleIndex)">[% translate 'Clear' %]</a>
+                        </div>
+
+                        <isc-product-variant-dropdown ng-if="styleTrait.displayType === 'Dropdown'"
+                                                      style-trait="styleTrait"
+                                                      style-selection="vm.styleSelection"
+                                                      index="styleIndex"
+                                                      style-change="vm.styleChange()"
+                                                      is-style-trait-disabled="vm.isStyleTraitDisabled(styleTraitValueId)">
+                        </isc-product-variant-dropdown>
+                        <isc-product-variant-buttons ng-if="styleTrait.displayType === 'Button'"
+                                                      style-trait="styleTrait"
+                                                      index="styleIndex"
+                                                      style-selection="vm.styleSelection"
+                                                      click-handler="vm.selectStyle(style, index)"
+                                                      is-style-trait-disabled="vm.isStyleTraitDisabled(styleTraitValueId)">
+                        </isc-product-variant-buttons>
+                        <isc-product-variant-swatch-dropdown ng-if="styleTrait.displayType === 'SwatchDropdown'"
+                                                      style-trait="styleTrait"
+                                                      index="styleIndex"
+                                                      style-selection="vm.styleSelection"
+                                                      click-handler="vm.selectStyle(style, index)"
+                                                      is-style-trait-disabled="vm.isStyleTraitDisabled(styleTraitValueId)"
+                                                      toggle-swatch-dropdown="vm.toggleSwatchDropdown(elementId)">
+                        </isc-product-variant-swatch-dropdown>
+                        <isc-product-variant-swatch-grid ng-if="styleTrait.displayType === 'SwatchGrid'"
+                                                      style-trait="styleTrait"
+                                                      index="styleIndex"
+                                                      style-selection="vm.styleSelection"
+                                                      click-handler="vm.selectStyle(style, index)"
+                                                      is-style-trait-disabled="vm.isStyleTraitDisabled(styleTraitValueId)">
+                        </isc-product-variant-swatch-grid>
+                        <isc-product-variant-swatch-list ng-if="styleTrait.displayType === 'SwatchList'"
+                                                      style-trait="styleTrait"
+                                                      index="styleIndex"
+                                                      style-selection="vm.styleSelection"
+                                                      click-handler="vm.selectStyle(style, index)"
+                                                      is-style-trait-disabled="vm.isStyleTraitDisabled(styleTraitValueId)">
+                        </isc-product-variant-swatch-list>
                     </div>
                 </div>
             </div>
@@ -189,4 +226,19 @@
 </script>
 <script type="text/ng-template" id="/PartialViews/Catalog-ProductImageCarousel">
     [% partialView 'Catalog-ProductImageCarousel' %]
+</script>
+<script type="text/ng-template" id="/PartialViews/Catalog-ProductDetailsVariantDropdown">
+    [% partialView 'Catalog-ProductDetailsVariantDropdown' %]
+</script>
+<script type="text/ng-template" id="/PartialViews/Catalog-ProductDetailsVariantButtons">
+    [% partialView 'Catalog-ProductDetailsVariantButtons' %]
+</script>
+<script type="text/ng-template" id="/PartialViews/Catalog-ProductDetailsVariantSwatchDropdown">
+    [% partialView 'Catalog-ProductDetailsVariantSwatchDropdown' %]
+</script>
+<script type="text/ng-template" id="/PartialViews/Catalog-ProductDetailsVariantSwatchGrid">
+    [% partialView 'Catalog-ProductDetailsVariantSwatchGrid' %]
+</script>
+<script type="text/ng-template" id="/PartialViews/Catalog-ProductDetailsVariantSwatchList">
+    [% partialView 'Catalog-ProductDetailsVariantSwatchList' %]
 </script>

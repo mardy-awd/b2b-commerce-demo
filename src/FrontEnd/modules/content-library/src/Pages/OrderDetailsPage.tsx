@@ -113,4 +113,7 @@ export const mapStateToOrderProps = (state: ApplicationState) => ({
     order: getOrderState(state, state.pages.orderDetails.orderNumber).value,
 });
 
+/**
+ * @deprecated Use string literal "OrderDetailsPage" instead of this constant.
+ */
 export const OrderDetailsPageContext = "OrderDetailsPage";

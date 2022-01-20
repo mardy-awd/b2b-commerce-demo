@@ -2,7 +2,6 @@ import Zone from "@insite/client-framework/Components/Zone";
 import toggleFiltersOpen from "@insite/client-framework/Store/Pages/SavedOrderList/Handlers/ToggleFiltersOpen";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { SavedOrderListPageContext } from "@insite/content-library/Pages/SavedOrderListPage";
 import Clickable, { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -78,7 +77,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Saved Order List",
         displayName: "Header",
-        allowedContexts: [SavedOrderListPageContext],
+        allowedContexts: ["SavedOrderListPage"],
     },
 };
 

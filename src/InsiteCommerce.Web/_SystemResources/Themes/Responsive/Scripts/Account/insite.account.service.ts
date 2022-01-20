@@ -20,7 +20,7 @@ module insite.account {
         createAccount(account: AccountModel): ng.IPromise<AccountModel>;
         updateAccount(account: AccountModel, accountId?: System.Guid): ng.IPromise<AccountModel>;
         updateVmiUser(vmiUser: VmiUserModel): ng.IPromise<VmiUserModel>;
-        getPaymentProfiles(): ng.IPromise<AccountPaymentProfileCollectionModel>;
+        getPaymentProfiles(expand?: string, pagination?: Insite.Core.WebApi.PaginationModel, sort?: string): ng.IPromise<AccountPaymentProfileCollectionModel>;
         addPaymentProfile(paymentProfile: AccountPaymentProfileModel): ng.IPromise<AccountPaymentProfileModel>;
         updatePaymentProfile(paymentProfileId: System.Guid, paymentProfile: AccountPaymentProfileModel): ng.IPromise<AccountPaymentProfileModel>;
         deletePaymentProfiles(paymentProfileId: System.Guid): ng.IPromise<void>;
@@ -184,8 +184,8 @@ module insite.account {
                 sort: sort
             } as any;
 
-            if (this.expand) {
-                params.expand = this.expand;
+            if (expand) {
+                params.expand = expand;
             }
 
             if (pagination) {

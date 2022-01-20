@@ -2,7 +2,6 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import Zone from "@insite/client-framework/Components/Zone";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { CartPageContext } from "@insite/content-library/Pages/CartPage";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import breakpointMediaQueries from "@insite/mobius/utilities/breakpointMediaQueries";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
@@ -195,7 +194,7 @@ const widgetModule: WidgetModule = {
     component: CartPageContainer,
     definition: {
         group: "Cart",
-        allowedContexts: [CartPageContext],
+        allowedContexts: ["CartPage"],
         displayName: "Page Container",
     },
 };

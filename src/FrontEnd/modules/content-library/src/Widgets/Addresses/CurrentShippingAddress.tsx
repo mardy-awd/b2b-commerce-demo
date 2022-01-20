@@ -15,7 +15,6 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import AddressInfoDisplay from "@insite/content-library/Components/AddressInfoDisplay";
 import CustomerAddressForm from "@insite/content-library/Components/CustomerAddressForm";
-import { AddressesPageContext } from "@insite/content-library/Pages/AddressesPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -209,7 +208,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(CurrentShippingAddress),
     definition: {
         group: "Addresses",
-        allowedContexts: [AddressesPageContext],
+        allowedContexts: ["AddressesPage"],
     },
 };
 

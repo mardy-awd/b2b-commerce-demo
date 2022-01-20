@@ -123,4 +123,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "SavedOrderDetailsPage" instead of this constant.
+ */
 export const SavedOrderDetailsPageContext = "SavedOrderDetailsPage";

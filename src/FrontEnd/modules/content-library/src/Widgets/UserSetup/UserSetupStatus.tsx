@@ -7,7 +7,6 @@ import { getCurrentEditingUser } from "@insite/client-framework/Store/Pages/User
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
-import { UserSetupPageContext } from "@insite/content-library/Pages/UserSetupPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Checkbox, { CheckboxPresentationProps, CheckboxProps } from "@insite/mobius/Checkbox";
 import { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
@@ -112,7 +111,7 @@ const UserSetupStatus = ({ editingUser, toaster, setUserFields, sendActivationEm
 
     return (
         <>
-            <Typography as="h2" {...styles.title} data-test-selector="tst_UserSetupStatus_statusLabel">
+            <Typography as="h2" {...styles.title} data-test-selector="userSetupStatus_statusLabel">
                 {translate("Status")}
             </Typography>
             <StyledWrapper {...styles.wrapper}>
@@ -120,7 +119,7 @@ const UserSetupStatus = ({ editingUser, toaster, setUserFields, sendActivationEm
                     {...styles.activationStatus}
                     checked={!!editingUser.isApproved}
                     onChange={activationStatusChangeHandler}
-                    data-test-selector="tst_userSetupStatus_activationStatus"
+                    data-test-selector="userSetupStatus_activationStatus"
                 >
                     {translate("Activation Status")}
                 </Checkbox>
@@ -130,7 +129,7 @@ const UserSetupStatus = ({ editingUser, toaster, setUserFields, sendActivationEm
                     as="p"
                     {...styles.lastSignInLabel}
                     id="lastSignIn"
-                    data-test-selector="tst_userSetupStatus_lastSignIn"
+                    data-test-selector="userSetupStatus_lastSignIn"
                 >
                     {translate("Last Sign In")}
                 </Typography>
@@ -139,7 +138,7 @@ const UserSetupStatus = ({ editingUser, toaster, setUserFields, sendActivationEm
                         as="p"
                         {...styles.lastSignInText}
                         aria-labelledby="lastSignIn"
-                        data-test-selector="tst_UserSetupStatus_lastSignInText"
+                        data-test-selector="userSetupStatus_lastSignInText"
                     >
                         <LocalizedDateTime
                             dateTime={editingUser.lastLoginOn}
@@ -163,7 +162,7 @@ const UserSetupStatus = ({ editingUser, toaster, setUserFields, sendActivationEm
                     <Button
                         {...styles.sendActivationEmailButton}
                         onClick={sendActivationEmailClickHandler}
-                        data-test-selector="tst_userSetupStatus_sendActivationEmail"
+                        data-test-selector="userSetupStatus_sendActivationEmail"
                     >
                         {translate(
                             activationEmailSent || editingUser.activationStatus === "EmailSent"
@@ -182,7 +181,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "User Setup",
         displayName: "Status",
-        allowedContexts: [UserSetupPageContext],
+        allowedContexts: ["UserSetupPage"],
     },
 };
 

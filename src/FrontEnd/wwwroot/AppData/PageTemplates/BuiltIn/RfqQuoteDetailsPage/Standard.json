@@ -9,7 +9,6 @@
     "name": "Quote Details",
     "urlSegment": "QuoteDetails",
     "horizontalRule": "",
-    "excludeFromNavigation": true,
     "tags": []
   },
   "translatableFields": {

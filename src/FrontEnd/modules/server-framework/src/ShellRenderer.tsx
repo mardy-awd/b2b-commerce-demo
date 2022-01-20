@@ -13,6 +13,7 @@ const renderedShell = `<!DOCTYPE html>${renderToStaticMarkup(
             <title>Content Administration</title>
             <base href="/" />
             <link rel="icon" href="data:," />
+            <link rel="stylesheet" href="/SystemResources/Styles/Admin/icons.css" />
             <link href="https://fonts.googleapis.com/css?family=Barlow:300,400,700&display=swap" rel="stylesheet" />
             <link rel="shortcut icon" href={favicon} type="image/svg" />
             {/* eslint-disable react/no-danger */}

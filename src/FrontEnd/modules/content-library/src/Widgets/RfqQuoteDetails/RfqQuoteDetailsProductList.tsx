@@ -2,7 +2,6 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getQuoteState } from "@insite/client-framework/Store/Data/Quotes/QuotesSelector";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqQuoteDetailsPageContext } from "@insite/content-library/Pages/RfqQuoteDetailsPage";
 import RfqQuoteDetailsCustomerProductList from "@insite/content-library/Widgets/RfqQuoteDetails/RfqQuoteDetailsCustomerProductList";
 import RfqQuoteDetailsSalesRepProductList from "@insite/content-library/Widgets/RfqQuoteDetails/RfqQuoteDetailsSalesRepProductList";
 import React from "react";
@@ -33,7 +32,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(RfqQuoteDetailsProductList),
     definition: {
         displayName: "Product List",
-        allowedContexts: [RfqQuoteDetailsPageContext],
+        allowedContexts: ["RfqQuoteDetailsPage"],
         group: "RFQ Quote Details",
     },
 };

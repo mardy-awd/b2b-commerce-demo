@@ -21,6 +21,7 @@ module insite.catalog {
         initialStyleTraits: StyleTraitDto[] = [];
         initialStyledProducts: StyledProductDto[] = [];
         styleTraitFiltered: StyleTraitDto[] = [];
+        disabledTraits: {} = {};
         showUnitError = false;
         failedToGetRealTimePrices = false;
         failedToGetRealTimeInventory = false;
@@ -32,9 +33,11 @@ module insite.catalog {
         initResolvePageCalled: boolean;
         configuration: string[] = [];
         ignoreLocationChange: boolean;
+        realTimeInventoryWasLoaded: boolean;
 
         static $inject = [
             "$scope",
+            "$window",
             "coreService",
             "cartService",
             "productService",
@@ -51,6 +54,7 @@ module insite.catalog {
 
         constructor(
             protected $scope: ng.IScope,
+            protected $window: ng.IWindowService,
             protected coreService: core.ICoreService,
             protected cartService: cart.ICartService,
             protected productService: IProductService,
@@ -87,6 +91,20 @@ module insite.catalog {
                     this.initStyleSelection(this.product.styleTraits);
                 }
                 this.ignoreLocationChange = false;
+            });
+
+            this.$window.addEventListener("click", function (event) {
+                const target = angular.element(event.target);
+
+                if (target.id !== "swatch_dropdown_id"
+                    && target.parents('#swatch_dropdown_id').length === 0) {
+                    const swatchDropdown = document.getElementsByClassName("swatch-dropdown-selected-item");
+                    if (swatchDropdown && swatchDropdown.length > 0) {
+                        for (var i = 0; i < swatchDropdown.length; i++) {
+                            swatchDropdown[i].classList.remove("show-dropdown-list");
+                        }
+                    }
+                }
             });
         }
 
@@ -164,6 +182,7 @@ module insite.catalog {
             if (this.product.styleTraits.length > 0) {
                 this.initialStyledProducts = this.product.styledProducts.slice();
                 this.styleTraitFiltered = this.product.styleTraits.slice();
+                this.disabledTraits = {};
                 this.initialStyleTraits = this.product.styleTraits.slice();
                 if (this.product.isStyleProductParent) {
                     this.parentProduct = angular.copy(this.product);
@@ -261,6 +280,7 @@ module insite.catalog {
 
         protected getProductRealTimeInventoryCompleted(realTimeInventory: RealTimeInventoryModel): void {
             // product inventory is already updated
+            this.realTimeInventoryWasLoaded = true;
             if (this.product.isStyleProductParent) {
                 this.parentProduct = angular.copy(this.product);
                 this.styleChange();
@@ -378,8 +398,31 @@ module insite.catalog {
         protected changeUnitOfMeasureFailed(error: any): void {
         }
 
+        isStyleTraitDisabled(styleTraitValueId: System.Guid): boolean {
+            return !!this.disabledTraits[styleTraitValueId.toString()];
+        }
+
+        toggleSwatchDropdown(elementId: string): void {
+            const swatchDropdowns = document.getElementsByClassName("swatch-dropdown-selected-item");
+            if (swatchDropdowns && swatchDropdowns.length > 0) {
+                for (var i = 0; i < swatchDropdowns.length; i++) {
+                    if (swatchDropdowns[i].id.includes(elementId)) {
+                        swatchDropdowns[i].classList.toggle("show-dropdown-list");
+                    } else {
+                        swatchDropdowns[i].classList.remove("show-dropdown-list");
+                    }
+                }
+            }
+        }
+
+        selectStyle(style: StyleValueDto, index: number): void {
+            this.styleSelection[index] = style;
+            this.styleChange();
+        }
+
         styleChange(): void {
             this.showUnitError = false;
+            this.disabledTraits = {};
             let styledProductsFiltered: StyledProductDto[] = [];
 
             angular.copy(this.initialStyleTraits, this.styleTraitFiltered); // init styleTraitFiltered to display
@@ -391,7 +434,7 @@ module insite.catalog {
 
                     // iteratively filter products for selected traits (except current)
                     this.styleSelection.forEach((styleValue: StyleValueDto) => {
-                        if (styleValue && styleValue.styleTraitId !== styleTrait.styleTraitId) { // skip current
+                        if (styleValue && styleValue.styleTraitId !== styleTrait.styleTraitId) { // skip current style trait
                             styledProductsFiltered = this.getProductsByStyleTraitValueId(styledProductsFiltered, styleValue.styleTraitValueId);
                         }
                     });
@@ -406,7 +449,8 @@ module insite.catalog {
                         }
                     });
 
-                    styleTrait.styleValues = filteredValues.slice();
+                    let disabledValues = styleTrait.styleValues.filter(x => !filteredValues.some(filteredValue => filteredValue.styleTraitValueId === x.styleTraitValueId));
+                    disabledValues.map(disabled => this.disabledTraits[disabled.styleTraitValueId.toString()] = true);
                 }
             });
 
@@ -610,10 +654,10 @@ module insite.catalog {
 
         protected isAddToCartVisible() {
             return this.product && this.product.allowedAddToCart && !this.product.cantBuy &&
-            (this.product.canAddToCart ||
-                ((this.styleSelectionCompleted || this.configurationCompleted)
-                && (this.settings.allowBackOrder || (<any>this.product.availability) && (<any>this.product.availability).messageType !== 2))
-                    && !this.product.canConfigure);
+                ((this.product.canAddToCart && (!this.settings.realTimeInventory || this.realTimeInventoryWasLoaded))
+                    || (((this.styleSelectionCompleted || this.configurationCompleted)
+                        && (this.settings.allowBackOrder || ((<any>this.product.availability) && (<any>this.product.availability).messageType !== 2)))
+                        && !this.product.canConfigure));
         }
     }
 

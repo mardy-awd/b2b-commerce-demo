@@ -53,4 +53,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "RequisitionConfirmationPage" instead of this constant.
+ */
 export const RequisitionConfirmationPageContext = "RequisitionConfirmationPage";

@@ -5,7 +5,6 @@ import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import OrderLinesList, { OrderLinesListStyles } from "@insite/content-library/Components/OrderLinesList";
 import { ProductBrandStyles } from "@insite/content-library/Components/ProductBrand";
 import { ProductDescriptionStyles } from "@insite/content-library/Components/ProductDescription";
-import { OrderDetailsPageContext } from "@insite/content-library/Pages/OrderDetailsPage";
 import { ButtonPresentationProps } from "@insite/mobius/Button";
 import { ClickablePresentationProps } from "@insite/mobius/Clickable";
 import { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -239,7 +238,7 @@ const OrderDetailsSummaryTable: React.FunctionComponent<Props> = ({ order }) => 
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(OrderDetailsSummaryTable),
     definition: {
-        allowedContexts: [OrderDetailsPageContext],
+        allowedContexts: ["OrderDetailsPage"],
         group: "Order Details",
     },
 };

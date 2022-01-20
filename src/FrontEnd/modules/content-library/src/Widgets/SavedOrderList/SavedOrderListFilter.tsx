@@ -5,7 +5,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/SavedOrderL
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { SavedOrderListPageContext } from "@insite/content-library/Pages/SavedOrderListPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import DatePicker, { DatePickerPresentationProps, DatePickerState } from "@insite/mobius/DatePicker";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -345,7 +344,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Saved Order List",
         displayName: "Search Results Filter",
-        allowedContexts: [SavedOrderListPageContext],
+        allowedContexts: ["SavedOrderListPage"],
         isSystem: true,
     },
 };

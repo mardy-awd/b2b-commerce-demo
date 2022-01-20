@@ -3,7 +3,6 @@ import { getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/C
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqRequestQuotePageContext } from "@insite/content-library/Pages/RfqRequestQuotePage";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import React, { FC } from "react";
 import { connect } from "react-redux";
@@ -46,7 +45,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "RFQ Request Quote",
         displayName: "Header",
-        allowedContexts: [RfqRequestQuotePageContext],
+        allowedContexts: ["RfqRequestQuotePage"],
         fieldDefinitions: [],
     },
 };

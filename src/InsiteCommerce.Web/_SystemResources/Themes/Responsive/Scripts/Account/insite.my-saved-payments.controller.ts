@@ -21,7 +21,7 @@
 
         protected getPaymentProfiles(): void {
             this.spinnerService.show();
-            this.accountService.getPaymentProfiles().then(
+            this.accountService.getPaymentProfiles(null, { pageSize: 999 } as PaginationModel).then(
                 (accountPaymentProfileCollection: AccountPaymentProfileCollectionModel) => { this.getPaymentProfilesCompleted(accountPaymentProfileCollection); },
                 (error: any) => { this.getPaymentProfilesFailed(error); });
         }

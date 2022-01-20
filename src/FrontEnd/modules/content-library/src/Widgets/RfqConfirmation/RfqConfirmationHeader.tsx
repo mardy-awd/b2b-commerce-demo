@@ -5,7 +5,6 @@ import { getHomePageUrl, getPageLinkByPageType } from "@insite/client-framework/
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { RfqConfirmationPageContext } from "@insite/content-library/Pages/RfqConfirmationPage";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable, { ClickableProps } from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -152,7 +151,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(withHistory(RfqConfirmationHeader)),
     definition: {
         displayName: "Page Header",
-        allowedContexts: [RfqConfirmationPageContext],
+        allowedContexts: ["RfqConfirmationPage"],
         fieldDefinitions: [],
         group: "RFQ Quote Confirmation",
     },

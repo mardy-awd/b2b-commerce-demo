@@ -100,7 +100,7 @@ class UserSetupPage extends Component<Props> {
     }
 }
 
-const page: PageModule = {
+const pageModule: PageModule = {
     component: withHistory(connect(mapStateToProps, mapDispatchToProps)(withToaster(UserSetupPage))),
     definition: {
         hasEditableTitle: true,
@@ -109,5 +109,9 @@ const page: PageModule = {
     },
 };
 
+export default pageModule;
+
+/**
+ * @deprecated Use string literal "UserSetupPage" instead of this constant.
+ */
 export const UserSetupPageContext = "UserSetupPage";
-export default page;

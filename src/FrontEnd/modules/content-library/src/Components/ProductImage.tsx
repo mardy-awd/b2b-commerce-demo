@@ -63,7 +63,7 @@ const ProductImage: FC<Props> = ({ product, extendedStyles }) => {
 
     return (
         <Clickable {...styles.linkWrappingImage} href={productDetailPath} data-test-selector="productImage">
-            <Img {...styles.img} loading={loading} src={imagePath} altText={altText} />
+            <Img {...styles.img} loading={loading} width="209" height="209" src={imagePath} altText={altText} />
         </Clickable>
     );
 };

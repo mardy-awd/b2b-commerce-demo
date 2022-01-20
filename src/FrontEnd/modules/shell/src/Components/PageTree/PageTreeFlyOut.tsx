@@ -1,11 +1,6 @@
 import { Dictionary } from "@insite/client-framework/Common/Types";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import PermissionsModel from "@insite/client-framework/Types/PermissionsModel";
-import Edit from "@insite/shell/Components/Icons/Edit";
-import Move from "@insite/shell/Components/Icons/Move";
-import OverflowAddPage from "@insite/shell/Components/Icons/OverflowAddPage";
-import OverflowCopyPage from "@insite/shell/Components/Icons/OverflowCopyPage";
-import Trash from "@insite/shell/Components/Icons/Trash";
 import { HasConfirmationContext, withConfirmation } from "@insite/shell/Components/Modals/ConfirmationContext";
 import {
     canAddChildPage,
@@ -71,11 +66,10 @@ type Props = RouteComponentProps &
     OwnProps &
     HasConfirmationContext;
 
-const flyOutOption = (onClick: () => void, icon: any, title: string) => {
+const flyOutOption = (onClick: () => void, title: string) => {
     return (
         <FlyoutOption onClick={onClick} data-test-selector={`pageFlyOutOption_${title}`}>
-            <div>{icon}</div>
-            <span>{title}</span>
+            {title}
         </FlyoutOption>
     );
 };
@@ -188,12 +182,10 @@ class PageTreeFlyOut extends React.Component<Props> {
         if (isLayout) {
             return (
                 <PageTreeFlyOutMenu style={style}>
-                    {permissions &&
-                        canEditLayout(permissions) &&
-                        flyOutOption(this.handleEditPage, <Edit />, "Edit Layout")}
+                    {permissions && canEditLayout(permissions) && flyOutOption(this.handleEditPage, "Edit Layout")}
                     {permissions &&
                         canDeleteLayout(permissions) &&
-                        flyOutOption(this.handleDeletePage, <Trash color1="#9b9b9b" />, "Delete Layout")}
+                        flyOutOption(this.handleDeletePage, "Delete Layout")}
                 </PageTreeFlyOutMenu>
             );
         }
@@ -205,37 +197,28 @@ class PageTreeFlyOut extends React.Component<Props> {
         return (
             <PageTreeFlyOutMenu style={style}>
                 {canEditPage(this.props.futurePublishNodeIds, pageDefinition, permissions, flyOutNode) &&
-                    flyOutOption(
-                        this.handleEditPage,
-                        <Edit />,
-                        flyOutNode.isRootVariant ? "Edit Shared Fields" : "Edit Page",
-                    )}
+                    flyOutOption(this.handleEditPage, flyOutNode.isRootVariant ? "Edit Shared Fields" : "Edit Page")}
                 {!mobileCmsModeActive && (
                     <>
                         {canAddChildPage(pageDefinition, permissions, flyOutNode) &&
-                            flyOutOption(this.handleAddPage, <OverflowAddPage />, "Add Page")}
+                            flyOutOption(this.handleAddPage, "Add Page")}
                     </>
                 )}
                 {canAddVariant(pageDefinition, permissions) &&
                     !flyOutNode.isVariant &&
-                    flyOutOption(this.handleCreateVariant, <OverflowAddPage />, "Create Variant")}
+                    flyOutOption(this.handleCreateVariant, "Create Variant")}
                 {canAddVariant(pageDefinition, permissions) &&
                     flyOutNode.isVariant &&
                     !flyOutNode.isDefaultVariant &&
-                    flyOutOption(this.handleEditRules, <Edit />, "Edit Rules")}
+                    flyOutOption(this.handleEditRules, "Edit Rules")}
                 {canAddVariant(pageDefinition, permissions) &&
                     flyOutNode.isVariant &&
                     !flyOutNode.isDefaultVariant &&
-                    flyOutOption(this.handleMakeDefault, <Edit />, "Make Default")}
-                {canCopyPage(pageDefinition, permissions, flyOutNode) &&
-                    flyOutOption(this.handleCopyPage, <OverflowCopyPage />, "Copy Page")}
-                {flyOutNode.isRootVariant && flyOutOption(this.handleReorderVariants, <Move />, "Reorder Variants")}
+                    flyOutOption(this.handleMakeDefault, "Make Default")}
+                {canCopyPage(pageDefinition, permissions, flyOutNode) && flyOutOption(this.handleCopyPage, "Copy Page")}
+                {flyOutNode.isRootVariant && flyOutOption(this.handleReorderVariants, "Reorder Variants")}
                 {canDeletePage(this.props.futurePublishNodeIds, pageDefinition, permissions, flyOutNode) &&
-                    flyOutOption(
-                        this.handleDeletePage,
-                        <Trash color1="#9b9b9b" />,
-                        flyOutNode.isRootVariant ? "Delete Variants" : "Delete",
-                    )}
+                    flyOutOption(this.handleDeletePage, flyOutNode.isRootVariant ? "Delete Variants" : "Delete")}
             </PageTreeFlyOutMenu>
         );
     }
@@ -297,20 +280,12 @@ const FlyoutOption = styled.div`
     color: ${(props: ShellThemeProps) => props.theme.colors.text.main};
     cursor: pointer;
     width: 180px;
-    padding: 3px 0;
+    padding: 3px 0 3px 10px;
     font-weight: 300;
     display: flex;
     align-content: center;
     position: relative;
     align-items: center;
-
-    div {
-        width: 36px;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
 
     &:hover {
         background-color: ${(props: ShellThemeProps) => props.theme.colors.common.backgroundContrast};

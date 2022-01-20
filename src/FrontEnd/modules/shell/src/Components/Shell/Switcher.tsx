@@ -1,15 +1,14 @@
 import { DeviceType } from "@insite/client-framework/Types/ContentItemModel";
-import Icon from "@insite/mobius/Icon";
+import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import CompareVersionClicker from "@insite/shell/Components/Shell/CompareVersionClicker";
 import ContentModeClicker from "@insite/shell/Components/Shell/ContentModeClicker";
-import { Spacer } from "@insite/shell/Components/Shell/HeaderBar";
 import HeaderGear from "@insite/shell/Components/Shell/HeaderGear";
 import ViewPortClicker from "@insite/shell/Components/Shell/ViewPortClicker";
 import { changeStageMode } from "@insite/shell/Store/ShellContext/ShellContextActionCreators";
 import ShellState from "@insite/shell/Store/ShellState";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const mapStateToProps = ({ shellContext: { mobileCmsModeActive, stageMode, contentMode } }: ShellState) => ({
     mobileCmsModeActive,
@@ -43,29 +42,50 @@ const Switcher: React.FC<Props> = ({ disabled, mobileCmsModeActive, stageMode, c
                     >
                         How To Preview Changes
                     </StyledA>
-                    <Icon src={Spacer} color={disabled ? "common.disabled" : "custom.borderDividerColor"} />
+                    <AxiomIcon
+                        src="pipe"
+                        size={16}
+                        css={pipeCss}
+                        color={disabled ? "common.disabled" : "custom.borderDividerColor"}
+                    />
                 </>
             )}
-            <div>
-                {contentMode === "Editing" && <CompareVersionClicker disabled={disabled} />}
-                <ContentModeClicker targetContentMode="Editing" icon="Edit2" disabled={disabled} />
-                <ContentModeClicker targetContentMode="Previewing" icon="Eye" disabled={disabled} />
-            </div>
+            {contentMode === "Editing" && <CompareVersionClicker disabled={disabled} />}
+            <ContentModeClicker targetContentMode="Editing" icon="pen" disabled={disabled} />
+            <ContentModeClicker targetContentMode="Previewing" icon="eye" disabled={disabled} />
             {!mobileCmsModeActive && (
                 <>
-                    <Icon src={Spacer} color={disabled ? "common.disabled" : "custom.borderDividerColor"} />
-                    <div data-test-selector="preview_switcher">
+                    <AxiomIcon
+                        src="pipe"
+                        size={16}
+                        css={pipeCss}
+                        color={disabled ? "common.disabled" : "custom.borderDividerColor"}
+                    />
+                    <div style={{ height: "100%" }} data-test-selector="preview_switcher">
                         {clicker("Phone")}
                         {clicker("Tablet")}
                         {clicker("Desktop")}
                     </div>
                 </>
             )}
-            <Icon src={Spacer} color="custom.borderDividerColor" />
+            <AxiomIcon
+                src="pipe"
+                size={16}
+                css={pipeCss}
+                color={disabled ? "common.disabled" : "custom.borderDividerColor"}
+            />
             <HeaderGear />
         </SwitcherStyle>
     );
 };
+
+const pipeCss = css`
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
 const SwitcherStyle = styled.div`
     display: flex;

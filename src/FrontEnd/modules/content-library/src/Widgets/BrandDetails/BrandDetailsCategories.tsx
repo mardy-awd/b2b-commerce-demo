@@ -5,7 +5,6 @@ import translate from "@insite/client-framework/Translate";
 import { BrandCategoryModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { BrandDetailsPageContext } from "@insite/content-library/Pages/BrandDetailsPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
@@ -226,7 +225,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Brand Details",
         displayName: "Categories",
-        allowedContexts: [BrandDetailsPageContext],
+        allowedContexts: ["BrandDetailsPage"],
         fieldDefinitions: [
             {
                 name: fields.title,

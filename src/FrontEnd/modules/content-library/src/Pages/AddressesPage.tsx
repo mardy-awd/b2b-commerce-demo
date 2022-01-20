@@ -82,4 +82,7 @@ const pageModule: PageModule = {
 
 export default pageModule;
 
+/**
+ * @deprecated Use string literal "AddressesPage" instead of this constant.
+ */
 export const AddressesPageContext = "AddressesPage";

@@ -4,7 +4,6 @@ import { getWishListsDataView } from "@insite/client-framework/Store/Data/WishLi
 import updateLoadParameter from "@insite/client-framework/Store/Pages/MyLists/Handlers/UpdateLoadParameter";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { MyListsPageContext } from "@insite/content-library/Pages/MyListsPage";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
@@ -77,7 +76,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "My Lists",
         displayName: "Pagination",
-        allowedContexts: [MyListsPageContext],
+        allowedContexts: ["MyListsPage"],
     },
 };
 

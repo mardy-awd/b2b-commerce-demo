@@ -1,0 +1,44 @@
+.vmi-recent-notes {
+  .orders-content-block {
+    padding: 0 !important;
+
+    .order-row {
+      padding: 1em;
+      border-top: 1px solid #d8d8d8;
+
+      &:hover, &:focus {
+        background: #f8f8f8;
+      }
+
+      .vmi-location-name {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.vmi-below-minimum, .vmi-fast-moving, .vmi-slow-moving {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 230px;
+  height: 230px;
+  background-color: #555555;
+  color: #fff;
+  float: left;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  font-size: 1.125rem;
+  font-weight: bold;
+
+  .items-count {
+    font-size: 4rem;
+    line-height: 4rem;
+    margin-bottom: 10px;
+  }
+}
+
+.vmi-slow-moving{
+  float: initial;
+}

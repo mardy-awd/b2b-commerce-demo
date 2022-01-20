@@ -4,7 +4,6 @@ import { HasProduct, withProduct } from "@insite/client-framework/Components/Pro
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { ProductDetailsPageContext } from "@insite/content-library/Pages/ProductDetailsPage";
 import Accordion, { AccordionProps } from "@insite/mobius/Accordion";
 import { AccordionSectionPresentationProps, ManagedAccordionSection } from "@insite/mobius/AccordionSection";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -136,7 +135,6 @@ const ProductDetailsSpecifications: React.FC<Props> = ({
                 ))}
         </ManagedAccordionSection>
     );
-
     return (
         <Accordion
             headingLevel={2}
@@ -146,21 +144,36 @@ const ProductDetailsSpecifications: React.FC<Props> = ({
             {attributesFirst && attributesAccordion}
             {documentsFirst && documentsAccordion}
             {renderingSpecifications &&
-                specifications?.map((specification, index) => (
-                    <ManagedAccordionSection
-                        initialExpanded={
-                            index === 0 &&
-                            (!documentsFirst || !renderingDocuments) &&
-                            (!attributesFirst || !renderingAttributes)
-                        }
-                        key={specification.id.toString()}
-                        title={specification.nameDisplay}
-                        data-test-selector="productDetails_specifications_specification"
-                        {...styles.specificationsAccordionSection}
-                    >
-                        {parse(specification.htmlContent, parserOptions)}
-                    </ManagedAccordionSection>
-                ))}
+                specifications?.map((specification, index) => {
+                    let htmlContent = specification.htmlContent;
+                    if (htmlContent.includes("<=")) {
+                        htmlContent = htmlContent.replace(/<=/g, "&lt=");
+                    }
+                    if (htmlContent.includes("=<")) {
+                        htmlContent = htmlContent.replace(/=</g, "=&lt");
+                    }
+                    if (htmlContent.includes(">=")) {
+                        htmlContent = htmlContent.replace(/>=/g, "&gt=");
+                    }
+                    if (htmlContent.includes("=>")) {
+                        htmlContent = htmlContent.replace(/=>/g, "=&gt");
+                    }
+                    return (
+                        <ManagedAccordionSection
+                            initialExpanded={
+                                index === 0 &&
+                                (!documentsFirst || !renderingDocuments) &&
+                                (!attributesFirst || !renderingAttributes)
+                            }
+                            key={specification.id.toString()}
+                            title={specification.nameDisplay}
+                            data-test-selector="productDetails_specifications_specification"
+                            {...styles.specificationsAccordionSection}
+                        >
+                            {parse(htmlContent, parserOptions)}
+                        </ManagedAccordionSection>
+                    );
+                })}
             {!attributesFirst && attributesAccordion}
             {!documentsFirst && documentsAccordion}
         </Accordion>
@@ -172,7 +185,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Specification",
         group: "Product Details",
-        allowedContexts: [ProductDetailsPageContext],
+        allowedContexts: ["ProductDetailsPage"],
         fieldDefinitions: [
             {
                 name: fields.showDocuments,

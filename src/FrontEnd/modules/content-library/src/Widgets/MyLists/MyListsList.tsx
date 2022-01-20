@@ -13,7 +13,6 @@ import CardContainer, { CardContainerStyles } from "@insite/content-library/Comp
 import CardList, { CardListStyles } from "@insite/content-library/Components/CardList";
 import TwoButtonModal from "@insite/content-library/Components/TwoButtonModal";
 import WishListCard from "@insite/content-library/Components/WishListCard";
-import { MyListsPageContext } from "@insite/content-library/Pages/MyListsPage";
 import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
 import { ModalPresentationProps } from "@insite/mobius/Modal";
 import ToasterContext from "@insite/mobius/Toast/ToasterContext";
@@ -220,7 +219,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "My Lists",
         displayName: "List",
-        allowedContexts: [MyListsPageContext],
+        allowedContexts: ["MyListsPage"],
     },
 };
 
