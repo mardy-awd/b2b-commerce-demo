@@ -83,13 +83,13 @@
     {
         "Name":  "GemBox.Spreadsheet",
         "Value":  {
-			"PackageName":  "GemBox.Spreadsheet",
-			"PackageVersion":  "47.0.1345",
-			"PackageFramework":  "NA",
-			"Libraries":  {
-				"GemBox.Spreadsheet":  "47.0.1345"
-			}
-		}
+            "PackageName":  "GemBox.Spreadsheet",
+            "PackageVersion":  "47.0.1345",
+            "PackageFramework":  "NA",
+            "Libraries":  {
+                "GemBox.Spreadsheet":  "47.0.0.1345"
+            }
+        }
     },
     {
         "Name": "IdentityServer3",

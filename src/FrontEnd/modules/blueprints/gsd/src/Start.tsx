@@ -9,13 +9,6 @@ if (module.hot) {
     module.hot.accept(widgets.id, () => onHotWidgetReplace(require.context("./Widgets", true, /\.tsx$/)));
 }
 
-// load all pages. Without this they won't be included in the bundle
-const pages = require.context("./Pages", true, /\.tsx$/);
-const onHotPageReplace = addPagesFromContext(pages);
-if (module.hot) {
-    module.hot.accept(pages.id, () => onHotPageReplace(require.context("./Pages", true, /\.tsx$/)));
-}
-
 // load all widget extensions. They could be loaded individually instead
 const widgetExtensions = require.context("./WidgetExtensions", true);
 widgetExtensions.keys().forEach(key => widgetExtensions(key));
