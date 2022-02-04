@@ -149,7 +149,7 @@
                                    ng-model="vm.cart.poNumber">
                             <span class="field-validation-valid" data-valmsg-for="poNumber" data-valmsg-replace="true"></span>
                         </div>
-                        <div ng-show="vm.cart.showCreditCard && vm.cart.paymentMethod.isPaymentProfile && !vm.cart.paymentMethod.isPaymentProfileExpired">
+                        <div ng-show="vm.cart.showCreditCard && vm.cart.paymentMethod.isPaymentProfile && !vm.cart.paymentMethod.isPaymentProfileExpired && !vm.bypassCvvForSavedCards">
                             <div class="security-code">
                                 <label>[% translate 'Security Code' %]&nbsp;<a href="javascript:void(0);" data-reveal-id="ppWhatsThisPopup">[% translate "What's This?" %]</a></label>
                                 <span ng-if="vm.useTokenExGateway">
@@ -215,7 +215,7 @@
                                     <div id="tokenExSecurityCode" class="tokenex-iframe-block"></div>
                                     <label ng-if="vm.isInvalidSecurityCode" class="tokenex-error error">[% translate 'Security code is invalid.' %]</label>
                                 </span>
-                                <span ng-if="!vm.useTokenExGateway">
+                                <span ng-if="!vm.useTokenExGateway && !vm.bypassCvvForSavedCards">
                                     <input id="securityCode" name="securityCode" type="text" minlength="3" maxlength="4"
                                            data-rule-required="true" data-msg-required="[% translate 'Security code is required.' %]"
                                            data-rule-digits="true" data-msg-digits="[% translate 'Security code is invalid.' %]"

@@ -845,6 +845,7 @@ export interface CartLineCollectionModel extends BaseModel {
 
 export interface CartSettingsModel extends BaseModel {
     addToCartPopupTimeout: number;
+    bypassCvvForSavedCards: boolean;
     canEditCostCode: boolean;
     canRequestDeliveryDate: boolean;
     canRequisition: boolean;

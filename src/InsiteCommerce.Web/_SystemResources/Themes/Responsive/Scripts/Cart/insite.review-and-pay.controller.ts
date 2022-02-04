@@ -55,6 +55,7 @@ module insite.cart {
         ppTokenExIframeIsLoaded: boolean;
         ppIsInvalidSecurityCode: boolean;
         hasInvalidPrice = false;
+        bypassCvvForSavedCards: boolean;
 
         static $inject = [
             "$http",
@@ -103,7 +104,7 @@ module insite.cart {
             $("#reviewAndPayForm").validate();
 
             this.$scope.$watch("vm.cart.paymentMethod", (paymentMethod: PaymentMethodDto) => {
-                if (paymentMethod && paymentMethod.isPaymentProfile) {
+                if (paymentMethod && paymentMethod.isPaymentProfile && !this.bypassCvvForSavedCards) {
                     this.setUpPPTokenExGateway();
                 }
                 if (paymentMethod && paymentMethod.isCreditCard && this.usePaymetricGateway) {
@@ -203,6 +204,7 @@ module insite.cart {
             this.useECheckTokenExGateway = settingsCollection.websiteSettings.useECheckTokenExGateway;
             this.usePaymetricGateway = settingsCollection.websiteSettings.usePaymetricGateway;
             this.enableWarehousePickup = settingsCollection.accountSettings.enableWarehousePickup;
+            this.bypassCvvForSavedCards = settingsCollection.cartSettings.bypassCvvForSavedCards;
 
             this.sessionService.getSession().then(
                 (session: SessionModel) => { this.getSessionCompleted(session); },
@@ -499,7 +501,7 @@ module insite.cart {
                     return;
                 }
 
-                if (this.cart.paymentMethod.isPaymentProfile) {
+                if (this.cart.paymentMethod.isPaymentProfile && !this.bypassCvvForSavedCards) {
                     this.ppTokenExIframe.tokenize();
                     return;
                 }

@@ -116,7 +116,7 @@ object AnonymousRequests {
   val home = exec(
     http("Anonymous.Home")
       .get("/")
-      .headers(headers_0)
+      .headers(headers_2)
       .resources(
         http("Anonymous.Home.Websites.Current.CrossSells")
           .get("/api/v1/websites/current/crosssells")
@@ -166,7 +166,7 @@ object AnonymousRequests {
 
   val productDetail = exec(
     http("Anonymous.ProductDetail")
-      .get("/Catalog/${productDetailUrl}")
+      .get("${productDetailUrl}")
       .headers(headers_2)
       .resources(
         http("Anonymous.ProductDetail.CatalogPages")

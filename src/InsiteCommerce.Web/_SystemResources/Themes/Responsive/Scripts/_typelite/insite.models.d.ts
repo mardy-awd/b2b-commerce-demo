@@ -1360,6 +1360,7 @@ declare module Insite.Cart.WebApi.V1.ApiModels {
 		addToCartPopupTimeout: number;
 		enableRequestPickUpDate: boolean;
 		enableSavedCreditCards: boolean;
+		bypassCvvForSavedCards: boolean;
 	}
 }
 declare module Insite.Cart.Services.Dtos {

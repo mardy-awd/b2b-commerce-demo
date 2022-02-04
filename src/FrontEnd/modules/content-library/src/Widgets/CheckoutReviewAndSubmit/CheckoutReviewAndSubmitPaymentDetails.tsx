@@ -75,6 +75,7 @@ const mapStateToProps = (state: ApplicationState) => {
         usePaymetricGateway: settingsCollection.websiteSettings.usePaymetricGateway,
         paymetricConfig: state.context.paymetricConfig,
         enableVat: settingsCollection.productSettings.enableVat,
+        bypassCvvForSavedCards: settingsCollection.cartSettings.bypassCvvForSavedCards,
     };
 };
 
@@ -328,6 +329,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     getPaymetricResponsePacket,
     resetCurrentCartId,
     enableVat,
+    bypassCvvForSavedCards,
 }: Props) => {
     const [paymentMethod, setPaymentMethod] = useState("");
     const [poNumber, setPONumber] = useState("");
@@ -538,27 +540,30 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     const paymentMethods = paymentOptions ? paymentOptions.paymentMethods : undefined;
 
     const paymentMethodDto = paymentMethods?.find(method => method.name === paymentMethod);
+    const isCreditCard = paymentMethodDto?.isCreditCard === true;
+    const isECheck = paymentMethodDto?.isECheck === true;
+    const isPaymentProfile = paymentMethodDto?.isPaymentProfile === true;
+    const isPaymentProfileExpired = paymentMethodDto?.isPaymentProfileExpired === true;
     const selectedCountry = countries?.find(country => country.id === countryId);
     let tokenName: string | undefined;
     const eCheckDetails = useRef<Validatable>(null);
 
     if (useTokenExGateway) {
-        if (paymentMethodDto?.isPaymentProfile) {
-            tokenName = paymentMethodDto.name;
-        } else if (paymentMethodDto?.isCreditCard) {
+        if (isPaymentProfile) {
+            tokenName = paymentMethodDto!.name;
+        } else if (isCreditCard) {
             tokenName = "";
         }
     }
 
     if (useECheckTokenExGateway) {
-        if (paymentMethodDto?.isECheck) {
+        if (isECheck) {
             tokenName = "";
         }
     }
 
     useEffect(() => {
         if (typeof tokenName !== "undefined") {
-            const isECheck = paymentMethodDto?.isECheck === true;
             loadTokenExConfig({ token: tokenName, isECheck });
         }
     }, [paymentMethod]);
@@ -579,9 +584,9 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             return;
         }
 
-        if (paymentMethodDto.isPaymentProfile && !paymentMethodDto.isPaymentProfileExpired) {
+        if (isPaymentProfile && !isPaymentProfileExpired && !bypassCvvForSavedCards) {
             setUpTokenExIFrameCvvOnly(tokenExConfig);
-        } else if (paymentMethodDto.isCreditCard) {
+        } else if (isCreditCard) {
             setUpTokenExIFrame(tokenExConfig);
         }
     };
@@ -708,7 +713,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         paymetricIframe.onload();
     };
     useEffect(() => {
-        if (usePaymetricGateway && paymentMethodDto?.isCreditCard) {
+        if (usePaymetricGateway && isCreditCard) {
             loadPaymetricConfig();
         }
     }, [usePaymetricGateway, paymentMethod]);
@@ -819,7 +824,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     };
 
     const validateCardHolderName = (cardHolderName: string) => {
-        const cardHolderNameValid = !paymentMethodDto?.isCreditCard || isNonEmptyString(cardHolderName);
+        const cardHolderNameValid = !isCreditCard || isNonEmptyString(cardHolderName);
         setCardHolderNameError(!cardHolderNameValid ? translate("Cardholder name is required.") : "");
         return cardHolderNameValid;
     };
@@ -828,7 +833,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         let cardNumberEmpty = false;
         let cardNumberValid = true;
 
-        if (paymentMethodDto?.isCreditCard && !useTokenExGateway) {
+        if (isCreditCard && !useTokenExGateway) {
             cardNumberEmpty = !isNonEmptyString(cardNumber);
             cardNumberValid = validateCreditCard(cardNumber);
         }
@@ -845,15 +850,13 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     };
 
     const validateCardType = (cardType: string) => {
-        const cardTypeValid =
-            !paymentMethodDto?.isCreditCard || useTokenExGateway || (!useTokenExGateway && isNonEmptyString(cardType));
+        const cardTypeValid = !isCreditCard || useTokenExGateway || (!useTokenExGateway && isNonEmptyString(cardType));
         setCardTypeError(!cardTypeValid ? translate("Credit card type is required.") : "");
         return cardTypeValid;
     };
 
     const validateCardExpiration = (expirationMonth: number, expirationYear: number) => {
-        const cardExpired =
-            paymentMethodDto?.isCreditCard && isMonthAndYearBeforeToday(expirationMonth, expirationYear);
+        const cardExpired = isCreditCard && isMonthAndYearBeforeToday(expirationMonth, expirationYear);
         setExpirationError(cardExpired ? translate("Card is expired. Please enter a valid expiration date.") : "");
         return cardExpired;
     };
@@ -862,7 +865,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         let securityCodeEmpty = false;
         let securityCodeValid = true;
 
-        if (paymentMethodDto?.isCreditCard && !useTokenExGateway) {
+        if (isCreditCard && !useTokenExGateway) {
             securityCodeEmpty = !isNonEmptyString(securityCode);
             securityCodeValid = /^\d+$/.test(securityCode);
         }
@@ -880,45 +883,35 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
 
     const validateAddress1 = (address1: string) => {
         const address1Valid =
-            !(paymentMethodDto?.isCreditCard || paymentMethodDto?.isECheck) ||
-            useBillingAddress ||
-            (!useBillingAddress && isNonEmptyString(address1));
+            !(isCreditCard || isECheck) || useBillingAddress || (!useBillingAddress && isNonEmptyString(address1));
         setAddress1Error(!address1Valid ? translate("Address is required.") : "");
         return address1Valid;
     };
 
     const validateCountry = (countryId: string) => {
         const countryValid =
-            !(paymentMethodDto?.isCreditCard || paymentMethodDto?.isECheck) ||
-            useBillingAddress ||
-            (!useBillingAddress && isNonEmptyString(countryId));
+            !(isCreditCard || isECheck) || useBillingAddress || (!useBillingAddress && isNonEmptyString(countryId));
         setCountryError(!countryValid ? translate("Country is required.") : "");
         return countryValid;
     };
 
     const validateState = (stateId: string) => {
         const stateValid =
-            !(paymentMethodDto?.isCreditCard || paymentMethodDto?.isECheck) ||
-            useBillingAddress ||
-            (!useBillingAddress && isNonEmptyString(stateId));
+            !(isCreditCard || isECheck) || useBillingAddress || (!useBillingAddress && isNonEmptyString(stateId));
         setStateError(!stateValid ? translate("State is required.") : "");
         return stateValid;
     };
 
     const validateCity = (city: string) => {
         const cityValid =
-            !(paymentMethodDto?.isCreditCard || paymentMethodDto?.isECheck) ||
-            useBillingAddress ||
-            (!useBillingAddress && isNonEmptyString(city));
+            !(isCreditCard || isECheck) || useBillingAddress || (!useBillingAddress && isNonEmptyString(city));
         setCityError(!cityValid ? translate("City is required.") : "");
         return cityValid;
     };
 
     const validatePostalCode = (postalCode: string) => {
         const postalCodeValid =
-            !(paymentMethodDto?.isCreditCard || paymentMethodDto?.isECheck) ||
-            useBillingAddress ||
-            (!useBillingAddress && isNonEmptyString(postalCode));
+            !(isCreditCard || isECheck) || useBillingAddress || (!useBillingAddress && isNonEmptyString(postalCode));
         setPostalCodeError(!postalCodeValid ? translate("Postal Code is required.") : "");
         return postalCodeValid;
     };
@@ -976,9 +969,9 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             return paymentMethodValid;
         }
 
-        if (useTokenExGateway && (paymentMethodDto?.isPaymentProfile || paymentMethodDto?.isCreditCard)) {
+        if (useTokenExGateway && ((isPaymentProfile && !bypassCvvForSavedCards) || isCreditCard)) {
             tokenExIframe?.validate();
-        } else if (useECheckTokenExGateway && paymentMethodDto?.isECheck) {
+        } else if (useECheckTokenExGateway && isECheck) {
             tokenExAccountNumberIframe?.validate();
         }
 
@@ -987,13 +980,13 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             if (!isFormValidForPaymetricPayment) {
                 return false;
             }
-            if (paymentMethodDto?.isCreditCard && paymetricIframe) {
+            if (isCreditCard && paymetricIframe) {
                 paymetricIframe.validate({
                     onValidate: (success: boolean) => {
                         handlePaymetricValidateSuccess(success);
                     },
                 });
-            } else if (paymentMethodDto?.isPaymentProfile) {
+            } else if (isPaymentProfile) {
                 return true;
             }
         }
@@ -1077,9 +1070,9 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             return false;
         }
 
-        if (useTokenExGateway && (paymentMethodDto?.isPaymentProfile || paymentMethodDto?.isCreditCard) && !isPayPal) {
+        if (useTokenExGateway && ((isPaymentProfile && !bypassCvvForSavedCards) || isCreditCard) && !isPayPal) {
             tokenExIframe?.tokenize();
-        } else if (useECheckTokenExGateway && !isPayPal && paymentMethodDto?.isECheck) {
+        } else if (useECheckTokenExGateway && !isPayPal && isECheck) {
             tokenExAccountNumberIframe?.tokenize();
         } else {
             placeOrder({
@@ -1200,14 +1193,13 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                                             </option>
                                         ))}
                                     </Select>
-                                    {paymentMethodDto?.isPaymentProfile &&
-                                        !paymentMethodDto.isPaymentProfileExpired && (
-                                            <PaymentProfileBillingAddress
-                                                address={paymentMethodDto.billingAddress}
-                                                extendedStyles={styles.paymentProfileBillingAddress}
-                                            />
-                                        )}
-                                    {paymentMethodDto?.isPaymentProfile && paymentMethodDto.isPaymentProfileExpired && (
+                                    {isPaymentProfile && !isPaymentProfileExpired && (
+                                        <PaymentProfileBillingAddress
+                                            address={paymentMethodDto!.billingAddress}
+                                            extendedStyles={styles.paymentProfileBillingAddress}
+                                        />
+                                    )}
+                                    {isPaymentProfile && isPaymentProfileExpired && (
                                         <StyledWrapper {...styles.paymentProfileExpiredErrorWrapper}>
                                             <Typography {...styles.paymentProfileExpiredErrorText}>
                                                 {siteMessage("Checkout_PaymentProfileExpired")}
@@ -1265,7 +1257,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                             </GridItem>
                         )}
                         {cart.showPoNumber && enableVat && <GridItem {...styles.emptyGridItem}></GridItem>}
-                        {paymentMethodDto?.isPaymentProfile && !paymentMethodDto.isPaymentProfileExpired && (
+                        {isPaymentProfile && !isPaymentProfileExpired && !bypassCvvForSavedCards && (
                             <GridItem width={6}>
                                 <SavedPaymentProfileEntry
                                     iframe={
@@ -1279,7 +1271,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                                 />
                             </GridItem>
                         )}
-                        {cart.showCreditCard && paymentMethodDto?.isCreditCard && (
+                        {cart.showCreditCard && isCreditCard && (
                             <GridItem {...styles.creditCardDetailsGridItem}>
                                 <CreditCardDetailsEntry
                                     canSaveCard={paymentOptions.canStorePaymentProfile}
@@ -1321,7 +1313,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                                 />
                             </GridItem>
                         )}
-                        {cart.showECheck && paymentMethodDto?.isECheck && (
+                        {cart.showECheck && isECheck && (
                             <GridItem {...styles.eCheckDetailsGridItem}>
                                 <ECheckDetailsEntry
                                     iframe={useECheckTokenExGateway ? "TokenEx" : undefined}
@@ -1340,8 +1332,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                                 />
                             </GridItem>
                         )}
-                        {((cart.showECheck && paymentMethodDto?.isECheck) ||
-                            (cart.showCreditCard && paymentMethodDto?.isCreditCard)) && (
+                        {((cart.showECheck && isECheck) || (cart.showCreditCard && isCreditCard)) && (
                             <GridItem {...styles.creditCardAddressGridItem}>
                                 <CreditCardBillingAddressEntry
                                     useBillTo={useBillingAddress}
