@@ -366,6 +366,17 @@
         }
     },
     {
+        "Name":  "Microsoft.IdentityModel.Protocol.Extensions",
+        "Value":  {
+                      "PackageName":  "Microsoft.IdentityModel.Protocol.Extensions",
+                      "PackageVersion":  "1.0.2.206221351",
+                      "PackageFramework":  null,
+                      "Libraries":  {
+                                        "Microsoft.IdentityModel.Protocol.Extensions":  "1.0.0.0"
+                                    }
+                  }
+    },
+    {
         "Name": "Microsoft.Owin",
         "Value": {
             "PackageName": "Microsoft.Owin",
@@ -398,6 +409,28 @@
             }
         }
     },
+	    {
+        "Name":  "Microsoft.Owin.Security.Facebook",
+        "Value":  {
+                      "PackageName":  "Microsoft.Owin.Security.Facebook",
+                      "PackageVersion":  "3.1.0",
+                      "PackageFramework":  null,
+                      "Libraries":  {
+                                        "Microsoft.Owin.Security.Facebook":  "3.1.0.0"
+                                    }
+                  }
+    },
+    {
+        "Name":  "Microsoft.Owin.Security.Google",
+        "Value":  {
+                      "PackageName":  "Microsoft.Owin.Security.Google",
+                      "PackageVersion":  "4.2.0",
+                      "PackageFramework":  null,
+                      "Libraries":  {
+                                        "Microsoft.Owin.Security.Google":  "4.2.0"
+                                    }
+                  }
+    },
     {
         "Name": "Microsoft.Owin.Security.OAuth",
         "Value": {
@@ -408,6 +441,17 @@
                 "Microsoft.Owin.Security.OAuth": "3.1.0.0"
             }
         }
+    },
+    {
+        "Name":  "Microsoft.Owin.Security.OpenIdConnect",
+        "Value":  {
+                      "PackageName":  "Microsoft.Owin.Security.OpenIdConnect",
+                      "PackageVersion":  "3.1.0",
+                      "PackageFramework":  null,
+                      "Libraries":  {
+                                        "Microsoft.Owin.Security.OpenIdConnect":  "3.1.0.0"
+                                    }
+                  }
     },
     {
         "Name": "Microsoft.Owin.Security.WsFederation",
