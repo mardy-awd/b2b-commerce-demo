@@ -7,6 +7,7 @@ import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import Modal, { ModalPresentationProps } from "@insite/mobius/Modal";
 import TextField from "@insite/mobius/TextField";
 import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
+import AxLinkList from "@insite/shell/Components/Icons/AxiomIcon/AxLinkList";
 import { getWidgetDefinition, getWidgetDefinitions } from "@insite/shell/DefinitionLoader";
 import { LoadedWidgetDefinition } from "@insite/shell/DefinitionTypes";
 import { setupWidgetModel } from "@insite/shell/Services/WidgetCreation";
@@ -226,7 +227,14 @@ class AddWidgetModal extends React.Component<Props, State> {
                                                     onClick={() => this.addWidget(widgetDefinition)}
                                                     data-test-selector={`addWidgetModal_${widgetDefinition.displayName}`}
                                                 >
-                                                    <AxiomIcon src={provideFallback(widgetDefinition.icon)} size={20} />
+                                                    {widgetDefinition.icon === "ax-link-list" ? (
+                                                        <AxLinkList />
+                                                    ) : (
+                                                        <AxiomIcon
+                                                            src={provideFallback(widgetDefinition.icon)}
+                                                            size={20}
+                                                        />
+                                                    )}
                                                     {widgetDefinition.displayName}
                                                 </WidgetListItemStyle>
                                             ))}

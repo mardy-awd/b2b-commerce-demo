@@ -2,7 +2,7 @@ import { createTypedReducerWithImmer } from "@insite/client-framework/Common/Cre
 import { GetVmiBinsApiParameter } from "@insite/client-framework/Services/VmiBinsService";
 import { setDataViewLoaded, setDataViewLoading } from "@insite/client-framework/Store/Data/DataState";
 import { VmiBinsState } from "@insite/client-framework/Store/Data/VmiBins/VmiBinsState";
-import { VmiBinCollectionModel } from "@insite/client-framework/Types/ApiModels";
+import { VmiBinCollectionModel, VmiBinModel } from "@insite/client-framework/Types/ApiModels";
 import { Draft } from "immer";
 
 const initialState: VmiBinsState = {
@@ -32,6 +32,25 @@ const reducer = {
 
     "Data/VmiBins/Reset": () => {
         return initialState;
+    },
+
+    "Data/VmiBins/BeginLoadVmiBin": (draft: Draft<VmiBinsState>, action: { id: string }) => {
+        draft.isLoading[action.id] = true;
+    },
+
+    "Data/VmiBins/CompleteLoadVmiBin": (draft: Draft<VmiBinsState>, action: { model: VmiBinModel }) => {
+        delete draft.isLoading[action.model.id];
+        draft.byId[action.model.id] = action.model;
+        if (draft.errorStatusCodeById) {
+            delete draft.errorStatusCodeById[action.model.id];
+        }
+    },
+
+    "Data/VmiBins/FailedToLoadVmiBin": (draft: Draft<VmiBinsState>, action: { id: string; status: number }) => {
+        delete draft.isLoading[action.id];
+        if (draft.errorStatusCodeById) {
+            draft.errorStatusCodeById[action.id] = action.status;
+        }
     },
 };
 

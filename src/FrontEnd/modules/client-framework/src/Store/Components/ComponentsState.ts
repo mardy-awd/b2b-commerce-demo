@@ -12,6 +12,7 @@ import ProductInfoListsState from "@insite/client-framework/Store/Components/Pro
 import ProductSelectorState from "@insite/client-framework/Store/Components/ProductSelector/ProductSelectorState";
 import ReCaptchaState from "@insite/client-framework/Store/Components/ReCaptcha/ReCaptchaState";
 import ShareListModalState from "@insite/client-framework/Store/Components/ShareListModal/ShareListModalState";
+import VmiBinsImportModalState from "@insite/client-framework/Store/Components/VmiBinsImportModal/VmiBinsImportModalState";
 
 export default interface ComponentsState {
     readonly addressDrawer: AddressDrawerState;
@@ -28,4 +29,5 @@ export default interface ComponentsState {
     readonly reCaptcha: ReCaptchaState;
     readonly shareListModal: ShareListModalState;
     readonly addressErrorModal: AddressErrorModalState;
+    readonly vmiBinsImportModal: VmiBinsImportModalState;
 }

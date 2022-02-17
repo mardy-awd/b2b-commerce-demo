@@ -88,7 +88,7 @@
                                        ng-click="vm.toggleSelected(location)" />
                             </span>
                         </td>
-                        <td class="col-name-value"><a id="tst_vmiLocationDetailsView_link_{{location.id}}" ng-href="{{::vm.vmiLocationDetailsUrl}}?locationId={{::location.id}}">{{ location.name }}</a></td>
+                        <td class="col-name-value"><a id="tst_vmiLocationDetailsView_link_{{location.id}}" ng-href="{{::vm.vmiLocationDetailsUrl}}?id={{::location.id}}">{{ location.name }}</a></td>
                         <td class="col-shipto" ng-bind="location.customerLabel"></td>
                         <td class="col-edit"><a ng-click="vm.openEditPopup(location)">[% translate 'Edit' %]</a></td>
                     </tr>

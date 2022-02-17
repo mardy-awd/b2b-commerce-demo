@@ -24,6 +24,7 @@ import QuotesReducer from "@insite/client-framework/Store/Data/Quotes/QuotesRedu
 import RequisitionsReducer from "@insite/client-framework/Store/Data/Requisitions/RequisitionsReducer";
 import ShipTosReducer from "@insite/client-framework/Store/Data/ShipTos/ShipTosReducer";
 import VmiBinsReducer from "@insite/client-framework/Store/Data/VmiBins/VmiBinsReducer";
+import VmiCountsReducer from "@insite/client-framework/Store/Data/VmiCounts/VmiCountsReducer";
 import VmiLocationsReducer from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsReducer";
 import WarehousesReducer from "@insite/client-framework/Store/Data/Warehouses/WarehousesReducer";
 import WishListLinesReducer from "@insite/client-framework/Store/Data/WishListLines/WishListLinesReducer";
@@ -57,6 +58,7 @@ const dataReducers = {
     requisitions: RequisitionsReducer,
     shipTos: ShipTosReducer,
     vmiBins: VmiBinsReducer,
+    vmiCounts: VmiCountsReducer,
     vmiLocations: VmiLocationsReducer,
     warehouses: WarehousesReducer,
     wishLists: WishListsReducer,

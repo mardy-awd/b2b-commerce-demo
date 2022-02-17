@@ -1,7 +1,7 @@
 import { addPagesFromContext, addWidgetsFromContext } from "@insite/client-framework/Components/ContentItemStore";
 
 const widgets = IS_PRODUCTION
-    ? require.context("../../content-library/src/Widgets", true, /(Header|Basic|Common|Footer)\/.+?\.tsx$/)
+    ? require.context("../../content-library/src/Widgets", true, /(Header|Basic|Common|Footer|SignIn)\/.+?\.tsx$/)
     : require.context("../../content-library/src/Widgets", true, /\/.+?\.tsx$/);
 const onHotWidgetReplace = addWidgetsFromContext(widgets);
 

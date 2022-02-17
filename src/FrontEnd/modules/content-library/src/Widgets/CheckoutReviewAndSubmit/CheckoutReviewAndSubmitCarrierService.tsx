@@ -177,7 +177,7 @@ const CheckoutReviewAndSubmitCarrierService: FC<Props> = ({
                                     {...styles.carrierSelect}
                                     value={selectedCarrier?.id || ""}
                                     onChange={carrierChangeHandler}
-                                    data-test-selector="checkoutReviewAndSubmitCarrierSelect"
+                                    data-test-selector="checkoutReviewAndSubmit_carrierSelect"
                                 >
                                     {cart.carriers!.map(c => {
                                         const id = c.id!.toString();
@@ -195,7 +195,7 @@ const CheckoutReviewAndSubmitCarrierService: FC<Props> = ({
                                     {...styles.serviceSelect}
                                     value={selectedShipVia?.id || ""}
                                     onChange={shipViaChangeHandler}
-                                    data-test-selector="checkoutReviewAndSubmitShippingServiceSelect"
+                                    data-test-selector="checkoutReviewAndSubmit_shippingServiceSelect"
                                 >
                                     {selectedCarrier &&
                                         selectedCarrier.shipVias!.map(s => {

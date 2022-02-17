@@ -68,7 +68,7 @@
     <Rule Id="CS1591" Action="None" />
   </Rules>
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
-    <Rule Id="SA1000" Action="Warning" />
+    <Rule Id="SA1000" Action="None" />
     <Rule Id="SA1001" Action="Warning" />
     <Rule Id="SA1002" Action="Warning" />
     <Rule Id="SA1003" Action="Warning" />
@@ -77,7 +77,7 @@
     <Rule Id="SA1006" Action="Warning" />
     <Rule Id="SA1007" Action="Warning" />
     <Rule Id="SA1008" Action="None" />
-    <Rule Id="SA1009" Action="Warning" />
+    <Rule Id="SA1009" Action="None" />
     <Rule Id="SA1010" Action="Warning" />
     <Rule Id="SA1011" Action="Warning" />
     <Rule Id="SA1012" Action="Warning" />
@@ -107,14 +107,14 @@
     <Rule Id="SA1107" Action="Warning" />
     <Rule Id="SA1108" Action="None" />
     <Rule Id="SA1110" Action="Warning" />
-    <Rule Id="SA1111" Action="Warning" />
+    <Rule Id="SA1111" Action="None" />
     <Rule Id="SA1112" Action="Warning" />
     <Rule Id="SA1113" Action="Warning" />
     <Rule Id="SA1114" Action="Warning" />
     <Rule Id="SA1115" Action="Warning" />
     <Rule Id="SA1116" Action="Warning" />
     <Rule Id="SA1117" Action="Warning" />
-    <Rule Id="SA1118" Action="Warning" />
+    <Rule Id="SA1118" Action="None" />
     <Rule Id="SA1119" Action="Warning" />
     <Rule Id="SA1120" Action="Warning" />
     <Rule Id="SA1121" Action="Warning" />
@@ -122,14 +122,15 @@
     <Rule Id="SA1123" Action="Warning" />
     <Rule Id="SA1124" Action="Warning" />
     <Rule Id="SA1125" Action="Warning" />
-    <Rule Id="SA1127" Action="Warning" />
-    <Rule Id="SA1128" Action="Warning" />
+    <Rule Id="SA1127" Action="None" />
+    <Rule Id="SA1128" Action="None" />
     <Rule Id="SA1129" Action="Warning" />
     <Rule Id="SA1130" Action="Warning" />
     <Rule Id="SA1131" Action="Warning" />
     <Rule Id="SA1132" Action="Warning" />
     <Rule Id="SA1133" Action="Warning" />
     <Rule Id="SA1134" Action="Warning" />
+    <Rule Id="SA1137" Action="None" />
     <Rule Id="SA1200" Action="Warning" />
     <Rule Id="SA1201" Action="None" />
     <Rule Id="SA1202" Action="None" />
@@ -171,9 +172,9 @@
     <Rule Id="SA1410" Action="Warning" />
     <Rule Id="SA1411" Action="Warning" />
     <Rule Id="SA1413" Action="None" />
-    <Rule Id="SA1500" Action="Warning" />
-    <Rule Id="SA1501" Action="Warning" />
-    <Rule Id="SA1502" Action="Warning" />
+    <Rule Id="SA1500" Action="None" />
+    <Rule Id="SA1501" Action="None" />
+    <Rule Id="SA1502" Action="None" />
     <Rule Id="SA1503" Action="Warning" />
     <Rule Id="SA1504" Action="None" />
     <Rule Id="SA1505" Action="Warning" />

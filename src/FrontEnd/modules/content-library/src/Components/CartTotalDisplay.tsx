@@ -206,12 +206,12 @@ const CartTotalDisplay = ({
                 orderPromotions.map(promotion => (
                     <Fragment key={promotion.id}>
                         <GridItem {...styles.labelGridItem}>
-                            <Typography {...styles.promotionLabel} data-test-selector="cartTotalOrderPromotionName">
+                            <Typography {...styles.promotionLabel} data-test-selector="cartTotal_orderPromotionName">
                                 {`${translate("Promotion")}: ${promotion.name}`}
                             </Typography>
                         </GridItem>
                         <GridItem {...styles.valueGridItem}>
-                            <Typography {...styles.promotionValue} data-test-selector="cartTotalOrderPromotionValue">
+                            <Typography {...styles.promotionValue} data-test-selector="cartTotal_orderPromotionValue">
                                 {`-${promotion.amountDisplay}`}
                             </Typography>
                         </GridItem>
@@ -225,7 +225,7 @@ const CartTotalDisplay = ({
                     <GridItem {...styles.valueGridItem}>
                         <Typography
                             {...styles.shippingAndHandlingValue}
-                            data-test-selector="cartTotalShippingAndHandlingAmount"
+                            data-test-selector="cartTotal_shippingAndHandlingAmount"
                         >
                             {cart.shippingAndHandlingDisplay}
                         </Typography>
@@ -241,7 +241,10 @@ const CartTotalDisplay = ({
                             </Typography>
                         </GridItem>
                         <GridItem {...styles.valueGridItem}>
-                            <Typography {...styles.promotionValue} data-test-selector="cartTotalShippingPromotionValue">
+                            <Typography
+                                {...styles.promotionValue}
+                                data-test-selector="cartTotal_shippingPromotionValue"
+                            >
                                 {`-${promotion.amountDisplay}`}
                             </Typography>
                         </GridItem>
@@ -279,7 +282,7 @@ const CartTotalDisplay = ({
                         <Typography {...styles.totalLabel}>{translate("Total")}</Typography>
                     </GridItem>
                     <GridItem {...styles.valueGridItem}>
-                        <Typography {...styles.totalValue} data-test-selector="cartTotalOrderGrandTotalDisplay">
+                        <Typography {...styles.totalValue} data-test-selector="cartTotal_orderGrandTotalDisplay">
                             {cart.orderGrandTotalDisplay}
                         </Typography>
                     </GridItem>

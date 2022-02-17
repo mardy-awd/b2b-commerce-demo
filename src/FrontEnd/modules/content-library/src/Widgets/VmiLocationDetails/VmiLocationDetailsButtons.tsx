@@ -14,7 +14,8 @@ import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import TwoButtonModal, { TwoButtonModalStyles } from "@insite/content-library/Components/TwoButtonModal";
-import VmiLocationDetailsAddProductModal from "@insite/content-library/Widgets/VmiLocationDetails/VmiLocationDetailsAddProductModal";
+import VmiAddProductModal from "@insite/content-library/Components/VmiAddProductModal";
+import VmiBinsImportModal from "@insite/content-library/Components/VmiBinsImportModal";
 import AddVmiLocationModal from "@insite/content-library/Widgets/VmiLocations/AddVmiLocationModal";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import Clickable from "@insite/mobius/Clickable";
@@ -189,11 +190,12 @@ const VmiLocationDetailsButtons = ({
                 onCancel={handleCancelModalButtonClick}
                 onSubmit={handleDeleteModalButtonClick}
             ></TwoButtonModal>
-            <VmiLocationDetailsAddProductModal
+            <VmiAddProductModal
                 isOpen={addProductModalOpen}
                 onSuccess={onSuccessAddProductModal}
                 onClose={onCloseAddProductModal}
-            ></VmiLocationDetailsAddProductModal>
+            />
+            <VmiBinsImportModal />
             <AddVmiLocationModal
                 isOpen={isAddLocationModalOpen}
                 editLocationId={locationId}

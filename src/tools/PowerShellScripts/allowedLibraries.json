@@ -11,6 +11,28 @@
         }
     },
     {
+        "Name": "AWSSDK.Core",
+        "Value": {
+            "PackageName": "AWSSDK.Core",
+            "PackageVersion": "3.5.1.57",
+            "PackageFramework": null,
+            "Libraries": {
+                "AWSSDK.Core": "3.3.0.0"
+            }
+        }
+    },
+    {
+        "Name": "AWSSDK.S3",
+        "Value": {
+            "PackageName": "AWSSDK.S3",
+            "PackageVersion": "3.5.7.4",
+            "PackageFramework": null,
+            "Libraries": {
+                "AWSSDK.S3": "3.3.0.0"
+            }
+        }
+    },
+    {
         "Name": "dotnet SDK",
         "Value": {
             "PackageName": "dotnet SDK",
@@ -150,6 +172,8 @@
                 "Insite.Public.WebFramework": null,
                 "Insite.PunchOut": null,
                 "Insite.QuickOrder": null,
+                "Insite.RatingService.FedEx":  null,
+                "Insite.RatingService.Ups":  null,
                 "Insite.RealTimeInventory": null,
                 "Insite.RealTimePricing": null,
                 "Insite.Requisition": null,

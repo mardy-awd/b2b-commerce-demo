@@ -136,6 +136,7 @@ const PaginationStyle = styled.div<InjectableCss>`
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    flex-wrap: wrap;
     ${injectCss}
 `;
 

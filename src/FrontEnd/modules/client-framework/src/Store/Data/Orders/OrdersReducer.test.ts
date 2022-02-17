@@ -203,6 +203,8 @@ function returnOrderModel(): OrderModel {
         taxAmountDisplay: "test",
         terms: "test",
         totalTaxDisplay: "test",
+        vmiLocationId: "test",
+        vmiLocationName: "test",
         webOrderNumber: "testWebOrder",
     };
 }

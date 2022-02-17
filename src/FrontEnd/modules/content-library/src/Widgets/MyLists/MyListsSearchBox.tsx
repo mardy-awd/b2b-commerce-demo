@@ -66,7 +66,7 @@ class MyListsSearchBox extends React.Component<Props, MyListsSearchBoxState> {
     render() {
         return (
             <TextField
-                data-test-selector="myListsSearchByName"
+                data-test-selector="myLists_searchByName"
                 placeholder={translate("Search lists by name")}
                 {...styles.search}
                 value={this.state.query}

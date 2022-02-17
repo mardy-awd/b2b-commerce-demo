@@ -1,4 +1,6 @@
 Antlr3.Runtime
+AWSSDK.Core
+AWSSDK.S3
 BouncyCastle.Crypto
 Elasticsearch.Net
 EntityFramework

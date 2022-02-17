@@ -39,6 +39,9 @@ import SignInState from "@insite/client-framework/Store/Pages/SignIn/SignInState
 import StaticListState from "@insite/client-framework/Store/Pages/StaticList/StaticListState";
 import UserListState from "@insite/client-framework/Store/Pages/UserList/UserListState";
 import UserSetupState from "@insite/client-framework/Store/Pages/UserSetup/UserSetupState";
+import VmiBinDetailsState from "@insite/client-framework/Store/Pages/VmiBinDetails/VmiBinDetailsState";
+import VmiBinsState from "@insite/client-framework/Store/Pages/VmiBins/VmiBinsState";
+import VmiDashboardState from "@insite/client-framework/Store/Pages/VmiDashboard/VmiDashboardState";
 import VmiLocationDetailsState from "@insite/client-framework/Store/Pages/VmiLocationDetails/VmiLocationDetailsState";
 import VmiLocationsState from "@insite/client-framework/Store/Pages/VmiLocations/VmiLocationsState";
 import VmiReportingState from "@insite/client-framework/Store/Pages/VmiReporting/VmiReportingState";
@@ -86,6 +89,9 @@ export default interface PagesState {
     readonly staticList: StaticListState;
     readonly userList: UserListState;
     readonly userSetup: UserSetupState;
+    readonly vmiBinDetails: VmiBinDetailsState;
+    readonly vmiBins: VmiBinsState;
+    readonly vmiDashboard: VmiDashboardState;
     readonly vmiLocationDetails: VmiLocationDetailsState;
     readonly vmiLocations: VmiLocationsState;
     readonly vmiReporting: VmiReportingState;

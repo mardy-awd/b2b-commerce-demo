@@ -2,7 +2,6 @@ import toggleFiltersOpen from "@insite/client-framework/Store/Pages/VmiReporting
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { VmiReportingPageContext } from "@insite/content-library/Pages/VmiReportingPage";
 import Clickable from "@insite/mobius/Clickable";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
@@ -75,7 +74,7 @@ const widgetModule: WidgetModule = {
     component: connect(null, mapDispatchToProps)(VmiReportingHeader),
     definition: {
         group: "VMI Reporting",
-        allowedContexts: [VmiReportingPageContext],
+        allowedContexts: ["VmiReportingPage"],
     },
 };
 

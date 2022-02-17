@@ -28,8 +28,8 @@ export interface Props {
     onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
-const AxiomIcon = ({ src, size, color, css, onClick, rotation }: Props) => (
-    <IconContainer color={color} css={css} size={size} rotation={rotation} onClick={onClick}>
+const AxiomIcon = ({ src, size, color, css, onClick, rotation, ...otherProps }: Props) => (
+    <IconContainer color={color} css={css} size={size} rotation={rotation} onClick={onClick} {...otherProps}>
         <i className={`fa-light fa-${src}`}></i>
     </IconContainer>
 );

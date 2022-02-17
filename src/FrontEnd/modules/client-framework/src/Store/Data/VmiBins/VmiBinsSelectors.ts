@@ -11,6 +11,13 @@ export function getVmiBinsDataView(state: ApplicationState, getVmiBinsParameter:
     return getDataView(state.data.vmiBins, getVmiBinsParameter);
 }
 
+export const VmiBinStateContext = createContext<ReturnType<typeof getVmiBinState>>({
+    value: undefined,
+    isLoading: false,
+    errorStatusCode: undefined,
+    id: undefined,
+});
+
 export const VmiBinsDataViewContext = createContext<ReturnType<typeof getVmiBinsDataView>>({
     value: undefined,
     isLoading: false,

@@ -66,7 +66,7 @@ COPY ./modules/mobius/ ./modules/mobius
 RUN ["npm", "run", "test:mobius"]
 
 # Linter configuration change occasionally.
-COPY ./.eslintignore ./.eslintrc.js ./.eslintrc-blueprint.js ./.stylelintrc ./.prettierrc  ./
+COPY ./.eslintignore ./.eslintrc.js ./.eslintrc-blueprint.js ./.stylelintrc ./.prettierrc ./.prettierignore  ./
 
 # These files will change frequently, so useful caching is limited to different build arguments.
 COPY ./modules/ ./modules/
@@ -80,14 +80,14 @@ RUN ["npm", "run", "stylelint"]
 # Copy this to get creators and other static files into the base build image.
 COPY ./wwwroot/ ./wwwroot/
 COPY ./config/spire_routes.json ./config/
-# We need these files available on build for the blueprints/Dockerfile
+# We need these files available on build for the modules/Dockerfile
 COPY /startProduction.package.json /startProduction.js /start.js ./
 
-# This stage has to match the build stage in modules/blueprints/Dockerfile
+# This stage has to match the build stage in modules/Dockerfile
 FROM $BUILD_BASE AS build
 
 ##########################################################################################
-# Most things below this are currently copied (and changed slightly) into ./modules/blueprints/Dockerfile
+# Most things below this are currently copied (and changed slightly) into ./modules/Dockerfile
 # you will probably need to make any changes there as well
 ##########################################################################################
 
@@ -101,15 +101,18 @@ RUN npm run build || exit 1
 ARG BLUEPRINT_NAME=content-library
 RUN mkdir -p /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/AppData/PageCreators \
   && mkdir -p /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/AppData/PageTemplates \
-  && mkdir -p /app/wwwroot/AppData/PageCreators/${BLUEPRINT_NAME} \
+  && mkdir -p /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/staticContent
+RUN mkdir -p /app/wwwroot/AppData/PageCreators/${BLUEPRINT_NAME} \
   && mkdir -p /app/wwwroot/AppData/PageTemplates/${BLUEPRINT_NAME} \
-  && cp -a /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/AppData/PageCreators/. /app/wwwroot/AppData/PageCreators/${BLUEPRINT_NAME}/ \
-  && cp -a /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/AppData/PageTemplates/. /app/wwwroot/AppData/PageTemplates/${BLUEPRINT_NAME}/
+  && mkdir -p /app/wwwroot/staticContent
+RUN cp -a /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/AppData/PageCreators/. /app/wwwroot/AppData/PageCreators/${BLUEPRINT_NAME}/ \
+  && cp -a /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/AppData/PageTemplates/. /app/wwwroot/AppData/PageTemplates/${BLUEPRINT_NAME}/ \
+  && cp -a /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/staticContent/. /app/wwwroot/staticContent/
 
 FROM $NODE_BASE_IMAGE AS runtime-base
 # This is just here for automation so we can push our runtime-base image to the registry as it evolves
 
-# This stage has to match the runtime stage in modules/blueprints/Dockerfile
+# This stage has to match the runtime stage in modules/Dockerfile
 FROM $RUNTIME_BASE AS runtime
 
 WORKDIR /app

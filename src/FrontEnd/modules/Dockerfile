@@ -14,10 +14,13 @@ RUN npm run build || exit 1
 ARG BLUEPRINT_NAME=content-library
 RUN mkdir -p /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/AppData/PageCreators \
   && mkdir -p /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/AppData/PageTemplates \
-  && mkdir -p /app/wwwroot/AppData/PageCreators/${BLUEPRINT_NAME} \
+  && mkdir -p /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/staticContent
+RUN mkdir -p /app/wwwroot/AppData/PageCreators/${BLUEPRINT_NAME} \
   && mkdir -p /app/wwwroot/AppData/PageTemplates/${BLUEPRINT_NAME} \
-  && cp -a /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/AppData/PageCreators/. /app/wwwroot/AppData/PageCreators/${BLUEPRINT_NAME}/ \
-  && cp -a /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/AppData/PageTemplates/. /app/wwwroot/AppData/PageTemplates/${BLUEPRINT_NAME}/
+  && mkdir -p /app/wwwroot/staticContent
+RUN cp -a /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/AppData/PageCreators/. /app/wwwroot/AppData/PageCreators/${BLUEPRINT_NAME}/ \
+  && cp -a /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/AppData/PageTemplates/. /app/wwwroot/AppData/PageTemplates/${BLUEPRINT_NAME}/ \
+  && cp -a /app/modules/blueprints/${BLUEPRINT_NAME}/wwwroot/staticContent/. /app/wwwroot/staticContent/
 
 FROM registry.cloud.insitehq.net/spire/runtime-base:${COMMERCE_VERSION} AS runtime
 

@@ -158,7 +158,7 @@
 
         // utilities
         protected getVmiLocationId(): System.Guid {
-            return this.queryString.get("locationId");
+            return this.queryString.get("id");
         }
 
         openAddProductPopup(): void {

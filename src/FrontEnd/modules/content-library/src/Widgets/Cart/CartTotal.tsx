@@ -269,7 +269,7 @@ const CartTotal: FC<Props> = ({
                         {...styles.checkoutButton}
                         onClick={checkoutHandler}
                         disabled={isCartCheckoutDisabled || hasOnlyQuoteRequiredProducts}
-                        data-test-selector="cartTotal_Checkout"
+                        data-test-selector="cartTotal_checkout"
                     >
                         {cart?.requiresApproval ? translate("Checkout for Approval") : translate("Checkout")}
                     </Button>
@@ -299,7 +299,7 @@ const CartTotal: FC<Props> = ({
                     {...styles.submitQuoteButton}
                     disabled={isSubmitForQuoteButtonDisabled}
                     onClick={submitForQuoteClickHandler}
-                    data-test-selector="cartTotal_SubmitQuote"
+                    data-test-selector="cartTotal_submitQuote"
                 >
                     {submitForQuoteLabel}
                 </Button>
@@ -309,7 +309,7 @@ const CartTotal: FC<Props> = ({
                 <Button
                     {...styles.submitRequisitionButton}
                     onClick={submitRequisitionClickHandler}
-                    data-test-selector="cartTotal_SubmitRequisition"
+                    data-test-selector="cartTotal_submitRequisition"
                 >
                     {translate("Submit Requisition")}
                 </Button>

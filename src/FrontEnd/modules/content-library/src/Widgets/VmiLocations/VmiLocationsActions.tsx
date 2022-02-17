@@ -34,7 +34,7 @@ const mapDispatchToProps = {
 
 type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & WidgetProps;
 
-export interface OrderHistoryHeaderStyles {
+export interface VmiLocationsActionsStyles {
     container?: GridContainerProps;
     gridItem?: GridItemProps;
     removeLink?: LinkPresentationProps;
@@ -42,7 +42,7 @@ export interface OrderHistoryHeaderStyles {
     twoButtonModalStyles?: TwoButtonModalStyles;
 }
 
-export const headerStyles: OrderHistoryHeaderStyles = {
+export const vmiLocationsActionsStyles: VmiLocationsActionsStyles = {
     container: {
         gap: 8,
         css: css`
@@ -63,7 +63,7 @@ export const headerStyles: OrderHistoryHeaderStyles = {
         },
     },
 };
-const styles = headerStyles;
+const styles = vmiLocationsActionsStyles;
 
 const VmiLocationsActions = ({ selectedIds, removeVmiLocations, isRemoving, isVmiAdmin }: Props) => {
     const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);

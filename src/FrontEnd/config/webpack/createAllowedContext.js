@@ -3,30 +3,21 @@ const appRoot = require("app-root-path");
 
 console.log("Creating AllowContext type in tsx file");
 
-const namedPageContextExportRegex = /export const [a-zA-Z]*PageContext = "[a-zA-Z]*"/;
-const contextStrRegex = /"[a-zA-Z]*"/;
-
 const writeNewFile = blueprint => {
     let contents = `// this file is auto generated and should not be modified
-export type AllowedContexts =
-    | "Layout"
-    | "Header"
-    | "Footer"`;
+export type AllowedContexts =`;
 
     const pages = fs.readdirSync(`${appRoot}/modules/content-library/src/Pages/`);
-
-    for (let i = 0; i < pages.length; i++) {
-        const fileContents = fs.readFileSync(`${appRoot}/modules/content-library/src/Pages/${pages[i]}`, "utf-8");
-
-        const pageContext = fileContents.match(namedPageContextExportRegex);
-
-        if (pageContext && pageContext[0]) {
-            const strLiteral = pageContext[0].match(contextStrRegex);
-
-            contents += `
-    | ${strLiteral}`;
+    pages.forEach(page => {
+        if (page === "Page.tsx") {
+            return;
         }
-    }
+
+        const strLiteral = page.replace(".tsx", "");
+        contents += `
+    | "${strLiteral}"`;
+    });
+
     if (blueprint !== "content-library") {
         contents += `
     | string`;

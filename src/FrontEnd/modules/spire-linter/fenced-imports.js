@@ -23,8 +23,6 @@ const validClientImports = [
     "styled-components",
     "tiny-warning",
     "qs",
-    "url",
-    "whatwg-fetch",
     "xlsx",
     "ismobilejs",
     "jsdom",

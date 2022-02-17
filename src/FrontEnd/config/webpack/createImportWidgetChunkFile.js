@@ -6,7 +6,7 @@ console.log("Creating Widget Import Chunk File");
 let contents = `export default function importWidgetChunk(type: string) {
     switch (type) {\n`;
 
-const skippedDirectories = ["Common", "Basic", "Header", "Footer"];
+const skippedDirectories = ["Common", "Basic", "Header", "Footer", "SignIn"];
 
 const writeNewFile = () => {
     const directories = fs.readdirSync(`${appRoot}/modules/content-library/src/Widgets/`);

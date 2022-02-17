@@ -153,7 +153,7 @@ const BillingAddress = ({
 
     return (
         <>
-            <GridContainer {...styles.container}>
+            <GridContainer {...styles.container} data-test-selector="checkoutShipping_billingAddress">
                 <GridItem {...styles.headingGridItem}>
                     <Typography {...styles.headingText} as="h3">
                         {translate("Billing Address")}

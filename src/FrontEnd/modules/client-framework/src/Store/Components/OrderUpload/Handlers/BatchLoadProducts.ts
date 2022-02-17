@@ -9,6 +9,7 @@ import {
     OrderUploadRowError,
     UploadedItem,
 } from "@insite/client-framework/Store/Components/OrderUpload/OrderUploadState";
+import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { ProductDto, RealTimeInventoryModel } from "@insite/client-framework/Types/ApiModels";
 
 export const enum UploadError {
@@ -106,14 +107,29 @@ export const LoadRealTimeInventory: HandlerType = async ({ result: { apiResult }
 };
 
 export const ProcessProducts: HandlerType = props => {
-    const orderUploadState = props.getState().components.orderUpload;
+    const state = props.getState();
+    const currentPage = getCurrentPage(state);
+    const processState =
+        ["VmiBinsPage", "VmiLocationDetailsPage"].indexOf(currentPage.type) !== -1
+            ? state.components.vmiBinsImportModal
+            : state.components.orderUpload;
     const products = props.result.apiResult;
-    if (orderUploadState.uploadCancelled) {
+    if ("uploadCancelled" in processState && processState.uploadCancelled) {
         return false;
     }
 
     for (let i = 0; i < products.length; i++) {
-        const item = orderUploadState.uploadedItems[i];
+        const item =
+            "uploadedItems" in processState
+                ? processState.uploadedItems[i]
+                : "parsedItems" in processState
+                ? processState.parsedItems[i]
+                : null;
+
+        if (item === null) {
+            continue;
+        }
+
         const index = props.parameter.firstRowHeading ? i + 2 : i + 1;
         const product = products[i];
         if (product) {

@@ -1,0 +1,5 @@
+{
+    "name": "VMI Product Details",
+    "parentType": "VmiBinsPage",
+    "urlSegment": "VmiProductDetails"
+}

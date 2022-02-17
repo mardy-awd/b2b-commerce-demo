@@ -129,13 +129,13 @@
         protected deleteVmiBinCollectionFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
         }
 
-        addVmiBinCollection(vmiLocationId: System.Guid, vmiBin: VmiBinModel[]): ng.IPromise<VmiBinCollectionModel> {
+        addVmiBinCollection(vmiLocationId: System.Guid, vmiBins: VmiBinModel[]): ng.IPromise<VmiBinCollectionModel> {
             return this.httpWrapperService.executeHttpRequest(
                 this,
                 this.$http({
                     url: `${this.serviceUri.replace("{vmiLocationId}", vmiLocationId.toString())}/batch`,
                     method: "POST",
-                    data: vmiBin
+                    data: vmiBins
                 }),
                 this.addVmiBinCollectionCompleted,
                 this.addVmiBinCollectionFailed

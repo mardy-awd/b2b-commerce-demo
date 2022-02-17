@@ -26,6 +26,7 @@ import { QuotesState } from "@insite/client-framework/Store/Data/Quotes/QuotesSt
 import { RequisitionsState } from "@insite/client-framework/Store/Data/Requisitions/RequisitionsState";
 import { ShipTosState } from "@insite/client-framework/Store/Data/ShipTos/ShipTosState";
 import { VmiBinsState } from "@insite/client-framework/Store/Data/VmiBins/VmiBinsState";
+import { VmiCountsState } from "@insite/client-framework/Store/Data/VmiCounts/VmiCountsState";
 import { VmiLocationsState } from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsState";
 import { WarehousesState } from "@insite/client-framework/Store/Data/Warehouses/WarehousesState";
 import { WishListLinesState } from "@insite/client-framework/Store/Data/WishListLines/WishListLinesState";
@@ -80,6 +81,7 @@ export default interface DataState {
     readonly requisitions: RequisitionsState;
     readonly shipTos: ShipTosState;
     readonly vmiBins: VmiBinsState;
+    readonly vmiCounts: VmiCountsState;
     readonly vmiLocations: VmiLocationsState;
     readonly warehouses: WarehousesState;
     readonly wishLists: WishListsState;

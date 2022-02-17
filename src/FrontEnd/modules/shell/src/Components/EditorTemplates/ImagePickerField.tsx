@@ -35,7 +35,9 @@ export default class ImagePickerField extends React.Component<Props, State> {
 
                 finder.on("files:choose", (evt: any) => {
                     hideOverlay();
-                    this.updateFieldWithWidthAndHeight(evt.data.files.first().getUrl());
+                    const url = evt.data.files.first().getUrl();
+                    this.props.updateField(this.props.fieldDefinition.name, url);
+                    this.updateFieldWithWidthAndHeight(url);
                 });
 
                 finder.on("file:choose:resizedImage", (evt: any) => {

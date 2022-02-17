@@ -9,10 +9,15 @@ public partial class QuickPing : Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        this.RegisterAsyncTask(new PageAsyncTask(async () =>
-        {
-            var healthCheckManager = DependencyLocator.Current.GetInstance<IHealthCheckManager>();
-            this.HealthCheckResults = await healthCheckManager.CheckHealth();
-        }));
+        this.RegisterAsyncTask(
+            new PageAsyncTask(
+                async () =>
+                {
+                    var healthCheckManager =
+                        DependencyLocator.Current.GetInstance<IHealthCheckManager>();
+                    this.HealthCheckResults = await healthCheckManager.CheckHealth();
+                }
+            )
+        );
     }
 }

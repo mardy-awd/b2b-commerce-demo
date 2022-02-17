@@ -89,7 +89,7 @@
         },
         {
             "parentId": "ce6723ed-cf33-44d1-b4e8-b560a0ecfb35",
-            "type": "VmiLocationDetails/VmiLoationDetailsTitle",
+            "type": "VmiLocationDetails/VmiLocationDetailsTitle",
             "zone": "Content0",
             "isLayout": false,
             "id": "bc20408a-a765-44fe-98bc-3161bec90922",

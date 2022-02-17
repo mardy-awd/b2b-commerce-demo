@@ -12,6 +12,7 @@ import ProductInfoListsReducer from "@insite/client-framework/Store/Components/P
 import ProductSelectorReducer from "@insite/client-framework/Store/Components/ProductSelector/ProductSelectorReducer";
 import ReCaptchaReducer from "@insite/client-framework/Store/Components/ReCaptcha/ReCaptchaReducer";
 import ShareListModalReducer from "@insite/client-framework/Store/Components/ShareListModal/ShareListModalReducer";
+import VmiBinsImportModalReducer from "@insite/client-framework/Store/Components/VmiBinsImportModal/VmiBinsImportModalReducer";
 import { combineReducers } from "redux";
 
 const reducers = {
@@ -29,6 +30,7 @@ const reducers = {
     reCaptcha: ReCaptchaReducer,
     shareListModal: ShareListModalReducer,
     addressErrorModal: AddressErrorModalReducer,
+    vmiBinsImportModal: VmiBinsImportModalReducer,
 };
 
 export type ComponentsReducers = Readonly<typeof reducers>;

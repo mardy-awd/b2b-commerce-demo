@@ -3,7 +3,6 @@ import { PreparedMetadata } from "@insite/client-framework/Common/Utilities/setP
 import logger from "@insite/client-framework/Logger";
 import { RetrievePageResult } from "@insite/client-framework/Services/ContentService";
 import "isomorphic-fetch";
-import { URL } from "url";
 // 'isomorphic-fetch' makes node and client-side have a similar 'fetch', but causes an 'iconv-loader' warning...
 
 /**

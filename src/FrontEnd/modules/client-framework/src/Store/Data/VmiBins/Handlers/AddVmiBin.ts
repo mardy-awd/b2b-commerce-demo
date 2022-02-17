@@ -14,9 +14,11 @@ export const RequestDataFromApi: HandlerType = async props => {
 };
 
 export const DispatchResetVmiBins: HandlerType = props => {
-    props.dispatch({
-        type: "Data/VmiBins/Reset",
-    });
+    if (props.apiResult.successful) {
+        props.dispatch({
+            type: "Data/VmiBins/Reset",
+        });
+    }
 };
 
 export const chain = [PopulateApiParameter, RequestDataFromApi, DispatchResetVmiBins];

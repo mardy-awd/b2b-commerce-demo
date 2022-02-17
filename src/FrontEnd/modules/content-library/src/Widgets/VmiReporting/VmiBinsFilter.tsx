@@ -5,7 +5,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/VmiReportin
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { VmiReportingPageContext } from "@insite/content-library/Pages/VmiReportingPage";
 import SearchProductField from "@insite/content-library/Widgets/VmiReporting/SearchTextField";
 import Button, { ButtonProps } from "@insite/mobius/Button";
 import DatePicker, { DatePickerPresentationProps, DatePickerState } from "@insite/mobius/DatePicker";
@@ -351,7 +350,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "VMI Reporting",
         displayName: "Search Results Filter",
-        allowedContexts: [VmiReportingPageContext],
+        allowedContexts: ["VmiReportingPage"],
         fieldDefinitions: [
             {
                 name: fields.showProduct,

@@ -18,7 +18,6 @@ import * as React from "react";
 import { hydrate, render, Renderer } from "react-dom";
 import { Provider } from "react-redux";
 import { css } from "styled-components";
-import "whatwg-fetch";
 
 const pages = require.context("../../client-framework/src/Internal/Pages", true, /\.tsx$/);
 const onHotPageReplace = addPagesFromContext(pages);

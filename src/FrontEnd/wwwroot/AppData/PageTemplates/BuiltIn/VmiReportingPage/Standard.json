@@ -59,6 +59,47 @@
             "generalFields": {},
             "translatableFields": {},
             "contextualFields": {}
+        },
+        {
+            "parentId": "09900e2b-cdc3-40c1-955b-2769d94645ee",
+            "type": "VmiReporting/VmiBinsActions",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "408804cf-a651-4b6e-b286-e4b95ae119cb",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "09900e2b-cdc3-40c1-955b-2769d94645ee",
+            "type": "VmiReporting/VmiBinsTable",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "c5159162-5879-4afc-8f93-36dd0179a21d",
+            "generalFields": {
+                "showShortDescription": true,
+                "showErpNumber": true,
+                "showManufacturerItem": true,
+                "showCustomerName": true,
+                "showBinNumber": true,
+                "showMinimumQty": true,
+                "showMaximumQty": true,
+                "showPreviousCountDate": true,
+                "showPreviousCountQty": true,
+                "showLastOrderLineId": true
+            },
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "09900e2b-cdc3-40c1-955b-2769d94645ee",
+            "type": "VmiReporting/VmiBinsPagination",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "e004b55a-0f9c-4efc-837c-a6b5aa176397",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
         }
     ]
 }

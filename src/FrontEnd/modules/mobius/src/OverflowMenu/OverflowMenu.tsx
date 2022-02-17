@@ -8,7 +8,7 @@ import getProp from "@insite/mobius/utilities/getProp";
 import { StyledProp } from "@insite/mobius/utilities/InjectableCss";
 import injectCss from "@insite/mobius/utilities/injectCss";
 import MobiusStyledComponentProps from "@insite/mobius/utilities/MobiusStyledComponentProps";
-import omitSingle from "@insite/mobius/utilities/omitSingle";
+import omitMultiple from "@insite/mobius/utilities/omitMultiple";
 import uniqueId from "@insite/mobius/utilities/uniqueId";
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
 import * as React from "react";
@@ -160,7 +160,7 @@ class OverflowMenu extends React.Component<Props, State> {
         const popoverBodyProps: ContentBodyProps = {
             uid: controlsId,
             _width: 191,
-            ...omitSingle(otherProps, "cssOverrides"),
+            ...omitMultiple(otherProps, ["cssOverrides", "data-test-selector"]),
             css: applyStyledProp(["cssOverrides", "menu"], resolvedMergeCss),
         };
         const popoverTrigger = (

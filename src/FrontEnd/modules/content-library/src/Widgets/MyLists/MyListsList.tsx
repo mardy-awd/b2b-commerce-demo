@@ -154,7 +154,7 @@ class MyListsList extends React.Component<Props, State> {
         if (!this.props.wishLists.value || this.props.wishLists.isLoading) {
             return (
                 <StyledWrapper {...styles.centeringWrapper}>
-                    <LoadingSpinner {...styles.spinner} data-test-selector="myListsListSpinner"></LoadingSpinner>
+                    <LoadingSpinner {...styles.spinner} data-test-selector="myLists_spinner"></LoadingSpinner>
                 </StyledWrapper>
             );
         }
@@ -162,7 +162,7 @@ class MyListsList extends React.Component<Props, State> {
         if (this.props.wishLists.value.length === 0) {
             return (
                 <StyledWrapper {...styles.centeringWrapper}>
-                    <Typography {...styles.messageText} data-test-selector="tst_MyList_NoListsFound">
+                    <Typography {...styles.messageText} data-test-selector="myLists_noListsFound">
                         {this.props.getWishListsParameter.query
                             ? siteMessage("Lists_NoResultsMessage")
                             : siteMessage("Lists_NoListsFound")}

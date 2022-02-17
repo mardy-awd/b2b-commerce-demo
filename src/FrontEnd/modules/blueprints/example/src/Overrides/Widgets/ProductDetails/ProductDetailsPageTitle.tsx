@@ -54,9 +54,7 @@ const ProductDetailsPageTitle: React.FC<Props> = ({ product }) => {
         <GridContainer {...styles.container}>
             <h1>This is totally different</h1>
             <GridItem {...styles.titleGridItem}>
-                <Typography {...styles.titleText} data-test-selector="ProductDetailsPageTitle">
-                    {product.productTitle}
-                </Typography>
+                <Typography {...styles.titleText}>{product.productTitle}</Typography>
             </GridItem>
         </GridContainer>
     );

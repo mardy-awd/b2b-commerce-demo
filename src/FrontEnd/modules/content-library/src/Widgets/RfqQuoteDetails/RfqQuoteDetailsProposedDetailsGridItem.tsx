@@ -131,14 +131,29 @@ export const rfqQuoteDetailsProposedDetailsGridItemStyles: RfqQuoteDetailsPropos
     },
     quantityGridItem: {
         width: [6, 6, 6, 6, 12],
+        printWidth: 10,
+        css: css`
+            @media print {
+                &&&& {
+                    max-width: 100%;
+                }
+            }
+        `,
     },
     subtotalGridItem: {
         width: [6, 6, 6, 6, 12],
         align: "bottom",
+        printWidth: 12,
         css: css`
             flex-direction: column;
             align-items: flex-start;
             justify-content: flex-end;
+
+            @media print {
+                &&&& {
+                    max-width: 100%;
+                }
+            }
         `,
     },
     subtotalText: {

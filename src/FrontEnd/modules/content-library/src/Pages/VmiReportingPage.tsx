@@ -78,5 +78,3 @@ const pageModule: PageModule = {
 };
 
 export default pageModule;
-
-export const VmiReportingPageContext = "VmiReportingPage";

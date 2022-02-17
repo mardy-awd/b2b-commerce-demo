@@ -1,9 +1,12 @@
 import { isMobileAppCookieName } from "@insite/client-framework/Common/ContentMode";
+import { getHeadGainSightScript } from "@insite/client-framework/Common/Utilities/gainsight";
 import { generateDataIfNeeded } from "@insite/server-framework/PageRenderer";
 import favicon from "@optimizely/design-tokens/dist/brand-assets/brand-logo.svg";
 import { Request, Response } from "express";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+
+const gainSightScript = getHeadGainSightScript();
 
 const renderedShell = `<!DOCTYPE html>${renderToStaticMarkup(
     <html>
@@ -22,6 +25,7 @@ const renderedShell = `<!DOCTYPE html>${renderToStaticMarkup(
                     __html: `if (document.domain === "localhost") { document.domain = "localhost"; }`,
                 }}
             ></script>
+            {gainSightScript && <script dangerouslySetInnerHTML={{ __html: gainSightScript }}></script>}
             {/* eslint-enable react/no-danger */}
         </head>
         <body>

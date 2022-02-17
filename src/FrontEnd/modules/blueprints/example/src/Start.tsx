@@ -57,6 +57,7 @@ setPostStyleGuideTheme({
         },
     },
     typography: {
+        fontFamilyImportUrl: "/staticContent/stylesheet.css",
         h1: {
             weight: 42,
             italic: true,

@@ -1,0 +1,180 @@
+{
+    "nodeId": "5a3fbf23-ec14-4c57-845b-07cbffd725df",
+    "name": "VMI Product Details",
+    "type": "VmiBinDetailsPage",
+    "parentId": "26c80229-0437-4806-a066-e3d7e728c39f",
+    "sortOrder": 0,
+    "websiteId": "c2c53320-98dc-4eca-8022-9efc00dea0dc",
+    "variantName": null,
+    "layoutPageId": null,
+    "templateHash": "5bd7ea6325ab9f54eba6fee26d34a90b406478779c1ee94809b99b35faf6d6c1",
+    "id": "0d16eeaa-eb20-41cf-bd50-d49c0ae8812e",
+    "generalFields": {
+        "variantName": null,
+        "layoutPage": "",
+        "horizontalRule": "",
+        "tags": [],
+        "hideBreadcrumbs": false
+    },
+    "translatableFields": {
+        "title": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": "VMI Product Details"
+        },
+        "urlSegment": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": "VmiProductDetails"
+        }
+    },
+    "contextualFields": {},
+    "widgets": [
+        {
+            "parentId": "0d16eeaa-eb20-41cf-bd50-d49c0ae8812e",
+            "type": "Basic/Row",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "cb65dba1-fc41-4e5f-876a-58e1ecec3790",
+            "generalFields": {
+                "columns": [
+                    [
+                        10,
+                        10,
+                        10,
+                        10,
+                        10
+                    ],
+                    [
+                        2,
+                        2,
+                        2,
+                        2,
+                        2
+                    ]
+                ],
+                "alignment": [],
+                "gap": 0,
+                "reflow": true
+            },
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "0d16eeaa-eb20-41cf-bd50-d49c0ae8812e",
+            "type": "VmiBinDetails/VmiBinDetailsProductInfo",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "edfab0f9-3b2b-4a47-aef6-1cd704f822c2",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "0d16eeaa-eb20-41cf-bd50-d49c0ae8812e",
+            "type": "VmiBinDetails/VmiBinDetailsTabbedTable",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "9c9e7988-a7d3-4125-af87-b67085b30dc2",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "cb65dba1-fc41-4e5f-876a-58e1ecec3790",
+            "type": "VmiBinDetails/VmiBinDetailsTitle",
+            "zone": "Content0",
+            "isLayout": false,
+            "id": "c7a8c02e-a026-4532-b72f-0bde32edc88f",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "cb65dba1-fc41-4e5f-876a-58e1ecec3790",
+            "type": "VmiBinDetails/VmiBinDetailsButtons",
+            "zone": "Content1",
+            "isLayout": false,
+            "id": "18bb6d1a-33e3-4151-9d3b-72c10062c69e",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "9c9e7988-a7d3-4125-af87-b67085b30dc2",
+            "type": "VmiBinDetails/VmiBinDetailsCountsFilter",
+            "zone": "Counts",
+            "isLayout": false,
+            "id": "9b0b1cbd-8e71-4ab5-a445-0de1affeda1c",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "9c9e7988-a7d3-4125-af87-b67085b30dc2",
+            "type": "VmiBinDetails/VmiBinDetailsCountsActions",
+            "zone": "Counts",
+            "isLayout": false,
+            "id": "21712c5e-dc42-4ea5-a1c8-f51da0b05e58",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "9c9e7988-a7d3-4125-af87-b67085b30dc2",
+            "type": "VmiBinDetails/VmiBinDetailsCountsTable",
+            "zone": "Counts",
+            "isLayout": false,
+            "id": "99981d96-b7d1-4264-9695-3a0ad39a4a67",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "9c9e7988-a7d3-4125-af87-b67085b30dc2",
+            "type": "VmiBinDetails/VmiBinDetailsCountsPagination",
+            "zone": "Counts",
+            "isLayout": false,
+            "id": "aca6764f-7002-4e4f-8218-4d4a2a4b900e",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "9c9e7988-a7d3-4125-af87-b67085b30dc2",
+            "zone": "Orders",
+            "type": "VmiBinDetails/VmiBinDetailsOrdersFilter",
+            "id": "69e14a6c-bc40-461c-b625-7963c357b7d9",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {},
+            "isLayout": false
+        },
+        {
+            "parentId": "9c9e7988-a7d3-4125-af87-b67085b30dc2",
+            "zone": "Orders",
+            "type": "VmiBinDetails/VmiBinDetailsOrdersActions",
+            "id": "577deeb9-c932-4e70-aa4f-a6ac3de4eeac",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {},
+            "isLayout": false
+        },
+        {
+            "parentId": "9c9e7988-a7d3-4125-af87-b67085b30dc2",
+            "zone": "Orders",
+            "type": "VmiBinDetails/VmiBinDetailsOrdersTable",
+            "id": "38ca4372-1a15-49fc-b85f-78279903eb79",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {},
+            "isLayout": false
+        },
+        {
+            "parentId": "9c9e7988-a7d3-4125-af87-b67085b30dc2",
+            "zone": "Orders",
+            "type": "VmiBinDetails/VmiBinDetailsOrdersPagination",
+            "id": "504233b1-a185-4b75-a4e2-41b8f4608b58",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {},
+            "isLayout": false
+        }
+    ]
+}

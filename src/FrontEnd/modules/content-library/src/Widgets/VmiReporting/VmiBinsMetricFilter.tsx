@@ -5,7 +5,6 @@ import updateSearchFields from "@insite/client-framework/Store/Pages/VmiReportin
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { VmiReportingPageContext } from "@insite/content-library/Pages/VmiReportingPage";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
@@ -248,7 +247,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(VmiBinsMetricFilter),
     definition: {
         group: "VMI Reporting",
-        allowedContexts: [VmiReportingPageContext],
+        allowedContexts: ["VmiReportingPage"],
     },
 };
 

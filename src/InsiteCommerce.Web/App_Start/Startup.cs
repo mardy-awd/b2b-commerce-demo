@@ -39,7 +39,10 @@ namespace InsiteCommerce.Web
             // Template.RegisterTag<MyCustomTag>("myCustomTag");
         }
 
-        protected override void RegisterCustomRoutes(RouteCollection routes, IRouteProvider routeProvider)
+        protected override void RegisterCustomRoutes(
+            RouteCollection routes,
+            IRouteProvider routeProvider
+        )
         {
             // Add additional routes with this syntax
             // routeProvider.MapRoute(routes, null, "Test", new { Controller = "Test", Action = "Index" }, true);

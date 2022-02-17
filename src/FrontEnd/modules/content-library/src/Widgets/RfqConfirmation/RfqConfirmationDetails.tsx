@@ -119,10 +119,12 @@ const RfqConfirmationDetails: FC<Props> = ({ quoteState }) => {
                     {quote.orderDate && (
                         <GridItem {...styles.dateGridItem}>
                             <Typography {...styles.dateLabelText}>{translate("Date Submitted")}</Typography>
-                            <LocalizedDateTime
-                                dateTime={quote.orderDate}
-                                options={{ year: "numeric", month: "numeric", day: "numeric" }}
-                            />
+                            <Typography as="p">
+                                <LocalizedDateTime
+                                    dateTime={quote.orderDate}
+                                    options={{ year: "numeric", month: "numeric", day: "numeric" }}
+                                />
+                            </Typography>
                         </GridItem>
                     )}
                     {quote.billTo && (

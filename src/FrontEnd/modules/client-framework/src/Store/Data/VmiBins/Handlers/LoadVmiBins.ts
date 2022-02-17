@@ -1,6 +1,5 @@
 import { ApiHandler, createHandlerChainRunner } from "@insite/client-framework/HandlerCreator";
 import { getVmiBins, GetVmiBinsApiParameter } from "@insite/client-framework/Services/VmiBinsService";
-import { TableTabKeys } from "@insite/client-framework/Store/Pages/VmiLocationDetails/VmiLocationDetailsReducer";
 import { VmiBinCollectionModel } from "@insite/client-framework/Types/ApiModels";
 
 type HandlerType = ApiHandler<GetVmiBinsApiParameter, VmiBinCollectionModel>;
@@ -18,8 +17,7 @@ export const DispatchBeginLoadVmiBins: HandlerType = props => {
 
 export const DispatchClearVmiBinChecks: HandlerType = props => {
     props.dispatch({
-        type: "Pages/VmiLocationDetails/ClearVmiItemChecks",
-        tabKey: TableTabKeys.Products,
+        type: "Pages/VmiBins/ClearVmiItemChecks",
     });
 };
 

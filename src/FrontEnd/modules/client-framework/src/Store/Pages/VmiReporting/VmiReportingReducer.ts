@@ -8,6 +8,8 @@ const initialState: VmiReportingState = {
         expand: ["product"],
     },
     filtersOpen: false,
+    selectedVmiBins: {},
+    isExportingVmiProducts: false,
 };
 
 const reducer = {
@@ -16,6 +18,15 @@ const reducer = {
         action: { parameter: GetVmiBinsApiParameter },
     ) => {
         draft.getVmiBinsParameter = { ...draft.getVmiBinsParameter, ...action.parameter };
+    },
+    "Pages/VmiReporting/ToggleBinCheck": (draft: Draft<VmiReportingState>, action: { ids: string[] }) => {
+        for (const id of action.ids) {
+            if (draft.selectedVmiBins[id]) {
+                delete draft.selectedVmiBins[id];
+            } else {
+                draft.selectedVmiBins[id] = true;
+            }
+        }
     },
     "Pages/VmiReporting/ClearParameter": (draft: Draft<VmiReportingState>) => {
         draft.getVmiBinsParameter = {
@@ -26,6 +37,12 @@ const reducer = {
     },
     "Pages/VmiReporting/ToggleFiltersOpen": (draft: Draft<VmiReportingState>) => {
         draft.filtersOpen = !draft.filtersOpen;
+    },
+    "Pages/VmiReporting/BeginExportVmiProducts": (draft: Draft<VmiReportingState>) => {
+        draft.isExportingVmiProducts = true;
+    },
+    "Pages/VmiReporting/CompleteExportVmiProducts": (draft: Draft<VmiReportingState>) => {
+        draft.isExportingVmiProducts = false;
     },
 };
 

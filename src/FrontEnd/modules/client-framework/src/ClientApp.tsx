@@ -20,7 +20,6 @@ import merge from "lodash/merge";
 import * as React from "react";
 import { hydrate, render, Renderer } from "react-dom";
 import { Provider } from "react-redux";
-import "whatwg-fetch";
 
 /**
  * To debug potentially unnecessary rendering, import "@welldone-software/why-did-you-render": "^4.2.5" in

@@ -366,7 +366,8 @@ export const LoadRealTimePrices: HandlerType = async props => {
         props.dispatch(loadRealTimePricing(loadRealTimePricingParameter));
     }
 
-    if (getSettingsCollection(props.getState()).productSettings.inventoryIncludedWithPricing) {
+    const productSettings = getSettingsCollection(props.getState()).productSettings;
+    if (productSettings.canSeePrices && productSettings.inventoryIncludedWithPricing) {
         await waitFor(() => !!props.pricingLoaded);
     }
 };

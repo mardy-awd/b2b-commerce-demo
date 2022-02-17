@@ -56,7 +56,7 @@ const MyListsPagination: React.FC<Props> = ({ wishListsDataView, updateLoadParam
     }
 
     return (
-        <StyledWrapper {...styles.wrapper}>
+        <StyledWrapper {...styles.wrapper} data-test-selector="myLists_pagination">
             <Pagination
                 {...styles.pagination}
                 resultsCount={pagination.totalItemCount}

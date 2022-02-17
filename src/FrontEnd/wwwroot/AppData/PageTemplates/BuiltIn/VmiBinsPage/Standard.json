@@ -1,0 +1,95 @@
+{
+    "nodeId": "26c80229-0437-4806-a066-e3d7e728c39f",
+    "name": "VMI Products",
+    "type": "VmiBinsPage",
+    "parentId": "9d29f434-564b-454d-98cb-9a2cba26a2bb",
+    "sortOrder": 0,
+    "websiteId": "c2c53320-98dc-4eca-8022-9efc00dea0dc",
+    "variantName": null,
+    "layoutPageId": null,
+    "templateHash": "45398d1f2c3f7298a1ed42283bc6f1b3aa3f50ed68803eda2cc4162f6df94984",
+    "id": "d933b0fc-0e93-4c44-ae3f-0e900e1caa09",
+    "generalFields": {
+        "horizontalRule": "",
+        "tags": [],
+        "hideBreadcrumbs": false,
+        "variantName": null,
+        "layoutPage": ""
+    },
+    "translatableFields": {
+        "title": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": "VMI Products"
+        },
+        "urlSegment": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": "VmiProducts"
+        }
+    },
+    "contextualFields": {},
+    "widgets": [
+        {
+            "parentId": "d933b0fc-0e93-4c44-ae3f-0e900e1caa09",
+            "type": "VmiBins/VmiBinsHeader",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "eed66c1d-4521-4ccf-8f23-2478e9645195",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "d933b0fc-0e93-4c44-ae3f-0e900e1caa09",
+            "type": "VmiBins/VmiBinsFilter",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "a6c333ad-ab49-4d0e-a27c-2fb238d3a2de",
+            "generalFields": {
+                "showProduct": true,
+                "showBinRange": true,
+                "showDateRange": true
+            },
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "d933b0fc-0e93-4c44-ae3f-0e900e1caa09",
+            "type": "VmiBins/VmiBinsActions",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "4339c8c1-2ffe-4e90-a724-2d210efc83df",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "d933b0fc-0e93-4c44-ae3f-0e900e1caa09",
+            "type": "VmiBins/VmiBinsTable",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "c9019dfb-e2ba-4c8a-9d8a-685ccd3b10a2",
+            "generalFields": {
+                "showShortDescription": true,
+                "showErpNumber": true,
+                "showManufacturerItem": true,
+                "showCustomerName": true,
+                "showBinNumber": true,
+                "showMinimumQty": true,
+                "showMaximumQty": true,
+                "showPreviousCountDate": true,
+                "showPreviousCountQty": true,
+                "showLastOrderLineId": true
+            },
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "d933b0fc-0e93-4c44-ae3f-0e900e1caa09",
+            "type": "VmiBins/VmiBinsPagination",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "86ffe4c4-5241-41c8-a230-8ccf2c6ad3d4",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        }
+    ]
+}

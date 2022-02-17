@@ -429,7 +429,9 @@ const CreateAccount = ({
                     </GridContainer>
                 </GridItem>
                 <GridItem {...styles.requirementsGridItem}>
-                    <Typography {...styles.requirementsTitle}>{translate("Password Requirements")}</Typography>
+                    <Typography {...styles.requirementsTitle} data-test-selector="createAccount_passwordRequirements">
+                        {translate("Password Requirements")}
+                    </Typography>
                     <GridContainer {...styles.passwordRequirementsGridContainer}>
                         <GridItem {...styles.passwordRequirementsGridItem}>
                             {translate(

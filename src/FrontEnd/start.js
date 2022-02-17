@@ -4,6 +4,7 @@ const compression = require("compression");
 const domain = require("domain");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const path = require("path");
 
 module.exports = function startServer(options) {
     const app = express();
@@ -19,6 +20,13 @@ module.exports = function startServer(options) {
     }
 
     app.use(express.static("wwwroot"));
+
+    const blueprint = process.argv[2];
+    const staticContentPath = blueprint
+        ? path.join(__dirname, "/modules/blueprints", blueprint, "wwwroot/staticContent")
+        : path.join(__dirname, "/wwwroot/staticContent");
+
+    app.use("/staticContent", express.static(staticContentPath));
     app.use(
         cookieParser(undefined, {
             // on the .net site we use HttpUtility.UrlEncode which encodes ' ' as '+'

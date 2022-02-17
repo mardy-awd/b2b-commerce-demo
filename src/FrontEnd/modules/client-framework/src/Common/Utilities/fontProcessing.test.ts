@@ -94,6 +94,7 @@ test("getFontContent should return modified css file", async () => {
         contentType: resultContentType as unknown,
         send: resultContent as unknown,
         statusCode: 200,
+        setHeader(name: string, value: number | string | string[]) {},
     } as ExpressResponse;
 
     const paths = [
@@ -135,6 +136,7 @@ test("getFontContent should return 404 if nothing cached for this user agent", a
     const response: ExpressResponse = {
         send: resultContent as unknown,
         statusCode: 200,
+        setHeader(name: string, value: number | string | string[]) {},
     } as ExpressResponse;
 
     await getFontContent(request, response);
@@ -173,6 +175,7 @@ test("getFontContent should load font file", async () => {
         contentType: resultContentType as unknown,
         send: resultContent as unknown,
         statusCode: 200,
+        setHeader(name: string, value: number | string | string[]) {},
     } as ExpressResponse;
 
     await getFontContent(request, response);
@@ -214,6 +217,7 @@ test("getFontContent should return font when unknown url is passed in", async ()
         send: resultContent as unknown,
         statusCode: 200,
         contentType: resultContentType as unknown,
+        setHeader(name: string, value: number | string | string[]) {},
     } as ExpressResponse;
 
     await getFontContent(request, response);
@@ -249,7 +253,8 @@ test("getFontContent should return 404 when fontResponse is not 200", async () =
         send: resultContent as unknown,
         statusCode: 200,
         contentType: resultContentType as unknown,
-    } as ExpressResponse;
+        setHeader(name: string, value: number | string | string[]) {},
+    } as unknown as ExpressResponse;
 
     await getFontContent(request, response);
 

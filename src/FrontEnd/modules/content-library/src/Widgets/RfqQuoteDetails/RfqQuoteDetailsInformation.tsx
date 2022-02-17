@@ -152,10 +152,12 @@ const RfqQuoteDetailsInformation = ({
             {!quote.isEditable && quote.expirationDate && (
                 <GridItem {...styles.expirationDateGridItem}>
                     <Typography {...styles.expirationDateLabelText}>{expirationDateLabel}</Typography>
-                    <LocalizedDateTime
-                        dateTime={quote.expirationDate}
-                        options={{ year: "numeric", month: "numeric", day: "numeric" }}
-                    />
+                    <Typography as="p">
+                        <LocalizedDateTime
+                            dateTime={quote.expirationDate}
+                            options={{ year: "numeric", month: "numeric", day: "numeric" }}
+                        />
+                    </Typography>
                 </GridItem>
             )}
             {quote.isJobQuote && (
@@ -192,10 +194,12 @@ const RfqQuoteDetailsInformation = ({
             {quote.orderDate && (
                 <GridItem {...styles.dateGridItem}>
                     <Typography {...styles.dateLabelText}>{translate("Date Submitted")}</Typography>
-                    <LocalizedDateTime
-                        dateTime={quote.orderDate}
-                        options={{ year: "numeric", month: "numeric", day: "numeric" }}
-                    />
+                    <Typography as="p">
+                        <LocalizedDateTime
+                            dateTime={quote.orderDate}
+                            options={{ year: "numeric", month: "numeric", day: "numeric" }}
+                        />
+                    </Typography>
                 </GridItem>
             )}
             {quote.billTo && (

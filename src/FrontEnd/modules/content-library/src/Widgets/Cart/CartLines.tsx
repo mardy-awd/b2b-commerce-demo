@@ -354,7 +354,10 @@ const CartLinesHeader: FC<CartLinesHeaderProps> = ({
             {productsCannotBePurchased && (
                 <StyledSection {...headerStyles.warningSection}>
                     <Icon {...headerStyles.warningIcon}></Icon>
-                    <Typography {...headerStyles.warningText}>
+                    <Typography
+                        {...headerStyles.warningText}
+                        data-test-selector="cartlineHeader_warningProductsCannotBePurchased"
+                    >
                         {siteMessage("Cart_ProductsCannotBePurchased")}
                     </Typography>
                 </StyledSection>

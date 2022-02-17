@@ -55,11 +55,6 @@ class SessionLoader extends React.Component<Props> {
 
         props.setLocation(props.location);
 
-        const punchOutSessionId = getCookie("PunchOutSessionId");
-        if (punchOutSessionId) {
-            props.setPunchOutSessionId({ punchOutSessionId });
-        }
-
         if (!props.isWebsiteLoaded && !props.isWebsiteLoading) {
             props.loadCurrentWebsite();
         }
@@ -81,6 +76,13 @@ class SessionLoader extends React.Component<Props> {
 
         if (!props.areSettingsLoaded && !props.areSettingsLoading) {
             props.loadSettings();
+        }
+    }
+
+    componentDidMount() {
+        const punchOutSessionId = getCookie("PunchOutSessionId");
+        if (punchOutSessionId) {
+            this.props.setPunchOutSessionId({ punchOutSessionId });
         }
     }
 

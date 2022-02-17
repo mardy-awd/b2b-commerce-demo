@@ -497,7 +497,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     // Setup isPayPal from cart.paymentOptions and validates form when cartState changes and is loaded.
     useEffect(() => {
         if (cartState.value) {
-            const tempIsPayPal = cartState.value.paymentOptions?.isPayPal || !!payPalToken;
+            const tempIsPayPal = cartState.value.paymentOptions?.isPayPal || (!!payPalToken && !!payPalPayerId);
             setIsPayPal(tempIsPayPal);
             if (tempIsPayPal) {
                 validateForm();
@@ -736,6 +736,9 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     }, [paymetricConfig, paymetricFrameRef]);
 
     const handlePaymentMethodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        if (event.currentTarget.value !== "PayPal") {
+            setIsPayPal(false);
+        }
         setPaymentMethod(event.currentTarget.value);
         validatePaymentMethod(event.currentTarget.value);
     };
@@ -1161,15 +1164,8 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                 </Typography>
                 {isPayPal && (
                     <Typography {...styles.paymentMethodPayPalText} as="span">
-                        {translate("Payment Method: PayPal")}
+                        {translate("Selected Payment Method: PayPal")}
                     </Typography>
-                )}
-                {isPayPal && payPalCheckoutErrorMessage && (
-                    <StyledWrapper {...styles.paypalCheckoutErrorWrapper}>
-                        <Typography {...styles.paypalCheckoutErrorText} data-test-selector="payPalCheckoutErrorMessage">
-                            {payPalCheckoutErrorMessage}
-                        </Typography>
-                    </StyledWrapper>
                 )}
                 {!isPayPal && (
                     <GridContainer {...styles.paymentMethodAndPONumberContainer}>
@@ -1193,13 +1189,14 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                                             </option>
                                         ))}
                                     </Select>
-                                    {isPaymentProfile && !isPaymentProfileExpired && (
-                                        <PaymentProfileBillingAddress
-                                            address={paymentMethodDto!.billingAddress}
-                                            extendedStyles={styles.paymentProfileBillingAddress}
-                                        />
-                                    )}
-                                    {isPaymentProfile && isPaymentProfileExpired && (
+                                    {paymentMethodDto?.isPaymentProfile &&
+                                        !paymentMethodDto.isPaymentProfileExpired && (
+                                            <PaymentProfileBillingAddress
+                                                address={paymentMethodDto.billingAddress}
+                                                extendedStyles={styles.paymentProfileBillingAddress}
+                                            />
+                                        )}
+                                    {paymentMethodDto?.isPaymentProfile && paymentMethodDto.isPaymentProfileExpired && (
                                         <StyledWrapper {...styles.paymentProfileExpiredErrorWrapper}>
                                             <Typography {...styles.paymentProfileExpiredErrorText}>
                                                 {siteMessage("Checkout_PaymentProfileExpired")}
@@ -1257,7 +1254,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                             </GridItem>
                         )}
                         {cart.showPoNumber && enableVat && <GridItem {...styles.emptyGridItem}></GridItem>}
-                        {isPaymentProfile && !isPaymentProfileExpired && !bypassCvvForSavedCards && (
+                        {paymentMethodDto?.isPaymentProfile && !paymentMethodDto.isPaymentProfileExpired && (
                             <GridItem width={6}>
                                 <SavedPaymentProfileEntry
                                     iframe={
@@ -1271,7 +1268,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                                 />
                             </GridItem>
                         )}
-                        {cart.showCreditCard && isCreditCard && (
+                        {cart.showCreditCard && paymentMethodDto?.isCreditCard && (
                             <GridItem {...styles.creditCardDetailsGridItem}>
                                 <CreditCardDetailsEntry
                                     canSaveCard={paymentOptions.canStorePaymentProfile}
@@ -1313,7 +1310,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                                 />
                             </GridItem>
                         )}
-                        {cart.showECheck && isECheck && (
+                        {cart.showECheck && paymentMethodDto?.isECheck && (
                             <GridItem {...styles.eCheckDetailsGridItem}>
                                 <ECheckDetailsEntry
                                     iframe={useECheckTokenExGateway ? "TokenEx" : undefined}
@@ -1332,7 +1329,8 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                                 />
                             </GridItem>
                         )}
-                        {((cart.showECheck && isECheck) || (cart.showCreditCard && isCreditCard)) && (
+                        {((cart.showECheck && paymentMethodDto?.isECheck) ||
+                            (cart.showCreditCard && paymentMethodDto?.isCreditCard)) && (
                             <GridItem {...styles.creditCardAddressGridItem}>
                                 <CreditCardBillingAddressEntry
                                     useBillTo={useBillingAddress}

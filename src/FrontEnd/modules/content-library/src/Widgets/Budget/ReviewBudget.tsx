@@ -162,7 +162,10 @@ class ReviewBudget extends React.Component<Props, State> {
         this.state = {
             budgetYears,
         };
-        this.props.updateLoadParameter({ fiscalYear: budgetYears[0], fullGrid: true });
+    }
+
+    componentDidMount() {
+        this.props.updateLoadParameter({ fiscalYear: this.state.budgetYears[0], fullGrid: true });
     }
 
     getAccounts = () => {

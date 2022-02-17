@@ -65,11 +65,12 @@ const ProductDetailsVariantOptions: React.FC<Props> = ({
     selectedProductId,
 }) => {
     useEffect(() => {
-        if (
-            variantProductState.value &&
-            (variantProductState.value.isVariantParent || variantProductState.value.childTraitValues)
-        ) {
-            window.history.replaceState(null, "", variantProductState.value.canonicalUrl);
+        let newUrl = window.location.href.split("?option=")[0];
+        if (variantProductState.value && variantProductState.value.isVariantParent) {
+            window.history.replaceState(null, "", newUrl);
+        } else if (variantProductState.value && !variantProductState.value.isVariantParent) {
+            newUrl = newUrl.concat("?option=", variantProductState.value.urlSegment);
+            window.history.replaceState(null, "", newUrl);
         }
     }, [selectedProductId]);
 

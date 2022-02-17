@@ -16,7 +16,7 @@ type Props = WidgetProps & ReturnType<typeof mapStateToProps>;
 
 const PageTitle: React.FunctionComponent<Props> = ({ pageTitle, fields }: Props) => (
     <Typography variant="h2" as="h1" data-test-selector="PageTitle">
-        {translate(fields.overrideTitle || pageTitle)}
+        {fields.overrideTitle || pageTitle}
     </Typography>
 );
 

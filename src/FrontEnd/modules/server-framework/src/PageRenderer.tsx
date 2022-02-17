@@ -153,11 +153,13 @@ export async function pageRenderer(request: Request, response: Response) {
         getTranslationDictionariesPromise,
     ]);
 
-    const fontFamilyImportUrl = await safeRequest(
-        () => loadAndParseFontCss(theme.typography.fontFamilyImportUrl, request.headers["user-agent"]),
-        theme.typography.fontFamilyImportUrl,
-    );
-
+    let fontFamilyImportUrl = theme.typography.fontFamilyImportUrl;
+    if (fontFamilyImportUrl.startsWith("http")) {
+        fontFamilyImportUrl = await safeRequest(
+            () => loadAndParseFontCss(theme.typography.fontFamilyImportUrl, request.headers["user-agent"]),
+            theme.typography.fontFamilyImportUrl,
+        );
+    }
     if (siteMessages) {
         setServerSiteMessages(siteMessages);
     }
@@ -247,7 +249,7 @@ export async function pageRenderer(request: Request, response: Response) {
                         <link key={key} rel="alternate" hrefLang={key} href={value} />
                     ))}
                 <base href="/" />
-                <link href={fontFamilyImportUrl} rel="stylesheet" />
+                <link href={fontFamilyImportUrl} rel="stylesheet" type="text/css" />
                 {sheet?.getStyleElement()}
                 <script
                     dangerouslySetInnerHTML={{
@@ -411,7 +413,10 @@ async function loadPageAndSetInitialCookies(request: Request, response: Response
         }`;
         const headers: Dictionary<string> = {};
         if (request.headers.referer) {
-            headers.referer = request.headers.referer;
+            headers.referer =
+                request.headers.referer.indexOf(request.hostname) > -1
+                    ? request.headers.referer
+                    : `${request.protocol}://${request.get("host")}${request.originalUrl}`;
         }
         pageByUrlResponse = await rawRequest(endpoint, "GET", headers, undefined);
     } catch (ex) {

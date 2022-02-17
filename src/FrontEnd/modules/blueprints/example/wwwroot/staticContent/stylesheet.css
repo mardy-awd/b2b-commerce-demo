@@ -1,0 +1,10 @@
+@font-face {
+    font-family: Dongle;
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url(/staticContent/Dongle-Regular.ttf) format("truetype");
+}
+body {
+    font-family: Dongle, sans-serif !important;
+}

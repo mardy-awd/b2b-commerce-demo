@@ -418,7 +418,7 @@ class PublishComparer extends React.Component<Props, State> {
                     <StageWrapper isVisible={isSideBySide || isShowingLeftSide}>
                         <Stage stageMode={stageMode}>
                             <PreviewFrame
-                                id="leftSiteIFrame"
+                                name="leftSiteIFrame"
                                 stageMode={stageMode}
                                 src={`/.spire/GetContentByVersion?pageVersionId=${leftVersion.versionId}${forcedContext}${skipHeaderFooter}`}
                             />
@@ -428,7 +428,7 @@ class PublishComparer extends React.Component<Props, State> {
                         <Stage stageMode={stageMode}>
                             {rightVersion && (
                                 <PreviewFrame
-                                    id="rightSiteIFrame"
+                                    name="rightSiteIFrame"
                                     stageMode={stageMode}
                                     src={`/.spire/GetContentByVersion?pageVersionId=${rightVersion.versionId}${forcedContext}${skipHeaderFooter}`}
                                 />

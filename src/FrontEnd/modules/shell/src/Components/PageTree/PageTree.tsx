@@ -234,14 +234,6 @@ class PageTree extends ClickOutside<Props, State> {
                         futurePublishNodeIds={futurePublishNodeIds}
                         draftNodeIds={draftNodeIds}
                     />
-                    {flyOutNode && flyOutElement && (
-                        <PageTreeFlyOut
-                            flyOutNode={flyOutNode}
-                            flyOutElement={flyOutElement}
-                            closeFlyOut={this.closeFlyOut}
-                            nodesByParentId={nodesByParentId}
-                        />
-                    )}
                     <MakeDefaultVariantModal />
                     <VariantRulesModal />
                 </PageTreeStyle>

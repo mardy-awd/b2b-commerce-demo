@@ -107,7 +107,11 @@ const OrderConfirmationAccountSignUpMessage = ({ createAccountUrl, showCreateAcc
     return (
         <StyledContainer {...styles.container}>
             <Typography {...styles.createAccountText}>{siteMessage("OrderConfirmation_AddAccountMessage")}</Typography>
-            <Button {...styles.createAccountButton} onClick={createAccountClickHandler}>
+            <Button
+                {...styles.createAccountButton}
+                onClick={createAccountClickHandler}
+                data-test-selector="orderConfirmation_createAccountButton"
+            >
                 {translate("Create Account")}
             </Button>
         </StyledContainer>

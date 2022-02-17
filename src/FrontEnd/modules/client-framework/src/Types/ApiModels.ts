@@ -1418,12 +1418,16 @@ export interface VmiNoteCollectionModel extends BaseModel {
 
 export interface VmiCountCollectionModel extends BaseModel {
     pagination: PaginationModel | null;
-    vmiCounts: VmiCountModel[] | null;
+    binCounts: VmiCountModel[] | null;
 }
 
 export interface VmiBinCollectionModel extends BaseModel {
     pagination: PaginationModel | null;
     vmiBins: VmiBinModel[] | null;
+}
+
+export interface VmiBinCountModel extends BaseModel {
+    count: number;
 }
 
 export interface VmiNoteModel extends BaseModel {
@@ -1438,6 +1442,8 @@ export interface VmiCountModel extends BaseModel {
     id: string;
     productId: string;
     vmiBinId: string;
+    createdOn: Date;
+    createdBy: string;
 }
 
 export interface VmiBinModel extends BaseModel {
@@ -1455,6 +1461,8 @@ export interface VmiBinModel extends BaseModel {
     productId: string;
     vmiLocationId: string;
     product: ProductDto;
+    lastOrderErpOrderNumber: string;
+    lastOrderWebOrderNumber: string;
 }
 
 export interface VmiLocationCollectionModel extends BaseModel {
@@ -2282,6 +2290,8 @@ export interface OrderModel extends BaseModel {
     taxAmountDisplay: string;
     terms: string;
     totalTaxDisplay: string;
+    vmiLocationId: string;
+    vmiLocationName: string;
     webOrderNumber: string;
 }
 

@@ -39,6 +39,8 @@ Insite.Public.Integration
 Insite.Public.WebFramework
 Insite.PunchOut
 Insite.QuickOrder
+Insite.RatingService.FedEx
+Insite.RatingService.Ups
 Insite.RealTimeInventory
 Insite.RealTimePricing
 Insite.Requisition

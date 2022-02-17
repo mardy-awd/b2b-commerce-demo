@@ -91,6 +91,12 @@ export const rfqQuoteDetailsMessagesStyles: RfqQuoteDetailsMessagesStyles = {
     messageBodyText: {
         css: css`
             margin-top: 10px;
+
+            @media print {
+                &&&& {
+                    display: block;
+                }
+            }
         `,
     },
 };

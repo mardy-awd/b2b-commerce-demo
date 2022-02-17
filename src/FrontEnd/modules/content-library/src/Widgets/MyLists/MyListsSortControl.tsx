@@ -42,7 +42,7 @@ const MyListsSortControl: React.FunctionComponent<Props> = props => {
     return (
         <StyledWrapper {...styles.wrapper}>
             <Select
-                data-test-selector="myListsSort"
+                data-test-selector="myLists_sort"
                 {...styles.select}
                 onChange={(event: React.FormEvent<HTMLSelectElement>) => sortChangeHandler(event, props)}
             >

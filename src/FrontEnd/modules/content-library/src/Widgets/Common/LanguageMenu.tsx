@@ -52,7 +52,7 @@ export const languageMenuStyles: LanguageMenuStyles = {
         backgroundColor: "common.accent",
         cssOverrides: {
             formInputWrapper: css`
-                width: 100px;
+                width: 135px;
             `,
             inputSelect: css`
                 border: none;
@@ -103,7 +103,7 @@ export const LanguageMenu: FC<Props> = ({ languages, currentLanguage, fields, se
             >
                 {languages.map(c => (
                     <option value={c.id} key={c.id}>
-                        {c.languageCode}
+                        {c.description}
                     </option>
                 ))}
             </Select>

@@ -39,6 +39,9 @@ import SignInReducer from "@insite/client-framework/Store/Pages/SignIn/SignInRed
 import StaticListReducer from "@insite/client-framework/Store/Pages/StaticList/StaticListReducer";
 import UserListReducer from "@insite/client-framework/Store/Pages/UserList/UserListReducer";
 import UserSetupReducer from "@insite/client-framework/Store/Pages/UserSetup/UserSetupReducer";
+import VmiBinDetailsReducer from "@insite/client-framework/Store/Pages/VmiBinDetails/VmiBinDetailsReducer";
+import VmiBinsReducer from "@insite/client-framework/Store/Pages/VmiBins/VmiBinsReducer";
+import VmiDashboardReducer from "@insite/client-framework/Store/Pages/VmiDashboard/VmiDashboardReducer";
 import VmiLocationDetailsReducer from "@insite/client-framework/Store/Pages/VmiLocationDetails/VmiLocationDetailsReducer";
 import VmiLocationsReducer from "@insite/client-framework/Store/Pages/VmiLocations/VmiLocationsReducer";
 import VmiReportingReducer from "@insite/client-framework/Store/Pages/VmiReporting/VmiReportingReducer";
@@ -87,6 +90,9 @@ const reducers = {
     staticList: StaticListReducer,
     userList: UserListReducer,
     userSetup: UserSetupReducer,
+    vmiBinDetails: VmiBinDetailsReducer,
+    vmiBins: VmiBinsReducer,
+    vmiDashboard: VmiDashboardReducer,
     vmiLocationDetails: VmiLocationDetailsReducer,
     vmiLocations: VmiLocationsReducer,
     vmiReporting: VmiReportingReducer,

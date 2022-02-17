@@ -106,6 +106,7 @@ export const loadAndParseFontCss = async (url: string, userAgent?: string) => {
 export const getFontContent = async (request: Request, response: Response) => {
     const { path } = request.query;
     const userAgent = trimUserAgent(request.headers["user-agent"] || "empty");
+    response.setHeader("Cache-Control", "max-age=31536000");
 
     const storageKey = userAgentToStorageMap.get(userAgent);
     if (

@@ -35,6 +35,46 @@
             "generalFields": {},
             "translatableFields": {},
             "contextualFields": {}
+        },
+        {
+            "parentId": "7a7007e5-2521-4efb-90a7-573a7d10f3c9",
+            "type": "VmiDashboard/VmiDashboardBelowMinimum",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "7f6ed559-5052-4df5-a124-1f63cd686011",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "7a7007e5-2521-4efb-90a7-573a7d10f3c9",
+            "type": "VmiDashboard/VmiDashboardFastMoving",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "2a95d72f-799f-4166-908e-a530c5e1cd44",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "7a7007e5-2521-4efb-90a7-573a7d10f3c9",
+            "type": "VmiDashboard/VmiDashboardSlowMoving",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "073b07d7-6f6c-4c66-90cc-11c978792001",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "7a7007e5-2521-4efb-90a7-573a7d10f3c9",
+            "type": "VmiDashboard/VmiDashboardRecentNotes",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "b022b79e-397c-4761-b76a-56d1fa905b09",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
         }
     ]
 }
