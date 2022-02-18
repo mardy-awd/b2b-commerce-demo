@@ -11,6 +11,8 @@ module insite.cart {
     import SessionModel = Insite.Account.WebApi.V1.ApiModels.SessionModel;
     import PaymentMethodDto = Insite.Cart.Services.Dtos.PaymentMethodDto;
     import CustomerSettingsModel = Insite.Customers.WebApi.V1.ApiModels.CustomerSettingsModel;
+    import IPaymentService = insite.payment.IPaymentService;
+    import PaymentAuthenticationModel = Insite.Payments.WebApi.V1.ApiModels.PaymentAuthenticationModel;
 
     export interface IReviewAndPayControllerAttributes extends ng.IAttributes {
         cartUrl: string;
@@ -56,6 +58,7 @@ module insite.cart {
         ppIsInvalidSecurityCode: boolean;
         hasInvalidPrice = false;
         bypassCvvForSavedCards: boolean;
+        paymentGatewayRequiresAuthentication: boolean;
 
         static $inject = [
             "$http",
@@ -72,7 +75,8 @@ module insite.cart {
             "$localStorage",
             "websiteService",
             "deliveryMethodPopupService",
-            "selectPickUpLocationPopupService"
+            "selectPickUpLocationPopupService",
+            "paymentService"
         ];
 
         constructor(
@@ -90,7 +94,8 @@ module insite.cart {
             protected $localStorage: common.IWindowStorage,
             protected websiteService: websites.IWebsiteService,
             protected deliveryMethodPopupService: account.IDeliveryMethodPopupService,
-            protected selectPickUpLocationPopupService: account.ISelectPickUpLocationPopupService) {
+            protected selectPickUpLocationPopupService: account.ISelectPickUpLocationPopupService,
+            protected paymentService: IPaymentService) {
         }
 
         $onInit(): void {
@@ -205,6 +210,7 @@ module insite.cart {
             this.usePaymetricGateway = settingsCollection.websiteSettings.usePaymetricGateway;
             this.enableWarehousePickup = settingsCollection.accountSettings.enableWarehousePickup;
             this.bypassCvvForSavedCards = settingsCollection.cartSettings.bypassCvvForSavedCards;
+            this.paymentGatewayRequiresAuthentication = settingsCollection.websiteSettings.paymentGatewayRequiresAuthentication;
 
             this.sessionService.getSession().then(
                 (session: SessionModel) => { this.getSessionCompleted(session); },
@@ -531,6 +537,52 @@ module insite.cart {
         }
 
         protected submitCart(): void {
+             if (this.paymentGatewayRequiresAuthentication) {
+                 const transactionId = guidHelper.generateGuid();
+                 this.paymentService.authenticate( {
+                     transactionId: transactionId,
+                     cardNumber: this.cart.paymentOptions.creditCard.cardNumber,
+                     expirationMonth: this.cart.paymentOptions.creditCard.expirationMonth,
+                     expirationYear: this.cart.paymentOptions.creditCard.expirationYear,
+                     orderAmount: this.cart.orderGrandTotal.toString()
+                 }).then(
+                     (result: PaymentAuthenticationModel) => {
+                         if (result.redirectHtml !== "") {
+                             angular.element("#redirect-html").html(result.redirectHtml);
+                             this.checkForRedirectResult(transactionId);
+                         } else {
+                             this.submitCart2();
+                         }
+                     }, (error: any) => {
+                         this.submitFailed(error);
+                     }
+                 );
+                 return;
+             } else {
+                 this.submitCart2();
+             }
+       }
+
+       protected checkForRedirectResult(transactionId: string): void {
+            let challengeResult = "";
+            // this will throw an exception until it posts back to the callback url, we don't care about that exception
+            try {
+                challengeResult = angular.element("#challengeFrame").contents().find('pre').text();
+            } catch {}
+           
+            if (!challengeResult) {
+                setTimeout(() => this.checkForRedirectResult(transactionId), 500);
+            } else {
+                angular.element("#threedsChallengeRedirect").remove();
+                if (challengeResult === '"PROCEED"') {
+                    this.submitCart2();
+                } else {
+                    this.submitFailed({ message: challengeResult });
+                }
+            }
+       }
+        
+        protected submitCart2() : void {
             this.cart.requestedDeliveryDate = this.formatWithTimezone(this.cart.requestedDeliveryDate);
             this.cart.status = this.cart.requiresApproval ? "AwaitingApproval" : "Submitted";
 

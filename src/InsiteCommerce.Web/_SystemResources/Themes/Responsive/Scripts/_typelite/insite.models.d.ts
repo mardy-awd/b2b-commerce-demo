@@ -143,7 +143,7 @@ declare module Insite.Account.WebApi.V1.ApiModels {
 	}
 	interface VmiUserImportModel extends Insite.Core.WebApi.BaseModel {
 		userId: System.Guid;
-		vmiLocationNames: System.Guid[];
+		vmiLocationNames: string[];
 		vmiRoles: string[];
 	}
 	interface VmiUserModel extends Insite.Core.WebApi.BaseModel {
@@ -281,6 +281,7 @@ declare module Insite.Catalog.WebApi.V1.ApiModels {
 		metaDescription: string;
 		metaKeywords: string;
 		canonicalPath: string;
+		alternateLanguageUrls: {[key: string]:  string};
 		isReplacementProduct: boolean;
 		breadCrumbs: Insite.Catalog.WebApi.V1.ApiModels.BreadCrumbModel[];
 		obsoletePath: boolean;
@@ -423,9 +424,6 @@ declare module Insite.Catalog.WebApi.V1.ApiModels {
 		pagination: Insite.Core.WebApi.PaginationModel;
 		vmiBins: Insite.Catalog.WebApi.V1.ApiModels.VmiBinModel[];
 	}
-	interface VmiBinCountModel extends Insite.Core.WebApi.BaseModel {
-		count: number;
-	}
 	interface VmiBinModel extends Insite.Core.WebApi.BaseModel {
 		id: System.Guid;
 		vmiLocationId: System.Guid;
@@ -443,6 +441,9 @@ declare module Insite.Catalog.WebApi.V1.ApiModels {
 		product: Insite.Catalog.Services.Dtos.ProductDto;
 		lastOrderErpOrderNumber: string;
 		lastOrderWebOrderNumber: string;
+	}
+	interface VmiBinCountModel extends Insite.Core.WebApi.BaseModel {
+		count: number;
 	}
 	interface VmiCountCollectionModel extends Insite.Core.WebApi.BaseModel {
 		pagination: Insite.Core.WebApi.PaginationModel;
@@ -598,6 +599,7 @@ declare module Insite.Websites.WebApi.V1.ApiModels {
 		useECheckTokenExGateway: boolean;
 		tokenExTestMode: boolean;
 		usePaymetricGateway: boolean;
+		paymentGatewayRequiresAuthentication: boolean;
 		defaultPageSize: number;
 		enableCookiePrivacyPolicyPopup: boolean;
 		enableDynamicRecommendations: boolean;
@@ -1473,6 +1475,7 @@ declare module Insite.Catalog.WebApi.V2.ApiModels.Product {
 		id: System.Guid;
 		productNumber: string;
 		customerProductNumber: string;
+		customerUnitOfMeasure: string;
 		productTitle: string;
 		urlSegment: string;
 		canonicalUrl: string;
@@ -1498,6 +1501,7 @@ declare module Insite.Catalog.WebApi.V2.ApiModels.Product {
 		canShowUnitOfMeasure: boolean;
 		isVariantParent: boolean;
 		variantTypeId: System.Guid;
+		salePriceLabel: string;
 		cantBuy: boolean;
 		allowZeroPricing: boolean;
 		brand: Insite.Catalog.WebApi.V2.ApiModels.Product.BrandModel;
@@ -1572,6 +1576,8 @@ declare module Insite.Catalog.WebApi.V2.ApiModels.Product {
 		hasMsds: boolean;
 		isSpecialOrder: boolean;
 		isGiftCard: boolean;
+		isSubscription: boolean;
+		subscription: Insite.Catalog.WebApi.V2.ApiModels.Product.ProductSubscriptionModel;
 		allowAnyGiftCardAmount: boolean;
 		taxCode1: string;
 		taxCode2: string;
@@ -1584,6 +1590,27 @@ declare module Insite.Catalog.WebApi.V2.ApiModels.Product {
 		shippingWeight: number;
 		configuration: Insite.Catalog.WebApi.V2.ApiModels.Product.ConfigurationModel;
 	}
+	interface ProductSubscriptionModel extends Insite.Core.WebApi.BaseModel {
+		subscriptionCyclePeriod: string;
+		subscriptionPeriodsPerCycle: number;
+		subscriptionTotalCycles: number;
+		subscriptionAllMonths: boolean;
+		subscriptionJanuary: boolean;
+		subscriptionFebruary: boolean;
+		subscriptionMarch: boolean;
+		subscriptionApril: boolean;
+		subscriptionMay: boolean;
+		subscriptionJune: boolean;
+		subscriptionJuly: boolean;
+		subscriptionAugust: boolean;
+		subscriptionSeptember: boolean;
+		subscriptionOctober: boolean;
+		subscriptionNovember: boolean;
+		subscriptionDecember: boolean;
+		subscriptionAddToInitialOrder: boolean;
+		subscriptionFixedPrice: boolean;
+		subscriptionShipViaId: System.Guid;
+	}
 	interface ConfigurationModel {
 		configSections: Insite.Catalog.WebApi.V2.ApiModels.Product.ConfigSectionModel[];
 		hasDefaults: boolean;
@@ -1592,6 +1619,7 @@ declare module Insite.Catalog.WebApi.V2.ApiModels.Product {
 	interface ConfigSectionModel {
 		id: System.Guid;
 		sectionName: string;
+		label: string;
 		sortOrder: number;
 		sectionOptions: Insite.Catalog.WebApi.V2.ApiModels.Product.SectionOptionModel[];
 	}
@@ -1668,6 +1696,9 @@ declare module Insite.Catalog.WebApi.V2.ApiModels.Product {
 		name: string;
 		nameDisplay: string;
 		unselectedValue: string;
+		displayType: string;
+		numberOfSwatchesVisible: number;
+		displayTextWithSwatch: boolean;
 		sortOrder: number;
 		traitValues: Insite.Catalog.WebApi.V2.ApiModels.Product.TraitValueModel[];
 	}
@@ -1677,6 +1708,9 @@ declare module Insite.Catalog.WebApi.V2.ApiModels.Product {
 		valueDisplay: string;
 		sortOrder: number;
 		isDefault: boolean;
+		swatchType: string;
+		swatchImageValue: string;
+		swatchColorValue: string;
 	}
 	interface ChildTraitValueModel {
 		id: System.Guid;
@@ -2400,6 +2434,20 @@ declare module Insite.Core.Plugins.Inventory {
 	interface InventoryWarehousesDto {
 		unitOfMeasure: string;
 		warehouseDtos: Insite.Catalog.Services.Dtos.WarehouseDto[];
+	}
+}
+declare module Insite.Payments.WebApi.V1.ApiModels {
+	interface PaymentAuthenticationParameter extends Insite.Core.WebApi.BaseParameter {
+		transactionId: string;
+		cardNumber: string;
+		expirationMonth: number;
+		expirationYear: number;
+		orderAmount: string;
+	}
+	interface PaymentAuthenticationModel {
+		transactionId: string;
+		webOrderNumber: string;
+		redirectHtml: string;
 	}
 }
 
