@@ -15,12 +15,13 @@ export const SetProductIdsParameter: HandlerType = props => {
     props.apiParameter = {
         productIds: props.parameter.productIds,
         pageSize: MAX_PRODUCTS_TO_COMPARE,
+        expand: ["images"],
     };
 };
 
 export const CheckIncludeAttributeTypesParameter: HandlerType = props => {
     if (props.parameter.includeAttributeTypes) {
-        props.apiParameter.expand = ["attributes"];
+        props.apiParameter.expand?.push("attributes");
         props.apiParameter.includeAttributes = ["includeOnProduct"];
     }
 };

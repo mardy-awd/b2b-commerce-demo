@@ -200,6 +200,10 @@ export const LoadProducts: HandlerType = props => {
     const isRecentlyViewedOnPDP =
         props.parameter.carouselType === "recentlyViewed" && props.parameter.isProductDetailsPage;
 
+    props.getProductCollectionParameter.expand
+        ? props.getProductCollectionParameter.expand.push("images")
+        : (props.getProductCollectionParameter.expand = ["images"]);
+
     props.dispatch(
         loadProductInfoList({
             id: props.parameter.carouselId,
