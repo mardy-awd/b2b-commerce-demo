@@ -23,6 +23,7 @@ Microsoft.Owin.Host.SystemWeb
 Microsoft.Owin.Security
 Microsoft.Owin.Security.Facebook
 Microsoft.Owin.Security.Google
+Microsoft.Owin.Security.Jwt
 Microsoft.Owin.Security.OAuth
 Microsoft.Owin.Security.OpenIdConnect
 Microsoft.Owin.Security.WsFederation

@@ -455,6 +455,18 @@
                                     }
                   }
     },
+
+    {
+        "Name":  "Microsoft.Owin.Security.Jwt",
+        "Value":  {
+                      "PackageName":  "Microsoft.Owin.Security.Jwt",
+                      "PackageVersion":  "3.1.0",
+                      "PackageFramework":  null,
+                      "Libraries":  {
+                                        "Microsoft.Owin.Security.Jwt":  "3.1.0.0"
+                                    }
+                  }
+    },
     {
         "Name": "Microsoft.Owin.Security.OAuth",
         "Value": {
