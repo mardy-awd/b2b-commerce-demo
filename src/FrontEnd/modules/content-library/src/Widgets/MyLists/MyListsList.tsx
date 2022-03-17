@@ -5,6 +5,7 @@ import { getWishListsDataView } from "@insite/client-framework/Store/Data/WishLi
 import addWishListToCart from "@insite/client-framework/Store/Pages/Cart/Handlers/AddWishListToCart";
 import deleteWishList from "@insite/client-framework/Store/Pages/MyLists/Handlers/DeleteWishList";
 import deleteWishListShare from "@insite/client-framework/Store/Pages/MyLists/Handlers/DeleteWishListShare";
+import updateLoadParameter from "@insite/client-framework/Store/Pages/MyLists/Handlers/UpdateLoadParameter";
 import translate from "@insite/client-framework/Translate";
 import { WishListModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
@@ -40,6 +41,7 @@ const mapDispatchToProps = {
     addWishListToCart,
     deleteWishList,
     deleteWishListShare,
+    updateLoadParameter,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & OwnProps;
@@ -160,6 +162,11 @@ class MyListsList extends React.Component<Props, State> {
         }
 
         if (this.props.wishLists.value.length === 0) {
+            if (this.props.getWishListsParameter.page && this.props.getWishListsParameter.page > 1) {
+                this.props.updateLoadParameter({ page: this.props.getWishListsParameter.page - 1 });
+                return null;
+            }
+
             return (
                 <StyledWrapper {...styles.centeringWrapper}>
                     <Typography {...styles.messageText} data-test-selector="myLists_noListsFound">

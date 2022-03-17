@@ -183,7 +183,7 @@
                         <td class="col-previousCountDate" ng-bind="vmiBin.previousCountDate | date:'shortDate'"></td>
                         <td class="col-previousCountQty" ng-bind="vmiBin.previousCountQty"></td>
                         <td class="col-previousOrder">
-                            <a ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ vmiBin.lastOrderErpOrderNumber || vmiBin.lastOrderWebOrderNumber }}">
+                            <a ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ vmiBin.lastOrderErpOrderNumber || vmiBin.lastOrderWebOrderNumber }}&isVmiOrder=true">
                                 {{ vmiBin.lastOrderErpOrderNumber || vmiBin.lastOrderWebOrderNumber }}
                             </a>
                         </td>

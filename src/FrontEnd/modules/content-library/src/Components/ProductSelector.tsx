@@ -19,6 +19,8 @@ import DynamicDropdown, { DynamicDropdownPresentationProps, OptionObject } from 
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
+import Icon, { IconProps } from "@insite/mobius/Icon";
+import X from "@insite/mobius/Icons/X";
 import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
 import { SelectPresentationProps } from "@insite/mobius/Select";
 import TextField, { TextFieldPresentationProps } from "@insite/mobius/TextField";
@@ -80,6 +82,7 @@ export interface ProductSelectorStyles {
     autocompleteErpText?: TypographyPresentationProps;
     selectButton?: ButtonPresentationProps;
     searchDynamicDropdown?: DynamicDropdownPresentationProps;
+    clearIcon?: IconProps;
 }
 
 export const productSelectorStyles: ProductSelectorStyles = {
@@ -88,6 +91,9 @@ export const productSelectorStyles: ProductSelectorStyles = {
     },
     searchGridItem: {
         width: [12, 12, 4, 5, 5],
+        css: css`
+            position: relative;
+        `,
     },
     qtyGridItem: {
         width: [3, 3, 2, 1, 1],
@@ -150,6 +156,14 @@ export const productSelectorStyles: ProductSelectorStyles = {
                     ],
                     "max",
                 )}
+        `,
+    },
+    clearIcon: {
+        css: css`
+            position: absolute;
+            right: 40px;
+            top: 45px;
+            cursor: pointer;
         `,
     },
 };
@@ -302,6 +316,12 @@ const ProductSelector = ({
         }
     };
 
+    const clearButtonHandler = () => {
+        clearProduct();
+        setQty("1");
+        searchProducts({ query: "" });
+    };
+
     return (
         <GridContainer {...styles.container} data-test-selector="productSelector">
             <GridItem {...styles.searchGridItem}>
@@ -318,6 +338,9 @@ const ProductSelector = ({
                     error={errorMessage}
                     data-test-selector="productSelector_search"
                 />
+                {selectedProductInfo && (
+                    <Icon {...productSelectorStyles.clearIcon} src={X} onClick={clearButtonHandler} />
+                )}
             </GridItem>
             <GridItem {...styles.qtyGridItem}>
                 <TextField

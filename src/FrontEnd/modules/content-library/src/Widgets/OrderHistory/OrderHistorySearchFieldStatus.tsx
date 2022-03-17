@@ -2,6 +2,7 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getOrderStatusMappingDataView } from "@insite/client-framework/Store/Data/OrderStatusMappings/OrderStatusMappingsSelectors";
 import updateSearchFields from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/UpdateSearchFields";
 import translate from "@insite/client-framework/Translate";
+import { OrderStatusMappingModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import SearchFieldWrapper, {
@@ -37,7 +38,10 @@ const styles = statusStyles;
 class OrderHistorySearchFieldStatus extends React.Component<Props> {
     handleChange = (event: React.FormEvent<HTMLSelectElement>) => {
         if (event.currentTarget.value) {
-            this.props.updateSearchFields({ status: event.currentTarget.value.split(",") });
+            this.props.updateSearchFields({
+                status: event.currentTarget.value.split(","),
+                displayName: findDisplayName(event.currentTarget.value, this.props.orderStatusMappings),
+            });
         } else {
             this.props.updateSearchFields({ status: undefined });
         }
@@ -70,12 +74,26 @@ class OrderHistorySearchFieldStatus extends React.Component<Props> {
     }
 }
 
+function findDisplayName(erpOrderStatus: string, orderStatusMappings: OrderStatusMappingModel[] = []) {
+    const arrOfStatus = erpOrderStatus.split(",");
+
+    let returnVal;
+    for (let i = 0; i < orderStatusMappings.length; i++) {
+        const option = orderStatusMappings[i];
+        if (arrOfStatus.includes(option.erpOrderStatus)) {
+            returnVal = option.displayName;
+            break;
+        }
+    }
+    return returnVal;
+}
+
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(OrderHistorySearchFieldStatus),
     definition: {
         group: "Order History",
         displayName: "Status",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
     },
 };
 

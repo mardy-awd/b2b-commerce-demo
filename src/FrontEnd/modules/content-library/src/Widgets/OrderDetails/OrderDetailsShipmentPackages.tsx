@@ -74,7 +74,7 @@ const OrderDetailsShipmentPackages: React.FC = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsShipmentPackages,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

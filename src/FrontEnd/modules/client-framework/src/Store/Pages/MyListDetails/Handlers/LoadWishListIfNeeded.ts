@@ -18,7 +18,14 @@ export const DispatchSetWishListId: HandlerType = props => {
 
 export const DispatchLoadWishListIfNeeded: HandlerType = props => {
     const wishListState = getWishListState(props.getState(), props.parameter.wishListId);
-    if (!wishListState.value || wishListState.value.schedule === undefined) {
+    if (
+        !wishListState.value ||
+        wishListState.value.schedule === undefined ||
+        !wishListState.value.sendDayOfMonthPossibleValues ||
+        !wishListState.value.sendDayOfWeekPossibleValues ||
+        wishListState.value.sendDayOfMonthPossibleValues.length < 1 ||
+        wishListState.value.sendDayOfWeekPossibleValues.length < 1
+    ) {
         props.dispatch(
             loadWishList({
                 wishListId: props.parameter.wishListId,

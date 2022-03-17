@@ -1,4 +1,5 @@
 import { getCookie } from "@insite/client-framework/Common/Cookies";
+import { convertDateToDateOnlyString } from "@insite/client-framework/Common/Utilities/DateUtilities";
 import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import Zone from "@insite/client-framework/Components/Zone";
 import { GetInvoicesApiParameter } from "@insite/client-framework/Services/InvoiceService";
@@ -56,11 +57,8 @@ const InvoiceHistoryPage = ({
             }
             updateSearchFields({ ...getInvoicesApiParameter, type: "Replace" });
         } else if (settings.invoiceSettings.lookBackDays > 0) {
-            const tzOffset = new Date().getTimezoneOffset() * 60000;
-            const fromDate = new Date(
-                Date.now() - settings.invoiceSettings.lookBackDays * 60 * 60 * 24 * 1000 - tzOffset,
-            );
-            updateSearchFields({ fromDate: fromDate.toISOString().split("T")[0], type: "Initialize", pageSize });
+            const fromDate = new Date(Date.now() - settings.invoiceSettings.lookBackDays * 60 * 60 * 24 * 1000);
+            updateSearchFields({ fromDate: convertDateToDateOnlyString(fromDate), type: "Initialize", pageSize });
         }
     }, []);
 

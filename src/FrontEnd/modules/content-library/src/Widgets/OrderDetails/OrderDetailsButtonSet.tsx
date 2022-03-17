@@ -2,8 +2,7 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import openPrintDialog from "@insite/client-framework/Common/Utilities/openPrintDialog";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
-import { getOrderState, OrderStateContext } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
-import { getOrderStatusMappingDataView } from "@insite/client-framework/Store/Data/OrderStatusMappings/OrderStatusMappingsSelectors";
+import { getOrderState } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import cancelOrder from "@insite/client-framework/Store/Pages/OrderDetails/Handlers/CancelOrder";
 import reorder from "@insite/client-framework/Store/Pages/OrderDetails/Handlers/Reorder";
@@ -24,7 +23,6 @@ import ToasterContext from "@insite/mobius/Toast/ToasterContext";
 import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
-import { useContext } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -73,6 +71,7 @@ const mapStateToProps = (state: ApplicationState) => {
         canReorderItems: settingsCollection.orderSettings.canReorderItems,
         showAddToCartConfirmationDialog: settingsCollection.productSettings.showAddToCartConfirmationDialog,
         isReordering: state.pages.orderDetails.isReordering,
+        isVmiOrderDetailsPage: state.pages.orderDetails.isVmiOrderDetailsPage,
     };
 };
 
@@ -197,6 +196,7 @@ const OrderDetailsButtonSet: React.FC<Props> = ({
     showAddToCartConfirmationDialog,
     isReordering,
     history,
+    isVmiOrderDetailsPage,
 }) => {
     const toasterContext = React.useContext(ToasterContext);
     const resolvedGenerateEmailAttachmentFromWebpage =
@@ -228,6 +228,7 @@ const OrderDetailsButtonSet: React.FC<Props> = ({
                             <OrderDetailPageTypeLink
                                 title={order.webOrderNumber}
                                 orderNumber={order.webOrderNumber || order.erpOrderNumber}
+                                isVmiOrderDetailsPage={isVmiOrderDetailsPage}
                             />
                             &nbsp;{translate("Added to Cart")}
                         </>
@@ -389,7 +390,7 @@ const OrderDetailsButtonSet: React.FC<Props> = ({
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(OrderDetailsButtonSet)),
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         displayName: "Order Details Button Set",
         group: "Order Details",
         fieldDefinitions: [

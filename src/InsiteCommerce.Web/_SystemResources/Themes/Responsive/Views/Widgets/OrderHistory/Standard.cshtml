@@ -15,9 +15,9 @@
                     </tr>
                     <tr class="tst_orderHistoryWidget_order" ng-repeat="order in vm.orderHistory.orders">
                         <td class="col-date">
-                            <a id="tst_orderHistoryWidget_link_{{order.webOrderNumber}}" ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ order.webOrderNumber || order.erpOrderNumber }}" ng-bind="order.orderDate | date:'shortDate'"></a>
+                            <a id="tst_orderHistoryWidget_link_{{order.webOrderNumber}}" ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ order.webOrderNumber || order.erpOrderNumber }}{{ !!order.vmiLocationId ? '&isVmiOrder=true' : '' }}" ng-bind="order.orderDate | date:'shortDate'"></a>
                         </td>
-                        <td class="col-ordernum"><a ng-href="[% urlForPage 'OrderDetailPage' %]?ordernumber={{ order.erpOrderNumber }}" ng-bind="order.erpOrderNumber"></a></td>
+                        <td class="col-ordernum"><a ng-href="[% urlForPage 'OrderDetailPage' %]?ordernumber={{ order.erpOrderNumber }}{{ !!order.vmiLocationId ? '&isVmiOrder=true' : '' }}" ng-bind="order.erpOrderNumber"></a></td>
                         <td class="col-status" ng-bind="order.statusDisplay"></td>
                         <td class="col-webordernum" ng-if="vm.showWebOrderNumber" ng-bind="order.webOrderNumber"></td>
                         <td class="col-tot" ng-bind="order.orderTotalDisplay"></td>
@@ -32,7 +32,7 @@
             <li class="row" ng-repeat="order in vm.orderHistory.orders">
                 <div class="columns small-6">
                     <div>
-                        <a ng-href="[% urlForPage 'OrderDetailPage' %]?ordernumber={{ order.webOrderNumber || order.erpOrderNumber }}" ng-bind="'[% translate 'Order #' EscapeSingleQuotes %]' + (order.webOrderNumber || order.erpOrderNumber)"></a>
+                        <a ng-href="[% urlForPage 'OrderDetailPage' %]?ordernumber={{ order.webOrderNumber || order.erpOrderNumber }}{{ !!order.vmiLocationId ? '&isVmiOrder=true' : '' }}" ng-bind="'[% translate 'Order #' EscapeSingleQuotes %]' + (order.webOrderNumber || order.erpOrderNumber)"></a>
                     </div>
                     <div ng-bind="order.orderDate | date:'shortDate'"></div>
                     <div ng-bind="order.statusDisplay"></div>

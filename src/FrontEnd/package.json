@@ -137,7 +137,7 @@
         "qs": "6.9.4",
         "react": "16.13.1",
         "react-color": "2.18.1",
-        "react-datetime-picker": "2.9.0",
+        "react-datetime-picker": "3.4.3",
         "react-dom": "16.13.1",
         "react-froala-wysiwyg": "3.0.6",
         "react-oui-icons": "^3.1.0",
@@ -161,7 +161,7 @@
         "stylelint-config-styled-components": "0.1.1",
         "stylelint-custom-processor-loader": "0.6.0",
         "stylelint-processor-styled-components": "1.9.0",
-        "template-file": "3.1.0",
+        "template-file": "6.0.0",
         "tiny-warning": "1.0.3",
         "ts-jest": "26.4.3",
         "ts-loader": "6.2.1",
@@ -177,7 +177,7 @@
         "webpack-hot-middleware": "2.25.0",
         "webpack-merge": "4.2.2",
         "winston": "3.3.3",
-        "xlsx": "0.15.6",
+        "xlsx": "0.17.5",
         "y18n": "4.0.1"
     },
     "optionalDependencies": {

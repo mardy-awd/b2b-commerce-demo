@@ -152,7 +152,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Product ERP Number",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
     },
 };
 

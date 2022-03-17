@@ -243,7 +243,7 @@ const VmiAddProductModal = ({
     };
 
     const validateForm = () => {
-        if (minValue > maxValue) {
+        if ((+minValue || 0) > (+maxValue || 0)) {
             setQtyErrorMessage(siteMessage("Vmi_VmiBinMinimumQtyMustBeLessThanOrEqualToMaximumQty"));
             return false;
         }
@@ -403,6 +403,7 @@ const VmiAddProductModal = ({
                                     {...styles.minTextField}
                                     type="number"
                                     min={0}
+                                    max={999999}
                                     label={translate("Min")}
                                     value={minValue}
                                     onChange={minValueChangeHandler}
@@ -414,6 +415,7 @@ const VmiAddProductModal = ({
                                     {...styles.maxTextField}
                                     type="number"
                                     min={0}
+                                    max={999999}
                                     label={translate("Max")}
                                     value={maxValue}
                                     onChange={maxValueChangeHandler}

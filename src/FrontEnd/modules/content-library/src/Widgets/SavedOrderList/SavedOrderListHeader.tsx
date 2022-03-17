@@ -62,7 +62,7 @@ const SavedOrderListHeader: FC<Props> = ({ toggleFiltersOpen, id }) => {
             <GridItem {...styles.toggleFilterGridItem}>
                 <Clickable
                     {...styles.toggleFilterClickable}
-                    onClick={toggleFiltersOpen}
+                    onClick={() => toggleFiltersOpen()}
                     data-test-selector="savedOrderList_showHideFilters"
                 >
                     <Icon {...styles.toggleFilterIcon} />

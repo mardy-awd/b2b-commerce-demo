@@ -1,3 +1,4 @@
+import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { OrdersDataViewContext } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import updateSearchFields from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/UpdateSearchFields";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
@@ -8,11 +9,15 @@ import { connect, ResolveThunks } from "react-redux";
 
 interface OwnProps extends WidgetProps {}
 
+const mapStateToProps = (state: ApplicationState) => ({
+    isVmiOrderHistoryPage: state.pages.orderHistory.isVmiOrderHistoryPage,
+});
+
 const mapDispatchToProps = {
     updateSearchFields,
 };
 
-type Props = OwnProps & ResolveThunks<typeof mapDispatchToProps>;
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
 export interface OrderHistoryPaginationStyles {
     pagination?: PaginationPresentationProps;
@@ -22,8 +27,10 @@ export const orderHistoryPaginationStyles: OrderHistoryPaginationStyles = {};
 
 const styles = orderHistoryPaginationStyles;
 
-const OrderHistoryPagination: FC<Props> = ({ updateSearchFields }) => {
+const OrderHistoryPagination: FC<Props> = ({ isVmiOrderHistoryPage, updateSearchFields }) => {
     const ordersDataView = useContext(OrdersDataViewContext);
+
+    const pageSizeCookieName = isVmiOrderHistoryPage ? "VmiOrderHistory-PageSize" : "OrderHistory-PageSize";
 
     if (!ordersDataView.value || !ordersDataView.pagination) {
         return null;
@@ -58,17 +65,17 @@ const OrderHistoryPagination: FC<Props> = ({ updateSearchFields }) => {
             resultsPerPageOptions={pageSizeOptions}
             onChangePage={changePage}
             onChangeResultsPerPage={changeResultsPerPage}
-            pageSizeCookie="OrderHistory-PageSize"
+            pageSizeCookie={pageSizeCookieName}
         />
     );
 };
 
 const widgetModule: WidgetModule = {
-    component: connect(null, mapDispatchToProps)(OrderHistoryPagination),
+    component: connect(mapStateToProps, mapDispatchToProps)(OrderHistoryPagination),
     definition: {
         displayName: "Pagination",
         group: "Order History",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
     },
 };
 

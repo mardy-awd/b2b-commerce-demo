@@ -6,6 +6,7 @@ import { Draft } from "immer";
 const initialState: OrderDetailsState = {
     isReordering: false,
     isCanceling: false,
+    isVmiOrderDetailsPage: false,
 };
 
 const reducer = {
@@ -26,6 +27,12 @@ const reducer = {
     },
     "Pages/OrderDetails/CompleteCancelOrder": (draft: Draft<OrderDetailsState>) => {
         draft.isCanceling = false;
+    },
+    "Pages/OrderDetails/SetVmiOrderDetailsPage": (
+        draft: Draft<OrderDetailsState>,
+        action: { isVmiOrderDetailsPage: boolean },
+    ) => {
+        draft.isVmiOrderDetailsPage = action.isVmiOrderDetailsPage;
     },
 };
 

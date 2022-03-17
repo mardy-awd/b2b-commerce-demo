@@ -3,13 +3,16 @@ import getLocalizedDateTime from "@insite/client-framework/Common/Utilities/getL
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { OrdersDataViewContext } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
+import exportOrders from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/ExportOrders";
 import reorder from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/Reorder";
+import selectOrders from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/SelectOrders";
 import updateSearchFields from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/UpdateSearchFields";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import OrderDetailPageTypeLink from "@insite/content-library/Components/OrderDetailPageTypeLink";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
+import Checkbox, { CheckboxPresentationProps } from "@insite/mobius/Checkbox";
 import { ClickableProps } from "@insite/mobius/Clickable";
 import DataTable, { DataTableProps, SortOrderOptions } from "@insite/mobius/DataTable";
 import DataTableBody from "@insite/mobius/DataTable/DataTableBody";
@@ -17,7 +20,9 @@ import DataTableCell, { DataTableCellProps } from "@insite/mobius/DataTable/Data
 import DataTableHead from "@insite/mobius/DataTable/DataTableHead";
 import DataTableHeader, { DataTableHeaderProps } from "@insite/mobius/DataTable/DataTableHeader";
 import DataTableRow from "@insite/mobius/DataTable/DataTableRow";
-import { LinkPresentationProps } from "@insite/mobius/Link";
+import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
+import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
+import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
 import { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
@@ -56,12 +61,16 @@ const mapStateToProps = (state: ApplicationState) => {
         showAddToCartConfirmationDialog: getSettingsCollection(state).productSettings.showAddToCartConfirmationDialog,
         language: state.context.session.language,
         showPoNumber: getSettingsCollection(state).orderSettings.showPoNumber,
+        isVmiOrderHistoryPage: state.pages.orderHistory.isVmiOrderHistoryPage,
+        selectedOrderIds: state.pages.orderHistory.selectedOrderIds || {},
     };
 };
 
 const mapDispatchToProps = {
     updateSearchFields,
     reorder,
+    selectOrders,
+    exportOrders,
 };
 
 type Props = ReturnType<typeof mapStateToProps> &
@@ -96,6 +105,12 @@ export interface OrderHistoryTableStyles {
     reorderButtonSpinner?: LoadingSpinnerProps;
     orderNumberLink?: LinkPresentationProps;
     dataTable?: DataTableProps;
+    checkboxHeader?: DataTableHeaderProps;
+    checkboxCells?: DataTableCellProps;
+    rowCheckbox?: CheckboxPresentationProps;
+    headerContainer?: GridContainerProps;
+    gridItem?: GridItemProps;
+    exportLink?: LinkPresentationProps;
 }
 
 export const orderHistoryTableStyles: OrderHistoryTableStyles = {
@@ -165,6 +180,28 @@ export const orderHistoryTableStyles: OrderHistoryTableStyles = {
             `,
         },
     },
+    checkboxHeader: {
+        tight: true,
+    },
+    headerContainer: {
+        gap: 8,
+        css: css`
+            padding: 20px 0;
+        `,
+    },
+    gridItem: {
+        width: 12,
+        css: css`
+            > * {
+                padding-right: 10px;
+            }
+        `,
+    },
+    exportLink: {
+        css: css`
+            margin-left: 10px;
+        `,
+    },
 };
 
 const styles = orderHistoryTableStyles;
@@ -188,10 +225,10 @@ class OrderHistoryTable extends React.Component<Props> {
         return sorted as SortOrderOptions;
     };
 
-    reorderClick = (orderNumber: string, linkOrderNumber: string) =>
+    reorderClick = (orderNumber: string, linkOrderNumber: string, isVmiOrder: boolean) =>
         this.props.reorder({
             orderNumber,
-            onSuccess: () => this.onReorderSuccess(orderNumber, linkOrderNumber),
+            onSuccess: () => this.onReorderSuccess(orderNumber, linkOrderNumber, isVmiOrder),
             onComplete(resultProps) {
                 if (resultProps.apiResult) {
                     this.onSuccess?.();
@@ -199,14 +236,19 @@ class OrderHistoryTable extends React.Component<Props> {
             },
         });
 
-    onReorderSuccess = (orderNumber: string, linkOrderNumber: string) => {
+    onReorderSuccess = (orderNumber: string, linkOrderNumber: string, isVmiOrder: boolean) => {
         if (!this.props.showAddToCartConfirmationDialog) {
             return;
         }
         this.props.toaster.addToast({
             body: (
                 <HistoryContext.Provider value={{ history: this.props.history }}>
-                    <OrderDetailPageTypeLink title={orderNumber} orderNumber={linkOrderNumber} />
+                    <OrderDetailPageTypeLink
+                        title={orderNumber}
+                        orderNumber={linkOrderNumber}
+                        isVmiOrder={isVmiOrder}
+                        isVmiOrderDetailsPage={this.props.isVmiOrderHistoryPage}
+                    />
                     &nbsp;{translate("Added to Cart")}
                 </HistoryContext.Provider>
             ),
@@ -254,6 +296,7 @@ class OrderHistoryTable extends React.Component<Props> {
                 status: order.statusDisplay,
                 po: order.customerPO,
                 total: order.orderGrandTotalDisplay,
+                isVmiOrder: !!order.vmiLocationId,
             };
         });
 
@@ -262,10 +305,61 @@ class OrderHistoryTable extends React.Component<Props> {
 
         const isTrueOrUndefined = (value?: boolean) => value === true || value === undefined;
 
+        const checkboxChangeHandler = (value: boolean, id?: string) => {
+            if (id) {
+                this.props.selectOrders({ ids: [id] });
+            } else {
+                let ids: string[] = [];
+                if (value) {
+                    for (const row of this.context.value!) {
+                        if (!this.props.selectedOrderIds[row.id]) {
+                            ids.push(row.id);
+                        }
+                    }
+                } else {
+                    ids = Object.keys(this.props.selectedOrderIds);
+                }
+
+                this.props.selectOrders({ ids });
+            }
+        };
+
+        const handleExportButtonClick = (selectedOnly = false) => {
+            this.props.exportOrders({ ids: selectedOnly ? this.props.selectedOrderIds : {} });
+        };
+
         return (
             <StyledWrapper {...styles.container} data-test-selector="orderHistoryTable">
+                {rows.length > 0 && this.props.isVmiOrderHistoryPage && (
+                    <GridContainer {...styles.headerContainer}>
+                        <GridItem {...styles.gridItem}>
+                            <>
+                                <Link
+                                    disabled={Object.keys(this.props.selectedOrderIds).length === 0}
+                                    onClick={() => handleExportButtonClick(true)}
+                                >
+                                    {translate("Export Selected")}
+                                </Link>
+                                <Link {...styles.exportLink} onClick={() => handleExportButtonClick()}>
+                                    {translate("Export All")}
+                                </Link>
+                            </>
+                        </GridItem>
+                    </GridContainer>
+                )}
                 <DataTable {...styles.dataTable}>
                     <DataTableHead>
+                        {this.props.isVmiOrderHistoryPage && (
+                            <DataTableHeader {...styles.checkboxHeader}>
+                                <Checkbox
+                                    {...styles.rowCheckbox}
+                                    checked={
+                                        Object.keys(this.props.selectedOrderIds).length === ordersDataView.value.length
+                                    }
+                                    onChange={(e, value) => checkboxChangeHandler(value)}
+                                />
+                            </DataTableHeader>
+                        )}
                         {isTrueOrUndefined(showOrderNumber) && (
                             <DataTableHeader
                                 {...styles.orderNumberHeader}
@@ -322,63 +416,81 @@ class OrderHistoryTable extends React.Component<Props> {
                                 {translate("PO #", "customerPO")}
                             </DataTableHeader>
                         )}
-                        {isTrueOrUndefined(showReorderProducts) && (
+                        {isTrueOrUndefined(showReorderProducts) && !this.props.isVmiOrderHistoryPage && (
                             <DataTableHeader {...styles.reorderHeader} title={translate("Reorder")} />
                         )}
                     </DataTableHead>
                     <DataTableBody data-test-selector="orderHistoryTable_tableBody">
-                        {rows.map(({ id, linkOrderNumber, date, orderNumber, shipTo, status, po, total }) => (
-                            <DataTableRow key={id}>
-                                {isTrueOrUndefined(showOrderNumber) && (
-                                    <DataTableCell
-                                        {...styles.orderNumberCells}
-                                        data-test-selector="orderHistoryTable_tableCell_orderNumber"
-                                    >
-                                        <OrderDetailPageTypeLink title={orderNumber} orderNumber={linkOrderNumber} />
-                                    </DataTableCell>
-                                )}
-                                {isTrueOrUndefined(showDate) && (
-                                    <DataTableCell
-                                        {...styles.orderDateCells}
-                                        data-test-selector="orderHistoryTable_tableCell_date"
-                                    >
-                                        {date}
-                                    </DataTableCell>
-                                )}
-                                {isTrueOrUndefined(showOrderTotal) && (
-                                    <DataTableCell {...styles.orderTotalCells}>{total}</DataTableCell>
-                                )}
-                                {isTrueOrUndefined(showStatus) && (
-                                    <DataTableCell
-                                        {...styles.statusCells}
-                                        data-test-selector="orderHistoryTable_tableCell_status"
-                                    >
-                                        {status}
-                                    </DataTableCell>
-                                )}
-                                {isTrueOrUndefined(showShipTo) && (
-                                    <DataTableCell {...styles.shipToCells}>{shipTo}</DataTableCell>
-                                )}
-                                {isTrueOrUndefined(showPONumber) && this.props.showPoNumber && (
-                                    <DataTableCell {...styles.customerPOCells}>{po}</DataTableCell>
-                                )}
-                                {isTrueOrUndefined(showReorderProducts) && (
-                                    <DataTableCell {...styles.reorderCells}>
-                                        {this.props.isReordering[orderNumber] ? (
-                                            <LoadingSpinner {...styles.reorderButtonSpinner} />
-                                        ) : (
-                                            <Button
-                                                disabled={Object.keys(this.props.isReordering).length > 0}
-                                                {...styles.reorderButton}
-                                                onClick={() => this.reorderClick(orderNumber, linkOrderNumber)}
-                                            >
-                                                {translate("Reorder")}
-                                            </Button>
-                                        )}
-                                    </DataTableCell>
-                                )}
-                            </DataTableRow>
-                        ))}
+                        {rows.map(
+                            ({ id, linkOrderNumber, date, orderNumber, shipTo, status, po, total, isVmiOrder }) => (
+                                <DataTableRow key={id}>
+                                    {this.props.isVmiOrderHistoryPage && (
+                                        <DataTableCell {...styles.checkboxCells}>
+                                            <Checkbox
+                                                {...styles.rowCheckbox}
+                                                checked={this.props.selectedOrderIds[id]}
+                                                onChange={(e, value) => checkboxChangeHandler(value, id)}
+                                            />
+                                        </DataTableCell>
+                                    )}
+                                    {isTrueOrUndefined(showOrderNumber) && (
+                                        <DataTableCell
+                                            {...styles.orderNumberCells}
+                                            data-test-selector="orderHistoryTable_tableCell_orderNumber"
+                                        >
+                                            <OrderDetailPageTypeLink
+                                                title={orderNumber}
+                                                orderNumber={linkOrderNumber}
+                                                isVmiOrder={isVmiOrder}
+                                                isVmiOrderDetailsPage={this.props.isVmiOrderHistoryPage}
+                                            />
+                                        </DataTableCell>
+                                    )}
+                                    {isTrueOrUndefined(showDate) && (
+                                        <DataTableCell
+                                            {...styles.orderDateCells}
+                                            data-test-selector="orderHistoryTable_tableCell_date"
+                                        >
+                                            {date}
+                                        </DataTableCell>
+                                    )}
+                                    {isTrueOrUndefined(showOrderTotal) && (
+                                        <DataTableCell {...styles.orderTotalCells}>{total}</DataTableCell>
+                                    )}
+                                    {isTrueOrUndefined(showStatus) && (
+                                        <DataTableCell
+                                            {...styles.statusCells}
+                                            data-test-selector="orderHistoryTable_tableCell_status"
+                                        >
+                                            {status}
+                                        </DataTableCell>
+                                    )}
+                                    {isTrueOrUndefined(showShipTo) && (
+                                        <DataTableCell {...styles.shipToCells}>{shipTo}</DataTableCell>
+                                    )}
+                                    {isTrueOrUndefined(showPONumber) && this.props.showPoNumber && (
+                                        <DataTableCell {...styles.customerPOCells}>{po}</DataTableCell>
+                                    )}
+                                    {isTrueOrUndefined(showReorderProducts) && !this.props.isVmiOrderHistoryPage && (
+                                        <DataTableCell {...styles.reorderCells}>
+                                            {this.props.isReordering[orderNumber] ? (
+                                                <LoadingSpinner {...styles.reorderButtonSpinner} />
+                                            ) : (
+                                                <Button
+                                                    disabled={Object.keys(this.props.isReordering).length > 0}
+                                                    {...styles.reorderButton}
+                                                    onClick={() =>
+                                                        this.reorderClick(orderNumber, linkOrderNumber, isVmiOrder)
+                                                    }
+                                                >
+                                                    {translate("Reorder")}
+                                                </Button>
+                                            )}
+                                        </DataTableCell>
+                                    )}
+                                </DataTableRow>
+                            ),
+                        )}
                     </DataTableBody>
                 </DataTable>
             </StyledWrapper>
@@ -391,7 +503,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Search Results Table",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
         fieldDefinitions: [
             {
                 name: fields.showOrderNumber,

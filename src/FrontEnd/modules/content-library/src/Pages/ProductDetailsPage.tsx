@@ -17,6 +17,7 @@ import changeQtyOrdered from "@insite/client-framework/Store/Pages/ProductDetail
 import changeUnitOfMeasure from "@insite/client-framework/Store/Pages/ProductDetails/Handlers/ChangeUnitOfMeasure";
 import displayProduct from "@insite/client-framework/Store/Pages/ProductDetails/Handlers/DisplayProduct";
 import resetSelections from "@insite/client-framework/Store/Pages/ProductDetails/Handlers/ResetSelections";
+import { HideFooter, HideHeader } from "@insite/client-framework/Types/FieldDefinition";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
 import CurrentCategory from "@insite/content-library/Components/CurrentCategory";
@@ -213,6 +214,7 @@ const pageModule: PageModule = {
         hasEditableTitle: false,
         supportsProductSelection: true,
         pageType: "System",
+        fieldDefinitions: [HideHeader, HideFooter],
     },
 };
 

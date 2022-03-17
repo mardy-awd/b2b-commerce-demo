@@ -50,7 +50,7 @@ const InvoiceDetailsBillingAddress = ({ invoice, extendedStyles }: OwnProps) => 
     const [styles] = React.useState(() => mergeToNew(billingAddressStyles, extendedStyles));
 
     return (
-        <StyledWrapper {...styles.wrapper} data-test-selector="tst_invoiceDetail_billingAddress">
+        <StyledWrapper {...styles.wrapper}>
             <Typography as="h2" {...styles.headerText}>
                 {translate("Billing Information")}
             </Typography>

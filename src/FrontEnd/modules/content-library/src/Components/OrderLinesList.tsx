@@ -90,7 +90,9 @@ export interface OrderLinesListStyles {
     productInfoErpNumberGridItem?: GridItemProps;
     erpNumberHeadingAndText?: SmallHeadingAndTextStyles;
     productInfoManufacturerItemGridItem?: GridItemProps;
+    productInfoVmiBinNumberGridItem?: GridItemProps;
     manufacturerHeadingAndText?: SmallHeadingAndTextStyles;
+    vmiBinNumberHeadingAndText?: SmallHeadingAndTextStyles;
     productInfoCustomerProductGridItem?: GridItemProps;
     customerProductNumberHeadingAndText?: SmallHeadingAndTextStyles;
     orderLineInfoPromotionGridItem?: GridItemProps;
@@ -204,6 +206,9 @@ export const orderLinesListStyles: OrderLinesListStyles = {
         width: [12, 12, 6, 6, 6],
     },
     productInfoManufacturerItemGridItem: {
+        width: [12, 12, 6, 6, 6],
+    },
+    productInfoVmiBinNumberGridItem: {
         width: [12, 12, 6, 6, 6],
     },
     productInfoCustomerProductGridItem: {
@@ -350,6 +355,13 @@ export const orderLinesListStyles: OrderLinesListStyles = {
             },
         },
     },
+    vmiBinNumberHeadingAndText: {
+        extendedStyles: {
+            heading: {
+                weight: "bold",
+            },
+        },
+    },
 };
 
 const OrderLineProductInfo = ({ orderLine, styles }: { orderLine: OrderLineModel; styles: OrderLinesListStyles }) => {
@@ -408,6 +420,15 @@ const OrderLineProductInfo = ({ orderLine, styles }: { orderLine: OrderLineModel
                                     {...styles.manufacturerHeadingAndText}
                                     heading={translate("MFG #")}
                                     text={orderLine.manufacturerItem}
+                                />
+                            </GridItem>
+                        )}
+                        {orderLine.vmiBinNumber && (
+                            <GridItem {...styles.productInfoVmiBinNumberGridItem}>
+                                <SmallHeadingAndText
+                                    {...styles.vmiBinNumberHeadingAndText}
+                                    heading={translate("Bin #")}
+                                    text={orderLine.vmiBinNumber}
                                 />
                             </GridItem>
                         )}

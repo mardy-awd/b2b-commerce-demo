@@ -182,7 +182,6 @@ export const chain = [
     SetVariantSelectionCompleted,
     SelectVariantProduct,
     SetProductInfo,
-    LoadRealTimePricing,
     DispatchUpdateVariantSelection,
 ];
 

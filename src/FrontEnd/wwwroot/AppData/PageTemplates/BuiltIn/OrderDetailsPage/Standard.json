@@ -250,10 +250,10 @@
         },
         {
             "parentId": "aa953773-de64-43ca-ae75-12aea5b6542b",
-            "type": "OrderDetails/OrderSalesperson",
+            "type": "OrderDetails/OrderDetailsVmiLocation",
             "zone": "Content0",
             "isLayout": false,
-            "id": "8a0d46ad-4242-44a5-b8da-620971d3856d",
+            "id": "6f8c2483-ed18-4e62-a6ea-fdb137be52d7",
             "generalFields": {},
             "translatableFields": {},
             "contextualFields": {}
@@ -270,10 +270,10 @@
         },
         {
             "parentId": "aa953773-de64-43ca-ae75-12aea5b6542b",
-            "type": "OrderDetails/OrderDetailsRequestedDate",
+            "type": "OrderDetails/OrderSalesperson",
             "zone": "Content1",
             "isLayout": false,
-            "id": "c0971d5e-6bb8-47b1-adca-34a0e5e89b1d",
+            "id": "8a0d46ad-4242-44a5-b8da-620971d3856d",
             "generalFields": {},
             "translatableFields": {},
             "contextualFields": {}
@@ -284,6 +284,16 @@
             "zone": "Content2",
             "isLayout": false,
             "id": "b75d1fdb-6f19-46ea-9acb-02b680a206da",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },        
+        {
+            "parentId": "aa953773-de64-43ca-ae75-12aea5b6542b",
+            "type": "OrderDetails/OrderDetailsRequestedDate",
+            "zone": "Content2",
+            "isLayout": false,
+            "id": "c0971d5e-6bb8-47b1-adca-34a0e5e89b1d",
             "generalFields": {},
             "translatableFields": {},
             "contextualFields": {}

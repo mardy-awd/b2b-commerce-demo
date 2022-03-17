@@ -2,10 +2,17 @@
     ng-init="vm.exportHeaders = [
         '[% translate 'Vmi Location ID' %]',
         '[% translate 'Product ID' %]',
+        '[% translate 'Product Name' %]',
+        '[% translate 'Part #' %]',
+        '[% translate 'Manufacturer #' %]',
+        '[% translate 'My Part #' %]',
         '[% translate 'Bin Number' %]',
         '[% translate 'Min Qty' %]',
-        '[% translate 'Max Qty' %]'
-        ];">
+        '[% translate 'Max Qty' %]',
+        '[% translate 'Previous Count Date' %]',
+        '[% translate 'Previous Count Quantity' %]',
+        '[% translate 'Previous Order' %]'
+        ]; vm.exportPage = 'Reporting';">
     <div ng-if="!vm.failedToLoadVmiBins">
         <section class="accordion search-vmi-reporting">
             <div class="cm">
@@ -200,7 +207,7 @@
                     <td class="col-previousCountDate" ng-bind="vmiBin.previousCountDate | date:'shortDate'"></td>
                     <td class="col-previousCountQty" ng-bind="vmiBin.previousCountQty"></td>
                     <td class="col-previousOrder">
-                        <a ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ vmiBin.lastOrderErpOrderNumber || vmiBin.lastOrderWebOrderNumber }}">
+                        <a ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ vmiBin.lastOrderErpOrderNumber || vmiBin.lastOrderWebOrderNumber }}&isVmiOrder=true">
                             {{ vmiBin.lastOrderErpOrderNumber || vmiBin.lastOrderWebOrderNumber }}
                         </a>
                     </td>

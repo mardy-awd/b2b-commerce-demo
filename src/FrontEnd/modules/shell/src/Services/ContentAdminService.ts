@@ -1,6 +1,7 @@
 import ContentMode from "@insite/client-framework/Common/ContentMode";
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
 import { SettingsModel } from "@insite/client-framework/Services/SettingsService";
+import { WebsiteModel } from "@insite/client-framework/Types/ApiModels";
 import { DeviceType } from "@insite/client-framework/Types/ContentItemModel";
 import { PageModel } from "@insite/client-framework/Types/PageProps";
 import PermissionsModel from "@insite/client-framework/Types/PermissionsModel";
@@ -125,6 +126,7 @@ function cleanPagePublishInfoModel(model: PagePublishInfoModel, result?: PagePub
             published: model.published,
             isVariant: model.isVariant,
             isDefaultVariant: model.isDefaultVariant,
+            isSharedContent: model.isSharedContent,
         });
     });
 
@@ -143,6 +145,9 @@ export const switchContentMode = (contentMode: ContentMode) => post("switchConte
 export const saveTheme = (theme: Partial<BaseTheme>) => postVoid("saveTheme", theme);
 
 export const exportContent = (onlyPublished: boolean) => post<string>(`exportContent?onlyPublished=${onlyPublished}`);
+
+export const getSharedContentWebsites = (sharedContentId: string) =>
+    get<{ name: string; domainName: string }[]>(`sharedContentWebsites?sharedContentId=${sharedContentId}`);
 
 export type ContentContextModel = {
     languageId: string;
@@ -170,6 +175,7 @@ export type PageVersionInfoModel = {
 export type PagePublishInfoModel = {
     pageId: string;
     name: string;
+    isSharedContent: boolean;
     isVariant: boolean;
     isDefaultVariant: boolean;
     unpublishedContexts: PublishableContentContextModel[];
@@ -188,7 +194,10 @@ export type RestorePageVersionModel = {
 };
 
 export type PagePublishInfo = PublishableContentContextModel &
-    Pick<PagePublishInfoModel, "pageId" | "name" | "unpublished" | "published" | "isVariant" | "isDefaultVariant">;
+    Pick<
+        PagePublishInfoModel,
+        "pageId" | "name" | "unpublished" | "published" | "isVariant" | "isDefaultVariant" | "isSharedContent"
+    >;
 
 export type PublishResultModel = {
     success: boolean;
@@ -265,6 +274,7 @@ export interface PageStateModel {
     allowedForPageType: string;
     isDraftPage: boolean;
     neverPublished: boolean;
+    tags: string[];
 }
 
 export type PageStateModelAttribute = "NonMatching";

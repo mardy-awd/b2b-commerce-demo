@@ -1,5 +1,6 @@
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
+import { getVmiLocationState } from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsSelectors";
 import updateSearchFields from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/UpdateSearchFields";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
@@ -9,10 +10,15 @@ import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
 
-const mapStateToProps = (state: ApplicationState) => ({
-    filtersOpen: state.pages.orderHistory.filtersOpen,
-    getOrdersParameter: state.pages.orderHistory.getOrdersParameter,
-});
+const mapStateToProps = (state: ApplicationState) => {
+    const vmiLocationId = state.pages.orderHistory.getOrdersParameter.vmiLocationId;
+
+    return {
+        filtersOpen: state.pages.orderHistory.filtersOpen,
+        getOrdersParameter: state.pages.orderHistory.getOrdersParameter,
+        vmiLocationState: vmiLocationId ? getVmiLocationState(state, vmiLocationId) : null,
+    };
+};
 
 const mapDispatchToProps = {
     updateSearchFields,
@@ -31,7 +37,7 @@ const styles = orderHistorySearchTagsStyles;
 
 type Props = WidgetProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
-const orderHistorySearchTags = ({ getOrdersParameter, updateSearchFields }: Props) => {
+const orderHistorySearchTags = ({ getOrdersParameter, updateSearchFields, vmiLocationState }: Props) => {
     const fieldRemoveHandler = (fieldName: string, value = "") => {
         updateSearchFields({ [fieldName]: value });
     };
@@ -109,7 +115,11 @@ const orderHistorySearchTags = ({ getOrdersParameter, updateSearchFields }: Prop
                         fieldRemoveHandler("status");
                     }}
                 >
-                    {`${translate("Status")}: ${getOrdersParameter.status}`}
+                    {`${translate("Status")}: ${
+                        getOrdersParameter.displayName
+                            ? translate(getOrdersParameter.displayName!)
+                            : getOrdersParameter.status
+                    }`}
                 </Tag>
             )}
             {getOrdersParameter.orderTotalOperator && getOrdersParameter.orderTotal && (
@@ -125,6 +135,16 @@ const orderHistorySearchTags = ({ getOrdersParameter, updateSearchFields }: Prop
                     }`}
                 </Tag>
             )}
+            {getOrdersParameter.vmiLocationId && vmiLocationState?.value && (
+                <Tag
+                    {...styles.appliedFilterTag}
+                    onDelete={() => {
+                        fieldRemoveHandler("vmiLocationId");
+                    }}
+                >
+                    {`${translate("VMI Location")}: ${vmiLocationState.value?.name}`}
+                </Tag>
+            )}
         </StyledWrapper>
     );
 };
@@ -134,7 +154,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Tags",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
     },
 };
 

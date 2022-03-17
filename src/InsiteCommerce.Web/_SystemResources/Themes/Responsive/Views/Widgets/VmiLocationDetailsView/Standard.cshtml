@@ -213,7 +213,7 @@
                                             ng-click="vm.toggleSelectedOrder(vmiOrder)" />
                                 </span>
                             </td>
-                            <td class="col-order-number"><a id="tst_orderList_{{vmiOrder.id}}_descriptionLink" ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ vmiOrder.erpOrderNumber || vmiOrder.orderNumber }}">{{vmiOrder.orderNumber}}</a></td>
+                            <td class="col-order-number"><a id="tst_orderList_{{vmiOrder.id}}_descriptionLink" ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ vmiOrder.erpOrderNumber || vmiOrder.orderNumber }}&isVmiOrder=true">{{vmiOrder.orderNumber}}</a></td>
                             <td class="col-order-date" ng-bind="vmiOrder.orderDate | date:'shortDate'"></td>
                             <td class="col-order-total" ng-bind="vmiOrder.orderGrandTotalDisplay"></td>
                             <td class="col-order-status" ng-bind="vmiOrder.status"></td>

@@ -148,7 +148,7 @@ const RfqMyQuotesHeader = ({
                     </Typography>
                 </GridItem>
                 <GridItem {...styles.toggleFilterGridItem}>
-                    <Clickable onClick={toggleFiltersOpen} data-test-selector="rfqMyQuotes_toggleFilter">
+                    <Clickable onClick={() => toggleFiltersOpen()} data-test-selector="rfqMyQuotes_toggleFilter">
                         <VisuallyHidden>{translate("Toggle Filter")}</VisuallyHidden>
                         <Icon src={Filter} {...styles.toggleFilterIcon} />
                     </Clickable>

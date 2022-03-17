@@ -1,4 +1,5 @@
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
+import { convertDateToDateOnlyString } from "@insite/client-framework/Common/Utilities/DateUtilities";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import loadInvoices from "@insite/client-framework/Store/Data/Invoices/Handlers/LoadInvoices";
 import loadCurrentShipTos from "@insite/client-framework/Store/Data/ShipTos/Handlers/LoadCurrentShipTos";
@@ -156,7 +157,6 @@ export const filterStyles: InvoiceHistoryFilterStyles = {
 };
 
 const styles = filterStyles;
-const tzOffset = new Date().getTimezoneOffset() * 60000;
 class InvoiceHistoryFilter extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
@@ -250,13 +250,13 @@ class InvoiceHistoryFilter extends React.Component<Props, State> {
 
     fromDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
         this.props.updateSearchFields({
-            fromDate: selectedDay ? new Date(selectedDay.getTime() - tzOffset).toISOString().split("T")[0] : "",
+            fromDate: convertDateToDateOnlyString(selectedDay),
         });
     };
 
     toDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
         this.props.updateSearchFields({
-            toDate: selectedDay ? new Date(selectedDay.getTime() - tzOffset).toISOString().split("T")[0] : "",
+            toDate: convertDateToDateOnlyString(selectedDay),
         });
     };
 

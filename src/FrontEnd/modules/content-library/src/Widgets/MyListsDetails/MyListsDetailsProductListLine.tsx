@@ -459,7 +459,11 @@ const MyListsDetailsProductListLine: React.FC<Props> = ({
                         <ProductImage product={productContext} extendedStyles={styles.productImageStyles} />
                         {canEditWishList && (
                             <Hidden {...styles.editNotesHidden}>
-                                <Link {...styles.editNotesLink} onClick={() => onEditNotesClick(wishListLine)}>
+                                <Link
+                                    {...styles.editNotesLink}
+                                    onClick={() => onEditNotesClick(wishListLine)}
+                                    data-test-selector="myListDetails_addOrEditNote"
+                                >
                                     {translate(`${wishListLine.notes ? "Edit" : "Add"} Notes`)}
                                 </Link>
                             </Hidden>

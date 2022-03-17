@@ -75,12 +75,12 @@ class PublicPage extends React.Component<Props> {
                 type,
                 fields: { hideHeader, hideBreadcrumbs, hideFooter },
             },
-            shellContext: { isInShell },
         } = this.props;
 
         switch (type) {
             case "Header":
             case "Footer":
+            case "SharedContent":
             case "VariantRootPage":
                 return <>{content}</>;
         }

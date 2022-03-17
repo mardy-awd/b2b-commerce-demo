@@ -7,6 +7,7 @@ import ErrorModal from "@insite/shell/Components/Modals/ErrorModal";
 import LogoutWarningModal from "@insite/shell/Components/Modals/LogoutWarningModal";
 import PageEditor from "@insite/shell/Components/PageEditor/PageEditor";
 import PageTreeSideBar from "@insite/shell/Components/PageTree/PageTreeSideBar";
+import SharedContentSideBar from "@insite/shell/Components/SharedContent/SharedContentSideBar";
 import CompleteVersionHistoryModal from "@insite/shell/Components/Shell/CompleteVersionHistoryModal";
 import ImportExportModal from "@insite/shell/Components/Shell/ImportExportModal";
 import MainHeader from "@insite/shell/Components/Shell/MainHeader";
@@ -16,6 +17,7 @@ import RestoreContentModal from "@insite/shell/Components/Shell/RestoreContentMo
 import StyleGuideEditor from "@insite/shell/Components/Shell/StyleGuide/StyleGuideEditor";
 import StyleGuidePreview from "@insite/shell/Components/Shell/StyleGuide/StyleGuidePreview";
 import { ShellThemeProps } from "@insite/shell/ShellTheme";
+import { isSharedContentOpened } from "@insite/shell/Store/Data/Pages/PagesHelpers";
 import ShellState from "@insite/shell/Store/ShellState";
 import * as React from "react";
 import { useEffect } from "react";
@@ -28,6 +30,10 @@ const menuItems = [{ url: "/", name: "", children: [] }];
 
 const homePageLoader = (props: ReturnType<typeof mapStateToProps> & RouteComponentProps) => {
     useEffect(() => {
+        if (isSharedContentOpened(props.history.location)) {
+            return;
+        }
+
         if (props.homePageId !== emptyGuid) {
             props.history.push(`/ContentAdmin/Page/${props.homePageId}`);
         }
@@ -90,18 +96,23 @@ const layout = (
                 <Switch>
                     <Route exact path="/ContentAdmin/Design/StyleGuide" component={StyleGuideEditor} />
                     <Route path="/ContentAdmin/Page/" component={PageTreeSideBar} />
+                    <Route path="/ContentAdmin/SharedContent/" component={SharedContentSideBar} />
                 </Switch>
             </SideBarArea>
             <MainArea>
                 <Switch>
-                    <Route path="/ContentAdmin/Page/*" component={MainHeader} />
-                    <Route path={["/ContentAdmin/Design", "/ContentAdmin/"]}>
+                    <Route path={["/ContentAdmin/Page/*", "/ContentAdmin/SharedContent/*"]} component={MainHeader} />
+                    <Route exact path={["/ContentAdmin/Design/StyleGuide", "/ContentAdmin/"]}>
                         <MainHeader disabled />
                     </Route>
                     <MainHeader />
                 </Switch>
                 <Switch>
-                    <Route exact path="/ContentAdmin/Page/:id" component={PageEditor} />
+                    <Route
+                        exact
+                        path={["/ContentAdmin/Page/:id", "/ContentAdmin/SharedContent/:id"]}
+                        component={PageEditor}
+                    />
                     <Route exact path="/ContentAdmin/Design/StyleGuide" component={StyleGuidePreview} />
                     <Route component={HomePageLoader} />
                 </Switch>

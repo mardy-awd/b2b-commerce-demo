@@ -1,0 +1,5 @@
+{
+  "name": "VMI Order History",
+  "parentType": "MyAccountPage",
+  "urlSegment": "VmiOrders"
+}

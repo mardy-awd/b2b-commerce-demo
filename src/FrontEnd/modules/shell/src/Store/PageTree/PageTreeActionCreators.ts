@@ -248,6 +248,7 @@ export const addPage =
                 defaultPersonaId,
                 websiteId,
                 parameter.isVariant,
+                true,
             );
 
             pageModel.layoutPageId = parameter.layoutId;

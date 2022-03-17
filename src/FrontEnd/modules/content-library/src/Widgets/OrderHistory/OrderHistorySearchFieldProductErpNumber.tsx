@@ -25,7 +25,7 @@ const widgetModule: WidgetModule = {
         isDeprecated: true,
         group: "Order History",
         displayName: "Product ERP Number",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
     },
 };
 

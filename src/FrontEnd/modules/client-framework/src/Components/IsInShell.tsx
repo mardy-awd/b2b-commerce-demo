@@ -7,6 +7,7 @@ interface Shell {
     isInShell?: boolean;
     layoutEditableZone?: true;
     pageId?: string;
+    isReadOnly?: boolean;
 }
 
 export interface HasShellContext {

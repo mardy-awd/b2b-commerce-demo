@@ -126,6 +126,29 @@ const reducer = {
             productInfo.failedToLoadPricing = true;
         }
     },
+    "Pages/ProductDetails/CompleteLoadRealTimePricings": (
+        draft: Draft<ProductDetailsState>,
+        action: { pricings: ProductPriceDto[] },
+    ) => {
+        action.pricings.forEach(pricing => {
+            const productInfo = draft.productInfosById![pricing.productId];
+            if (productInfo) {
+                productInfo.pricing = pricing;
+                delete productInfo.failedToLoadPricing;
+            }
+        });
+    },
+    "Pages/ProductDetails/FailedLoadRealTimePricings": (
+        draft: Draft<ProductDetailsState>,
+        action: { productIds: string[] },
+    ) => {
+        action.productIds.forEach(productId => {
+            const productInfo = draft.productInfosById![productId];
+            if (productInfo) {
+                productInfo.failedToLoadPricing = true;
+            }
+        });
+    },
     "Pages/ProductDetails/CompleteLoadRealTimeInventory": (
         draft: Draft<ProductDetailsState>,
         action: { realTimeInventory: RealTimeInventoryModel },

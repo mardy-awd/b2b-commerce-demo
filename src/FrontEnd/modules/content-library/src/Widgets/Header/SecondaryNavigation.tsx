@@ -24,7 +24,8 @@ const Navigation = styled.div`
     color: ${getContrastColor("common.accent")};
     font-size: 15px;
     background-color: ${getColor("common.accent")};
-    padding: 9px 45px 4px 45px;
+    padding: 0 45px 0 45px;
+    height: 50px;
     text-transform: uppercase;
     display: flex;
     justify-content: flex-end;

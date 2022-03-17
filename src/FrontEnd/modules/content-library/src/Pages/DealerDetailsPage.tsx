@@ -60,29 +60,25 @@ class DealerDetailsPage extends React.Component<Props, State> {
         this.state = {};
     }
 
-    private checkState(prevProps?: Props) {
-        const { dealerState, breadcrumbLinks } = this.props;
-        if (!dealerState.value) {
-            return;
+    UNSAFE_componentWillMount(): void {
+        const { dealerId, displayDealer, breadcrumbLinks, dealerState } = this.props;
+        if (dealerId && !dealerState.value) {
+            displayDealer({ dealerId });
+            this.setMetadata(false);
         }
 
-        if (!breadcrumbLinks || (prevProps && dealerState.value?.id !== prevProps.dealerState?.value?.id)) {
+        if (!breadcrumbLinks && dealerState.value) {
             this.setPageBreadcrumbs();
         }
     }
 
-    UNSAFE_componentWillMount(): void {
-        const { dealerId, displayDealer } = this.props;
-        if (dealerId) {
-            displayDealer({ dealerId });
-            this.setMetadata(false);
-            this.checkState();
-        }
-    }
-
     componentDidUpdate(prevProps: Props) {
-        this.checkState(prevProps);
         const { dealerState } = this.props;
+
+        if (prevProps && dealerState.value && dealerState.value?.id !== prevProps.dealerState?.value?.id) {
+            this.setPageBreadcrumbs();
+        }
+
         if (dealerState.value && dealerState.value.id !== this.state.metadataUpdatedForId) {
             this.setMetadata(true);
         }
@@ -123,14 +119,11 @@ class DealerDetailsPage extends React.Component<Props, State> {
 
     setPageBreadcrumbs() {
         const { dealerState, links, nodeId, dealerDetailsPageLink, homePageUrl, setBreadcrumbs } = this.props;
-        if (!dealerState.value) {
-            return;
-        }
 
         const breadcrumbs = generateLinksFrom(links, nodeId, homePageUrl);
         const updatedBreadcrumbs = cloneDeep(breadcrumbs) as LinkProps[];
         updatedBreadcrumbs.forEach(link => {
-            link.children = link.children === dealerDetailsPageLink?.title ? dealerState.value.name : link.children;
+            link.children = link.children === dealerDetailsPageLink?.title ? dealerState.value!.name! : link.children;
         });
         setBreadcrumbs({ links: updatedBreadcrumbs });
     }

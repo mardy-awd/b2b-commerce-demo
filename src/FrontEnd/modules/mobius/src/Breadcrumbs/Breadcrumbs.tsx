@@ -33,6 +33,7 @@ export type BreadcrumbsPresentationProps = Omit<BreadcrumbsProps, "links">;
 
 export const Slash = styled(Typography as any).attrs({ children: "/" })`
     margin: 0 10px;
+    display: block;
 `;
 
 export const StyledNav = styled.nav.attrs({ "aria-label": "breadcrumbs" })`

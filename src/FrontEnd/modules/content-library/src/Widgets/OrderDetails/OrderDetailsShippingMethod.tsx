@@ -55,7 +55,7 @@ const OrderDetailsShippingMethod: React.FunctionComponent = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsShippingMethod,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

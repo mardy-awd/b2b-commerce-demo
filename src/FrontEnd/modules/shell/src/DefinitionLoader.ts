@@ -209,12 +209,18 @@ function cleanupPageDefinition(pageDefinition: LoadedPageDefinition) {
         sortOrder: 9999,
     });
 
-    fieldDefinitions.push({
-        name: "hideBreadcrumbs",
-        editorTemplate: "CheckboxField",
-        displayName: "Hide Breadcrumbs",
-        defaultValue: false,
-        fieldType: "General",
-        sortOrder: 10000,
-    });
+    if (
+        pageDefinition.type !== "Header" &&
+        pageDefinition.type !== "Footer" &&
+        pageDefinition.type !== "SharedContent"
+    ) {
+        fieldDefinitions.push({
+            name: "hideBreadcrumbs",
+            editorTemplate: "CheckboxField",
+            displayName: "Hide Breadcrumbs",
+            defaultValue: false,
+            fieldType: "General",
+            sortOrder: 10000,
+        });
+    }
 }

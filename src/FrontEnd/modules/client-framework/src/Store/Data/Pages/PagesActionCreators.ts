@@ -341,3 +341,41 @@ export interface UpdateFieldParameter {
     defaultPersonaId: string;
     deviceType: DeviceType;
 }
+
+export const loadSharedContent =
+    (pageId: string, onSuccess?: () => void): AppThunkAction =>
+    (dispatch, getState) => {
+        addTask(
+            (async function () {
+                dispatch({
+                    type: "Data/Pages/BeginLoadPage",
+                    key: pageId,
+                });
+
+                let retrievePageResult: RetrievePageResult | undefined;
+
+                try {
+                    retrievePageResult = await getPageByUrl(`/Content/Page/${pageId}`, true);
+                } catch (ex) {
+                    logger.error(ex);
+                    return;
+                }
+
+                const { page } = retrievePageResult;
+                if (page) {
+                    dispatch({
+                        type: "Data/Pages/CompleteLoadPage",
+                        page,
+                        ...getContextData(getState()),
+                    });
+                    dispatch({
+                        type: "Data/Pages/SetPageIsLoaded",
+                        pageType: page.type,
+                        page,
+                        path: pageId,
+                    });
+                    onSuccess?.();
+                }
+            })(),
+        );
+    };

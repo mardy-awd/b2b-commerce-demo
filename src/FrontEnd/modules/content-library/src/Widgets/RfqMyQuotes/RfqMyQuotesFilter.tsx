@@ -1,4 +1,8 @@
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
+import {
+    convertDateOnlyStringToDate,
+    convertDateToDateOnlyString,
+} from "@insite/client-framework/Common/Utilities/DateUtilities";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getAccountsDataView } from "@insite/client-framework/Store/Data/Accounts/AccountsSelector";
 import loadAccounts from "@insite/client-framework/Store/Data/Accounts/Handlers/LoadAccounts";
@@ -154,8 +158,6 @@ export const rfqMyQuotesFilterStyles: RfqMyQuotesFilterStyles = {
 
 const styles = rfqMyQuotesFilterStyles;
 
-const tzOffset = new Date().getTimezoneOffset() * 60000;
-
 class RfqMyQuotesFilter extends Component<Props, State> {
     updateTimeoutId: number | undefined;
 
@@ -222,28 +224,20 @@ class RfqMyQuotesFilter extends Component<Props, State> {
         this.updateParameterAfterTimeout();
     };
 
-    convertDateToString = (date?: Date) => {
-        return date ? new Date(date.getTime() - tzOffset).toISOString().split("T")[0] : "";
-    };
-
-    convertStringToDate = (dateStr?: string) => {
-        return dateStr ? new Date(new Date(dateStr).getTime() + tzOffset) : undefined;
-    };
-
     fromDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
-        this.props.updateSearchFields({ fromDate: this.convertDateToString(selectedDay) });
+        this.props.updateSearchFields({ fromDate: convertDateToDateOnlyString(selectedDay) });
     };
 
     toDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
-        this.props.updateSearchFields({ toDate: this.convertDateToString(selectedDay) });
+        this.props.updateSearchFields({ toDate: convertDateToDateOnlyString(selectedDay) });
     };
 
     expireFromDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
-        this.props.updateSearchFields({ expireFromDate: this.convertDateToString(selectedDay) });
+        this.props.updateSearchFields({ expireFromDate: convertDateToDateOnlyString(selectedDay) });
     };
 
     expireToDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
-        this.props.updateSearchFields({ expireToDate: this.convertDateToString(selectedDay) });
+        this.props.updateSearchFields({ expireToDate: convertDateToDateOnlyString(selectedDay) });
     };
 
     clearFiltersClickHandler = () => {
@@ -378,10 +372,10 @@ class RfqMyQuotesFilter extends Component<Props, State> {
         const billToOptions = this.props.billTosDataView.value || [];
         const userOptions = this.props.accountsDataView.value || [];
         const salesRepOptions = this.props.quotesDataView.value ? this.props.quotesDataView.salespersonList || [] : [];
-        const fromDate = this.convertStringToDate(this.props.getQuotesParameter.fromDate);
-        const toDate = this.convertStringToDate(this.props.getQuotesParameter.toDate);
-        const expireFromDate = this.convertStringToDate(this.props.getQuotesParameter.expireFromDate);
-        const expireToDate = this.convertStringToDate(this.props.getQuotesParameter.expireToDate);
+        const fromDate = convertDateOnlyStringToDate(this.props.getQuotesParameter.fromDate);
+        const toDate = convertDateOnlyStringToDate(this.props.getQuotesParameter.toDate);
+        const expireFromDate = convertDateOnlyStringToDate(this.props.getQuotesParameter.expireFromDate);
+        const expireToDate = convertDateOnlyStringToDate(this.props.getQuotesParameter.expireToDate);
 
         return (
             <GridContainer {...styles.container} data-test-selector="rfqMyQuotes_filter">

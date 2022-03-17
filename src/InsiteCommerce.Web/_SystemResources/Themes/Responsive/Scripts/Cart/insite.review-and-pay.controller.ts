@@ -547,7 +547,7 @@ module insite.cart {
                      orderAmount: this.cart.orderGrandTotal.toString()
                  }).then(
                      (result: PaymentAuthenticationModel) => {
-                         if (result.redirectHtml !== "") {
+                         if (result.redirectHtml) {
                              angular.element("#redirect-html").html(result.redirectHtml);
                              this.checkForRedirectResult(transactionId);
                          } else {

@@ -54,7 +54,7 @@ const OrderPo = () => {
 const widgetModule: WidgetModule = {
     component: OrderPo,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

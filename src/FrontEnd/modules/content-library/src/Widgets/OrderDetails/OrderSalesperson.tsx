@@ -53,7 +53,7 @@ const OrderSalesperson = () => {
 const widgetModule: WidgetModule = {
     component: OrderSalesperson,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

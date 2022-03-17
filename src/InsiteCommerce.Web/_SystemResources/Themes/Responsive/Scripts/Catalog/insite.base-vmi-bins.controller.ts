@@ -18,15 +18,17 @@ module insite.catalog {
         isSelected: {};
         Papa: any;
         exportHeaders: string[];
+        exportPage: string;
 
-        static $inject = ["vmiBinService", "coreService", "paginationService", "queryString", "spinnerService"];
+        static $inject = ["vmiBinService", "coreService", "paginationService", "queryString", "spinnerService", "$filter"];
 
         constructor(
             protected vmiBinService: vmiBin.IVmiBinService,
             protected coreService: core.ICoreService,
             protected paginationService: core.IPaginationService,
             protected queryString: common.IQueryStringService,
-            protected spinnerService: core.ISpinnerService) {
+            protected spinnerService: core.ISpinnerService,
+            protected $filter: ng.IFilterService) {
         }
 
         $onInit(): void {
@@ -161,6 +163,26 @@ module insite.catalog {
                 return null;
             }
 
+            if (this.exportPage === "Reporting") {
+                return {
+                    fields: this.exportHeaders,
+                    data: list.map(o => [
+                        o.vmiLocationId.toString(),
+                        o.productId.toString(),
+                        o.product.shortDescription,
+                        o.product.erpNumber,
+                        o.product.manufacturerItem,
+                        o.product.customerName,
+                        o.binNumber,
+                        o.minimumQty.toString(),
+                        o.maximumQty.toString(),
+                        o.previousCountDate ? this.$filter("date")(o.previousCountDate, "shortDate") : '',
+                        o.previousCountQty.toString(),
+                        o.lastOrderErpOrderNumber ? o.lastOrderErpOrderNumber : o.lastOrderWebOrderNumber ? o.lastOrderWebOrderNumber : '',
+                    ]),
+                };
+            }
+
             return {
                 fields: this.exportHeaders,
                 data: list.map(o => [
@@ -169,12 +191,12 @@ module insite.catalog {
                     o.product.customerName,
                     o.product.manufacturerItem,
                     o.binNumber,
-                    o.minimumQty ? o.minimumQty.toString() : '',
-                    o.maximumQty ? o.maximumQty.toString() : '',
-                    o.previousCountDate ? o.previousCountDate.toString() : '',
-                    o.previousCountQty ? o.previousCountQty.toString() : '',
+                    o.minimumQty.toString(),
+                    o.maximumQty.toString(),
+                    o.previousCountDate ? this.$filter("date")(o.previousCountDate, "shortDate") : '',
+                    o.previousCountQty.toString(),
                     o.lastOrderErpOrderNumber ? o.lastOrderErpOrderNumber : o.lastOrderWebOrderNumber ? o.lastOrderWebOrderNumber : '',
-                    o.product.largeImagePath ? o.product.largeImagePath : '',
+                    o.product.largeImagePath || '',
                 ]),
             };
         };
@@ -196,7 +218,7 @@ module insite.catalog {
         exportAll(): void {
             this.spinnerService.show();
 
-            this.vmiBinService.getVmiBins(this.locationId, {}, { page: 1, pageSize: this.pagination?.totalItemCount } as PaginationModel).then(
+            this.vmiBinService.getVmiBins(this.locationId, {}, { page: 1, pageSize: this.pagination?.totalItemCount, sortType: this.pagination?.sortType } as PaginationModel).then(
                 (result: VmiBinCollectionModel) => { this.generateCsv(result.vmiBins) },
                 (error: any) => { this.getVmiBinsFailed(error); });
         }

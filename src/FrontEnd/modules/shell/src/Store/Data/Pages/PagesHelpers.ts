@@ -17,3 +17,7 @@ export function updatePageOnSite(state: ShellState) {
         page,
     });
 }
+
+export function isSharedContentOpened(location?: { pathname: string }) {
+    return (location || window.location).pathname.startsWith("/ContentAdmin/SharedContent");
+}

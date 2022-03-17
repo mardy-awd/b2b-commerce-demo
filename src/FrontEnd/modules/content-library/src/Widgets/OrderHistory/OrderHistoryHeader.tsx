@@ -59,7 +59,7 @@ const OrderHistoryHeader: FC<Props> = ({ toggleFiltersOpen, id }) => {
             <GridItem {...styles.toggleFilterGridItem}>
                 <Clickable
                     {...styles.toggleFilterClickable}
-                    onClick={toggleFiltersOpen}
+                    onClick={() => toggleFiltersOpen()}
                     data-test-selector="orderHistory_showHideFilters"
                 >
                     <Icon {...styles.toggleFilterIcon} />
@@ -74,7 +74,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Header",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
     },
 };
 

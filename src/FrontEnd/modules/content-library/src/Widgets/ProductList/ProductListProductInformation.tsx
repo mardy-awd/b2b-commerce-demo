@@ -1,12 +1,14 @@
 import { HasProductContext, withProductContext } from "@insite/client-framework/Components/ProductContext";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
+import { VariantDisplayTypeValues, VariantTraitModel } from "@insite/client-framework/Types/ApiModels";
 import ProductAttributes, { ProductAttributesStyles } from "@insite/content-library/Components/ProductAttributes";
 import { ProductAvailabilityStyles } from "@insite/content-library/Components/ProductAvailability";
 import ProductBrand, { ProductBrandStyles } from "@insite/content-library/Components/ProductBrand";
 import ProductContextAvailability from "@insite/content-library/Components/ProductContextAvailability";
 import ProductDescription, { ProductDescriptionStyles } from "@insite/content-library/Components/ProductDescription";
 import ProductPartNumbers, { ProductPartNumbersStyles } from "@insite/content-library/Components/ProductPartNumbers";
+import ProductListVariantSwatch from "@insite/content-library/Widgets/ProductList/ProductListVariantSwatch";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import React, { FC } from "react";
@@ -34,6 +36,7 @@ export interface ProductListProductInformationStyles {
     brandGridItem?: GridItemProps;
     descriptionGridItem?: GridItemProps;
     partNumbersGridItem?: GridItemProps;
+    swatchGridItem?: GridItemProps;
     partNumbersStyles?: ProductPartNumbersStyles;
     availabilityGridItem?: GridItemProps;
     availabilityStyles?: ProductAvailabilityStyles;
@@ -68,6 +71,9 @@ export const productInformationStyles: ProductListProductInformationStyles = {
     partNumbersGridItem: {
         width: 12,
     },
+    swatchGridItem: {
+        width: 12,
+    },
     availabilityGridItem: {
         width: 12,
     },
@@ -91,9 +97,20 @@ const ProductListProductInformation: FC<Props> = ({
     showAttributes,
 }) => {
     const { product } = productContext;
+    let variantDisplayTrait = null;
 
     if (!product) {
         return null;
+    }
+
+    if (product?.variantTraits && product.variantTraits.length > 0) {
+        const swatchedViewList = [
+            VariantDisplayTypeValues.SwatchDropdown,
+            VariantDisplayTypeValues.SwatchList,
+            VariantDisplayTypeValues.SwatchGrid,
+        ];
+        const sortedVaraintTraits = product.variantTraits.slice().sort((a, b) => a.sortOrder - b.sortOrder);
+        variantDisplayTrait = sortedVaraintTraits.find(x => swatchedViewList.includes(x.displayType));
     }
 
     return (
@@ -116,6 +133,11 @@ const ProductListProductInformation: FC<Props> = ({
                         manufacturerItem={product.manufacturerItem}
                         extendedStyles={styles.partNumbersStyles}
                     />
+                </GridItem>
+            )}
+            {variantDisplayTrait && (
+                <GridItem {...styles.swatchGridItem}>
+                    <ProductListVariantSwatch product={productContext} variantTrait={variantDisplayTrait} />
                 </GridItem>
             )}
             {settingsCollection.productSettings.showInventoryAvailability && showAvailability && (

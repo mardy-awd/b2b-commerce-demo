@@ -1280,7 +1280,9 @@ export interface ProductAutocompleteItemModel extends BaseModel {
     image: string;
     isNameCustomerOverride: boolean;
     manufacturerItemNumber: string;
+    displayManufacturerItemNumber: JSX.Element;
     name: string;
+    displayName: JSX.Element;
     styleParentId: string | null;
     subtitle: string;
     displaySubtitle: JSX.Element;
@@ -2370,6 +2372,7 @@ export interface OrderLineModel extends BaseModel {
     unitRegularPrice: number;
     unitRegularPriceDisplay: string;
     warehouse: string;
+    vmiBinNumber: string;
 }
 
 export interface OrderSettingsModel extends BaseModel {

@@ -56,7 +56,7 @@ const OrderDetailsRequestedDate: React.FunctionComponent = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsRequestedDate,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

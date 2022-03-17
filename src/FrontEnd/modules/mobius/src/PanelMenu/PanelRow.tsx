@@ -1,6 +1,7 @@
 import Clickable, { ClickableProps } from "@insite/mobius/Clickable";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import { IconMemo, IconPresentationProps } from "@insite/mobius/Icon";
+import { getProp } from "@insite/mobius/utilities";
 import applyPropBuilder from "@insite/mobius/utilities/applyPropBuilder";
 import getContrastColor from "@insite/mobius/utilities/getContrastColor";
 import { StyledProp } from "@insite/mobius/utilities/InjectableCss";
@@ -49,6 +50,9 @@ const PanelRowStyle = styled(Clickable)<any>`
     }
     & > *:first-child {
         ${({ hasChildren }) => hasChildren && "width: calc(100% - 24px);"}
+    }
+    &:focus {
+        outline-offset: -${getProp("theme.focus.width")};
     }
     ${injectCss}
     ${({ isCurrent, isCurrentCss, theme }) =>

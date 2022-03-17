@@ -359,6 +359,7 @@ const MyListsDetailsOptions = ({
                                     {...styles.editSortOrder}
                                     checked={editingSortOrder}
                                     onChange={editingSortOrderChangeHandler}
+                                    data-test-selector="myListDetailPage_editSortOrderCheckbox"
                                 >
                                     {translate("Edit Sort Order")}
                                 </Checkbox>
@@ -369,7 +370,7 @@ const MyListsDetailsOptions = ({
                                 <Link
                                     {...styles.addItemsLink}
                                     onClick={addItemsToListClickHandler}
-                                    data-test-selector="tst_ListDetailPage_addItems"
+                                    data-test-selector="myListDetails_addItemsToList"
                                 >
                                     {translate("Add Items To List")}
                                 </Link>

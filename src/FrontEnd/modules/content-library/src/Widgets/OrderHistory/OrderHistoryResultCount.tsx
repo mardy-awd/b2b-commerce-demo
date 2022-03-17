@@ -38,7 +38,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Result Count",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
     },
 };
 

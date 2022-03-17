@@ -36,7 +36,7 @@ const OrderDetailsTitle: React.FC = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsTitle,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

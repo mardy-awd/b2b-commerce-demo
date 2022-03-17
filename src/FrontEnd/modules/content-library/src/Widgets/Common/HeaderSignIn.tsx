@@ -55,6 +55,7 @@ export const headerSignInStyles: HeaderSignInStyles = {
     signOutWrapper: {
         css: css`
             display: inline-flex;
+            padding: 6px 0;
         `,
     },
     titleClickable: {

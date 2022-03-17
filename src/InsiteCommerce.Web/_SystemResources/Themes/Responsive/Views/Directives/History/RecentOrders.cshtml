@@ -18,10 +18,10 @@
                     <tr ng-repeat="order in vm.orderHistory.orders">
                         <td class="col-date">
                             <span class="sticky-first">
-                                <a ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ order.webOrderNumber || order.erpOrderNumber }}" ng-bind="order.orderDate | date:'shortDate'"></a>
+                                <a ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ order.webOrderNumber || order.erpOrderNumber }}{{ !!order.vmiLocationId ? '&isVmiOrder=true' : '' }}" ng-bind="order.orderDate | date:'shortDate'"></a>
                             </span>
                         </td>
-                        <td class="col-ordernum"><a ng-href="[% urlForPage 'OrderDetailPage' %]?ordernumber={{ order.erpOrderNumber }}" ng-bind="order.erpOrderNumber"></a></td>
+                        <td class="col-ordernum"><a ng-href="[% urlForPage 'OrderDetailPage' %]?ordernumber={{ order.erpOrderNumber }}{{ !!order.vmiLocationId ? '&isVmiOrder=true' : '' }}" ng-bind="order.erpOrderNumber"></a></td>
                         <td class="col-shipto" ng-bind="order.stCompanyName"></td>
                         <td class="col-status" ng-bind="order.statusDisplay"></td>
                         <td class="col-webordernum" ng-if="vm.orderSettings.showWebOrderNumber" ng-bind="order.webOrderNumber"></td>

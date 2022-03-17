@@ -14,6 +14,7 @@ import BadgeDefault from "@insite/shell/Components/Icons/BadgeDefault";
 import BadgeVariant from "@insite/shell/Components/Icons/BadgeVariant";
 import { ContentContextModel, PagePublishInfo } from "@insite/shell/Services/ContentAdminService";
 import { configureComparison } from "@insite/shell/Store/CompareModal/CompareModalActionCreators";
+import { isSharedContentOpened } from "@insite/shell/Store/Data/Pages/PagesHelpers";
 import {
     closePublishModal,
     loadAllPagePublishInfo,
@@ -170,26 +171,30 @@ const PublishModal: React.FC = () => {
         }
     }, [pagePublishInfoIsSelected]);
 
+    const isSharedContent = isSharedContentOpened();
+    const label = isSharedContent ? "Shared Content" : "Page";
+
+    const pagesToPublish = pagePublishInfosState?.value?.filter(o => o.isSharedContent === isSharedContent);
+
     const nothingToPublish =
-        pagePublishInfosState.value &&
-        pagePublishInfosState.value.length < 1 &&
-        (isBulkPublish ? "There is no content to publish." : "There is no content on this page to publish.");
+        pagesToPublish &&
+        pagesToPublish.length < 1 &&
+        (isBulkPublish
+            ? "There is no content to publish."
+            : `There is no content on this ${label.toLowerCase()} to publish.`);
 
     const allPagesSkipped =
         !!failedToPublishPageIds &&
         Object.keys(failedToPublishPageIds).length > 0 &&
-        !!pagePublishInfosState.value &&
-        pagePublishInfoIsSelected.every(
-            (o, index) => !o || failedToPublishPageIds[pagePublishInfosState.value![index].pageId],
-        );
+        !!pagesToPublish &&
+        pagePublishInfoIsSelected.every((o, index) => !o || failedToPublishPageIds[pagesToPublish[index].pageId]);
 
-    const isApprover =
-        permissions?.canApproveContent && pagePublishInfosState?.value?.some(o => o.isWaitingForApproval);
+    const isApprover = permissions?.canApproveContent && pagesToPublish?.some(o => o.isWaitingForApproval);
 
     let hasFewPagesForApproval = false;
     if (isApprover && isBulkPublish) {
         const pageIds: Dictionary<boolean> = {};
-        pagePublishInfosState?.value?.forEach(o => {
+        pagesToPublish?.forEach(o => {
             pageIds[o.pageId] = true;
         });
         hasFewPagesForApproval = Object.keys(pageIds).length > 1;
@@ -197,7 +202,7 @@ const PublishModal: React.FC = () => {
 
     const hasFailedToPublishPages = failedToPublishPageIds && Object.keys(failedToPublishPageIds).length > 0;
     const getFailedPages = () => {
-        if (!failedToPublishPageIds || !pagePublishInfosState.value) {
+        if (!failedToPublishPageIds || !pagesToPublish) {
             return [];
         }
         const failedPages = [];
@@ -205,7 +210,7 @@ const PublishModal: React.FC = () => {
             if (!failedToPublishPageIds[pageId]) {
                 continue;
             }
-            const page = pagePublishInfosState.value.find(o => o.pageId === pageId);
+            const page = pagesToPublish.find(o => o.pageId === pageId);
             if (!page) {
                 continue;
             }
@@ -235,17 +240,17 @@ const PublishModal: React.FC = () => {
             return;
         }
 
-        if (!pagePublishInfosState?.value) {
+        if (!pagesToPublish) {
             return;
         }
 
-        const selectedElement = pagePublishInfosState.value[index];
+        const selectedElement = pagesToPublish[index];
         if (!selectedElement) {
             return;
         }
 
         const pageId = selectedElement.pageId;
-        const mainPageIndex = pagePublishInfosState.value.findIndex(
+        const mainPageIndex = pagesToPublish.findIndex(
             o => o.pageId === pageId && !o.deviceType && !o.personaId && !o.languageId,
         );
 
@@ -259,7 +264,7 @@ const PublishModal: React.FC = () => {
             return false;
         }
 
-        const otherVersions = pagePublishInfosState.value?.find(
+        const otherVersions = pagesToPublish?.find(
             (o, index) => o.pageId === page.pageId && o !== page && pagePublishInfoIsSelected[index],
         );
 
@@ -281,7 +286,7 @@ const PublishModal: React.FC = () => {
             size={size}
             isOpen={visible}
             handleClose={() => dispatch(closePublishModal())}
-            headline={isBulkPublish ? "Bulk Publish Pages" : "Publish Page"}
+            headline={isBulkPublish ? `Bulk Publish ${label}s` : `Publish ${label}`}
             data-hide={pagePublishInfosState.isLoading}
             {...styles.modal}
         >
@@ -293,8 +298,8 @@ const PublishModal: React.FC = () => {
                 )}
                 {hasFailedToPublishPages && (
                     <Typography color="danger" data-test-selector="publishModal_failed_pages_message">
-                        Publication of selected page(s) has failed. Would you like to skip these pages and continue
-                        publishing?
+                        Publication of selected {label.toLowerCase()}(s) has failed. Would you like to skip these{" "}
+                        {label.toLowerCase()}s and continue publishing?
                         <ul>
                             {getFailedPages().map(o => (
                                 <li key={o.pageId}>{o.name}</li>
@@ -304,7 +309,8 @@ const PublishModal: React.FC = () => {
                 )}
                 {hasFewPagesForApproval && (
                     <Typography color="danger" data-test-selector="publishModal_hasFewPagesForApproval">
-                        It is not possible to approve and publish multiple pages, please, use Publish instead.
+                        It is not possible to approve and publish multiple {label.toLowerCase()}s, please, use Publish
+                        instead.
                     </Typography>
                 )}
             </MessageContainer>
@@ -323,7 +329,7 @@ const PublishModal: React.FC = () => {
                                             onChange={selectAllChangeHandler}
                                         ></Checkbox>
                                     </th>
-                                    <th>Page</th>
+                                    <th>{label}</th>
                                     <th>Language</th>
                                     {!mobileCmsModeActive && <th>Device</th>}
                                     {!mobileCmsModeActive && <th>Customer Segment</th>}
@@ -333,7 +339,7 @@ const PublishModal: React.FC = () => {
                                 </tr>
                             </thead>
                             <tbody data-test-selector="publishModal_contextsAvailableToPublish">
-                                {pagePublishInfosState?.value?.map((pagePublishInfo, index) => {
+                                {pagesToPublish?.map((pagePublishInfo, index) => {
                                     const {
                                         languageId,
                                         personaId,
@@ -470,7 +476,7 @@ const PublishModal: React.FC = () => {
                                             {...styles.rollbackOnTooltip}
                                             text={
                                                 "When this time is reached the published changes will be rolled back " +
-                                                "and the previously published version of the page will display."
+                                                `and the previously published version of the ${label.toLowerCase()} will display.`
                                             }
                                         />
                                     </>
@@ -505,7 +511,7 @@ const PublishModal: React.FC = () => {
                         `}
                         data-test-selector="publishModal_publish"
                         disabled={
-                            !pagePublishInfosState.value ||
+                            !pagesToPublish ||
                             !!nothingToPublish ||
                             hasFewPagesForApproval ||
                             pagePublishInfoIsSelected.every(o => !o) ||

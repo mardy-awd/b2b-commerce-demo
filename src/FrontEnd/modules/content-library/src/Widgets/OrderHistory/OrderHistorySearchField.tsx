@@ -60,7 +60,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Search Field",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
         fieldDefinitions: [
             {
                 name: fields.parameterField,

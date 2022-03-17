@@ -7,6 +7,7 @@ import { HasShellContext, withIsInShell } from "@insite/client-framework/Compone
 import { sendToShell } from "@insite/client-framework/Components/ShellHole";
 import logger from "@insite/client-framework/Logger";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
+import { getById } from "@insite/client-framework/Store/Data/DataState";
 import { beginDraggingWidget, endDraggingWidget } from "@insite/client-framework/Store/Data/Pages/PagesActionCreators";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import AsyncAxiomIcon from "@insite/shell/Components/Icons/AxiomIcon/AsyncAxiomIcon";
@@ -34,13 +35,17 @@ const mapStateToProps = (state: ApplicationState, { id }: OwnProps) => {
         },
         context: { permissions, canChangePage },
     } = state;
+    const widget = widgetsById[id];
+    const isSharedContent = widget.type === "Basic/SharedContent" && widget.generalFields["pageId"];
     return {
-        widget: widgetsById[id],
+        widget,
         draggingWidgetId,
         permissions,
         canChangePage,
         currentPageType: getCurrentPage(state).type,
         pageDefinitionsByType,
+        isSharedContent,
+        sharedContentName: isSharedContent ? getById(state.data.pages, widget.generalFields["pageId"]).value?.name : "",
     };
 };
 
@@ -99,19 +104,32 @@ class WidgetRenderer extends React.PureComponent<Props, State> {
     };
 
     editWidget = () => {
-        sendToShell({
-            type: "EditWidget",
-            id: this.props.id,
-        });
+        this.props.isSharedContent
+            ? sendToShell({
+                  type: "ConfirmSharedContentEditing",
+                  sharedContentId: this.props.widget.generalFields["pageId"],
+                  fromPageId: this.props.pageId,
+              })
+            : sendToShell({
+                  type: "EditWidget",
+                  id: this.props.id,
+              });
     };
 
     removeWidget = () => {
-        sendToShell({
-            type: "ConfirmWidgetDeletion",
-            id: this.props.id,
-            widgetType: this.props.widget.type,
-            pageId: this.props.pageId,
-        });
+        this.props.isSharedContent
+            ? sendToShell({
+                  type: "ConfirmSharedContentDeletion",
+                  id: this.props.id,
+                  pageId: this.props.pageId,
+                  sharedContentName: this.props.sharedContentName,
+              })
+            : sendToShell({
+                  type: "ConfirmWidgetDeletion",
+                  id: this.props.id,
+                  widgetType: this.props.widget.type,
+                  pageId: this.props.pageId,
+              });
     };
 
     dragHandleMouseDown = () => {
@@ -173,6 +191,7 @@ class WidgetRenderer extends React.PureComponent<Props, State> {
 
     private canEditWidget = () => {
         return (
+            !this.props.shellContext.isReadOnly &&
             this.props.canChangePage &&
             this.props.permissions?.canEditWidget &&
             (!this.isAdvancedWidget() || this.canEditAdvancedWidgets())
@@ -182,6 +201,7 @@ class WidgetRenderer extends React.PureComponent<Props, State> {
     private canMoveWidget = () => {
         const pageDefinition = this.props.pageDefinitionsByType?.[this.props.currentPageType];
         return (
+            !this.props.shellContext.isReadOnly &&
             pageDefinition &&
             this.props.canChangePage &&
             ((this.props.permissions?.canMoveWidgets && pageDefinition.pageType === "Content") ||
@@ -193,6 +213,7 @@ class WidgetRenderer extends React.PureComponent<Props, State> {
     private canDeleteWidget = () => {
         const pageDefinition = this.props.pageDefinitionsByType?.[this.props.currentPageType];
         return (
+            !this.props.shellContext.isReadOnly &&
             pageDefinition &&
             this.props.canChangePage &&
             ((this.props.permissions?.canDeleteWidget && pageDefinition.pageType === "Content") ||
@@ -210,7 +231,8 @@ class WidgetRenderer extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { type, widget, draggingWidgetId, shellContext, fixed, isLayout } = this.props;
+        const { type, widget, draggingWidgetId, shellContext, fixed, isLayout, isSharedContent, sharedContentName } =
+            this.props;
 
         const { isEditing, isCurrentPage, isInShell } = shellContext;
 
@@ -242,12 +264,17 @@ class WidgetRenderer extends React.PureComponent<Props, State> {
                                 onDragEnd={this.dragEnd}
                                 data-test-selector={`widgetHover_${type}`}
                             >
+                                {isSharedContent && (
+                                    <SharedContentIconStyle>
+                                        <AsyncAxiomIcon src="pen-ruler" size={15} color="#fff" />
+                                    </SharedContentIconStyle>
+                                )}
                                 <WidgetHoverNameStyle
                                     fixed={fixed || !this.canMoveWidget()}
                                     onMouseDown={this.dragHandleMouseDown}
                                     data-test-selector="widgetHover_title"
                                 >
-                                    {widget.type}
+                                    {sharedContentName || widget.type}
                                 </WidgetHoverNameStyle>
                                 {this.canEditWidget() && (
                                     <IconLink
@@ -301,6 +328,7 @@ const HoverStyle = styled.div`
     color: white;
     top: 42px;
     left: 4px;
+    max-width: 100%;
     transform: translate(0, -100%);
     align-items: center;
     z-index: 10;
@@ -315,12 +343,13 @@ const HoverStyle = styled.div`
 
 const WidgetHoverNameStyle = styled.span<{ fixed: boolean }>`
     padding: 0 12px;
-    margin-right: 20px;
     font-weight: 300;
     font-size: 15px;
     letter-spacing: 0.5px;
     cursor: ${props => (!props.fixed ? "grab" : "auto")};
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const WidgetWrapper = styled.div`
@@ -336,6 +365,7 @@ const WidgetWrapper = styled.div`
 const WidgetStyle = styled.div`
     padding: 40px 4px 4px;
     position: relative;
+    max-width: 100%;
 
     &:hover > ${WidgetWrapper} {
         border: 2px solid #000;
@@ -359,4 +389,8 @@ const WidgetDisabler = styled.div`
 
 const WidgetClearer = styled.div`
     clear: both;
+`;
+
+const SharedContentIconStyle = styled.div`
+    margin-left: 10px;
 `;

@@ -61,6 +61,9 @@
             if (pagination) {
                 params.page = pagination.page;
                 params.pageSize = pagination.pageSize;
+                if (!params.sort) {
+                    params.sort = pagination.sortType;
+                }
             }
 
             return params;

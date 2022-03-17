@@ -23,7 +23,7 @@ const widgetModule: WidgetModule = {
     component: OrderHistorySearchFieldOrderTotal,
     definition: {
         group: "Order History",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
         displayName: "Order Total",
     },
 };

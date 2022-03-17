@@ -17,6 +17,7 @@ import {
     setRightVersion,
     showCompleteVersionHistoryModal,
 } from "@insite/shell/Store/CompareModal/CompareModalActionCreators";
+import { isSharedContentOpened } from "@insite/shell/Store/Data/Pages/PagesHelpers";
 import ShellState from "@insite/shell/Store/ShellState";
 import React from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -261,7 +262,10 @@ class PublishComparer extends React.Component<Props, State> {
 
         const forcedContext = `&languageId=${languageId}&deviceType=${deviceType}&personaId=${personaId}`;
         const skipHeaderFooter =
-            pageType === "Header" || pageType === "Footer" || mobileCmsModeActive ? "&skipHeaderFooter=true" : "";
+            pageType === "Header" || pageType === "Footer" || pageType === "SharedContent" || mobileCmsModeActive
+                ? "&skipHeaderFooter=true"
+                : "";
+        const label = isSharedContentOpened() ? "Shared Content" : "Page";
 
         return (
             <FullScreenModal data-test-selector="publishCompareModal">
@@ -281,7 +285,7 @@ class PublishComparer extends React.Component<Props, State> {
                                         data-test-selector="publishCompareModal_toggleSelection"
                                         onClick={this.toggleLeftSelectionClickHandler}
                                     >
-                                        <span>Page Version: </span>
+                                        <span>{label} Version: </span>
                                         <span>
                                             {new Date(leftVersion.publishOn).toLocaleString()}
                                             {leftVersion.versionId === currentPublished.versionId ? " (Published)" : ""}
@@ -345,7 +349,7 @@ class PublishComparer extends React.Component<Props, State> {
                                     >
                                         {rightVersion ? (
                                             <>
-                                                <span>Page Version: </span>
+                                                <span>{label} Version: </span>
                                                 {rightVersion.versionId === futurePublished?.versionId ? (
                                                     <>
                                                         {new Date(futurePublished.publishOn).toLocaleString()} (Futured)

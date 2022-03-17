@@ -15,7 +15,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "PO Number",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
     },
 };
 

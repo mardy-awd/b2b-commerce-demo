@@ -7,7 +7,7 @@ import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateT
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Typography, { TypographyProps } from "@insite/mobius/Typography";
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import { css } from "styled-components";
 
 interface OwnProps {
@@ -168,7 +168,7 @@ const OrderApprovalDetailsShippingInformation = ({ cart, shipTo, pickUpWarehouse
             )}
             <GridItem {...mergedStyles.shippingOtherInformationGridItem}>
                 <GridContainer {...mergedStyles.shippingOtherInformationGridContainer}>
-                    {cart.fulfillmentMethod === "Ship" && (
+                    {cart.fulfillmentMethod === "Ship" && cart.shipVia && cart.carrier && (
                         <GridItem {...mergedStyles.shippingInformationCarrierGridItem}>
                             <Typography {...mergedStyles.shippingCarrierTitle}>{translate("Carrier")}</Typography>
                             <Typography {...mergedStyles.shippingCarrierText}>{cart.carrier!.description}</Typography>
@@ -189,7 +189,7 @@ const OrderApprovalDetailsShippingInformation = ({ cart, shipTo, pickUpWarehouse
                             </Typography>
                         </GridItem>
                     )}
-                    {cart.fulfillmentMethod === "Ship" && (
+                    {cart.fulfillmentMethod === "Ship" && cart.shipVia && cart.carrier && (
                         <GridItem {...mergedStyles.shippingInformationServiceGridItem}>
                             <Typography {...mergedStyles.shippingServiceTitle}>{translate("Service")}</Typography>
                             <Typography {...mergedStyles.shippingServiceText}>{cart.shipVia?.description}</Typography>

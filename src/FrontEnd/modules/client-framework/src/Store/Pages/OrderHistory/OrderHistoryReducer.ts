@@ -9,7 +9,14 @@ const initialState: OrderHistoryState = {
     getOrdersParameter: {
         customerSequence: "-1",
     },
+    getVmiLocationsParameter: {
+        page: 1,
+        pageSize: 9999,
+    },
     filtersOpen: false,
+    isVmiOrderHistoryPage: false,
+    isExportingOrders: false,
+    selectedOrderIds: {},
 };
 
 const reducer = {
@@ -49,7 +56,11 @@ const reducer = {
         }
     },
     "Pages/OrderHistory/ClearParameter": (draft: Draft<OrderHistoryState>) => {
-        draft.getOrdersParameter = { ...initialState.getOrdersParameter, pageSize: draft.getOrdersParameter.pageSize };
+        draft.getOrdersParameter = {
+            ...initialState.getOrdersParameter,
+            pageSize: draft.getOrdersParameter.pageSize,
+            vmiOrdersOnly: draft.getOrdersParameter.vmiOrdersOnly,
+        };
     },
     "Pages/OrderHistory/BeginReorder": (draft: Draft<OrderHistoryState>, action: { orderNumber: string }) => {
         draft.isReordering[action.orderNumber] = true;
@@ -59,6 +70,30 @@ const reducer = {
     },
     "Pages/OrderHistory/ToggleFiltersOpen": (draft: Draft<OrderHistoryState>) => {
         draft.filtersOpen = !draft.filtersOpen;
+    },
+    "Pages/OrderHistory/SetVmiOrderHistoryPage": (
+        draft: Draft<OrderHistoryState>,
+        action: { isVmiOrderHistoryPage: boolean },
+    ) => {
+        draft.isVmiOrderHistoryPage = action.isVmiOrderHistoryPage;
+    },
+    "Pages/OrderHistory/BeginExportOrders": (draft: Draft<OrderHistoryState>) => {
+        draft.isExportingOrders = true;
+    },
+    "Pages/OrderHistory/CompleteExportOrders": (draft: Draft<OrderHistoryState>) => {
+        draft.isExportingOrders = false;
+    },
+    "Pages/OrderHistory/ToggleSelectedOrders": (draft: Draft<OrderHistoryState>, action: { ids: string[] }) => {
+        for (const id of action.ids) {
+            if (draft.selectedOrderIds[id]) {
+                delete draft.selectedOrderIds[id];
+            } else {
+                draft.selectedOrderIds[id] = true;
+            }
+        }
+    },
+    "Pages/OrderHistory/ClearSelectedOrders": (draft: Draft<OrderHistoryState>) => {
+        draft.selectedOrderIds = {};
     },
 };
 

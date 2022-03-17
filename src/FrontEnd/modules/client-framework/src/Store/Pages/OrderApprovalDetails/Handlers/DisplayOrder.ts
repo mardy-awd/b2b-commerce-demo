@@ -1,4 +1,8 @@
-import { ApiHandlerDiscreteParameter, createHandlerChainRunner } from "@insite/client-framework/HandlerCreator";
+import {
+    ApiHandlerDiscreteParameter,
+    createHandlerChainRunner,
+    makeHandlerChainAwaitable,
+} from "@insite/client-framework/HandlerCreator";
 import { GetOrderApiParameter } from "@insite/client-framework/Services/OrderService";
 import loadApprovalCart from "@insite/client-framework/Store/Data/OrderApprovals/Handlers/LoadOrderApproval";
 import { getOrderApprovalsState } from "@insite/client-framework/Store/Data/OrderApprovals/OrderApprovalsSelectors";
@@ -15,15 +19,21 @@ export const DispatchSetOrderId: HandlerType = props => {
     });
 };
 
-export const DispatchLoadOrderIfNeeded: HandlerType = props => {
+export const DispatchLoadOrderIfNeeded: HandlerType = async props => {
     const orderApprovalsState = getOrderApprovalsState(props.getState(), props.parameter.cartId);
+
+    if (orderApprovalsState.isLoading) {
+        return false;
+    }
+
     if (
         !orderApprovalsState.value ||
         !orderApprovalsState.value.billTo ||
         !orderApprovalsState.value.shipTo ||
         orderApprovalsState.value.cartLines?.length === 0
     ) {
-        props.dispatch(loadApprovalCart(props.parameter));
+        const awaitableLoadApprovalCart = makeHandlerChainAwaitable(loadApprovalCart);
+        await awaitableLoadApprovalCart(props.parameter)(props.dispatch, props.getState);
     }
 };
 

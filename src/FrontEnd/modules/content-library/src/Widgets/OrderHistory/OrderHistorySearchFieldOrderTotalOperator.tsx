@@ -70,7 +70,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Order Total Operator",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
     },
 };
 

@@ -61,7 +61,7 @@ const VmiReportingHeader = ({ toggleFiltersOpen }: Props) => {
             </GridContainer>
             <GridContainer {...styles.container}>
                 <GridItem {...styles.toggleFilterGridItem}>
-                    <Clickable onClick={toggleFiltersOpen}>
+                    <Clickable onClick={() => toggleFiltersOpen()}>
                         <Icon src={Filter} {...styles.toggleFilterIcon} />
                     </Clickable>
                 </GridItem>

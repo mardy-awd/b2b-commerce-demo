@@ -27,11 +27,14 @@ export interface GetOrdersApiParameter extends ApiParameter, HasPagingParameters
     orderTotal?: number;
     productErpNumber?: string;
     sort?: string;
+    displayName?: string;
+    vmiOrdersOnly?: boolean;
+    vmiLocationId?: string;
 }
 
 export interface GetOrderApiParameter extends ApiParameter {
     orderNumber: string;
-    expand?: ("orderLines" | "shipments")[];
+    expand?: ("orderLines" | "shipments" | "vmidetails")[];
     additionalExpands?: string[];
     sTEmail?: string;
     sTPostalCode?: string;

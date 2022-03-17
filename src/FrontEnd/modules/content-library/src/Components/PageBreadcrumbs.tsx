@@ -29,7 +29,7 @@ const PageBreadcrumbs = (props: Props) => {
     let links = props.links || generateLinksFrom(props.linksState, props.nodeId, props.homePageUrl);
     if (links.length > 0) {
         // we need to always direct to the language-specific homepage URL
-        const homePageLink = { children: translate("Home"), href: props.homePageUrl };
+        const homePageLink = { children: translate("Home_Breadcrumb"), href: props.homePageUrl };
         const linksWithoutHomePageLink = [...links].splice(1, links.length);
         links = [homePageLink, ...linksWithoutHomePageLink];
     }

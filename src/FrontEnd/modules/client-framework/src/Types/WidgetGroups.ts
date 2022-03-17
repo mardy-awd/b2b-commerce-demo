@@ -15,6 +15,8 @@ const WidgetGroups = [
     "Order Approval Details",
     "Order History",
     "Order Details",
+    "VMI Order History",
+    "VMI Order Details",
     "Order Status",
     "Return Request (RMA)",
     "My Account",

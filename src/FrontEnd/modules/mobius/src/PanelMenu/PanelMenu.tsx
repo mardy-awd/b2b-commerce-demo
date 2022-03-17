@@ -77,6 +77,13 @@ const PanelMenuWrapper = styled.nav<ThemeProps<BaseTheme> & InjectableCss>`
     > button {
         width: 100%;
     }
+    &:focus > *:first-child {
+        outline-color: ${getProp("theme.focus.color", "#09f")};
+        outline-style: ${getProp("theme.focus.style", "solid")};
+        outline-width: ${getProp("theme.focus.width", "2px")};
+        outline-offset: -${getProp("theme.focus.width")};
+    }
+    outline: none;
     ${injectCss}
 `;
 

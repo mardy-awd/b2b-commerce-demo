@@ -11,6 +11,7 @@ import styled, { css, ThemeProps } from "styled-components";
 
 const LabelWithInputAtEnd = styled.label<ThemeProps<ShellTheme> & { firstInput?: boolean; disabled?: boolean }>`
     display: flex;
+    align-items: center;
     justify-content: space-between;
     &:hover {
         .label {

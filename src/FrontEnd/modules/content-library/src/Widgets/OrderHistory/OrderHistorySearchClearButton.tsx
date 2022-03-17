@@ -59,7 +59,7 @@ const widgetModule: WidgetModule = {
     definition: {
         group: "Order History",
         displayName: "Clear Filters Button",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
     },
 };
 

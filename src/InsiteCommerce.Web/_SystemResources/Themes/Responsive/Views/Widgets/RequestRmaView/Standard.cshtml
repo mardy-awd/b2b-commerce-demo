@@ -10,7 +10,7 @@
             <a href="[% urlForPage 'OrdersPage' %]">[% translate 'Order History' %]</a>
         </li>
         <li class="">
-            <a ng-href="[% urlForPage 'OrderDetailPage' %]?ordernumber={{vm.order.webOrderNumber || vm.order.erpOrderNumber}}">[% translate 'Order Details' %]</a>
+            <a ng-href="[% urlForPage 'OrderDetailPage' %]?ordernumber={{vm.order.webOrderNumber || vm.order.erpOrderNumber}}{{ !!order.vmiLocationId ? '&isVmiOrder=true' : '' }}">[% translate 'Order Details' %]</a>
         </li>
         <li class="hide-for-small current">[% translate 'Return Request (RMA)' %]</li>
     </ul>
@@ -18,7 +18,7 @@
     <h1>[% translate 'Return Request (RMA)' %]</h1>
 
     <div class="hide-for-small back-btn">
-        <a ng-href="[% urlForPage 'OrderDetailPage' %]?ordernumber={{vm.order.webOrderNumber || vm.order.erpOrderNumber}}" class="btn tertiary btn-return">[% translate 'Return to Order Details' %]</a>
+        <a ng-href="[% urlForPage 'OrderDetailPage' %]?ordernumber={{vm.order.webOrderNumber || vm.order.erpOrderNumber}}{{ !!order.vmiLocationId ? '&isVmiOrder=true' : '' }}" class="btn tertiary btn-return">[% translate 'Return to Order Details' %]</a>
     </div>
 
     <div class="order-details-top">

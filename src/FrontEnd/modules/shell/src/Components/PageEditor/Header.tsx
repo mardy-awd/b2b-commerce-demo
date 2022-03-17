@@ -1,4 +1,5 @@
 import PageProps from "@insite/client-framework/Types/PageProps";
+import Link from "@insite/mobius/Link";
 import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import BrandSelection from "@insite/shell/Components/PageEditor/BrandSelection";
 import CategorySelection from "@insite/shell/Components/PageEditor/CategorySelection";
@@ -9,11 +10,13 @@ import { LoadedPageDefinition } from "@insite/shell/DefinitionTypes";
 import { getPageState, getPageStateFromDictionaries } from "@insite/shell/Services/ContentAdminService";
 import { getAutoUpdatedPageTypes } from "@insite/shell/Services/SpireService";
 import { ShellThemeProps } from "@insite/shell/ShellTheme";
+import { isSharedContentOpened } from "@insite/shell/Store/Data/Pages/PagesHelpers";
 import { editPageOptions, openPageTemplateModal } from "@insite/shell/Store/PageEditor/PageEditorActionCreators";
-import { setContentMode } from "@insite/shell/Store/ShellContext/ShellContextActionCreators";
+import { openEditContent } from "@insite/shell/Store/SharedContent/SharedContentActionCreator";
 import ShellState from "@insite/shell/Store/ShellState";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
+import { RouteComponentProps, withRouter } from "react-router";
 import styled, { css } from "styled-components";
 
 interface OwnProps {
@@ -21,7 +24,10 @@ interface OwnProps {
     pageDefinition: LoadedPageDefinition;
 }
 
-type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & OwnProps;
+type Props = ReturnType<typeof mapStateToProps> &
+    ResolveThunks<typeof mapDispatchToProps> &
+    OwnProps &
+    RouteComponentProps;
 
 const mapStateToProps = (state: ShellState, { page }: OwnProps) => {
     const {
@@ -58,13 +64,14 @@ const mapStateToProps = (state: ShellState, { page }: OwnProps) => {
             pageState &&
             futurePublishNodeIds[pageState.isVariant ? `${pageState.nodeId}_${pageState.pageId}` : pageState.nodeId],
         isVariant: pageState?.isVariant,
+        fromPageId: state.sharedContent.fromPageId,
     };
 };
 
 const mapDispatchToProps = {
     openPageTemplateModal,
-    setContentMode,
     editPageOptions,
+    openEditContent,
 };
 
 interface State {
@@ -94,51 +101,50 @@ class Header extends React.Component<Props, State> {
     }
 
     editPageOptions = () => {
-        this.props.editPageOptions(this.props.page.id, this.props.isVariant);
+        isSharedContentOpened()
+            ? this.props.openEditContent(this.props.page.id)
+            : this.props.editPageOptions(this.props.page.id, this.props.isVariant);
+    };
+
+    returnBack = () => {
+        this.props.history.push(`/ContentAdmin/Page/${this.props.fromPageId}`);
     };
 
     render() {
-        const { page, pageDefinition, openPageTemplateModal, contentMode, permissions, futurePublishOn } = this.props;
+        const { page, pageDefinition, openPageTemplateModal, contentMode, permissions, futurePublishOn, fromPageId } =
+            this.props;
 
         const autoUpdatedPage = this.state.autoUpdatedPageTypes?.includes(page.type) ?? false;
+
+        const divider = <AxiomIcon src="pipe" color="custom.borderDividerColor" size={16} css={dividerCss} />;
+
         return (
             <PageHeaderStyle>
+                {fromPageId && (
+                    <>
+                        <AxiomIcon src="arrow-left-long" size={16} />
+                        <Link css={backLinkCss} onClick={this.returnBack}>
+                            Back
+                        </Link>
+                        {divider}
+                    </>
+                )}
                 <PageHeaderTitle data-test-selector="shell_title">{page.name}</PageHeaderTitle>
-                <AxiomIcon
-                    src="pipe"
-                    color="custom.borderDividerColor"
-                    size={16}
-                    css={css`
-                        width: 24px;
-                        height: 24px;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                    `}
-                />
+                {divider}
                 <HeaderPublishStatus />
                 {contentMode === "Editing" && (
                     <>
-                        <AxiomIcon
-                            src="pipe"
-                            size={16}
-                            color="custom.borderDividerColor"
-                            css={css`
-                                width: 24px;
-                                height: 24px;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                            `}
-                        />
+                        {divider}
                         {permissions?.canEditWidget && (!futurePublishOn || futurePublishOn < new Date()) && (
                             <PageHeaderButton onClick={this.editPageOptions} data-test-selector="shell_editPage">
                                 <AxiomIcon src="edit" size={16} />
                             </PageHeaderButton>
                         )}
-                        <PageHeaderButton onClick={openPageTemplateModal}>
-                            <AxiomIcon src="bug" size={16} />
-                        </PageHeaderButton>
+                        {!isSharedContentOpened() && (
+                            <PageHeaderButton onClick={openPageTemplateModal}>
+                                <AxiomIcon src="bug" size={16} />
+                            </PageHeaderButton>
+                        )}
                     </>
                 )}
 
@@ -161,7 +167,7 @@ class Header extends React.Component<Props, State> {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));
 
 const AutoUpdateWarning = styled.span`
     color: ${(props: ShellThemeProps) => props.theme.colors.danger.main};
@@ -175,12 +181,12 @@ const PageHeaderStyle = styled.div`
     display: flex;
     align-items: center;
     border-bottom: 1px solid #dedede;
+    padding-left: 16px;
 `;
 
 const PageHeaderTitle = styled.p`
     color: ${(props: ShellThemeProps) => props.theme.colors.primary.main};
     align-content: center;
-    padding-left: 16px;
     font-size: 16px;
     font-weight: 400;
     line-height: 1.5rem;
@@ -209,4 +215,16 @@ const PublishDropDownStyle = styled.div`
     margin-left: auto;
     margin-right: 30px;
     display: flex;
+`;
+
+const dividerCss = css`
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const backLinkCss = css`
+    margin-left: 8px;
 `;

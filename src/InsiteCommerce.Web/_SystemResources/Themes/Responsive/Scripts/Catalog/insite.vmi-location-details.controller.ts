@@ -209,12 +209,12 @@
                     o.product.customerName,
                     o.product.manufacturerItem,
                     o.binNumber,
-                    o.minimumQty ? o.minimumQty.toString() : '',
-                    o.maximumQty ? o.maximumQty.toString() : '',
-                    o.previousCountDate ? o.previousCountDate.toString() : '',
-                    o.previousCountQty ? o.previousCountQty.toString() : '',
+                    o.minimumQty.toString(),
+                    o.maximumQty.toString(),
+                    o.previousCountDate ? this.$filter("date")(o.previousCountDate, "shortDate") : '',
+                    o.previousCountQty.toString(),
                     o.lastOrderErpOrderNumber ? o.lastOrderErpOrderNumber : o.lastOrderWebOrderNumber ? o.lastOrderWebOrderNumber : '',
-                    o.product.largeImagePath ? o.product.largeImagePath : '',
+                    o.product.largeImagePath || '',
                 ]),
             };
         };

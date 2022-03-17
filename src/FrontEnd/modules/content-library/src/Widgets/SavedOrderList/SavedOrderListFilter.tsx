@@ -147,7 +147,6 @@ const StyledDateRangeFieldSet = getStyledWrapper("fieldset");
 const StyledOrderTotalFieldSet = getStyledWrapper("fieldset");
 
 export const styles = savedOrderListFilterStyles;
-const tzOffset = new Date().getTimezoneOffset() * 60000;
 let updateTimeoutId: any;
 const SavedOrderListFilter = ({ isFilterOpen, getCartsApiParameter, updateSearchFields, clearSearch }: Props) => {
     const [orderSubtotal, setOrderSubtotal] = React.useState("");

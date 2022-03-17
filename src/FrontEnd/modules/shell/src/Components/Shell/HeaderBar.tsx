@@ -40,6 +40,7 @@ const commonDisabled = shellTheme.colors.common.disabled;
 
 class HeaderBar extends React.Component<Props, State> {
     private intervalId: number;
+    private _isMounted: boolean;
     constructor(props: Props) {
         super(props);
 
@@ -47,8 +48,9 @@ class HeaderBar extends React.Component<Props, State> {
             canChangeContext: (window as any).frameHoleIsReady,
         };
 
+        this._isMounted = false;
         this.intervalId = setInterval(() => {
-            if (this.state.canChangeContext !== (window as any).frameHoleIsReady) {
+            if (this.state.canChangeContext !== (window as any).frameHoleIsReady && this._isMounted) {
                 this.setState({
                     canChangeContext: (window as any).frameHoleIsReady,
                 });
@@ -57,10 +59,12 @@ class HeaderBar extends React.Component<Props, State> {
     }
 
     componentWillUnmount() {
+        this._isMounted = false;
         clearImmediate(this.intervalId);
     }
 
     componentDidMount(): void {
+        this._isMounted = true;
         if (this.props.languages.length === 0) {
             this.props.loadShellContext();
         }
@@ -122,7 +126,7 @@ class HeaderBar extends React.Component<Props, State> {
                     >
                         {languages.map(({ id, description }) => (
                             <option key={id} value={id}>
-                                {description}
+                                &nbsp;{description}&nbsp;
                             </option>
                         ))}
                     </select>
@@ -140,7 +144,7 @@ class HeaderBar extends React.Component<Props, State> {
                             >
                                 {deviceTypes.map(deviceType => (
                                     <option key={deviceType} value={deviceType}>
-                                        {deviceType}
+                                        &nbsp;{deviceType}&nbsp;
                                     </option>
                                 ))}
                             </select>
@@ -164,7 +168,7 @@ class HeaderBar extends React.Component<Props, State> {
                             >
                                 {personas.map(({ id, name }) => (
                                     <option key={id} value={id}>
-                                        {name}
+                                        &nbsp;{name}&nbsp;
                                     </option>
                                 ))}
                             </select>
@@ -210,10 +214,15 @@ const SelectWrapper = styled.div`
         appearance: none;
         padding-right: 20px;
         cursor: pointer;
-        font-weight: bold;
+        font-weight: 400;
+        font-family: inherit;
+        &:focus {
+            outline: none;
+        }
 
         option {
             color: ${getColor("text.main")};
+            font-size: 16px;
 
             &:disabled {
                 font-style: italic;

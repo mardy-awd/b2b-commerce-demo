@@ -238,7 +238,7 @@ const OrderDetailsSummaryTable: React.FunctionComponent<Props> = ({ order }) => 
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(OrderDetailsSummaryTable),
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

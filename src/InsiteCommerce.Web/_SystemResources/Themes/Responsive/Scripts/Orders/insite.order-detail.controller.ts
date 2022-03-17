@@ -5,6 +5,7 @@
     export class OrderDetailController {
         order: OrderModel;
         orderNumber: string;
+        isVmiOrder = false;
         private stEmail: string;
         private stPostalCode: string;
         canReorderItems = false;
@@ -56,7 +57,9 @@
                 stPostalCode: this.stPostalCode
             }
 
-            this.getOrder(this.orderNumber, this.stEmail, this.stPostalCode);
+            this.isVmiOrder = this.queryString.get("isVmiOrder").toLowerCase() === "true";
+
+            this.getOrder(this.orderNumber, this.stEmail, this.stPostalCode, this.isVmiOrder);
             this.getOrderStatusMappings();
 
             this.sessionService.getSession().then(
@@ -141,8 +144,9 @@
             return formattedString;
         }
 
-        getOrder(orderNumber: string, stEmail?: string, stPostalCode?: string): void {
-            this.orderService.getOrder(orderNumber, "orderlines,shipments", stEmail, stPostalCode).then(
+        getOrder(orderNumber: string, stEmail?: string, stPostalCode?: string, expandVmi?: boolean): void {
+            const expand = expandVmi ? "orderlines,shipments,vmidetails" : "orderlines,shipments";
+            this.orderService.getOrder(orderNumber, expand, stEmail, stPostalCode).then(
                 (order: OrderModel) => { this.getOrderCompleted(order); },
                 (error: any) => { this.getOrderFailed(error); });
         }

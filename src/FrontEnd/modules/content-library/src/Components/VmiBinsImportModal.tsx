@@ -292,8 +292,8 @@ const VmiBinsImportModal = ({
                 return {
                     productId: erpNumberToIdMap[o.name.toLowerCase()],
                     binNumber: o.binNumber,
-                    minimumQty: (o.minQty && +o.minQty) || 0,
-                    maximumQty: (o.maxQty && +o.maxQty) || 0,
+                    minimumQty: Math.min((o.minQty && +o.minQty) || 0, 999999),
+                    maximumQty: Math.min((o.maxQty && +o.maxQty) || 0, 999999),
                 } as VmiBinModel;
             }),
             onComplete: result => {

@@ -170,7 +170,10 @@ export const savePage =
             const state = getState();
             const { shellContext } = state;
             const currentPage = getCurrentPage(state);
-            const storablePage = getStorablePage(state, shellContext.websiteId);
+            const storablePage = getStorablePage(
+                state,
+                currentPage.type === "SharedContent" ? null : shellContext.websiteId,
+            );
 
             if (storablePage.generalFields["variantName"]) {
                 storablePage.variantName = storablePage.generalFields["variantName"];
@@ -305,7 +308,10 @@ export const doneEditingItem = (): ShellThunkAction => (dispatch, getState) => {
 
 export const cancelEditingItem = (): ShellThunkAction => (dispatch, getState) => {
     if (getState().pageEditor.isEditingNewPage) {
-        dispatch(push("/ContentAdmin/Page/"));
+        const url = window.location.pathname.startsWith("/ContentAdmin/SharedContent")
+            ? "/ContentAdmin/SharedContent"
+            : "/ContentAdmin/Page";
+        dispatch(push(url));
     }
 
     dispatch({

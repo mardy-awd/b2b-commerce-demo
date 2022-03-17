@@ -59,7 +59,7 @@ class ConfirmationProvider extends React.Component<{}, State> {
                             Cancel
                         </Button>
                         <Button variant="primary" onClick={this.confirm} data-test-selector="confirmationModal_confirm">
-                            Delete
+                            {this.state.options?.confirmLabel || "Delete"}
                         </Button>
                     </ButtonBar>
                 </Modal>

@@ -1,4 +1,5 @@
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
+import { convertDateToDateOnlyString } from "@insite/client-framework/Common/Utilities/DateUtilities";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import clearCountsSearch from "@insite/client-framework/Store/Pages/VmiBinDetails/Handlers/ClearCountsSearch";
 import toggleFiltersOpen from "@insite/client-framework/Store/Pages/VmiBinDetails/Handlers/ToggleCountsFilterOpen";
@@ -117,26 +118,17 @@ export const filterStyles: VmiBinDetailsCountsFilterStyles = {
 };
 
 const styles = filterStyles;
-const tzOffset = new Date().getTimezoneOffset() * 60000;
 class VmiBinDetailsCountsFilter extends React.Component<Props> {
     userChangeHandler = (userSearch: string) => {
         this.props.updateSearchFields({ userName: userSearch });
     };
 
     fromDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
-        this.props.updateSearchFields({
-            previousCountFromDate: selectedDay
-                ? new Date(selectedDay.getTime() - tzOffset).toISOString().split("T")[0]
-                : "",
-        });
+        this.props.updateSearchFields({ previousCountFromDate: convertDateToDateOnlyString(selectedDay) });
     };
 
     toDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
-        this.props.updateSearchFields({
-            previousCountToDate: selectedDay
-                ? new Date(selectedDay.getTime() - tzOffset).toISOString().split("T")[0]
-                : "",
-        });
+        this.props.updateSearchFields({ previousCountToDate: convertDateToDateOnlyString(selectedDay) });
     };
 
     clearFiltersClickHandler = () => {

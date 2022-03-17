@@ -127,7 +127,7 @@ const OrderDetailsTotal: FC = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsTotal,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

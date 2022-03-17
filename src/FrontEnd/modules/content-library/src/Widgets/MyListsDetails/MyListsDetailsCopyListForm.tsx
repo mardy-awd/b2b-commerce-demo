@@ -183,7 +183,7 @@ class MyListsDetailsCopyListForm extends React.Component<Props, State> {
         }
 
         return (
-            <GridContainer {...styles.container} data-test-selector="copyListForm">
+            <GridContainer {...styles.container} data-test-selector="copyListModal">
                 <GridItem {...styles.descriptionGridItem}>
                     <Typography {...styles.descriptionText}>
                         {translate("Copy items to a new or existing list.")}
@@ -196,7 +196,7 @@ class MyListsDetailsCopyListForm extends React.Component<Props, State> {
                         onSelectionChange={this.wishListChangeHandler}
                         selected={this.CREATE_ID}
                         options={options}
-                        data-test-selector="selectList"
+                        data-test-selector="copyListModal_selectList"
                         onOpen={this.props.disableCloseCopyListModalOnEsc}
                         onClose={this.props.enableCloseCopyListModalOnEsc}
                     />
@@ -205,7 +205,7 @@ class MyListsDetailsCopyListForm extends React.Component<Props, State> {
                     <GridItem {...styles.nameGridItem}>
                         <TextField
                             label={translate("List Name")}
-                            data-test-selector="tst_CopyList_ListName"
+                            data-test-selector="copyListModal_listName"
                             {...styles.nameTextField}
                             name="name"
                             error={this.state.nameError}
@@ -222,7 +222,7 @@ class MyListsDetailsCopyListForm extends React.Component<Props, State> {
                     <Button
                         {...styles.createButton}
                         onClick={this.submitHandler}
-                        data-test-selector="submitCopyListButton"
+                        data-test-selector="copyListModal_copyToListButton"
                     >
                         {translate("Copy to List")}
                     </Button>

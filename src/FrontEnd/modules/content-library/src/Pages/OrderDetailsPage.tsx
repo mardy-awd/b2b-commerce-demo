@@ -8,6 +8,7 @@ import loadOrderStatusMappings from "@insite/client-framework/Store/Data/OrderSt
 import { getOrderStatusMappingDataView } from "@insite/client-framework/Store/Data/OrderStatusMappings/OrderStatusMappingsSelectors";
 import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import displayOrder from "@insite/client-framework/Store/Pages/OrderDetails/Handlers/DisplayOrder";
+import setVmiOrderDetailsPage from "@insite/client-framework/Store/Pages/OrderDetails/Handlers/SetVmiOrderDetailsPage";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
 import Modals from "@insite/content-library/Components/Modals";
@@ -22,11 +23,14 @@ import { css } from "styled-components";
 const mapStateToProps = (state: ApplicationState) => {
     const location = getLocation(state);
     let orderNumber;
+    let isVmiOrder = false;
     if (location && location.search) {
         const parsedQuery = parseQueryStringCaseInsensitive(location.search, {
             orderNumber: "",
+            isVmiOrder: false,
         });
         orderNumber = parsedQuery.orderNumber;
+        isVmiOrder = parsedQuery.isVmiOrder;
     }
 
     const orderState = getOrderState(state, orderNumber);
@@ -38,12 +42,15 @@ const mapStateToProps = (state: ApplicationState) => {
         orderState,
         shouldDisplayOrder: !isOrderNumberStoredInState,
         shouldLoadOrderStatusMappings: !orderStatusMappingDataView.value && !orderStatusMappingDataView.isLoading,
+        isVmiOrder,
+        isVmiOrderDetailsPage: state.pages.orderDetails.isVmiOrderDetailsPage,
     };
 };
 
 const mapDispatchToProps = {
     displayOrder,
     loadOrderStatusMappings,
+    setVmiOrderDetailsPage,
 };
 
 export interface OrderDetailsPageStyles {
@@ -75,7 +82,13 @@ class OrderDetailsPage extends React.Component<Props> {
             this.props.loadOrderStatusMappings();
         }
         if (this.props.orderNumber && this.props.shouldDisplayOrder) {
-            this.props.displayOrder({ orderNumber: this.props.orderNumber });
+            this.props.displayOrder({
+                orderNumber: this.props.orderNumber,
+                expand: this.props.isVmiOrder ? ["orderLines", "shipments", "vmidetails"] : ["orderLines", "shipments"],
+            });
+        }
+        if (this.props.isVmiOrderDetailsPage) {
+            this.props.setVmiOrderDetailsPage(false);
         }
     }
 
@@ -108,10 +121,6 @@ const pageModule: PageModule = {
 };
 
 export default pageModule;
-
-export const mapStateToOrderProps = (state: ApplicationState) => ({
-    order: getOrderState(state, state.pages.orderDetails.orderNumber).value,
-});
 
 /**
  * @deprecated Use string literal "OrderDetailsPage" instead of this constant.

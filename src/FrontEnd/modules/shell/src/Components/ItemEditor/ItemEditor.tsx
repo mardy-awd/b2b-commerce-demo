@@ -1,8 +1,12 @@
 import { Dictionary, SafeDictionary } from "@insite/client-framework/Common/Types";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import FieldDefinition, {
+    ExcludeFromNavigation,
+    ExcludeFromSignInRequired,
+    HideFooter,
     HideFromSearchEngines,
     HideFromSiteSearch,
+    HideHeader,
 } from "@insite/client-framework/Types/FieldDefinition";
 import PageProps from "@insite/client-framework/Types/PageProps";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
@@ -254,7 +258,7 @@ class ItemEditor extends React.Component<Props, State> {
             }
         }
 
-        if ((definition as LoadedPageDefinition).pageType === "System" && !isVariant) {
+        if ((definition as LoadedPageDefinition).pageType === "System") {
             let itemType = item.type;
             if (itemType === "VariantRootPage") {
                 const currentPageState = getPageState(
@@ -282,11 +286,28 @@ class ItemEditor extends React.Component<Props, State> {
             ]);
             if (!skipTypes.has(itemType)) {
                 const fieldDefinitionSet = new Set(fieldDefinitions.map(o => o.name));
-                if (!fieldDefinitionSet.has(HideFromSearchEngines.name)) {
-                    fieldDefinitions.push(HideFromSearchEngines);
+                if (!isVariant) {
+                    if (!fieldDefinitionSet.has(HideFromSearchEngines.name)) {
+                        fieldDefinitions.push(HideFromSearchEngines);
+                    }
+                    if (!fieldDefinitionSet.has(HideFromSiteSearch.name)) {
+                        fieldDefinitions.push(HideFromSiteSearch);
+                    }
+                    if (!fieldDefinitionSet.has(ExcludeFromNavigation.name)) {
+                        fieldDefinitions.push(ExcludeFromNavigation);
+                    }
+                    if (!fieldDefinitionSet.has(ExcludeFromSignInRequired.name)) {
+                        fieldDefinitions.push(ExcludeFromSignInRequired);
+                    }
                 }
-                if (!fieldDefinitionSet.has(HideFromSiteSearch.name)) {
-                    fieldDefinitions.push(HideFromSiteSearch);
+
+                if (itemType !== "MyAccountPage" && (isVariant || item.type !== "VariantRootPage")) {
+                    if (!fieldDefinitionSet.has(HideHeader.name)) {
+                        fieldDefinitions.push(HideHeader);
+                    }
+                    if (!fieldDefinitionSet.has(HideFooter.name)) {
+                        fieldDefinitions.push(HideFooter);
+                    }
                 }
             }
         }

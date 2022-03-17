@@ -16,6 +16,7 @@ const mapStateToProps = (state: ShellState) => {
             headerTreeNodesByParentId,
             footerTreeNodesByParentId,
             mobileTreeNodesByParentId,
+            sharedContentTreeNodesByParentId,
             futurePublishNodeIds,
         },
     } = state;
@@ -30,6 +31,7 @@ const mapStateToProps = (state: ShellState) => {
             headerTreeNodesByParentId[page.parentId],
             footerTreeNodesByParentId[page.parentId],
             mobileTreeNodesByParentId[page.parentId],
+            sharedContentTreeNodesByParentId[page.parentId],
         ) ||
         getPageStateFromDictionaries(
             pageId,
@@ -37,6 +39,7 @@ const mapStateToProps = (state: ShellState) => {
             headerTreeNodesByParentId,
             footerTreeNodesByParentId,
             mobileTreeNodesByParentId,
+            sharedContentTreeNodesByParentId,
         );
 
     return {
@@ -102,6 +105,5 @@ const HeaderPublishStatus: FC<Props> = ({
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderPublishStatus);
 
 const StyledParagraph = styled.p`
-    margin-left: 4px;
-    width: 86px;
+    margin: 0 4px;
 `;

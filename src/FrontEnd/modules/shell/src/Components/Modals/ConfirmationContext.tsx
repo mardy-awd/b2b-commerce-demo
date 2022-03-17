@@ -9,10 +9,11 @@ interface ConfirmationModel {
 }
 
 export interface ConfirmationOptions {
-    message: string;
+    message: React.ReactNode;
     onConfirm: () => void;
     onCancel?: () => void;
     title?: string;
+    confirmLabel?: string;
 }
 
 export const ConfirmationContext = React.createContext<ConfirmationModel | null>(null);

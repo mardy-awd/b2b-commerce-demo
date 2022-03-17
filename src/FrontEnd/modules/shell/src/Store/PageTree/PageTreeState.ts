@@ -16,6 +16,7 @@ export interface TreeNodeModel {
     isRootVariant?: boolean;
     isShared?: boolean;
     allowedForPageType: string;
+    tags: string[];
 }
 
 export interface PageTreeState {
@@ -32,6 +33,7 @@ export interface PageTreeState {
     footerTreeNodesByParentId: Dictionary<TreeNodeModel[]>;
     mobileTreeNodesByParentId: Dictionary<TreeNodeModel[]>;
     layoutTreeNodesByParentId: Dictionary<TreeNodeModel[]>;
+    sharedContentTreeNodesByParentId: Dictionary<TreeNodeModel[]>;
     neverPublishedNodeIds: Dictionary<boolean>;
     futurePublishNodeIds: Dictionary<Date>;
     draftNodeIds: Dictionary<boolean>;

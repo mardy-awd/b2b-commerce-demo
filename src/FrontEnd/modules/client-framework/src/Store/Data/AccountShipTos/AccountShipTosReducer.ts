@@ -30,6 +30,9 @@ const reducer = {
 
         draft.dataViews[getDataViewKey(action.parameter)] = dataView;
     },
+    "Data/AccountShipTos/Reset": () => {
+        return initialState;
+    },
 };
 
 export default createTypedReducerWithImmer(initialState, reducer);

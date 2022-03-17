@@ -1,4 +1,8 @@
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
+import {
+    convertDateOnlyStringToDate,
+    convertDateToDateOnlyString,
+} from "@insite/client-framework/Common/Utilities/DateUtilities";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import updateSearchFields from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/UpdateSearchFields";
 import translate from "@insite/client-framework/Translate";
@@ -46,7 +50,7 @@ export const dateRangeStyles: OrderHistoryDateRangeStyles = {
                 width: 100%;
             `,
             formField: css`
-                padding-right: 10px;
+                padding-right: 5px;
             `,
         },
     },
@@ -56,7 +60,7 @@ export const dateRangeStyles: OrderHistoryDateRangeStyles = {
                 width: 100%;
             `,
             formField: css`
-                padding-left: 10px;
+                padding-left: 5px;
             `,
         },
         labelProps: {
@@ -66,32 +70,32 @@ export const dateRangeStyles: OrderHistoryDateRangeStyles = {
 };
 
 const styles = dateRangeStyles;
-const tzOffset = new Date().getTimezoneOffset() * 60000;
 const OrderHistorySearchFieldDateRange: React.FunctionComponent<Props> = props => {
     const fromDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
         const loadParameter = {
             ...props.parameter,
-            fromDate: selectedDay ? new Date(selectedDay.getTime() - tzOffset).toISOString().split("T")[0] : "",
+            fromDate: convertDateToDateOnlyString(selectedDay),
         };
+
         props.updateSearchFields(loadParameter);
     };
 
     const toDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
         const loadParameter = {
             ...props.parameter,
-            toDate: selectedDay ? new Date(selectedDay.getTime() - tzOffset).toISOString().split("T")[0] : "",
+            toDate: convertDateToDateOnlyString(selectedDay),
         };
         props.updateSearchFields(loadParameter);
     };
 
-    // replacing - with / prevents a date in the format "yyyy-mm-dd" from losing a day (doesn't add a time zone that can change the day)
-    const fromDate = props.parameter.fromDate ? new Date(props.parameter.fromDate.replace(/-/g, "/")) : undefined;
-    const toDate = props.parameter.toDate ? new Date(props.parameter.toDate.replace(/-/g, "/")) : undefined;
+    const fromDate = convertDateOnlyStringToDate(props.parameter.fromDate);
+    const toDate = convertDateOnlyStringToDate(props.parameter.toDate);
 
     return (
         <SearchFieldWrapper extendedStyles={styles.searchFieldWrapper}>
-            <StyledWrapper {...styles.datePickersWrapper} data-test-selector="tst_orderHistory_filterDateRange">
+            <StyledWrapper {...styles.datePickersWrapper} data-test-selector="orderHistory_filterDateRange">
                 <DatePicker
+                    data-test-selector="orderHistory_filterFromDate"
                     {...styles.fromDate}
                     label={translate("Date Range")}
                     selectedDay={fromDate}
@@ -103,6 +107,7 @@ const OrderHistorySearchFieldDateRange: React.FunctionComponent<Props> = props =
                     }}
                 />
                 <DatePicker
+                    data-test-selector="orderHistory_filterToDate"
                     {...styles.toDate}
                     label={translate("To")}
                     selectedDay={toDate}
@@ -122,7 +127,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(OrderHistorySearchFieldDateRange),
     definition: {
         group: "Order History",
-        allowedContexts: ["OrderHistoryPage"],
+        allowedContexts: ["OrderHistoryPage", "VmiOrderHistoryPage"],
         displayName: "Date Range",
     },
 };

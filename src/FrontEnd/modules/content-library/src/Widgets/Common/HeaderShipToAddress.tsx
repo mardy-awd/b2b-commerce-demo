@@ -85,6 +85,7 @@ export const headerShipToAddressStyles: HeaderShipToAddressStyles = {
         css: css`
             margin-left: 10px;
             width: calc(100% - 10px);
+            padding: 6px 0;
         `,
     },
     titleIcon: {

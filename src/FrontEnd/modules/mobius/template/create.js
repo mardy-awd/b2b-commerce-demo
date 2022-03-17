@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 const { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } = require("fs");
-const { renderString } = require("template-file"); // https://github.com/gsandf/template-file
+const { render } = require("template-file"); // https://github.com/gsandf/template-file
 
 // get component type and name from CLI
 const [, , componentName] = process.argv;
@@ -43,7 +43,7 @@ mkdirSync(destinationFolder);
 // render templates and write files
 const fileNames = Object.keys(templates);
 fileNames.forEach(fileName => {
-    const renderedString = renderString(templates[fileName], data);
+    const renderedString = render(templates[fileName], data);
     const filePath = `${destinationFolder}/${fileName}`;
     writeFileSync(filePath, renderedString, readFileOptions);
     console.log(`${filePath} created.`);

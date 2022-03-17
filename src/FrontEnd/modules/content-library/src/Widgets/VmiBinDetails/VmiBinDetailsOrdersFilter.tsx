@@ -1,4 +1,5 @@
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
+import { convertDateToDateOnlyString } from "@insite/client-framework/Common/Utilities/DateUtilities";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import loadOrderStatusMappings from "@insite/client-framework/Store/Data/OrderStatusMappings/Handlers/LoadOrderStatusMappings";
 import { getOrderStatusMappingDataView } from "@insite/client-framework/Store/Data/OrderStatusMappings/OrderStatusMappingsSelectors";
@@ -137,7 +138,6 @@ export const filterStyles: VmiBinDetailsOrdersFilterStyles = {
 };
 
 const styles = filterStyles;
-const tzOffset = new Date().getTimezoneOffset() * 60000;
 const VmiBinDetailsOrdersFilter = ({
     filtersOpen,
     getVmiOrdersParameter,
@@ -156,15 +156,11 @@ const VmiBinDetailsOrdersFilter = ({
     });
 
     const fromDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
-        updateOrdersSearchFields({
-            fromDate: selectedDay ? new Date(selectedDay.getTime() - tzOffset).toISOString().split("T")[0] : "",
-        });
+        updateOrdersSearchFields({ fromDate: convertDateToDateOnlyString(selectedDay) });
     };
 
     const toDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
-        updateOrdersSearchFields({
-            toDate: selectedDay ? new Date(selectedDay.getTime() - tzOffset).toISOString().split("T")[0] : "",
-        });
+        updateOrdersSearchFields({ toDate: convertDateToDateOnlyString(selectedDay) });
     };
 
     const statusChangeHandler = (event?: React.FormEvent<HTMLSelectElement>) => {
@@ -196,7 +192,7 @@ const VmiBinDetailsOrdersFilter = ({
         <>
             <GridContainer {...styles.filterContainer}>
                 <GridItem {...styles.toggleFilterGridItem}>
-                    <Clickable onClick={toggleOrdersFilterOpen}>
+                    <Clickable onClick={() => toggleOrdersFilterOpen()}>
                         <Icon src={Filter} {...styles.toggleFilterIcon} />
                     </Clickable>
                 </GridItem>

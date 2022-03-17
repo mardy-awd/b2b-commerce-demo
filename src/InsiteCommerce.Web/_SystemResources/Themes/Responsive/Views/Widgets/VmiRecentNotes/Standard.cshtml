@@ -7,7 +7,7 @@
                 <div ng-repeat="order in vm.orders" class="order-row">
                     <div class="vmi-location-name" ng-bind="order.vmiLocationName"></div>
                     <div>
-                        <a ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{order.erpOrderNumber || order.webOrderNumber}}">{{order.erpOrderNumber || order.webOrderNumber}}</a>
+                        <a ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{order.erpOrderNumber || order.webOrderNumber}}&isVmiOrder=true">{{order.erpOrderNumber || order.webOrderNumber}}</a>
                     </div>
                     <div ng-bind="order.notes"></div>
                     <div ng-bind="order.orderDate | date:'shortDate'"></div>

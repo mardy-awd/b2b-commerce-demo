@@ -1254,20 +1254,26 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                             </GridItem>
                         )}
                         {cart.showPoNumber && enableVat && <GridItem {...styles.emptyGridItem}></GridItem>}
-                        {paymentMethodDto?.isPaymentProfile && !paymentMethodDto.isPaymentProfileExpired && (
-                            <GridItem width={6}>
-                                <SavedPaymentProfileEntry
-                                    iframe={
-                                        useTokenExGateway ? "TokenEx" : usePaymetricGateway ? "Paymetric" : undefined
-                                    }
-                                    isTokenExIframeLoaded={isTokenExIframeLoaded}
-                                    securityCode={securityCode}
-                                    onSecurityCodeChange={handleSecurityCodeChange}
-                                    securityCodeError={showFormErrors ? securityCodeError : undefined}
-                                    extendedStyles={styles.savedPaymentProfile}
-                                />
-                            </GridItem>
-                        )}
+                        {paymentMethodDto?.isPaymentProfile &&
+                            !paymentMethodDto.isPaymentProfileExpired &&
+                            !bypassCvvForSavedCards && (
+                                <GridItem width={6}>
+                                    <SavedPaymentProfileEntry
+                                        iframe={
+                                            useTokenExGateway
+                                                ? "TokenEx"
+                                                : usePaymetricGateway
+                                                ? "Paymetric"
+                                                : undefined
+                                        }
+                                        isTokenExIframeLoaded={isTokenExIframeLoaded}
+                                        securityCode={securityCode}
+                                        onSecurityCodeChange={handleSecurityCodeChange}
+                                        securityCodeError={showFormErrors ? securityCodeError : undefined}
+                                        extendedStyles={styles.savedPaymentProfile}
+                                    />
+                                </GridItem>
+                            )}
                         {cart.showCreditCard && paymentMethodDto?.isCreditCard && (
                             <GridItem {...styles.creditCardDetailsGridItem}>
                                 <CreditCardDetailsEntry

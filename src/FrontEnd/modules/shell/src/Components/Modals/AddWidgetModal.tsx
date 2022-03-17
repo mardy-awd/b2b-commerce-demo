@@ -1,10 +1,13 @@
 import { AddWidgetData } from "@insite/client-framework/Common/FrameHole";
+import { emptyGuid } from "@insite/client-framework/Common/StringHelpers";
 import { Dictionary } from "@insite/client-framework/Common/Types";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { AllowedContexts } from "@insite/client-framework/Types/AllowedContexts";
 import WidgetGroups, { WidgetGroup } from "@insite/client-framework/Types/WidgetGroups";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import Modal, { ModalPresentationProps } from "@insite/mobius/Modal";
+import Tab from "@insite/mobius/Tab";
+import TabGroup from "@insite/mobius/TabGroup";
 import TextField from "@insite/mobius/TextField";
 import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import AxLinkList from "@insite/shell/Components/Icons/AxiomIcon/AxLinkList";
@@ -13,7 +16,14 @@ import { LoadedWidgetDefinition } from "@insite/shell/DefinitionTypes";
 import { setupWidgetModel } from "@insite/shell/Services/WidgetCreation";
 import { ShellThemeProps } from "@insite/shell/ShellTheme";
 import { addWidget } from "@insite/shell/Store/Data/Pages/PagesActionCreators";
-import { editWidget, hideAddWidgetModal, savePage } from "@insite/shell/Store/PageEditor/PageEditorActionCreators";
+import { isSharedContentOpened } from "@insite/shell/Store/Data/Pages/PagesHelpers";
+import {
+    doneEditingItem,
+    editWidget,
+    hideAddWidgetModal,
+    savePage,
+} from "@insite/shell/Store/PageEditor/PageEditorActionCreators";
+import { TreeNodeModel } from "@insite/shell/Store/PageTree/PageTreeState";
 import ShellState from "@insite/shell/Store/ShellState";
 import sortBy from "lodash/sortBy";
 import * as React from "react";
@@ -77,6 +87,8 @@ const mapStateToProps = (state: ShellState) => {
         addWidgetData: state.pageEditor.addWidgetData,
         widgetsByGroup,
         groups: sortBy(groups, [o => WidgetGroups.indexOf(o)]),
+        sharedContents: state.pageTree.sharedContentTreeNodesByParentId[emptyGuid] || [],
+        mobileCmsModeActive: state.shellContext.mobileCmsModeActive,
     };
 };
 
@@ -85,10 +97,12 @@ const mapDispatchToProps = {
     savePage,
     editWidget,
     hideAddWidgetModal,
+    doneEditingItem,
 };
 
 interface State {
     widgetSearch: string;
+    sharedContentSearch: string;
 }
 
 interface AddWidgetModalStyles {
@@ -101,6 +115,7 @@ const styles: AddWidgetModalStyles = {
         cssOverrides: {
             modalContent: css`
                 overflow-y: hidden;
+                padding: 10px 30px;
             `,
         },
     },
@@ -108,6 +123,7 @@ const styles: AddWidgetModalStyles = {
 
 class AddWidgetModal extends React.Component<Props, State> {
     searchInputWrapper = React.createRef<HTMLInputElement>();
+    sharedContentSearchInputWrapper = React.createRef<HTMLInputElement>();
     lastAddWidgetData?: AddWidgetData;
 
     constructor(props: Props) {
@@ -115,6 +131,7 @@ class AddWidgetModal extends React.Component<Props, State> {
 
         this.state = {
             widgetSearch: "",
+            sharedContentSearch: "",
         };
     }
 
@@ -125,6 +142,12 @@ class AddWidgetModal extends React.Component<Props, State> {
     searchChange = (event: React.FormEvent<HTMLInputElement>) => {
         this.setState({
             widgetSearch: event.currentTarget.value,
+        });
+    };
+
+    sharedContentSearchChange = (event: React.FormEvent<HTMLInputElement>) => {
+        this.setState({
+            sharedContentSearch: event.currentTarget.value,
         });
     };
 
@@ -167,8 +190,48 @@ class AddWidgetModal extends React.Component<Props, State> {
         savePage();
     };
 
+    addSharedContent = (sharedContent: TreeNodeModel) => {
+        const {
+            addWidgetData,
+            addWidget,
+            currentLanguage,
+            defaultLanguageId,
+            currentPersonaId,
+            defaultPersonaId,
+            currentDeviceType,
+            doneEditingItem,
+            hideAddWidgetModal,
+            page,
+        } = this.props;
+        if (!addWidgetData) {
+            return;
+        }
+
+        const newWidget = setupWidgetModel(
+            getWidgetDefinition("Basic/SharedContent"),
+            addWidgetData.parentId,
+            addWidgetData.zoneName,
+            currentLanguage,
+            defaultLanguageId,
+            currentDeviceType,
+            currentPersonaId,
+            defaultPersonaId,
+        ) as WidgetProps;
+
+        if (page.type === "Layout") {
+            newWidget.isLayout = true;
+        }
+
+        newWidget.fields["pageId"] = sharedContent.pageId;
+        newWidget.generalFields["pageId"] = sharedContent.pageId;
+
+        addWidget(newWidget, addWidgetData.sortOrder, page.id);
+        doneEditingItem();
+        hideAddWidgetModal();
+    };
+
     render() {
-        const { groups, widgetsByGroup, addWidgetData } = this.props;
+        const { groups, widgetsByGroup, addWidgetData, sharedContents } = this.props;
 
         if (addWidgetData?.addRow && !this.lastAddWidgetData?.addRow) {
             this.addWidget(getWidgetDefinition("Basic/Row"));
@@ -181,7 +244,7 @@ class AddWidgetModal extends React.Component<Props, State> {
             this.lastAddWidgetData = addWidgetData;
         });
 
-        const { widgetSearch } = this.state;
+        const { widgetSearch, sharedContentSearch } = this.state;
         let displayedWidgetsByGroup: Dictionary<LoadedWidgetDefinition[]> = {};
         if (widgetSearch) {
             Object.keys(widgetsByGroup).forEach(groupName => {
@@ -199,6 +262,14 @@ class AddWidgetModal extends React.Component<Props, State> {
             displayedWidgetsByGroup = widgetsByGroup;
         }
 
+        const filteredSharedContents = sharedContents?.filter(
+            o =>
+                o.displayName.toLowerCase().indexOf(sharedContentSearch.toLowerCase()) > -1 ||
+                o.tags.some(p => p.toLowerCase().indexOf(sharedContentSearch.toLowerCase()) > -1),
+        );
+
+        const hideSharedContentTab = isSharedContentOpened() || this.props.mobileCmsModeActive;
+
         return (
             <Modal
                 {...styles.modal}
@@ -206,44 +277,78 @@ class AddWidgetModal extends React.Component<Props, State> {
                 handleClose={this.close}
                 isOpen={!!addWidgetData && !addWidgetData.addRow}
             >
-                <WidgetListWidgets ref={this.searchInputWrapper} data-test-selector="addWidgetModal">
-                    <TextField
-                        value={this.state.widgetSearch}
-                        placeholder="Search Widgets"
-                        onChange={this.searchChange}
-                        cssOverrides={{ formInputWrapper: formInputWrapperCss, formField: formFieldCss }}
-                        iconProps={{ src: "Search" }}
-                    />
-                    <WidgetListScroller>
-                        {groups.map(
-                            displayName =>
-                                displayedWidgetsByGroup[displayName] && (
-                                    <WidgetListGroup key={displayName}>
-                                        <WidgetListHeader>{displayName} elements</WidgetListHeader>
-                                        <WidgetListItems>
-                                            {displayedWidgetsByGroup[displayName].map(widgetDefinition => (
-                                                <WidgetListItemStyle
-                                                    key={widgetDefinition.type}
-                                                    onClick={() => this.addWidget(widgetDefinition)}
-                                                    data-test-selector={`addWidgetModal_${widgetDefinition.displayName}`}
-                                                >
-                                                    {widgetDefinition.icon === "ax-link-list" ? (
-                                                        <AxLinkList />
-                                                    ) : (
-                                                        <AxiomIcon
-                                                            src={provideFallback(widgetDefinition.icon)}
-                                                            size={20}
-                                                        />
-                                                    )}
-                                                    {widgetDefinition.displayName}
-                                                </WidgetListItemStyle>
+                <TabGroup cssOverrides={{ tabContent: tabContentCss }}>
+                    <Tab key="Standard" tabKey="Standard" headline="Standard Widgets">
+                        <ListWrapper ref={this.searchInputWrapper} data-test-selector="addWidgetModal">
+                            <TextField
+                                value={this.state.widgetSearch}
+                                placeholder="Search Widgets"
+                                onChange={this.searchChange}
+                                cssOverrides={{ formInputWrapper: formInputWrapperCss, formField: formFieldCss }}
+                                iconProps={{ src: "Search" }}
+                            />
+                            <ListScroller>
+                                {groups.map(
+                                    displayName =>
+                                        displayedWidgetsByGroup[displayName] && (
+                                            <ListGroup key={displayName}>
+                                                <ListHeader>{displayName} elements</ListHeader>
+                                                <ListItems>
+                                                    {displayedWidgetsByGroup[displayName].map(widgetDefinition => (
+                                                        <ListItemStyle
+                                                            key={widgetDefinition.type}
+                                                            onClick={() => this.addWidget(widgetDefinition)}
+                                                            data-test-selector={`addWidgetModal_${widgetDefinition.displayName}`}
+                                                        >
+                                                            {widgetDefinition.icon === "ax-link-list" ? (
+                                                                <AxLinkList />
+                                                            ) : (
+                                                                <AxiomIcon
+                                                                    src={provideFallback(widgetDefinition.icon)}
+                                                                    size={20}
+                                                                />
+                                                            )}
+                                                            {widgetDefinition.displayName}
+                                                        </ListItemStyle>
+                                                    ))}
+                                                </ListItems>
+                                            </ListGroup>
+                                        ),
+                                )}
+                            </ListScroller>
+                        </ListWrapper>
+                    </Tab>
+                    <Tab
+                        key="Shared"
+                        tabKey="Shared"
+                        headline="Shared Content"
+                        css={hideSharedContentTab ? hideTabCss : undefined}
+                    >
+                        <ListWrapper ref={this.sharedContentSearchInputWrapper}>
+                            <TextField
+                                value={this.state.sharedContentSearch}
+                                placeholder="Search by Name or Tags"
+                                onChange={this.sharedContentSearchChange}
+                                cssOverrides={{ formInputWrapper: formInputWrapperCss, formField: formFieldCss }}
+                                iconProps={{ src: "Search" }}
+                            />
+                            <ListScroller>
+                                {filteredSharedContents && filteredSharedContents.length > 0 && (
+                                    <ListGroup>
+                                        <ListItems>
+                                            {filteredSharedContents.map(sc => (
+                                                <ListItemStyle key={sc.key} onClick={() => this.addSharedContent(sc)}>
+                                                    <AxiomIcon src="pen-ruler" size={14} />
+                                                    {sc.displayName}
+                                                </ListItemStyle>
                                             ))}
-                                        </WidgetListItems>
-                                    </WidgetListGroup>
-                                ),
-                        )}
-                    </WidgetListScroller>
-                </WidgetListWidgets>
+                                        </ListItems>
+                                    </ListGroup>
+                                )}
+                            </ListScroller>
+                        </ListWrapper>
+                    </Tab>
+                </TabGroup>
             </Modal>
         );
     }
@@ -259,7 +364,6 @@ function provideFallback(src?: string): any {
 export default connect(mapStateToProps, mapDispatchToProps)(AddWidgetModal);
 
 const formInputWrapperCss = css`
-    margin-bottom: 10px;
     width: 300px;
 `;
 
@@ -267,29 +371,29 @@ const formFieldCss = css`
     margin-top: 0;
 `;
 
-const WidgetListWidgets = styled.div`
+const ListWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
     font-size: 16px;
-    height: 80vh;
+    height: 70vh;
 `;
 
-const WidgetListScroller = styled.div`
-    height: calc(80vh - 85px);
+const ListScroller = styled.div`
+    height: calc(70vh - 85px);
     overflow-y: auto;
     padding-right: 5px;
     margin-bottom: 0;
     width: 100%;
 `;
 
-const WidgetListGroup = styled.div`
+const ListGroup = styled.div`
     border-radius: 4px;
     border: 1px solid ${(props: ShellThemeProps) => props.theme.colors.text.main};
     margin-bottom: 20px;
     background-color: white;
 `;
 
-const WidgetListHeader = styled.h3`
+const ListHeader = styled.h3`
     && {
         background-color: ${(props: ShellThemeProps) => props.theme.colors.text.main};
         width: 100%;
@@ -300,23 +404,31 @@ const WidgetListHeader = styled.h3`
     }
 `;
 
-const WidgetListItems = styled.div`
+const ListItems = styled.div`
     display: flex;
     flex-wrap: wrap;
     padding: 4px;
 `;
 
-const WidgetListItemStyle = styled.div`
+const ListItemStyle = styled.div`
     flex-basis: 8.75%;
     border-radius: 4px;
     font-size: 13px;
     margin: 5px;
     display: flex;
     text-align: center;
-    align-items: center;
     padding: 2px 5px;
     cursor: pointer;
     overflow: hidden;
     min-height: 36px;
     flex-direction: column;
+`;
+
+const tabContentCss = css`
+    padding: 20px 0 0 0;
+    border: none;
+`;
+
+const hideTabCss = css`
+    display: none;
 `;

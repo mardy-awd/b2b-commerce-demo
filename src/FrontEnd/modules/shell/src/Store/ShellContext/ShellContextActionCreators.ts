@@ -84,7 +84,9 @@ export const setContentMode =
                 dispatch({
                     type: "Data/Pages/Reset",
                 });
-                dispatch(loadPage({ pathname: `/Content/Page/${pageId}`, search: "" } as Location));
+                if (pageId) {
+                    dispatch(loadPage({ pathname: `/Content/Page/${pageId}`, search: "" } as Location));
+                }
                 dispatch({
                     type: "ShellContext/SetContentMode",
                     contentMode,

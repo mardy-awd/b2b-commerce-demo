@@ -76,6 +76,7 @@ const HeaderGear = ({
     permissions,
 }: Props) => {
     const [showAbout, setShowAbout] = React.useState(false);
+    const [isOpen, setIsOpen] = React.useState(false);
 
     const clickRedoPageState = () => {
         window.open(
@@ -88,6 +89,8 @@ const HeaderGear = ({
         <>
             <OverflowMenu
                 position="end"
+                onOpen={() => setIsOpen(true)}
+                onClose={() => setIsOpen(false)}
                 buttonProps={{
                     css: css`
                         height: 32px;
@@ -95,8 +98,16 @@ const HeaderGear = ({
                         background-color: transparent;
                         border: 0;
                         border-radius: 0;
+
                         &:hover {
                             background-color: ${shellTheme.colors.custom.activeBackground};
+                        }
+
+                        &:focus {
+                            outline: none;
+                            i {
+                                transform: rotate(${isOpen ? "120deg" : "0deg"});
+                            }
                         }
                     `,
                 }}
@@ -126,7 +137,10 @@ const HeaderGear = ({
                     Restore Content
                 </Clickable>
                 {permissions?.canUseSearchDataMode && (
-                    <Clickable data-test-selector="shellSettings_searchDataMode" onClick={toggleSearchDataModeActive}>
+                    <Clickable
+                        data-test-selector="shellSettings_searchDataMode"
+                        onClick={() => toggleSearchDataModeActive()}
+                    >
                         {searchDataModeActive ? "Disable Search Data Mode" : "Enable Search Data Mode"}
                     </Clickable>
                 )}

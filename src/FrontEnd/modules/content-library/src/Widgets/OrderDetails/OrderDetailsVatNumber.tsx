@@ -48,7 +48,7 @@ const OrderDetailsVatNumber = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsVatNumber,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

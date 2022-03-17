@@ -9,6 +9,7 @@ import NeverPublishedModalReducer from "@insite/shell/Store/NeverPublishedModal/
 import PageEditorReducer from "@insite/shell/Store/PageEditor/PageEditorReducer";
 import PageTreeReducer from "@insite/shell/Store/PageTree/PageTreeReducer";
 import PublishModalReducer from "@insite/shell/Store/PublishModal/PublishModalReducer";
+import SharedContentReducer from "@insite/shell/Store/SharedContent/SharedContentReducer";
 import ShellContextReducer from "@insite/shell/Store/ShellContext/ShellContextReducer";
 import StyleGuideReducer from "@insite/shell/Store/StyleGuide/StyleGuideReducer";
 import { combineReducers } from "redux";
@@ -33,6 +34,7 @@ export const reducers = {
     pageEditor: PageEditorReducer,
     pageTree: PageTreeReducer,
     publishModal: PublishModalReducer,
+    sharedContent: SharedContentReducer,
     shellContext: ShellContextReducer,
     styleGuide: StyleGuideReducer,
 };

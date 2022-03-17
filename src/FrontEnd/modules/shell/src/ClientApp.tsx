@@ -49,7 +49,7 @@ function renderApp(renderer: Renderer = render) {
     let shell: JSX.Element;
     if (!token) {
         clearCookiesAndStorage();
-        window.location.href = "/admin/signin?returnUrl=%2FContentAdmin%2F";
+        window.location.href = `/admin/signin?returnUrl=${encodeURIComponent(window.location.pathname)}`;
         shell = <LoadingOverlay loading css={loadingCss} />;
     } else {
         trackUserEvents(store.dispatch);

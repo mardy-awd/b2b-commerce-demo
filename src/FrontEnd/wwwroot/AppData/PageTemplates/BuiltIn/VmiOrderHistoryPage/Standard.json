@@ -1,0 +1,300 @@
+{
+    "nodeId": "be57f20a-fa15-49da-a18e-1ce1ca4ae2fc",
+    "name": "VMI Order History",
+    "type": "VmiOrderHistoryPage",
+    "parentId": "76e15376-4941-4f0e-88e1-ece6a2f3114c",
+    "sortOrder": 0,
+    "websiteId": "c2c53320-98dc-4eca-8022-9efc00dea0dc",
+    "variantName": null,
+    "layoutPageId": null,
+    "templateHash": "b445ab5682ad3f06936c3988a5c83236bde6c48e65f14e6b579696aa69932f0b",
+    "id": "1c659832-652c-4862-9db4-19289beba34d",
+    "generalFields": {
+        "horizontalRule": "",
+        "hideHeader": false,
+        "hideFooter": false,
+        "hideFromSearchEngines": false,
+        "hideFromSiteSearch": false,
+        "excludeFromNavigation": false,
+        "excludeFromSignInRequired": false,
+        "tags": [],
+        "variantName": null,
+        "layoutPage": "",
+        "hideBreadcrumbs": false
+    },
+    "translatableFields": {
+        "title": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": "VMI Order History"
+        },
+        "openGraphTitle": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": ""
+        },
+        "urlSegment": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": "VmiOrders"
+        },
+        "openGraphUrl": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": ""
+        },
+        "openGraphImage": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": ""
+        },
+        "metaKeywords": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": ""
+        },
+        "metaDescription": {
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": ""
+        }
+    },
+    "contextualFields": {},
+    "widgets": [
+        {
+            "parentId": "1c659832-652c-4862-9db4-19289beba34d",
+            "type": "Basic/PageTitle",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "9c643af4-80b0-437f-90a6-fd7d69080bb3",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "1c659832-652c-4862-9db4-19289beba34d",
+            "type": "OrderHistory/OrderHistoryHeader",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "9e9af31f-46a3-41c7-9a9a-a8f990d920f5",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "1c659832-652c-4862-9db4-19289beba34d",
+            "type": "OrderHistory/OrderHistorySearchForm",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "a01bfc48-0bc9-44d7-9daf-57894140be6b",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "1c659832-652c-4862-9db4-19289beba34d",
+            "type": "OrderHistory/OrderHistoryTable",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "37d8329a-4585-4ef3-8c77-be7fc725d885",
+            "generalFields": {
+                "showReorderProducts": true,
+                "showOrderNumber": true,
+                "showDate": true,
+                "showOrderTotal": true,
+                "showStatus": true,
+                "showShipTo": true,
+                "showPONumber": true
+            },
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "1c659832-652c-4862-9db4-19289beba34d",
+            "type": "OrderHistory/OrderHistoryPagination",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "8f0d5081-c5b1-4754-919b-9adbf5b8eba3",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "9e9af31f-46a3-41c7-9a9a-a8f990d920f5",
+            "type": "OrderHistory/OrderHistoryResultCount",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "03eaa358-2800-4860-8b96-5a1d2dae8ce3",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "a01bfc48-0bc9-44d7-9daf-57894140be6b",
+            "type": "Basic/Grid",
+            "zone": "Content",
+            "isLayout": false,
+            "id": "a23a11be-f011-4ced-8df2-4afba5ce424d",
+            "generalFields": {
+                "extraLargeColumnCount": 3,
+                "extraLargeRowCount": 3,
+                "largeColumnCount": 3,
+                "mediumColumnCount": 2,
+                "smallColumnCount": 1,
+                "extraSmallColumnCount": 1
+            },
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "a01bfc48-0bc9-44d7-9daf-57894140be6b",
+            "type": "OrderHistory/OrderHistorySearchTags",
+            "zone": "Content01",
+            "isLayout": false,
+            "id": "1cb595cf-2b12-42ee-8124-22ce5cda476d",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "a23a11be-f011-4ced-8df2-4afba5ce424d",
+            "type": "OrderHistory/OrderHistorySearchFieldProductErpNumber2",
+            "zone": "Content00",
+            "isLayout": false,
+            "id": "f0292f42-4879-4935-9e3c-55963cb6970f",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "a23a11be-f011-4ced-8df2-4afba5ce424d",
+            "zone": "Content11",
+            "type": "Basic/Row",
+            "id": "9fe45c4f-1adc-4f15-8773-ba5e2844f104",
+            "generalFields": {
+                "columns": [
+                    6,
+                    6
+                ],
+                "alignment": [],
+                "gap": 0,
+                "reflow": false
+            },
+            "translatableFields": {},
+            "contextualFields": {},
+            "isLayout": false
+        },
+        {
+            "parentId": "a23a11be-f011-4ced-8df2-4afba5ce424d",
+            "type": "Basic/Row",
+            "zone": "Content10",
+            "isLayout": false,
+            "id": "c70ed312-edb1-420d-9e27-819cc1aacd11",
+            "generalFields": {
+                "columns": [
+                    6,
+                    6
+                ],
+                "alignment": [],
+                "gap": 0,
+                "reflow": false
+            },
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "a23a11be-f011-4ced-8df2-4afba5ce424d",
+            "type": "OrderHistory/OrderHistorySearchFieldShipTos",
+            "zone": "Content01",
+            "isLayout": false,
+            "id": "685b9059-ec65-4bc1-9af7-396546fe6bdd",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "a23a11be-f011-4ced-8df2-4afba5ce424d",
+            "type": "OrderHistory/OrderHistorySearchClearButton",
+            "zone": "Content22",
+            "isLayout": false,
+            "id": "59b4d58e-53f4-4a89-ad11-8f55bebd2afb",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "a23a11be-f011-4ced-8df2-4afba5ce424d",
+            "type": "Basic/Row",
+            "zone": "Content21",
+            "isLayout": false,
+            "id": "54728efb-1cb9-4ff7-b7c2-976ea630597b",
+            "generalFields": {
+                "columns": [
+                    6,
+                    6
+                ],
+                "alignment": [],
+                "gap": 0,
+                "reflow": false
+            },
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "a23a11be-f011-4ced-8df2-4afba5ce424d",
+            "type": "OrderHistory/OrderHistorySearchFieldDateRange",
+            "zone": "Content20",
+            "isLayout": false,
+            "id": "7a183774-98b5-49ba-8ad0-61844e23b984",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "c70ed312-edb1-420d-9e27-819cc1aacd11",
+            "type": "OrderHistory/OrderHistorySearchFieldPoNumber",
+            "zone": "Content0",
+            "isLayout": false,
+            "id": "d36ba9c2-9529-40aa-ae2a-f167531574a5",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "c70ed312-edb1-420d-9e27-819cc1aacd11",
+            "type": "OrderHistory/OrderHistorySearchFieldOrderNumber",
+            "zone": "Content1",
+            "isLayout": false,
+            "id": "22e0aea9-9253-4dfc-b0e0-d06ebedbc8cf",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "54728efb-1cb9-4ff7-b7c2-976ea630597b",
+            "type": "OrderHistory/OrderHistorySearchFieldOrderTotalOperator",
+            "zone": "Content0",
+            "isLayout": false,
+            "id": "bb900686-d610-419f-8788-59354a53c5b1",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "54728efb-1cb9-4ff7-b7c2-976ea630597b",
+            "type": "OrderHistory/OrderHistorySearchFieldOrderTotal",
+            "zone": "Content1",
+            "isLayout": false,
+            "id": "96dd65f0-605c-4517-8a22-e1a8b53baea4",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "9fe45c4f-1adc-4f15-8773-ba5e2844f104",
+            "type": "OrderHistory/OrderHistorySearchFieldStatus",
+            "zone": "Content0",
+            "isLayout": false,
+            "id": "c974ae70-4528-485c-b825-d686bdf7c973",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "9fe45c4f-1adc-4f15-8773-ba5e2844f104",
+            "zone": "Content1",
+            "type": "OrderHistory/OrderHistorySearchFieldVmiLocation",
+            "id": "ca9a87d9-a2c0-40da-ba58-4d7c39b9e831",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {},
+            "isLayout": false
+        }
+    ]
+}

@@ -94,7 +94,7 @@ const WishListSharingStatus: FC<Props> = ({
     return (
         <>
             {!isSharedListInner && wishListSharesCountInner === 0 && (
-                <Typography {...styles.statusText}>
+                <Typography {...styles.statusText} data-test-selector="myLists_PrivateLabel">
                     {translate("Private")}
                     <Tooltip {...styles.privateTooltip} text={siteMessage("Lists_Share_List_Tooltip") as string} />
                 </Typography>

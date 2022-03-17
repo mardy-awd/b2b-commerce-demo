@@ -527,7 +527,11 @@ class MyListsDetailsActions extends React.Component<Props, State> {
                                 </Clickable>
                             ) : null}
                         </OverflowMenu>
-                        <Button {...styles.printButton} onClick={this.printOrOpenPrintAllModal}>
+                        <Button
+                            {...styles.printButton}
+                            onClick={this.printOrOpenPrintAllModal}
+                            data-test-selector="myListsDetails_printButton"
+                        >
                             {translate("Print")}
                         </Button>
                         {showSchedule ? (
@@ -557,7 +561,7 @@ class MyListsDetailsActions extends React.Component<Props, State> {
                             <Button
                                 {...styles.removeSelectedButton}
                                 onClick={this.removeSelectedClickHandler}
-                                data-test-selector="tst_ListDetail_removeSelected"
+                                data-test-selector="myListDetails_removeSelected"
                             >
                                 {translate("Remove Selected")}
                             </Button>
@@ -566,7 +570,7 @@ class MyListsDetailsActions extends React.Component<Props, State> {
                             disabled={!this.enableAddToCart() || !showAddToCart}
                             {...styles.addListButton}
                             onClick={this.addToCartClickHandler}
-                            data-test-selector="tst_ListDetail_addToCart"
+                            data-test-selector="myListDetails_addListToCart"
                         >
                             {addListToCartButtonText}
                         </Button>

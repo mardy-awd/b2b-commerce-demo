@@ -9,6 +9,7 @@ import NeverPublishedModalState from "@insite/shell/Store/NeverPublishedModal/Ne
 import { PageEditorState } from "@insite/shell/Store/PageEditor/PageEditorState";
 import { PageTreeState } from "@insite/shell/Store/PageTree/PageTreeState";
 import { PublishModalState } from "@insite/shell/Store/PublishModal/PublishModalState";
+import { SharedContentState } from "@insite/shell/Store/SharedContent/SharedContentState";
 import { ShellContextState } from "@insite/shell/Store/ShellContext/ShellContextState";
 import { StyleGuideState } from "@insite/shell/Store/StyleGuide/StyleGuideState";
 
@@ -26,6 +27,7 @@ export default interface ShellState {
     readonly pageEditor: PageEditorState;
     readonly pageTree: PageTreeState;
     readonly publishModal: PublishModalState;
+    readonly sharedContent: SharedContentState;
     readonly shellContext: ShellContextState;
     readonly styleGuide: StyleGuideState;
 }

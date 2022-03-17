@@ -280,7 +280,9 @@ class AddPage extends React.Component<Props, State> {
             saveText = "Save";
         }
 
-        let allowedPagesTypes = this.props.pageDefinitions.filter(o => o.pageType === "Content" && o.type !== "Layout");
+        let allowedPagesTypes = this.props.pageDefinitions.filter(
+            o => o.pageType === "Content" && o.type !== "Layout" && o.type !== "SharedContent",
+        );
 
         if (this.props.addingPageUnderType) {
             const currentPageDefinition = this.props.pageDefinitions.find(

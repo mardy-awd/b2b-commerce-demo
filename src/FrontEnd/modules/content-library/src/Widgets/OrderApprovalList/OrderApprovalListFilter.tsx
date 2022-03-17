@@ -1,4 +1,8 @@
 import StyledWrapper, { getStyledWrapper } from "@insite/client-framework/Common/StyledWrapper";
+import {
+    convertDateOnlyStringToDate,
+    convertDateToDateOnlyString,
+} from "@insite/client-framework/Common/Utilities/DateUtilities";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import loadCurrentShipTos from "@insite/client-framework/Store/Data/ShipTos/Handlers/LoadCurrentShipTos";
 import { getCurrentShipTosDataView } from "@insite/client-framework/Store/Data/ShipTos/ShipTosSelectors";
@@ -152,7 +156,6 @@ const StyledDateRangeFieldSet = getStyledWrapper("fieldset");
 const StyledOrderTotalFieldSet = getStyledWrapper("fieldset");
 
 export const styles = filterStyles;
-const tzOffset = new Date().getTimezoneOffset() * 60000;
 class OrderApprovalListFilter extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
@@ -221,13 +224,13 @@ class OrderApprovalListFilter extends React.Component<Props, State> {
 
     fromDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
         this.props.updateSearchFields({
-            fromDate: selectedDay ? new Date(selectedDay.getTime() - tzOffset).toISOString().split("T")[0] : "",
+            fromDate: convertDateToDateOnlyString(selectedDay),
         });
     };
 
     toDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
         this.props.updateSearchFields({
-            toDate: selectedDay ? new Date(selectedDay.getTime() - tzOffset).toISOString().split("T")[0] : "",
+            toDate: convertDateToDateOnlyString(selectedDay),
         });
     };
 
@@ -306,12 +309,8 @@ class OrderApprovalListFilter extends React.Component<Props, State> {
         }
 
         const shipToOptions = this.props.currentShipTosDataView.value || [];
-        const fromDate = this.props.getOrderApprovalsParameter.fromDate
-            ? new Date(new Date(this.props.getOrderApprovalsParameter.fromDate).getTime() + tzOffset)
-            : undefined;
-        const toDate = this.props.getOrderApprovalsParameter.toDate
-            ? new Date(new Date(this.props.getOrderApprovalsParameter.toDate).getTime() + tzOffset)
-            : undefined;
+        const fromDate = convertDateOnlyStringToDate(this.props.getOrderApprovalsParameter.fromDate);
+        const toDate = convertDateOnlyStringToDate(this.props.getOrderApprovalsParameter.toDate);
 
         return (
             <GridContainer {...styles.container}>

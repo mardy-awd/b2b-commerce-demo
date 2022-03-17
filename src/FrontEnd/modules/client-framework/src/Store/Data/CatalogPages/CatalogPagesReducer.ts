@@ -1,5 +1,4 @@
 import { createTypedReducerWithImmer } from "@insite/client-framework/Common/CreateTypedReducer";
-import { SafeDictionary } from "@insite/client-framework/Common/Types";
 import { CatalogPage } from "@insite/client-framework/Services/CategoryService";
 import { CatalogPagesState } from "@insite/client-framework/Store/Data/CatalogPages/CatalogPagesState";
 import { Draft } from "immer";
@@ -25,15 +24,16 @@ const reducer = {
         const lowerCanonicalPath = model.canonicalPath.toLowerCase();
 
         if (lowerPath) {
+            // should be using this when possible, as the canonical path is not guaranteed to be unuique
+            // it may be shared if the product is assigned to multiple categories
+            draft.idByPath[lowerPath] = lowerPath;
             delete draft.isLoading[lowerPath];
-            if (lowerPath !== lowerCanonicalPath) {
-                draft.idByPath[lowerPath] = lowerCanonicalPath;
-            }
+            draft.byId[lowerPath] = model;
+        } else {
+            draft.idByPath[lowerCanonicalPath] = lowerCanonicalPath;
+            delete draft.isLoading[lowerCanonicalPath];
+            draft.byId[lowerCanonicalPath] = model;
         }
-        // this looks weird, but means we always start from idByPath to get to the "id" which is really the canonicalPath
-        draft.idByPath[lowerCanonicalPath] = lowerCanonicalPath;
-        delete draft.isLoading[lowerCanonicalPath];
-        draft.byId[lowerCanonicalPath] = model;
     },
 };
 

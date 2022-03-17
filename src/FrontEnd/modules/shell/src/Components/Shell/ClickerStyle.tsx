@@ -19,7 +19,9 @@ const ClickerStyle = styled(Clickable)`
     &:disabled {
         cursor: not-allowed;
     }
-    &:focus,
+    &:focus {
+        outline-style: none;
+    }
     &:hover:not([disabled]) {
         background-color: ${(props: StyleProps & ShellThemeProps) => props.theme.colors.custom.activeBackground};
         outline-style: none;

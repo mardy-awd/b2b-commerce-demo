@@ -200,7 +200,7 @@ type SizeVariant = { _sizeVariant: "small" | "default" };
 const SelectedText = styled(Typography as any)<SizeVariant>`
     pointer-events: none;
     position: absolute;
-    padding: ${({ _sizeVariant }) => (_sizeVariant === "small" ? "5px 0 5px 11px" : "9px 0 9px 11px")};
+    padding: ${({ _sizeVariant }) => (_sizeVariant === "small" ? "5px 24px 5px 11px" : "9px 24px 9px 11px")};
     top: 0;
     left: 0;
     white-space: nowrap;

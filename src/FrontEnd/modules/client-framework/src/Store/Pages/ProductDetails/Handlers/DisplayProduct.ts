@@ -192,33 +192,39 @@ export const LoadRealTimePrices: HandlerType = async props => {
         return;
     }
 
-    const productInfo = props.productInfosById[props.product.id];
-    if (!productInfo) {
-        return;
-    }
-    const { productId } = productInfo;
+    const productIds = Object.keys(props.productInfosById);
+    const productPriceParameters = productIds.map(productId => {
+        const productInfo = props.productInfosById![productId];
+        return {
+            productId: productInfo!.productId,
+            unitOfMeasure: productInfo!.unitOfMeasure,
+            qtyOrdered: productInfo!.qtyOrdered,
+        };
+    });
 
     props.dispatch(
         loadRealTimePricing({
-            productPriceParameters: [productInfo],
+            productPriceParameters,
             onComplete: pricingProps => {
-                if (pricingProps.apiResult) {
-                    const pricing = pricingProps.apiResult.realTimePricingResults!.find(o => o.productId === productId);
+                if (pricingProps.apiResult?.realTimePricingResults) {
+                    const pricing = pricingProps.apiResult.realTimePricingResults!.find(
+                        o => o.productId === props.product?.id,
+                    );
                     if (pricing) {
                         props.dispatch({
-                            type: "Pages/ProductDetails/CompleteLoadRealTimePricing",
-                            pricing,
+                            type: "Pages/ProductDetails/CompleteLoadRealTimePricings",
+                            pricings: pricingProps.apiResult.realTimePricingResults,
                         });
                     } else {
                         props.dispatch({
-                            type: "Pages/ProductDetails/FailedLoadRealTimePricing",
-                            productId,
+                            type: "Pages/ProductDetails/FailedLoadRealTimePricings",
+                            productIds,
                         });
                     }
                 } else if (pricingProps.error) {
                     props.dispatch({
-                        type: "Pages/ProductDetails/FailedLoadRealTimePricing",
-                        productId,
+                        type: "Pages/ProductDetails/FailedLoadRealTimePricings",
+                        productIds,
                     });
                 }
 

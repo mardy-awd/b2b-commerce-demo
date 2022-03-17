@@ -283,7 +283,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(PageTree);
 const pagesH2 = css`
     position: relative;
     font-weight: normal;
-    font-size: 26px;
+    font-size: 24px;
 `;
 
 const TreeIcon = styled.div`

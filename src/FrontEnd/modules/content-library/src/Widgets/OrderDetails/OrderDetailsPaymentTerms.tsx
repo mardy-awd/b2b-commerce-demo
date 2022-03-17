@@ -47,7 +47,7 @@ const OrderDetailsPaymentTerms = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsPaymentTerms,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

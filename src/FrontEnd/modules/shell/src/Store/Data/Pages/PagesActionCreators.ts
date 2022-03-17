@@ -2,9 +2,9 @@ import { loadPage, UpdateFieldParameter } from "@insite/client-framework/Store/D
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { ItemProps } from "@insite/client-framework/Types/PageProps";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { updatePageOnSite } from "@insite/shell/Store/Data/Pages/PagesHelpers";
+import { isSharedContentOpened, updatePageOnSite } from "@insite/shell/Store/Data/Pages/PagesHelpers";
 import ShellThunkAction from "@insite/shell/Store/ShellThunkAction";
-import { push } from "connected-react-router";
+import { getLocation, push } from "connected-react-router";
 
 export * from "@insite/client-framework/Store/Data/Pages/PagesActionCreators";
 
@@ -82,7 +82,10 @@ export const loadPageIfNeeded =
                     },
                     undefined,
                     () => {
-                        dispatch(push(`/ContentAdmin/Page/${pageId}`));
+                        const url = isSharedContentOpened()
+                            ? `/ContentAdmin/SharedContent/${pageId}`
+                            : `/ContentAdmin/Page/${pageId}`;
+                        dispatch(push(url));
                         finished();
                     },
                 ),

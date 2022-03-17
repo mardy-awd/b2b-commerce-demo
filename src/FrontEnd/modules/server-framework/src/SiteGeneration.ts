@@ -256,6 +256,7 @@ async function setupPage(
         defaultPersonaId,
         websiteId,
         false,
+        false,
         nodeId,
         pageId,
     );

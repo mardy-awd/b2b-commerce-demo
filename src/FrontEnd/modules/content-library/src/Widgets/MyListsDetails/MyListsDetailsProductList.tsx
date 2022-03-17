@@ -327,7 +327,7 @@ const MyListsDetailsProductList: React.FC<Props> = ({
     if (!wishListLines || wishListLines.length === 0 || Object.keys(productInfosByWishListLineId).length === 0) {
         return (
             <StyledWrapper {...styles.centeringWrapper}>
-                <Typography {...styles.messageText} data-test-selector="tst_ListDetail_noItemsMessage">
+                <Typography {...styles.messageText} data-test-selector="myListDetails_noItemsMessage">
                     {loadWishListLinesParameter.query
                         ? siteMessage("Lists_NoResultsMessage")
                         : siteMessage("Lists_NoItemsInList")}
@@ -427,7 +427,7 @@ const LineItem = SortableElement(
         }
 
         return (
-            <GridItem {...styles.lineGridItem} data-test-selector="lineContainer">
+            <GridItem {...styles.lineGridItem} data-test-selector="myListDetails_line">
                 {editingSortOrder && (
                     <StyledWrapper {...styles.sortOrderWrapper}>
                         <DragHandle />
@@ -439,6 +439,7 @@ const LineItem = SortableElement(
                             defaultValue={wishListLine.sortOrder}
                             onBlur={sortOrderBlurHandler}
                             onKeyPress={sortOrderKeyPressHandler}
+                            data-test-selector="myListDetailPage_inputSortOrderLine"
                         />
                     </StyledWrapper>
                 )}
@@ -474,7 +475,7 @@ const LinesContainer = SortableContainer(
         onDeleteClick,
         onEditNotesClick,
     }: LinesContainerProps) => (
-        <GridContainer {...styles.container} data-test-selector="linesContainer">
+        <GridContainer {...styles.container} data-test-selector="myListDetails_lines">
             {wishListLines.map((wishListLine, index) => (
                 <LineItem
                     key={`${wishListLine.productId}_${wishListLine.selectedUnitOfMeasure}`}
@@ -516,17 +517,30 @@ const EditNotesForm: React.FC<EditNotesFormProps> = ({ wishListLine, onCancel, o
                 value={notes}
                 onChange={notesChangeHandler}
                 hint={`${300 - notes.length} ${translate("characters left")}`}
+                data-test-selector="myLists_editNote"
             />
             <StyledWrapper {...styles.editNotesModalButtonsWrapper}>
                 {wishListLine.notes && (
-                    <Button {...styles.editNotesModalDeleteButton} onClick={deleteHandler}>
+                    <Button
+                        {...styles.editNotesModalDeleteButton}
+                        onClick={deleteHandler}
+                        data-test-selector="myLists_deleteNoteButton"
+                    >
                         {translate("Delete Note")}
                     </Button>
                 )}
-                <Button {...styles.editNotesModalCancelButton} onClick={onCancel}>
+                <Button
+                    {...styles.editNotesModalCancelButton}
+                    onClick={onCancel}
+                    data-test-selector="myLists_cancelNoteButton"
+                >
                     {translate("Cancel")}
                 </Button>
-                <Button {...styles.editNotesModalSubmitButton} onClick={() => onSubmit(notes)}>
+                <Button
+                    {...styles.editNotesModalSubmitButton}
+                    onClick={() => onSubmit(notes)}
+                    data-test-selector="myLists_submitNoteButton"
+                >
                     {translate(`${wishListLine.notes ? "Save" : "Add Notes"}`)}
                 </Button>
             </StyledWrapper>

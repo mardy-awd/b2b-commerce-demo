@@ -396,7 +396,7 @@
                       "PackageVersion":  "1.0.2.206221351",
                       "PackageFramework":  null,
                       "Libraries":  {
-                                        "Microsoft.IdentityModel.Protocol.Extensions":  "1.0.0.0"
+                                        "Microsoft.IdentityModel.Protocol.Extensions":  "1.0.2.33"
                                     }
                   }
     },
@@ -451,7 +451,7 @@
                       "PackageVersion":  "4.2.0",
                       "PackageFramework":  null,
                       "Libraries":  {
-                                        "Microsoft.Owin.Security.Google":  "4.2.0"
+                                        "Microsoft.Owin.Security.Google":  "4.2.0.0"
                                     }
                   }
     },

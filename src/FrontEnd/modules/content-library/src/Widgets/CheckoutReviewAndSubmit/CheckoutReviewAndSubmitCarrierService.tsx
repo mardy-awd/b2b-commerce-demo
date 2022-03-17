@@ -178,6 +178,7 @@ const CheckoutReviewAndSubmitCarrierService: FC<Props> = ({
                                     value={selectedCarrier?.id || ""}
                                     onChange={carrierChangeHandler}
                                     data-test-selector="checkoutReviewAndSubmit_carrierSelect"
+                                    name="carrier"
                                 >
                                     {cart.carriers!.map(c => {
                                         const id = c.id!.toString();

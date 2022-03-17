@@ -7,15 +7,20 @@ import AddWidgetModal from "@insite/shell/Components/Modals/AddWidgetModal";
 import { HasConfirmationContext, withConfirmation } from "@insite/shell/Components/Modals/ConfirmationContext";
 import { closeSiteHole, sendToSite, setSiteFrame } from "@insite/shell/Components/Shell/SiteHole";
 import { getPageDefinitions } from "@insite/shell/DefinitionLoader";
-import { getPageState, getPageStateFromDictionaries } from "@insite/shell/Services/ContentAdminService";
+import {
+    getPageState,
+    getPageStateFromDictionaries,
+    getSharedContentWebsites,
+} from "@insite/shell/Services/ContentAdminService";
 import { moveWidgetTo, removeWidget } from "@insite/shell/Store/Data/Pages/PagesActionCreators";
-import { loadPageOnSite } from "@insite/shell/Store/Data/Pages/PagesHelpers";
+import { isSharedContentOpened, loadPageOnSite } from "@insite/shell/Store/Data/Pages/PagesHelpers";
 import {
     displayAddWidgetModal,
     editWidget,
     reloadPage,
     savePage,
 } from "@insite/shell/Store/PageEditor/PageEditorActionCreators";
+import { setFromPageId } from "@insite/shell/Store/SharedContent/SharedContentActionCreator";
 import ShellState from "@insite/shell/Store/ShellState";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -41,6 +46,7 @@ const mapStateToProps = (state: ShellState) => ({
     headerNodesByParentId: state.pageTree.headerTreeNodesByParentId,
     footerNodesByParentId: state.pageTree.footerTreeNodesByParentId,
     mobileNodesByParentId: state.pageTree.mobileTreeNodesByParentId,
+    sharedContentTreeNodesByParentId: state.pageTree.sharedContentTreeNodesByParentId,
     updatedLayoutIds: state.pageEditor.updatedLayoutIds,
     futurePublishNodeIds: state.pageTree.futurePublishNodeIds,
 });
@@ -53,6 +59,7 @@ const mapDispatchToProps = {
     removeWidget,
     changeContext,
     reloadPage,
+    setFromPageId,
 };
 
 type Props = ReturnType<typeof mapStateToProps> &
@@ -167,7 +174,9 @@ class SiteFrame extends React.Component<Props, State> {
 
         setSiteFrame(iframe, {
             LoadPageComplete: (data: { pageId: string; parentId: string; layoutPageId: string | undefined }) => {
-                const url = `/ContentAdmin/Page/${data.pageId}`;
+                const url = isSharedContentOpened(this.props.history.location)
+                    ? `/ContentAdmin/SharedContent/${data.pageId}`
+                    : `/ContentAdmin/Page/${data.pageId}`;
                 this.framePageId = data.pageId;
                 this.props.history.push(url);
 
@@ -184,6 +193,7 @@ class SiteFrame extends React.Component<Props, State> {
                         this.props.headerNodesByParentId[data.parentId],
                         this.props.footerNodesByParentId[data.parentId],
                         this.props.mobileNodesByParentId[data.parentId],
+                        this.props.sharedContentTreeNodesByParentId[data.parentId],
                     ) ||
                     getPageStateFromDictionaries(
                         data.pageId,
@@ -191,6 +201,7 @@ class SiteFrame extends React.Component<Props, State> {
                         this.props.headerNodesByParentId,
                         this.props.footerNodesByParentId,
                         this.props.mobileNodesByParentId,
+                        this.props.sharedContentTreeNodesByParentId,
                     );
 
                 const key =
@@ -231,6 +242,27 @@ class SiteFrame extends React.Component<Props, State> {
                 this.props.confirmation.display({
                     message: "Are you sure you want to delete this widget?",
                     title: `Delete ${data.widgetType}`,
+                    onConfirm: () => {
+                        this.props.removeWidget(data.id, data.pageId);
+                        this.props.savePage();
+                    },
+                });
+            },
+            ConfirmSharedContentEditing: (data: { sharedContentId: string; fromPageId: string }) => {
+                this.props.confirmation.display({
+                    message: "Editing shared content will affect every website where it's being used.",
+                    title: "Edit Shared Content",
+                    confirmLabel: "Edit Content",
+                    onConfirm: () => {
+                        this.props.setFromPageId(data.fromPageId);
+                        this.props.history.push(`/ContentAdmin/SharedContent/${data.sharedContentId}`);
+                    },
+                });
+            },
+            ConfirmSharedContentDeletion: (data: { id: string; pageId: string; sharedContentName: string }) => {
+                this.props.confirmation.display({
+                    message: `Are you sure you want to delete this shared content`,
+                    title: `Delete ${data.sharedContentName}`,
                     onConfirm: () => {
                         this.props.removeWidget(data.id, data.pageId);
                         this.props.savePage();

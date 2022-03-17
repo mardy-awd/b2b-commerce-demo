@@ -65,7 +65,7 @@ const OrderDetailsBillingAddress = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsBillingAddress,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

@@ -22,6 +22,7 @@ const initialState: PageTreeState = {
     footerTreeNodesByParentId: {},
     mobileTreeNodesByParentId: {},
     layoutTreeNodesByParentId: {},
+    sharedContentTreeNodesByParentId: {},
     neverPublishedNodeIds: {},
     futurePublishNodeIds: {},
     draftNodeIds: {},
@@ -44,6 +45,7 @@ const reducer = {
         draft.footerTreeNodesByParentId = {};
         draft.mobileTreeNodesByParentId = {};
         draft.layoutTreeNodesByParentId = {};
+        draft.sharedContentTreeNodesByParentId = {};
         draft.neverPublishedNodeIds = {};
         draft.futurePublishNodeIds = {};
         draft.draftNodeIds = {};
@@ -78,6 +80,12 @@ const reducer = {
                 }
 
                 targetNodes = draft.layoutTreeNodesByParentId[treeNode.parentId];
+            } else if (treeNode.type === "SharedContent") {
+                if (!draft.sharedContentTreeNodesByParentId[treeNode.parentId]) {
+                    draft.sharedContentTreeNodesByParentId[treeNode.parentId] = [];
+                }
+
+                targetNodes = draft.sharedContentTreeNodesByParentId[treeNode.parentId];
             } else {
                 if (!draft.treeNodesByParentId[treeNode.parentId]) {
                     draft.treeNodesByParentId[treeNode.parentId] = [];
@@ -119,6 +127,7 @@ const reducer = {
                 isDefaultVariant: pageState.isDefaultVariant,
                 isShared: pageState.isShared,
                 allowedForPageType: pageState.allowedForPageType,
+                tags: pageState.tags,
             };
 
             if (pageState.neverPublished) {
@@ -232,6 +241,7 @@ const reducer = {
                     draft.headerTreeNodesByParentId[action.parentId],
                     draft.footerTreeNodesByParentId[action.parentId],
                     draft.mobileTreeNodesByParentId[action.parentId],
+                    draft.sharedContentTreeNodesByParentId[action.parentId],
                 )) ||
             getPageStateFromDictionaries(
                 action.pageId,
@@ -239,6 +249,7 @@ const reducer = {
                 draft.headerTreeNodesByParentId,
                 draft.footerTreeNodesByParentId,
                 draft.mobileTreeNodesByParentId,
+                draft.sharedContentTreeNodesByParentId,
             );
         if (!pageState) {
             return;
@@ -281,6 +292,7 @@ const reducer = {
             draft.headerTreeNodesByParentId,
             draft.footerTreeNodesByParentId,
             draft.mobileTreeNodesByParentId,
+            draft.sharedContentTreeNodesByParentId,
         );
 
         if (!pageState) {

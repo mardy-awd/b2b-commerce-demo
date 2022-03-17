@@ -8,7 +8,6 @@ import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import Icon, { IconPresentationProps } from "@insite/mobius/Icon";
 import { chevronLeftString } from "@insite/mobius/Icons/ChevronLeft";
 import { chevronRightString } from "@insite/mobius/Icons/ChevronRight";
-import { breakpointMediaQueries } from "@insite/mobius/utilities";
 import applyPropBuilder from "@insite/mobius/utilities/applyPropBuilder";
 import { HasDisablerContext, withDisabler } from "@insite/mobius/utilities/DisablerContext";
 import getColor from "@insite/mobius/utilities/getColor";
@@ -191,6 +190,9 @@ const DateTimePickerStyle = styled.div<DateTimePickerStyleProps>`
             &__amPm {
                 font: inherit;
             }
+            &__leadingZero {
+                margin: -1px -2px 0 0;
+            }
         }
 
         &__button {
@@ -253,6 +255,7 @@ const DateTimePickerStyle = styled.div<DateTimePickerStyleProps>`
         }
 
         &__navigation {
+            display: flex;
             margin-bottom: 4px;
 
             button {
@@ -406,7 +409,8 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
                 selectedDayDisabled,
             },
             () => {
-                if (typeof this.props.onDayChange === "function") {
+                // when the date is cleared, we let the parent know from here
+                if (!value && typeof this.props.onDayChange === "function") {
                     this.props.onDayChange(this.state);
                 }
             },
@@ -454,6 +458,16 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
             >
                 <DateTimePicker
                     value={selectedDay}
+                    onCalendarClose={() => {
+                        if (typeof this.props.onDayChange === "function") {
+                            this.props.onDayChange(this.state);
+                        }
+                    }}
+                    onClockClose={() => {
+                        if (typeof this.props.onDayChange === "function") {
+                            this.props.onDayChange(this.state);
+                        }
+                    }}
                     onCalendarOpen={() => {
                         const rect = this.datePickerRef.current!.getBoundingClientRect();
                         this.setState({

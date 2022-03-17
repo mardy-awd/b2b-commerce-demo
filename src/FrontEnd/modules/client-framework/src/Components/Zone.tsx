@@ -2,7 +2,9 @@ import { HasShellContext, withIsInShell } from "@insite/client-framework/Compone
 import { sendToShell } from "@insite/client-framework/Components/ShellHole";
 import WidgetRenderer from "@insite/client-framework/Components/WidgetRenderer";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
+import { getById } from "@insite/client-framework/Store/Data/DataState";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { nullPage } from "@insite/client-framework/Store/Data/Pages/PagesState";
 import { getWidgetsByIdAndZone } from "@insite/client-framework/Store/Data/Widgets/WidgetSelectors";
 import { dragLeaveZone, dragWidgetOverZone, dropWidgetOnZone } from "@insite/client-framework/WidgetReordering";
 import AsyncAxiomIcon from "@insite/shell/Components/Icons/AxiomIcon/AsyncAxiomIcon";
@@ -16,10 +18,13 @@ export interface OwnProps {
     fixed?: boolean;
     requireRows?: boolean;
     fullHeight?: boolean;
+    pageId?: string;
 }
 
 const mapStateToProps = (state: ApplicationState, ownProps: OwnProps & HasShellContext) => {
-    const currentPage = getCurrentPage(state);
+    const currentPage = ownProps.pageId
+        ? getById(state.data.pages, ownProps.pageId).value || nullPage
+        : getCurrentPage(state);
     let pageId = currentPage.id;
 
     if (ownProps.shellContext.pageId) {
@@ -92,7 +97,7 @@ class Zone extends React.Component<Props> {
             widgets,
             draggingWidgetId,
             zoneName,
-            shellContext: { isEditing, isCurrentPage, layoutEditableZone },
+            shellContext: { isEditing, isCurrentPage, layoutEditableZone, isReadOnly },
             permissions,
             canChangePage,
             currentPageType,
@@ -125,7 +130,13 @@ class Zone extends React.Component<Props> {
                 ))
             );
 
-        if (isEditing && isCurrentPage && (!createdUsingLayout || layoutEditableZone)) {
+        if (isEditing && isCurrentPage && (!createdUsingLayout || layoutEditableZone) && !isReadOnly) {
+            const canAddWidget =
+                !draggingWidgetId &&
+                !fixed &&
+                canChangePage &&
+                ((permissions?.canAddWidget && pageDefinition?.pageType === "Content") ||
+                    (permissions?.canAddSystemWidget && pageDefinition?.pageType === "System"));
             return (
                 <ZoneStyle
                     data-contentid={contentId}
@@ -135,17 +146,13 @@ class Zone extends React.Component<Props> {
                 >
                     <ZoneWrapper data-dragging={!!draggingWidgetId} data-empty={widgets.length === 0} data-zone>
                         {renderedWidgets}
-                        {!draggingWidgetId &&
-                            !fixed &&
-                            canChangePage &&
-                            ((permissions?.canAddWidget && pageDefinition?.pageType === "Content") ||
-                                (permissions?.canAddSystemWidget && pageDefinition?.pageType === "System")) && (
-                                <AddContainer fullHeight={widgets.length === 0}>
-                                    <AddButton onClick={this.add} data-test-selector={`shell_addWidget_${zoneName}`}>
-                                        <AsyncAxiomIcon src="plus" size={26} color="#4A4A4A" />
-                                    </AddButton>
-                                </AddContainer>
-                            )}
+                        {canAddWidget && (
+                            <AddContainer fullHeight={widgets.length === 0}>
+                                <AddButton onClick={this.add} data-test-selector={`shell_addWidget_${zoneName}`}>
+                                    <AsyncAxiomIcon src="plus" size={26} color="#4A4A4A" />
+                                </AddButton>
+                            </AddContainer>
+                        )}
                     </ZoneWrapper>
                 </ZoneStyle>
             );

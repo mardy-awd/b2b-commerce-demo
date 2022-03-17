@@ -4,7 +4,11 @@ import loadOrderByOrderNumber from "@insite/client-framework/Store/Data/Orders/H
 import { getOrderState } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import { OrderModel } from "@insite/client-framework/Types/ApiModels";
 
-type HandlerType = ApiHandlerDiscreteParameter<{ orderNumber: string }, GetOrderApiParameter, OrderModel>;
+type HandlerType = ApiHandlerDiscreteParameter<
+    { orderNumber: string; expand?: ("orderLines" | "shipments" | "vmidetails")[] },
+    GetOrderApiParameter,
+    OrderModel
+>;
 
 export const DispatchSetOrderNumber: HandlerType = props => {
     props.dispatch({

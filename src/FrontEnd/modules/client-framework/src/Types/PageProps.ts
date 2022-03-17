@@ -13,7 +13,7 @@ export default interface PageProps extends ContentItemModel {
 /** All the data needed for saving a page, and provided when retrieving. */
 export interface PageModel extends PageProps {
     widgets: WidgetProps[];
-    websiteId: string;
+    websiteId: string | null;
 }
 
 export type ItemProps = PageProps | WidgetProps;

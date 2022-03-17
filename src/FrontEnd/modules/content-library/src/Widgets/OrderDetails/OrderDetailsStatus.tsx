@@ -54,7 +54,7 @@ const OrderDetailsStatus = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsStatus,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

@@ -1,4 +1,5 @@
 import { getCookie } from "@insite/client-framework/Common/Cookies";
+import { convertDateToDateOnlyString } from "@insite/client-framework/Common/Utilities/DateUtilities";
 import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import Zone from "@insite/client-framework/Components/Zone";
 import { GetOrdersApiParameter } from "@insite/client-framework/Services/OrderService";
@@ -9,6 +10,7 @@ import { getOrdersDataView, OrdersDataViewContext } from "@insite/client-framewo
 import loadOrderStatusMappings from "@insite/client-framework/Store/Data/OrderStatusMappings/Handlers/LoadOrderStatusMappings";
 import { getOrderStatusMappingDataView } from "@insite/client-framework/Store/Data/OrderStatusMappings/OrderStatusMappingsSelectors";
 import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import setVmiOrderHistoryPage from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/SetVmiOrderHistoryPage";
 import updateSearchFields from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/UpdateSearchFields";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
@@ -31,6 +33,7 @@ const mapDispatchToProps = {
     loadOrders,
     loadOrderStatusMappings,
     updateSearchFields,
+    setVmiOrderHistoryPage,
 };
 
 type Props = PageProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasHistory;
@@ -40,6 +43,7 @@ const OrderHistoryPage = ({
     loadOrders,
     loadOrderStatusMappings,
     updateSearchFields,
+    setVmiOrderHistoryPage,
     ordersDataView,
     id,
     shouldLoadOrderStatusMappings,
@@ -48,7 +52,9 @@ const OrderHistoryPage = ({
     getOrdersParameter,
 }: Props) => {
     let firstLoad = false;
+
     useEffect(() => {
+        setVmiOrderHistoryPage(false);
         firstLoad = true;
         const pageSizeCookie = getCookie("OrderHistory-PageSize");
         const pageSize = pageSizeCookie ? parseInt(pageSizeCookie, 10) : undefined;
@@ -59,11 +65,8 @@ const OrderHistoryPage = ({
             }
             updateSearchFields({ ...getOrdersApiParameter, type: "Replace" });
         } else if (settings.orderSettings.lookBackDays > 0) {
-            const tzOffset = new Date().getTimezoneOffset() * 60000;
-            const fromDate = new Date(
-                Date.now() - settings.orderSettings.lookBackDays * 60 * 60 * 24 * 1000 - tzOffset,
-            );
-            updateSearchFields({ fromDate: fromDate.toISOString().split("T")[0], type: "Initialize", pageSize });
+            const fromDate = new Date(Date.now() - settings.orderSettings.lookBackDays * 60 * 60 * 24 * 1000);
+            updateSearchFields({ fromDate: convertDateToDateOnlyString(fromDate), type: "Initialize", pageSize });
         }
 
         if (shouldLoadOrderStatusMappings) {

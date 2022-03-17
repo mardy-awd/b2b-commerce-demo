@@ -1,12 +1,12 @@
-import "jest-styled-components";
-import "jest-canvas-mock";
-import React from "react";
-import { mount } from "enzyme";
-import ThemeProvider from "../ThemeProvider";
-import DatePicker, { DatePickerIcon } from "./DatePicker";
-import Icon from "../Icon";
-import DisablerContext from "../utilities/DisablerContext";
+import DatePicker, { DatePickerIcon } from "@insite/mobius/DatePicker/DatePicker";
 import { FormFieldStyle } from "@insite/mobius/FormField";
+import Icon from "@insite/mobius/Icon";
+import ThemeProvider from "@insite/mobius/ThemeProvider";
+import DisablerContext from "@insite/mobius/utilities/DisablerContext";
+import { mount } from "enzyme";
+import React from "react";
+import "jest-canvas-mock";
+import "jest-styled-components";
 
 describe("DatePicker", () => {
     let props;
@@ -57,15 +57,6 @@ describe("DatePicker", () => {
             props = { selectedDay: new Date(2018, 1, 12) };
             expect(wrapper().find('input[name="datetime"]').prop("value")).toEqual("2018-02-12T00:00");
         });
-    });
-
-    test("onChange is called", () => {
-        const fn = jest.fn();
-        props = { format: "dd/MM/y", selectedDay: new Date(2018, 1, 12), onDayChange: fn };
-        const root = wrapper();
-        root.find("button").first().simulate("click");
-        expect(root.find('input[name="datetime"]').prop("value")).toEqual("");
-        expect(fn).toHaveBeenCalled();
     });
 
     describe("date validation", () => {

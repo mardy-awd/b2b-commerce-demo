@@ -2,7 +2,11 @@ import { ApiHandlerDiscreteParameter, createHandlerChainRunner } from "@insite/c
 import { getOrder, GetOrderApiParameter } from "@insite/client-framework/Services/OrderService";
 import { OrderModel } from "@insite/client-framework/Types/ApiModels";
 
-type HandlerType = ApiHandlerDiscreteParameter<{ orderNumber: string }, GetOrderApiParameter, OrderModel>;
+type HandlerType = ApiHandlerDiscreteParameter<
+    { orderNumber: string; expand?: ("orderLines" | "shipments" | "vmidetails")[] },
+    GetOrderApiParameter,
+    OrderModel
+>;
 
 export const DispatchBeginLoadOrder: HandlerType = props => {
     props.dispatch({
@@ -14,7 +18,7 @@ export const DispatchBeginLoadOrder: HandlerType = props => {
 export const PopulateApiParameter: HandlerType = props => {
     props.apiParameter = {
         orderNumber: props.parameter.orderNumber,
-        expand: ["orderLines", "shipments"],
+        expand: props.parameter.expand ?? ["orderLines", "shipments"],
     };
 };
 

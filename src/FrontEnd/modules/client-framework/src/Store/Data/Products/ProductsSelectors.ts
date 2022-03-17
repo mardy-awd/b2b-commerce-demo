@@ -115,6 +115,7 @@ export function getComputedVariantProduct(
         isVariantParent: false,
         canAddToWishlist: variantProduct.canAddToWishlist,
         cantBuy: variantProduct.cantBuy,
+        allowZeroPricing: variantProduct.allowZeroPricing,
     });
 
     return {

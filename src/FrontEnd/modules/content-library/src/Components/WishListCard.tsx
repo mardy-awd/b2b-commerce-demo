@@ -212,7 +212,7 @@ const WishListCard = ({
 
     return (
         <GridContainer {...styles.gridContainer} data-test-selector="wishListCard">
-            <GridItem {...styles.wishListInfoGridItem}>
+            <GridItem {...styles.wishListInfoGridItem} data-test-selector={`${wishList.name}`}>
                 <GridContainer {...styles.wishListInfoGridContainer}>
                     <GridItem {...styles.basicInfoGridItem}>
                         <GridContainer {...styles.basicInfoGridContainer}>

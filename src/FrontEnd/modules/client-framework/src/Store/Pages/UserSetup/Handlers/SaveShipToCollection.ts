@@ -52,11 +52,18 @@ export const ExecuteOnErrorCallback: HandlerType = props => {
     }
 };
 
+export const ResetAccountShipTosData: HandlerType = props => {
+    props.dispatch({
+        type: "Data/AccountShipTos/Reset",
+    });
+};
+
 export const chain = [
     PopulateApiParameter,
     CallApplyAccountShipToCollection,
     ExecuteOnSuccessCallback,
     ExecuteOnErrorCallback,
+    ResetAccountShipTosData,
 ];
 
 const saveShipToCollection = createHandlerChainRunner(chain, "SaveShipToCollection");

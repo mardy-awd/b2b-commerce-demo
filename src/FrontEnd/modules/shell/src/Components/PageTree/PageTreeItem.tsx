@@ -92,6 +92,7 @@ class PageTreeItem extends React.Component<Props> {
                     }
                     data-test-selector={`pageTreeTitle_${node.displayName}`}
                 >
+                    <DisplayTopHoverDiv className="hover-div" />
                     {children && !node.isVariant && (
                         <AxiomIcon
                             size={16}
@@ -126,6 +127,7 @@ class PageTreeItem extends React.Component<Props> {
                         {node.displayName} {node.isVariant && node.variantName ? ` - ${node.variantName}` : ""}
                     </a>
                     {pageTreeFlyOutMenuHasItems(futurePublishNodeIds, node, permissions) && flyOutMenu}
+                    <DisplayBottomHoverDiv className="hover-div" />
                 </PageTreeTitle>
                 {isExpanded && (
                     <PageTreePages
@@ -156,6 +158,23 @@ const NodeIcon = styled.span`
     position: absolute;
     width: 12px;
     text-align: center;
+`;
+
+const DisplayTopHoverDiv = styled.div`
+    position: absolute;
+    top: 0;
+    left: -300px;
+    width: 300px;
+    height: 100%;
+    background: transparent;
+`;
+const DisplayBottomHoverDiv = styled.div`
+    position: absolute;
+    top: 0;
+    right: -200px;
+    width: 200px;
+    height: 100%;
+    background: transparent;
 `;
 
 const PageTreeFlyout = styled.button<{ isActivePage: boolean }>`
@@ -197,7 +216,11 @@ const PageTreeTitle = styled.h3<{
                       width: 22px;
                       left: -22px;
                   }
-                  ${AxiomIcon} {
+
+                .hover-div {
+                    background-color: ${props.theme.colors.custom.activeBackground};
+                }
+                ${AxiomIcon} {
                       svg {
                         color: ${props.theme.colors.primary.main};
                       }
@@ -235,6 +258,10 @@ const PageTreeTitle = styled.h3<{
     }
     &:hover {
         background-color: ${props => props.theme.colors.custom.activeBackground};
+
+        .hover-div {
+            background-color: ${props => props.theme.colors.custom.activeBackground};
+        }
     }
 `;
 
@@ -256,6 +283,7 @@ const PageTreePage = styled.li`
             position: absolute;
             top: 0;
             left: -16px;
+            z-index: 100;
         }
         li:last-child::before {
             height: 20px;

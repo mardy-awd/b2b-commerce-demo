@@ -16,7 +16,7 @@ export const colorResultToString = (color: ColorResult): undefined | string => {
 
 export function getStorablePage(
     state: ShellState,
-    websiteId: string,
+    websiteId: string | null,
     page?: PageProps,
     shouldCleanPage = true,
 ): PageModel {

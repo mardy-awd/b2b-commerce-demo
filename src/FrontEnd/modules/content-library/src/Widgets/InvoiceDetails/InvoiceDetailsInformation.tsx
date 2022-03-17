@@ -193,10 +193,7 @@ const InvoiceDetailsInformation = ({ language }: Props) => {
                 <InvoiceDetailsBillingAddress invoice={invoice} extendedStyles={styles.billingAddressStyle} />
             </GridItem>
             {invoice.notes && (
-                <GridItem
-                    {...mergeToNew(styles.invoiceInformationGridItems, styles.invoiceNotesGridItem)}
-                    data-test-selector="tst_invoiceDetail_invoiceNote"
-                >
+                <GridItem {...mergeToNew(styles.invoiceInformationGridItems, styles.invoiceNotesGridItem)}>
                     <SmallHeadingAndText
                         extendedStyles={styles.headingAndTextStyles}
                         heading={translate("Invoice Notes")}

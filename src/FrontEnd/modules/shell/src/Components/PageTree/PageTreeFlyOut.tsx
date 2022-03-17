@@ -26,7 +26,6 @@ import {
     openRulesEdit,
 } from "@insite/shell/Store/PageTree/PageTreeActionCreators";
 import { TreeNodeModel } from "@insite/shell/Store/PageTree/PageTreeState";
-import { setContentMode } from "@insite/shell/Store/ShellContext/ShellContextActionCreators";
 import ShellState from "@insite/shell/Store/ShellState";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -52,7 +51,6 @@ const mapDispatchToProps = {
     openAddPage,
     openCopyPage,
     editPageOptions,
-    setContentMode,
     openCreateVariant,
     openMakeDefaultVariant,
     openRulesEdit,

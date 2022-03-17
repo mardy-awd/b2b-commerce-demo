@@ -348,8 +348,12 @@ const LocationSearchForm: React.FC<Props> = ({
         return () => openLocationContentDisplay(location);
     };
 
-    const generateLocationSelectClickHandler = (location: LocationModel) => {
-        return () => onLocationSelected(location);
+    const generateLocationSelectClickHandler = (
+        event: React.MouseEvent<Element, MouseEvent>,
+        location: LocationModel,
+    ) => {
+        event.preventDefault();
+        onLocationSelected(location);
     };
 
     const isNotFinalResult = (resultIndex: number) => {
@@ -472,7 +476,9 @@ const LocationSearchForm: React.FC<Props> = ({
                                     <GridItem {...styles.searchResultLocationGridItem}>
                                         <Link
                                             {...styles.locationNameLink}
-                                            onClick={generateLocationSelectClickHandler(location)}
+                                            onClick={(event: React.MouseEvent<Element, MouseEvent>) =>
+                                                generateLocationSelectClickHandler(event, location)
+                                            }
                                             data-test-selector="findLocationModal_locationSelect"
                                         >
                                             {location.name}

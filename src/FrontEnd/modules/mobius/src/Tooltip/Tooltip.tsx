@@ -174,7 +174,7 @@ class Tooltip extends React.Component<TooltipProps> {
         const toolTipComponent = (
             <TooltipContainer data-id="tooltipContainer" css={get(cssOverrides, "tooltipContainer")} {...otherProps}>
                 <TooltipBody data-id="tooltipBody" css={get(cssOverrides, "tooltipBody")}>
-                    <Typography as="p" {...spreadProps("typographyProps")}>
+                    <Typography as="p" {...spreadProps("typographyProps")} data-test-selector="toolTip">
                         {text}
                     </Typography>
                 </TooltipBody>

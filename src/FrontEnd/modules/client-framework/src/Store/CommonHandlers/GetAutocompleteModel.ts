@@ -27,6 +27,11 @@ export const SetDisplayTitles: HandlerType = props => {
             props.apiResult.products.forEach(product => {
                 product.displayTitle = getBoldedText(product.title, props.apiParameter.query);
                 product.displayErpNumber = getBoldedText(product.erpNumber, props.apiParameter.query);
+                product.displayName = getBoldedText(product.name, props.apiParameter.query);
+                product.displayManufacturerItemNumber = getBoldedText(
+                    product.manufacturerItemNumber,
+                    props.apiParameter.query,
+                );
             });
         }
         if (props.apiResult.brands) {

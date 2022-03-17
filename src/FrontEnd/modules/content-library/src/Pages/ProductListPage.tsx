@@ -20,6 +20,7 @@ import clearAllProductFilters from "@insite/client-framework/Store/Pages/Product
 import clearProducts from "@insite/client-framework/Store/Pages/ProductList/Handlers/ClearProducts";
 import displayProducts from "@insite/client-framework/Store/Pages/ProductList/Handlers/DisplayProducts";
 import translate from "@insite/client-framework/Translate";
+import { HideFooter, HideHeader } from "@insite/client-framework/Types/FieldDefinition";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
 import Modals from "@insite/content-library/Components/Modals";
@@ -341,6 +342,7 @@ const pageModule: PageModule = {
         hasEditableTitle: false,
         supportsCategorySelection: true,
         pageType: "System",
+        fieldDefinitions: [HideHeader, HideFooter],
     },
 };
 

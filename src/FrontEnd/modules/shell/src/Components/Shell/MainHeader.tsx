@@ -1,9 +1,7 @@
-import { Navigation } from "@episerver/platform-navigation";
 import "@episerver/platform-navigation/dist/main.css";
 import HeaderBar from "@insite/shell/Components/Shell/HeaderBar";
 import Switcher from "@insite/shell/Components/Shell/Switcher";
 import * as React from "react";
-import { match } from "react-router-dom";
 import styled from "styled-components";
 
 const MainHeader: React.FunctionComponent<{ disabled?: boolean }> = ({ disabled }) => {

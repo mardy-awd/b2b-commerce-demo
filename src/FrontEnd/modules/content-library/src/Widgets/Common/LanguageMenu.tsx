@@ -44,9 +44,6 @@ export const languageMenuStyles: LanguageMenuStyles = {
     languageIcon: {
         size: 22,
         src: Globe,
-        css: css`
-            margin-top: 10px;
-        `,
     },
     languageSelect: {
         backgroundColor: "common.accent",

@@ -58,7 +58,7 @@ const OrderDate: FC = () => {
 const widgetModule: WidgetModule = {
     component: OrderDate,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

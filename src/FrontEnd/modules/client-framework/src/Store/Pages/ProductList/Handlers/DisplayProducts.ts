@@ -1,6 +1,7 @@
 import { getCookie, setCookie } from "@insite/client-framework/Common/Cookies";
 import { createFromProduct, ProductInfo } from "@insite/client-framework/Common/ProductInfo";
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
+import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import { trackSearchResultEvent } from "@insite/client-framework/Common/Utilities/tracking";
 import waitFor from "@insite/client-framework/Common/Utilities/waitFor";
 import { getIsWebCrawler } from "@insite/client-framework/Common/WebCrawler";
@@ -146,7 +147,8 @@ export const SetIsFiltered: HandlerType = ({ result, result: { productFilters } 
 };
 
 export const SetExpandTokens: HandlerType = props => {
-    props.expandTokens = ["attributes", "facets"];
+    props.expandTokens = ["attributes", "facets", "variantTraits"];
+
     if (getSearchDataModeActive(props.getState())) {
         props.expandTokens.push("scoreexplanation");
     }
@@ -231,7 +233,10 @@ export const ResetSortTypeIfNeeded: HandlerType = props => {
 
     if (props.apiParameter.sort !== productsDataView.pagination.sortType) {
         setCookie(productListSortTypeCookie, "1");
-        props.dispatch(displayProducts(props.parameter));
+        const parsedQuery = parseQueryString<any>(props.parameter.queryString);
+        delete parsedQuery.sort;
+        const parateter = { ...props.parameter, queryString: qs.stringify(parsedQuery) };
+        props.dispatch(displayProducts(parateter));
         return false;
     }
 };

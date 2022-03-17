@@ -47,7 +47,7 @@ const OrderDetailsNotes: React.FunctionComponent = () => {
 const widgetModule: WidgetModule = {
     component: OrderDetailsNotes,
     definition: {
-        allowedContexts: ["OrderDetailsPage"],
+        allowedContexts: ["OrderDetailsPage", "VmiOrderDetailsPage"],
         group: "Order Details",
     },
 };

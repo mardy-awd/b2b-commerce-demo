@@ -41,7 +41,12 @@ export const DispatchCompleteCancelOrder: HandlerType = props => {
         type: "Pages/OrderDetails/CompleteCancelOrder",
     });
     props.dispatch(
-        loadOrderByOrderNumber({ orderNumber: props.apiResult.webOrderNumber || props.apiResult.erpOrderNumber }),
+        loadOrderByOrderNumber({
+            orderNumber: props.apiResult.webOrderNumber || props.apiResult.erpOrderNumber,
+            expand: props.apiResult.vmiLocationId
+                ? ["orderLines", "shipments", "vmidetails"]
+                : ["orderLines", "shipments"],
+        }),
     );
 };
 

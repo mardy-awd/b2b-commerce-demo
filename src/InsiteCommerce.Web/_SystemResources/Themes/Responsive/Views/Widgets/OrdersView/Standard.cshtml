@@ -167,8 +167,8 @@
                                    ng-model="vm.selectedIds[order.id]"
                                    ng-click="vm.updateSelected($event, order.id)"/>
                         </td>
-                        <td class="col-date"><span class="sticky-first"><a ng-href="{{ vm.orderDetailsPageUrl }}?orderNumber={{ order.erpOrderNumber || order.webOrderNumber }}">{{ order.orderDate | date:'shortDate' }} </a></span></td>
-                        <td class="col-erp"><a ng-href="{{ vm.orderDetailsPageUrl }}?ordernumber={{ order.erpOrderNumber || order.webOrderNumber }}" ng-click="">{{ order.erpOrderNumber }}</a></td>
+                        <td class="col-date"><span class="sticky-first"><a ng-href="{{ vm.orderDetailsPageUrl }}?orderNumber={{ order.erpOrderNumber || order.webOrderNumber }}{{ !!order.vmiLocationId ? '&isVmiOrder=true' : '' }}">{{ order.orderDate | date:'shortDate' }} </a></span></td>
+                        <td class="col-erp"><a ng-href="{{ vm.orderDetailsPageUrl }}?ordernumber={{ order.erpOrderNumber || order.webOrderNumber }}{{ !!order.vmiLocationId ? '&isVmiOrder=true' : '' }}" ng-click="">{{ order.erpOrderNumber }}</a></td>
                         <td class="col-shipto" ng-bind="order.stCompanyName"></td>
                         <td class="col-status" ng-bind="order.statusDisplay"></td>
                         <td class="col-ordernum" ng-if="vm.settings.showWebOrderNumber" ng-bind="order.webOrderNumber"></td>

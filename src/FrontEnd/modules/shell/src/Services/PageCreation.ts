@@ -17,11 +17,14 @@ export function setupPageModel(
     language: BasicLanguageModel,
     personaId: string,
     defaultPersonaId: string,
-    websiteId: string,
+    websiteId: string | null,
     isVariant: boolean,
+    shouldResetTitle: boolean,
     nodeId?: string,
     pageId?: string,
 ) {
+    const hasNoTitleYet = !(!!pageModel.translatableFields && !!pageModel.translatableFields["title"]);
+
     if (!pageModel.fields) {
         pageModel.fields = {};
     }
@@ -88,7 +91,9 @@ export function setupPageModel(
     }
 
     // I believe this is here because generic content pages all use a creator that has a generic title, and when someone creates a page the title should get auto set to match the name they enter
-    if (pageDefinition.hasEditableTitle) {
+    // When Page is created through Spire CMS, the title is auto set with name.
+    // When Page is created through Sitegeneration/Startup, the title is auto set to name when there is no translatable title defined in page template.
+    if (pageDefinition.hasEditableTitle && (shouldResetTitle || hasNoTitleYet)) {
         pageModel.translatableFields["title"][language.id] = name;
     }
     if (pageDefinition.hasEditableUrlSegment) {

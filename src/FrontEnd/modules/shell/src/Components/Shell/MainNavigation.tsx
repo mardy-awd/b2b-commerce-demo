@@ -7,14 +7,12 @@ import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-interface OwnProps {}
-
 const mapStateToProps = ({ shellContext: { homePageId, mobileCmsModeActive } }: ShellState) => ({
     homePageId,
     mobileCmsModeActive,
 });
 
-type Props = OwnProps & ReturnType<typeof mapStateToProps> & RouteComponentProps;
+type Props = ReturnType<typeof mapStateToProps> & RouteComponentProps;
 
 const MainNavigation = ({ mobileCmsModeActive, location: { pathname }, homePageId }: Props) => {
     if (mobileCmsModeActive) {
@@ -35,6 +33,7 @@ const MainNavigation = ({ mobileCmsModeActive, location: { pathname }, homePageI
     return (
         <NavigationWrapper data-test-selector="shell_navigation">
             {link(`/ContentAdmin/Page${homePageId}`, "Pages", "/ContentAdmin/Page")}
+            {link("/ContentAdmin/SharedContent", "Shared Content")}
             {link("/ContentAdmin/Design/StyleGuide", "Style Guide")}
         </NavigationWrapper>
     );
@@ -51,7 +50,7 @@ const NavigationWrapper = styled.div`
 
 const NavigationLink = styled(Link)`
     margin-right: 16px;
-    font-size: 18px;
+    font-size: 14px;
     border-bottom: 2px solid transparent;
 
     &[data-active="true"] {
