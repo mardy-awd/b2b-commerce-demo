@@ -216,8 +216,12 @@ const ProductSelector = ({
                         <LazyImage {...styles.productImage} src={product.image} />
                     </StyledWrapper>
                     <StyledWrapper {...styles.infoWrapper}>
-                        <Typography {...styles.autocompleteTitleText}>{product.displayTitle}</Typography>
-                        <Typography {...styles.autocompleteErpText}>{product.displayErpNumber}</Typography>
+                        <Typography {...styles.autocompleteTitleText}>
+                            {product.displayTitle || product.title}
+                        </Typography>
+                        <Typography {...styles.autocompleteErpText}>
+                            {product.displayErpNumber || product.erpNumber}
+                        </Typography>
                     </StyledWrapper>
                 </StyledWrapper>
             ),
