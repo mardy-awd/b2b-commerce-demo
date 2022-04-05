@@ -592,10 +592,10 @@
         "Name": "SSH.NET",
         "Value": {
             "PackageName": "SSH.NET",
-            "PackageVersion": "2016.1.0",
+            "PackageVersion": "2020.0.1",
             "PackageFramework": "net40",
             "Libraries": {
-                "Renci.SshNet": "2016.1.0.0"
+                "Renci.SshNet": "2020.0.1.0"
             }
         }
     },
