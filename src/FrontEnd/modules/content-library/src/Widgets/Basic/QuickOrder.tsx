@@ -110,6 +110,14 @@ export const quickOrderStyles: QuickOrderStyles = {
                 align-self: flex-end;
             `,
         },
+        clearIcon: {
+            css: css`
+                position: absolute;
+                right: 50px;
+                top: 55px;
+                cursor: pointer;
+            `,
+        },
     },
 };
 

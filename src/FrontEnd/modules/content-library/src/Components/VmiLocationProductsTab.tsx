@@ -10,6 +10,7 @@ import updateProductSearchFields from "@insite/client-framework/Store/Pages/VmiL
 import { TableTabKeys } from "@insite/client-framework/Store/Pages/VmiLocationDetails/VmiLocationDetailsReducer";
 import translate from "@insite/client-framework/Translate";
 import TwoButtonModal, { TwoButtonModalStyles } from "@insite/content-library/Components/TwoButtonModal";
+import VmiBinDetailTypeLink from "@insite/content-library/Components/VmiBinDetailTypeLink";
 import Checkbox, { CheckboxPresentationProps } from "@insite/mobius/Checkbox";
 import DataTable, { DataTableProps, SortOrderOptions } from "@insite/mobius/DataTable";
 import DataTableBody from "@insite/mobius/DataTable/DataTableBody";
@@ -415,9 +416,11 @@ const VmiLocationProductsTab = ({
                                             </DataTableCell>
                                         )}
                                         <DataTableCell {...styles.nameCells}>
-                                            <Link title={product.shortDescription} href={product.productDetailUrl}>
-                                                {product.shortDescription}
-                                            </Link>
+                                            <VmiBinDetailTypeLink
+                                                title={product.shortDescription}
+                                                locationId={vmiLocationId}
+                                                id={id}
+                                            />
                                         </DataTableCell>
                                         <DataTableCell {...styles.productNumberCells}>
                                             {product.erpNumber}

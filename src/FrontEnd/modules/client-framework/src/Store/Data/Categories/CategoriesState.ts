@@ -5,6 +5,7 @@ import { DataViewState } from "@insite/client-framework/Store/Data/DataState";
 export interface CategoriesState extends DataViewState<Category> {
     readonly categoryDepthLoaded: Dictionary<number>;
     readonly parentCategoryIdToChildrenIds: SafeDictionary<readonly string[]>;
+    categoryIdsCalled: string[];
 }
 
 export interface HasCategoriesState {

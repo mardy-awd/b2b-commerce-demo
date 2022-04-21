@@ -11,7 +11,7 @@ export const getPageByType = (type: string) =>
     get<{ page: PageModel; statusCode: number; redirectTo: string }>("pageByType", { type });
 
 export const getPageByUrl = (url: string, bypassFilters?: boolean) =>
-    get<RetrievePageResult>("pageByUrl", { url, bypassFilters });
+    get<RetrievePageResult>("pageByUrl", { url: encodeURIComponent(url), bypassFilters });
 
 /** @internal Gets page content for a specific version, used by the content management shell. */
 export const getPageByVersion = (pageVersionId: string) =>

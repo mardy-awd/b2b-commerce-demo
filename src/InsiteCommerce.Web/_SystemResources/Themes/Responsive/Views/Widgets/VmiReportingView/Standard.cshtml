@@ -14,6 +14,16 @@
         '[% translate 'Previous Order' %]'
         ]; vm.exportPage = 'Reporting';">
     <div ng-if="!vm.failedToLoadVmiBins">
+        <div class="vmi-location-switcher">
+            <div>
+                <label>[% translate 'Select VMI Location' %]</label>
+                <select id="vmiLocationList" name="vmiLocationList"
+                        class="vmi-location-select"
+                        ng-change="vm.switchLocation()"
+                        ng-model="vm.selectedLocation"
+                        ng-options="location.name for location in vm.vmiLocations" ng-disabled="vm.vmiLocations.length < 2"></select>
+            </div>
+        </div>
         <section class="accordion search-vmi-reporting">
             <div class="cm">
                 <input type="checkbox" id="accord-{{vm.time}}" class="accord-check"/>

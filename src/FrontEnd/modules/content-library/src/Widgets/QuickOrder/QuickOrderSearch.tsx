@@ -7,7 +7,7 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductSelector, { ProductSelectorStyles } from "@insite/content-library/Components/ProductSelector";
 import ToasterContext from "@insite/mobius/Toast/ToasterContext";
-import React, { FC } from "react";
+import React, { useContext } from "react";
 import { connect, ResolveThunks } from "react-redux";
 
 const mapDispatchToProps = {
@@ -24,8 +24,8 @@ export const quickOrderSearchStyles: QuickOrderSearchStyles = {};
 
 const styles = quickOrderSearchStyles;
 
-const QuickOrderSearch: FC<Props> = ({ addProduct }) => {
-    const toasterContext = React.useContext(ToasterContext);
+const QuickOrderSearch = ({ addProduct }: Props) => {
+    const toasterContext = useContext(ToasterContext);
 
     const addProductToOrder = (productInfo: ProductInfo, product: ProductModel) => {
         addProduct({ productInfo, product });
@@ -38,6 +38,7 @@ const QuickOrderSearch: FC<Props> = ({ addProduct }) => {
             onSelectProduct={addProductToOrder}
             productIsConfigurableMessage={siteMessage("QuickOrder_CannotOrderConfigurable")}
             productIsUnavailableMessage={siteMessage("QuickOrder_ProductIsUnavailable")}
+            extendedStyles={styles.productSelector}
         />
     );
 };

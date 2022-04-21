@@ -98,10 +98,13 @@ interface DatePickerComponentProps
     dayAriaLabel?: string;
     /** label for screen reader to speak when focus is on the year input field */
     yearAriaLabel?: string;
+    /** Callback function that will be called when the user is pressing a key (on the keyboard) */
+    onKeyDown?(event: React.KeyboardEvent): void;
 }
 
 export interface DatePickerState {
     selectedDay?: Date;
+    datePickerValue?: Date;
     isEmpty: boolean;
     selectedDayDisabled: boolean;
     mobilePopupDirection?: DatePickerPopupDirection;
@@ -356,6 +359,7 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
         this.handleDayChange = this.handleDayChange.bind(this);
         this.state = {
             selectedDay: this.props.selectedDay || undefined,
+            datePickerValue: this.props.selectedDay || undefined,
             isEmpty: !this.props.selectedDay,
             selectedDayDisabled: this.isSelectedDayDisabled(this.props.selectedDay, this.props.dateTimePickerProps),
             mobilePopupDirection: DatePickerPopupDirection.Right,
@@ -364,12 +368,22 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
     }
 
     UNSAFE_componentWillReceiveProps(nextProps: DatePickerProps) {
-        // eslint-disable-line camelcase
         if (nextProps.selectedDay !== this.props.selectedDay) {
+            // if the next props don't have a date, but we think the date is disabled
+            // then it means the datepicker has an invalid value, don't change state
+            // otherwise we will lose that value
+            if (!nextProps.selectedDay && this.state.selectedDayDisabled) {
+                return;
+            }
+
             this.setState({
                 isEmpty: !nextProps.selectedDay,
                 selectedDay: nextProps.selectedDay,
-                selectedDayDisabled: this.isSelectedDayDisabled(nextProps.selectedDay, nextProps.dateTimePickerProps),
+                datePickerValue: nextProps.selectedDay,
+                selectedDayDisabled: this.isSelectedDayDisabled(
+                    this.state.datePickerValue,
+                    nextProps.dateTimePickerProps,
+                ),
             });
         }
     }
@@ -402,15 +416,55 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
 
     handleDayChange = (value: Date | undefined) => {
         const selectedDayDisabled = this.isSelectedDayDisabled(value, this.props.dateTimePickerProps);
+
+        const setActualState = () => {
+            this.setState(
+                {
+                    isEmpty: !value,
+                    selectedDay: value,
+                    datePickerValue: value,
+                    selectedDayDisabled,
+                },
+                () => {
+                    // when the date is cleared, we let the parent know from here
+                    if (!value && typeof this.props.onDayChange === "function") {
+                        this.props.onDayChange(this.state);
+                    }
+                },
+            );
+        };
+
+        // if the last state was disabled, and we don't have a value
+        // then someone clicked clear when there was an invalid date
+        // we need to set the date to a valid value and back to null
+        // to get the datepicker to rerender and clear the invalid date.
+        // this also applies to if the value selected is the same as the last valid value in the datepicker
+        if (this.state.selectedDayDisabled && (!value || value.toString() === this.state.datePickerValue?.toString())) {
+            this.setState(
+                {
+                    datePickerValue: new Date(),
+                },
+                () => {
+                    setActualState();
+                },
+            );
+        } else {
+            setActualState();
+        }
+    };
+
+    handlePickerClosed = () => {
+        // the datepicker library that we use won't return a selected date if it is
+        // outside of the min/max, and it doesn't expose any way to know an invalid date
+        // is selected, looking for :invalid inputs is the only way to detect it
+        const selectedDayDisabled = !!(
+            this.datePickerRef.current && this.datePickerRef.current.querySelectorAll(":invalid").length > 0
+        );
+
         this.setState(
-            {
-                isEmpty: !value,
-                selectedDay: value,
-                selectedDayDisabled,
-            },
+            { selectedDayDisabled, selectedDay: selectedDayDisabled ? undefined : this.state.selectedDay },
             () => {
-                // when the date is cleared, we let the parent know from here
-                if (!value && typeof this.props.onDayChange === "function") {
+                if (typeof this.props.onDayChange === "function") {
                     this.props.onDayChange(this.state);
                 }
             },
@@ -435,7 +489,7 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
         // Because disabled html attribute doesn't accept undefined
         // eslint-disable-next-line no-unneeded-ternary
         const isDisabled = disable || disabled ? true : false;
-        const { selectedDay, isEmpty, selectedDayDisabled } = this.state;
+        const { selectedDay, isEmpty, selectedDayDisabled, datePickerValue } = this.state;
         const { applyProp, spreadProps } = applyPropBuilder(this.props, {
             component: "datePicker",
             category: "formField",
@@ -457,17 +511,9 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
                 aria-invalid={selectedDayDisabled || (required && isEmpty) || false}
             >
                 <DateTimePicker
-                    value={selectedDay}
-                    onCalendarClose={() => {
-                        if (typeof this.props.onDayChange === "function") {
-                            this.props.onDayChange(this.state);
-                        }
-                    }}
-                    onClockClose={() => {
-                        if (typeof this.props.onDayChange === "function") {
-                            this.props.onDayChange(this.state);
-                        }
-                    }}
+                    value={datePickerValue}
+                    onCalendarClose={this.handlePickerClosed}
+                    onClockClose={this.handlePickerClosed}
                     onCalendarOpen={() => {
                         const rect = this.datePickerRef.current!.getBoundingClientRect();
                         this.setState({
@@ -506,6 +552,8 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
                     {...otherProps}
                     format={applyProp("format", "MM/dd/y")}
                     {...spreadProps("dateTimePickerProps")}
+                    minDate={otherProps.dateTimePickerProps?.minDate || new Date("2000-01-01T00:00:00")}
+                    maxDate={otherProps.dateTimePickerProps?.maxDate || new Date("9999-01-01T00:00:00")}
                     {...spreadProps("placeholders")}
                     onChange={this.handleDayChange}
                     nativeInputAriaLabel={typeof label === "string" ? label : undefined}

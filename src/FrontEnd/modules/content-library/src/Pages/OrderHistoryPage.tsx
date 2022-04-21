@@ -67,6 +67,8 @@ const OrderHistoryPage = ({
         } else if (settings.orderSettings.lookBackDays > 0) {
             const fromDate = new Date(Date.now() - settings.orderSettings.lookBackDays * 60 * 60 * 24 * 1000);
             updateSearchFields({ fromDate: convertDateToDateOnlyString(fromDate), type: "Initialize", pageSize });
+        } else {
+            updateSearchFields({ type: "Initialize", pageSize });
         }
 
         if (shouldLoadOrderStatusMappings) {
@@ -92,7 +94,6 @@ const OrderHistoryPage = ({
         <Page
             data-test-selector="orderHistory"
             css={css`
-                overflow: hidden;
                 position: relative;
             `}
         >

@@ -674,7 +674,10 @@ const FindLocationModal = ({
                                                             {getWarehouseNumber(index)}
                                                         </Typography>
                                                     </GridItem>
-                                                    <GridItem {...styles.searchResultWarehouseGridItem}>
+                                                    <GridItem
+                                                        {...styles.searchResultWarehouseGridItem}
+                                                        data-test-selector={`pickUpLocationModal_warehouseName_${index}`}
+                                                    >
                                                         <Typography {...styles.warehouseNameText}>
                                                             {warehouse.description || warehouse.name}
                                                         </Typography>
@@ -734,6 +737,7 @@ const FindLocationModal = ({
                                                             onOpenWarehouseHours={generateOpenWarehouseHoursFor(
                                                                 warehouse,
                                                             )}
+                                                            data-test-selector={`pickUpLocationModal_warehouseHours_${index}`}
                                                         />
                                                     </GridItem>
                                                 )}
@@ -748,6 +752,7 @@ const FindLocationModal = ({
                                                         {...styles.warehouseDistanceDisplayText}
                                                         distance={warehouse.distance}
                                                         unitOfMeasure={distanceUnitOfMeasure}
+                                                        data-test-selector={`pickUpLocationModal_warehouseDistance_${index}`}
                                                     />
                                                 </GridItem>
                                                 {isNotFinalResult(index) && (

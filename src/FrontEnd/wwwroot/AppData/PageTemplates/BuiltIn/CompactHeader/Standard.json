@@ -1,0 +1,126 @@
+{
+    "nodeId": "01780cd4-b67d-474c-bf29-5012bb5327b5",
+    "name": "Compact Header",
+    "type": "CompactHeader",
+    "parentId": "00000000-0000-0000-0000-000000000000",
+    "sortOrder": 0,
+    "websiteId": "c2c53320-98dc-4eca-8022-9efc00dea0dc",
+    "variantName": null,
+    "layoutPageId": null,
+    "templateHash": "283602e98104829c9c9b64d99604aa248000499c4e0bf1c939dbea7f8315a0c1",
+    "id": "96cc2d27-8a22-46d6-ad6c-7866c0e4abd5",
+    "generalFields": {
+        "horizontalRule": "",
+        "tags": [],
+        "hideBreadcrumbs": false,
+        "variantName": "",
+        "layoutPage": ""
+    },
+    "translatableFields": {},
+    "contextualFields": {},
+    "widgets": [
+        {
+            "parentId": "96cc2d27-8a22-46d6-ad6c-7866c0e4abd5",
+            "type": "CompactHeader/Cart",
+            "zone": "Cart",
+            "isLayout": false,
+            "id": "2d77f9b3-e361-45f9-83f5-d53c866c23f1",
+            "generalFields": {
+                "visibilityState": "both",
+                "icon": "cart"
+            },
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "96cc2d27-8a22-46d6-ad6c-7866c0e4abd5",
+            "type": "CompactHeader/MainNavigation",
+            "zone": "MainNavigation",
+            "isLayout": false,
+            "id": "b6d961b0-eef6-44b4-9777-002321e8f628",
+            "generalFields": {
+                "showQuickOrder": true
+            },
+            "translatableFields": {
+                "links": {
+                    "a26095ef-c714-e311-ba31-d43d7e4e88b2": [
+                        {
+                            "fields": {
+                                "linkType": "MegaMenu",
+                                "destination": {
+                                    "type": "Category",
+                                    "value": "00000000-0000-0000-0000-000000000000"
+                                },
+                                "overrideTitle": "",
+                                "title": "",
+                                "numberOfColumns": 6,
+                                "maxDepth": 3,
+                                "openInNewWindow": false
+                            }
+                        },
+                        {
+                            "fields": {
+                                "linkType": "CascadingMenu",
+                                "destination": {
+                                    "type": "Category",
+                                    "value": "00000000-0000-0000-0000-000000000000"
+                                },
+                                "overrideTitle": "Cascade Products",
+                                "title": "",
+                                "numberOfColumns": 6,
+                                "maxDepth": 3,
+                                "openInNewWindow": false
+                            }
+                        }
+                    ]
+                }
+            },
+            "contextualFields": {}
+        },
+        {
+            "parentId": "96cc2d27-8a22-46d6-ad6c-7866c0e4abd5",
+            "type": "CompactHeader/Search",
+            "zone": "Search",
+            "isLayout": false,
+            "id": "5e125a57-df9d-48e6-ae6b-5bb4c7d2d93b",
+            "generalFields": {},
+            "translatableFields": {},
+            "contextualFields": {}
+        },
+        {
+            "parentId": "96cc2d27-8a22-46d6-ad6c-7866c0e4abd5",
+            "type": "CompactHeader/Logo",
+            "zone": "Logo",
+            "isLayout": false,
+            "id": "484c1fbe-cff8-4853-87e0-5678668e5da1",
+            "generalFields": {
+                "isMobileSpecific": false
+            },
+            "translatableFields": {
+                "logoImage": {
+                    "a26095ef-c714-e311-ba31-d43d7e4e88b2": "images/victory_logo.svg?width=212&height=150"
+                },
+                "mobileSpecificImage": {
+                    "a26095ef-c714-e311-ba31-d43d7e4e88b2": ""
+                }
+            },
+            "contextualFields": {}
+        },
+        {
+            "parentId": "96cc2d27-8a22-46d6-ad6c-7866c0e4abd5",
+            "type": "CompactHeader/Flyout",
+            "zone": "Flyout",
+            "isLayout": false,
+            "id": "57c3b70a-2e36-44b1-a5a6-04c743058069",
+            "generalFields": {
+                "showQuickOrder": true
+            },
+            "translatableFields": {
+                "links": {
+                    "a26095ef-c714-e311-ba31-d43d7e4e88b2": []
+                }
+            },
+            "contextualFields": {}
+        }
+    ]
+}

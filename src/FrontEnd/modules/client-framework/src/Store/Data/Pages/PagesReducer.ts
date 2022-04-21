@@ -31,6 +31,7 @@ export const initialState: PagesState = {
     bypassedAuthorization: {},
     requiresAuthorizationByPageId: {},
     alternateLanguageUrlsByPageId: {},
+    deletedSharedContents: [],
 };
 
 interface SetPageIsLoaded {
@@ -220,6 +221,13 @@ export const reducer = {
         { pageId, alternateLanguageUrls }: { pageId: string; alternateLanguageUrls: SafeDictionary<string> },
     ) => {
         draft.alternateLanguageUrlsByPageId[pageId] = alternateLanguageUrls;
+    },
+
+    "Data/Pages/SetSharedContentIsDeleted": (
+        draft: Draft<PagesState>,
+        { sharedContentId }: { sharedContentId: string },
+    ) => {
+        draft.deletedSharedContents.push(sharedContentId);
     },
 };
 

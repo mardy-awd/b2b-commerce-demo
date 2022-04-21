@@ -606,7 +606,7 @@ declare module Insite.Websites.WebApi.V1.ApiModels {
 		googleMapsApiKey: string;
 		googleTrackingTypeComputed: string;
 		googleTrackingAccountId: string;
-		cmsType: string;
+		cmsType: Insite.Data.Entities.CmsType;
 		includeSiteNameInPageTitle: boolean;
 		pageTitleDelimiter: string;
 		siteNameAfterTitle: boolean;
@@ -2448,6 +2448,12 @@ declare module Insite.Payments.WebApi.V1.ApiModels {
 		transactionId: string;
 		webOrderNumber: string;
 		redirectHtml: string;
+	}
+}
+declare module Insite.Data.Entities {
+	enum CmsType {
+		Classic = 0,
+		Spire = 1
 	}
 }
 

@@ -1,5 +1,5 @@
-﻿<div class="large-12 columns" ng-controller="ReviewAndPayController as vm" ng-cloak cart-url="[% urlForPage 'CartPage' %]">
-    <input type="hidden" id="tst_reviewAndPayPage_pageIsReady" value="{{vm.pageIsReady}}"/>
+﻿<div class="large-12 columns" ng-controller="ReviewAndPayController as vm" ng-cloak cart-url="[% urlForPage 'CartPage' %]" many-attempts-error="[% siteMessage 'CreditCardInfo_MaximumCreditCardAttempts' %]">
+    <input type="hidden" id="tst_reviewAndPayPage_pageIsReady" value="{{vm.pageIsReady}}" />
 
     <div class="checkout-head">
         <h1>[% translate 'Checkout' %]</h1>
@@ -399,6 +399,16 @@
         </div>
         <isc-spinner name="checkoutPage" show="true"></isc-spinner>
     </form>
+    <div id="userLocked" class="reveal-modal" data-reveal data-reveal-init>
+        <div class="modal-wrap">
+            <h2>[% translate 'User Locked' %]</h2>
+            <div class="row message">[% siteMessage "CreditCardInfo_MaximumCreditCardAttempts" %]</div>
+            <div class="row btns">
+                <button type="button" class="btn primary btn-done" onclick="$('.close-reveal-modal').click()">[% translate 'Close' %]</button>
+            </div>
+            <a class="close-reveal-modal">&#215;</a>
+        </div>
+    </div>
 </div>
 
 <script type="text/ng-template" id="/PartialViews/Account-AddressDisplay">

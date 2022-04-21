@@ -5,7 +5,11 @@ import { ParentProductIdContext } from "@insite/client-framework/Components/Pare
 import { ProductContext, ProductContextModel } from "@insite/client-framework/Components/ProductContext";
 import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getSelectedProductPath, getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
+import {
+    getSelectedProductPath,
+    getSession,
+    getSettingsCollection,
+} from "@insite/client-framework/Store/Context/ContextSelectors";
 import { getCatalogPageStateByPath } from "@insite/client-framework/Store/Data/CatalogPages/CatalogPagesSelectors";
 import { getCurrentPage, getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import {
@@ -16,7 +20,10 @@ import {
 import changeQtyOrdered from "@insite/client-framework/Store/Pages/ProductDetails/Handlers/ChangeQtyOrdered";
 import changeUnitOfMeasure from "@insite/client-framework/Store/Pages/ProductDetails/Handlers/ChangeUnitOfMeasure";
 import displayProduct from "@insite/client-framework/Store/Pages/ProductDetails/Handlers/DisplayProduct";
+import generateStructuredPageData from "@insite/client-framework/Store/Pages/ProductDetails/Handlers/GenerateStructuredPageData";
 import resetSelections from "@insite/client-framework/Store/Pages/ProductDetails/Handlers/ResetSelections";
+import setMetadataSetForId from "@insite/client-framework/Store/Pages/ProductDetails/Handlers/SetMetadataSetForId";
+import { EnableStructuredPageData } from "@insite/client-framework/Types/FieldDefinition";
 import { HideFooter, HideHeader } from "@insite/client-framework/Types/FieldDefinition";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
@@ -52,6 +59,10 @@ const mapStateToProps = (state: ApplicationState) => {
         websiteSettings: getSettingsCollection(state).websiteSettings,
         selectedProductId: state.pages.productDetails.selectedProductId,
         isProductLoading: state.pages.productDetails.isProductLoading,
+        metadataSetForId: state.pages.productDetails.metadataSetForId,
+        structuredPageData: state.pages.productDetails.structuredPageData,
+        structuredPageDataSetForId: state.pages.productDetails.structuredPageDataSetForId,
+        session: getSession(state),
     };
 };
 
@@ -60,21 +71,13 @@ const mapDispatchToProps = {
     changeQtyOrdered,
     changeUnitOfMeasure,
     resetSelections,
+    generateStructuredPageData,
+    setMetadataSetForId,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & PageProps;
 
-interface State {
-    metadataSetForId?: string;
-}
-
-class ProductDetailsPage extends React.Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-
-        this.state = {};
-    }
-
+class ProductDetailsPage extends React.Component<Props> {
     UNSAFE_componentWillMount() {
         this.displayProductIfNeeded();
         this.setMetadata();
@@ -84,7 +87,7 @@ class ProductDetailsPage extends React.Component<Props, State> {
         this.displayProductIfNeeded();
 
         const { productState } = this.props;
-        if (productState.value && productState.value.id !== this.state.metadataSetForId) {
+        if (productState.value && productState.value.id !== this.props.metadataSetForId) {
             trackPageChange();
             this.setMetadata();
         }
@@ -101,9 +104,27 @@ class ProductDetailsPage extends React.Component<Props, State> {
             websiteName,
             location,
             websiteSettings,
+            page,
+            structuredPageData,
+            productInfo,
+            session,
+            metadataSetForId,
+            structuredPageDataSetForId,
         } = this.props;
 
         if (!catalogPageState?.value || !product) {
+            return;
+        }
+
+        if (page.fields.enableStructuredPageData && product.id !== structuredPageDataSetForId) {
+            this.props.generateStructuredPageData({
+                product,
+                productInfo,
+                session,
+                brandId: catalogPageState.value.brandId || product.brand?.id,
+                categoryIdWithBrandId: catalogPageState.value.categoryIdWithBrandId,
+                categoryId: catalogPageState.value.categoryId,
+            });
             return;
         }
 
@@ -129,13 +150,16 @@ class ProductDetailsPage extends React.Component<Props, State> {
                 title: title || product.productTitle,
                 websiteName,
                 alternateLanguageUrls: alternateLanguageUrls ?? undefined,
+                structuredPageData,
             },
             websiteSettings,
         );
 
-        this.setState({
-            metadataSetForId: product.id,
-        });
+        if (product.id !== metadataSetForId) {
+            this.props.setMetadataSetForId({
+                metadataSetForId: product.id,
+            });
+        }
     }
 
     displayProductIfNeeded() {
@@ -214,7 +238,7 @@ const pageModule: PageModule = {
         hasEditableTitle: false,
         supportsProductSelection: true,
         pageType: "System",
-        fieldDefinitions: [HideHeader, HideFooter],
+        fieldDefinitions: [EnableStructuredPageData, HideHeader, HideFooter],
     },
 };
 

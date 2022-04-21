@@ -30,6 +30,7 @@ export interface GetOrdersApiParameter extends ApiParameter, HasPagingParameters
     displayName?: string;
     vmiOrdersOnly?: boolean;
     vmiLocationId?: string;
+    expand?: ("orderLines" | "vmidetails")[];
 }
 
 export interface GetOrderApiParameter extends ApiParameter {

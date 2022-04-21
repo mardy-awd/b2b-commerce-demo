@@ -10,7 +10,7 @@
     }
 
     .search-vmi-reporting {
-        margin-top: 20px;
+        margin-top: 5px;
     }
 
     .search-date {
@@ -44,6 +44,16 @@
         padding: 0.5em 0 0.5em;
     }
 
+    .vmi-location-switcher {
+        margin-top: 15px;
+        max-width: 25%;
+    }
+
+    .vmi-location-select {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     .btn-group {
         display: inline-block;
         padding: 0.5em .75em;
@@ -51,14 +61,14 @@
     }
 
     .overflow-table {
-         overflow: auto;
+        overflow: auto;
 
-         .col-check {
-             input {
-                 margin: 0;
-             }
-         }
-     }
+        .col-check {
+            input {
+                margin: 0;
+            }
+        }
+    }
 
     .vmi-reporting-filter {
         .products-filter {
@@ -94,6 +104,10 @@
         .btns .btn {
             width: 100%;
             margin-bottom: 1em;
+        }
+
+        .vmi-location-switcher {
+            min-width: 100%;
         }
     }
 }

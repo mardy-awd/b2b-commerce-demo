@@ -115,7 +115,9 @@ class AutocompleteProducts extends React.Component<Props> {
         const styles = this.styles;
         return (
             <>
-                <Typography {...styles.headerText}>{translate("Products")}</Typography>
+                <Typography {...styles.headerText} data-test-selector="autocompleteProducts_Header">
+                    {translate("Products")}
+                </Typography>
                 {products.map(product => (
                     <GridContainer
                         {...(this.props.focusedItem === product ? styles.focusedContainer : styles.container)}
@@ -128,8 +130,10 @@ class AutocompleteProducts extends React.Component<Props> {
                             <LazyImage {...styles.image} src={product.image} />
                         </GridItem>
                         <GridItem {...styles.infoGridItem}>
-                            <Link {...styles.titleLink}>{product.displayTitle}</Link>
-                            <Typography {...styles.erpNumberText}>
+                            <Link {...styles.titleLink} data-test-selector={`productId_${product.id}`}>
+                                {product.displayTitle}
+                            </Link>
+                            <Typography {...styles.erpNumberText} data-test-selector="autocompleteProducts_PartNumber">
                                 {product.isNameCustomerOverride ? (
                                     <>
                                         {translate("My Part #")}

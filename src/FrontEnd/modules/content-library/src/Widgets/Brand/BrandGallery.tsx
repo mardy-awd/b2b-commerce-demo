@@ -43,7 +43,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps) => {
         brandIds: props.fields.brandsSelected,
         randomize: props.fields.brandsToDisplay === "random",
         pageSize: parseInt(props.fields.numberOfBrandsToDisplay || "0", 10),
-        select: "id,detailPagePath,logoSmallImagePath,logoAltText",
+        select: "id,name,detailPagePath,logoSmallImagePath,logoAltText",
     };
     const brandsState = getBrandsDataView(state, brandGalleryParameter);
     const shouldLoadBrandGallery = !brandsState.isLoading && !brandsState.value;
@@ -120,6 +120,15 @@ class BrandGallery extends React.Component<Props> {
             },
         };
 
+        const focusFunction = () => {
+            const elementToFocus = document.getElementById("collapseButton");
+            if (elementToFocus) {
+                elementToFocus.focus();
+            } else {
+                document.getElementById("expandButton")?.focus();
+            }
+        };
+
         return (
             <StyledWrapper {...styles.container} data-test-selector="brandGallery">
                 <VisuallyHidden as="h1">{translate("Explore available brands")}</VisuallyHidden>
@@ -129,63 +138,29 @@ class BrandGallery extends React.Component<Props> {
                     </Typography>
                 )}
                 <FlexWrapContainer {...styles.imageContainer}>
-                    {brandList.map(brand => {
-                        if (brand === brandList[0]) {
-                            const focusFunction = () => {
-                                const elementToFocus = document.getElementById("collapseButton");
-                                if (elementToFocus) {
-                                    elementToFocus.focus();
-                                } else {
-                                    document.getElementById("expandButton")?.focus();
-                                }
-                            };
-                            return (
-                                <FlexItem
-                                    key={brand.id}
-                                    flexColumns={[mobile, tablet, tablet, desktop, desktop]}
-                                    {...styles.imageItem}
-                                >
-                                    <SkipNav
-                                        extendedStyles={styles.skipToContent}
-                                        text={translate("Skip to full brand list")}
-                                        focusFunction={focusFunction}
-                                    />
-                                    <Clickable href={brand.detailPagePath} {...styles.link}>
-                                        <LazyImage
-                                            imgProps={imgProps}
-                                            {...styles.image}
-                                            src={brand.logoSmallImagePath}
-                                            altText={
-                                                brand.logoAltText
-                                                    ? `${translate("Go to brand page")} ${brand.logoAltText}`
-                                                    : `${translate("Go to brand page")} ${brand.name}`
-                                            }
-                                        />
-                                    </Clickable>
-                                </FlexItem>
-                            );
-                        }
-                        return (
-                            <FlexItem
-                                key={brand.id}
-                                flexColumns={[mobile, tablet, tablet, desktop, desktop]}
-                                {...styles.imageItem}
-                            >
-                                <Clickable href={brand.detailPagePath} {...styles.link}>
-                                    <LazyImage
-                                        imgProps={imgProps}
-                                        {...styles.image}
-                                        src={brand.logoSmallImagePath}
-                                        altText={
-                                            brand.logoAltText
-                                                ? `${translate("Go to brand page")} ${brand.logoAltText}`
-                                                : `${translate("Go to brand page")} ${brand.name}`
-                                        }
-                                    />
-                                </Clickable>
-                            </FlexItem>
-                        );
-                    })}
+                    {brandList.map(brand => (
+                        <FlexItem
+                            key={brand.id}
+                            flexColumns={[mobile, tablet, tablet, desktop, desktop]}
+                            {...styles.imageItem}
+                        >
+                            {brand === brandList[0] && (
+                                <SkipNav
+                                    extendedStyles={styles.skipToContent}
+                                    text={translate("Skip to full brand list")}
+                                    focusFunction={focusFunction}
+                                />
+                            )}
+                            <Clickable href={brand.detailPagePath} {...styles.link}>
+                                <LazyImage
+                                    imgProps={imgProps}
+                                    {...styles.image}
+                                    src={brand.logoSmallImagePath}
+                                    altText={`${translate("Go to brand page")} ${brand.logoAltText || brand.name}`}
+                                />
+                            </Clickable>
+                        </FlexItem>
+                    ))}
                 </FlexWrapContainer>
             </StyledWrapper>
         );

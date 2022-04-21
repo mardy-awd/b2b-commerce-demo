@@ -139,7 +139,7 @@ const CurrentShippingAddress: React.FunctionComponent<Props> = (props: Props) =>
             </GridItem>
             <GridItem {...styles.editLinkGridItem}>
                 {countries && (
-                    <Link {...styles.editLink} onClick={editClickHandler}>
+                    <Link {...styles.editLink} onClick={editClickHandler} data-test-selector="shipTo_Edit_Address">
                         {translate("Edit")}
                     </Link>
                 )}

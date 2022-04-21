@@ -1,16 +1,15 @@
 import { DeepWriteable } from "@insite/client-framework/Common/Types";
 import ApplicationState, { WriteableState } from "@insite/client-framework/Store/ApplicationState";
 import { configureStore } from "@insite/client-framework/Store/ConfigureStore";
-import WidgetGroups from "@insite/client-framework/Types/WidgetGroups";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
-import { Styles, StylesContext, StylesProvider } from "@insite/content-library/additionalStyles";
+import { Styles, StylesProvider } from "@insite/content-library/additionalStyles";
 import baseTheme from "@insite/mobius/globals/baseTheme";
 import ThemeProvider from "@insite/mobius/ThemeProvider";
 import RecursivePartial from "@insite/mobius/utilities/RecursivePartial";
-import { mount, ReactWrapper, ShallowWrapper } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import "jest-styled-components";
-import React, { ComponentType, FC, ReactNode } from "react";
+import React, { ComponentType } from "react";
 import { Provider } from "react-redux";
 
 export function elementHasStyle<P, S, C>(component: ReactWrapper<P, S, C>, styleRule: any) {

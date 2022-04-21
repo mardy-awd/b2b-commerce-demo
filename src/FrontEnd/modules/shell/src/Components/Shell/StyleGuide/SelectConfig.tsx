@@ -12,7 +12,7 @@ const SelectConfig: React.FunctionComponent<
         title: string;
         disabled?: boolean;
     } & PresetHelpers
-> = ({ locationInTheme, theme, title, update, postStyleGuideTheme, disabled, children }) => {
+> = ({ locationInTheme, theme, title, update, postStyleGuideTheme, disabled, children, ...otherProps }) => {
     const codeOverridden = !!get(postStyleGuideTheme, locationInTheme);
 
     return (
@@ -34,6 +34,7 @@ const SelectConfig: React.FunctionComponent<
                 update(draft => createSetNewValueInDraft(locationInTheme)(draft, resultVal));
             }}
             {...configFormFieldStyles}
+            {...otherProps}
         >
             {children}
         </Select>

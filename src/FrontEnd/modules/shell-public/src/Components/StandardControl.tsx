@@ -16,12 +16,30 @@ const tooltipStyles: TooltipPresentationProps = {
     },
 };
 
+const leftTooltipStyles: TooltipPresentationProps = {
+    cssOverrides: {
+        tooltipWrapper: css`
+            margin-left: 5px;
+        `,
+        tooltipContainer: css`
+            width: 320px;
+            margin-left: -160px;
+            padding-right: 90px;
+        `,
+    },
+};
+
 const StandardControl: React.FC<Props> = props => (
     <>
         <Label htmlFor={props.fieldDefinition.name} id={props.labelId}>
             {props.fieldDefinition.displayName}
             {props.fieldDefinition.isRequired && <RequiredStyle>(Required)</RequiredStyle>}
-            {props.fieldDefinition.tooltip && <Tooltip {...tooltipStyles} text={props.fieldDefinition.tooltip} />}
+            {props.fieldDefinition.tooltip &&
+                (props.fieldDefinition.tooltipPosition === "left" ? (
+                    <Tooltip {...leftTooltipStyles} text={props.fieldDefinition.tooltip} />
+                ) : (
+                    <Tooltip {...tooltipStyles} text={props.fieldDefinition.tooltip} />
+                ))}
             {props.fieldDefinition.fieldType && (
                 <FieldTypeStyle>{props.fieldDefinition.fieldType.substr(0, 1)}</FieldTypeStyle>
             )}

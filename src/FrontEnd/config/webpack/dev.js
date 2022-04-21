@@ -22,8 +22,7 @@ const clientConfig = merge(setupCommonConfig(true), commonClientConfig, {
     devtool: "inline-source-map", // slowest build/slowest rebuild but shows proper source, eval-cheap-source-map is only like 2 seconds faster and gives us transpiled code
 });
 
-// TODO ISC-13725 - Node 14 supports ES2020 syntax, such as `?.` and `??`; using it will reduce the amount of compiler-generated code in the JS bundle.
-const serverConfig = merge(setupCommonConfig(true, undefined, "ES2019"), commonServerConfig, {
+const serverConfig = merge(setupCommonConfig(true, undefined, "ES2020"), commonServerConfig, {
     name: "server",
     mode: "development",
     plugins: [

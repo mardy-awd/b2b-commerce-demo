@@ -86,9 +86,11 @@ module insite.catalog {
                 this.onSessionUpdated(session);
             });
 
-            this.$scope.$on("$locationChangeSuccess", () => {
+            this.$scope.$on("$locationChangeSuccess", (event, newUrl: string) => {
                 if (this.product && this.product.styleTraits && !this.ignoreLocationChange) {
-                    this.initStyleSelection(this.product.styleTraits);
+                    if (newUrl.toLowerCase().indexOf(this.product.productDetailUrl.split("?")[0].toLowerCase()) !== -1) {
+                        this.initStyleSelection(this.product.styleTraits);
+                    }
                 }
                 this.ignoreLocationChange = false;
             });
@@ -174,8 +176,9 @@ module insite.catalog {
             const productWasAlreadyLoaded = !!this.product;
             this.product = productModel.product;
             this.product.qtyOrdered = this.product.minimumOrderQty || 1;
+            const isConfigured = this.product.isConfigured && this.product.configurationDto && this.product.configurationDto.sections;
 
-            if (!productWasAlreadyLoaded && this.product.isConfigured && this.product.configurationDto && this.product.configurationDto.sections) {
+            if (!productWasAlreadyLoaded && isConfigured) {
                 this.initConfigurationSelection(this.product.configurationDto.sections);
             }
 
@@ -193,11 +196,16 @@ module insite.catalog {
                 }
             }
 
-            if (productWasAlreadyLoaded && this.product.isConfigured && this.product.configurationDto && this.product.configurationDto.sections) {
+            if (productWasAlreadyLoaded && isConfigured) {
                 this.configurationCompleted = false;
                 this.configChanged();
             } else {
-                this.getRealTimePrices();
+                if (isConfigured && this.configurationCompleted){
+                    this.getConfigurablePrice(this.product)
+                } else {
+                    this.getRealTimePrices()
+                }
+
                 if (!this.settings.inventoryIncludedWithPricing) {
                     this.getRealTimeInventory();
                 }

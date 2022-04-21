@@ -1,3 +1,6 @@
+/* eslint-disable spire/fenced-imports */
+/* eslint-disable ordered-imports/ordered-imports */
+/* eslint-disable no-undef */
 import "jest-styled-components";
 import React from "react";
 import { mount } from "enzyme";
@@ -6,6 +9,8 @@ import TextField, { InputStyle } from "./TextField";
 import FormField from "@insite/mobius/FormField";
 import DisablerContext from "../utilities/DisablerContext";
 import { css } from "styled-components";
+import AnimatedTextField from "@insite/mobius/TextField/AnimatedTextField";
+import baseTheme from "@insite/mobius/globals/baseTheme";
 
 describe("TextField", () => {
     let props;
@@ -48,6 +53,7 @@ describe("TextField", () => {
 
     const withTheme = () => {
         theme = {
+            ...baseTheme,
             textField: {
                 defaultProps: {},
             },
@@ -153,6 +159,39 @@ describe("TextField", () => {
             withTheme();
 
             expect(wrapper().find(FormField).props().backgroundColor).toEqual("green");
+        });
+    });
+
+    describe("Animated Text Field", () => {
+        test("Render text field", () => {
+            props = {
+                isAnimated: true,
+            };
+            withTheme();
+
+            expect(wrapper().find(AnimatedTextField)).toHaveLength(1);
+        });
+    });
+
+    describe("AnimatedTextField is appropriately disabled", () => {
+        test("if DisablerContext is true", () => {
+            props = {
+                isAnimated: true,
+            };
+            disablerValue = { disable: true };
+            withTheme();
+            expect(wrapper().find("input").prop("disabled")).toBe(true);
+        });
+        test("if DisablerContext is false and disabled is true", () => {
+            props = { disabled: true, isAnimated: true };
+            disablerValue = { disable: false };
+            withTheme();
+            expect(wrapper().find("input").prop("disabled")).toBe(true);
+        });
+        test("if DisablerContext is false and disabled is false", () => {
+            props = { isAnimated: true };
+            disablerValue = { disable: false };
+            expect(wrapper().find("input").prop("disabled")).toBe(false);
         });
     });
 });

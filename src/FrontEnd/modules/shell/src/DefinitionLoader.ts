@@ -212,7 +212,8 @@ function cleanupPageDefinition(pageDefinition: LoadedPageDefinition) {
     if (
         pageDefinition.type !== "Header" &&
         pageDefinition.type !== "Footer" &&
-        pageDefinition.type !== "SharedContent"
+        pageDefinition.type !== "SharedContent" &&
+        pageDefinition.type !== "CompactHeader"
     ) {
         fieldDefinitions.push({
             name: "hideBreadcrumbs",

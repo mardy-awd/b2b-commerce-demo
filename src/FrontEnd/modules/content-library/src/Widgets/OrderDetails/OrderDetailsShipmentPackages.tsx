@@ -61,7 +61,7 @@ const OrderDetailsShipmentPackages: React.FC = () => {
                         </DataTableCell>
                         <DataTableCell {...styles.carrierCell}>{shipmentPackage.carrier}</DataTableCell>
                         <DataTableCell {...styles.shipViaCell}>{shipmentPackage.shipVia}</DataTableCell>
-                        <DataTableCell {...styles.trackingNumberCell}>
+                        <DataTableCell {...styles.trackingNumberCell} data-test-selector="orderDetails_TrackingNumber">
                             {parse(shipmentPackage.trackingUrl, parserOptions)}
                         </DataTableCell>
                     </DataTableRow>

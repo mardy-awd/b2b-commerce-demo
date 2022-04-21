@@ -97,7 +97,9 @@ class AutocompleteCategories extends React.Component<Props> {
         const styles = this.styles;
         return (
             <>
-                <Typography {...styles.headerText}>{translate("Categories")}</Typography>
+                <Typography {...styles.headerText} data-test-selector="autocompleteCategories_Header">
+                    {translate("Categories")}
+                </Typography>
                 {categories.map(category => (
                     <Fragment key={`${category.id}`}>
                         {category.subtitle && (

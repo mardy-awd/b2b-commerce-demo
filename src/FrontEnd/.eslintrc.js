@@ -159,7 +159,6 @@ module.exports = {
         "require-atomic-updates": "off", // Ideally would be "error", but would get triggered frequently by our front-end handler chain design.
         "require-await": "error", // This isn't enabled by any rule sets so we force it on here to reduce waste in the JS bundle.
         semi: "off", // handled by prettier
-        "spire/avoid-dynamic-translate": "error",
         "spire/export-chain": "error",
         "spire/export-styles": "error",
         "spire/fenced-imports": ["error", { failRelativeImports: true }],
@@ -171,10 +170,8 @@ module.exports = {
                 ignoreDir: [
                     "/modules/blueprints",
                     "/modules/blueprints-shell",
-                    "/modules/mobius",
                     "/modules/mobius-styleguide",
                     "/modules/server-framework",
-                    "/modules/shell",
                     "/modules/shell-public",
                     "/modules/spire-linter",
                     "/modules/test",

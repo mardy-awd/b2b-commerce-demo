@@ -61,7 +61,9 @@ const ProductDetailsPageTitle: React.FC<Props> = ({ product }) => {
                 </GridItem>
             )}
             <GridItem {...styles.titleGridItem}>
-                <Typography {...styles.titleText}>{product.productTitle}</Typography>
+                <Typography {...styles.titleText} data-test-selector="productDetails_productDescription">
+                    {product.productTitle}
+                </Typography>
             </GridItem>
         </GridContainer>
     );

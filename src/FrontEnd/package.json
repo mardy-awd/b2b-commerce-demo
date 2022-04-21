@@ -26,7 +26,7 @@
         "@comment start": "Optionally pass a blueprint name and port. IE npm run start example 8080",
         "setupTsconfigPaths": "node ./config/webpack/setupTsconfigPathsFile.js",
         "start:example": "node startDevelopment.js example 4000",
-        "start:prod": "CLS && SET ISC_API_URL=http://commerce.local.com && SET ISC_WORKER_COUNT=2 && SET ISC_FRONT_END_PORT=3000 && SET ACCEPT_RISKS_OF_USING_DEFAULT_SPIRE_CLIENT_SECRET=true && ECHO Starting... && node -r source-map-support/register startProduction.js",
+        "start:prod": "CLS && SET ISC_API_URL=http://localhost:3010 && SET ISC_WORKER_COUNT=2 && SET ISC_FRONT_END_PORT=3000 && SET ACCEPT_RISKS_OF_USING_DEFAULT_SPIRE_CLIENT_SECRET=true && ECHO Starting... && node -r source-map-support/register startProduction.js",
         "start:styleguide": "npm start --prefix ./modules/mobius-styleguide",
         "stylelint": "stylelint \"./modules/**/*.tsx\"",
         "test": "cd modules && jest",

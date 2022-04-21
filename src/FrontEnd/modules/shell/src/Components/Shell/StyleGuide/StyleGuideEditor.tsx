@@ -16,6 +16,7 @@ import CheckboxConfig from "@insite/shell/Components/Shell/StyleGuide/CheckboxCo
 import ColorPickerConfig from "@insite/shell/Components/Shell/StyleGuide/ColorPickerConfig";
 import ConfigMenu from "@insite/shell/Components/Shell/StyleGuide/ConfigMenu";
 import ElementTypographyConfig from "@insite/shell/Components/Shell/StyleGuide/ElementTypographyConfig";
+import HeaderConfig from "@insite/shell/Components/Shell/StyleGuide/HeaderConfig";
 import { createSetNewValueInDraft } from "@insite/shell/Components/Shell/StyleGuide/Helpers";
 import IconConfig from "@insite/shell/Components/Shell/StyleGuide/IconConfig";
 import IconSelector from "@insite/shell/Components/Shell/StyleGuide/IconSelector";
@@ -533,6 +534,9 @@ const ConnectableStyleGuideEditor: React.FunctionComponent<Props> = props => {
                         <SideBarAccordionSection title="File Upload">
                             {buttonConfig("Button Props", "file-upload-button", "fileUpload.defaultProps.buttonProps")}
                             {iconConfig("file-upload", "fileUpload.defaultProps.iconProps")}
+                        </SideBarAccordionSection>
+                        <SideBarAccordionSection title="Header">
+                            <HeaderConfig presetHelpers={presetHelpers} />
                         </SideBarAccordionSection>
                         <SideBarAccordionSection title="Spinner">
                             <ColorPickerConfig

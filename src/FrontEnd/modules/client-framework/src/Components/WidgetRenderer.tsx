@@ -305,7 +305,7 @@ class WidgetRenderer extends React.PureComponent<Props, State> {
                 </div>
             );
         }
-        if (isInShell && isCurrentPage) {
+        if ((isInShell && isCurrentPage) || !IS_PRODUCTION) {
             return <div data-widget={type}>{widgetElement}</div>;
         }
 

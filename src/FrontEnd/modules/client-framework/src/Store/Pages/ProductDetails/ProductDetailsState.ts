@@ -14,4 +14,7 @@ export default interface ProductDetailsState {
     configurationCompleted: boolean;
     isProductLoading?: boolean;
     subscription?: ProductSubscriptionDto;
+    metadataSetForId?: string;
+    structuredPageData?: string;
+    structuredPageDataSetForId?: string;
 }

@@ -1,6 +1,7 @@
 import { createTypedReducerWithImmer } from "@insite/client-framework/Common/CreateTypedReducer";
 import { emptyGuid } from "@insite/client-framework/Common/StringHelpers";
 import { Dictionary } from "@insite/client-framework/Common/Types";
+import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import {
     getPageState,
     getPageStateFromDictionaries,
@@ -38,6 +39,7 @@ const reducer = {
         draft: Draft<PageTreeState>,
         action: {
             pageStates: PageStateModel[];
+            theme?: Partial<BaseTheme>;
         },
     ) => {
         draft.treeNodesByParentId = {};
@@ -56,7 +58,7 @@ const reducer = {
 
         const insertNode = (treeNode: TreeNodeModel, toTheEnd = true) => {
             let targetNodes: TreeNodeModel[];
-            if (treeNode.displayName === "Header") {
+            if (["Sticky Header", "Flyout Navigation", "Header"].includes(treeNode.displayName)) {
                 if (!draft.headerTreeNodesByParentId[treeNode.parentId]) {
                     draft.headerTreeNodesByParentId[treeNode.parentId] = [];
                 }
@@ -110,6 +112,10 @@ const reducer = {
         const sharedFuturePublishOn = new Set();
 
         for (const pageState of action.pageStates) {
+            if (pageState.displayName === "Compact Header" && !action.theme?.header?.isCompactHeader) {
+                continue;
+            }
+
             if (pageState.displayName === "Home" && pageState.pageId) {
                 draft.expandedNodes[pageState.pageId] = true;
             }

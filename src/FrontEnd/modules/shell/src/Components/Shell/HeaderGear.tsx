@@ -130,9 +130,11 @@ const HeaderGear = ({
                         {mobileCmsModeActive ? "Switch to Desktop CMS" : "Switch to Mobile CMS"}
                     </Clickable>
                 )}
-                <Clickable data-test-selector="shellSettings_showImportExportModal" onClick={showImportExportModal}>
-                    Import/Export Content
-                </Clickable>
+                {permissions?.canCreatePage && (
+                    <Clickable data-test-selector="shellSettings_showImportExportModal" onClick={showImportExportModal}>
+                        Import/Export Content
+                    </Clickable>
+                )}
                 <Clickable data-test-selector="shellSettings_showRestoreContentModal" onClick={showRestoreContentModal}>
                     Restore Content
                 </Clickable>

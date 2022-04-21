@@ -2,6 +2,7 @@ import setPageMetadata from "@insite/client-framework/Common/Utilities/setPageMe
 import { trackPageChange } from "@insite/client-framework/Common/Utilities/tracking";
 import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
+import setBreadcrumbs from "@insite/client-framework/Store/Components/Breadcrumbs/Handlers/SetBreadcrumbs";
 import {
     getSelectedCategoryPath,
     getSettingsCollection,
@@ -14,7 +15,7 @@ import PageProps from "@insite/client-framework/Types/PageProps";
 import CurrentCategory from "@insite/content-library/Components/CurrentCategory";
 import Page from "@insite/mobius/Page";
 import * as React from "react";
-import { connect } from "react-redux";
+import { connect, ResolveThunks } from "react-redux";
 
 interface State {
     metadataSetForId?: string;
@@ -36,10 +37,15 @@ const mapStateToProps = (state: ApplicationState) => {
         location,
         websiteName: state.context.website.name,
         websiteSettings: getSettingsCollection(state).websiteSettings,
+        breadcrumbLinks: state.components.breadcrumbs.links,
     };
 };
 
-type Props = PageProps & ReturnType<typeof mapStateToProps>;
+const mapDispatchToProps = {
+    setBreadcrumbs,
+};
+
+type Props = PageProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
 
 class CategoryDetailsPage extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -50,6 +56,19 @@ class CategoryDetailsPage extends React.Component<Props, State> {
 
     UNSAFE_componentWillMount() {
         this.setMetadata();
+        if (this.props.catalogPageState.value) {
+            if (
+                this.props.breadcrumbLinks?.map(o => o.children?.toString()).join(",") !==
+                this.props.catalogPageState.value.breadCrumbs?.map(o => o.text).join(",")
+            ) {
+                this.props.setBreadcrumbs({
+                    links: this.props.catalogPageState.value!.breadCrumbs!.map(o => ({
+                        children: o.text,
+                        href: o.url,
+                    })),
+                });
+            }
+        }
     }
 
     componentDidUpdate() {
@@ -102,7 +121,7 @@ class CategoryDetailsPage extends React.Component<Props, State> {
 }
 
 const pageModule: PageModule = {
-    component: connect(mapStateToProps)(CategoryDetailsPage),
+    component: connect(mapStateToProps, mapDispatchToProps)(CategoryDetailsPage),
     definition: {
         hasEditableUrlSegment: false,
         hasEditableTitle: true,

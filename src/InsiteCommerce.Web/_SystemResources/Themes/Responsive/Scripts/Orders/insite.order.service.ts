@@ -13,6 +13,7 @@ module insite.order {
         toDate?: string;
         fromDate?: string;
         expand?: string;
+        vmiOrdersOnly?: boolean;
     }
 
     export interface IOrderService {

@@ -2,6 +2,7 @@ import sleep from "@insite/client-framework/Common/Sleep";
 import { Dictionary } from "@insite/client-framework/Common/Types";
 import { addTask } from "@insite/client-framework/ServerSideRendering";
 import { getPageByUrl } from "@insite/client-framework/Services/ContentService";
+import { getTheme } from "@insite/client-framework/Services/ContentService";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { loadPageLinks } from "@insite/client-framework/Store/Links/LinksActionCreators";
 import { PageModel } from "@insite/client-framework/Types/PageProps";
@@ -92,10 +93,13 @@ export const clearFilters = (): ShellThunkAction => dispatch => {
 export const loadTreeNodes = (): ShellThunkAction => (dispatch, getState) => {
     addTask(
         (async function () {
-            const pageStates = await getPageStates(getState().pageTree.appliedTreeFilters);
+            const state = getState();
+            const theme = state?.styleGuide?.theme ?? (await getTheme());
+            const pageStates = await getPageStates(state.pageTree.appliedTreeFilters);
             dispatch({
                 type: "PageTree/LoadPageStatesComplete",
                 pageStates,
+                theme,
             });
         })(),
     );

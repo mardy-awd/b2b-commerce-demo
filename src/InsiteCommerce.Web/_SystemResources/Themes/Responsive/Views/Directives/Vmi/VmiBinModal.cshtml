@@ -4,7 +4,7 @@
               vm.productNotFoundError = '[% siteMessage 'Product_NotFound' %]'">
         <h2 ng-bind="vm.vmiBin.id ? '[% translate 'Edit Product' EscapeSingleQuotes %]' : '[% translate 'Add Product' EscapeSingleQuotes %]'"></h2>
         <div class="pop-content">
-            <form name="vm.vmiBinForm" ng-submit="vm.vmiBin.id ? vm.updateVmiBin() : vm.addVmiBin()" novalidate>
+            <form name="vm.vmiBinForm" id="vmiBinForm" ng-submit="vm.vmiBin.id ? vm.updateVmiBin() : vm.addVmiBin()" novalidate>
                 <div class="row">
                     <div class="columns controls-block">
                         <div class="medium-12 large-6 columns">

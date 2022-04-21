@@ -308,6 +308,7 @@ class FileUpload extends React.Component<FileUploadProps & HasDisablerContext, F
                                                 readOnly
                                                 tabIndex={-1}
                                                 data-id="visualInput"
+                                                data-test-selector={`fileUpload_FileName_${this.state.fileName}`}
                                             />
                                             <FormFieldClickable onClick={this.removeFile}>
                                                 <FormFieldIcon

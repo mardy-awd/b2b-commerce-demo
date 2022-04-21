@@ -74,6 +74,8 @@ const recentOrdersParameter: GetOrdersApiParameter = {
     pageSize: 5,
     sort: "OrderDate DESC",
     customerSequence: "-1",
+    vmiOrdersOnly: true,
+    expand: ["vmidetails"],
 };
 
 const styles = vmiDashboardRecentNotesStyles;

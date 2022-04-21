@@ -115,9 +115,12 @@ export const watchForOtherTabSessionChange = () => {
         }
 
         Logger.info("Window state invalid due to session change, reloading.");
-        window.location.reload();
+        if (document.hidden) {
+            // reload only hidden tabs
+            window.location.reload();
 
-        stopWatchingForOtherTabSessionChange(); // Prevent repeated window reloads if it doesn't finish fast enough.
+            stopWatchingForOtherTabSessionChange(); // Prevent repeated window reloads if it doesn't finish fast enough.
+        }
     }, 1000);
 };
 

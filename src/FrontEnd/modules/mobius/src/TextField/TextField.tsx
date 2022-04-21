@@ -9,6 +9,7 @@ import FormField, {
 import { sizeVariantValues } from "@insite/mobius/FormField/formStyles";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import { IconPresentationProps } from "@insite/mobius/Icon";
+import AnimatedTextField from "@insite/mobius/TextField/AnimatedTextField";
 import { TypographyPresentationProps } from "@insite/mobius/Typography";
 import applyPropBuilder from "@insite/mobius/utilities/applyPropBuilder";
 import { HasDisablerContext, withDisabler } from "@insite/mobius/utilities/DisablerContext";
@@ -19,7 +20,7 @@ import omitMultiple from "@insite/mobius/utilities/omitMultiple";
 import uniqueId from "@insite/mobius/utilities/uniqueId";
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
 import * as React from "react";
-import styled, { css, ThemeConsumer } from "styled-components";
+import styled, { ThemeConsumer } from "styled-components";
 
 export interface TextFieldPresentationProps extends FormFieldPresentationProps<TextFieldComponentProps> {
     /** Props to be passed into the Clickable component that will optionally wrap the icon.
@@ -41,6 +42,8 @@ export interface TextFieldPresentationProps extends FormFieldPresentationProps<T
     backgroundColor?: string;
     /** The props for the textfield label */
     labelProps?: TypographyPresentationProps;
+    /** Boolean value for width animation */
+    isAnimated?: boolean;
 }
 
 type TextFieldComponentProps = MobiusStyledComponentPropsWithRef<
@@ -81,6 +84,7 @@ const omitKeys = [
     "labelProps",
     "dispatch",
     "labelId",
+    "isAnimated",
 ] as (keyof Omit<
     TextFieldProps,
     | "id"
@@ -100,6 +104,7 @@ const omitKeys = [
     | "min"
     | "max"
     | "css"
+    | "isAnimated"
 >)[];
 
 const validForNumber = ({ altKey, ctrlKey, key }: React.KeyboardEvent<HTMLInputElement>) => {
@@ -146,6 +151,7 @@ const TextField: React.FC<TextFieldProps & HasDisablerContext> = React.forwardRe
                     mergeCss,
                     min,
                     max,
+                    isAnimated,
                     ...otherProps
                 } = props;
 
@@ -199,7 +205,7 @@ const TextField: React.FC<TextFieldProps & HasDisablerContext> = React.forwardRe
                     )
                 ) : null;
 
-                const InputElement = (
+                const InputElement = !isAnimated ? (
                     <>
                         <InputStyle
                             {...{ disabled: isDisabled, placeholder, required }}
@@ -221,7 +227,26 @@ const TextField: React.FC<TextFieldProps & HasDisablerContext> = React.forwardRe
                         />
                         {formIcon}
                     </>
+                ) : (
+                    <AnimatedTextField
+                        {...{ disabled: isDisabled, placeholder, required }}
+                        {...inputLabelObj}
+                        {...omitMultiple(otherProps, omitKeys)}
+                        min={min}
+                        max={max}
+                        type={type || "text"}
+                        id={inputId}
+                        onKeyDown={internalOnKeyDownHandler}
+                        onChange={internalOnChangeHandler}
+                        aria-labelledby={labelId}
+                        aria-describedby={hasDescription ? descriptionId : undefined}
+                        aria-invalid={!!error}
+                        aria-required={!disabled && required}
+                        tabIndex={0}
+                        css={applyStyledProp("css", resolvedMergeCss)}
+                    />
                 );
+
                 return (
                     <FormField
                         {...props}

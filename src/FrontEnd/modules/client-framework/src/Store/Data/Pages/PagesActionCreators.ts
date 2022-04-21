@@ -358,24 +358,34 @@ export const loadSharedContent =
                     retrievePageResult = await getPageByUrl(`/Content/Page/${pageId}`, true);
                 } catch (ex) {
                     logger.error(ex);
+                    dispatch({
+                        type: "Data/Pages/SetSharedContentIsDeleted",
+                        sharedContentId: pageId,
+                    });
                     return;
                 }
 
                 const { page } = retrievePageResult;
-                if (page) {
+                if (!page || page.type === "NotFoundErrorPage") {
                     dispatch({
-                        type: "Data/Pages/CompleteLoadPage",
-                        page,
-                        ...getContextData(getState()),
+                        type: "Data/Pages/SetSharedContentIsDeleted",
+                        sharedContentId: pageId,
                     });
-                    dispatch({
-                        type: "Data/Pages/SetPageIsLoaded",
-                        pageType: page.type,
-                        page,
-                        path: pageId,
-                    });
-                    onSuccess?.();
+                    return;
                 }
+
+                dispatch({
+                    type: "Data/Pages/CompleteLoadPage",
+                    page,
+                    ...getContextData(getState()),
+                });
+                dispatch({
+                    type: "Data/Pages/SetPageIsLoaded",
+                    pageType: page.type,
+                    page,
+                    path: pageId,
+                });
+                onSuccess?.();
             })(),
         );
     };

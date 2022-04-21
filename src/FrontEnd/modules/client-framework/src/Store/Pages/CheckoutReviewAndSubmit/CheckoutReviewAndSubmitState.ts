@@ -7,7 +7,9 @@ export default interface CheckoutReviewAndSubmitState {
     isCheckingOutWithPayPay: boolean;
     payPalRedirectUri?: string;
     requestedDeliveryDate?: Date | null;
+    requestedDeliveryDateDisabled?: boolean;
     requestedPickupDate?: Date | null;
+    requestedPickUpDateDisabled?: boolean;
     placeOrderErrorMessage?: string;
     isPreloadingData: boolean;
     payPalCheckoutErrorMessage?: string;

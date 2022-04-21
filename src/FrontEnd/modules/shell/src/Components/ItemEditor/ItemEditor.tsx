@@ -57,6 +57,8 @@ const mapStateToProps = (state: ShellState) => {
         footerTreeNodesByParentId: state.pageTree.footerTreeNodesByParentId,
         mobileTreeNodesByParentId: state.pageTree.mobileTreeNodesByParentId,
         pageId: currentPage.id,
+        settings: state.shellContext.settings,
+        permissions: state.shellContext.permissions,
     };
 };
 
@@ -145,6 +147,8 @@ class ItemEditor extends React.Component<Props, State> {
             headerTreeNodesByParentId,
             footerTreeNodesByParentId,
             mobileTreeNodesByParentId,
+            settings,
+            permissions,
         } = this.props;
 
         if (!item || !definition) {
@@ -275,6 +279,7 @@ class ItemEditor extends React.Component<Props, State> {
                 "Header",
                 "Footer",
                 "Layout",
+                "CompactHeader",
                 "RobotsTxtPage",
                 "ProductListPage",
                 "ProductDetailsPage",
@@ -328,6 +333,8 @@ class ItemEditor extends React.Component<Props, State> {
                         updateField={this.updateField}
                         registerHasValidationErrors={this.registerHasValidationErrors}
                         updateHasValidationErrors={this.updateHasValidationErrors}
+                        advancedFeaturesEnabled={settings.settingsCollection.websiteSettings.advancedSpireCmsFeatures}
+                        advancedPermissions={permissions?.canUseAdvancedFeatures}
                     />
                 </SideBarForm>
             </>

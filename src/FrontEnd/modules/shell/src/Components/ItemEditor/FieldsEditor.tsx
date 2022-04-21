@@ -18,28 +18,48 @@ interface OwnProps {
     updateField: (fieldName: string, value: readonly HasFields[]) => void;
     updateHasValidationErrors: (hasValidationErrors: boolean) => void;
     registerHasValidationErrors: (validate: () => boolean) => void;
+    advancedFeaturesEnabled?: boolean;
+    advancedPermissions?: boolean;
 }
 
 interface State {
     validationErrors: Dictionary<string | null | undefined>;
+    currentTab?: string;
 }
 
 export default class FieldsEditor extends React.Component<OwnProps, State> {
+    fieldScrollRefs: Dictionary<React.RefObject<HTMLDivElement>> = {};
+
     constructor(props: OwnProps) {
         super(props);
 
         this.state = {
             validationErrors: {},
+            currentTab: "Basic",
         };
 
         props.updateHasValidationErrors(false);
         props.registerHasValidationErrors(() => {
             const validationErrors = validateItem(props.fieldDefinitions, this.props.item);
-            this.setState({
-                validationErrors,
-            });
             const hasValidationErrors = Object.keys(validationErrors).length !== 0;
+            const tabWithErrors = hasValidationErrors
+                ? props.fieldDefinitions.find(o => o.name === Object.keys(validationErrors)[0])?.tab?.displayName
+                : undefined;
+            this.setState(
+                {
+                    validationErrors,
+                    currentTab: tabWithErrors,
+                },
+                () => {
+                    if (hasValidationErrors) {
+                        setTimeout(() => {
+                            this.scrollToFirstFieldWithError();
+                        }, 0);
+                    }
+                },
+            );
             this.props.updateHasValidationErrors(hasValidationErrors);
+
             return hasValidationErrors;
         });
 
@@ -47,6 +67,10 @@ export default class FieldsEditor extends React.Component<OwnProps, State> {
             this.forceUpdate = this.forceUpdate.bind(this);
             setEditorTemplatesHotUpdate(this.forceUpdate);
         }
+
+        this.props.fieldDefinitions.forEach(o => {
+            this.fieldScrollRefs[o.name] = React.createRef();
+        });
     }
 
     updateField = (fieldName: string, value: readonly HasFields[]) => {
@@ -100,14 +124,28 @@ export default class FieldsEditor extends React.Component<OwnProps, State> {
         });
     };
 
-    render() {
-        const { fieldDefinitions, item } = this.props;
+    scrollToFirstFieldWithError = () => {
+        const fieldName = Object.keys(this.state.validationErrors)[0];
+        const firstErrorFieldScroll = this.fieldScrollRefs[fieldName].current;
+        if (firstErrorFieldScroll) {
+            const scrollContainer = firstErrorFieldScroll.closest("[data-scroll-container]");
+            if (scrollContainer) {
+                scrollContainer.scrollTop = firstErrorFieldScroll.offsetTop - 20;
+            }
+        }
+    };
 
+    render() {
+        const { fieldDefinitions, item, advancedFeaturesEnabled, advancedPermissions } = this.props;
+        const shouldDisplayAdvacedFeatures = !!advancedFeaturesEnabled && !!advancedPermissions;
         const fieldsByTab: Dictionary<typeof fieldDefinitions> = {};
         let tabs: TabDefinition[] = [];
 
         fieldDefinitions.forEach(fieldDefinition => {
             const tab = fieldDefinition.tab!;
+            if (fieldDefinition.isVisible && !fieldDefinition.isVisible(item, shouldDisplayAdvacedFeatures)) {
+                return;
+            }
             if (tabs.findIndex(o => o.displayName === tab.displayName) < 0) {
                 tabs.push(tab);
                 fieldsByTab[tab.displayName] = [];
@@ -120,7 +158,7 @@ export default class FieldsEditor extends React.Component<OwnProps, State> {
 
         const renderFields = (tab: TabDefinition) => {
             return fieldsByTab[tab.displayName].map(fieldDefinition => {
-                if (fieldDefinition.isVisible && !fieldDefinition.isVisible(item)) {
+                if (fieldDefinition.isVisible && !fieldDefinition.isVisible(item, shouldDisplayAdvacedFeatures)) {
                     if (this.state.validationErrors[fieldDefinition.name]) {
                         logger.warn(
                             "Field has validation error and hidden, use dependentFields to prevent such situations",
@@ -140,6 +178,7 @@ export default class FieldsEditor extends React.Component<OwnProps, State> {
                         key={fieldDefinition.name + fieldDefinition.sortOrder}
                         name={fieldDefinition.name}
                     >
+                        <div ref={this.fieldScrollRefs[fieldDefinition.name]}></div>
                         {getEditorTemplate(fieldDefinition, editorProps)}
                         <ErrorMessage data-test-selector={`controlFor_${fieldDefinition.name}_error`}>
                             {this.state.validationErrors[fieldDefinition.name]}
@@ -149,26 +188,36 @@ export default class FieldsEditor extends React.Component<OwnProps, State> {
             });
         };
 
+        const tabChangeHandler = (_event: any, tabKey: string | undefined) => {
+            this.setState({ currentTab: tabKey });
+        };
+
+        if (tabs.length === 0) {
+            return null;
+        }
+
+        if (tabs.length === 1) {
+            return <>{renderFields(tabs[0])}</>;
+        }
+
         return (
-            <>
-                {tabs.length === 0 ? null : tabs.length > 1 ? (
-                    <TabGroup cssOverrides={{ tabContent, tabGroup, wrapper }}>
-                        {tabs.map(tab => (
-                            <Tab
-                                key={tab.displayName}
-                                tabKey={tab.displayName}
-                                headline={tab.displayName}
-                                css={tabCss}
-                                data-test-selector={`editItem_${tab.dataTestSelector}`}
-                            >
-                                {renderFields(tab)}
-                            </Tab>
-                        ))}
-                    </TabGroup>
-                ) : (
-                    renderFields(tabs[0])
-                )}
-            </>
+            <TabGroup
+                cssOverrides={{ tabContent, tabGroup, wrapper }}
+                current={this.state.currentTab}
+                onTabChange={tabChangeHandler}
+            >
+                {tabs.map(tab => (
+                    <Tab
+                        key={tab.displayName}
+                        tabKey={tab.displayName}
+                        headline={tab.displayName}
+                        css={tabCss}
+                        data-test-selector={`editItem_${tab.dataTestSelector}`}
+                    >
+                        {renderFields(tab)}
+                    </Tab>
+                ))}
+            </TabGroup>
         );
     }
 }

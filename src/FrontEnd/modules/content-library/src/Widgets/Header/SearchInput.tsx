@@ -53,6 +53,7 @@ interface OwnProps {
     autocompletePositionFunction?: (element: React.RefObject<HTMLUListElement>) => PositionStyle;
     onBeforeGoToUrl?: () => void;
     extendedStyles?: SearchInputStyles;
+    isAnimated?: boolean;
 }
 
 const mapStateToProps = (state: ApplicationState) => {
@@ -118,7 +119,7 @@ export const searchInputStyles: SearchInputStyles = {
         },
     },
     popover: {
-        transitionDuration: "short",
+        transitionDuration: "regular",
         toggle: false,
     },
     popoverWrapper: {
@@ -272,8 +273,8 @@ class SearchInput extends React.Component<Props, State> {
         });
     }, 200);
 
-    handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.showAutocomplete = true;
+    handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, toggleAutoComplete = true) => {
+        this.showAutocomplete = toggleAutoComplete;
         const newQuery = event.target.value;
         this.setState({ query: newQuery });
         this.loadAutocomplete(newQuery);
@@ -304,6 +305,17 @@ class SearchInput extends React.Component<Props, State> {
                     ? sizeVariantValues[this.styles?.input?.sizeVariant || ("default" as FormFieldSizeVariant)].height
                     : rect.height);
             positionStyle.right = document.documentElement.clientWidth - rect.right;
+
+            if (this.props.isAnimated) {
+                // Adjust for compact header usage
+                positionStyle.top += 3;
+                if (this.props.theme.header.isBorder && this.props.theme.header.isBorderRight) {
+                    positionStyle.right -= Number(this.props.theme.header.borderThickness);
+                }
+                if (this.props.theme.header.isBorder && this.props.theme.header.isBorderTop) {
+                    positionStyle.top -= Number(this.props.theme.header.borderThickness);
+                }
+            }
         }
 
         return positionStyle;
@@ -459,10 +471,12 @@ class SearchInput extends React.Component<Props, State> {
     render() {
         const styles = this.styles;
         const searchId = `headerSearch-${this.props.id}`;
+
         const searchInput = (
             <TextField
                 {...styles.input}
                 ref={this.props.inputRef}
+                isAnimated={this.props.isAnimated}
                 iconClickableProps={{ onClick: this.doSearch }}
                 value={this.state.query}
                 onChange={this.handleInputChange}

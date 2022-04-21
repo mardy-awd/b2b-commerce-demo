@@ -47,12 +47,6 @@ const SliderFrame = styled.div<SliderFrameProps>`
     position: relative;
     display: inline-block;
     box-sizing: border-box;
-    &[aria-checked="true"]:not([aria-disabled]) {
-        background: ${({ _color, theme }) => resolveColor(_color, theme)};
-        border: ${({ _color, theme }) => resolveColor(_color, theme)} 1px solid;
-        color: ${({ _color, theme }) => getContrastColor(_color, theme)};
-        fill: ${({ _color, theme }) => getContrastColor(_color, theme)};
-    }
     &[aria-checked="false"]:not([aria-disabled]) {
         background: ${getColor("common.background")};
         border: ${getColor("text.accent")} solid 1px;
@@ -68,6 +62,17 @@ const SliderFrame = styled.div<SliderFrameProps>`
         color: ${getColor("common.background")};
         fill: ${getColor("common.background")};
     }
+    &[aria-checked="true"] {
+        background: ${({ _color, theme }) => resolveColor(_color, theme)};
+        border: ${({ _color, theme }) => resolveColor(_color, theme)} 1px solid;
+        color: ${({ _color, theme }) => getContrastColor(_color, theme)};
+        fill: ${({ _color, theme }) => getContrastColor(_color, theme)};
+    }
+    &[aria-checked="true"]:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px ${({ _color, theme }) => resolveColor(_color, theme)};
+    }
+
     & + label {
         margin-left: 10px;
     }

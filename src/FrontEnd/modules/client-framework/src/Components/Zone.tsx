@@ -18,6 +18,7 @@ export interface OwnProps {
     fixed?: boolean;
     requireRows?: boolean;
     fullHeight?: boolean;
+    normalWidth?: boolean;
     pageId?: string;
 }
 
@@ -158,14 +159,18 @@ class Zone extends React.Component<Props> {
             );
         }
 
-        return <Wrapper fullHeight={this.props.fullHeight}>{renderedWidgets}</Wrapper>;
+        return (
+            <Wrapper normalWidth={this.props.normalWidth} fullHeight={this.props.fullHeight}>
+                {renderedWidgets}
+            </Wrapper>
+        );
     }
 }
 
 export default withIsInShell(connect(mapStateToProps)(Zone));
 
-const Wrapper = styled.div<{ fullHeight?: boolean }>`
-    width: 100%;
+const Wrapper = styled.div<{ fullHeight?: boolean; normalWidth?: boolean }>`
+    width: ${props => (props.normalWidth ? "auto" : "100%")};
     ${props => (props.fullHeight ? "height: 100%;" : "")}
 `;
 

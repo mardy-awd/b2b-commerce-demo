@@ -1,0 +1,22 @@
+{
+    "nodeId": "15ef869f-91d5-489b-b40f-0e745f6eb618",
+    "name": "Flyout Navigation",
+    "type": "FlyoutNavigation",
+    "parentId": "8c4af81c-6dea-4ce2-8828-5111ccab0c3d",
+    "sortOrder": 0,
+    "websiteId": "c2c53320-98dc-4eca-8022-9efc00dea0dc",
+    "variantName": null,
+    "layoutPageId": null,
+    "templateHash": "43b34cbea82b01f199d667af68d8e488218f44f8ea290f672ad451839726ce7e",
+    "id": "8a35922b-655e-4929-abc6-ea19e320d377",
+    "generalFields": {
+        "horizontalRule": "",
+        "tags": [],
+        "hideBreadcrumbs": false,
+        "variantName": "",
+        "layoutPage": ""
+    },
+    "translatableFields": {},
+    "contextualFields": {},
+    "widgets": []
+}

@@ -46,7 +46,7 @@ const translate = (text: string, ...replacementValues: readonly string[]): strin
     }
 
     const translation = resolver(text) ?? text;
-    return replacer(translation.split("_")[0], replacementValues);
+    return replacer(translation, replacementValues);
 };
 
 const replacer = (text: string, replacementValues: readonly string[]) => {

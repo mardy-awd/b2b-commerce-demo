@@ -6,6 +6,8 @@ import { ReactNode } from "react";
 interface PageLayoutProps {
     showHeader: boolean;
     header: ReactNode;
+    showCompactHeader: boolean;
+    compactHeader: ReactNode;
     showBreadcrumbs: boolean;
     pageContent: ReactNode;
     showFooter: boolean;
@@ -13,10 +15,20 @@ interface PageLayoutProps {
 }
 
 // This doesn't currently support HMR
-const PageLayout = ({ showHeader, header, showBreadcrumbs, pageContent, showFooter, footer }: PageLayoutProps) => {
+const PageLayout = ({
+    showHeader,
+    header,
+    showBreadcrumbs,
+    pageContent,
+    showFooter,
+    footer,
+    showCompactHeader,
+    compactHeader,
+}: PageLayoutProps) => {
     return (
         <>
             {showHeader && header}
+            {showCompactHeader && compactHeader}
             {showBreadcrumbs && (
                 <Page as="div">
                     <PageBreadcrumbs />

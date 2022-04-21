@@ -1,4 +1,5 @@
 import mergeToNew from "@insite/client-framework/Common/mergeToNew";
+import { NavigationModeMenuStyles } from "@insite/content-library/Components/NavigationModeMenu";
 import { BannerStyles } from "@insite/content-library/Widgets/Basic/Banner";
 import { ButtonStyles } from "@insite/content-library/Widgets/Basic/Button";
 import { ImageStyles } from "@insite/content-library/Widgets/Basic/Image";
@@ -10,6 +11,7 @@ import { RichContentStyles } from "@insite/content-library/Widgets/Basic/RichCon
 import { SlideshowStyles } from "@insite/content-library/Widgets/Basic/Slideshow";
 import { LinkListStyles as SocialLinkListStyles } from "@insite/content-library/Widgets/Basic/SocialLinks";
 import { SubscribeStyles } from "@insite/content-library/Widgets/Basic/Subscribe";
+import { CartLinkStyles } from "@insite/content-library/Widgets/Common/CartLink";
 import { CurrencyMenuStyles } from "@insite/content-library/Widgets/Common/CurrencyMenu";
 import { HeaderShipToAddressStyles } from "@insite/content-library/Widgets/Common/HeaderShipToAddress";
 import { HeaderSignInStyles } from "@insite/content-library/Widgets/Common/HeaderSignIn";
@@ -39,9 +41,11 @@ export interface Styles {
     headerShipToAddress?: HeaderShipToAddressStyles;
     currencyMenu?: CurrencyMenuStyles;
     languageMenu?: LanguageMenuStyles;
+    navigationModeMenu?: NavigationModeMenuStyles;
     link?: InjectableCss;
     richContent?: RichContentStyles;
     mainNavigation?: Partial<MainNavigationStyles>;
+    cartLink?: Partial<CartLinkStyles>;
 }
 
 type ComponentStyles =
@@ -62,9 +66,11 @@ type ComponentStyles =
     | HeaderShipToAddressStyles
     | CurrencyMenuStyles
     | LanguageMenuStyles
+    | NavigationModeMenuStyles
     | InjectableCss
     | RichContentStyles
-    | Partial<MainNavigationStyles>;
+    | Partial<MainNavigationStyles>
+    | Partial<CartLinkStyles>;
 
 interface StylesContextType {
     styles?: Styles;

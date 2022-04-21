@@ -480,6 +480,7 @@ const LocationSearchForm: React.FC<Props> = ({
                                                 generateLocationSelectClickHandler(event, location)
                                             }
                                             data-test-selector="findLocationModal_locationSelect"
+                                            data-markerNumber={index + 1}
                                         >
                                             {location.name}
                                         </Link>

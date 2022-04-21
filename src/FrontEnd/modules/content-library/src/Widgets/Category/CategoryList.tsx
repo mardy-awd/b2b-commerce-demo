@@ -12,7 +12,7 @@ import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
-import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
+import GridItem, { GridItemProps, GridWidths } from "@insite/mobius/GridItem";
 import LazyImage, { LazyImageProps } from "@insite/mobius/LazyImage";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
@@ -137,24 +137,29 @@ class CategoryList extends React.Component<Props> {
     }
 
     recalculateWidth = () => {
-        if (this.container.current && this.categoryItemStyles) {
-            const theme = this.props.theme;
-            const width = this.container.current.clientWidth;
-            const prevWidth = this.categoryItemStyles.width;
-            if (width < theme.breakpoints.values[1]) {
-                this.categoryItemStyles.width = 12;
-            } else if (width < theme.breakpoints.values[2]) {
-                this.categoryItemStyles.width = 6;
-            } else if (width < theme.breakpoints.values[3]) {
-                this.categoryItemStyles.width = 4;
-            } else {
-                this.categoryItemStyles.width = 2;
-            }
-
-            if (prevWidth !== this.categoryItemStyles.width) {
-                this.forceUpdate();
-            }
+        if (!this.container.current) {
+            return;
         }
+
+        const { breakpoints } = this.props.theme;
+        const { clientWidth } = this.container.current;
+        let width: GridWidths;
+        if (clientWidth < breakpoints.values[1]) {
+            width = 12;
+        } else if (clientWidth < breakpoints.values[2]) {
+            width = 6;
+        } else if (clientWidth < breakpoints.values[3]) {
+            width = 4;
+        } else {
+            width = 2;
+        }
+
+        if (width === this.categoryItemStyles.width) {
+            return;
+        }
+
+        this.categoryItemStyles.width = width;
+        this.forceUpdate();
     };
 
     componentDidMount() {
@@ -164,6 +169,12 @@ class CategoryList extends React.Component<Props> {
 
     componentWillUnmount() {
         window.removeEventListener("resize", this.recalculateWidth);
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        if (!prevProps.categoriesDataView.value && this.props.categoriesDataView.value) {
+            this.recalculateWidth();
+        }
     }
 
     render() {

@@ -101,6 +101,7 @@ export const useGetLinks = <T>(list: T[], linkSelector: (item: T) => LinkFieldVa
 };
 
 export const useGetLink = (linkField: LinkFieldValue) => {
+    linkField = linkField || { type: "Page", value: "" };
     return useGetLinks([linkField], o => o)[0];
 };
 

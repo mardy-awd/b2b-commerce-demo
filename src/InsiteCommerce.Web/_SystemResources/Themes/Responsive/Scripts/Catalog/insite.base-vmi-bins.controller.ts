@@ -14,16 +14,19 @@ module insite.catalog {
             sort: this.defaultSort
         };
         vmiBins: VmiBinModel[];
+        vmiLocations: VmiLocationModel[];
+        selectedLocation: VmiLocationModel;
         allSelected: boolean;
         isSelected: {};
         Papa: any;
         exportHeaders: string[];
         exportPage: string;
 
-        static $inject = ["vmiBinService", "coreService", "paginationService", "queryString", "spinnerService", "$filter"];
+        static $inject = ["vmiBinService", "vmiLocationsService", "coreService", "paginationService", "queryString", "spinnerService", "$filter"];
 
         constructor(
             protected vmiBinService: vmiBin.IVmiBinService,
+            protected vmiLocationsService: catalog.IVmiLocationsService,
             protected coreService: core.ICoreService,
             protected paginationService: core.IPaginationService,
             protected queryString: common.IQueryStringService,
@@ -45,6 +48,7 @@ module insite.catalog {
             this.pagination = this.paginationService.getDefaultPagination(this.paginationStorageKey);
             this.restoreHistory();
             this.getVmiBins();
+            this.getVmiLocations();
         }
 
         search(): void {
@@ -89,6 +93,31 @@ module insite.catalog {
         protected getVmiBinsFailed(error: any): void {
             this.spinnerService.hide();
             this.failedToLoadVmiBins = true;
+        }
+
+        getVmiLocations(): void {
+            const filter: ISearchFilter = {
+                filter: "",
+                sort: "Name",
+                page: 1,
+                pageSize: 9999 // get all locations
+            }
+
+            this.vmiLocationsService.getVmiLocations(filter).then(
+                (locationCollection: VmiLocationCollectionModel) => { this.getLocationsCompleted(locationCollection); },
+                (error: any) => { this.getLocationsFailed(error); });
+        }
+
+        switchLocation(): void {
+            window.location.href = window.location.href.replace(this.locationId, String(this.selectedLocation.id));
+        }
+
+        protected getLocationsCompleted(locationCollection: VmiLocationCollectionModel): void {
+            this.vmiLocations = locationCollection.vmiLocations;
+            this.selectedLocation = this.vmiLocations?.find(location => location.id.toLowerCase() === this.locationId?.toLowerCase());
+        }
+
+        protected getLocationsFailed(error: any): void {
         }
 
         clear(): void {

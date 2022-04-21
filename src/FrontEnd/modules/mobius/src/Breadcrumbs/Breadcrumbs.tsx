@@ -57,7 +57,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = withTheme(({ links, mergeCss, ..
         if (!React.Children.count(children)) {
             return null;
         }
-        const key = typeof children === "string" ? children : index;
+        const key = typeof children === "string" ? `${children}_${index}` : index;
         if (index === links.length - 1) {
             return (
                 <Typography mergeCss={resolvedMergeCss} {...typographyProps} aria-current="page" key={key}>

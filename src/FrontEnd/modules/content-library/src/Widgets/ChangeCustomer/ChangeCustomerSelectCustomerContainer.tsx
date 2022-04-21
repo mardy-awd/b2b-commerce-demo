@@ -47,7 +47,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps) => {
     const { requireSelectCustomerOnSignIn, enableWarehousePickup } = getSettingsCollection(state).accountSettings;
     const { session } = state.context;
     return {
-        cart: getCurrentCartState(state),
+        cartState: getCurrentCartState(state),
         shipTosDataView: getShipTosDataView(state, props.shipTosParameter),
         billTosDataView: getBillTosDataView(state, props.billTosParameter),
         fulfillmentMethod: session.fulfillmentMethod,
@@ -133,12 +133,10 @@ const DescriptionWrapper = getStyledWrapper("div");
 
 const ChangeCustomerSelectCustomerContainer: FC<Props> = ({
     extendedStyles,
-    history,
-    session,
     customerSettings,
     enableWarehousePickup,
     pickUpWarehouse,
-    cart,
+    cartState,
     shipTosDataView,
     billTosParameter,
     setBillTosParameter,
@@ -150,14 +148,9 @@ const ChangeCustomerSelectCustomerContainer: FC<Props> = ({
     loadShipTos,
     changeCustomerContext,
     returnUrl,
-    dashboardUrl,
-    checkoutShippingUrl,
-    cartUrl,
     homeUrl,
-    checkoutReviewAndSubmitUrl,
     canSetDefaultCustomer,
     defaultCustomerChangedMessage,
-    displayChangeCustomerLink,
 }) => {
     const [styles] = useState(() => mergeToNew(changeCustomerSelectCustomerContainerStyles, extendedStyles));
     const [billTo, setBillTo] = useState<BillToModel | undefined>(undefined);
@@ -189,7 +182,7 @@ const ChangeCustomerSelectCustomerContainer: FC<Props> = ({
     };
 
     const handleContinueClicked = () => {
-        if (!billTo || !shipTo || !cart.value) {
+        if (!billTo || !shipTo || !cartState.value) {
             return;
         }
 
@@ -291,7 +284,7 @@ const ChangeCustomerSelectCustomerContainer: FC<Props> = ({
                 <Button
                     {...styles.continueButton}
                     onClick={handleContinueClicked}
-                    disabled={!billTo || !shipTo}
+                    disabled={!billTo || !shipTo || !cartState.value}
                     data-test-selector="changeCustomer_continue"
                 >
                     {translate("Continue")}

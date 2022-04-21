@@ -23,7 +23,9 @@ module insite.account {
                 customerSequence: "-1",
                 sort: "OrderDate DESC",
                 toDate: "",
-                fromDate: ""
+                fromDate: "",
+                vmiOrdersOnly: true,
+                expand: "vmidetails"
             };
 
             const pagination = {

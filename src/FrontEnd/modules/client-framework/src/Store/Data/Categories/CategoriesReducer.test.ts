@@ -28,6 +28,7 @@ describe("CategoriesReducer", () => {
             parentCategoryIdToChildrenIds: {},
             categoryDepthLoaded: {},
             errorStatusCodeById: {},
+            categoryIdsCalled: [],
         };
     });
 

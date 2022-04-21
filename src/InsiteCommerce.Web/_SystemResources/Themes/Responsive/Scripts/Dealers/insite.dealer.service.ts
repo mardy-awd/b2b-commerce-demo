@@ -88,14 +88,14 @@ module insite.dealers {
             }
 
             navigator.geolocation.getCurrentPosition(
-                (position: Position) => { this.getCurrentPositionCompleted(position, deferred as any); },
+                (position: any) => { this.getCurrentPositionCompleted(position, deferred as any); },
                 (error: any) => { this.getCurrentPositionFailed(error, deferred as any); },
                 { timeout: 5500 });
 
             return deferred.promise as any;
         }
 
-        protected getCurrentPositionCompleted(position: Position, getGeoLocationDeferred: ng.IDeferred<google.maps.LatLng>) {
+        protected getCurrentPositionCompleted(position: any, getGeoLocationDeferred: ng.IDeferred<google.maps.LatLng>) {
             getGeoLocationDeferred.resolve(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
         }
 

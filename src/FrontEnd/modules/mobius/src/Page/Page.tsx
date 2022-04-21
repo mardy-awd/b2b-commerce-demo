@@ -1,4 +1,5 @@
 import baseTheme, { BaseTheme, ComponentThemeProps } from "@insite/mobius/globals/baseTheme";
+import { get } from "@insite/mobius/utilities";
 import breakpointMediaQueries from "@insite/mobius/utilities/breakpointMediaQueries";
 import { StyledProp } from "@insite/mobius/utilities/InjectableCss";
 import injectCss from "@insite/mobius/utilities/injectCss";
@@ -23,10 +24,12 @@ export type PageProps = MobiusStyledComponentProps<
         fullWidth?: boolean[];
         /** This object, which partially matches the BaseTheme, modifies the theme for this page component and all its children */
         themeMod?: RecursivePartial<ComponentThemeProps>;
+        /** This is for the compact header */
+        hasCustomBackground?: boolean;
     }
 >;
 
-const PageStyle = styled.main<Pick<PageProps, "padding" | "fullWidth" | "background">>`
+const PageStyle = styled.main<Pick<PageProps, "padding" | "fullWidth" | "background" | "hasCustomBackground">>`
     display: block; /* needed for IE */
     margin: 0 auto;
     width: 100%;
@@ -46,7 +49,8 @@ const PageStyle = styled.main<Pick<PageProps, "padding" | "fullWidth" | "backgro
             "max",
         )}
 
-    background: ${({ background, theme }) => resolveColor(background, theme)};
+    background: ${({ background, theme, hasCustomBackground }) =>
+        hasCustomBackground ? get(theme, background) : resolveColor(background, theme)};
     ${({ padding, theme, fullWidth }) => {
         let paddingValue = padding;
         const { maxWidths } = theme.breakpoints || baseTheme.breakpoints;

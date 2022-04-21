@@ -180,6 +180,30 @@ const reducer = {
         draft.configurationCompleted = initialState.configurationCompleted;
         draft.lastStyledOption = initialState.lastStyledOption;
     },
+    "Pages/ProductDetails/SetStructuredPageData": (
+        draft: Draft<ProductDetailsState>,
+        action: {
+            structuredPageData: string;
+        },
+    ) => {
+        draft.structuredPageData = action.structuredPageData;
+    },
+    "Pages/ProductDetails/SetStructuredPageDataSetForId": (
+        draft: Draft<ProductDetailsState>,
+        action: {
+            productId: string;
+        },
+    ) => {
+        draft.structuredPageDataSetForId = action.productId;
+    },
+    "Pages/ProductDetails/SetMetadataSetForId": (
+        draft: Draft<ProductDetailsState>,
+        action: {
+            metadataSetForId: string;
+        },
+    ) => {
+        draft.metadataSetForId = action.metadataSetForId;
+    },
 };
 
 const initConfigurationSelection = (draft: Draft<ProductDetailsState>, configuration?: ConfigurationModel | null) => {

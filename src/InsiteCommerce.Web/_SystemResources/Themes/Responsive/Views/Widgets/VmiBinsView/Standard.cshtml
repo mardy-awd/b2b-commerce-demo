@@ -19,6 +19,16 @@
                 <button class="btn primary" ng-click="vm.openAddProductModal()">[% translate 'Add Product' %]</button>
             </div>
         </div>
+        <div class="vmi-location-switcher">
+            <div>
+                <label>[% translate 'Select VMI Location' %]</label>
+                <select id="vmiLocationList" name="vmiLocationList"
+                        class="vmi-location-select"
+                        ng-change="vm.switchLocation()"
+                        ng-model="vm.selectedLocation"
+                        ng-options="location.name for location in vm.vmiLocations" ng-disabled="vm.vmiLocations.length < 2"></select>
+            </div>
+        </div>
         <section class="accordion search-vmi-bins">
             <div class="cm">
                 <input type="checkbox" id="accord-1" class="accord-check" />

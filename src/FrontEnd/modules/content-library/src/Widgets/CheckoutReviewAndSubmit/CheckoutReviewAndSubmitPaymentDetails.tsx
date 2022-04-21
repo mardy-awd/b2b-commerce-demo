@@ -9,6 +9,7 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import loadPaymetricConfig from "@insite/client-framework/Store/Context/Handlers/LoadPaymetricConfig";
 import loadTokenExConfig from "@insite/client-framework/Store/Context/Handlers/LoadTokenExConfig";
+import signOut from "@insite/client-framework/Store/Context/Handlers/SignOut";
 import { getBillToState } from "@insite/client-framework/Store/Data/BillTos/BillTosSelectors";
 import loadBillTo from "@insite/client-framework/Store/Data/BillTos/Handlers/LoadBillTo";
 import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
@@ -19,8 +20,10 @@ import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/Link
 import checkoutWithPayPal from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/CheckoutWithPayPal";
 import getPaymetricResponsePacket from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/GetPaymetricResponsePacket";
 import placeOrder from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/PlaceOrder";
+import setCheckoutPaymentMethod from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/SetCheckoutPaymentMethod";
 import preloadOrderConfirmationData from "@insite/client-framework/Store/Pages/OrderConfirmation/Handlers/PreloadOrderConfirmationData";
 import translate from "@insite/client-framework/Translate";
+import { PaymentMethodDto } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import CreditCardBillingAddressEntry, {
     CreditCardBillingAddressEntryStyles,
@@ -43,7 +46,7 @@ import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import Select, { SelectPresentationProps } from "@insite/mobius/Select";
 import TextField, { TextFieldPresentationProps } from "@insite/mobius/TextField";
-import { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
+import ToasterContext, { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
 import { generateTokenExFrameStyleConfig } from "@insite/mobius/TokenExFrame";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext";
@@ -54,7 +57,14 @@ import { connect, ResolveThunks } from "react-redux";
 import { css, ThemeProps, withTheme } from "styled-components";
 
 const mapStateToProps = (state: ApplicationState) => {
-    const { cartId } = state.pages.checkoutReviewAndSubmit;
+    const {
+        cartId,
+        payPalRedirectUri,
+        payPalCheckoutErrorMessage,
+        placeOrderErrorMessage,
+        requestedPickUpDateDisabled,
+        requestedDeliveryDateDisabled,
+    } = state.pages.checkoutReviewAndSubmit;
     const cartState = cartId ? getCartState(state, cartId) : getCurrentCartState(state);
     const settingsCollection = getSettingsCollection(state);
     return {
@@ -69,13 +79,16 @@ const mapStateToProps = (state: ApplicationState) => {
         session: state.context.session,
         signInPageLink: getPageLinkByPageType(state, "SignInPage"),
         checkoutReviewAndSubmitPageLink: getPageLinkByPageType(state, "CheckoutReviewAndSubmitPage"),
-        payPalRedirectUri: state.pages.checkoutReviewAndSubmit.payPalRedirectUri,
-        payPalCheckoutErrorMessage: state.pages.checkoutReviewAndSubmit.payPalCheckoutErrorMessage,
+        payPalRedirectUri,
+        payPalCheckoutErrorMessage,
         location: getLocation(state),
         usePaymetricGateway: settingsCollection.websiteSettings.usePaymetricGateway,
         paymetricConfig: state.context.paymetricConfig,
         enableVat: settingsCollection.productSettings.enableVat,
         bypassCvvForSavedCards: settingsCollection.cartSettings.bypassCvvForSavedCards,
+        placeOrderErrorMessage,
+        requestedDeliveryDateDisabled,
+        requestedPickUpDateDisabled,
     };
 };
 
@@ -88,6 +101,8 @@ const mapDispatchToProps = {
     loadPaymetricConfig,
     getPaymetricResponsePacket,
     resetCurrentCartId,
+    setCheckoutPaymentMethod,
+    signOut,
 };
 
 type Props = ReturnType<typeof mapStateToProps> &
@@ -330,6 +345,12 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     resetCurrentCartId,
     enableVat,
     bypassCvvForSavedCards,
+    setCheckoutPaymentMethod,
+    signInPageLink,
+    placeOrderErrorMessage,
+    signOut,
+    requestedDeliveryDateDisabled,
+    requestedPickUpDateDisabled,
 }: Props) => {
     const [paymentMethod, setPaymentMethod] = useState("");
     const [poNumber, setPONumber] = useState("");
@@ -735,12 +756,29 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         };
     }, [paymetricConfig, paymetricFrameRef]);
 
+    const toasterContext = React.useContext(ToasterContext);
+    useEffect(() => {
+        if (placeOrderErrorMessage === siteMessage("CreditCardInfo_MaximumCreditCardAttempts")) {
+            toasterContext.addToast({
+                body: placeOrderErrorMessage,
+                messageType: "danger",
+            });
+
+            setTimeout(() => {
+                signOut();
+                signInPageLink && history.push(signInPageLink.url);
+            }, 3000);
+        }
+    }, [placeOrderErrorMessage]);
+
     const handlePaymentMethodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         if (event.currentTarget.value !== "PayPal") {
             setIsPayPal(false);
         }
         setPaymentMethod(event.currentTarget.value);
         validatePaymentMethod(event.currentTarget.value);
+
+        setCheckoutPaymentMethod({ paymentMethod: paymentMethods?.find(method => method.name === event.target.value) });
     };
     const handlePONumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPONumber(event.currentTarget.value);
@@ -1061,7 +1099,9 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             postalCodeValid &&
             accountHolderNameValid &&
             accountNumberValid &&
-            routingNumberValid
+            routingNumberValid &&
+            !requestedDeliveryDateDisabled &&
+            !requestedPickUpDateDisabled
         );
     };
 

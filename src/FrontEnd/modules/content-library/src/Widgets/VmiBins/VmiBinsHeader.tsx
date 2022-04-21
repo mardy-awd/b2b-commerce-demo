@@ -1,3 +1,9 @@
+import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
+import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
+import ApplicationState from "@insite/client-framework/Store/ApplicationState";
+import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { getVmiLocationsDataView } from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsSelectors";
+import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import toggleFiltersOpen from "@insite/client-framework/Store/Pages/VmiBins/Handlers/ToggleFiltersOpen";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
@@ -12,19 +18,44 @@ import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Hidden from "@insite/mobius/Hidden";
 import Icon, { IconProps } from "@insite/mobius/Icon";
 import Filter from "@insite/mobius/Icons/Filter";
+import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
 import OverflowMenu, { OverflowMenuPresentationProps } from "@insite/mobius/OverflowMenu";
+import Select, { SelectPresentationProps } from "@insite/mobius/Select";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
+import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext";
+import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React, { Component } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
+
+interface OwnProps extends WidgetProps {}
+
+const mapStateToProps = (state: ApplicationState, props: OwnProps) => {
+    const getVmiLocationsParameter = {
+        ...state.pages.vmiLocations.getVmiLocationsParameter,
+        page: 1,
+        pageSize: 9999, // need to get all locations
+    };
+
+    const location = getLocation(state);
+    const parsedQuery = parseQueryString<{ locationid?: string }>(location.search?.toLowerCase());
+
+    return {
+        vmiLocationsDataView: getVmiLocationsDataView(state, getVmiLocationsParameter),
+        vmiBinsPageUrl: getPageLinkByPageType(state, "VmiBinsPage")?.url,
+        parsedQuery,
+    };
+};
 
 const mapDispatchToProps = {
     toggleFiltersOpen,
 };
 
-type Props = WidgetProps & ResolveThunks<typeof mapDispatchToProps>;
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasHistory;
 
 export interface VmiLocationsHeaderStyles {
+    centeringWrapper?: InjectableCss;
+    spinner?: LoadingSpinnerProps;
     gridContainer?: GridContainerProps;
     titleGridItem?: GridItemProps;
     buttonsGridItem?: GridItemProps;
@@ -32,11 +63,25 @@ export interface VmiLocationsHeaderStyles {
     overflowMenu?: OverflowMenuPresentationProps;
     addProductButton?: ButtonPresentationProps;
     container?: GridContainerProps;
+    locationSwitcherGridItem?: GridItemProps;
+    locationSelect?: SelectPresentationProps;
     toggleFilterGridItem?: GridItemProps;
     toggleFilterIcon?: IconProps;
 }
 
 export const headerStyles: VmiLocationsHeaderStyles = {
+    centeringWrapper: {
+        css: css`
+            height: 100px;
+            display: flex;
+            align-items: center;
+        `,
+    },
+    spinner: {
+        css: css`
+            margin: auto;
+        `,
+    },
     titleGridItem: {
         width: [11, 9, 7, 5, 6],
     },
@@ -56,9 +101,24 @@ export const headerStyles: VmiLocationsHeaderStyles = {
             padding-bottom: 10px;
         `,
     },
-    toggleFilterGridItem: {
-        width: 12,
+    locationSwitcherGridItem: {
+        width: [12, 12, 11, 11, 11],
         style: { marginTop: "8px", justifyContent: "flex-end" },
+    },
+    locationSelect: {
+        cssOverrides: {
+            formInputWrapper: css`
+                width: 200px;
+                align-self: end;
+            `,
+            inputSelect: css`
+                text-transform: uppercase;
+            `,
+        },
+    },
+    toggleFilterGridItem: {
+        width: [12, 12, 1, 1, 1],
+        style: { marginTop: "8px", justifyContent: "flex-end", alignSelf: "center" },
     },
     toggleFilterIcon: { size: 24 },
 };
@@ -74,15 +134,35 @@ class VmiBinsHeader extends Component<Props, { isAddProductModalOpen: boolean }>
         this.setState({ isAddProductModalOpen: true });
     };
 
-    onSuccessAddProductModal = () => {
-        this.setState({ isAddProductModalOpen: false });
-    };
+    onSuccessAddProductModal = () => {};
 
     onCloseAddProductModal = () => {
         this.setState({ isAddProductModalOpen: false });
     };
 
+    setLocation = (locationId: string) => {
+        if (locationId && this.props.vmiBinsPageUrl) {
+            this.props.history.push(`${this.props.vmiBinsPageUrl}?locationId=${locationId}`);
+        }
+    };
+
     render() {
+        if (!this.props.vmiLocationsDataView.value || this.props.vmiLocationsDataView.isLoading) {
+            return (
+                <StyledWrapper {...styles.centeringWrapper}>
+                    <LoadingSpinner {...styles.spinner} />
+                </StyledWrapper>
+            );
+        }
+
+        const vmiLocations = this.props.vmiLocationsDataView;
+        let currentLocation = null;
+        if (vmiLocations?.value && vmiLocations.value.length > 0) {
+            currentLocation = vmiLocations.value.find(
+                location => location.id?.toLowerCase() === this.props.parsedQuery?.locationid?.toLowerCase(),
+            );
+        }
+
         return (
             <>
                 <GridContainer {...styles.gridContainer}>
@@ -105,6 +185,23 @@ class VmiBinsHeader extends Component<Props, { isAddProductModalOpen: boolean }>
                     </GridItem>
                 </GridContainer>
                 <GridContainer {...styles.container}>
+                    {vmiLocations && vmiLocations.value && (
+                        <GridItem {...styles.locationSwitcherGridItem}>
+                            <Select
+                                {...styles.locationSelect}
+                                data-test-selector="locationSelector"
+                                onChange={event => this.setLocation(event.currentTarget.value)}
+                                value={currentLocation?.id ?? ""}
+                                hasLabel
+                            >
+                                {vmiLocations.value.map(c => (
+                                    <option value={c.id} key={c.id}>
+                                        {c.name}
+                                    </option>
+                                ))}
+                            </Select>
+                        </GridItem>
+                    )}
                     <GridItem {...styles.toggleFilterGridItem}>
                         <Clickable onClick={this.props.toggleFiltersOpen}>
                             <Icon src={Filter} {...styles.toggleFilterIcon} />
@@ -123,7 +220,7 @@ class VmiBinsHeader extends Component<Props, { isAddProductModalOpen: boolean }>
 }
 
 const widgetModule: WidgetModule = {
-    component: connect(null, mapDispatchToProps)(VmiBinsHeader),
+    component: connect(mapStateToProps, mapDispatchToProps)(withHistory(VmiBinsHeader)),
     definition: {
         group: "VMI Bins",
         allowedContexts: [BinsPageContext],

@@ -39,6 +39,7 @@ export const LookUpData: HandlerType = props => {
         openGraphUrl: page.fields.openGraphUrl,
         openGraphTitle: page.fields.openGraphTitle,
         openGraphImage: page.fields.openGraphImage,
+        structuredPageData: page.fields.structuredPageData,
         title: page.fields.title,
         currentPath: pathname,
         canonicalPath: pathname,

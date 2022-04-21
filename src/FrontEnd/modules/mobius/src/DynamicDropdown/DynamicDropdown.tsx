@@ -227,6 +227,7 @@ const listCssBuilder = (
     top: ${sizeVariantValues[sizeVariant].height - 1}px;
     width: calc(100% - 2px);
     margin-bottom: 15px;
+    overflow-y: auto;
     ${additionalCss as any}
 `;
 

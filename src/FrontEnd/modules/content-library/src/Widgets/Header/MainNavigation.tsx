@@ -1,3 +1,4 @@
+import { getCookie } from "@insite/client-framework/Common/Cookies";
 import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import { emptyGuid } from "@insite/client-framework/Common/StringHelpers";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
@@ -5,7 +6,7 @@ import { Dictionary } from "@insite/client-framework/Common/Types";
 import { setMainNavigation } from "@insite/client-framework/Components/ShellHoleConnect";
 import Logger from "@insite/client-framework/Logger";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
+import { getSession, getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import {
     getCategoriesDataView,
     getCategoryDepthLoaded,
@@ -23,6 +24,7 @@ import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { StylesContext } from "@insite/content-library/additionalStyles";
 import MainNavigationItem from "@insite/content-library/Components/MainNavigationItem";
 import NavigationDrawer from "@insite/content-library/Components/NavigationDrawer";
+import { NavigationModeCookieName } from "@insite/content-library/Components/NavigationModeMenu";
 import SearchInput, { SearchInputStyles } from "@insite/content-library/Widgets/Header/SearchInput";
 import Button, { ButtonIcon, ButtonPresentationProps } from "@insite/mobius/Button";
 import { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -36,9 +38,11 @@ import { MenuPresentationProps } from "@insite/mobius/Menu";
 import Modal, { ModalPresentationProps } from "@insite/mobius/Modal";
 import { PopoverPresentationProps, PositionStyle } from "@insite/mobius/Popover";
 import { TypographyPresentationProps } from "@insite/mobius/Typography";
+import { resolveColor } from "@insite/mobius/utilities";
 import getColor from "@insite/mobius/utilities/getColor";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
+import isEqual from "lodash/isEqual";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
@@ -53,6 +57,8 @@ interface OwnProps extends WidgetProps {
         [fields.links]: LinkModel[];
         [fields.showQuickOrder]: boolean;
     };
+    isCompactHeaderFlyoutMenu: boolean;
+    isCompactHeaderMainNavigation: boolean;
 }
 
 interface LinkModel {
@@ -81,7 +87,7 @@ export interface MappedLink {
 
 const mapStateToProps = (state: ApplicationState, ownProps: OwnProps) => {
     const {
-        fields: { links },
+        fields: { links = [] },
     } = ownProps;
     const mappedLinks = [];
     const categoryIdsToLoad: Dictionary<number> = {};
@@ -128,13 +134,29 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps) => {
         mappedLinks.push(mappedLink);
     }
 
+    const currentMode = getCookie(NavigationModeCookieName) || "Storefront";
+    const orderSettings = getSettingsCollection(state).orderSettings;
+    const session = getSession(state);
+    const isAuthenticated = session?.isAuthenticated && !session?.isGuest;
+
     return {
         links: mappedLinks,
         quickOrderLink: getPageLinkByPageType(state, "QuickOrderPage"),
         categoryIdsToLoad,
-        allowQuickOrder: getSettingsCollection(state).orderSettings.allowQuickOrder,
+        allowQuickOrder: orderSettings.allowQuickOrder,
         categoryErrorStatusCodeById: state.data.categories.errorStatusCodeById,
-        displayChangeCustomerLink: state.context?.session?.displayChangeCustomerLink,
+        categoryIdsCalled: state.data.categories.categoryIdsCalled,
+        displayChangeCustomerLink: session?.displayChangeCustomerLink,
+        displayVmiNavigation:
+            currentMode === "Vmi" &&
+            orderSettings.vmiEnabled &&
+            isAuthenticated &&
+            session.userRoles?.toLowerCase().indexOf("vmi_admin") !== -1,
+        vmiPageLinks: [
+            getPageLinkByPageType(state, "VmiDashboardPage"),
+            getPageLinkByPageType(state, "VmiLocationsPage"),
+            getPageLinkByPageType(state, "VmiUsersPage"),
+        ],
     };
 };
 
@@ -250,6 +272,7 @@ export interface MainNavigationStyles {
     megaMenuHeading?: LinkPresentationProps;
     megaMenuLink?: LinkPresentationProps;
     mobileWrapper?: InjectableCss;
+    compactFlyoutMenu?: InjectableCss;
     mobileMenuWrapper?: InjectableCss;
     mobileSearchButton?: ButtonPresentationProps;
     mobileSearchWrapper?: InjectableCss;
@@ -342,6 +365,21 @@ export const mainNavigationStyles: MainNavigationStyles = {
         css: css`
             display: flex;
             justify-content: space-between;
+        `,
+    },
+    compactFlyoutMenu: {
+        css: css`
+            & button {
+                background: transparent;
+                border: none;
+                &:hover {
+                    background: rgba(0, 0, 0, 0.3);
+                }
+
+                svg {
+                    color: ${props => resolveColor(props.theme.header.linkColor, props.theme)};
+                }
+            }
         `,
     },
     mobileSearchWrapper: {
@@ -460,15 +498,19 @@ export class MainNavigation extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Readonly<Props>): void {
-        this.loadCategoriesIfNeeded();
+        if (!isEqual(this.props.categoryIdsToLoad, prevProps.categoryIdsToLoad)) {
+            this.loadCategoriesIfNeeded(true);
+        }
     }
 
-    loadCategoriesIfNeeded() {
+    loadCategoriesIfNeeded(isComponentDidUpdate = false) {
         const { categoryIdsToLoad } = this.props;
         for (const categoryId of Object.keys(categoryIdsToLoad)) {
             if (!this.props.categoryErrorStatusCodeById?.[categoryId]) {
                 const maxDepth = categoryIdsToLoad[categoryId];
-                this.props.loadCategories(getParameter(categoryId, maxDepth));
+                if (!this.props.categoryIdsCalled?.includes(categoryId) || isComponentDidUpdate) {
+                    this.props.loadCategories(getParameter(categoryId, maxDepth));
+                }
             }
         }
     }
@@ -511,12 +553,67 @@ export class MainNavigation extends React.Component<Props, State> {
             fields: { showQuickOrder },
             id,
             allowQuickOrder,
+            isCompactHeaderFlyoutMenu,
+            isCompactHeaderMainNavigation,
+            vmiPageLinks,
+            displayVmiNavigation,
         } = this.props;
         const { selectedLinkIndex } = this.state;
 
         const showQuickOrderLink = showQuickOrder && allowQuickOrder;
         const mainNavContextStyles = this?.context?.styles?.mainNavigation ?? {};
         const styles = mergeToNew(mainNavigationStyles, mainNavContextStyles);
+
+        if (isCompactHeaderFlyoutMenu) {
+            return (
+                <StyledWrapper {...styles.compactFlyoutMenu}>
+                    <NavigationDrawer
+                        links={links}
+                        showQuickOrder={showQuickOrderLink}
+                        quickOrderLink={quickOrderLink}
+                        displayVmiNavigation={displayVmiNavigation}
+                        vmiPageLinks={vmiPageLinks}
+                    />
+                </StyledWrapper>
+            );
+        }
+
+        if (isCompactHeaderMainNavigation) {
+            return (
+                <StyledWrapper {...styles.container} ref={this.container}>
+                    {links.map((link, index) => {
+                        return (
+                            // eslint-disable-next-line react/no-array-index-key
+                            <StyledWrapper {...styles.itemWrapper} key={index}>
+                                <MainNavigationItem
+                                    index={index}
+                                    link={link}
+                                    styles={styles}
+                                    container={this.container}
+                                    isOpen={index === selectedLinkIndex}
+                                    displayChangeCustomerLink={this.props.displayChangeCustomerLink}
+                                />
+                            </StyledWrapper>
+                        );
+                    })}
+                    {showQuickOrderLink && quickOrderLink && (
+                        <StyledWrapper {...styles.itemWrapper}>
+                            <StyledWrapper {...styles.quickOrderItemWrapper}>
+                                <Link
+                                    typographyProps={styles.menuItemTypography}
+                                    color={styles.menuItemTypography?.color}
+                                    {...styles.menuItem}
+                                    id="quickOrder"
+                                    href={quickOrderLink.url}
+                                >
+                                    {quickOrderLink.title}
+                                </Link>
+                            </StyledWrapper>
+                        </StyledWrapper>
+                    )}
+                </StyledWrapper>
+            );
+        }
 
         return (
             <>
@@ -526,6 +623,8 @@ export class MainNavigation extends React.Component<Props, State> {
                             links={links}
                             showQuickOrder={showQuickOrderLink}
                             quickOrderLink={quickOrderLink}
+                            displayVmiNavigation={displayVmiNavigation}
+                            vmiPageLinks={vmiPageLinks}
                         />
                     </Hidden>
                     <Hidden above="sm" {...styles.mobileSearchWrapper}>
@@ -536,38 +635,61 @@ export class MainNavigation extends React.Component<Props, State> {
                     </Hidden>
                 </StyledWrapper>
                 <Hidden below="lg">
-                    <StyledWrapper {...styles.container} ref={this.container}>
-                        {links.map((link, index) => {
-                            return (
-                                // eslint-disable-next-line react/no-array-index-key
-                                <StyledWrapper {...styles.itemWrapper} key={index}>
-                                    <MainNavigationItem
-                                        index={index}
-                                        link={link}
-                                        styles={styles}
-                                        container={this.container}
-                                        isOpen={index === selectedLinkIndex}
-                                        displayChangeCustomerLink={this.props.displayChangeCustomerLink}
-                                    />
+                    {!displayVmiNavigation && (
+                        <StyledWrapper {...styles.container} ref={this.container}>
+                            {links.map((link, index) => {
+                                return (
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    <StyledWrapper {...styles.itemWrapper} key={index}>
+                                        <MainNavigationItem
+                                            index={index}
+                                            link={link}
+                                            styles={styles}
+                                            container={this.container}
+                                            isOpen={index === selectedLinkIndex}
+                                            displayChangeCustomerLink={this.props.displayChangeCustomerLink}
+                                        />
+                                    </StyledWrapper>
+                                );
+                            })}
+                            {showQuickOrderLink && quickOrderLink && (
+                                <StyledWrapper {...styles.itemWrapper}>
+                                    <StyledWrapper {...styles.quickOrderItemWrapper}>
+                                        <Link
+                                            typographyProps={styles.menuItemTypography}
+                                            color={styles.menuItemTypography?.color}
+                                            {...styles.menuItem}
+                                            id="quickOrder"
+                                            href={quickOrderLink.url}
+                                        >
+                                            {quickOrderLink.title}
+                                        </Link>
+                                    </StyledWrapper>
                                 </StyledWrapper>
-                            );
-                        })}
-                        {showQuickOrderLink && quickOrderLink && (
+                            )}
+                        </StyledWrapper>
+                    )}
+                    {displayVmiNavigation && (
+                        <StyledWrapper {...styles.container} ref={this.container}>
                             <StyledWrapper {...styles.itemWrapper}>
-                                <StyledWrapper {...styles.quickOrderItemWrapper}>
-                                    <Link
-                                        typographyProps={styles.menuItemTypography}
-                                        color={styles.menuItemTypography?.color}
-                                        {...styles.menuItem}
-                                        id="quickOrder"
-                                        href={quickOrderLink.url}
-                                    >
-                                        {quickOrderLink.title}
-                                    </Link>
-                                </StyledWrapper>
+                                {vmiPageLinks.map(
+                                    link =>
+                                        link && (
+                                            <Link
+                                                key={link.id}
+                                                typographyProps={styles.menuItemTypography}
+                                                color={styles.menuItemTypography?.color}
+                                                {...styles.menuItem}
+                                                id={link.id}
+                                                href={link.url}
+                                            >
+                                                {link.title}
+                                            </Link>
+                                        ),
+                                )}
                             </StyledWrapper>
-                        )}
-                    </StyledWrapper>
+                        </StyledWrapper>
+                    )}
                 </Hidden>
                 <Modal
                     {...styles.mobileSearchModal}
@@ -595,6 +717,7 @@ const mainNavigation: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(MainNavigation),
     definition: {
         group: "Header",
+        icon: "magnifying-glass",
         allowedContexts: ["Header"],
         fieldDefinitions: [
             {

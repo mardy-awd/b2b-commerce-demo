@@ -10,10 +10,10 @@ export interface HeaderSearchInputStyles {
 
 export const searchInputStyles: HeaderSearchInputStyles = {};
 
-export const HeaderSearchInput: React.FC<WidgetProps> = ({ id }) => {
+export const HeaderSearchInput: React.FC<WidgetProps & { isAnimated?: boolean }> = ({ id, isAnimated = false }) => {
     const styles = useMergeStyles("headerSearchInput", searchInputStyles);
 
-    return <SearchInput id={id} extendedStyles={styles.searchInputStyles} />;
+    return <SearchInput id={id} isAnimated={isAnimated} extendedStyles={styles.searchInputStyles} />;
 };
 
 const widgetModule: WidgetModule = {

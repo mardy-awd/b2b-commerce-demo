@@ -310,7 +310,11 @@ const OrderUpload: FC<Props> = ({
     return (
         <StyledWrapper {...styles.mainWrapper}>
             {uploadCancelled && (
-                <Typography as="p" {...styles.orderCancellationSuccessfulText}>
+                <Typography
+                    as="p"
+                    {...styles.orderCancellationSuccessfulText}
+                    data-test-selector="OrderUpload_CancellationSuccessful"
+                >
                     {siteMessage("OrderUpload_CancellationSuccessful")}
                 </Typography>
             )}
@@ -336,10 +340,16 @@ const OrderUpload: FC<Props> = ({
                 onChange={firstRowHeadingChangeHandler}
                 checked={firstRowHeading}
                 uid="includeHeading"
+                data-test-selector="orderUpload_includeHeading"
             >
                 {translate("Include First Row Column Heading")}
             </Checkbox>
-            <Button {...styles.uploadFileButton} disabled={!file || isUploading} onClick={uploadFileHandler}>
+            <Button
+                {...styles.uploadFileButton}
+                disabled={!file || isUploading}
+                onClick={uploadFileHandler}
+                data-test-selector="orderUpload_UploadFile"
+            >
                 {isUploading && (
                     <>
                         <LoadingSpinner {...styles.spinner} />
@@ -352,6 +362,7 @@ const OrderUpload: FC<Props> = ({
                 {...styles.cancelUploadButton}
                 onClick={cancelUploadingHandler}
                 disabled={!isUploading || !allowCancel || uploadCancelled}
+                data-test-selector="orderUpload_CancelUpload"
             >
                 {translate("Cancel Upload")}
             </Button>

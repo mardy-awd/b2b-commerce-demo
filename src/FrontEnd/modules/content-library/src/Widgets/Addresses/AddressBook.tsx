@@ -372,6 +372,7 @@ const AddressActions: React.FunctionComponent<AddressActionsProps> = (props: Add
                     {...componentStyles.actionUseAsShippingAddressButton}
                     onClick={useAsShippingAddressHandler}
                     disabled={addressBookContext.isSettingShipTo || shipTo.id === currentShipTo?.id}
+                    data-test-selector="useAs_Shipping_Address"
                 >
                     {translate("Use as Shipping Address")}
                 </Button>

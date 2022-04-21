@@ -93,7 +93,7 @@ const CurrentBillingAddress: React.FunctionComponent<Props> = (props: Props) => 
             </GridItem>
             <GridItem {...styles.editLinkGridItem}>
                 {countries && (
-                    <Link {...styles.editLink} onClick={editClickHandler}>
+                    <Link {...styles.editLink} onClick={editClickHandler} data-test-selector="billTo_Edit_Address">
                         {translate("Edit")}
                     </Link>
                 )}

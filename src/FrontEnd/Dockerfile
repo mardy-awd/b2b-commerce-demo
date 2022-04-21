@@ -40,7 +40,7 @@ ARG BUILD_BASE="build-base"
 
 ARG RUNTIME_BASE="runtime-base"
 
-ARG NODE_BASE_IMAGE="node:12-alpine"
+ARG NODE_BASE_IMAGE="node:14-alpine"
 
 FROM $NODE_BASE_IMAGE AS build-base
 

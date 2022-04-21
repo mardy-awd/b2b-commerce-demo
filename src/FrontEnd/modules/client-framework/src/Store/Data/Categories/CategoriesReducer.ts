@@ -17,9 +17,18 @@ const initialState: CategoriesState = {
     parentCategoryIdToChildrenIds: {},
     categoryDepthLoaded: {},
     errorStatusCodeById: {},
+    categoryIdsCalled: [],
 };
 
 const reducer = {
+    "Data/Categories/CalledLoadCategories": (
+        draft: Draft<CategoriesState>,
+        action: { parameter: GetCategoriesApiParameter },
+    ) => {
+        if (action.parameter?.startCategoryId) {
+            draft.categoryIdsCalled.push(action.parameter.startCategoryId);
+        }
+    },
     "Data/Categories/BeginLoadCategories": (
         draft: Draft<CategoriesState>,
         action: { parameter: GetCategoriesApiParameter },

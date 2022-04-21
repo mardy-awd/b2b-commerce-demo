@@ -4,11 +4,15 @@ import HeaderSearchInputWidgetModule, {
 } from "@insite/content-library/Widgets/Header/HeaderSearchInput";
 import { elementHasStyle, elementIsRendering, setupWidgetRendering } from "@insite/content-library/WidgetTests/helpers";
 import TextField from "@insite/mobius/TextField";
+import AnimatedTextField from "@insite/mobius/TextField/AnimatedTextField";
 import "jest-styled-components";
 import { css } from "styled-components";
 
 describe("HeaderSearchInput Widget", () => {
-    const { renderWidget, useStyles } = setupWidgetRendering(HeaderSearchInput, HeaderSearchInputWidgetModule);
+    const { renderWidget, useStyles, useProps } = setupWidgetRendering(
+        HeaderSearchInput,
+        HeaderSearchInputWidgetModule,
+    );
 
     const initialState = {
         context: {
@@ -48,5 +52,18 @@ describe("HeaderSearchInput Widget", () => {
         const styleRule = /background:\s?magenta;/;
 
         elementHasStyle(textField, styleRule);
+    });
+
+    test("isAnimated props is passed down and rendering AnimatedTextField", () => {
+        const props = useProps();
+        props.isAnimated = true;
+
+        const widgets = renderWidget();
+
+        const textField = widgets.find(TextField);
+        const animatedTextField = widgets.find(AnimatedTextField);
+
+        expect(textField.props().isAnimated).toBe(true);
+        expect(animatedTextField).toHaveLength(1);
     });
 });

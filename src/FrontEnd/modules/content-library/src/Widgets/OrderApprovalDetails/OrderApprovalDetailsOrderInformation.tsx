@@ -1,4 +1,5 @@
 import { HasCartContext, withCart } from "@insite/client-framework/Components/CartContext";
+import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
@@ -14,7 +15,14 @@ import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Typography, { TypographyPresentationProps, TypographyProps } from "@insite/mobius/Typography";
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
 import React, { FC } from "react";
+import { connect } from "react-redux";
 import { css } from "styled-components";
+
+const mapStateToProps = (state: ApplicationState) => {
+    return {
+        pickUpWarehouse: state.context.session.pickUpWarehouse,
+    };
+};
 
 export interface OrderApprovalDetailsOrderInformationStyles {
     orderInformationGridContainer?: GridContainerProps;
@@ -134,9 +142,9 @@ export const orderInformationStyles: OrderApprovalDetailsOrderInformationStyles 
 };
 
 const styles = orderInformationStyles;
-type Props = WidgetProps & HasCartContext;
+type Props = WidgetProps & HasCartContext & ReturnType<typeof mapStateToProps>;
 
-const OrderApprovalDetailsOrderInformation = ({ cart }: Props) => {
+const OrderApprovalDetailsOrderInformation = ({ cart, pickUpWarehouse }: Props) => {
     if (!cart || !cart.shipTo || !cart.billTo) {
         return null;
     }
@@ -176,6 +184,7 @@ const OrderApprovalDetailsOrderInformation = ({ cart }: Props) => {
                     cart={cart}
                     shipTo={cart.shipTo}
                     extendedStyles={styles.orderApprovalDetailsShippingInformation}
+                    pickUpWarehouse={pickUpWarehouse}
                 />
             </GridItem>
             <GridItem {...styles.billingInformationGridItem}>
@@ -196,7 +205,7 @@ const OrderApprovalDetailsOrderInformation = ({ cart }: Props) => {
 };
 
 const widgetModule: WidgetModule = {
-    component: withCart(OrderApprovalDetailsOrderInformation),
+    component: connect(mapStateToProps)(withCart(OrderApprovalDetailsOrderInformation)),
     definition: {
         displayName: "Order Approval Information",
         allowedContexts: ["OrderApprovalDetailsPage"],

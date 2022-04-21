@@ -80,6 +80,8 @@ interface OwnProps {
     links: MappedLink[];
     showQuickOrder: boolean;
     quickOrderLink: PageLinkModel | undefined;
+    displayVmiNavigation: boolean;
+    vmiPageLinks: (PageLinkModel | undefined)[];
 }
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasHistory;
@@ -290,6 +292,8 @@ const NavigationDrawer: FC<Props> = props => {
         isPunchOutSession,
         headerLinkListLinkFields,
         history,
+        displayVmiNavigation,
+        vmiPageLinks,
     } = props;
 
     const currentPageUrl = currentLocation.pathname;
@@ -354,41 +358,42 @@ const NavigationDrawer: FC<Props> = props => {
                         </PanelRow>
                     )}
                     {/* covers MainNavigation functionality */}
-                    {links.map((link, index) => {
-                        if (link.children && link.children.length > 0) {
+                    {!displayVmiNavigation &&
+                        links.map((link, index) => {
+                            if (link.children && link.children.length > 0) {
+                                return (
+                                    <PanelMenu
+                                        // eslint-disable-next-line react/no-array-index-key
+                                        key={index}
+                                        currentUrl={currentPageUrl}
+                                        closeOverlay={closeDrawer}
+                                        panelTrigger={
+                                            <PanelRow hasChildren {...styles.mainNavigationRow}>
+                                                <Typography {...styles.mainNavigationRowTypography}>
+                                                    {link.title}
+                                                </Typography>
+                                            </PanelRow>
+                                        }
+                                        menuItems={link.children}
+                                        maxDepth={link.maxDepth || 3}
+                                        layer={0}
+                                        {...styles.panelMenu}
+                                    />
+                                );
+                            }
                             return (
-                                <PanelMenu
+                                <PanelRow
                                     // eslint-disable-next-line react/no-array-index-key
                                     key={index}
-                                    currentUrl={currentPageUrl}
-                                    closeOverlay={closeDrawer}
-                                    panelTrigger={
-                                        <PanelRow hasChildren {...styles.mainNavigationRow}>
-                                            <Typography {...styles.mainNavigationRowTypography}>
-                                                {link.title}
-                                            </Typography>
-                                        </PanelRow>
-                                    }
-                                    menuItems={link.children}
-                                    maxDepth={link.maxDepth || 3}
-                                    layer={0}
-                                    {...styles.panelMenu}
-                                />
+                                    href={link.url}
+                                    target={link.openInNewWindow ? "_blank" : ""}
+                                    {...styles.mainNavigationRow}
+                                >
+                                    <Typography {...styles.mainNavigationRowTypography}>{link.title}</Typography>
+                                </PanelRow>
                             );
-                        }
-                        return (
-                            <PanelRow
-                                // eslint-disable-next-line react/no-array-index-key
-                                key={index}
-                                href={link.url}
-                                target={link.openInNewWindow ? "_blank" : ""}
-                                {...styles.mainNavigationRow}
-                            >
-                                <Typography {...styles.mainNavigationRowTypography}>{link.title}</Typography>
-                            </PanelRow>
-                        );
-                    })}
-                    {showQuickOrder && quickOrderLink && (
+                        })}
+                    {!displayVmiNavigation && showQuickOrder && quickOrderLink && (
                         <PanelRow
                             isCurrent={currentPageUrl === quickOrderLink.url}
                             onClick={closeDrawer}
@@ -398,12 +403,27 @@ const NavigationDrawer: FC<Props> = props => {
                             <Typography {...styles.mainNavigationRowTypography}>{quickOrderLink.title}</Typography>
                         </PanelRow>
                     )}
+                    {displayVmiNavigation &&
+                        vmiPageLinks.map(
+                            link =>
+                                link && (
+                                    <PanelRow
+                                        key={link.id}
+                                        isCurrent={currentPageUrl === link.url}
+                                        onClick={closeDrawer}
+                                        href={link.url}
+                                        {...styles.mainNavigationRow}
+                                    >
+                                        <Typography {...styles.mainNavigationRowTypography}>{link.title}</Typography>
+                                    </PanelRow>
+                                ),
+                        )}
                 </StyledSection>
                 {headerLinkListLinks.length > 0 && (
                     <StyledSection {...styles.drawerSectionWrapper}>
                         {headerLinkListLinks.map((link, index) => (
                             <PanelRow
-                                key={link.title}
+                                key={link.title + String(index)}
                                 {...(styles.logoLinks && omitSingle(styles.logoLinks, "typographyProps"))}
                                 isCurrent={currentPageUrl === link.url}
                                 onClick={closeDrawer}

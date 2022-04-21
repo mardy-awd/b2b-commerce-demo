@@ -23,9 +23,11 @@ type HandlerType = Handler<
 >;
 
 export const DispatchBeginLoadCart: HandlerType = props => {
-    if (getCurrentCartState(props.getState()).isLoading) {
+    const state = props.getState();
+    if (getCurrentCartState(state).isLoading) {
         return false;
     }
+
     props.dispatch({
         type: "Data/Carts/BeginLoadCart",
         id: API_URL_CURRENT_FRAGMENT,

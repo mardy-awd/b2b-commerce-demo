@@ -10,7 +10,7 @@
     }
 
     .search-vmi-bins {
-        margin-top: 20px;
+        margin-top: 5px;
     }
 
     .top-actions-block {
@@ -26,6 +26,16 @@
         top: -60px;
         margin-bottom: -60px;
         overflow: hidden;
+    }
+
+    .vmi-location-switcher {
+        margin-top: 15px;
+        max-width: 25%;
+    }
+
+    .vmi-location-select {
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .search-date {
@@ -238,6 +248,10 @@
         .btns .btn {
             width: 100%;
             margin-bottom: 1em;
+        }
+
+        .vmi-location-switcher {
+            min-width: 100%;
         }
     }
 }

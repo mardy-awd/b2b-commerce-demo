@@ -23,7 +23,6 @@
         broadcastCreateStr: string;
         broadcastEditStr: string;
         showImport: boolean;
-        closeOnAdd: boolean;
 
         static $inject = ["$scope", "$rootScope", "vmiBinService", "coreService", "$timeout", "vmiBinModalService", "searchService", "productService", "importVmiBinsModalService"];
 
@@ -65,7 +64,6 @@
                 this.broadcastCreateStr = data.broadcastCreateStr;
                 this.broadcastEditStr = data.broadcastEditStr;
                 this.showImport = data.showImport;
-                this.closeOnAdd = data.closeOnAdd;
                 this.clearMessages();
                 
                 if (this.vmiBin.id) {
@@ -75,11 +73,7 @@
                     this.minimumQty = this.vmiBin.minimumQty;
                     this.maximumQty = this.vmiBin.maximumQty;
                 } else {
-                    this.itemToAdd = null;
-                    this.addingSearchTerm = "";
-                    this.binNumber = "";
-                    this.minimumQty = 0;
-                    this.maximumQty = 0;
+                    this.clearForm();
                 }
 
                 this.coreService.displayModal(popup);
@@ -112,11 +106,8 @@
         }
 
         protected addVmiBinCompleted(vmiBin: VmiBinModel): void {
-            if (this.closeOnAdd) {
-                this.closeModal();
-            } else {
-                this.setSuccessMessage();
-            }
+            this.clearForm();
+            this.setSuccessMessage();
             this.$rootScope.$broadcast(this.broadcastCreateStr, vmiBin);
         }
 
@@ -124,6 +115,17 @@
             if (error && error.message) {
                 this.formErrorMessage = error.message;
             }
+        }
+
+        clearForm(): void {
+            this.clearMessages();
+            this.addingSearchTerm = "";
+            this.itemToAdd = null;
+            this.binNumber = "";
+            this.minimumQty = 0;
+            this.maximumQty = 0;
+
+            angular.element("#vmiBinForm").validate().resetForm();
         }
 
         updateVmiBin(): void {

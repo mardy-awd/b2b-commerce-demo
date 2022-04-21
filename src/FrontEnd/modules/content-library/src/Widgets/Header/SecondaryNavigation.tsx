@@ -5,6 +5,7 @@ import { getSettingsCollection } from "@insite/client-framework/Store/Context/Co
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import { useMergeStyles } from "@insite/content-library/additionalStyles";
+import NavigationModeMenu, { NavigationModeMenuStyles } from "@insite/content-library/Components/NavigationModeMenu";
 import Hidden from "@insite/mobius/Hidden";
 import getColor from "@insite/mobius/utilities/getColor";
 import getContrastColor from "@insite/mobius/utilities/getContrastColor";
@@ -44,6 +45,7 @@ const NavItem = styled.span<InjectableCss>`
 
 export interface SecondaryNavigationStyles {
     wrapper?: InjectableCss;
+    navigationModeMenu?: NavigationModeMenuStyles;
     languageLink?: InjectableCss;
     warehousePickupLink?: InjectableCss;
     signInLink?: InjectableCss;
@@ -77,6 +79,9 @@ const SecondaryNavigation: FC<Props> = ({ id, enableWarehousePickup }) => {
     return (
         <Hidden below="lg">
             <Navigation {...styles.wrapper}>
+                <NavItem>
+                    <NavigationModeMenu extendedStyles={styles.navigationModeMenu} />
+                </NavItem>
                 <NavItem>
                     <Zone zoneName="Currency" contentId={id} fixed />
                 </NavItem>

@@ -116,6 +116,8 @@ export function getComputedVariantProduct(
         canAddToWishlist: variantProduct.canAddToWishlist,
         cantBuy: variantProduct.cantBuy,
         allowZeroPricing: variantProduct.allowZeroPricing,
+        manufacturerItem: variantProduct.manufacturerItem,
+        detail: variantProduct.detail,
     });
 
     return {

@@ -41,7 +41,8 @@ export const parserOptions: HTMLReactParserOptions = {
             );
         }
         if (name === "img") {
-            return <LazyImage as="span" css={style as any} {...otherAttribs} />;
+            const { alt, ...remainingAttribs } = otherAttribs;
+            return <LazyImage as="span" altText={alt} css={style as any} {...remainingAttribs} />;
         }
         if (name === "a") {
             return (

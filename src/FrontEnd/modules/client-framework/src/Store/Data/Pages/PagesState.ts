@@ -17,6 +17,7 @@ export interface PagesState extends DataViewState<PageProps> {
     readonly bypassedAuthorization: SafeDictionary<true>;
     readonly requiresAuthorizationByPageId: SafeDictionary<boolean>;
     readonly alternateLanguageUrlsByPageId: SafeDictionary<SafeDictionary<string>>;
+    readonly deletedSharedContents: string[];
 }
 
 const frozenEmptyObject = Object.freeze({});

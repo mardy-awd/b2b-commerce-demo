@@ -1,4 +1,4 @@
-import { SafeDictionary } from "@insite/client-framework/Common/Types";
+import { Dictionary, SafeDictionary } from "@insite/client-framework/Common/Types";
 import { getUrl, setServerPageMetadata } from "@insite/client-framework/ServerSideRendering";
 import { WebsiteSettingsModel } from "@insite/client-framework/Types/ApiModels";
 
@@ -11,6 +11,7 @@ export interface PreparedMetadata {
     canonicalUrl?: string;
     alternateLanguageUrls?: SafeDictionary<string>;
     title: string;
+    structuredPageData?: string;
 }
 
 export interface Metadata {
@@ -24,6 +25,7 @@ export interface Metadata {
     alternateLanguageUrls?: SafeDictionary<string>;
     title?: string;
     websiteName: string;
+    structuredPageData?: string;
 }
 
 export default function setPageMetadata(
@@ -38,6 +40,7 @@ export default function setPageMetadata(
         alternateLanguageUrls,
         title,
         websiteName,
+        structuredPageData,
     }: Metadata,
     websiteSettings?: WebsiteSettingsModel,
 ) {
@@ -84,19 +87,63 @@ export default function setPageMetadata(
             canonicalUrl,
             alternateLanguageUrls: preparedAlternateLanguageUrls,
             title: actualTitle,
+            structuredPageData,
         });
     } else {
+        const addOrUpdate = (
+            tag: string,
+            attributeName: string,
+            attributeValue: string,
+            defaultAttributes: Dictionary<string>,
+            id?: string,
+            selector?: string,
+        ) => {
+            let element = id ? document.getElementById(id) : selector ? document.querySelector(selector) : null;
+            if (!element && attributeValue) {
+                element = document.createElement(tag);
+                for (const key in defaultAttributes) {
+                    element.setAttribute(key, defaultAttributes[key]);
+                }
+                document.head.appendChild(element);
+            }
+
+            element?.setAttribute(attributeName, attributeValue);
+        };
+
         document.title = actualTitle;
-        document.getElementById("ogTitle")?.setAttribute("content", ogTitle);
-        document.getElementById("ogImage")?.setAttribute("content", ogImage);
-        document.getElementById("ogUrl")?.setAttribute("content", ogUrl);
-        document.querySelector('meta[name="keywords"]')?.setAttribute("content", metaKeywords || "");
-        document.querySelector('meta[name="description"]')?.setAttribute("content", metaDescription || "");
-        document.querySelector('link[rel="canonical"]')?.setAttribute("href", canonicalUrl || "");
+        addOrUpdate("meta", "content", ogTitle, { id: "ogTitle", property: "og:title" }, "ogTitle", undefined);
+        addOrUpdate("meta", "content", ogImage, { id: "ogImage", property: "og:image" }, "ogImage", undefined);
+        addOrUpdate("meta", "content", ogUrl, { id: "ogUrl", property: "og:url" }, "ogUrl", undefined);
+        addOrUpdate("meta", "content", metaKeywords || "", { name: "keywords" }, undefined, 'meta[name="keywords"]');
+        addOrUpdate(
+            "meta",
+            "content",
+            metaDescription || "",
+            { name: "description" },
+            undefined,
+            'meta[name="description"]',
+        );
+        addOrUpdate("link", "href", canonicalUrl || "", { rel: "canonical" }, undefined, 'link[rel="canonical"]');
         preparedAlternateLanguageUrls &&
             Object.entries(preparedAlternateLanguageUrls)?.forEach(([key, value]) => {
-                document.querySelector(`link[rel="alternate"][hreflang="${key}"]`)?.setAttribute("href", value);
+                addOrUpdate(
+                    "link",
+                    "href",
+                    value,
+                    { key, rel: "alternate", hrefLang: key },
+                    undefined,
+                    `link[rel="alternate"][hreflang="${key}"]`,
+                );
             });
+        let jsonLdScript = document.querySelector('script[type="application/ld+json"]');
+        if (jsonLdScript) {
+            jsonLdScript.innerHTML = structuredPageData || "";
+        } else if (structuredPageData) {
+            jsonLdScript = document.createElement("script");
+            jsonLdScript.setAttribute("type", "application/ld+json");
+            jsonLdScript.innerHTML = structuredPageData;
+            document.head.appendChild(jsonLdScript);
+        }
     }
 }
 

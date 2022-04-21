@@ -7,7 +7,7 @@ const defaultConfigFormFieldStyles: Partial<FormFieldProps> = {
     labelPosition: "left",
     labelProps: {
         transform: "initial",
-        weight: 300,
+        weight: 400,
         css: css`
             text-transform: initial;
             text-align: left;
@@ -35,7 +35,7 @@ const defaultConfigCheckboxStyles: Partial<CheckboxProps> & CheckboxPresentation
     labelPosition: "left",
     variant: "toggle",
     typographyProps: {
-        weight: 300,
+        weight: 400,
         size: "1rem",
         css: css`
             text-transform: initial;
@@ -75,6 +75,69 @@ export const configFormFieldStyles: Pick<FormFieldProps, "cssOverrides" | "label
             overflow: visible;
             white-space: nowrap;
         ` as any,
+    },
+};
+
+export const configHeaderFormFieldStyles: Pick<FormFieldProps, "cssOverrides" | "labelProps" | "labelPosition"> = {
+    ...defaultConfigFormFieldStyles,
+    labelPosition: undefined,
+    cssOverrides: {
+        ...defaultConfigFormFieldStyles?.cssOverrides,
+        inputSelect: css`
+            ${() => defaultConfigFormFieldStyles?.cssOverrides?.inputSelect}
+            border-radius: 3px;
+        `,
+        formInputWrapper: css`
+            ${() => defaultConfigFormFieldStyles?.cssOverrides?.formInputWrapper}
+            &&&& {
+                margin-top: 5px;
+                margin-bottom: 10px;
+            }
+        `,
+        formField: css<FormFieldProps>`
+            ${() => defaultConfigFormFieldStyles?.cssOverrides?.formField}
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin: 0;
+            label {
+                > span {
+                    cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+                }
+            }
+        `,
+    },
+    labelProps: {
+        ...defaultConfigFormFieldStyles?.labelProps,
+        css: css`
+            ${() => defaultConfigFormFieldStyles?.labelProps?.css}
+            width: 100%;
+            overflow: visible;
+            white-space: nowrap;
+        ` as any,
+    },
+};
+
+export const configHeaderFormFieldStylesExtraMargin: Pick<
+    FormFieldProps,
+    "cssOverrides" | "labelProps" | "labelPosition"
+> = {
+    ...configHeaderFormFieldStyles,
+    cssOverrides: {
+        ...configHeaderFormFieldStyles.cssOverrides,
+        formField: css<FormFieldProps>`
+            ${() => defaultConfigFormFieldStyles?.cssOverrides?.formField}
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin: 0;
+            margin-top: 10px;
+            label {
+                > span {
+                    cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+                }
+            }
+        `,
     },
 };
 

@@ -283,7 +283,7 @@ const PageTreePage = styled.li`
             position: absolute;
             top: 0;
             left: -16px;
-            z-index: 100;
+            z-index: 1;
         }
         li:last-child::before {
             height: 20px;

@@ -61,7 +61,13 @@ class OrderHistorySearchFieldStatus extends React.Component<Props> {
 
         return (
             <SearchFieldWrapper extendedStyles={styles.wrapper}>
-                <Select label={translate("Status")} {...styles.select} value={value} onChange={this.handleChange}>
+                <Select
+                    label={translate("Status")}
+                    {...styles.select}
+                    value={value}
+                    onChange={this.handleChange}
+                    data-test-selector="orderHistory_filterStatus"
+                >
                     <option value="">{translate("Select")}</option>
                     {Array.from(uniqueOptions, ([name, values]) => ({ name, values })).map(option => (
                         <option key={option.values.join(",")} value={option.values.join(",")}>

@@ -4,7 +4,7 @@ import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Hidden, { HiddenProps } from "@insite/mobius/Hidden";
-import * as React from "react";
+import React from "react";
 import { css } from "styled-components";
 
 export interface QuickOrderPageContainerStyles {
@@ -47,7 +47,7 @@ export const quickOrderPageContainerStyles: QuickOrderPageContainerStyles = {
 export const viewStyles = quickOrderPageContainerStyles;
 const styles = quickOrderPageContainerStyles;
 
-const QuickOrderPageContainer: React.FC<WidgetProps> = props => {
+const QuickOrderPageContainer = (props: WidgetProps) => {
     return (
         <GridContainer {...styles.container}>
             <GridItem {...styles.firstGridItem}>

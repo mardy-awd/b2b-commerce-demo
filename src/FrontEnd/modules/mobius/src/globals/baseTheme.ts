@@ -172,6 +172,21 @@ export interface ComponentThemeProps {
     drawer: { defaultProps?: DrawerPresentationProps };
     dynamicDropdown: { defaultProps?: DynamicDropdownPresentationProps };
     fileUpload: { defaultProps?: FileUploadPresentationProps };
+    header: {
+        isCompactHeader: boolean;
+        triggerPoint: string | number;
+        backgroundColor: string;
+        linkColor: string;
+        dropShadowStyle: string;
+        isDropShadow: boolean;
+        borderThickness: string | number;
+        borderColor: string;
+        isBorder: boolean;
+        isBorderRight: boolean;
+        isBorderLeft: boolean;
+        isBorderTop: boolean;
+        isBorderBottom: boolean;
+    };
     icon: { defaultProps?: IconThemableProps };
     link: { defaultProps?: LinkPresentationProps };
     lists: {
@@ -438,6 +453,21 @@ const baseTheme: BaseTheme = {
     drawer: { defaultProps: DrawerPresentationPropsDefault },
     dynamicDropdown: { defaultProps: DynamicDropdownPresentationPropsDefault },
     fileUpload: { defaultProps: FileUploadPresentationPropsDefault },
+    header: {
+        isCompactHeader: false,
+        triggerPoint: 330,
+        backgroundColor: "secondary.main",
+        linkColor: "#fff",
+        isDropShadow: false,
+        dropShadowStyle: "medium",
+        isBorderTop: false,
+        isBorderBottom: false,
+        isBorderRight: false,
+        isBorderLeft: false,
+        borderThickness: 0,
+        borderColor: "#000",
+        isBorder: false,
+    },
     formField: {
         defaultProps: {
             border: "rectangle",

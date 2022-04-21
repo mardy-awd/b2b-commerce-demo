@@ -190,26 +190,41 @@ const OrderUploadErrorsModal: React.FC<Props> = ({
             isOpen={errorsModalIsOpen}
             handleClose={closeModal}
             onAfterClose={modalOnAfterCloseHandler}
+            data-test-selector="orderUpload_UploadError"
         >
             {isBadFile || uploadLimitExceeded ? (
                 <>
                     {isBadFile && (
-                        <Typography as="p" {...styles.uploadErrorText}>
+                        <Typography
+                            as="p"
+                            {...styles.uploadErrorText}
+                            data-test-selector="orderUpload_UploadError_BadFile"
+                        >
                             {uploadErrorText}
                         </Typography>
                     )}
                     {uploadLimitExceeded && (
-                        <Typography as="p" {...styles.rowsLimitExceededErrorText}>
+                        <Typography
+                            as="p"
+                            {...styles.rowsLimitExceededErrorText}
+                            data-test-selector="orderUpload_UploadError_UploadLimitExceeded"
+                        >
                             {rowsLimitExceededText}
                         </Typography>
                     )}
-                    <Button {...styles.continueButton} onClick={closeModal}>
+                    <Button
+                        {...styles.continueButton}
+                        onClick={closeModal}
+                        data-test-selector="orderUpload_UploadError_Continue"
+                    >
                         {translate("Continue")}
                     </Button>
                 </>
             ) : (
                 <>
-                    <Typography {...styles.descriptionText}>{descriptionText}</Typography>
+                    <Typography {...styles.descriptionText} data-test-selector={`orderUpload_${descriptionText}`}>
+                        {descriptionText}
+                    </Typography>
                     <DataTable {...styles.dataTable}>
                         <DataTableHead {...styles.tableHead}>
                             <DataTableHeader {...styles.rowNumberHeader}>{translate("Row")}</DataTableHeader>
@@ -221,11 +236,22 @@ const OrderUploadErrorsModal: React.FC<Props> = ({
                         <DataTableBody {...styles.tableBody}>
                             {rowErrors.map(({ index, name, qtyRequested, umRequested, error }) => (
                                 <DataTableRow key={index} {...styles.tableRow}>
-                                    <DataTableCell {...styles.rowNumberCell}>{index}</DataTableCell>
-                                    <DataTableCell {...styles.nameCell}>{name}</DataTableCell>
-                                    <DataTableCell {...styles.qtyCell}>{qtyRequested}</DataTableCell>
-                                    <DataTableCell {...styles.umCell}>{umRequested}</DataTableCell>
-                                    <DataTableCell {...styles.reasonCell}>
+                                    <DataTableCell
+                                        {...styles.rowNumberCell}
+                                        data-test-selector={`row_${index}_RowNumber`}
+                                    >
+                                        {index}
+                                    </DataTableCell>
+                                    <DataTableCell {...styles.nameCell} data-test-selector={`row_${index}_ItemName`}>
+                                        {name}
+                                    </DataTableCell>
+                                    <DataTableCell {...styles.qtyCell} data-test-selector={`row_${index}_Quantity`}>
+                                        {qtyRequested}
+                                    </DataTableCell>
+                                    <DataTableCell {...styles.umCell} data-test-selector={`row_${index}_UM`}>
+                                        {umRequested}
+                                    </DataTableCell>
+                                    <DataTableCell {...styles.reasonCell} data-test-selector={`row_${index}_Reason`}>
                                         {error === UploadError.NotEnough && errorReasons[UploadError.NotEnough]}
                                         {error === UploadError.ConfigurableProduct &&
                                             errorReasons[UploadError.ConfigurableProduct]}
@@ -240,13 +266,18 @@ const OrderUploadErrorsModal: React.FC<Props> = ({
                         </DataTableBody>
                     </DataTable>
                     <StyledWrapper {...styles.buttonsWrapper}>
-                        <Button {...styles.cancelUploadButton} onClick={cancelUploadClickHandler}>
+                        <Button
+                            {...styles.cancelUploadButton}
+                            onClick={cancelUploadClickHandler}
+                            data-test-selector="orderUploadModal_CancelUpload"
+                        >
                             {translate("Cancel Upload")}
                         </Button>
                         <Button
                             {...styles.continueUploadButton}
                             onClick={continueUploadClickHandler}
                             disabled={!products || products.length === 0}
+                            data-test-selector="orderUploadModal_ContinueUpload"
                         >
                             {translate("Continue Upload")}
                         </Button>

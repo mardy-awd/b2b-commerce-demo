@@ -51,6 +51,14 @@ export const UpdatePrice: HandlerType = props => {
                         type: "Pages/ProductDetails/CompleteLoadRealTimePricing",
                         pricing,
                     });
+                    props.dispatch({
+                        type: "Pages/ProductDetails/SetStructuredPageDataSetForId",
+                        productId: "",
+                    });
+                    props.dispatch({
+                        type: "Pages/ProductDetails/SetMetadataSetForId",
+                        metadataSetForId: "",
+                    });
                 } else {
                     props.dispatch({
                         type: "Pages/ProductDetails/FailedLoadRealTimePricing",

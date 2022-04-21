@@ -262,7 +262,11 @@ class PublishComparer extends React.Component<Props, State> {
 
         const forcedContext = `&languageId=${languageId}&deviceType=${deviceType}&personaId=${personaId}`;
         const skipHeaderFooter =
-            pageType === "Header" || pageType === "Footer" || pageType === "SharedContent" || mobileCmsModeActive
+            pageType === "Header" ||
+            pageType === "Footer" ||
+            pageType === "SharedContent" ||
+            pageType === "CompactHeader" ||
+            mobileCmsModeActive
                 ? "&skipHeaderFooter=true"
                 : "";
         const label = isSharedContentOpened() ? "Shared Content" : "Page";

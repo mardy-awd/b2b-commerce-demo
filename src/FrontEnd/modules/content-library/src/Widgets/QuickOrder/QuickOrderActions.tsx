@@ -6,10 +6,12 @@ import setAddToListModalIsOpen from "@insite/client-framework/Store/Components/A
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import addCartLines from "@insite/client-framework/Store/Data/Carts/Handlers/AddCartLines";
 import loadCurrentCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCurrentCart";
+import { getProductState } from "@insite/client-framework/Store/Data/Products/ProductsSelectors";
+import addToWishList from "@insite/client-framework/Store/Data/WishLists/Handlers/AddToWishList";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import clearProducts from "@insite/client-framework/Store/Pages/QuickOrder/Handlers/ClearProducts";
 import translate from "@insite/client-framework/Translate";
-import { CartLineCollectionModel } from "@insite/client-framework/Types/ApiModels";
+import { CartLineCollectionModel, ProductModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import ProductAddedToCartMessage from "@insite/content-library/Components/ProductAddedToCartMessage";
@@ -22,7 +24,7 @@ import ToasterContext from "@insite/mobius/Toast/ToasterContext";
 import breakpointMediaQueries from "@insite/mobius/utilities/breakpointMediaQueries";
 import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
-import React, { FC, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -42,10 +44,12 @@ const mapStateToProps = (state: ApplicationState) => {
     const settingsCollection = getSettingsCollection(state);
     return {
         productInfos: state.pages.quickOrder.productInfos,
+        products: state.pages.quickOrder.productInfos.map(o => getProductState(state, o.productId).value),
         orderUploadPageLink: getPageLinkByPageType(state, "OrderUploadPage"),
         cartPageLink: getPageLinkByPageType(state, "CartPage"),
         showAddToCartConfirmationDialog: settingsCollection.productSettings.showAddToCartConfirmationDialog,
         canOrderUpload: settingsCollection.orderSettings.canOrderUpload,
+        allowMultipleWishLists: settingsCollection.wishListSettings.allowMultipleWishLists,
     };
 };
 
@@ -168,29 +172,28 @@ export const actionsStyles: QuickOrderActionsStyles = {
 
 const styles = actionsStyles;
 
-const QuickOrderActions: FC<Props> = ({
+const QuickOrderActions = ({
     fields,
     productInfos,
+    products,
     history,
     orderUploadPageLink,
     cartPageLink,
     showAddToCartConfirmationDialog,
     canOrderUpload,
+    allowMultipleWishLists,
     setAddToListModalIsOpen,
     addCartLines,
     clearProducts,
     loadCurrentCart,
-}) => {
-    const toasterContext = React.useContext(ToasterContext);
+}: Props) => {
+    const toasterContext = useContext(ToasterContext);
 
     const [allQtysIsValid, setAllQtysIsValid] = useState(false);
     const productsExist = productInfos && productInfos.length > 0;
 
-    React.useEffect(() => {
-        const isValid = productInfos.every(productInfo => {
-            return productInfo.qtyOrdered > 0;
-        });
-        setAllQtysIsValid(isValid);
+    useEffect(() => {
+        setAllQtysIsValid(productInfos.every(o => o.qtyOrdered > 0));
     }, [productInfos]);
 
     if (fields.hideForEmptyProductList && !productsExist) {
@@ -219,17 +222,33 @@ const QuickOrderActions: FC<Props> = ({
     };
 
     const addToListClickHandler = () => {
-        setAddToListModalIsOpen({ modalIsOpen: true, productInfos });
+        const productInfosToAdd = productInfos.filter(o => products.find(p => p?.id === o.productId)?.canAddToWishlist);
+        if (!allowMultipleWishLists) {
+            addToWishList({
+                productInfos: productInfosToAdd,
+                onSuccess: () => {
+                    toasterContext.addToast({ body: siteMessage("Lists_ProductAdded"), messageType: "success" });
+                },
+            });
+            return;
+        }
+
+        setAddToListModalIsOpen({ modalIsOpen: true, productInfos: productInfosToAdd });
     };
 
+    const canAddSomeToList = products.some(o => o?.canAddToWishlist);
     const buttons = (
         <>
             {canOrderUpload && (
-                <Button {...styles.uploadOrderButton} onClick={uploadOrderClickHandler}>
+                <Button
+                    {...styles.uploadOrderButton}
+                    onClick={uploadOrderClickHandler}
+                    data-test-selector="quickOrder_UploadOrder"
+                >
                     {translate("Upload Order")}
                 </Button>
             )}
-            {productsExist && (
+            {productsExist && canAddSomeToList && (
                 <Button
                     {...styles.addToListButton}
                     onClick={addToListClickHandler}
@@ -266,7 +285,7 @@ const QuickOrderActions: FC<Props> = ({
                         {canOrderUpload && (
                             <Clickable onClick={uploadOrderClickHandler}>{translate("Upload Order")}</Clickable>
                         )}
-                        {productsExist && (
+                        {productsExist && canAddSomeToList && (
                             <Clickable onClick={addToListClickHandler} disabled={!allQtysIsValid}>
                                 {translate("Add to List")}
                             </Clickable>

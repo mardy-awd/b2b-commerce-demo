@@ -249,6 +249,7 @@ const shellTheme = {
             `,
         },
     },
+    checkbox: { defaultProps: { color: "custom.activeBorder", iconProps: { src: "Check" } } },
     formField: {
         defaultProps: {
             backgroundColor: "common.background",

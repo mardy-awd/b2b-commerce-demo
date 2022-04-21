@@ -342,9 +342,7 @@ const ProductSelector = ({
                     error={errorMessage}
                     data-test-selector="productSelector_search"
                 />
-                {selectedProductInfo && (
-                    <Icon {...productSelectorStyles.clearIcon} src={X} onClick={clearButtonHandler} />
-                )}
+                {selectedProductInfo && <Icon {...styles.clearIcon} src={X} onClick={clearButtonHandler} />}
             </GridItem>
             <GridItem {...styles.qtyGridItem}>
                 <TextField

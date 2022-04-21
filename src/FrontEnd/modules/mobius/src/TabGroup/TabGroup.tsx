@@ -115,6 +115,13 @@ class TabGroup extends React.Component<Props, State> {
         currentTab: selectCurrent(this.props),
     };
 
+    componentDidUpdate(prevProps: Props) {
+        if (this.props.current !== prevProps.current) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ currentTab: this.props.current });
+        }
+    }
+
     changeTab = (tabKey: string, event: React.MouseEvent | React.KeyboardEvent) => {
         this.setState({ currentTab: tabKey });
         // eslint-disable-next-line no-unused-expressions
@@ -179,7 +186,7 @@ class TabGroup extends React.Component<Props, State> {
             if (!thisTab) {
                 return;
             }
-            const { tabKey, headline } = thisTab.props;
+            const { tabKey } = thisTab.props;
 
             this.tabRefs[tabKey] = React.createRef();
 
@@ -199,7 +206,6 @@ class TabGroup extends React.Component<Props, State> {
                     key={tabKey}
                     id={tabKey}
                     selected={tabKey === currentTab}
-                    headline={headline}
                     ref={this.tabRefs[tabKey]}
                     {...thisTab.props}
                 />,

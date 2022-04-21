@@ -8,6 +8,8 @@ import {
     getVmiBinsDataView,
     VmiBinsDataViewContext,
 } from "@insite/client-framework/Store/Data/VmiBins/VmiBinsSelectors";
+import loadVmiLocations from "@insite/client-framework/Store/Data/VmiLocations/Handlers/LoadVmiLocations";
+import { getVmiLocationsDataView } from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsSelectors";
 import updateSearchFields from "@insite/client-framework/Store/Pages/VmiBins/Handlers/UpdateSearchFields";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
@@ -19,15 +21,23 @@ import { connect, ResolveThunks } from "react-redux";
 const mapStateToProps = (state: ApplicationState) => {
     const location = getLocation(state);
     const parsedQuery = parseQueryString<{ locationId?: string }>(location.search);
+    const getVmiLocationsParameter = {
+        ...state.pages.vmiLocations.getVmiLocationsParameter,
+        page: 1,
+        pageSize: 9999, // need to get all locations
+    };
     return {
         vmiBinsDataView: getVmiBinsDataView(state, state.pages.vmiBins.getVmiBinsParameter),
         getVmiBinsParameter: state.pages.vmiBins.getVmiBinsParameter,
+        vmiLocationsDataView: getVmiLocationsDataView(state, getVmiLocationsParameter),
+        getVmiLocationsParameter,
         parsedQuery,
     };
 };
 
 const mapDispatchToProps = {
     loadVmiBins,
+    loadVmiLocations,
     updateSearchFields,
 };
 
@@ -37,13 +47,17 @@ const VmiBinsPage = ({
     id,
     vmiBinsDataView,
     loadVmiBins,
+    vmiLocationsDataView,
+    loadVmiLocations,
     updateSearchFields,
     getVmiBinsParameter,
+    getVmiLocationsParameter,
     parsedQuery,
 }: Props) => {
     useEffect(() => {
         const pageSizeCookie = getCookie("VmiBins-PageSize");
         const pageSize = pageSizeCookie ? parseInt(pageSizeCookie, 10) : undefined;
+
         if (pageSize && pageSize !== getVmiBinsParameter.pageSize) {
             updateSearchFields({ pageSize });
             return;
@@ -56,6 +70,10 @@ const VmiBinsPage = ({
 
         if (!vmiBinsDataView.value && !vmiBinsDataView.isLoading && getVmiBinsParameter.vmiLocationId) {
             loadVmiBins(getVmiBinsParameter);
+        }
+
+        if (!vmiLocationsDataView.value && !vmiLocationsDataView.isLoading) {
+            loadVmiLocations(getVmiLocationsParameter);
         }
     });
 

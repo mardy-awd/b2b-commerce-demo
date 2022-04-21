@@ -268,6 +268,14 @@ export async function pageRenderer(request: Request, response: Response) {
                         #react-app {"{"} pointer-events: none; {"}"}
                     </style>
                 )}
+                {metadata?.structuredPageData && (
+                    <script
+                        type="application/ld+json"
+                        dangerouslySetInnerHTML={{
+                            __html: metadata?.structuredPageData,
+                        }}
+                    />
+                )}
             </head>
             <body>
                 {BodyStart(layoutSectionRenderingContext)}
@@ -337,18 +345,26 @@ async function renderUntilPromisesResolved(request: Request, renderRawAndStyles:
 
     renderSite();
 
-    while (trackedPromises.length !== 0 && renderLoop < 10 && !redirectToUrl) {
+    const maxLoops = 10;
+    while (trackedPromises.length !== 0 && renderLoop < maxLoops && !redirectToUrl) {
         renderLoop += 1;
         if (renderLoop > 5) {
             if (renderLoop === 6) {
-                setPromiseAddedCallback(stack =>
-                    logger.warn(
-                        `During SSR of ${request.url} there was a new promise added on loop ${renderLoop}.
+                setPromiseAddedCallback(stack => {
+                    const message = `During SSR of ${request.url} there was a new promise added on loop ${renderLoop}.
 This usually indicates a problem with react state management that will affect performance.
 The new promise was added at the following location:
-${stack}`,
-                    ),
-                );
+${stack}`;
+                    if (
+                        !process.env.BYPASS_FAIL_ON_PROMISE_LOOPS &&
+                        renderLoop === maxLoops &&
+                        (!IS_PRODUCTION || process.env.FAIL_ON_PROMISE_LOOPS)
+                    ) {
+                        throw message;
+                    }
+
+                    return logger.warn(message);
+                });
             }
         }
 

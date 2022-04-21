@@ -1,11 +1,12 @@
 import { createHandlerChainRunner, Handler } from "@insite/client-framework/HandlerCreator";
 
-type HandlerType = Handler<{ requestedDeliveryDate?: Date }>;
+type HandlerType = Handler<{ requestedDeliveryDate?: Date; requestedDeliveryDateDisabled?: boolean }>;
 
 export const DispatchSetRequestedDeliveryDate: HandlerType = props => {
     props.dispatch({
         type: "Pages/CheckoutReviewAndSubmit/SetRequestedDeliveryDate",
         requestedDeliveryDate: props.parameter.requestedDeliveryDate,
+        requestedDeliveryDateDisabled: props.parameter.requestedDeliveryDateDisabled,
     });
 };
 

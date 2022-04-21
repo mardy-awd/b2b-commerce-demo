@@ -166,108 +166,28 @@ $tsConfigFile = "{
 $tsConfigFilePath = "$themePath\tsconfig.json"
 Set-Content -Path $tsConfigFilePath -Value $tsConfigFile -Force
 
-$projectFile = "<Project ToolsVersion=`"12.0`" DefaultTargets=`"Build`" xmlns=`"http://schemas.microsoft.com/developer/msbuild/2003`">
-  <Import Project=`"`$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v`$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props`" Condition=`"Exists('`$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v`$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')`" />
-  <Import Project=`"`$(MSBuildExtensionsPath)\`$(MSBuildToolsVersion)\Microsoft.Common.props`" Condition=`"Exists('`$(MSBuildExtensionsPath)\`$(MSBuildToolsVersion)\Microsoft.Common.props')`" />
+$projectFile = "<Project Sdk=`"Microsoft.NET.Sdk.Web`">
   <PropertyGroup>
-    <Configuration Condition=`" '`$(Configuration)' == '' `">Debug</Configuration>
-    <Platform Condition=`" '`$(Platform)' == '' `">AnyCPU</Platform>
-    <ProductVersion>
-    </ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{$projectId}</ProjectGuid>
-    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$themeName</RootNamespace>
-    <AssemblyName>$themeName</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
-    <UseGlobalApplicationHostFile />
     <TypeScriptToolsVersion>3.7</TypeScriptToolsVersion>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=`" '`$(Configuration)|`$(Platform)' == 'Debug|AnyCPU' `">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <OutputType>Library</OutputType>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TargetFramework>net452</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition=`"'$(Configuration)|$(Platform)' == 'Debug|AnyCPU' `">
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
-    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
-    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
-    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
     <TypeScriptOutDir />
-    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>False</TypeScriptNoEmitOnError>
-    <TypeScriptSourceMap>True</TypeScriptSourceMap>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
   </PropertyGroup>
-  <PropertyGroup Condition=`" '`$(Configuration)|`$(Platform)' == 'Release|AnyCPU' `">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <ItemGroup>
-    <Service Include=`"{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}`" />
+    <PackageReference Include=`"Microsoft.CSharp`" Version=`"4.7.0`" />
+    <PackageReference Include=`"System.ComponentModel.Annotations`" Version=`"5.0.0`" />
+    <PackageReference Include=`"System.Data.DataSetExtensions`" Version=`"4.5.0`" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include=`"tsconfig.json`" />
-    $itemGroup
-  </ItemGroup>
-  <PropertyGroup>
-    <VisualStudioVersion Condition=`"'`$(VisualStudioVersion)' == ''`">10.0</VisualStudioVersion>
-    <VSToolsPath Condition=`"'`$(VSToolsPath)' == ''`">`$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v`$(VisualStudioVersion)</VSToolsPath>
-  </PropertyGroup>
-  <Import Project=`"`$(MSBuildBinPath)\Microsoft.CSharp.targets`" />
-  <Import Project=`"`$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v`$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets`" Condition=`"Exists('`$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v`$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')`" />
-  <Import Project=`"`$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets`" Condition=`"'`$(VSToolsPath)' != ''`" />
-  <Import Project=`"`$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets`" Condition=`"false`" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID=`"{349c5851-65df-11da-9384-00065b846f21}`">
-        <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52642</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:52642/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-        </WebProjectProperties>
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
-  <Target Name=`"EnsureNuGetPackageBuildImports`" BeforeTargets=`"PrepareForBuild`">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name=`"BeforeBuild`">
-  </Target>
-  <Target Name=`"AfterBuild`">
-  </Target>
-  -->
 </Project>"
 
 $csProject = "$themePath\$themeName.csproj"

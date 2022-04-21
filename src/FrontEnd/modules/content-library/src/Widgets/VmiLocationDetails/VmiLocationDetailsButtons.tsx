@@ -126,9 +126,7 @@ const VmiLocationDetailsButtons = ({
         });
     };
 
-    const onSuccessAddProductModal = () => {
-        setAddProductModalOpen(false);
-    };
+    const onSuccessAddProductModal = () => {};
 
     const onCloseAddProductModal = () => {
         setAddProductModalOpen(false);

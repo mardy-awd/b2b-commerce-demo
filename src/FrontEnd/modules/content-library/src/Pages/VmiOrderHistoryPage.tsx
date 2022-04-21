@@ -105,7 +105,6 @@ const VmiOrderHistoryPage = ({
         <Page
             data-test-selector="vmiOrderHistory"
             css={css`
-                overflow: hidden;
                 position: relative;
             `}
         >

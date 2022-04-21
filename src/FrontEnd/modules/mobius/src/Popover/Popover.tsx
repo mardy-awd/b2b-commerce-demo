@@ -141,9 +141,11 @@ const PopoverStyle = styled.ul<PopoverStyleProps>`
                 return "";
         }
     }}
-    transition: all ease-in-out ${({ theme, transitionLength }) =>
-        get(theme, `transition.duration.${transitionLength}`)}ms;
     width: ${getProp("_width")}px;
+    transition-property: color, max-height;
+    transition-duration: ${({ transitionLength }) => transitionLength}ms;
+    transition-timing-function: ease-in-out;
+    overflow-y: hidden;
     ${injectCss}
 `;
 
@@ -181,13 +183,14 @@ class Popover extends React.Component<PopoverProps, State> {
         document.addEventListener("mousedown", this.handleClickOutside);
         document.addEventListener("scroll", this.handleScroll, true);
         window.addEventListener("resize", this.handleResize, true);
+        this.setPopoverStyle();
     }
 
     componentWillUnmount() {
         document.removeEventListener("keydown", this.handleKeyDown);
         document.removeEventListener("mousedown", this.handleClickOutside);
-        document.removeEventListener("scroll", this.handleScroll);
-        window.removeEventListener("resize", this.handleResize);
+        document.removeEventListener("scroll", this.handleScroll, true);
+        window.removeEventListener("resize", this.handleResize, true);
     }
 
     closePopover = (event: Event) => {
@@ -213,14 +216,20 @@ class Popover extends React.Component<PopoverProps, State> {
 
     handleClickOutside = (event: MouseEvent) => {
         if (
-            this.state.open &&
-            !this.isTargetInsideRef(event.target as Node) &&
-            !this.isInsideChildPortalModal(event.target as Node) &&
-            !this.isClickingScrollBar(event)
+            (this.state.open &&
+                !this.isTargetInsideRef(event.target as Node) &&
+                !this.isInsideChildPortalModal(event.target as Node) &&
+                !this.isClickingScrollBar(event)) ||
+            (this.state.open && this.isPopoverTagPresent(event))
         ) {
             this.closePopover(event);
         }
+
         typeof this.props.handleClickOutside === "function" && this.props.handleClickOutside(event);
+    };
+
+    isPopoverTagPresent = (event: MouseEvent) => {
+        return (event as any)?.target?.dataset?.popoverClose === "true";
     };
 
     isClickingScrollBar = (event: MouseEvent) => {
@@ -359,7 +368,7 @@ class Popover extends React.Component<PopoverProps, State> {
         const transitionLength = get(otherProps.theme, `transition.duration.${transitionDuration}`) || 200;
 
         return (
-            <OverflowWrapper ref={this.element} {...wrapperProps}>
+            <OverflowWrapper {...wrapperProps} ref={wrapperProps?.ref || this.element}>
                 {React.cloneElement(popoverTrigger, {
                     onClick: toggle ? this.togglePopover : this.openPopover,
                     "aria-expanded": open,

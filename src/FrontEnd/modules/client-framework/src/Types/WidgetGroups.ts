@@ -72,6 +72,7 @@ const WidgetGroups = [
     "VMI Location Details",
     "VMI Reporting",
     "VMI Users",
+    "Compact Header",
 ] as const;
 
 export default WidgetGroups;

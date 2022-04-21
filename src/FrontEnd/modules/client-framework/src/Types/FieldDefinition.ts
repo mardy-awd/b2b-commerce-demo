@@ -115,12 +115,13 @@ export interface LinkFieldValue {
 export interface BaseFieldDefinition<TEditorTemplate extends string, TValue = string> {
     name: string;
     displayName?: string;
-    isVisible?: (item: HasFields) => boolean;
+    isVisible?: (item: HasFields, advancedFeaturesEnabled?: boolean) => boolean;
     isEnabled?: (item?: HasFields) => boolean;
     defaultValue: TValue;
     editorTemplate: TEditorTemplate;
     fieldType: FieldType;
     tooltip?: string;
+    tooltipPosition?: "left";
     isRequired?: boolean;
     regularExpression?: RegExp;
     tab?: TabDefinition;
@@ -263,4 +264,40 @@ export const ExcludeFromSignInRequired: FieldDefinition = field(
     250,
     AdvancedTab,
 );
+export const EnableStructuredPageData: FieldDefinition = {
+    name: "enableStructuredPageData",
+    editorTemplate: "CheckboxField",
+    defaultValue: false,
+    fieldType: "General",
+    sortOrder: 100,
+    variant: "toggle",
+    tooltip: "JSON-LD is structured data communicated to search engines about web pages",
+};
+export const StructuredPageData: MultilineTextFieldDefinition = {
+    name: "structuredPageData",
+    editorTemplate: "MultilineTextField",
+    defaultValue: "",
+    fieldType: "General",
+    sortOrder: 110,
+    tab: AdvancedTab,
+    tooltip: "Code entered in this field will be added to the head of the page. This field only supports JSON-LD data.",
+    tooltipPosition: "left",
+    validate: value => {
+        if (!value) {
+            return null;
+        }
+
+        const errorText = "JSON-LD data is only allowed in this field";
+        try {
+            const o = JSON.parse(value);
+            if (o && typeof o === "object") {
+                return null;
+            }
+        } catch (e) {
+            return errorText;
+        }
+
+        return errorText;
+    },
+};
 export const HorizontalRule: FieldDefinition = field("horizontalRule", "HorizontalRule", "", "General", 0);

@@ -395,7 +395,7 @@ const DragHandle = SortableHandle(() => <Icon {...styles.dragHandleIcon} />);
 interface LineItemProps {
     wishList: WishListModel;
     wishListLine: WishListLineModel;
-    productInfo?: ProductInfo;
+    productInfo: ProductInfo;
     editingSortOrder: boolean;
     updateSortOrder: (wishListLine: WishListLineModel, value: number | string) => void;
     onDeleteClick: (wishListLine: WishListLineModel) => void;
@@ -421,10 +421,6 @@ const LineItem = SortableElement(
                 (event.target as any).blur();
             }
         };
-
-        if (!productInfo) {
-            return null;
-        }
 
         return (
             <GridItem {...styles.lineGridItem} data-test-selector="myListDetails_line">
@@ -476,19 +472,21 @@ const LinesContainer = SortableContainer(
         onEditNotesClick,
     }: LinesContainerProps) => (
         <GridContainer {...styles.container} data-test-selector="myListDetails_lines">
-            {wishListLines.map((wishListLine, index) => (
-                <LineItem
-                    key={`${wishListLine.productId}_${wishListLine.selectedUnitOfMeasure}`}
-                    index={index}
-                    wishList={wishList}
-                    wishListLine={wishListLine}
-                    productInfo={productInfosByWishListLineId[wishListLine.id]}
-                    editingSortOrder={editingSortOrder}
-                    updateSortOrder={updateSortOrder}
-                    onDeleteClick={onDeleteClick}
-                    onEditNotesClick={onEditNotesClick}
-                />
-            ))}
+            {wishListLines
+                .filter(wishListLine => !!productInfosByWishListLineId[wishListLine.id])
+                .map((wishListLine, index) => (
+                    <LineItem
+                        key={`${wishListLine.productId}_${wishListLine.selectedUnitOfMeasure}`}
+                        index={index}
+                        wishList={wishList}
+                        wishListLine={wishListLine}
+                        productInfo={productInfosByWishListLineId[wishListLine.id]!}
+                        editingSortOrder={editingSortOrder}
+                        updateSortOrder={updateSortOrder}
+                        onDeleteClick={onDeleteClick}
+                        onEditNotesClick={onEditNotesClick}
+                    />
+                ))}
         </GridContainer>
     ),
 );

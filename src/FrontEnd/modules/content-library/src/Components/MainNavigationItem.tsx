@@ -159,7 +159,7 @@ class MainNavigationItem extends React.Component<Props> {
                                         {child.title}
                                     </Link>
                                     {child.children && (
-                                        <ul>
+                                        <ul data-test-selector={`linksFor_${child.title}`}>
                                             {child.children
                                                 .filter(grandChild => {
                                                     if (grandChild.excludeFromNavigation) {
@@ -180,6 +180,7 @@ class MainNavigationItem extends React.Component<Props> {
                                                             {...styles.megaMenuLink}
                                                             onClick={this.closePopover}
                                                             href={grandChild.url}
+                                                            data-test-selector={grandChild.title}
                                                         >
                                                             {grandChild.title}
                                                         </Link>

@@ -76,6 +76,7 @@ const ProductDetailsBundleSectionOptions: React.FC<Props> = ({
                                 onChange={event => {
                                     sectionOptionChangeHandler(configSection.id, event.currentTarget.value);
                                 }}
+                                data-test-selector={`styleSelect_${configSection.sectionName}`}
                             >
                                 <option value="">{`${translate("Select")} ${
                                     configSection.label || configSection.sectionName

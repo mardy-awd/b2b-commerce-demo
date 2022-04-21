@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Startup.cs" company="Insite Software">
-//   Copyright © 2019. Insite Software. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace InsiteCommerce.Web
+﻿namespace InsiteCommerce.Web
 {
     using System.Web.Routing;
     using Insite.Core.Interfaces.Data;

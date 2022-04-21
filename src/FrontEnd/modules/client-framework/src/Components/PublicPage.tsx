@@ -1,4 +1,5 @@
 import BypassedAuthorizationWarning from "@insite/client-framework/Components/BypassedAuthorizationWarning";
+import CompactHeader from "@insite/client-framework/Components/CompactHeader";
 import {
     createPageElement,
     registerPageUpdate,
@@ -16,8 +17,10 @@ import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSe
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 // eslint-disable-next-line spire/fenced-imports
 import PageLayout from "@insite/content-library/PageLayout";
+import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
+import { ThemeProps, withTheme } from "styled-components";
 
 const mapStateToProps = (state: ApplicationState) => {
     const page = getCurrentPage(state);
@@ -34,7 +37,10 @@ const mapDispatchToProps = {
     setMetadata,
 };
 
-type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasShellContext;
+type Props = ReturnType<typeof mapStateToProps> &
+    ResolveThunks<typeof mapDispatchToProps> &
+    HasShellContext &
+    ThemeProps<BaseTheme>;
 
 class PublicPage extends React.Component<Props> {
     componentDidMount() {
@@ -75,11 +81,16 @@ class PublicPage extends React.Component<Props> {
                 type,
                 fields: { hideHeader, hideBreadcrumbs, hideFooter },
             },
+            theme: {
+                header: { isCompactHeader },
+            },
         } = this.props;
 
         switch (type) {
             case "Header":
             case "Footer":
+            case "CompactHeader":
+            case "FlyoutNavigation":
             case "SharedContent":
             case "VariantRootPage":
                 return <>{content}</>;
@@ -99,6 +110,8 @@ class PublicPage extends React.Component<Props> {
             <PageLayout
                 showHeader={!hideHeader}
                 header={<Header />}
+                showCompactHeader={isCompactHeader && !hideHeader}
+                compactHeader={<CompactHeader />}
                 pageContent={pageContent}
                 showBreadcrumbs={!hideBreadcrumbs}
                 showFooter={!hideFooter}
@@ -136,4 +149,4 @@ class PublicPage extends React.Component<Props> {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withIsInShell(PublicPage));
+export default connect(mapStateToProps, mapDispatchToProps)(withIsInShell(withTheme(PublicPage)));

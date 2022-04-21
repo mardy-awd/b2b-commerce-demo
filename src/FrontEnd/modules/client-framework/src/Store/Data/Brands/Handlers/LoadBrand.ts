@@ -1,4 +1,8 @@
-import { ApiHandlerNoApiParameter, createHandlerChainRunner } from "@insite/client-framework/HandlerCreator";
+import {
+    ApiHandlerNoApiParameter,
+    createHandlerChainRunner,
+    HasOnSuccess,
+} from "@insite/client-framework/HandlerCreator";
 import { getBrandById } from "@insite/client-framework/Services/BrandService";
 import { BrandModel } from "@insite/client-framework/Types/ApiModels";
 
@@ -8,7 +12,7 @@ export interface LoadBrandByIdParameter {
     additionalExpands?: string[];
 }
 
-type HandlerType = ApiHandlerNoApiParameter<LoadBrandByIdParameter, BrandModel>;
+type HandlerType = ApiHandlerNoApiParameter<LoadBrandByIdParameter & HasOnSuccess, BrandModel>;
 
 export const DispatchBeginLoadBrand: HandlerType = props => {
     props.dispatch({
@@ -30,7 +34,11 @@ export const DispatchCompleteLoadBrand: HandlerType = props => {
     });
 };
 
-export const chain = [DispatchBeginLoadBrand, RequestDataFromApi, DispatchCompleteLoadBrand];
+export const ExecuteOnSuccessCallback: HandlerType = props => {
+    props.parameter.onSuccess?.();
+};
+
+export const chain = [DispatchBeginLoadBrand, RequestDataFromApi, DispatchCompleteLoadBrand, ExecuteOnSuccessCallback];
 
 const loadBrand = createHandlerChainRunner(chain, "LoadBrandById");
 export default loadBrand;

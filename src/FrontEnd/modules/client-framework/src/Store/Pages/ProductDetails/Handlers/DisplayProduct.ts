@@ -287,9 +287,11 @@ export const LoadRealTimeInventory: HandlerType = props => {
                                 },
                             });
 
-                            const productInfo = createFromProduct(
-                                getProductState(props.getState(), props.product.id).value ?? props.product,
-                            );
+                            const productInfo =
+                                props.getState().pages.productDetails.productInfosById?.[props.product.id] ??
+                                createFromProduct(
+                                    getProductState(props.getState(), props.product.id).value ?? props.product,
+                                );
 
                             props.dispatch({
                                 type: "Pages/ProductDetails/UpdateVariantSelection",

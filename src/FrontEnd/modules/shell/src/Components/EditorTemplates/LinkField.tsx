@@ -35,6 +35,10 @@ type OwnProps = EditorTemplateProps<LinkFieldValue, LinkFieldDefinition>;
 const mapStateToProps = (state: ShellState, ownProps: OwnProps) => {
     const categories = state.pageEditor.categories;
 
+    ownProps.fieldValue =
+        ownProps.fieldValue !== undefined && ownProps.fieldValue !== null
+            ? ownProps.fieldValue
+            : ownProps.fieldDefinition.defaultValue;
     const fieldValue = ownProps.fieldValue;
     let displayValue = "";
     if (fieldValue) {

@@ -239,7 +239,7 @@ class PanelMenu extends React.Component<PanelMenuPropsCompleted> {
                                         tabIndex={layer === 0 ? 0 : -1}
                                     >
                                         <ButtonIcon {...spreadProps("backIconProps")} />
-                                        <VisuallyHidden>{translate("back")}</VisuallyHidden>
+                                        <VisuallyHidden>{translate("Back")}</VisuallyHidden>
                                     </Button>
                                     {closeOverlay && (
                                         <Button

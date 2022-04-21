@@ -22,6 +22,7 @@ interface OwnProps extends WidgetProps {
 const mapStateToProps = (state: ApplicationState, { fields: { pageId } }: OwnProps) => ({
     sharedContentState: getById(state.data.pages, pageId),
     isLoading: state.data.pages.isLoading[pageId],
+    isDeleted: state.data.pages.deletedSharedContents.indexOf(pageId) > -1,
 });
 
 const mapDispatchToProps = {
@@ -36,9 +37,10 @@ class SharedContent extends React.Component<Props> {
             fields: { pageId },
             sharedContentState,
             isLoading,
+            isDeleted,
             loadSharedContent,
         } = this.props;
-        if (!sharedContentState.value && !isLoading) {
+        if (!sharedContentState.value && !isLoading && !isDeleted) {
             loadSharedContent(pageId);
         }
     }

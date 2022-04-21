@@ -19,6 +19,13 @@ type Props = {
 
 type HandlerType = Handler<Parameter, Props>;
 
+export const DispatchCalledLoadCategories: HandlerType = ({ dispatch, parameter }) => {
+    dispatch({
+        type: "Data/Categories/CalledLoadCategories",
+        parameter,
+    });
+};
+
 export const CheckIfDataViewLoading: HandlerType = props => {
     const categoriesDataView = getCategoriesDataView(props.getState(), props.parameter);
     if (categoriesDataView.isLoading) {
@@ -69,6 +76,7 @@ export const ExecuteOnSuccessCallback: HandlerType = props => {
 };
 
 export const chain = [
+    DispatchCalledLoadCategories,
     CheckIfDataViewLoading,
     DispatchBeginLoadCategories,
     PopulateApiParameter,

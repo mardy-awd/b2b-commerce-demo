@@ -49,9 +49,14 @@ module insite {
             }
 
             if (!accessToken) {
-                const queryString: any = this.queryString(this.$window.location.search.replace(/^\?/, '').split("&"));
+                let queryString: any = this.queryString(this.$window.location.search.replace(/^\?/, '').split("&"));
                 if (queryString.access_token) {
                     this.$localStorage.set("accessToken", queryString.access_token);
+                } else {
+                    queryString = this.queryString(this.$window.location.hash.replace(/^#/, '').split("&"));
+                    if (queryString.access_token) {
+                        this.$localStorage.set("accessToken", queryString.access_token);
+                    }
                 }
             }
 

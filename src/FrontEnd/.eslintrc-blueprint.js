@@ -25,10 +25,8 @@ module.exports = {
             {
                 generateTranslations: true,
                 ignoreDir: [
-                    "/modules/mobius",
                     "/modules/mobius-styleguide",
                     "/modules/server-framework",
-                    "/modules/shell",
                     "/modules/shell-public",
                     "/modules/spire-linter",
                     "/modules/test"

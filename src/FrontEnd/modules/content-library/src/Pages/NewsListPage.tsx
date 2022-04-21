@@ -12,6 +12,7 @@ import {
     OpenGraphImage,
     OpenGraphTitle,
     OpenGraphUrl,
+    StructuredPageData,
 } from "@insite/client-framework/Types/FieldDefinition";
 import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
@@ -38,6 +39,7 @@ const pageModule: PageModule = {
             OpenGraphTitle,
             OpenGraphUrl,
             OpenGraphImage,
+            StructuredPageData,
             {
                 ...HorizontalRule,
                 sortOrder: 199,

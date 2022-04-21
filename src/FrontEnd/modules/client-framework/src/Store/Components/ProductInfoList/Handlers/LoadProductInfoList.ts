@@ -44,7 +44,13 @@ export const LoadProducts: HandlerType = async props => {
         return false;
     }
 
-    props.products = getProductsDataView(props.getState(), parameter).value;
+    const productsDataViewState = getProductsDataView(props.getState(), parameter);
+
+    if (productsDataViewState.isLoading) {
+        return false;
+    }
+
+    props.products = productsDataViewState.value;
     props.dataViewHasProducts = !!props.products;
 
     if (props.products && !props.parameter.forceLoad) {

@@ -5,11 +5,12 @@
 
         paginationStorageKey = "DefaultPaginationVmiBinList";
 
-        static $inject = ["$scope", "vmiBinService", "coreService", "paginationService", "queryString", "spinnerService", "$filter", "deleteVmiBinsModalService", "vmiBinModalService"];
+        static $inject = ["$scope", "vmiBinService", "vmiLocationsService", "coreService", "paginationService", "queryString", "spinnerService", "$filter", "deleteVmiBinsModalService", "vmiBinModalService"];
 
         constructor(
             protected $scope: ng.IScope,
             protected vmiBinService: vmiBin.IVmiBinService,
+            protected vmiLocationsService: catalog.IVmiLocationsService,
             protected coreService: core.ICoreService,
             protected paginationService: core.IPaginationService,
             protected queryString: common.IQueryStringService,
@@ -17,7 +18,7 @@
             protected $filter: ng.IFilterService,
             protected deleteVmiBinsModalService: vmiBin.IDeleteVmiBinsModalService,
             protected vmiBinModalService: vmiBin.IVmiBinModalService) {
-            super(vmiBinService, coreService, paginationService, queryString, spinnerService, $filter);
+            super(vmiBinService, vmiLocationsService, coreService, paginationService, queryString, spinnerService, $filter);
         }
 
         $onInit(): void {

@@ -34,7 +34,7 @@ import Typography, { TypographyPresentationProps } from "@insite/mobius/Typograp
 import breakpointMediaQueries from "@insite/mobius/utilities/breakpointMediaQueries";
 import getColor from "@insite/mobius/utilities/getColor";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
-import React, { FC } from "react";
+import React, { useEffect } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -201,7 +201,7 @@ export const quickOrderProductListStyles: QuickOrderProductListStyles = {
 const styles = quickOrderProductListStyles;
 const StyledSection = getStyledWrapper("section");
 
-const QuickOrderProductList: FC<Props> = ({
+const QuickOrderProductList = ({
     products,
     productInfos,
     total,
@@ -209,23 +209,23 @@ const QuickOrderProductList: FC<Props> = ({
     calculateTotal,
     changeProductQty,
     removeProduct,
-}) => {
-    if (!products || products.length === 0) {
-        return null;
-    }
-
-    React.useEffect(() => calculateTotal(), [products]);
+}: Props) => {
+    useEffect(() => calculateTotal(), [products]);
 
     const removeProductHandler = (productInfo: ProductInfo) => {
         removeProduct({ productId: productInfo.productId, unitOfMeasure: productInfo.unitOfMeasure });
     };
 
+    if (!products || products.length === 0) {
+        return null;
+    }
+
     const productListDisplay = products.map((product, index) => {
         if (!product || index >= productInfos.length) {
             return;
         }
-        const productInfo = productInfos[index];
 
+        const productInfo = productInfos[index];
         const productContext: ProductContextModel = {
             product,
             productInfo,
@@ -238,6 +238,7 @@ const QuickOrderProductList: FC<Props> = ({
                 });
             },
         };
+
         return (
             <ProductContext.Provider value={productContext} key={product.id + productInfo.unitOfMeasure}>
                 <CardContainer extendedStyles={styles.cardContainer}>

@@ -375,6 +375,7 @@ class OrderHistoryTable extends React.Component<Props> {
                                 {...styles.orderDateHeader}
                                 sorted={this.sorted("orderDate")}
                                 onSortClick={() => this.headerClick("orderDate")}
+                                data-test-selector="tableHeader_OrderDate"
                             >
                                 {translate("Date", "orderDate")}
                             </DataTableHeader>

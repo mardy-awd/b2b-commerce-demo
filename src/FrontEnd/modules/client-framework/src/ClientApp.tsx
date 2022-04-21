@@ -62,7 +62,15 @@ async function renderApp(renderer: Renderer = render) {
     if (isInShell) {
         logger.debug("CMS shell detected.");
         if (window.location.pathname.startsWith(getContentByVersionPath)) {
-            logger.debug("Suppressing shell wrapper due to GetContentByVersion request.");
+            logger.debug("Adding shell wrapper for GetContentByVersion request, but excluding isEdit");
+
+            const PreviewWrappingContext: React.FC = ({ children }) => (
+                <ShellContext.Provider value={{ isCurrentPage: true, isInShell: true }}>
+                    {children}
+                </ShellContext.Provider>
+            );
+
+            WrappingContext = PreviewWrappingContext;
         } else {
             setCookie(isSiteInShellCookieName, "true");
             const isEditing = getCookie(contentModeCookieName) === "Editing";

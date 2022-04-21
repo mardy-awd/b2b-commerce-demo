@@ -5,6 +5,7 @@ import { ToastContextData } from "@insite/mobius/Toast/ToasterContext";
 import { PublishPageSelection } from "@insite/shell/Components/Shell/PublishModal";
 import { closeSiteHole, sendToSite } from "@insite/shell/Components/Shell/SiteHole";
 import { getPageBulkPublishInfo, getPagePublishInfo, publishPages } from "@insite/shell/Services/ContentAdminService";
+import { isSharedContentOpened } from "@insite/shell/Store/Data/Pages/PagesHelpers";
 import { AnyShellAction } from "@insite/shell/Store/Reducers";
 import ShellThunkAction from "@insite/shell/Store/ShellThunkAction";
 import { Location } from "history";
@@ -222,11 +223,12 @@ export const publish =
         }
 
         if (!permissions?.canPublishContent) {
+            const label = isSharedContentOpened() ? "Shared content" : "Page";
             toasterContext.addToast({
                 body:
                     pagesToPublish.length > 1
-                        ? "Pages submitted for approval"
-                        : `The Page ${currentPage.name} submitted for approval`,
+                        ? `${label}s submitted for approval`
+                        : `${label} ${currentPage.name} submitted for approval`,
                 messageType: "success",
             });
         }

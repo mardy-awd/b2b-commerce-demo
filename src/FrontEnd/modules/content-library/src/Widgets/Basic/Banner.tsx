@@ -43,6 +43,7 @@ const enum fields {
     h5FontSize = "h5FontSize",
     h6FontSize = "h6FontSize",
     normalFontSize = "normalFontSize",
+    customCSS = "customCSS",
 }
 
 interface OwnProps extends WidgetProps {
@@ -80,6 +81,7 @@ interface OwnProps extends WidgetProps {
         [fields.h4FontSize]: number;
         [fields.h5FontSize]: number;
         [fields.normalFontSize]: number;
+        [fields.customCSS]: string;
     };
     extendedStyles?: BannerStyles;
 }
@@ -174,6 +176,12 @@ export const Banner: FC<OwnProps> = ({ fields, extendedStyles }) => {
         fontSizeStyles = responsiveStyleRules(fields.responsiveFontSizes, fields.customFontSizes ? fields : undefined);
     }
 
+    const customCssWrapper = {
+        css: css`
+            ${fields.customCSS}
+        `,
+    };
+
     const wrapperStyles = {
         css: css`
             ${styles.wrapper?.css || ""}
@@ -199,16 +207,18 @@ export const Banner: FC<OwnProps> = ({ fields, extendedStyles }) => {
     };
 
     return (
-        <StyledWrapper {...wrapperStyles}>
-            <StyledWrapper {...overlayWrapperStyles}>
-                <StyledWrapper {...styles.slideCenteringWrapperStyles}>
-                    <Typography>{parse(fields.heading, parserOptions)}</Typography>
-                    <Typography>{parse(fields.subheading, parserOptions)}</Typography>
-                    {!fields.disableButton && (
-                        <Button {...styles.bannerButton} variant={fields.variant} onClick={onClick}>
-                            {fields.buttonLabel || title || url}
-                        </Button>
-                    )}
+        <StyledWrapper {...customCssWrapper}>
+            <StyledWrapper className="banner-wrapper" {...wrapperStyles}>
+                <StyledWrapper className="banner-overlay-wrapper" {...overlayWrapperStyles}>
+                    <StyledWrapper className="banner-center-wrapper" {...styles.slideCenteringWrapperStyles}>
+                        <Typography className="banner-heading">{parse(fields.heading, parserOptions)}</Typography>
+                        <Typography className="banner-subheading">{parse(fields.subheading, parserOptions)}</Typography>
+                        {!fields.disableButton && (
+                            <Button {...styles.bannerButton} variant={fields.variant} onClick={onClick}>
+                                {fields.buttonLabel || title || url}
+                            </Button>
+                        )}
+                    </StyledWrapper>
                 </StyledWrapper>
             </StyledWrapper>
         </StyledWrapper>
@@ -223,6 +233,11 @@ const basicTab = {
 const settingsTab = {
     displayName: "Settings",
     sortOrder: 1,
+};
+
+const advancedTab = {
+    displayName: "Advanced",
+    sortOrder: 2,
 };
 
 const banner: WidgetModule = {
@@ -480,6 +495,15 @@ const banner: WidgetModule = {
                 min: 1,
                 defaultValue: null,
                 isVisible: item => item?.fields[fields.customFontSizes],
+            },
+            {
+                name: fields.customCSS,
+                displayName: "Custom CSS",
+                editorTemplate: "RichTextField",
+                fieldType: "General",
+                tab: advancedTab,
+                defaultValue: "",
+                isVisible: (item, shouldDisplayAdvacedFeatures) => !!shouldDisplayAdvacedFeatures,
             },
         ],
     },

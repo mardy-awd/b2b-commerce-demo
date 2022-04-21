@@ -373,7 +373,10 @@ const CartLinesHeader: FC<CartLinesHeaderProps> = ({
             {hasInsufficientInventory && (
                 <StyledSection {...headerStyles.warningSection}>
                     <Icon {...headerStyles.warningIcon}></Icon>
-                    <Typography {...headerStyles.warningText}>
+                    <Typography
+                        {...headerStyles.warningText}
+                        data-test-selector="cartlineHeader_InsufficientInventoryAtCheckout"
+                    >
                         {siteMessage("Cart_InsufficientInventoryAtCheckout")}
                     </Typography>
                 </StyledSection>

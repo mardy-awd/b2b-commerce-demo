@@ -165,8 +165,7 @@
             this.vmiBinModalService.display({
                 vmiBin: { vmiLocationId: this.vmiLocationId },
                 broadcastCreateStr: "vmi-bin-item-was-created",
-                showImport: true,
-                closeOnAdd: true
+                showImport: true
             });
         }
         openEditPopup(): void {

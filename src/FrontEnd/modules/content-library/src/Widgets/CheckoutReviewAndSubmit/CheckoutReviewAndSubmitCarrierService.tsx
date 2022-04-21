@@ -120,12 +120,14 @@ const CheckoutReviewAndSubmitCarrierService: FC<Props> = ({
 
     const carrierChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
         const selectedCarrier = cart.carriers!.find(c => c.id === event.currentTarget.value)!;
+        const defaultShipVias = selectedCarrier.shipVias!.filter(o => o.isDefault);
+        const shipVia = defaultShipVias.length > 0 ? defaultShipVias[0] : selectedCarrier.shipVias![0];
         setIsPreloadingData({ isPreloadingData: true });
         setSelectedCarrier(selectedCarrier);
-        setSelectedShipVia(selectedCarrier.shipVias![0]);
+        setSelectedShipVia(shipVia);
         setShippingMethod({
             carrier: selectedCarrier,
-            shipVia: selectedCarrier.shipVias![0],
+            shipVia,
             onComplete: () => {
                 setIsPreloadingData({ isPreloadingData: false });
             },
@@ -147,14 +149,16 @@ const CheckoutReviewAndSubmitCarrierService: FC<Props> = ({
         });
     };
 
-    const handleRequestPickUpDateChanged = ({ selectedDay }: DatePickerState) => {
+    const handleRequestPickUpDateChanged = ({ selectedDay, selectedDayDisabled }: DatePickerState) => {
         setRequestedPickUpDate({
             requestedPickUpDate: selectedDay,
+            requestedPickUpDateDisabled: selectedDayDisabled,
         });
     };
-    const handleRequestDeliveryDateChanged = ({ selectedDay }: DatePickerState) => {
+    const handleRequestDeliveryDateChanged = ({ selectedDay, selectedDayDisabled }: DatePickerState) => {
         setRequestedDeliveryDate({
             requestedDeliveryDate: selectedDay,
+            requestedDeliveryDateDisabled: selectedDayDisabled,
         });
     };
 

@@ -1,5 +1,5 @@
 export function convertDateToDateOnlyString(date: Date | undefined) {
-    if (date === undefined) {
+    if (!date) {
         return "";
     }
 

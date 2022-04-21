@@ -44,7 +44,7 @@ const OrderDetailsStatus = () => {
             <Typography {...styles.titleText} id="orderDetailsStatus">
                 {translate("Status")}
             </Typography>
-            <Typography {...styles.status} aria-labelledby="orderDetailsStatus">
+            <Typography {...styles.status} aria-labelledby="orderDetailsStatus" data-test-selector="orderDetailsStatus">
                 {order.statusDisplay}
             </Typography>
         </StyledWrapper>

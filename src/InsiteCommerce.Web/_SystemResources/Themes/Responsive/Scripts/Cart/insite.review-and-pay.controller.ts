@@ -52,6 +52,7 @@ module insite.cart {
         session: SessionModel;
         enableWarehousePickup: boolean;
         taxFailureReason: string;
+        manyAttemptsError: string;
         canUpdateShipToAddress: boolean;
         ppTokenExIframe: any;
         ppTokenExIframeIsLoaded: boolean;
@@ -102,6 +103,7 @@ module insite.cart {
             this.$scope.$on("cartChanged", (event: ng.IAngularEvent) => this.onCartChanged(event));
 
             this.cartUrl = this.$attrs.cartUrl;
+            this.manyAttemptsError = this.$attrs.manyAttemptsError;
             this.cartId = this.queryString.get("cartId") || "current";
 
             this.getCart(true);
@@ -537,39 +539,39 @@ module insite.cart {
         }
 
         protected submitCart(): void {
-             if (this.paymentGatewayRequiresAuthentication) {
-                 const transactionId = guidHelper.generateGuid();
-                 this.paymentService.authenticate( {
-                     transactionId: transactionId,
-                     cardNumber: this.cart.paymentOptions.creditCard.cardNumber,
-                     expirationMonth: this.cart.paymentOptions.creditCard.expirationMonth,
-                     expirationYear: this.cart.paymentOptions.creditCard.expirationYear,
-                     orderAmount: this.cart.orderGrandTotal.toString()
-                 }).then(
-                     (result: PaymentAuthenticationModel) => {
-                         if (result.redirectHtml) {
-                             angular.element("#redirect-html").html(result.redirectHtml);
-                             this.checkForRedirectResult(transactionId);
-                         } else {
-                             this.submitCart2();
-                         }
-                     }, (error: any) => {
-                         this.submitFailed(error);
-                     }
-                 );
-                 return;
-             } else {
-                 this.submitCart2();
-             }
-       }
+            if (this.paymentGatewayRequiresAuthentication) {
+                const transactionId = guidHelper.generateGuid();
+                this.paymentService.authenticate({
+                    transactionId: transactionId,
+                    cardNumber: this.cart.paymentOptions.creditCard.cardNumber,
+                    expirationMonth: this.cart.paymentOptions.creditCard.expirationMonth,
+                    expirationYear: this.cart.paymentOptions.creditCard.expirationYear,
+                    orderAmount: this.cart.orderGrandTotal.toString()
+                }).then(
+                    (result: PaymentAuthenticationModel) => {
+                        if (result.redirectHtml) {
+                            angular.element("#redirect-html").html(result.redirectHtml);
+                            this.checkForRedirectResult(transactionId);
+                        } else {
+                            this.submitCart2();
+                        }
+                    }, (error: any) => {
+                        this.submitFailed(error);
+                    }
+                );
+                return;
+            } else {
+                this.submitCart2();
+            }
+        }
 
-       protected checkForRedirectResult(transactionId: string): void {
+        protected checkForRedirectResult(transactionId: string): void {
             let challengeResult = "";
             // this will throw an exception until it posts back to the callback url, we don't care about that exception
             try {
                 challengeResult = angular.element("#challengeFrame").contents().find('pre').text();
-            } catch {}
-           
+            } catch { }
+
             if (!challengeResult) {
                 setTimeout(() => this.checkForRedirectResult(transactionId), 500);
             } else {
@@ -580,9 +582,9 @@ module insite.cart {
                     this.submitFailed({ message: challengeResult });
                 }
             }
-       }
-        
-        protected submitCart2() : void {
+        }
+
+        protected submitCart2(): void {
             this.cart.requestedDeliveryDate = this.formatWithTimezone(this.cart.requestedDeliveryDate);
             this.cart.status = this.cart.requiresApproval ? "AwaitingApproval" : "Submitted";
 
@@ -612,10 +614,30 @@ module insite.cart {
                 this.tokenExIframe.reset();
             }
 
+            if (this.manyAttemptsError === error.message) {
+                this.coreService.displayModal(angular.element("#userLocked"), () => {
+                    this.sessionService.signOut().then(
+                        () => {
+                            this.signOutCompleted();
+                        },
+                        (error: any) => {
+                            this.signOutFailed(error);
+                        },
+                    );
+                });
+            }
+
             this.submitting = false;
             this.cart.paymentOptions.isPayPal = false;
             this.submitErrorMessage = error.message;
             this.spinnerService.hide();
+        }
+
+        protected signOutFailed(error: any): void {
+        }
+
+        protected signOutCompleted(): void {
+            this.coreService.redirectToSignIn(false);
         }
 
         submitPaypal(returnUri: string, signInUri: string): void {
@@ -842,8 +864,8 @@ module insite.cart {
                         this.isInvalidRoutingNumber = false;
                     } else if (this.submitting || data.validator && data.validator !== "required") {
                         this.isInvalidRoutingNumber = true;
-                    } 
-                    
+                    }
+
                     if (this.submitting && (this.isInvalidAccountNumber || this.isInvalidRoutingNumber)) {
                         this.submitting = false;
                         this.spinnerService.hide();

@@ -65,15 +65,17 @@ const reducer = {
     },
     "Pages/CheckoutReviewAndSubmit/SetRequestedDeliveryDate": (
         draft: Draft<CheckoutReviewAndSubmitState>,
-        action: { requestedDeliveryDate?: Date },
+        action: { requestedDeliveryDate?: Date; requestedDeliveryDateDisabled?: boolean },
     ) => {
         draft.requestedDeliveryDate = action.requestedDeliveryDate;
+        draft.requestedDeliveryDateDisabled = action.requestedDeliveryDateDisabled;
     },
     "Pages/CheckoutReviewAndSubmit/SetRequestedPickUpDate": (
         draft: Draft<CheckoutReviewAndSubmitState>,
-        action: { requestedPickUpDate?: Date },
+        action: { requestedPickUpDate?: Date; requestedPickUpDateDisabled?: boolean },
     ) => {
         draft.requestedPickupDate = action.requestedPickUpDate;
+        draft.requestedPickUpDateDisabled = action.requestedPickUpDateDisabled;
     },
     "Pages/CheckoutReviewAndSubmit/BeginPlaceOrderForApproval": (draft: Draft<CheckoutReviewAndSubmitState>) => {
         draft.isPlacingOrder = true;

@@ -6,6 +6,8 @@ import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/Link
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { useMergeStyles } from "@insite/content-library/additionalStyles";
+import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import Hidden from "@insite/mobius/Hidden";
 import ShoppingBag from "@insite/mobius/Icons/ShoppingBag";
 import ShoppingCart from "@insite/mobius/Icons/ShoppingCart";
@@ -15,7 +17,7 @@ import Typography, { TypographyPresentationProps } from "@insite/mobius/Typograp
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
 import React, { FC, useEffect } from "react";
 import { connect, ResolveThunks } from "react-redux";
-import { css } from "styled-components";
+import { css, withTheme } from "styled-components";
 
 const enum fields {
     visibilityState = "visibilityState",
@@ -36,6 +38,7 @@ export interface CartLinkStyles {
     routerLink?: LinkPresentationProps;
     desktopCountText?: TypographyPresentationProps;
     mobileCountText?: TypographyPresentationProps;
+    compactCountText?: TypographyPresentationProps;
 }
 
 export const cartLinkStyles: CartLinkStyles = {
@@ -54,6 +57,11 @@ export const cartLinkStyles: CartLinkStyles = {
             padding: 0 4px 0 10px;
         `,
     },
+    compactCountText: {
+        css: css`
+            font-weight: normal;
+        `,
+    },
 };
 
 const iconMap = {
@@ -68,6 +76,8 @@ interface OwnProps extends WidgetProps {
         [fields.visibilityState]: "both" | "label" | "icon";
         [fields.icon]: keyof typeof iconMap;
     };
+    isCompactHeaderCart?: boolean;
+    theme: BaseTheme;
 }
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
@@ -75,19 +85,22 @@ type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeo
 /** Reloading the cart makes `totalCountDisplay` temporarily unavailable, so retain the previous value for better UX. */
 let retainedTotalCountToDisplay: number | undefined;
 
-const styles = cartLinkStyles;
 const CartLink: FC<Props> = ({
     shouldLoadCart,
     cartUrl,
     totalCountDisplay,
     fields: { visibilityState, icon: selectedIcon },
     loadCurrentCart,
+    isCompactHeaderCart,
+    theme,
 }) => {
     useEffect(() => {
         if (shouldLoadCart) {
             loadCurrentCart({ shouldLoadFullCart: false, replaceCart: false });
         }
     }, [shouldLoadCart]);
+
+    const styles = useMergeStyles("cartLink", cartLinkStyles);
 
     const showIcon = visibilityState !== "label";
     const showLabel = visibilityState !== "icon";
@@ -99,6 +112,23 @@ const CartLink: FC<Props> = ({
     const icon = iconMap[(showIcon && selectedIcon) || "none"];
 
     const { routerLink } = styles;
+
+    if (isCompactHeaderCart) {
+        return (
+            <Link
+                {...routerLink}
+                color={theme.header.linkColor}
+                href={cartUrl}
+                icon={{ ...routerLink?.icon, iconProps: { src: icon, ...routerLink?.icon?.iconProps } }}
+                data-test-selector="cartLink"
+            >
+                <Typography as="span" {...styles.compactCountText}>
+                    {retainedTotalCountToDisplay}
+                </Typography>
+                <VisuallyHidden>{siteMessage("Header_CartCount")}</VisuallyHidden>
+            </Link>
+        );
+    }
 
     return (
         <Link
@@ -125,7 +155,7 @@ const CartLink: FC<Props> = ({
 };
 
 const widgetModule: WidgetModule = {
-    component: connect(mapStateToProps, mapDispatchToProps)(CartLink),
+    component: connect(mapStateToProps, mapDispatchToProps)(withTheme(CartLink)),
     definition: {
         displayName: "Cart",
         icon: "cart-shopping",

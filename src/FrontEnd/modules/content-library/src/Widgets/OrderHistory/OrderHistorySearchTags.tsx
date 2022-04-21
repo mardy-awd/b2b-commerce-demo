@@ -84,6 +84,7 @@ const orderHistorySearchTags = ({ getOrdersParameter, updateSearchFields, vmiLoc
                     onDelete={() => {
                         fieldRemoveHandler("fromDate");
                     }}
+                    data-test-selector="orderHistoryTags_FromDate"
                 >
                     {`${translate("From")}: ${getOrdersParameter.fromDate}`}
                 </Tag>
