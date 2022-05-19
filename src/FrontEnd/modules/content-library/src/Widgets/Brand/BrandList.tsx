@@ -145,7 +145,7 @@ const BrandList: FC<Props> = (props: Props) => {
 
     React.useEffect(() => {
         setState({ ...state, brandLetterDetails, brandSections });
-    }, [brandList?.length, brandAlphabetState, brandAlphabet]);
+    }, [brandLetterDetails?.length, brandSections?.length]);
 
     if (allBrandsDataView.isLoading || brandAlphabetState.isLoading) {
         return (

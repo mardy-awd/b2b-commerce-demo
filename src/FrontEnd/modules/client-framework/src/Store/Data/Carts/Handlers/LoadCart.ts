@@ -1,12 +1,19 @@
-import { createHandlerChainRunner, Handler, HasOnSuccess } from "@insite/client-framework/HandlerCreator";
+import waitFor from "@insite/client-framework/Common/Utilities/waitFor";
+import {
+    createHandlerChainRunner,
+    Handler,
+    HasOnSuccess,
+    markSkipOnCompleteIfOnSuccessIsSet,
+} from "@insite/client-framework/HandlerCreator";
 import { CartResult, getCart, GetCartApiParameter } from "@insite/client-framework/Services/CartService";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { nullPage } from "@insite/client-framework/Store/Data/Pages/PagesState";
 
 type HandlerType = Handler<
-    | {
+    | ({
           cartId: string;
           shouldLoadFullCart?: boolean;
-      }
+      } & HasOnSuccess)
     | ({
           apiParameter: GetCartApiParameter;
       } & HasOnSuccess),
@@ -16,11 +23,13 @@ type HandlerType = Handler<
         needFullCart: boolean;
     }
 >;
-export const DispatchBeginLoadCart: HandlerType = props => {
+export const DispatchBeginLoadCart: HandlerType = async props => {
     props.dispatch({
         type: "Data/Carts/BeginLoadCart",
         id: "cartId" in props.parameter ? props.parameter.cartId : props.parameter.apiParameter.cartId,
     });
+
+    await waitFor(() => getCurrentPage(props.getState()) !== nullPage);
 };
 
 export const SetNeedFullCart: HandlerType = props => {
@@ -108,6 +117,11 @@ export const DispatchCompleteLoadShipTo: HandlerType = props => {
     });
 };
 
+export const ExecuteOnSuccessCallback: HandlerType = props => {
+    markSkipOnCompleteIfOnSuccessIsSet(props);
+    props.parameter.onSuccess?.();
+};
+
 export const chain = [
     DispatchBeginLoadCart,
     SetNeedFullCart,
@@ -116,6 +130,7 @@ export const chain = [
     DispatchCompleteLoadCart,
     DispatchCompleteLoadBillTo,
     DispatchCompleteLoadShipTo,
+    ExecuteOnSuccessCallback,
 ];
 
 const loadCart = createHandlerChainRunner(chain, "LoadCart");

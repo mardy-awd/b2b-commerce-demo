@@ -1,5 +1,5 @@
 import { createTypedReducerWithImmer } from "@insite/client-framework/Common/CreateTypedReducer";
-import { GetCartsApiParameter } from "@insite/client-framework/Services/CartService";
+import { GetOrdersApiParameter } from "@insite/client-framework/Services/OrderService";
 import { GetVmiCountsApiParameter } from "@insite/client-framework/Services/VmiCountsService";
 import VmiBinDetailsState from "@insite/client-framework/Store/Pages/VmiBinDetails/VmiBinDetailsState";
 import { Draft } from "immer";
@@ -14,6 +14,7 @@ const initialState: VmiBinDetailsState = {
     },
     getVmiOrdersParameter: {
         sort: "OrderDate DESC",
+        customerSequence: "-1",
     },
     countsFilterOpen: false,
     ordersFilterOpen: false,
@@ -42,7 +43,7 @@ const reducer = {
     },
     "Pages/VmiBinDetails/UpdateVmiOrderSearchFields": (
         draft: Draft<VmiBinDetailsState>,
-        action: { parameter: GetCartsApiParameter },
+        action: { parameter: GetOrdersApiParameter },
     ) => {
         draft.getVmiOrdersParameter = { ...draft.getVmiOrdersParameter, ...action.parameter };
     },

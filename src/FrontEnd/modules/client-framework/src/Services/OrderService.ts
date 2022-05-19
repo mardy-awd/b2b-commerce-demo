@@ -59,6 +59,7 @@ export async function getOrders(parameter: GetOrdersApiParameter): Promise<Order
         delete parameter.status;
     }
 
+    delete (parameter as any).onComplete;
     const orders = await get<OrderCollectionModel>(ordersUrl, parameter);
     orders.orders?.forEach(o => {
         cleanOrder(o);

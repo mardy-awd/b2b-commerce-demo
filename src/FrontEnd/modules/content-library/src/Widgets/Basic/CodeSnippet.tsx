@@ -7,7 +7,7 @@ import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import merge from "lodash/merge";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { css } from "styled-components";
 
 const enum fields {
@@ -44,8 +44,17 @@ export const codeSnippetStyles: CodeSnippetStyles = {
     },
 };
 
-const CodeSnippet = ({ fields, shellContext, extendedStyles }: Props) => {
+const CodeSnippet = ({ fields, shellContext, extendedStyles, id }: Props) => {
     const [styles] = useState(() => merge(codeSnippetStyles, extendedStyles));
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (wrapperRef.current) {
+            const fragment = document.createRange().createContextualFragment(fields.content);
+            wrapperRef.current.innerHTML = "";
+            wrapperRef.current.appendChild(fragment);
+        }
+    }, []);
 
     return (
         <>
@@ -55,8 +64,12 @@ const CodeSnippet = ({ fields, shellContext, extendedStyles }: Props) => {
                     <Typography {...styles.instructionText}>{siteMessage("CodeSnippet_Instruction")}</Typography>
                 </StyledWrapper>
             )}
-            {/* eslint-disable react/no-danger */}
-            <div dangerouslySetInnerHTML={{ __html: fields.content }}></div>
+            {IS_SERVER_SIDE ? (
+                // eslint-disable-next-line react/no-danger
+                <div dangerouslySetInnerHTML={{ __html: fields.content }}></div>
+            ) : (
+                <div id={`snippet-wrapper_${id}`} ref={wrapperRef}></div>
+            )}
         </>
     );
 };

@@ -1,8 +1,8 @@
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
 import getLocalizedDateTime from "@insite/client-framework/Common/Utilities/getLocalizedDateTime";
 import { createHandlerChainRunner, Handler } from "@insite/client-framework/HandlerCreator";
-import { getCarts } from "@insite/client-framework/Services/CartService";
-import { getCartsDataView } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import { getOrders } from "@insite/client-framework/Services/OrderService";
+import { getOrdersDataView } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import translate from "@insite/client-framework/Translate";
 
 type HandlerType = Handler<{
@@ -22,12 +22,12 @@ export const ExportData: HandlerType = async props => {
     const state = props.getState();
     const language = state.context.session.language;
     if (Object.keys(props.parameter.ids).length) {
-        const vmiOrdersDataView = getCartsDataView(state, state.pages.vmiLocationDetails.getVmiOrdersParameter);
+        const vmiOrdersDataView = getOrdersDataView(state, state.pages.vmiLocationDetails.getVmiOrdersParameter);
         if (vmiOrdersDataView.value) {
             for (const row of vmiOrdersDataView.value) {
                 if (props.parameter.ids[row.id]) {
                     data.push([
-                        row.orderNumber,
+                        row.webOrderNumber || row.erpOrderNumber,
                         row.orderDate &&
                             getLocalizedDateTime({
                                 dateTime: new Date(row.orderDate),
@@ -40,15 +40,15 @@ export const ExportData: HandlerType = async props => {
             }
         }
     } else {
-        const apiResult = await getCarts({
+        const apiResult = await getOrders({
             ...state.pages.vmiLocationDetails.getVmiOrdersParameter,
             page: 1,
             pageSize: 9999,
         });
-        if (apiResult.successful && apiResult.result?.carts) {
-            for (const row of apiResult.result.carts) {
+        if (apiResult.orders) {
+            for (const row of apiResult.orders) {
                 data.push([
-                    row.orderNumber,
+                    row.webOrderNumber || row.erpOrderNumber,
                     row.orderDate &&
                         getLocalizedDateTime({
                             dateTime: new Date(row.orderDate),

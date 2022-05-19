@@ -3,15 +3,19 @@ import { addPagesFromContext, addWidgetsFromContext } from "@insite/client-frame
 import { setPreStyleGuideTheme } from "@insite/client-framework/ThemeConfiguration";
 
 // load all widgets. Without this they won't be included in the bundle
-const widgets = require.context("./Widgets", true, /\.tsx$/);
+const widgets = IS_PRODUCTION
+    ? require.context("./Widgets", true, /(Header|Basic|Common|Footer|SignIn)\/.+?\.tsx$/)
+    : require.context("./Widgets", true, /\.tsx$/);
 const onHotWidgetReplace = addWidgetsFromContext(widgets);
 if (module.hot) {
     module.hot.accept(widgets.id, () => onHotWidgetReplace(require.context("./Widgets", true, /\.tsx$/)));
 }
 
-// load all widget extensions. They could be loaded individually instead
-const widgetExtensions = require.context("./WidgetExtensions", true);
-widgetExtensions.keys().forEach(key => widgetExtensions(key));
+if (!IS_PRODUCTION) {
+    // load all widget extensions. They could be loaded individually instead
+    const widgetExtensions = require.context("./WidgetExtensions", true);
+    widgetExtensions.keys().forEach(key => widgetExtensions(key));
+}
 
 // add some post styleguide customizations. These can't be overridden by the style guide
 setPreStyleGuideTheme({

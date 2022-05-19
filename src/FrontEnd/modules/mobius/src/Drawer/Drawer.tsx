@@ -194,9 +194,9 @@ class Drawer extends React.Component<DrawerProps, DrawerState> {
 
     componentDidMount() {
         if (this.props.draggable) {
-            window.addEventListener("touchstart", this.tap);
+            window.addEventListener("touchstart", this.tap, { passive: true });
             window.addEventListener("touchmove", this.drag, { passive: false });
-            window.addEventListener("touchend", this.release);
+            window.addEventListener("touchend", this.release, { passive: true });
         }
     }
 
@@ -468,6 +468,7 @@ class Drawer extends React.Component<DrawerProps, DrawerState> {
                                 {...spreadProps("closeButtonProps")}
                                 onClick={draggable ? this.closePersistedDrawer : this.props.handleClose}
                                 aria-labelledby="close-drawer"
+                                data-test-selector="closeDrawer"
                             >
                                 <ButtonIcon {...spreadProps("closeButtonIconProps")} />
                                 <VisuallyHidden id="close-drawer">{theme.translate("Close Drawer")}</VisuallyHidden>

@@ -110,6 +110,11 @@ const PageStyle = styled.main<Pick<PageProps, "padding" | "fullWidth" | "backgro
             }
         `;
     }}
+
+    &.overflow-visible {
+        overflow: visible;
+    }
+
     ${injectCss}
 `;
 

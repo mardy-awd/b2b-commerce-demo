@@ -79,9 +79,7 @@
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -195,8 +193,8 @@
     <Content Include="App_Config\paypal.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Insite.Commerce.Private" Version="5.1.2204.1033" />
-    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2204.1033" />
+    <PackageReference Include="Insite.Commerce.Private" Version="5.1.2205.735" />
+    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2205.735" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj" />

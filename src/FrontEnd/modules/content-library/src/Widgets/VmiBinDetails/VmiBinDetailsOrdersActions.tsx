@@ -1,5 +1,5 @@
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getCartsDataView } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import { getOrdersDataView } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import exportVmiOrders from "@insite/client-framework/Store/Pages/VmiBinDetails/Handlers/ExportVmiOrders";
 import { TableTabKeys } from "@insite/client-framework/Store/Pages/VmiBinDetails/VmiBinDetailsReducer";
 import translate from "@insite/client-framework/Translate";
@@ -15,7 +15,7 @@ import { css } from "styled-components";
 
 const mapStateToProps = (state: ApplicationState) => {
     return {
-        vmiOrdersState: getCartsDataView(state, state.pages.vmiBinDetails.getVmiOrdersParameter),
+        vmiOrdersState: getOrdersDataView(state, state.pages.vmiBinDetails.getVmiOrdersParameter),
         selectedIds: state.pages.vmiBinDetails.selectedVmiItems[TableTabKeys.PreviousOrders] || {},
     };
 };

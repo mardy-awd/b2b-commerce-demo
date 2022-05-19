@@ -22,6 +22,7 @@ addWidgetsFromContext(require.context("../../client-framework/src/Internal/Widge
 
 // the new bundle splitting doesn't include all widgets in the bundle, but we want them for site generation
 addWidgetsFromContext(require.context("../../content-library/src/Widgets", true, /\.tsx$/));
+addPagesFromContext(require.context("../../content-library/src/Pages", true, /\.tsx$/));
 
 const readFileAsync = promisify(readFile);
 

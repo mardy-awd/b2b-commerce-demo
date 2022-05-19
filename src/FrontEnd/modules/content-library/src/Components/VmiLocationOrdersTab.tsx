@@ -2,13 +2,14 @@ import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import getLocalizedDateTime from "@insite/client-framework/Common/Utilities/getLocalizedDateTime";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSession, getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
-import { getCartsDataView } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import { getOrdersDataView } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import { isVmiAdmin } from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsSelectors";
 import exportVmiOrders from "@insite/client-framework/Store/Pages/VmiLocationDetails/Handlers/ExportVmiOrders";
 import selectVmiItems from "@insite/client-framework/Store/Pages/VmiLocationDetails/Handlers/SelectVmiItems";
 import updateOrderSearchFields from "@insite/client-framework/Store/Pages/VmiLocationDetails/Handlers/UpdateOrderSearchFields";
 import { TableTabKeys } from "@insite/client-framework/Store/Pages/VmiLocationDetails/VmiLocationDetailsReducer";
 import translate from "@insite/client-framework/Translate";
+import OrderDetailPageTypeLink from "@insite/content-library/Components/OrderDetailPageTypeLink";
 import Checkbox, { CheckboxPresentationProps } from "@insite/mobius/Checkbox";
 import DataTable, { DataTableProps, SortOrderOptions } from "@insite/mobius/DataTable";
 import DataTableBody from "@insite/mobius/DataTable/DataTableBody";
@@ -38,7 +39,7 @@ const mapStateToProps = (state: ApplicationState) => {
         isVmiAdmin: isVmiAdmin(settings.orderSettings, session),
         language: session.language,
         getVmiOrdersParameter: state.pages.vmiLocationDetails.getVmiOrdersParameter,
-        vmiOrdersDataView: getCartsDataView(state, state.pages.vmiLocationDetails.getVmiOrdersParameter),
+        vmiOrdersDataView: getOrdersDataView(state, state.pages.vmiLocationDetails.getVmiOrdersParameter),
         orderNumber: state.pages.vmiLocationDetails.getVmiOrdersParameter.orderNumber,
     };
 };
@@ -324,7 +325,14 @@ const VmiLocationOrdersTab = ({
                             </DataTableHead>
                             <DataTableBody>
                                 {vmiOrdersDataView.value.map(
-                                    ({ id, orderNumber, orderDate, orderGrandTotalDisplay, status }) => (
+                                    ({
+                                        id,
+                                        webOrderNumber,
+                                        erpOrderNumber,
+                                        orderDate,
+                                        orderGrandTotalDisplay,
+                                        status,
+                                    }) => (
                                         <DataTableRow key={id}>
                                             {isVmiAdmin && (
                                                 <DataTableCell {...styles.checkboxCells}>
@@ -338,7 +346,11 @@ const VmiLocationOrdersTab = ({
                                                 </DataTableCell>
                                             )}
                                             <DataTableCell {...styles.nameCells}>
-                                                <Link>{orderNumber}</Link>
+                                                <OrderDetailPageTypeLink
+                                                    title={webOrderNumber || erpOrderNumber}
+                                                    orderNumber={webOrderNumber || erpOrderNumber}
+                                                    isVmiOrderDetailsPage={true}
+                                                />
                                             </DataTableCell>
                                             <DataTableCell {...styles.orderDateCells}>
                                                 {orderDate &&

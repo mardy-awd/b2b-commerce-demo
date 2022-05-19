@@ -188,11 +188,14 @@ class Tooltip extends React.Component<TooltipProps> {
                     onClick={this.openTooltip}
                     onKeyDown={this.handleKeyDown}
                     onBlur={this.closeTooltip}
+                    data-test-selector="tooltip_OpenTooltip"
                 >
                     {trigger}
                     <VisuallyHidden>{triggerAltText || this.props.theme!.translate("more info")}</VisuallyHidden>
                 </TooltipClickable>
-                <div aria-live="polite">{this.state.visible ? toolTipComponent : null}</div>
+                <div aria-live="polite" data-test-selector="tooltip_TooltipInfo">
+                    {this.state.visible ? toolTipComponent : null}
+                </div>
             </TooltipWrapper>
         );
     }

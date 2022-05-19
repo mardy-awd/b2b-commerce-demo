@@ -13,6 +13,7 @@ import {
 
 type HandlerType = Handler<{
     cartId?: string;
+    cartLinesShouldBeExpanded?: true;
     onSuccess?: () => void;
 }>;
 
@@ -39,7 +40,13 @@ export const LoadData: HandlerType = props => {
         }
     } else {
         const currentCartState = getCurrentCartState(state);
-        if (!currentCartState.value && !currentCartState.isLoading) {
+        if (
+            (!currentCartState.value ||
+                (props.parameter.cartLinesShouldBeExpanded &&
+                    currentCartState.value.lineCount &&
+                    !currentCartState.value.cartLines)) &&
+            !currentCartState.isLoading
+        ) {
             props.dispatch(loadCurrentCart());
         }
         const currentPromotionsState = getCurrentPromotionsDataView(state);

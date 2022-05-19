@@ -303,7 +303,7 @@ const AddVmiLocationModal = ({
         <Modal
             {...styles.modal}
             handleClose={closeModalHandler}
-            headline={editLocationId ? translate("Edit Ship To Address") : translate("Add Ship To Address")}
+            headline={editLocationId ? translate("Edit Location") : translate("Add Location")}
             isOpen={isOpen}
             size={700}
         >
@@ -381,7 +381,7 @@ const AddVmiLocationModal = ({
                             {translate("Cancel")}
                         </Button>
                         <Button {...styles.submitButton} type="submit">
-                            {editLocationId ? translate("Edit Ship To Address") : translate("Add Ship To Address")}
+                            {translate("Save")}
                         </Button>
                     </GridItem>
                 </GridContainer>

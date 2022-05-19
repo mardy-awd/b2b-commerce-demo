@@ -50,8 +50,12 @@
             <div class="table-view-select">
                 <select id="tableView" name="tableView"
                         ng-model="vm.tableViewProducts">
-                    <option ng-value="true">[% translate 'Products' %]</option>
-                    <option ng-value="false">[% translate 'Orders' %]</option>
+                    <option ng-value="true">
+                        {{::vm.capitalizeString('[% translate 'Products' %]')}}
+                    </option>
+                    <option ng-value="false">
+                        {{::vm.capitalizeString('[% translate 'Orders' %]')}}
+                    </option>
                 </select>
             </div>
         </div>
@@ -129,7 +133,7 @@
                                             ng-click="vm.toggleSelectedProduct(vmiProduct)" />
                                 </span>
                             </td>
-                            <td class="col-name"><a id="tst_productList_{{vmiProduct.id}}_descriptionLink" ng-href="{{vmiProduct.product.productDetailUrl}}">{{vmiProduct.product.shortDescription}}</a></td>
+                            <td class="col-name"><a id="tst_productList_{{vmiProduct.id}}_descriptionLink" ng-href="[% urlForPage 'VmiBinDetailsPage' %]?locationId={{vm.vmiLocationId}}&id={{vmiProduct.id}}">{{vmiProduct.product.shortDescription}}</a></td>
                             <td class="col-part-number" ng-bind="vmiProduct.product.erpNumber"></td>
                             <td class="col-bin-number" ng-bind="vmiProduct.binNumber"></td>
                             <td class="col-min-qty" ng-bind="vmiProduct.minimumQty"></td>
@@ -213,7 +217,7 @@
                                             ng-click="vm.toggleSelectedOrder(vmiOrder)" />
                                 </span>
                             </td>
-                            <td class="col-order-number"><a id="tst_orderList_{{vmiOrder.id}}_descriptionLink" ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ vmiOrder.erpOrderNumber || vmiOrder.orderNumber }}&isVmiOrder=true">{{vmiOrder.orderNumber}}</a></td>
+                            <td class="col-order-number"><a id="tst_orderList_{{vmiOrder.id}}_descriptionLink" ng-href="[% urlForPage 'OrderDetailPage' %]?orderNumber={{ vmiOrder.webOrderNumber || vmiOrder.erpOrderNumber }}&isVmiOrder=true">{{ vmiOrder.webOrderNumber || vmiOrder.erpOrderNumber }}</a></td>
                             <td class="col-order-date" ng-bind="vmiOrder.orderDate | date:'shortDate'"></td>
                             <td class="col-order-total" ng-bind="vmiOrder.orderGrandTotalDisplay"></td>
                             <td class="col-order-status" ng-bind="vmiOrder.status"></td>

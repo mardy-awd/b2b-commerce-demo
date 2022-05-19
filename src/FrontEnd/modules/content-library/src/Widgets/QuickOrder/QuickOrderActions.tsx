@@ -275,7 +275,12 @@ const QuickOrderActions = ({
             )}
             {!fields.useOverflowMenu && buttons}
             {productsExist && (
-                <Button {...styles.addAllToCartButton} onClick={addAllToCartClickHandler} disabled={!allQtysIsValid}>
+                <Button
+                    {...styles.addAllToCartButton}
+                    onClick={addAllToCartClickHandler}
+                    disabled={!allQtysIsValid}
+                    data-test-selector="quickOrder_addAllProductsToCart"
+                >
                     {translate("Add All to Cart & Check Out")}
                 </Button>
             )}

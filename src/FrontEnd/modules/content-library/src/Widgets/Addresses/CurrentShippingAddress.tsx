@@ -160,7 +160,10 @@ const CurrentShippingAddress: React.FunctionComponent<Props> = (props: Props) =>
                     </Modal>
                 )}
             </GridItem>
-            <GridItem {...styles.addressInfoDisplayGridItem}>
+            <GridItem
+                {...styles.addressInfoDisplayGridItem}
+                data-test-selector="addressInfoDisplay_CurrentShippingAddress"
+            >
                 <AddressInfoDisplay
                     firstName={currentShipTo.firstName}
                     lastName={currentShipTo.lastName}

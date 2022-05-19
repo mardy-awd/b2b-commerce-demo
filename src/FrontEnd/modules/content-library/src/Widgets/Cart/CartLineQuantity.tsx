@@ -89,6 +89,7 @@ const CartLineQuantity: FC<Props> = ({
                 onChange={changeHandler}
                 onKeyDown={keyDownHandler}
                 onBlur={blurHandler}
+                onClick={event => event.currentTarget.focus()}
                 data-test-selector="cartline_qty"
             />
         );

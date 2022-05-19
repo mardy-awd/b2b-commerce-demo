@@ -2,7 +2,12 @@ import { createTypedReducerWithImmer } from "@insite/client-framework/Common/Cre
 import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import { getContentByVersionPath } from "@insite/client-framework/Services/ContentService";
 import { Session } from "@insite/client-framework/Services/SessionService";
-import { PaymetricConfig, SettingsModel, TokenExConfig } from "@insite/client-framework/Services/SettingsService";
+import {
+    AdyenSettings,
+    PaymetricConfig,
+    SettingsModel,
+    TokenExConfig,
+} from "@insite/client-framework/Services/SettingsService";
 import { Website } from "@insite/client-framework/Services/WebsiteService";
 import ContextState from "@insite/client-framework/Store/Context/ContextState";
 import { LanguageModel, PersonaModel } from "@insite/client-framework/Types/ApiModels";
@@ -134,6 +139,9 @@ const reducer = {
         action: { paymetricConfig: PaymetricConfig },
     ) => {
         draft.paymetricConfig = action.paymetricConfig;
+    },
+    "Context/CompleteLoadAdyenSettings": (draft: Draft<ContextState>, action: { adyenSettings: AdyenSettings }) => {
+        draft.adyenSettings = action.adyenSettings;
     },
     "Context/DeleteSession": (draft: Draft<ContextState>) => {
         draft.session = {} as Session;

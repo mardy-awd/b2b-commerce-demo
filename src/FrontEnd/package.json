@@ -36,6 +36,7 @@
         "postinstall": "node validateLockFile.js"
     },
     "devDependencies": {
+        "@adyen/adyen-web": "5.6.1",
         "@babel/cli": "7.2.3",
         "@babel/core": "7.4.0",
         "@babel/plugin-proposal-class-properties": "7.4.0",

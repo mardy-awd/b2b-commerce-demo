@@ -5,6 +5,8 @@ import { getSettingsCollection } from "@insite/client-framework/Store/Context/Co
 import { getBillToState } from "@insite/client-framework/Store/Data/BillTos/BillTosSelectors";
 import loadBillTo from "@insite/client-framework/Store/Data/BillTos/Handlers/LoadBillTo";
 import { getCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import loadOrderByOrderNumber from "@insite/client-framework/Store/Data/Orders/Handlers/LoadOrderByOrderNumber";
+import { getOrderState } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import loadShipTo from "@insite/client-framework/Store/Data/ShipTos/Handlers/LoadShipTo";
 import { getShipToState } from "@insite/client-framework/Store/Data/ShipTos/ShipTosSelectors";
 import translate from "@insite/client-framework/Translate";
@@ -20,16 +22,17 @@ import OrderConfirmationShippingInformation, {
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Typography, { TypographyPresentationProps, TypographyProps } from "@insite/mobius/Typography";
-import React, { FC } from "react";
+import React, { useEffect } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
 const mapStateToProps = (state: ApplicationState) => {
-    const cart = getCartState(state, state.pages.orderConfirmation.cartId).value;
+    const cartState = getCartState(state, state.pages.orderConfirmation.cartId);
     return {
-        cart,
-        billTo: getBillToState(state, cart?.billToId).value,
-        shipTo: getShipToState(state, cart?.shipToId).value,
+        cartState,
+        billToState: getBillToState(state, cartState.value?.billToId),
+        shipToState: getShipToState(state, cartState.value?.shipToId),
+        orderState: getOrderState(state, cartState.value?.orderNumber),
         pickUpWarehouse: state.context.session.pickUpWarehouse,
         enableVat: getSettingsCollection(state).productSettings.enableVat,
         language: state.context.session.language,
@@ -39,6 +42,7 @@ const mapStateToProps = (state: ApplicationState) => {
 const mapDispatchToProps = {
     loadBillTo,
     loadShipTo,
+    loadOrderByOrderNumber,
 };
 
 export interface OrderConfirmationOrderInformationStyles {
@@ -170,21 +174,42 @@ type Props = WidgetProps & ReturnType<typeof mapStateToProps> & ResolveThunks<ty
 
 const styles = orderInformationStyles;
 
-const OrderConfirmationOrderInformation: FC<Props> = props => {
-    const language = props.language;
-    if (!props.cart) {
-        return null;
-    }
+const OrderConfirmationOrderInformation = ({
+    cartState,
+    billToState,
+    shipToState,
+    orderState,
+    pickUpWarehouse,
+    enableVat,
+    language,
+    loadBillTo,
+    loadShipTo,
+    loadOrderByOrderNumber,
+}: Props) => {
+    useEffect(() => {
+        if (cartState.isLoading || !cartState.value) {
+            return;
+        }
 
-    if (!props.billTo && props.cart.billToId) {
-        props.loadBillTo({ billToId: props.cart.billToId });
-    }
+        const cart = cartState.value;
+        if (!billToState.isLoading && !billToState.value && cart.billToId) {
+            loadBillTo({ billToId: cart.billToId });
+        }
 
-    if (!props.shipTo && props.cart.billToId && props.cart.shipToId) {
-        props.loadShipTo({ billToId: props.cart.billToId, shipToId: props.cart.shipToId });
-    }
+        if (!shipToState.isLoading && !shipToState.value && cart.billToId && cart.shipToId) {
+            loadShipTo({ billToId: cart.billToId, shipToId: cart.shipToId });
+        }
 
-    if (!props.billTo || !props.shipTo) {
+        if (!orderState.isLoading && !orderState.value && cart.orderNumber && cart.status === "Submitted") {
+            loadOrderByOrderNumber({ orderNumber: cart.orderNumber });
+        }
+    }, [cartState]);
+
+    const cart = cartState.value;
+    const billTo = billToState.value;
+    const shipTo = shipToState.value;
+    const order = orderState.value;
+    if (!cart || !billTo || !shipTo) {
         return null;
     }
 
@@ -194,7 +219,7 @@ const OrderConfirmationOrderInformation: FC<Props> = props => {
                 <Typography {...styles.orderNumberHeading}>
                     {`${translate("Order")} #`}
                     <Typography {...styles.orderNumberText} data-test-selector="orderConfirmation_orderNumber">
-                        {props.cart.erpOrderNumber || props.cart.orderNumber}
+                        {cart.erpOrderNumber || cart.orderNumber}
                     </Typography>
                 </Typography>
             </GridItem>
@@ -204,7 +229,7 @@ const OrderConfirmationOrderInformation: FC<Props> = props => {
                         extendedStyles={styles.headingAndTextStyles}
                         heading={translate("Order Date")}
                         text={getLocalizedDateTime({
-                            dateTime: new Date(props.cart.orderDate as Date),
+                            dateTime: new Date(cart.orderDate as Date),
                             language,
                         })}
                     />
@@ -213,53 +238,53 @@ const OrderConfirmationOrderInformation: FC<Props> = props => {
                     <SmallHeadingAndText
                         extendedStyles={styles.headingAndTextStyles}
                         heading={translate("PO Number")}
-                        text={props.cart.poNumber}
+                        text={cart.poNumber}
                     />
                 </GridItem>
                 <GridItem {...mergeToNew(styles.orderInformationGridItems, styles.statusGridItem)}>
                     <SmallHeadingAndText
                         extendedStyles={styles.headingAndTextStyles}
                         heading={translate("Status")}
-                        text={props.cart.status}
+                        text={order?.statusDisplay || cart.statusDisplay}
                     />
                 </GridItem>
-                {props.cart?.salespersonName && (
+                {cart?.salespersonName && (
                     <GridItem {...mergeToNew(styles.orderInformationGridItems, styles.salespersonGridItem)}>
                         <SmallHeadingAndText
                             extendedStyles={styles.headingAndTextStyles}
                             heading={translate("Salesperson")}
-                            text={props.cart.salespersonName}
+                            text={cart.salespersonName}
                         />
                     </GridItem>
                 )}
             </GridContainer>
             <GridItem {...styles.shippingInformationGridItem}>
                 <OrderConfirmationShippingInformation
-                    cart={props.cart}
-                    shipTo={props.shipTo}
-                    pickUpWarehouse={props.pickUpWarehouse}
+                    cart={cart}
+                    shipTo={shipTo}
+                    pickUpWarehouse={pickUpWarehouse}
                     extendedStyles={styles.orderConfirmationShippingInformation}
                 />
             </GridItem>
-            {props.enableVat && props.cart.customerVatNumber && (
+            {enableVat && cart.customerVatNumber && (
                 <GridItem {...styles.vatNumberGridItem}>
                     <Typography {...styles.vatNumberTitleText} as="h3">
                         {translate("VAT Number")}
                     </Typography>
-                    <Typography {...styles.vatNumberText}>{props.cart.customerVatNumber}</Typography>
+                    <Typography {...styles.vatNumberText}>{cart.customerVatNumber}</Typography>
                 </GridItem>
             )}
             <GridItem {...styles.billingInformationGridItem}>
                 <OrderConfirmationBillingInformation
-                    cart={props.cart}
-                    billTo={props.billTo}
+                    cart={cart}
+                    billTo={billTo}
                     extendedStyles={styles.orderConfirmationBillingInformation}
                 />
             </GridItem>
-            {props.cart.notes && (
+            {cart.notes && (
                 <GridItem {...styles.notesGridItem}>
                     <Typography {...styles.notesTitle}>{translate("Notes")}</Typography>
-                    <Typography {...styles.notesDescription}>{props.cart.notes}</Typography>
+                    <Typography {...styles.notesDescription}>{cart.notes}</Typography>
                 </GridItem>
             )}
         </GridContainer>

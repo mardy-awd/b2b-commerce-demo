@@ -130,7 +130,11 @@ const CreateAddressButton = ({
                     </OverflowMenu>
                 </Hidden>
                 <Hidden below="md">
-                    <Button {...styles.createNewAddressButton} onClick={editClickHandler}>
+                    <Button
+                        {...styles.createNewAddressButton}
+                        onClick={editClickHandler}
+                        data-test-selector="addresses_CreateNewAddress"
+                    >
                         {translate("Create New Address")}
                     </Button>
                 </Hidden>

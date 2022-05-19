@@ -13,6 +13,7 @@ module insite.cart {
     import CustomerSettingsModel = Insite.Customers.WebApi.V1.ApiModels.CustomerSettingsModel;
     import IPaymentService = insite.payment.IPaymentService;
     import PaymentAuthenticationModel = Insite.Payments.WebApi.V1.ApiModels.PaymentAuthenticationModel;
+    import ThreeDsModel = Insite.Cart.Services.Dtos.ThreeDsDto;
 
     export interface IReviewAndPayControllerAttributes extends ng.IAttributes {
         cartUrl: string;
@@ -60,6 +61,7 @@ module insite.cart {
         hasInvalidPrice = false;
         bypassCvvForSavedCards: boolean;
         paymentGatewayRequiresAuthentication: boolean;
+        threeDs: ThreeDsModel;
 
         static $inject = [
             "$http",
@@ -546,12 +548,26 @@ module insite.cart {
                     cardNumber: this.cart.paymentOptions.creditCard.cardNumber,
                     expirationMonth: this.cart.paymentOptions.creditCard.expirationMonth,
                     expirationYear: this.cart.paymentOptions.creditCard.expirationYear,
-                    orderAmount: this.cart.orderGrandTotal.toString()
+                    orderAmount: this.cart.orderGrandTotal.toString(),
+                    operation: 'authenticate'
                 }).then(
                     (result: PaymentAuthenticationModel) => {
                         if (result.redirectHtml) {
-                            angular.element("#redirect-html").html(result.redirectHtml);
-                            this.checkForRedirectResult(transactionId);
+                            if (result.redirectHtml.includes("threedsFrictionLessRedirect"))
+                            {
+                                this.threeDs = { 
+                                    authenticationToken: result.threeDs.authenticationToken, 
+                                    authenticationVersion : result.threeDs.authenticationVersion,
+                                    dsTransactionId : result.threeDs.dsTransactionId,
+                                    acsEci: result.threeDs.acsEci
+                                };
+                                this.submitCart2();
+                            }
+                            else {
+                                this.coreService.displayModal(angular.element("#3ds"));
+                                angular.element("#redirect-html").html(result.redirectHtml.replace("100vh", "70vh"));
+                                this.checkForRedirectResult(transactionId);
+                            }
                         } else {
                             this.submitCart2();
                         }
@@ -565,28 +581,42 @@ module insite.cart {
             }
         }
 
-        protected checkForRedirectResult(transactionId: string): void {
-            let challengeResult = "";
-            // this will throw an exception until it posts back to the callback url, we don't care about that exception
-            try {
-                challengeResult = angular.element("#challengeFrame").contents().find('pre').text();
-            } catch { }
+        protected close3dsModal(): void {
+            this.submitFailed({ message: "" });
+        }
 
-            if (!challengeResult) {
-                setTimeout(() => this.checkForRedirectResult(transactionId), 500);
-            } else {
-                angular.element("#threedsChallengeRedirect").remove();
-                if (challengeResult === '"PROCEED"') {
-                    this.submitCart2();
-                } else {
-                    this.submitFailed({ message: challengeResult });
-                }
-            }
+        protected checkForRedirectResult(transactionId: string): void {
+            this.paymentService.getAuthenticationStatus(transactionId)
+                .then(
+                    (result: PaymentAuthenticationModel) => {
+                        if (result.action === 'PENDING') {
+                            setTimeout(() => this.checkForRedirectResult(transactionId), 250);
+                        } else {
+                            this.coreService.closeModal("#3ds");
+                            if (result.action === 'SUCCESS') {
+                                this.threeDs = { 
+                                    authenticationToken: result.threeDs.authenticationToken, 
+                                    authenticationVersion : result.threeDs.authenticationVersion,
+                                    dsTransactionId : result.threeDs.dsTransactionId,
+                                    acsEci: result.threeDs.acsEci
+                                };
+                                this.submitCart2();
+                           } else {
+                               this.$scope.$apply(() => {
+                                   this.submitFailed({ message: "" });
+                               });
+                           }
+                        }
+                }, (error: any) => {
+                    this.coreService.closeModal("#3ds");
+                    this.submitFailed(error);
+                });
         }
 
         protected submitCart2(): void {
             this.cart.requestedDeliveryDate = this.formatWithTimezone(this.cart.requestedDeliveryDate);
             this.cart.status = this.cart.requiresApproval ? "AwaitingApproval" : "Submitted";
+            this.cart.paymentOptions.threeDs = this.threeDs;
 
             this.cartService.updateCart(this.cart, true).then(
                 (cart: CartModel) => {

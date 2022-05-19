@@ -360,7 +360,7 @@ const RfqQuoteDetailsSalesRepProductList = ({
                             </GridItem>
                             <GridItem {...styles.infoCenterColumn}>
                                 <GridContainer {...styles.infoContainer}>
-                                    <GridItem {...styles.quantityGridItem}>
+                                    <GridItem {...styles.quantityGridItem} data-test-selector="quoteLine_Quantity">
                                         <VisuallyHidden>{translate("Quantity Requested")}</VisuallyHidden>
                                         <SmallHeadingAndText
                                             heading={translate("QTY Req.")}

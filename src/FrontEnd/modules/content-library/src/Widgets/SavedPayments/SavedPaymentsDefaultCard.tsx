@@ -217,8 +217,8 @@ const SavedPaymentsDefaultCard: React.FC<Props> = ({ updateEditModal, deletePaym
                 <StyledWrapper {...styles.headerWrapper}>
                     <LazyImage
                         {...styles.cardTypeImage}
-                        src={`/images/card-types/${getImageName(defaultCard.cardType)}.png`}
-                        altText=""
+                        src={`/images/card-types/${getImageName(defaultCard.cardType)}.webp`}
+                        altText={`Card type ${defaultCard.cardType}`}
                     />
                     <Typography {...styles.descriptionText}>
                         {defaultCard.description && <>{defaultCard.description}&nbsp;&mdash;&nbsp;</>}

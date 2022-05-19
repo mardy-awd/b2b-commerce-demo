@@ -109,7 +109,7 @@ export const trackUserEvents = async (storeDispatch: typeof dispatch) => {
     setLastActiveTime();
     document.addEventListener("keypress", setLastActiveTime);
     document.addEventListener("mousedown", setLastActiveTime);
-    document.addEventListener("ontouchstart", setLastActiveTime);
+    document.addEventListener("ontouchstart", setLastActiveTime, { passive: true });
 };
 
 export const getAccessTokenFromLocalStorage = () => {

@@ -10,7 +10,7 @@ import PageProps from "@insite/client-framework/Types/PageProps";
 import Modals from "@insite/content-library/Components/Modals";
 import LoadingOverlay, { LoadingOverlayProps } from "@insite/mobius/LoadingOverlay";
 import Page from "@insite/mobius/Page";
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -24,8 +24,10 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: ApplicationState) => {
     const currentPromotionsDataView = getCurrentPromotionsDataView(state);
+    const cartState = getCurrentCartState(state);
     return {
-        cart: getCurrentCartState(state),
+        shouldLoadCart:
+            !cartState.isLoading && (!cartState.value || (cartState.value.lineCount && !cartState.value.cartLines)),
         shouldLoadPromotions: !currentPromotionsDataView.value && !currentPromotionsDataView.isLoading,
         isPreloadingData: state.pages.checkoutShipping.isPreloadingData,
     };
@@ -45,38 +47,37 @@ export const cartPageStyles: CartPageStyles = {
     },
 };
 
-class CartPage extends Component<Props> {
-    UNSAFE_componentWillMount() {
-        const { shouldLoadPromotions, loadCurrentPromotions, isPreloadingData } = this.props;
-
+const styles = cartPageStyles;
+const CartPage = ({
+    id,
+    shouldLoadCart,
+    shouldLoadPromotions,
+    loadCurrentPromotions,
+    isPreloadingData,
+    setIsPreloadingData,
+    loadCurrentCart,
+}: Props) => {
+    useEffect(() => {
         if (shouldLoadPromotions) {
             loadCurrentPromotions();
-        }
-
-        if (isPreloadingData) {
-            this.props.setIsPreloadingData({ isPreloadingData: false });
-        }
-    }
-
-    componentDidMount() {
-        const { cart, loadCurrentCart } = this.props;
-        if (!cart.isLoading) {
+        } else if (shouldLoadCart) {
             loadCurrentCart();
         }
-    }
 
-    render() {
-        const styles = cartPageStyles;
-        return (
-            <Page>
-                <LoadingOverlay {...styles.loadingOverlay} loading={this.props.isPreloadingData}>
-                    <Zone contentId={this.props.id} zoneName="Content"></Zone>
-                </LoadingOverlay>
-                <Modals />
-            </Page>
-        );
-    }
-}
+        if (!shouldLoadPromotions && !shouldLoadCart && isPreloadingData) {
+            setIsPreloadingData({ isPreloadingData: false });
+        }
+    });
+
+    return (
+        <Page>
+            <LoadingOverlay {...styles.loadingOverlay} loading={isPreloadingData}>
+                <Zone contentId={id} zoneName="Content"></Zone>
+            </LoadingOverlay>
+            <Modals />
+        </Page>
+    );
+};
 
 const pageModule: PageModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(CartPage),

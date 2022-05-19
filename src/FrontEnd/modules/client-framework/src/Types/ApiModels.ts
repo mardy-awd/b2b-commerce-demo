@@ -1020,6 +1020,7 @@ export interface ShipViaDto {
 }
 
 export interface PaymentOptionsDto {
+    adyenPspReference: string;
     canStorePaymentProfile: boolean;
     cardTypes: { key: string; value: string }[] | null;
     creditCard: CreditCardDto | null;
@@ -1027,6 +1028,7 @@ export interface PaymentOptionsDto {
     expirationMonths: { key: string; value: number }[] | null;
     expirationYears: { key: number; value: number }[] | null;
     isPayPal: boolean;
+    isAdyenDropIn: boolean;
     paymentMethods: PaymentMethodDto[] | null;
     payPalPayerId: string;
     payPalPaymentUrl: string;
@@ -2883,6 +2885,7 @@ export interface WebsiteSettingsModel extends BaseModel {
     useECheckTokenExGateway: boolean;
     usePaymetricGateway: boolean;
     useTokenExGateway: boolean;
+    useAdyenDropIn: boolean;
 }
 
 export interface TranslationDictionaryModel {

@@ -3,12 +3,14 @@ import { encodeCookie } from "@insite/client-framework/Common/Cookies";
 import { Dictionary, SafeDictionary } from "@insite/client-framework/Common/Types";
 import { loadAndParseFontCss } from "@insite/client-framework/Common/Utilities/fontProcessing";
 import { getHeadTrackingScript, getNoscriptTrackingScript } from "@insite/client-framework/Common/Utilities/tracking";
+import { getIsWebCrawler } from "@insite/client-framework/Common/WebCrawler";
 import { ShellContext } from "@insite/client-framework/Components/IsInShell";
 import PreviewLogin from "@insite/client-framework/Components/PreviewLogin";
 import SessionLoader from "@insite/client-framework/Components/SessionLoader";
 import SpireRouter, { convertToLocation } from "@insite/client-framework/Components/SpireRouter";
 import logger from "@insite/client-framework/Logger";
 import {
+    getInitialPage,
     getPageMetadata,
     getRedirectTo,
     getStatusCode,
@@ -142,9 +144,17 @@ export async function pageRenderer(request: Request, response: Response) {
     let rawHtml = "";
     const store = publicConfigureStore();
 
-    const disableSSR = !!Object.keys(request.query).find(o => o.toLowerCase() === "disablessr");
+    const initialPage = getInitialPage();
+    const enableSSR = !!Object.keys(request.query).find(o => o.toLowerCase() === "enablessr");
     const hasAccessToken = !!Object.keys(request.query).find(o => o.toLowerCase() === "access_token");
-    const renderStorefrontServerSide = !disableSSR && !hasAccessToken && !isGetContentRequest;
+    const renderStorefrontServerSide =
+        !hasAccessToken &&
+        !isGetContentRequest &&
+        (isSiteInShell ||
+            getIsWebCrawler() ||
+            enableSSR ||
+            (initialPage && initialPage?.result.statusCode >= 300) ||
+            request.originalUrl.startsWith(shareEntityRoute));
 
     // Out of other work, wait for API results.
     const [theme, siteMessages, translationDictionaries] = await Promise.all([

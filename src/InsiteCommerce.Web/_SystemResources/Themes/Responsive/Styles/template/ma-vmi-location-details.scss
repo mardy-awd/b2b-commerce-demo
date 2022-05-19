@@ -34,6 +34,12 @@
         margin: 0px;
     }
 
+    .table-view-select {
+        select, select option {
+            text-transform: capitalize;
+        }
+    }
+
     .location-header {
         margin: 0px;
     }

@@ -88,7 +88,9 @@ class TwoButtonModal extends React.Component<Props> {
             >
                 <GridContainer {...styles.container}>
                     <GridItem {...styles.textGridItem}>
-                        <Typography {...styles.messageText}>{this.props.messageText}</Typography>
+                        <Typography {...styles.messageText} data-test-selector="twoButtonModal_MessageContent">
+                            {this.props.messageText}
+                        </Typography>
                     </GridItem>
                     <GridItem {...styles.buttonsGridItem}>
                         <Button {...styles.cancelButton} onClick={this.formCancelHandler}>

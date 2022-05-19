@@ -1,9 +1,9 @@
 const fs = require("fs");
 const appRoot = require("app-root-path");
 
-console.log("Creating AllowContext type in tsx file");
-
 const writeNewFile = blueprint => {
+    console.log("Creating AllowContext type in tsx file");
+
     let contents = `// this file is auto generated and should not be modified
 export type AllowedContexts =`;
 

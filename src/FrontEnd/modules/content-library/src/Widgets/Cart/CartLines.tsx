@@ -205,7 +205,7 @@ const CartLines: FC<Props> = ({
 }) => {
     const [isCondensed, setIsCondensed] = useState(false);
 
-    if (!cart || !cart.cartLines || isClearingCart) {
+    if (!cart || (cart.lineCount && !cart.cartLines) || isClearingCart) {
         return (
             <StyledSection {...styles.centeringWrapper}>
                 <LoadingSpinner {...styles.spinner} />
@@ -213,7 +213,7 @@ const CartLines: FC<Props> = ({
         );
     }
 
-    const cartLines = cart.cartLines;
+    const cartLines = cart.cartLines || [];
 
     if (cartLines.length === 0) {
         return (
@@ -365,7 +365,10 @@ const CartLinesHeader: FC<CartLinesHeaderProps> = ({
             {cartNotPriced && (
                 <StyledSection {...headerStyles.warningSection}>
                     <Icon {...headerStyles.warningIcon}></Icon>
-                    <Typography {...headerStyles.warningText}>
+                    <Typography
+                        {...headerStyles.warningText}
+                        data-test-selector="cartlineHeader_NoPriceAvailableAtCheckout"
+                    >
                         {siteMessage("Cart_NoPriceAvailableAtCheckout")}
                     </Typography>
                 </StyledSection>
@@ -375,7 +378,7 @@ const CartLinesHeader: FC<CartLinesHeaderProps> = ({
                     <Icon {...headerStyles.warningIcon}></Icon>
                     <Typography
                         {...headerStyles.warningText}
-                        data-test-selector="cartlineHeader_InsufficientInventoryAtCheckout"
+                        data-test-selector="cartlineHeader_warningInsufficientInventoryAtCheckout"
                     >
                         {siteMessage("Cart_InsufficientInventoryAtCheckout")}
                     </Typography>

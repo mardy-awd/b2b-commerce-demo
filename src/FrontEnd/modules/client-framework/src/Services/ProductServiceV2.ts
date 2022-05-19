@@ -30,6 +30,7 @@ export interface GetProductApiV2ParameterBase extends ApiParameter {
     expand?: ProductExpandTokens;
     additionalExpands?: string[];
     includeAttributes?: ("includeOnProduct" | "comparable" | "facets")[];
+    type?: string;
 }
 
 export type ProductFilterTokens =
@@ -135,6 +136,17 @@ export function getRelatedProductsCollectionV2(parameter: GetRelatedProductColle
     const productId = parameter.productId;
     delete parameter.productId;
     return get<ProductCollectionModel>(`${productsUrl}/${productId}/relatedproducts`, parameter);
+}
+
+export interface GetAlsoPurchasedProductCollectionApiV2Parameter
+    extends GetProductApiV2ParameterBase,
+        HasPagingParameters {
+    productId: string;
+}
+export function getAlsoPurchasedProductsCollectionV2(parameter: GetAlsoPurchasedProductCollectionApiV2Parameter) {
+    const productId = parameter.productId;
+    delete parameter.productId;
+    return get<ProductCollectionModel>(`${productsUrl}/${productId}/alsopurchased`, parameter);
 }
 
 export async function getProductRealTimePrice(parameter: GetProductRealTimePriceApiV2Parameter) {

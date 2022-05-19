@@ -109,6 +109,7 @@ export interface DatePickerState {
     selectedDayDisabled: boolean;
     mobilePopupDirection?: DatePickerPopupDirection;
     windowWidth?: number;
+    calendarCompensationX?: number | null;
 }
 
 enum DatePickerPopupDirection {
@@ -134,6 +135,7 @@ interface DateTimePickerStyleProps extends ThemeProps<BaseTheme> {
     css?: StyledProp;
     disabled: boolean;
     mobilePopupDirection?: DatePickerPopupDirection;
+    calendarCompensationX?: number | null;
 }
 
 const DateTimePickerStyle = styled.div<DateTimePickerStyleProps>`
@@ -345,6 +347,18 @@ const DateTimePickerStyle = styled.div<DateTimePickerStyleProps>`
                 font-weight: 600;
             }
         }
+
+        ${props => {
+            return (
+                props.calendarCompensationX !== null &&
+                css`
+                    @media (max-width: 600px) {
+                        left: ${props.calendarCompensationX}px;
+                        right: unset;
+                    }
+                `
+            );
+        }}
     }
     ${injectCss}
 `;
@@ -354,9 +368,13 @@ const DateTimePickerStyle = styled.div<DateTimePickerStyleProps>`
  */
 class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, DatePickerState> {
     private readonly datePickerRef = React.createRef<HTMLDivElement>();
+    private readonly datePickerStyleRef = React.createRef<HTMLDivElement>();
+    private readonly calendarWidth: number;
+
     constructor(props: DatePickerProps & HasDisablerContext) {
         super(props);
         this.handleDayChange = this.handleDayChange.bind(this);
+        this.calendarWidth = 306;
         this.state = {
             selectedDay: this.props.selectedDay || undefined,
             datePickerValue: this.props.selectedDay || undefined,
@@ -364,6 +382,7 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
             selectedDayDisabled: this.isSelectedDayDisabled(this.props.selectedDay, this.props.dateTimePickerProps),
             mobilePopupDirection: DatePickerPopupDirection.Right,
             windowWidth: typeof window !== "undefined" ? window.innerWidth : 0,
+            calendarCompensationX: null,
         };
     }
 
@@ -393,6 +412,21 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
     };
 
     componentDidMount() {
+        const yearInput: HTMLInputElement | null = this.datePickerStyleRef.current!.querySelector(
+            ".react-datetime-picker__inputGroup__year",
+        );
+
+        if (yearInput) {
+            // firefox allows someone to add more than 4 digits in a year, it does not seem to respect the max="9999"
+            // this prevents someone from typing too much into the year field in firefox
+            yearInput.addEventListener("keydown", (e: KeyboardEvent) => {
+                const regex = /\d/;
+                if (yearInput.value.length === 4 && regex.test(e.key)) {
+                    e.preventDefault();
+                }
+            });
+        }
+
         window.addEventListener("resize", this.handleResize, true);
     }
 
@@ -467,6 +501,8 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
                 if (typeof this.props.onDayChange === "function") {
                     this.props.onDayChange(this.state);
                 }
+                const main = document.querySelector("main");
+                main?.classList?.remove("overflow-visible");
             },
         );
     };
@@ -489,7 +525,7 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
         // Because disabled html attribute doesn't accept undefined
         // eslint-disable-next-line no-unneeded-ternary
         const isDisabled = disable || disabled ? true : false;
-        const { selectedDay, isEmpty, selectedDayDisabled, datePickerValue } = this.state;
+        const { isEmpty, selectedDayDisabled, datePickerValue } = this.state;
         const { applyProp, spreadProps } = applyPropBuilder(this.props, {
             component: "datePicker",
             category: "formField",
@@ -505,22 +541,39 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
             <DateTimePickerStyle
                 _sizeVariant={sizeVariant}
                 css={datePickerCss}
+                ref={this.datePickerStyleRef}
                 disabled={!!isDisabled}
                 mobilePopupDirection={this.state.mobilePopupDirection}
                 role="group"
                 aria-invalid={selectedDayDisabled || (required && isEmpty) || false}
+                calendarCompensationX={this.state.calendarCompensationX}
             >
                 <DateTimePicker
                     value={datePickerValue}
                     onCalendarClose={this.handlePickerClosed}
                     onClockClose={this.handlePickerClosed}
                     onCalendarOpen={() => {
-                        const rect = this.datePickerRef.current!.getBoundingClientRect();
+                        const main = document.querySelector("main");
+                        main?.classList?.add("overflow-visible");
+
+                        const rect = this.datePickerStyleRef.current!.getBoundingClientRect();
+                        const halfPageWidth = Math.round(this.state.windowWidth! / 2);
+                        const rightHandSpace = Math.round(this.state.windowWidth! - rect.right);
+
+                        let isLeft = rightHandSpace < this.calendarWidth - rect.width;
+
+                        let calendarCompensationX = null;
+
+                        if (isLeft) {
+                            isLeft = false;
+                            calendarCompensationX = Math.abs(halfPageWidth - rightHandSpace) * -1;
+                        }
+
                         this.setState({
-                            mobilePopupDirection:
-                                rect.right > (this.state.windowWidth ?? 0) / 2
-                                    ? DatePickerPopupDirection.Left
-                                    : DatePickerPopupDirection.Right,
+                            mobilePopupDirection: isLeft
+                                ? DatePickerPopupDirection.Left
+                                : DatePickerPopupDirection.Right,
+                            calendarCompensationX,
                         });
                     }}
                     calendarIcon={

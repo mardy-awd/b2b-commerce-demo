@@ -1,7 +1,7 @@
 import { createHandlerChainRunner, Handler } from "@insite/client-framework/HandlerCreator";
-import { GetCartsApiParameter } from "@insite/client-framework/Services/CartService";
+import { GetOrdersApiParameter } from "@insite/client-framework/Services/OrderService";
 
-type HandlerType = Handler<GetCartsApiParameter>;
+type HandlerType = Handler<GetOrdersApiParameter>;
 
 export const DispatchUpdateSearchFields: HandlerType = props => {
     props.dispatch({

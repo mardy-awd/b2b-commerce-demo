@@ -1,5 +1,5 @@
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getCartsDataView } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import { getOrdersDataView } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import updateOrdersSearchFields from "@insite/client-framework/Store/Pages/VmiBinDetails/Handlers/UpdateOrdersSearchFields";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
@@ -9,7 +9,7 @@ import { connect, ResolveThunks } from "react-redux";
 
 const mapStateToProps = (state: ApplicationState) => {
     return {
-        vmiOrdersState: getCartsDataView(state, state.pages.vmiBinDetails.getVmiOrdersParameter),
+        vmiOrdersState: getOrdersDataView(state, state.pages.vmiBinDetails.getVmiOrdersParameter),
     };
 };
 

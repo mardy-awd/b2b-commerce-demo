@@ -2,11 +2,14 @@ import { useTokenExFrame } from "@insite/client-framework/Common/Hooks/useTokenE
 import StyledWrapper, { getStyledWrapper } from "@insite/client-framework/Common/StyledWrapper";
 import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import validateCreditCard from "@insite/client-framework/Common/Utilities/validateCreditCard";
+import { makeHandlerChainAwaitable } from "@insite/client-framework/HandlerCreator";
 import logger from "@insite/client-framework/Logger";
+import { getAdyenSessionData } from "@insite/client-framework/Services/PaymentService";
 import { TokenExConfig } from "@insite/client-framework/Services/SettingsService";
 import siteMessage from "@insite/client-framework/SiteMessage";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
+import loadAdyenSettings from "@insite/client-framework/Store/Context/Handlers/LoadAdyenSettings";
 import loadPaymetricConfig from "@insite/client-framework/Store/Context/Handlers/LoadPaymetricConfig";
 import loadTokenExConfig from "@insite/client-framework/Store/Context/Handlers/LoadTokenExConfig";
 import signOut from "@insite/client-framework/Store/Context/Handlers/SignOut";
@@ -19,12 +22,17 @@ import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelec
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import checkoutWithPayPal from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/CheckoutWithPayPal";
 import getPaymetricResponsePacket from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/GetPaymetricResponsePacket";
+import loadAdyenDropInConfig from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/LoadAdyenDropInConfiguration";
 import placeOrder from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/PlaceOrder";
 import setCheckoutPaymentMethod from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/SetCheckoutPaymentMethod";
+import validateAdyenPayment, {
+    ValidatAdyenPaymenteResult,
+    ValidateAdyenPaymentParameter,
+} from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/ValidateAdyenPayment";
 import preloadOrderConfirmationData from "@insite/client-framework/Store/Pages/OrderConfirmation/Handlers/PreloadOrderConfirmationData";
 import translate from "@insite/client-framework/Translate";
-import { PaymentMethodDto } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
+import AdyenDropIn from "@insite/content-library/Widgets/CheckoutReviewAndSubmit/AdyenDropIn";
 import CreditCardBillingAddressEntry, {
     CreditCardBillingAddressEntryStyles,
 } from "@insite/content-library/Widgets/CheckoutReviewAndSubmit/CreditCardBillingAddressEntry";
@@ -44,6 +52,7 @@ import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
+import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
 import Select, { SelectPresentationProps } from "@insite/mobius/Select";
 import TextField, { TextFieldPresentationProps } from "@insite/mobius/TextField";
 import ToasterContext, { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
@@ -52,6 +61,7 @@ import Typography, { TypographyPresentationProps } from "@insite/mobius/Typograp
 import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
+import qs from "qs";
 import React, { useEffect, useRef, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css, ThemeProps, withTheme } from "styled-components";
@@ -83,6 +93,8 @@ const mapStateToProps = (state: ApplicationState) => {
         payPalCheckoutErrorMessage,
         location: getLocation(state),
         usePaymetricGateway: settingsCollection.websiteSettings.usePaymetricGateway,
+        adyenSettings: state.context.adyenSettings,
+        returnUrl: getPageLinkByPageType(state, "CheckoutReviewAndSubmitPage"),
         paymetricConfig: state.context.paymetricConfig,
         enableVat: settingsCollection.productSettings.enableVat,
         bypassCvvForSavedCards: settingsCollection.cartSettings.bypassCvvForSavedCards,
@@ -99,10 +111,15 @@ const mapDispatchToProps = {
     preloadOrderConfirmationData,
     loadBillTo,
     loadPaymetricConfig,
+    loadAdyenSettings,
+    loadAdyenDropInConfig,
     getPaymetricResponsePacket,
     resetCurrentCartId,
     setCheckoutPaymentMethod,
     signOut,
+    validateAdyenPayment: makeHandlerChainAwaitable<ValidateAdyenPaymentParameter, ValidatAdyenPaymenteResult>(
+        validateAdyenPayment,
+    ),
 };
 
 type Props = ReturnType<typeof mapStateToProps> &
@@ -128,6 +145,7 @@ export interface CheckoutReviewAndSubmitPaymentDetailsStyles {
     poNumberGridItem?: GridItemProps;
     poNumberText?: TextFieldPresentationProps;
     emptyGridItem?: GridItemProps;
+    adyenDropInGridItem?: GridItemProps;
     mainContainer?: GridContainerProps;
     savedPaymentProfile?: SavedPaymentProfileEntryStyles;
     creditCardDetailsGridItem?: GridItemProps;
@@ -139,6 +157,7 @@ export interface CheckoutReviewAndSubmitPaymentDetailsStyles {
     eCheckDetailsEntryStyles?: ECheckDetailsEntryStyles;
     paypalCheckoutErrorWrapper?: InjectableCss;
     paypalCheckoutErrorText?: TypographyPresentationProps;
+    loadingSpinner?: LoadingSpinnerProps;
 }
 
 export const checkoutReviewAndSubmitPaymentDetailsStyles: CheckoutReviewAndSubmitPaymentDetailsStyles = {
@@ -193,6 +212,12 @@ export const checkoutReviewAndSubmitPaymentDetailsStyles: CheckoutReviewAndSubmi
         `,
     },
     paypalCheckoutErrorText: { color: "danger" },
+    loadingSpinner: {
+        css: css`
+            margin: auto;
+        `,
+    },
+    adyenDropInGridItem: { width: 12 },
 };
 
 // TokenEx doesn't provide an npm package or type definitions for using the iframe solution.
@@ -330,7 +355,6 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     history,
     checkoutWithPayPal,
     payPalRedirectUri,
-    payPalCheckoutErrorMessage,
     preloadOrderConfirmationData,
     loadTokenExConfig,
     theme,
@@ -340,6 +364,10 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     toaster,
     paymetricConfig,
     loadPaymetricConfig,
+    adyenSettings,
+    returnUrl,
+    loadAdyenSettings,
+    loadAdyenDropInConfig,
     usePaymetricGateway,
     getPaymetricResponsePacket,
     resetCurrentCartId,
@@ -351,6 +379,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     signOut,
     requestedDeliveryDateDisabled,
     requestedPickUpDateDisabled,
+    validateAdyenPayment,
 }: Props) => {
     const [paymentMethod, setPaymentMethod] = useState("");
     const [poNumber, setPONumber] = useState("");
@@ -417,10 +446,14 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     const {
         PayerID: payPalPayerId,
         token: payPalToken,
+        sessionId: adyenRedirectSessionId,
+        redirectResult: adyenRedirectResult,
         cartId,
     } = parseQueryString<{
         PayerID?: string;
         token?: string;
+        sessionId?: string;
+        redirectResult?: string;
         cartId?: string;
     }>(location.search);
 
@@ -510,9 +543,14 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
 
     useEffect(() => {
         if (!cartState.isLoading && cartState.value && cartState.value.paymentMethod && paymentMethod === "") {
-            setPaymentMethod(cartState.value.paymentMethod.name);
+            if (adyenRedirectSessionId && adyenRedirectResult) {
+                // force set credit card payment method if we returned from Adyen
+                setPaymentMethod(cartState.value.paymentOptions?.paymentMethods?.find(o => o.isCreditCard)?.name || "");
+            } else {
+                setPaymentMethod(cartState.value.paymentMethod.name);
+            }
         }
-    }, [cartState.isLoading]);
+    }, [cartState]);
 
     // IsPayPal
     // Setup isPayPal from cart.paymentOptions and validates form when cartState changes and is loaded.
@@ -555,7 +593,14 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
 
     const { value: cart } = cartState;
 
-    const { useTokenExGateway, useECheckTokenExGateway } = websiteSettings;
+    const { useTokenExGateway, useECheckTokenExGateway, useAdyenDropIn } = websiteSettings;
+    const [adyenSessionId, setAdyenSessionId] = useState("");
+    const [adyenSessionData, setAdyenSessionData] = useState("");
+    const [adyenRegion, setAdyenRegion] = useState("");
+    const [adyenFormValid, setAdyenFormValid] = useState(false);
+    const [adyenErrorMessage, setAdyenErrorMessage] = useState("");
+    const [adyenConfiguration, setAdyenConfiguration] = useState<any>(null);
+    const [adyenDropIn, setAdyenDropIn] = useState<any>(null);
     const { showPayPal } = cartSettings;
     const paymentOptions = cart ? cart.paymentOptions : undefined;
     const paymentMethods = paymentOptions ? paymentOptions.paymentMethods : undefined;
@@ -582,6 +627,126 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             tokenName = "";
         }
     }
+
+    const placeAdyenOrder = async (paymentResult: string) => {
+        const { success, adyenPspReference, errorMessage } = await validateAdyenPayment({ paymentResult });
+        if (!success) {
+            if (errorMessage) {
+                setAdyenErrorMessage(errorMessage);
+            }
+
+            resetAdyenSession();
+            return;
+        }
+
+        placeOrder({
+            paymentMethod: "",
+            poNumber: window.localStorage.getItem("order-po-number") ?? poNumber,
+            vatNumber,
+            saveCard,
+            cardHolderName,
+            cardNumber,
+            cardType,
+            expirationMonth,
+            expirationYear,
+            securityCode,
+            useBillingAddress,
+            address1,
+            countryId,
+            stateId,
+            city,
+            postalCode,
+            payPalToken,
+            payPalPayerId,
+            isPending: paymentResult === "Pending" || paymentResult === "Received",
+            isAdyenDropIn: true,
+            adyenPspReference,
+            accountHolderName,
+            accountNumber,
+            routingNumber,
+            onSuccess: (cartId: string) => {
+                preloadOrderConfirmationData({
+                    cartId,
+                    onSuccess: () => {
+                        if (cart?.isAwaitingApproval) {
+                            resetCurrentCartId({});
+                            toaster.addToast({
+                                body: siteMessage("OrderApproval_OrderPlaced"),
+                                messageType: "success",
+                            });
+                        }
+                        history.push(`${orderConfirmationPageLink!.url}?cartId=${cartId}`);
+                    },
+                });
+            },
+            onComplete(resultProps) {
+                if (!resultProps.apiResult?.cart) {
+                    return;
+                }
+                // "this" is targeting the object being created, not the parent SFC
+                // eslint-disable-next-line react/no-this-in-sfc
+                this.onSuccess?.(resultProps.apiResult.cart.id);
+            },
+        });
+    };
+
+    const resetAdyenSession = () => {
+        setAdyenSessionId("");
+        setAdyenSessionData("");
+        setAdyenRegion("");
+        setAdyenConfiguration(null);
+
+        const parsedQuery = parseQueryString<any>(window.location.search);
+        delete parsedQuery.customerId;
+        delete parsedQuery.amount;
+        delete parsedQuery.sessionId;
+        delete parsedQuery.redirectResult;
+        delete parsedQuery.type;
+        delete parsedQuery.resultCode;
+        const queryString = qs.stringify(parsedQuery);
+        history.replace(`${window.location.pathname}${queryString !== "" ? `?${queryString}` : ""}`);
+    };
+
+    useEffect(() => {
+        if (useAdyenDropIn && paymentMethodDto?.isCreditCard && returnUrl && cartState.value && !adyenSessionData) {
+            loadAdyenSettings();
+            const url = !cartId
+                ? returnUrl.url
+                : returnUrl.url.includes("?")
+                ? `${returnUrl.url}&cartId=${cartId}`
+                : `${returnUrl.url}?cartId=${cartId}`;
+            getAdyenSessionData(cartState.value.orderGrandTotal, url, cartId).then(result => {
+                setAdyenSessionId(result.transactionId);
+                setAdyenSessionData(result.sessionData);
+                setAdyenRegion(result.region);
+            });
+        }
+    }, [useAdyenDropIn, returnUrl, cartState, paymentMethodDto, adyenSessionData]);
+
+    useEffect(() => {
+        if (adyenSessionId && adyenSessionData && adyenRegion && adyenSettings?.clientKey && !adyenConfiguration) {
+            loadAdyenDropInConfig({
+                sessionId: adyenSessionId,
+                sessionData: adyenSessionData,
+                region: adyenRegion,
+                clientKey: adyenSettings.clientKey,
+                setAdyenFormValid,
+                setAdyenErrorMessage,
+                resetAdyenSession,
+                placeAdyenOrder,
+                onSuccess: (adyenConfiguration: any) => {
+                    setAdyenConfiguration(adyenConfiguration);
+                },
+            });
+        }
+    }, [adyenSessionId, adyenSessionData, adyenRegion, adyenSettings]);
+
+    useEffect(() => {
+        setAdyenSessionId("");
+        setAdyenSessionData("");
+        setAdyenRegion("");
+        setAdyenConfiguration(null);
+    }, [cartState.value?.orderGrandTotal, cartState.value?.billToId]);
 
     useEffect(() => {
         if (typeof tokenName !== "undefined") {
@@ -859,7 +1024,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     };
 
     const validatePONumber = (poNumber: string) => {
-        const poNumberValid = !cart || !cart.requiresPoNumber || isNonEmptyString(poNumber);
+        const poNumberValid = !cart || !cart.showPoNumber || !cart.requiresPoNumber || isNonEmptyString(poNumber);
         setPONumberError(!poNumberValid ? translate("PO Number is required.") : "");
         return poNumberValid;
     };
@@ -1010,6 +1175,10 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             return paymentMethodValid;
         }
 
+        if (useAdyenDropIn && paymentMethodDto?.isCreditCard) {
+            return poNumberValid;
+        }
+
         if (useTokenExGateway && ((isPaymentProfile && !bypassCvvForSavedCards) || isCreditCard)) {
             tokenExIframe?.validate();
         } else if (useECheckTokenExGateway && isECheck) {
@@ -1105,8 +1274,38 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         );
     };
 
-    const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        if (document.activeElement?.className === "adyen-checkout__payment-method__header__title") {
+            // The adyen form buttons are incorrectly submitting our form, we should just ignore these occurances.
+            return false;
+        }
+
+        if (useAdyenDropIn && paymentMethodDto?.isCreditCard && !isPayPal) {
+            if (adyenDropIn && validateForm()) {
+                const { success, errorMessage } = await validateAdyenPayment({
+                    customerId: cartState.value?.billToId,
+                    paymentAmount: cartState.value?.orderGrandTotal,
+                });
+                if (success) {
+                    window.localStorage.setItem("order-po-number", poNumber);
+                    adyenDropIn.submit();
+                } else if (errorMessage) {
+                    setAdyenErrorMessage(errorMessage);
+                }
+            } else if (adyenDropIn && !validateForm() && !adyenFormValid) {
+                adyenDropIn.submit();
+                setShowFormErrors(true);
+            } else if (!validateForm()) {
+                // in this case the adyen form is likely valid and we do not want to submit it
+                // without clearing the rest of our validation for the page
+                setShowFormErrors(true);
+            }
+
+            // AdyenDropIn will handle result of the submission
+            return false;
+        }
 
         if (!validateForm()) {
             setShowFormErrors(true);
@@ -1314,7 +1513,20 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                                     />
                                 </GridItem>
                             )}
-                        {cart.showCreditCard && paymentMethodDto?.isCreditCard && (
+                        {paymentMethodDto?.isCreditCard && useAdyenDropIn && !adyenDropIn && (
+                            <LoadingSpinner {...styles.loadingSpinner} />
+                        )}
+                        {paymentMethodDto?.isCreditCard && useAdyenDropIn && (
+                            <GridItem {...styles.adyenDropInGridItem}>
+                                <AdyenDropIn
+                                    redirectResult={adyenRedirectResult}
+                                    adyenConfiguration={adyenConfiguration}
+                                    setAdyenDropIn={setAdyenDropIn}
+                                    adyenErrorMessage={adyenErrorMessage}
+                                />
+                            </GridItem>
+                        )}
+                        {cart.showCreditCard && paymentMethodDto?.isCreditCard && !useAdyenDropIn && (
                             <GridItem {...styles.creditCardDetailsGridItem}>
                                 <CreditCardDetailsEntry
                                     canSaveCard={paymentOptions.canStorePaymentProfile}
@@ -1376,7 +1588,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                             </GridItem>
                         )}
                         {((cart.showECheck && paymentMethodDto?.isECheck) ||
-                            (cart.showCreditCard && paymentMethodDto?.isCreditCard)) && (
+                            (cart.showCreditCard && paymentMethodDto?.isCreditCard && !useAdyenDropIn)) && (
                             <GridItem {...styles.creditCardAddressGridItem}>
                                 <CreditCardBillingAddressEntry
                                     useBillTo={useBillingAddress}

@@ -16,7 +16,7 @@ import React, { Component, createContext } from "react";
 import { connect, ResolveThunks } from "react-redux";
 
 const mapDispatchToProps = {
-    preloadCheckoutShippingData,
+    preloadCheckoutShippingData: makeHandlerChainAwaitable(preloadCheckoutShippingData),
     setIsPreloadingData,
     updateCart: makeHandlerChainAwaitable(updateCart),
     setInitialValues,
@@ -57,21 +57,13 @@ class CheckoutShippingPage extends Component<Props, State> {
         };
     }
 
-    componentDidMount() {
-        const parsedQuery = parseQueryString<{ cartId?: string }>(this.props.location.search);
-        const cartId = parsedQuery.cartId;
+    async componentDidMount() {
         if (!this.props.isPreloadingData) {
-            this.props.preloadCheckoutShippingData({
-                cartId,
-                onSuccess: () => {
-                    this.props.setInitialValues();
-                    this.props.setIsPreloadingData({ isPreloadingData: false });
-                },
-            });
-        } else {
-            this.props.setIsPreloadingData({ isPreloadingData: false });
-            this.props.setInitialValues();
+            const { cartId } = parseQueryString<{ cartId?: string }>(this.props.location.search);
+            await this.props.preloadCheckoutShippingData({ cartId });
         }
+        this.props.setIsPreloadingData({ isPreloadingData: false });
+        this.props.setInitialValues();
     }
 
     scrollToFirstFormError = () => {

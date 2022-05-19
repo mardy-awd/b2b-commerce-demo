@@ -43,8 +43,9 @@ export function canAddChildPage(
     return (
         pageDefinition &&
         permissions.canCreatePage &&
-        treeNode.displayName !== "Header" &&
-        treeNode.displayName !== "Footer" &&
+        treeNode.type !== "Header" &&
+        treeNode.type !== "CompactHeader" &&
+        treeNode.type !== "Footer" &&
         !treeNode.isVariant
     );
 }
@@ -63,6 +64,7 @@ export function canCopyPage(
         !treeNode.isVariant &&
         !treeNode.isRootVariant &&
         treeNode.displayName !== "Header" &&
+        treeNode.displayName !== "Compact Header" &&
         treeNode.displayName !== "Footer" &&
         pageDefinition?.pageType === "Content"
     );

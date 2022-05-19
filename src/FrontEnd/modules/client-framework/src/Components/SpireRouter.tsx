@@ -109,7 +109,7 @@ class SpireRouter extends React.Component<Props> {
     updateLocation = (url: string, state: unknown, action: (state: unknown, title: string, url: string) => void) => {
         const { pathname, search } = convertToLocation(url);
 
-        if (pathname === this.props.location.pathname) {
+        if (pathname === this.props.location.pathname && this.props.currentPage !== nullPage) {
             action(state, "", url);
             this.setLocation(pathname, search);
         } else {

@@ -149,7 +149,7 @@ export const orderLinesListStyles: OrderLinesListStyles = {
             @media print {
                 max-height: 83px;
                 max-width: 83px;
-                padding: 0;
+                padding: 15px 0 0 0;
             }
         `,
     },

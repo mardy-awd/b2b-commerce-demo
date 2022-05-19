@@ -213,7 +213,9 @@ const Modal: React.FC<ModalProps> = withTheme(props => {
                 {headlineComponent}
                 {titleButton}
             </ModalTitle>
-            <ModalContent css={cssOverrides?.modalContent}>{children}</ModalContent>
+            <ModalContent css={cssOverrides?.modalContent} data-test-selector="modal_ModalContent">
+                {children}
+            </ModalContent>
         </Overlay>
     );
 });

@@ -5,6 +5,7 @@ import {
     registerPageUpdate,
     unregisterPageUpdate,
 } from "@insite/client-framework/Components/ContentItemStore";
+import DelayedSpinner from "@insite/client-framework/Components/DelayedSpinner";
 import ErrorModal from "@insite/client-framework/Components/ErrorModal";
 import Footer from "@insite/client-framework/Components/Footer";
 import Header from "@insite/client-framework/Components/Header";
@@ -142,7 +143,7 @@ class PublicPage extends React.Component<Props> {
         }
 
         if (page.id === "") {
-            return this.wrapContent(<p>Loading</p>);
+            return this.wrapContent(<DelayedSpinner isWidget={false} />);
         }
 
         return this.wrapContent(createPageElement(page.type, page));

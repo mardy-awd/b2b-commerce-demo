@@ -134,7 +134,7 @@ export function createPageElement(type: string, props: HasFields) {
     }
 
     if (!pageComponents[type]) {
-        return React.createElement(MissingComponent, { type, isWidget: false });
+        return React.createElement(AsyncComponent, { type, key: type, isWidget: false, ...props });
     }
 
     return React.createElement(pageComponents[type], props);

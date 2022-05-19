@@ -87,3 +87,27 @@ export function getReviewAndPayCartState(state: ApplicationState) {
     }
     return getCurrentCartState(state);
 }
+
+export function isCartLoadedWithLines(cartState: ReturnType<typeof getCartState>) {
+    if (cartState.isLoading || !cartState.value) {
+        return false;
+    }
+
+    if (!cartState.value.cartLines || (cartState.value.cartLines.length === 0 && cartState.value.lineCount > 0)) {
+        return false;
+    }
+
+    return true;
+}
+
+export function isCartLoadedWithoutLines(cartState: ReturnType<typeof getCartState>) {
+    if (cartState.isLoading || !cartState.value) {
+        return false;
+    }
+
+    if (cartState.value.cartLines && (cartState.value.cartLines.length > 0 || cartState.value.lineCount === 0)) {
+        return false;
+    }
+
+    return true;
+}

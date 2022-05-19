@@ -1,5 +1,5 @@
 import { createTypedReducerWithImmer } from "@insite/client-framework/Common/CreateTypedReducer";
-import { GetCartsApiParameter } from "@insite/client-framework/Services/CartService";
+import { GetOrdersApiParameter } from "@insite/client-framework/Services/OrderService";
 import { GetVmiBinsApiParameter } from "@insite/client-framework/Services/VmiBinsService";
 import VmiLocationDetailsState from "@insite/client-framework/Store/Pages/VmiLocationDetails/VmiLocationDetailsState";
 import { Draft } from "immer";
@@ -8,6 +8,7 @@ const initialState: VmiLocationDetailsState = {
     getVmiBinsParameter: {},
     getVmiOrdersParameter: {
         sort: "OrderDate DESC",
+        customerSequence: "-1",
     },
     selectedVmiItems: {},
     isExportingVmiProducts: false,
@@ -51,7 +52,7 @@ const reducer = {
     },
     "Pages/VmiLocationDetails/UpdateOrderSearchFields": (
         draft: Draft<VmiLocationDetailsState>,
-        action: { parameter: GetCartsApiParameter },
+        action: { parameter: GetOrdersApiParameter },
     ) => {
         draft.getVmiOrdersParameter = { ...draft.getVmiOrdersParameter, ...action.parameter };
     },

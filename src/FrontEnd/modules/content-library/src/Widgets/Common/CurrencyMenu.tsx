@@ -92,13 +92,14 @@ export const CurrencyMenu: FC<Props> = ({
             <Select
                 {...styles.currencySelect}
                 uid={menuId}
+                data-test-selector={menuId}
                 onChange={event => setCurrency({ currencyId: event.currentTarget.value })}
                 value={currentCurrencyId}
                 autoComplete="off"
                 hasLabel
             >
                 {currencies.map(c => (
-                    <option value={c.id} key={c.id}>
+                    <option value={c.id} key={c.id} data-test-selector={c.currencyCode}>
                         {c.currencyCode}
                     </option>
                 ))}

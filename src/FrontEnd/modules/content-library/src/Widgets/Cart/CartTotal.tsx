@@ -291,6 +291,7 @@ const CartTotal: FC<Props> = ({
                         onCancel={() => setQuoteRequiredModalIsOpen(false)}
                         onSubmit={checkoutHandler}
                         submitTestSelector="QuoteInCartMessageSubmit"
+                        dataTestSelector="twoButtonModal_RequiresQuote"
                     ></TwoButtonModal>
                 </>
             )}

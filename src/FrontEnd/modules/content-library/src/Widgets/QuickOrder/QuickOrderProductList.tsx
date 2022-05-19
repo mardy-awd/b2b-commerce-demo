@@ -278,7 +278,10 @@ const QuickOrderProductList = ({
                                         </GridItem>
                                         <GridItem {...styles.extendedPriceGridItem}>
                                             {!product.quoteRequired && !productInfo.pricing?.requiresRealTimePrice && (
-                                                <Typography {...styles.extendedPriceText}>
+                                                <Typography
+                                                    {...styles.extendedPriceText}
+                                                    data-test-selector="quickOrder_ProductPrice"
+                                                >
                                                     {" "}
                                                     {productInfo.pricing?.extendedUnitNetPriceDisplay}{" "}
                                                 </Typography>
@@ -292,6 +295,7 @@ const QuickOrderProductList = ({
                             <Clickable
                                 {...styles.removeProductClickable}
                                 onClick={() => removeProductHandler(productInfo)}
+                                data-test-selector="quickOrder_RemoveProduct"
                             >
                                 <IconMemo {...styles.removeProductIcon} />
                             </Clickable>
@@ -308,7 +312,7 @@ const QuickOrderProductList = ({
             <StyledSection {...styles.wrapper}>
                 <CardList>{productListDisplay}</CardList>
             </StyledSection>
-            <Typography {...styles.totalText}>
+            <Typography {...styles.totalText} data-test-selector="quickOrder_TotalPrice">
                 {`${translate("Total")}`} <LocalizedCurrency amount={total} />
             </Typography>
         </>

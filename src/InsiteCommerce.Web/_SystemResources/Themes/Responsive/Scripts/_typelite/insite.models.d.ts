@@ -617,6 +617,7 @@ declare module Insite.Websites.WebApi.V1.ApiModels {
 		reCaptchaEnabledForShareProduct: boolean;
 		advancedSpireCmsFeatures: boolean;
 		previewLoginEnabled: boolean;
+		useAdyenDropIn: boolean;
 	}
 	interface AddressFieldCollectionModel extends Insite.Core.WebApi.BaseModel {
 		billToAddressFields: Insite.Websites.WebApi.V1.ApiModels.AddressFieldDisplayCollectionModel;
@@ -1388,6 +1389,7 @@ declare module Insite.Cart.Services.Dtos {
 		tokenScheme: string;
 	}
 	interface PaymentOptionsDto {
+		threeDs: Insite.Cart.Services.Dtos.ThreeDsDto;
 		paymentMethods: Insite.Cart.Services.Dtos.PaymentMethodDto[];
 		cardTypes: {[key: string]:  string};
 		expirationMonths: {[key: string]:  number};
@@ -1431,6 +1433,12 @@ declare module Insite.Cart.Services.Dtos {
 		taxAmount: number;
 		taxAmountDisplay: string;
 		sortOrder: number;
+	}
+	interface ThreeDsDto {
+		authenticationVersion: string;
+		authenticationToken: string;
+		dsTransactionId: System.Guid;
+		acsEci: string;
 	}
 }
 declare module Insite.Core.Plugins.PaymentGateway.Dtos {
@@ -2443,11 +2451,15 @@ declare module Insite.Payments.WebApi.V1.ApiModels {
 		expirationMonth: number;
 		expirationYear: number;
 		orderAmount: string;
+		operation: string;
 	}
 	interface PaymentAuthenticationModel {
 		transactionId: string;
 		webOrderNumber: string;
 		redirectHtml: string;
+		threeDs: Insite.Cart.Services.Dtos.ThreeDsDto
+		sessionData: string;
+		action: string;
 	}
 }
 declare module Insite.Data.Entities {

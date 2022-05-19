@@ -12,7 +12,7 @@ const DelayAppearance = keyframes`
     }
 `;
 
-function DelayedSpinner() {
+function DelayedSpinner(props: { isWidget: boolean }) {
     return (
         <StyledWrapper
             css={css`
@@ -24,7 +24,7 @@ function DelayedSpinner() {
         >
             <LoadingSpinner
                 css={css`
-                    height: 400px;
+                    height: ${props.isWidget ? "400px" : "calc(100vh - 300px)"};
                     margin: 20px auto;
                     display: block;
                 `}

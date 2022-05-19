@@ -2,6 +2,7 @@ import { createHandlerChainRunner, Handler } from "@insite/client-framework/Hand
 import { API_URL_CURRENT_FRAGMENT } from "@insite/client-framework/Services/ApiService";
 import { Category } from "@insite/client-framework/Services/CategoryService";
 import {
+    GetAlsoPurchasedProductCollectionApiV2Parameter,
     GetProductCollectionApiV2Parameter,
     GetRelatedProductCollectionApiV2Parameter,
 } from "@insite/client-framework/Services/ProductServiceV2";
@@ -27,8 +28,14 @@ interface Parameter {
 }
 
 interface Props {
-    getProductCollectionParameter?: GetProductCollectionApiV2Parameter | GetRelatedProductCollectionApiV2Parameter;
-    extraProductCollectionParameter?: GetProductCollectionApiV2Parameter | GetRelatedProductCollectionApiV2Parameter;
+    getProductCollectionParameter?:
+        | GetProductCollectionApiV2Parameter
+        | GetRelatedProductCollectionApiV2Parameter
+        | GetAlsoPurchasedProductCollectionApiV2Parameter;
+    extraProductCollectionParameter?:
+        | GetProductCollectionApiV2Parameter
+        | GetRelatedProductCollectionApiV2Parameter
+        | GetAlsoPurchasedProductCollectionApiV2Parameter;
 }
 
 type HandlerType = Handler<Parameter, Props>;
@@ -98,16 +105,22 @@ export const LoadCustomersAlsoPurchased: HandlerType = props => {
             return;
         }
 
-        props.getProductCollectionParameter = {
-            pageSize: numberOfProductsToDisplay,
-            filter: "alsoPurchased",
-        };
-
         if (seedWithManuallyAssigned) {
+            props.getProductCollectionParameter = {
+                pageSize: numberOfProductsToDisplay,
+                filter: "alsoPurchased",
+            };
+
             props.extraProductCollectionParameter = {
                 productId,
                 pageSize: numberOfProductsToDisplay,
                 relationship: seedWithManuallyAssigned,
+            };
+        } else {
+            props.getProductCollectionParameter = {
+                productId,
+                pageSize: numberOfProductsToDisplay,
+                type: "alsoPurchased",
             };
         }
     } else {

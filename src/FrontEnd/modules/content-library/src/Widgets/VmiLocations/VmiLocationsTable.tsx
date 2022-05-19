@@ -256,11 +256,11 @@ class VmiLocationsTable extends React.Component<
                             )}
                             <DataTableHeader
                                 {...styles.nameHeader}
-                                title={translate("Locations Name")}
+                                title={translate("Location Name")}
                                 sorted={this.sorted("name")}
                                 onSortClick={() => this.headerClick("name")}
                             >
-                                {translate("Locations Name")}
+                                {translate("Location Name")}
                             </DataTableHeader>
                             <DataTableHeader
                                 {...styles.customerHeader}

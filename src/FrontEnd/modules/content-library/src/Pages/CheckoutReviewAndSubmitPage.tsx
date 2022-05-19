@@ -15,7 +15,7 @@ import PageModule from "@insite/client-framework/Types/PageModule";
 import PageProps from "@insite/client-framework/Types/PageProps";
 import AddressErrorModal from "@insite/content-library/Components/AddressErrorModal";
 import Page from "@insite/mobius/Page";
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { connect, ResolveThunks } from "react-redux";
 
 const mapDispatchToProps = {
@@ -34,37 +34,46 @@ const mapStateToProps = (state: ApplicationState) => {
     const promotionsDataView = getReviewAndPayPromotions(state);
 
     const isLoadDataNeeded =
-        (!cartState.value && !cartState.isLoading) || (!promotionsDataView.value && !promotionsDataView.isLoading);
+        ((!cartState.value || !cartState.value.cartLines) && !cartState.isLoading) ||
+        (!promotionsDataView.value && !promotionsDataView.isLoading);
 
     return {
         cartId,
+        cartState,
         isLoadDataNeeded: isLoadDataNeeded || !getCurrentCountries(state),
     };
 };
 
 type Props = PageProps & ResolveThunks<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
 
-class CheckoutReviewAndSubmitPage extends Component<Props> {
-    componentDidMount() {
-        this.props.setCartId({ cartId: this.props.cartId });
-
-        if (this.props.isLoadDataNeeded) {
-            this.props.loadDataIfNeeded({ cartId: this.props.cartId });
+const CheckoutReviewAndSubmitPage = ({
+    id,
+    cartId,
+    isLoadDataNeeded,
+    setCartId,
+    loadDataIfNeeded,
+    setPlaceOrderErrorMessage,
+    clearMessages,
+}: Props) => {
+    useEffect(() => {
+        if (isLoadDataNeeded) {
+            loadDataIfNeeded({ cartId, cartLinesShouldBeExpanded: true });
         }
+    });
 
-        this.props.setPlaceOrderErrorMessage({});
-        this.props.clearMessages();
-    }
+    useEffect(() => {
+        setCartId({ cartId });
+        setPlaceOrderErrorMessage({});
+        clearMessages();
+    }, []);
 
-    render() {
-        return (
-            <Page data-test-selector="checkoutReviewAndSubmitPage">
-                <Zone zoneName="Content" contentId={this.props.id} />
-                <AddressErrorModal />
-            </Page>
-        );
-    }
-}
+    return (
+        <Page data-test-selector="checkoutReviewAndSubmitPage">
+            <Zone zoneName="Content" contentId={id} />
+            <AddressErrorModal />
+        </Page>
+    );
+};
 
 const pageModule: PageModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(CheckoutReviewAndSubmitPage),

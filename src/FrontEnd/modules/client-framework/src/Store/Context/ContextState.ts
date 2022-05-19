@@ -1,6 +1,11 @@
 import { Dictionary } from "@insite/client-framework/Common/Types";
 import { Session } from "@insite/client-framework/Services/SessionService";
-import { PaymetricConfig, SettingsModel, TokenExConfig } from "@insite/client-framework/Services/SettingsService";
+import {
+    AdyenSettings,
+    PaymetricConfig,
+    SettingsModel,
+    TokenExConfig,
+} from "@insite/client-framework/Services/SettingsService";
 import { Website } from "@insite/client-framework/Services/WebsiteService";
 import PermissionsModel from "@insite/client-framework/Types/PermissionsModel";
 
@@ -28,5 +33,6 @@ export default interface ContextState {
     addingProductToCart?: boolean;
     isSearchDataModeActive: boolean;
     paymetricConfig?: PaymetricConfig;
+    adyenSettings?: AdyenSettings;
     wasSetMetadataCalled: boolean;
 }

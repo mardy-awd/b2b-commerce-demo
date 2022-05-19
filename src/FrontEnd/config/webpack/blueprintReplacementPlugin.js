@@ -53,20 +53,40 @@ class BlueprintReplacementPlugin {
                 const contextPath = result.context.replace(/\\/g, "/").split("/");
                 const modulePart = contextPath.indexOf("modules");
                 let potentialReplacement = "";
+                let potentialNonOverrideReplacement = "";
+                let suggestedLocationForNonOverrideReplacement = "";
                 for (let x = modulePart + 1; x < contextPath.length; x++) {
                     potentialReplacement += "../";
+                    potentialNonOverrideReplacement += "../";
+                    suggestedLocationForNonOverrideReplacement += "../";
                 }
                 if (isContentLibraryPath) {
                     const componentPathMatch = potentialPath.match(contentLibraryComponentPath);
                     potentialReplacement += `blueprints/${this.blueprintName}/src/Overrides/${componentPathMatch[1]}`;
+                    if (componentPathMatch[1].match(/^(Widgets|Pages)\/([A-Z]+[a-z]+\/?)+$/)) {
+                        potentialNonOverrideReplacement += `blueprints/${this.blueprintName}/src/${componentPathMatch[1]}`;
+                        suggestedLocationForNonOverrideReplacement += `blueprints/${this.blueprintName}/src/Overrides/${componentPathMatch[1]}`;
+                    }
                 } else {
                     const componentPathMatch = potentialPath.match(mobiusComponentPath);
                     potentialReplacement += `blueprints/${this.blueprintName}/src/MobiusOverrides/${componentPathMatch[1]}`;
                 }
 
                 const pathToFile = path.join(result.context, `${potentialReplacement}.tsx`);
+                const pathToFileOutsideOverrides = path.join(result.context, `${potentialNonOverrideReplacement}.tsx`);
+
                 if (replacementExists[pathToFile] === undefined) {
                     replacementExists[pathToFile] = fs.existsSync(pathToFile);
+                    if (!replacementExists[pathToFile]) {
+                        // * Check for widget, page, or mobius component outside of overrides
+                        replacementExists[pathToFileOutsideOverrides] = fs.existsSync(pathToFileOutsideOverrides);
+                    }
+                }
+                if (replacementExists[pathToFileOutsideOverrides]) {
+                    throwOverridesErrorMessage(
+                        path.join(result.context, potentialNonOverrideReplacement),
+                        path.join(result.context, suggestedLocationForNonOverrideReplacement),
+                    );
                 }
                 if (replacementExists[pathToFile]) {
                     result.request = potentialReplacement;
@@ -77,5 +97,11 @@ class BlueprintReplacementPlugin {
         });
     }
 }
+
+const throwOverridesErrorMessage = (originalPath, newPath) => {
+    const errorMessage = `File ${originalPath} should be moved to ${newPath}, so that it is properly overriden.`;
+
+    throw new Error(errorMessage);
+};
 
 module.exports = BlueprintReplacementPlugin;

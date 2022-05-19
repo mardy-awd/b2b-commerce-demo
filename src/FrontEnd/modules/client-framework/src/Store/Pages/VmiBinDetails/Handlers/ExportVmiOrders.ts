@@ -1,10 +1,10 @@
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
 import getLocalizedDateTime from "@insite/client-framework/Common/Utilities/getLocalizedDateTime";
 import { createHandlerChainRunner, Handler } from "@insite/client-framework/HandlerCreator";
-import { getCarts } from "@insite/client-framework/Services/CartService";
-import { getCartsDataView } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import { getOrders } from "@insite/client-framework/Services/OrderService";
+import { getOrdersDataView } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import translate from "@insite/client-framework/Translate";
-import { CartModel } from "@insite/client-framework/Types/ApiModels";
+import { OrderModel } from "@insite/client-framework/Types/ApiModels";
 
 type HandlerType = Handler<{
     ids: SafeDictionary<boolean>;
@@ -23,9 +23,9 @@ export const ExportData: HandlerType = async props => {
     const state = props.getState();
     const language = state.context.session.language;
 
-    const prepareData = (row: CartModel) => {
+    const prepareData = (row: OrderModel) => {
         return [
-            row.orderNumber,
+            row.webOrderNumber || row.erpOrderNumber,
             row.status,
             row.orderDate &&
                 getLocalizedDateTime({
@@ -36,7 +36,7 @@ export const ExportData: HandlerType = async props => {
     };
 
     if (Object.keys(props.parameter.ids).length) {
-        const vmiOrdersDataView = getCartsDataView(state, state.pages.vmiBinDetails.getVmiOrdersParameter);
+        const vmiOrdersDataView = getOrdersDataView(state, state.pages.vmiBinDetails.getVmiOrdersParameter);
         if (vmiOrdersDataView.value) {
             for (const row of vmiOrdersDataView.value) {
                 if (props.parameter.ids[row.id]) {
@@ -45,13 +45,13 @@ export const ExportData: HandlerType = async props => {
             }
         }
     } else {
-        const apiResult = await getCarts({
+        const apiResult = await getOrders({
             ...state.pages.vmiBinDetails.getVmiOrdersParameter,
             page: 1,
             pageSize: 9999,
         });
-        if (apiResult.successful && apiResult.result?.carts) {
-            for (const row of apiResult.result.carts) {
+        if (apiResult.orders) {
+            for (const row of apiResult.orders) {
                 data.push(prepareData(row));
             }
         }

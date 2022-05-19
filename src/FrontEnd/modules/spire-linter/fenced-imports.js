@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 const validClientImports = [
+    "@adyen/adyen-web",
     "color",
     "csstype",
     "embla-carousel",
@@ -29,6 +30,7 @@ const validClientImports = [
 ];
 const validMobiusImports = [...validClientImports, "enzyme", "jest-styled-components"];
 const validServerImports = [
+    "@adyen/adyen-web",
     "connect",
     "crypto",
     "express",

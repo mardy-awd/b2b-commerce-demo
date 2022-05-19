@@ -8,14 +8,14 @@ require("./setupTsconfigPathsFile");
 const webpack = require("webpack");
 const RemovePlugin = require("remove-files-webpack-plugin");
 const semver = require("semver");
-const createImportWidgetChunkFile = require("./createImportWidgetChunkFile");
+const createImportChunk = require("./createImportChunk");
 const createAllowedContext = require("./createAllowedContext");
 
 if (semver.lt(process.version, "12.12.0")) {
     throw new Error("Spire requires node 12.12+ to function properly.");
 }
 
-createImportWidgetChunkFile();
+let hasBeenCalled = false;
 
 exports.setupCommonConfig = (isDevBuild, env, target = "ES2017") => {
     let blueprint = env && env.BLUEPRINT && `blueprints/${env.BLUEPRINT}`;
@@ -34,11 +34,14 @@ exports.setupCommonConfig = (isDevBuild, env, target = "ES2017") => {
         blueprint = "content-library";
     }
 
-    createAllowedContext(blueprint);
-
     console.log(`Blueprint is ${blueprint}.`);
 
-    setupEntryFiles(isDevBuild, blueprint);
+    if (!hasBeenCalled) {
+        createImportChunk(blueprint);
+        createAllowedContext(blueprint);
+        setupEntryFiles(isDevBuild, blueprint);
+        hasBeenCalled = true;
+    }
 
     const removePluginOptions = {
         include: [

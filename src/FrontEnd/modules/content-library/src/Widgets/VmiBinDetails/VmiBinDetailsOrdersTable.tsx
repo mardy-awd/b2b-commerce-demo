@@ -2,8 +2,8 @@ import { getCookie } from "@insite/client-framework/Common/Cookies";
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getCartsDataView } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
-import loadCarts from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCarts";
+import loadOrders from "@insite/client-framework/Store/Data/Orders/Handlers/LoadOrders";
+import { getOrdersDataView } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import resetVmiItemsSelection from "@insite/client-framework/Store/Pages/VmiBinDetails/Handlers/ResetVmiItemsSelection";
 import selectVmiOrders from "@insite/client-framework/Store/Pages/VmiBinDetails/Handlers/SelectVmiOrders";
@@ -12,6 +12,7 @@ import { TableTabKeys } from "@insite/client-framework/Store/Pages/VmiBinDetails
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import LocalizedDateTime from "@insite/content-library/Components/LocalizedDateTime";
+import OrderDetailPageTypeLink from "@insite/content-library/Components/OrderDetailPageTypeLink";
 import Checkbox, { CheckboxPresentationProps } from "@insite/mobius/Checkbox";
 import DataTable, { DataTableProps, SortOrderOptions } from "@insite/mobius/DataTable";
 import DataTableBody from "@insite/mobius/DataTable/DataTableBody";
@@ -35,7 +36,7 @@ const mapStateToProps = (state: ApplicationState) => {
     const parsedQuery = parseQueryString<{ locationId?: string }>(location.search);
     return {
         parameter: state.pages.vmiBinDetails.getVmiOrdersParameter,
-        vmiOrdersDataView: getCartsDataView(state, state.pages.vmiBinDetails.getVmiOrdersParameter),
+        vmiOrdersDataView: getOrdersDataView(state, state.pages.vmiBinDetails.getVmiOrdersParameter),
         selectedIds: state.pages.vmiBinDetails.selectedVmiItems[TableTabKeys.PreviousOrders] || {},
         parsedQuery,
     };
@@ -45,7 +46,7 @@ const mapDispatchToProps = {
     resetVmiItemsSelection,
     updateOrdersSearchFields,
     selectVmiOrders,
-    loadCarts,
+    loadOrders,
 };
 
 type Props = ReturnType<typeof mapStateToProps> &
@@ -117,7 +118,7 @@ const VmiBinDetailsOrdersTable = ({
     resetVmiItemsSelection,
     updateOrdersSearchFields,
     selectVmiOrders,
-    loadCarts,
+    loadOrders,
 }: Props) => {
     useEffect(() => {
         if (parameter.vmiLocationId !== parsedQuery.locationId) {
@@ -133,8 +134,8 @@ const VmiBinDetailsOrdersTable = ({
         }
 
         if (!vmiOrdersDataView.value && !vmiOrdersDataView.isLoading) {
-            loadCarts({
-                apiParameter: parameter,
+            loadOrders({
+                ...parameter,
                 onComplete: () => {
                     resetVmiItemsSelection({ tabKey: TableTabKeys.PreviousOrders });
                 },
@@ -244,7 +245,7 @@ const VmiBinDetailsOrdersTable = ({
                         </DataTableHeader>
                     </DataTableHead>
                     <DataTableBody>
-                        {vmiOrdersDataView.value.map(({ id, orderNumber, status, orderDate }) => (
+                        {vmiOrdersDataView.value.map(({ id, webOrderNumber, erpOrderNumber, status, orderDate }) => (
                             <DataTableRow key={id}>
                                 <DataTableCell {...styles.checkboxCells}>
                                     <Checkbox
@@ -254,7 +255,11 @@ const VmiBinDetailsOrdersTable = ({
                                     />
                                 </DataTableCell>
                                 <DataTableCell {...styles.nameCells}>
-                                    <Link>{orderNumber}</Link>
+                                    <OrderDetailPageTypeLink
+                                        title={webOrderNumber || erpOrderNumber}
+                                        orderNumber={webOrderNumber || erpOrderNumber}
+                                        isVmiOrderDetailsPage={true}
+                                    />
                                 </DataTableCell>
                                 <DataTableCell {...styles.orderStatusCells}>{status}</DataTableCell>
                                 <DataTableCell {...styles.orderDateCells}>

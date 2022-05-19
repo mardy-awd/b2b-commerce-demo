@@ -181,7 +181,7 @@ class Popover extends React.Component<PopoverProps, State> {
     componentDidMount() {
         document.addEventListener("keydown", this.handleKeyDown);
         document.addEventListener("mousedown", this.handleClickOutside);
-        document.addEventListener("scroll", this.handleScroll, true);
+        document.addEventListener("scroll", this.handleScroll, { passive: true });
         window.addEventListener("resize", this.handleResize, true);
         this.setPopoverStyle();
     }

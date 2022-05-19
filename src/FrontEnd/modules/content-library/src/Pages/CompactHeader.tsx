@@ -191,7 +191,7 @@ const CompactHeader = (props: Props) => {
                 setIsShow(false);
             }
         }
-        window.addEventListener("scroll", eventHandler);
+        window.addEventListener("scroll", eventHandler, { passive: true });
 
         return () => {
             window.removeEventListener("scroll", eventHandler);

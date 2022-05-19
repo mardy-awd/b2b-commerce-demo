@@ -23,7 +23,7 @@
         allProductsSelected = false;
         exportProductHeaders: string[];
 
-        vmiOrdersList: Insite.Cart.WebApi.V1.ApiModels.CartModel[];
+        vmiOrdersList: OrderModel[];
         vmiOrdersPagination: PaginationModel;
         vmiOrdersPaginationStorageKey = "DefaultPagination-VmiOrdersSearch";
         ordersTableSearchFilter: string;
@@ -35,7 +35,7 @@
         static $inject = [
             "$scope",
             "coreService",
-            "cartService",
+            "orderService",
             "spinnerService",
             "customerService",
             "vmiLocationPopupService",
@@ -52,7 +52,7 @@
         constructor(
             protected $scope: ng.IScope,
             protected coreService: core.ICoreService,
-            protected cartService: cart.ICartService,
+            protected orderService: order.IOrderService,
             protected spinnerService: core.ISpinnerService,
             protected customerService: customers.ICustomerService,
             protected vmiLocationPopupService: catalog.IVmiLocationPopupService,
@@ -288,7 +288,7 @@
         }
 
         // orders table utilities
-        protected generateCsvOrders(list: CartModel[]): void {
+        protected generateCsvOrders(list: OrderModel[]): void {
             this.spinnerService.hide();
 
             const dataForUnparse = this.createDataForOrderUnparse(list);
@@ -310,7 +310,7 @@
             }
         }
 
-        protected createDataForOrderUnparse(list: CartModel[]): any {
+        protected createDataForOrderUnparse(list: OrderModel[]): any {
             if (!list?.length) {
                 return null;
             }
@@ -318,9 +318,9 @@
             return {
                 fields: this.exportOrdersHeaders,
                 data: list.map(o => [
-                    o.orderNumber,
+                    o.webOrderNumber || o.erpOrderNumber,
                     this.$filter("date")(o.orderDate, "shortDate"),
-                    o.orderGrandTotal.toString(),
+                    o.orderTotal.toString(),
                     o.status,
                 ]),
             };
@@ -329,7 +329,7 @@
         exportSelectedOrders(): void {
             this.spinnerService.show();
 
-            let selectedOrders: CartModel[] = [];
+            let selectedOrders: OrderModel[] = [];
 
             this.vmiOrdersList.forEach((order) => {
                 if (this.checkOrderStorage[order.id.toString()]) {
@@ -345,13 +345,14 @@
 
             let searchFilter = {
                 sort: "",
-                orderNumber: "",
+                orderNumber: this.ordersTableSearchFilter,
                 status: "Submitted",
+                customerSequence: "-1",
                 vmiLocationId: this.vmiLocationId
             };
 
-            this.cartService.getCarts(searchFilter, { page: 1, pageSize: this.vmiOrdersPagination?.totalItemCount } as PaginationModel).then(
-                (result: CartCollectionModel) => { this.generateCsvOrders(result.carts) },
+            this.orderService.getOrders(searchFilter, { page: 1, pageSize: this.vmiOrdersPagination?.totalItemCount } as PaginationModel).then(
+                (result: OrderCollectionModel) => { this.generateCsvOrders(result.orders) },
                 (error: any) => { this.getVmiOrderCollectionFailed(error); });
         }
 
@@ -359,7 +360,7 @@
             return !!this.checkOrderStorage[orderId.toString()];
         }
 
-        toggleSelectedOrder(order: CartModel): void {
+        toggleSelectedOrder(order: OrderModel): void {
             if (this.checkOrderStorage[order.id.toString()]) {
                 delete this.checkOrderStorage[order.id.toString()];
                 this.allOrdersSelected = false;
@@ -436,16 +437,17 @@
                 sort: "",
                 orderNumber: this.ordersTableSearchFilter,
                 status: "Submitted",
+                customerSequence: "-1",
                 vmiLocationId: this.vmiLocationId
             };
-            this.cartService.getCarts(searchFilter, this.vmiOrdersPagination).then(
-                (result: CartCollectionModel) => { this.getVmiOrderCollectionCompleted(result); },
+            this.orderService.getOrders(searchFilter, this.vmiOrdersPagination).then(
+                (result: OrderCollectionModel) => { this.getVmiOrderCollectionCompleted(result); },
                 (error: any) => { this.getVmiOrderCollectionFailed(error); });
         }
 
-        protected getVmiOrderCollectionCompleted(result: CartCollectionModel): void {
+        protected getVmiOrderCollectionCompleted(result: OrderCollectionModel): void {
             this.checkOrderStorage = {};
-            this.vmiOrdersList = result.carts;
+            this.vmiOrdersList = result.orders;
             this.vmiOrdersPagination = result.pagination;
         }
 
@@ -471,6 +473,10 @@
                 vmiLocations: [this.vmiLocation],
                 broadcastStr: "vmi-location-was-removed"
             });
+        }
+
+        capitalizeString(input: string): string {
+            return input ? input[0] + input.substr(1) : "";
         }
     }
 

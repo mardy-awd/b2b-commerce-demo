@@ -5,6 +5,7 @@ import removeVmiBins from "@insite/client-framework/Store/Data/VmiBins/Handlers/
 import { getVmiBinsDataView } from "@insite/client-framework/Store/Data/VmiBins/VmiBinsSelectors";
 import { isVmiAdmin } from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsSelectors";
 import exportVmiProducts from "@insite/client-framework/Store/Pages/VmiLocationDetails/Handlers/ExportVmiProducts";
+import resetVmiItemsSelection from "@insite/client-framework/Store/Pages/VmiLocationDetails/Handlers/ResetVmiItemsSelection";
 import selectVmiItems from "@insite/client-framework/Store/Pages/VmiLocationDetails/Handlers/SelectVmiItems";
 import updateProductSearchFields from "@insite/client-framework/Store/Pages/VmiLocationDetails/Handlers/UpdateProductSearchFields";
 import { TableTabKeys } from "@insite/client-framework/Store/Pages/VmiLocationDetails/VmiLocationDetailsReducer";
@@ -12,6 +13,7 @@ import translate from "@insite/client-framework/Translate";
 import TwoButtonModal, { TwoButtonModalStyles } from "@insite/content-library/Components/TwoButtonModal";
 import VmiBinDetailTypeLink from "@insite/content-library/Components/VmiBinDetailTypeLink";
 import Checkbox, { CheckboxPresentationProps } from "@insite/mobius/Checkbox";
+import Clickable from "@insite/mobius/Clickable";
 import DataTable, { DataTableProps, SortOrderOptions } from "@insite/mobius/DataTable";
 import DataTableBody from "@insite/mobius/DataTable/DataTableBody";
 import DataTableCell, { DataTableCellProps } from "@insite/mobius/DataTable/DataTableCell";
@@ -20,9 +22,11 @@ import DataTableHeader, { DataTableHeaderProps } from "@insite/mobius/DataTable/
 import DataTableRow from "@insite/mobius/DataTable/DataTableRow";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
+import Hidden from "@insite/mobius/Hidden";
 import Search from "@insite/mobius/Icons/Search";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
+import OverflowMenu from "@insite/mobius/OverflowMenu";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
 import TextField, { TextFieldProps } from "@insite/mobius/TextField";
 import Typography, { TypographyPresentationProps, TypographyProps } from "@insite/mobius/Typography";
@@ -50,6 +54,7 @@ const mapDispatchToProps = {
     removeVmiBins,
     exportVmiProducts,
     selectVmiItems,
+    resetVmiItemsSelection,
 };
 
 interface OwnProps {
@@ -115,6 +120,13 @@ export const vmiLocationProductsTabStyles: VmiLocationProductsTabStyles = {
     gridItem: {
         width: 12,
         css: css`
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            @media (min-width: 768px) {
+                justify-content: start;
+            }
             > * {
                 padding-right: 10px;
             }
@@ -183,6 +195,7 @@ const VmiLocationProductsTab = ({
     removeVmiBins,
     exportVmiProducts,
     selectVmiItems,
+    resetVmiItemsSelection,
     filter,
 }: Props) => {
     const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
@@ -260,6 +273,9 @@ const VmiLocationProductsTab = ({
         removeVmiBins({
             vmiLocationId,
             ids: Object.keys(selectedProductIds),
+            onComplete: () => {
+                resetVmiItemsSelection({ tabKey: TableTabKeys.Products });
+            },
         });
     };
 
@@ -309,23 +325,44 @@ const VmiLocationProductsTab = ({
                         </Typography>
                         {isVmiAdmin && (
                             <>
-                                <Link
-                                    {...styles.removeLink}
-                                    disabled={isRemoving || Object.keys(selectedProductIds).length === 0}
-                                    onClick={handleRemoveButtonClick}
-                                >
-                                    {translate("Remove")}
-                                </Link>
-                                <Link
-                                    {...styles.exportLink}
-                                    disabled={Object.keys(selectedProductIds).length === 0}
-                                    onClick={() => handleExportButtonClick(true)}
-                                >
-                                    {translate("Export Selected")}
-                                </Link>
-                                <Link {...styles.exportLink} onClick={() => handleExportButtonClick()}>
-                                    {translate("Export All")}
-                                </Link>
+                                <Hidden above="sm">
+                                    <OverflowMenu>
+                                        <Clickable
+                                            disabled={isRemoving || Object.keys(selectedProductIds).length === 0}
+                                            onClick={handleRemoveButtonClick}
+                                        >
+                                            {translate("Remove")}
+                                        </Clickable>
+                                        <Clickable
+                                            disabled={Object.keys(selectedProductIds).length === 0}
+                                            onClick={() => handleExportButtonClick(true)}
+                                        >
+                                            {translate("Export Selected")}
+                                        </Clickable>
+                                        <Clickable onClick={() => handleExportButtonClick()}>
+                                            {translate("Export All")}
+                                        </Clickable>
+                                    </OverflowMenu>
+                                </Hidden>
+                                <Hidden below="md">
+                                    <Link
+                                        {...styles.removeLink}
+                                        disabled={isRemoving || Object.keys(selectedProductIds).length === 0}
+                                        onClick={handleRemoveButtonClick}
+                                    >
+                                        {translate("Remove")}
+                                    </Link>
+                                    <Link
+                                        {...styles.exportLink}
+                                        disabled={Object.keys(selectedProductIds).length === 0}
+                                        onClick={() => handleExportButtonClick(true)}
+                                    >
+                                        {translate("Export Selected")}
+                                    </Link>
+                                    <Link {...styles.exportLink} onClick={() => handleExportButtonClick()}>
+                                        {translate("Export All")}
+                                    </Link>
+                                </Hidden>
                             </>
                         )}
                     </GridItem>

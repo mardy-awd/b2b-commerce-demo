@@ -168,11 +168,13 @@ const DealerInformation: React.FC<Props> = ({ history, locationFinderUrl }) => {
             <GridItem {...styles.googleMapsDirectionLinkGridItem}>
                 <GoogleMapsDirectionLink {...styles.googleMapsDirectionLink} {...dealer} />
             </GridItem>
-            <GridItem {...styles.visitWebsiteLinkGridItem}>
-                <Link href={dealer.webSiteUrl} target="_blank" {...styles.visitWebsiteLink}>
-                    {translate("Visit Website")}
-                </Link>
-            </GridItem>
+            {dealer.webSiteUrl && (
+                <GridItem {...styles.visitWebsiteLinkGridItem}>
+                    <Link href={dealer.webSiteUrl} target="_blank" {...styles.visitWebsiteLink}>
+                        {translate("Visit Website")}
+                    </Link>
+                </GridItem>
+            )}
         </GridContainer>
     );
 };

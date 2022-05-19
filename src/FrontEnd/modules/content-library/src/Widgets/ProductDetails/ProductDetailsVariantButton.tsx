@@ -1,8 +1,11 @@
 import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { SafeDictionary } from "@insite/client-framework/Common/Types";
+import translate from "@insite/client-framework/Translate";
 import { VariantTraitModel } from "@insite/client-framework/Types/ApiModels";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
+import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
+import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React from "react";
 import { css } from "styled-components";
 
@@ -13,11 +16,26 @@ interface Props {
 }
 
 export interface ProductDetailsVariantButtonStyles {
+    wrapper?: InjectableCss;
+    swatchHeader?: InjectableCss;
     button?: ButtonPresentationProps;
     labelText?: TypographyPresentationProps;
+    link?: LinkPresentationProps;
 }
 
 export const variantButtonsStyles: ProductDetailsVariantButtonStyles = {
+    wrapper: {
+        css: css`
+            margin-top: 10px;
+        `,
+    },
+    swatchHeader: {
+        css: css`
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        `,
+    },
     button: {
         css: css`
             margin-right: 5px;
@@ -38,14 +56,30 @@ export const variantButtonsStyles: ProductDetailsVariantButtonStyles = {
             margin-bottom: 5px;
         `,
     },
+    link: {
+        css: css`
+            margin: 5px;
+            white-space: nowrap;
+        `,
+    },
 };
 
 const styles = variantButtonsStyles;
 
 const ProductDetailsVariantButton = ({ variantSelection, updateVariantSelection, variantTrait }: Props) => {
     return (
-        <StyledWrapper key={variantTrait.id}>
-            <Typography {...styles.labelText}>{variantTrait.nameDisplay}</Typography>
+        <StyledWrapper {...styles.wrapper} key={variantTrait.id}>
+            <StyledWrapper {...styles.swatchHeader}>
+                <Typography {...styles.labelText}>{variantTrait.nameDisplay}</Typography>
+                <Link
+                    {...styles.link}
+                    onClick={() => {
+                        updateVariantSelection("", variantTrait.id);
+                    }}
+                >
+                    {translate("Clear Selection")}
+                </Link>
+            </StyledWrapper>
             {variantTrait.traitValues?.map(traitValue => (
                 <Button
                     {...styles.button}

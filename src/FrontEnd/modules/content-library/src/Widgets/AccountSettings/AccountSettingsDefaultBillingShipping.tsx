@@ -326,7 +326,11 @@ const PickUpLocation = ({ warehouse, onChange }: PickUpLocationProps) => {
             <GridContainer {...componentStyles.gridContainer}>
                 <GridItem {...componentStyles.headingGridItem}>
                     <Typography {...componentStyles.headerText}>{translate("Pick Up Location")}</Typography>
-                    <Link onClick={handleOpenFindLocation} {...componentStyles.changeLink}>
+                    <Link
+                        onClick={handleOpenFindLocation}
+                        {...componentStyles.changeLink}
+                        data-test-selector="pickUpLocation_ChangeButton"
+                    >
                         {translate("Change")}
                     </Link>
                 </GridItem>

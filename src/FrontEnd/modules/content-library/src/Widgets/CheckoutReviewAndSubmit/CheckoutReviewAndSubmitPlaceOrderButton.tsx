@@ -1,4 +1,5 @@
 /* eslint-disable spire/export-styles */
+import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getBillToState } from "@insite/client-framework/Store/Data/BillTos/BillTosSelectors";
 import {
@@ -6,6 +7,7 @@ import {
     getCurrentCartState,
     hasProductsWithInvalidPrice,
 } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { getShipToState } from "@insite/client-framework/Store/Data/ShipTos/ShipTosSelectors";
 import translate from "@insite/client-framework/Translate";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
@@ -21,6 +23,11 @@ const mapStateToProps = (state: ApplicationState) => {
     const cartState = cartId ? getCartState(state, cartId) : getCurrentCartState(state);
     const billToState = getBillToState(state, cartState.value?.billToId);
     const shipToState = getShipToState(state, cartState.value?.shipToId);
+
+    const { sessionId, redirectResult } = parseQueryString<{ sessionId?: string; redirectResult?: string }>(
+        getLocation(state).search,
+    );
+
     return {
         isDisabled:
             cartState.isLoading ||
@@ -32,6 +39,7 @@ const mapStateToProps = (state: ApplicationState) => {
             !shipToState.value.address1 ||
             isPlacingOrder ||
             isCheckingOutWithPayPay ||
+            (!!sessionId && !!redirectResult) ||
             hasProductsWithInvalidPrice(cartState.value) ||
             cartState.value?.hasInsufficientInventory === true,
     };

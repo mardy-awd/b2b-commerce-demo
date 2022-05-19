@@ -36,6 +36,10 @@ export interface PaymetricConfig {
     javaScriptUrl: string;
 }
 
+export interface AdyenSettings {
+    clientKey: string;
+}
+
 export const enum StorefrontAccess {
     NoSignInRequired = "NoSignInRequired",
     SignInRequiredToBrowse = "SignInRequiredToBrowse",
@@ -54,6 +58,10 @@ export function getTokenExConfig(parameter: GetTokenExConfigApiParameter = {}) {
 
 export function getPaymetricConfig() {
     return post<PaymetricConfig>("/api/v1/paymetric/config");
+}
+
+export function getAdyenSettings() {
+    return get<AdyenSettings>("api/v1/adyen/config");
 }
 
 export interface SettingsModel extends BaseModel {

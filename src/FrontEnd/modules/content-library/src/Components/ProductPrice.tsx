@@ -253,7 +253,9 @@ const ProductPrice = ({
     if (!canSeePrices) {
         return (
             <StyledWrapper {...styles.wrapper}>
-                <Typography {...priceStyles.signInText}>{siteMessage("Pricing_SignInForPrice")}</Typography>
+                <Typography {...priceStyles.signInText} data-test-selector="productPrice_PricingMessage">
+                    {siteMessage("Pricing_SignInForPrice")}
+                </Typography>
             </StyledWrapper>
         );
     }
@@ -261,7 +263,9 @@ const ProductPrice = ({
     if ("product" in pricingData && pricingData.productInfo.failedToLoadPricing) {
         return (
             <SectionWrapper {...styles.wrapper}>
-                <Typography {...priceStyles.errorText}>{siteMessage("RealTimePricing_PriceLoadFailed")}</Typography>
+                <Typography {...priceStyles.errorText} data-test-selector="productPrice_PricingMessage">
+                    {siteMessage("RealTimePricing_PriceLoadFailed")}
+                </Typography>
             </SectionWrapper>
         );
     }

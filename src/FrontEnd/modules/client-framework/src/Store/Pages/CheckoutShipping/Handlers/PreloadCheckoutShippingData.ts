@@ -2,7 +2,12 @@ import waitFor from "@insite/client-framework/Common/Utilities/waitFor";
 import { createHandlerChainRunner, Handler } from "@insite/client-framework/HandlerCreator";
 import { getAddressFieldsDataView } from "@insite/client-framework/Store/Data/AddressFields/AddressFieldsSelector";
 import loadAddressFields from "@insite/client-framework/Store/Data/AddressFields/Handlers/LoadAddressFields";
-import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import {
+    getCartState,
+    getCurrentCartState,
+    isCartLoadedWithLines,
+    isCartLoadedWithoutLines,
+} from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import loadCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCart";
 import loadCurrentCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCurrentCart";
 import { getCurrentCountries } from "@insite/client-framework/Store/Data/Countries/CountriesSelectors";
@@ -40,7 +45,7 @@ export const PreloadData: HandlerType = props => {
     }
     if (props.parameter.cartId) {
         const cartState = getCartState(state, props.parameter.cartId);
-        if (!cartState.value && !cartState.isLoading) {
+        if (!isCartLoadedWithLines(cartState)) {
             props.dispatch(loadCart({ cartId: props.parameter.cartId }));
         }
         const promotionsState = getPromotionsDataView(state, props.parameter.cartId);
@@ -49,7 +54,7 @@ export const PreloadData: HandlerType = props => {
         }
     } else {
         const currentCartState = getCurrentCartState(state);
-        if (!currentCartState.value && !currentCartState.isLoading) {
+        if (!isCartLoadedWithLines(currentCartState)) {
             props.dispatch(loadCurrentCart());
         }
         const currentPromotionsState = getCurrentPromotionsDataView(state);
@@ -74,7 +79,10 @@ export const WaitForData: HandlerType = async props => {
                 return false;
             }
             const cartState = getCartState(state, props.parameter.cartId);
-            if (!cartState || cartState.isLoading) {
+            if (!isCartLoadedWithLines(cartState)) {
+                if (isCartLoadedWithoutLines(cartState)) {
+                    props.dispatch(loadCart({ cartId: props.parameter.cartId }));
+                }
                 return false;
             }
         } else {
@@ -82,8 +90,11 @@ export const WaitForData: HandlerType = async props => {
             if (!currentPromotions || currentPromotions.isLoading) {
                 return false;
             }
-            const currentCart = getCurrentCartState(state);
-            if (!currentCart || currentCart.isLoading) {
+            const currentCartState = getCurrentCartState(state);
+            if (!isCartLoadedWithLines(currentCartState)) {
+                if (isCartLoadedWithoutLines(currentCartState)) {
+                    props.dispatch(loadCurrentCart());
+                }
                 return false;
             }
         }

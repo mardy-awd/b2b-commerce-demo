@@ -131,8 +131,13 @@ const SignInMessage = ({ onClick }: SignInMessageProps) => {
                 margin-top: 1rem;
             `}
         >
-            <Link onClick={onClick}>{translate("Sign In")}</Link>
-            <Typography> {translate("or enter address during checkout")}</Typography>
+            <Link onClick={onClick} data-test-selector="addressDrawer_SignInLink">
+                {translate("Sign In")}
+            </Link>
+            <Typography data-test-selector="addressDrawer_ShipToText">
+                {" "}
+                {translate("or enter address during checkout")}
+            </Typography>
         </StyledWrapper>
     );
 };

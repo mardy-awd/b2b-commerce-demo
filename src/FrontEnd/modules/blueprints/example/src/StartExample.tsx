@@ -1,7 +1,12 @@
 // import { addPagesFromContext, addWidgetsFromContext } from "@insite/client-framework/Configuration";
 
-// Load all custom widgets so they are included in the bundle and enable hot module reloading for them. Do not do this for the ./Overrides folder
-// const widgets = require.context("./Widgets", true, /\.tsx$/);
+// For production, include a set of commonly used widgets in the main bundle
+// the rest will be split into their own chunks
+// Do not do this for the ./Overrides folder
+// const widgets = IS_PRODUCTION
+//     ? require.context("./Widgets", true, /(Header|Basic|Common|Footer|SignIn)\/.+?\.tsx$/)
+//     : require.context("./Widgets", true, /\.tsx$/);
+// enable hot module reloading for widgets
 // const onHotWidgetReplace = addWidgetsFromContext(widgets);
 // if (module.hot) {
 //     module.hot.accept(widgets.id, () => onHotWidgetReplace(require.context("./Widgets", true, /\.tsx$/)));
@@ -18,6 +23,9 @@
 // const handlers = require.context("./Handlers", true);
 // handlers.keys().forEach(key => handlers(key));
 
-// Load all the extensions to the base widgets. This includes style extensions.
-// const widgetExtensions = require.context("./WidgetExtensions", true);
-// widgetExtensions.keys().forEach(key => widgetExtensions(key));
+// in production, the widget extensions are included in the chunks created for widgets
+// if (!IS_PRODUCTION) {
+//     // load all widget extensions. They could be loaded individually instead
+//     const widgetExtensions = require.context("./WidgetExtensions", true);
+//     widgetExtensions.keys().forEach(key => widgetExtensions(key));
+// }

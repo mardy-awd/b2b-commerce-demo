@@ -42,6 +42,19 @@ const enum fields {
     showReorderProducts = "showReorderProducts",
 }
 
+type sortByField = {
+    [key: string]: string[];
+};
+
+const sortByFields: sortByField = {
+    webOrderNumber: ["webOrderNumber"],
+    orderDate: ["orderDate", "erpOrderNumber"],
+    orderTotal: ["orderTotal"],
+    status: ["status"],
+    stCompanyName: ["stCompanyName"],
+    customerPO: ["customerPO"],
+};
+
 interface OwnProps extends WidgetProps {
     fields: {
         [fields.showOrderNumber]: boolean;
@@ -211,15 +224,23 @@ class OrderHistoryTable extends React.Component<Props> {
     context!: React.ContextType<typeof OrdersDataViewContext>;
 
     headerClick(sortField: string) {
-        const sort = this.props.parameter.sort === sortField ? `${sortField} DESC` : sortField;
+        const previousSort = this.props.parameter.sort ?? "";
+        const [previousPrimaryField] = previousSort.split(",");
+        const direction = previousPrimaryField === sortField ? " DESC" : "";
+        const sort = sortByFields[sortField].map(field => `${field}${direction}`).join(", ");
         this.props.updateSearchFields({ sort });
     }
 
     sorted = (sortField: string) => {
         let sorted: boolean | string = false;
-        if (this.props.parameter.sort === sortField) {
+
+        if (!this.props.parameter.sort) {
+            return sorted;
+        }
+        const [primaryField] = this.props.parameter.sort.split(",");
+        if (primaryField === sortField) {
             sorted = "ascending";
-        } else if (this.props.parameter.sort === `${sortField} DESC`) {
+        } else if (primaryField === `${sortField} DESC`) {
             sorted = "descending";
         }
         return sorted as SortOrderOptions;

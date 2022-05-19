@@ -6,6 +6,7 @@
 
     export interface IPaymentService {
         authenticate(parameter: PaymentAuthenticationParameter): ng.IPromise<PaymentAuthenticationModel>;
+        getAuthenticationStatus(transactionId: string): ng.IPromise<PaymentAuthenticationModel>;
     }
 
     export class PaymentService implements IPaymentService {
@@ -31,6 +32,21 @@
         }
 
         protected authenticationFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
+        }
+        
+         getAuthenticationStatus(transactionId: string): ng.IPromise<PaymentAuthenticationModel> {
+            return this.httpWrapperService.executeHttpRequest(
+                this,
+                this.$http({ method: "GET", url: `${this.serviceUri}/${transactionId}` }),
+                this.getAuthenticationStatusSucceeded,
+                this.getAuthenticationStatusFailed
+            );
+        }
+        
+        protected getAuthenticationStatusSucceeded(response: ng.IHttpPromiseCallbackArg<PaymentAuthenticationModel>): void {
+        }
+
+        protected getAuthenticationStatusFailed(error: ng.IHttpPromiseCallbackArg<any>): void {
         }
     }
 

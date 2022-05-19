@@ -1,3 +1,4 @@
+import { getCookie } from "@insite/client-framework/Common/Cookies";
 import { ApiHandler, createHandlerChainRunner } from "@insite/client-framework/HandlerCreator";
 import { fetch } from "@insite/client-framework/ServerSideRendering";
 import { API_URL_CURRENT_FRAGMENT } from "@insite/client-framework/Services/ApiService";
@@ -9,9 +10,14 @@ import {
     stopWatchingForOtherTabSessionChange,
     watchForOtherTabSessionChange,
 } from "@insite/client-framework/Services/SessionService";
-import { getCurrentUserIsGuest } from "@insite/client-framework/Store/Context/ContextSelectors";
+import {
+    getCurrentUserIsGuest,
+    getSession,
+    getSettingsCollection,
+} from "@insite/client-framework/Store/Context/ContextSelectors";
 import loadSession from "@insite/client-framework/Store/Context/Handlers/LoadSession";
 import { getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
+import { isVmiAdmin } from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsSelectors";
 import { getHomePageUrl, getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import { Draft } from "immer";
 import cloneDeep from "lodash/cloneDeep";
@@ -161,10 +167,14 @@ export const RedirectToChangeCustomer: HandlerType = props => {
         return;
     }
 
+    const currentMode = getCookie("NavigationMode") || "Storefront";
+    const session = getSession(props.getState());
+    const settings = getSettingsCollection(props.getState());
+    const isUserVmiAdmin = isVmiAdmin(settings.orderSettings, session);
     const homePageUrl = getPageLinkByPageType(props.getState(), "HomePage")?.url;
     const dashboardPageUrl = getPageLinkByPageType(props.getState(), "MyAccountPage")?.url;
     const changeCustomerPageUrl = getPageLinkByPageType(props.getState(), "ChangeCustomerPage")?.url;
-    if (homePageUrl && changeCustomerPageUrl) {
+    if (homePageUrl && changeCustomerPageUrl && (!isUserVmiAdmin || currentMode !== "Vmi")) {
         const shouldAddReturnUrl = props.parameter.returnUrl && props.parameter.returnUrl !== homePageUrl;
         const returnUrl = shouldAddReturnUrl
             ? props.parameter.returnUrl
@@ -173,6 +183,23 @@ export const RedirectToChangeCustomer: HandlerType = props => {
             : undefined;
 
         window.location.href = changeCustomerPageUrl + (returnUrl ? `?returnUrl=${encodeURIComponent(returnUrl)}` : "");
+        return false;
+    }
+};
+
+export const RedirectToVmiDashboard: HandlerType = props => {
+    const currentMode = getCookie("NavigationMode") || "Storefront";
+    if (!props.authenticatedSession || !!props.parameter.returnUrl || currentMode !== "Vmi") {
+        return;
+    }
+
+    const session = getSession(props.getState());
+    const settings = getSettingsCollection(props.getState());
+    const isUserVmiAdmin = isVmiAdmin(settings.orderSettings, session);
+    const vmiDashboardPageUrl = getPageLinkByPageType(props.getState(), "VmiDashboardPage")?.url;
+
+    if (currentMode === "Vmi" && isUserVmiAdmin && !!vmiDashboardPageUrl) {
+        window.location.href = vmiDashboardPageUrl;
         return false;
     }
 };
@@ -247,6 +274,7 @@ export const chain = [
     LoadSessionIfNeeded,
     DispatchCompleteSignIn,
     RedirectToChangeCustomer,
+    RedirectToVmiDashboard,
     NavigateToReturnUrl,
 ];
 

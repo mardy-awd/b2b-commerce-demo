@@ -5,8 +5,12 @@ import { css } from "styled-components";
 
 import ShoppingCart from "@insite/mobius/Icons/ShoppingCart";
 
-// load all widgets. Without this they won't be included in the bundle
-const widgets = require.context("./Widgets", true, /\.tsx$/);
+// For production, include a set of commonly used widgets in the main bundle
+// the rest will be split into their own chunks
+const widgets = IS_PRODUCTION
+    ? require.context("./Widgets", true, /(Header|Basic|Common|Footer|SignIn)\/.+?\.tsx$/)
+    : require.context("./Widgets", true, /\.tsx$/);
+// enable hot module reloading for widgets
 const onHotWidgetReplace = addWidgetsFromContext(widgets);
 if (module.hot) {
     module.hot.accept(widgets.id, () => onHotWidgetReplace(require.context("./Widgets", true, /\.tsx$/)));
@@ -23,9 +27,12 @@ if (module.hot) {
 const handlers = require.context("./Handlers", true);
 handlers.keys().forEach(key => handlers(key));
 
-// load all widget extensions. They could be loaded individually instead
-const widgetExtensions = require.context("./WidgetExtensions", true);
-widgetExtensions.keys().forEach(key => widgetExtensions(key));
+// in production, the widget extensions are included in the chunks created for widgets
+if (!IS_PRODUCTION) {
+    // load all widget extensions. They could be loaded individually instead
+    const widgetExtensions = require.context("./WidgetExtensions", true);
+    widgetExtensions.keys().forEach(key => widgetExtensions(key));
+}
 
 // add some pre styleguide customizations. These can be overridden by the style guid.
 setPreStyleGuideTheme({

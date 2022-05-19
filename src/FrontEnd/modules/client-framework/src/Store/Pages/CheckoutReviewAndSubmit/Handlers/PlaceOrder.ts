@@ -41,6 +41,9 @@ interface PlaceOrderParameter {
     onSuccess?: (cartId: string) => void;
     payPalToken?: string;
     payPalPayerId?: string;
+    isPending?: boolean;
+    isAdyenDropIn?: boolean;
+    adyenPspReference?: string;
     accountHolderName?: string;
     accountNumber?: string;
     routingNumber?: string;
@@ -70,9 +73,15 @@ export const SetCartStatus: HandlerType = props => {
         throw new Error("There was no current cart and we are trying to place the current cart as an order.");
     }
 
+    const newStatus = cart?.requiresApproval
+        ? "AwaitingApproval"
+        : props.parameter?.isPending
+        ? "PendingPaymentValidation"
+        : "Submitted";
+
     props.cartToUpdate = {
         ...cloneDeep(cart),
-        status: cart.requiresApproval ? "AwaitingApproval" : "Submitted",
+        status: newStatus,
         poNumber: props.parameter.poNumber,
         customerVatNumber: props.parameter.vatNumber || "",
     };
@@ -80,6 +89,13 @@ export const SetCartStatus: HandlerType = props => {
 
 export const SetPaymentMethod: HandlerType = props => {
     const { cartToUpdate } = props;
+
+    if (props.parameter.isAdyenDropIn) {
+        cartToUpdate.paymentOptions!.isAdyenDropIn = true;
+        cartToUpdate.paymentOptions!.adyenPspReference = props.parameter.adyenPspReference!;
+        cartToUpdate.paymentMethod = null;
+        return;
+    }
 
     if (props.parameter.payPalPayerId) {
         cartToUpdate.paymentOptions!.isPayPal = true;
@@ -106,7 +122,7 @@ export const SetPaymentMethod: HandlerType = props => {
 export const SetCreditCard: HandlerType = props => {
     const { cartToUpdate } = props;
 
-    if (cartToUpdate.paymentMethod?.isCreditCard) {
+    if (cartToUpdate.paymentMethod?.isCreditCard && !props.parameter.isAdyenDropIn) {
         const updatedCreditCard = {
             ...cartToUpdate.paymentOptions!.creditCard!,
             cardHolderName: props.parameter.cardHolderName,

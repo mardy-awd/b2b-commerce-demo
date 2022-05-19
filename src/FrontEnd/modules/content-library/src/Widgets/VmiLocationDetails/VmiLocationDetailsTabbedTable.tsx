@@ -1,7 +1,7 @@
 import { getCookie } from "@insite/client-framework/Common/Cookies";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getCartsDataView } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
-import loadCarts from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCarts";
+import loadOrders from "@insite/client-framework/Store/Data/Orders/Handlers/LoadOrders";
+import { getOrdersDataView } from "@insite/client-framework/Store/Data/Orders/OrdersSelectors";
 import loadVmiBins from "@insite/client-framework/Store/Data/VmiBins/Handlers/LoadVmiBins";
 import { getVmiBinsDataView } from "@insite/client-framework/Store/Data/VmiBins/VmiBinsSelectors";
 import { VmiLocationStateContext } from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsSelectors";
@@ -28,7 +28,7 @@ const mapStateToProps = (state: ApplicationState) => {
         getVmiBinsParameter: state.pages.vmiLocationDetails.getVmiBinsParameter,
         vmiBinsDataView: getVmiBinsDataView(state, state.pages.vmiLocationDetails.getVmiBinsParameter),
         getVmiOrdersParameter: state.pages.vmiLocationDetails.getVmiOrdersParameter,
-        vmiOrdersDataView: getCartsDataView(state, state.pages.vmiLocationDetails.getVmiOrdersParameter),
+        vmiOrdersDataView: getOrdersDataView(state, state.pages.vmiLocationDetails.getVmiOrdersParameter),
     };
 };
 
@@ -36,7 +36,7 @@ const mapDispatchToProps = {
     updateProductSearchFields,
     loadVmiBins,
     updateOrderSearchFields,
-    loadCarts,
+    loadOrders,
     resetVmiItemsSelection,
 };
 
@@ -68,7 +68,7 @@ const VmiLocationDetailsTabbedTable = ({
     getVmiOrdersParameter,
     vmiOrdersDataView,
     updateOrderSearchFields,
-    loadCarts,
+    loadOrders,
     resetVmiItemsSelection,
 }: Props) => {
     const [currentTab, setCurrentTab] = useState(TableTabKeys.Products);
@@ -114,8 +114,8 @@ const VmiLocationDetailsTabbedTable = ({
                     updateOrderSearchFields({ pageSize });
                     return;
                 }
-                loadCarts({
-                    apiParameter: getVmiOrdersParameter,
+                loadOrders({
+                    ...getVmiOrdersParameter,
                     onComplete: () => {
                         resetVmiItemsSelection({ tabKey: TableTabKeys.Orders });
                     },

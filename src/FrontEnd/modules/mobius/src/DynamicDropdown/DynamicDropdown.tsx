@@ -381,6 +381,7 @@ class DynamicDropdown extends React.Component<DynamicDropdownProps & HasDisabler
                 this.handleImplicitSelection("tab");
                 break;
             case ENTER_KEY:
+                event.preventDefault();
                 this.handleImplicitSelection("enter");
                 break;
             case ESC_KEY:

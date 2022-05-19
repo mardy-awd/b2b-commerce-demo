@@ -9,6 +9,8 @@ import {
     HasOnSuccess,
 } from "@insite/client-framework/HandlerCreator";
 import {
+    GetAlsoPurchasedProductCollectionApiV2Parameter,
+    getAlsoPurchasedProductsCollectionV2,
     GetProductCollectionApiV2Parameter,
     getProductCollectionV2,
     GetRelatedProductCollectionApiV2Parameter,
@@ -18,11 +20,18 @@ import sortProductCollections from "@insite/client-framework/Store/Data/Products
 import { ProductCollectionModel, ProductModel } from "@insite/client-framework/Types/ApiModels";
 import sortBy from "lodash/sortBy";
 
-type Parameter = (GetProductCollectionApiV2Parameter | GetRelatedProductCollectionApiV2Parameter) &
+type Parameter = (
+    | GetProductCollectionApiV2Parameter
+    | GetRelatedProductCollectionApiV2Parameter
+    | GetAlsoPurchasedProductCollectionApiV2Parameter
+) &
     HasOnSuccess<ProductModel[]> &
     HasOnError<string>;
 type Props = {
-    apiParameter: GetProductCollectionApiV2Parameter | GetRelatedProductCollectionApiV2Parameter;
+    apiParameter:
+        | GetProductCollectionApiV2Parameter
+        | GetRelatedProductCollectionApiV2Parameter
+        | GetAlsoPurchasedProductCollectionApiV2Parameter;
     apiResult: ProductCollectionModel;
 };
 
@@ -44,6 +53,8 @@ export const RequestDataFromApi: HandlerType = async props => {
     try {
         if ("relationship" in props.apiParameter) {
             props.apiResult = await getRelatedProductsCollectionV2(props.apiParameter);
+        } else if ("productId" in props.apiParameter && props.apiParameter?.type === "alsoPurchased") {
+            props.apiResult = await getAlsoPurchasedProductsCollectionV2(props.apiParameter);
         } else {
             props.apiResult = await getProductCollectionV2(props.apiParameter);
         }

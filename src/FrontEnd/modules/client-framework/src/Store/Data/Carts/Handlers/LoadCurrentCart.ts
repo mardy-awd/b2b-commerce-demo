@@ -1,3 +1,4 @@
+import waitFor from "@insite/client-framework/Common/Utilities/waitFor";
 import {
     createHandlerChainRunnerOptionalParameter,
     Handler,
@@ -7,6 +8,7 @@ import { API_URL_CURRENT_FRAGMENT } from "@insite/client-framework/Services/ApiS
 import { CartResult, getCart, GetCartApiParameter } from "@insite/client-framework/Services/CartService";
 import { getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { nullPage } from "@insite/client-framework/Store/Data/Pages/PagesState";
 import loadCurrentPromotions from "@insite/client-framework/Store/Data/Promotions/Handlers/LoadCurrentPromotions";
 
 type HandlerType = Handler<
@@ -22,7 +24,7 @@ type HandlerType = Handler<
     }
 >;
 
-export const DispatchBeginLoadCart: HandlerType = props => {
+export const DispatchBeginLoadCart: HandlerType = async props => {
     const state = props.getState();
     if (getCurrentCartState(state).isLoading) {
         return false;
@@ -32,6 +34,10 @@ export const DispatchBeginLoadCart: HandlerType = props => {
         type: "Data/Carts/BeginLoadCart",
         id: API_URL_CURRENT_FRAGMENT,
     });
+
+    if (props.parameter.shouldLoadFullCart !== false) {
+        await waitFor(() => getCurrentPage(props.getState()) !== nullPage);
+    }
 };
 
 export const SetNeedFullCart: HandlerType = props => {

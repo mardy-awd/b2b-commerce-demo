@@ -21,7 +21,7 @@ const reducer = {
     ) => {
         const { model, path } = action;
         const lowerPath = path?.toLowerCase();
-        const lowerCanonicalPath = model.canonicalPath.toLowerCase();
+        const lowerCanonicalPath = model?.canonicalPath?.toLowerCase();
 
         if (lowerPath) {
             // should be using this when possible, as the canonical path is not guaranteed to be unuique
@@ -29,7 +29,7 @@ const reducer = {
             draft.idByPath[lowerPath] = lowerPath;
             delete draft.isLoading[lowerPath];
             draft.byId[lowerPath] = model;
-        } else {
+        } else if (lowerCanonicalPath) {
             draft.idByPath[lowerCanonicalPath] = lowerCanonicalPath;
             delete draft.isLoading[lowerCanonicalPath];
             draft.byId[lowerCanonicalPath] = model;

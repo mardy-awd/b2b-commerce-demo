@@ -216,7 +216,7 @@ const ProductSelector = ({
                         <LazyImage {...styles.productImage} src={product.image} />
                     </StyledWrapper>
                     <StyledWrapper {...styles.infoWrapper}>
-                        <Typography {...styles.autocompleteTitleText}>
+                        <Typography {...styles.autocompleteTitleText} data-test-selector="productSelector_ProductTitle">
                             {product.displayTitle || product.title}
                         </Typography>
                         <Typography {...styles.autocompleteErpText}>

@@ -110,7 +110,7 @@ const CheckoutReviewAndSubmitCarrierService: FC<Props> = ({
         }
     }, [cart?.carrier, cart?.shipVia]);
 
-    if (!cart || !cart.cartLines) {
+    if (!cart || !cart.cartLines || cart.cartLines.length === 0) {
         return (
             <StyledWrapper {...styles.centeringWrapper}>
                 <LoadingSpinner data-test-selector="checkoutShipping_carrierServiceLoading" />

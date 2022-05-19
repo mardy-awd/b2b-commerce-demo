@@ -332,8 +332,8 @@ const SavedPaymentsCardList: React.FC<Props> = ({ updateEditModal, updatePayment
                             >
                                 <LazyImage
                                     {...styles.cardTypeImage}
-                                    src={`/images/card-types/${getImageName(savedPayment.cardType)}.png`}
-                                    altText=""
+                                    src={`/images/card-types/${getImageName(savedPayment.cardType)}.webp`}
+                                    altText={`Card type ${savedPayment.cardType}`}
                                 />
                                 <Typography {...styles.descriptionText}>
                                     {savedPayment.description && <>{savedPayment.description}&nbsp;&mdash;&nbsp;</>}

@@ -190,7 +190,7 @@ const OrderStatusHeader = ({
                         generateAttachmentFromWebpage={resolvedGenerateEmailAttachmentFromWebpage}
                         extraProperties={{ stEmail, stPostalCode }}
                     />
-                    <Button {...styles.printButton} onClick={onClickPrint}>
+                    <Button {...styles.printButton} onClick={onClickPrint} data-test-selector="orderStatusHeader_print">
                         {translate("Print")}
                     </Button>
                 </Hidden>

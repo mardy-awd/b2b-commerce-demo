@@ -58,6 +58,7 @@ const RfqMyQuotesPagination = ({ quotesDataView, updateSearchFields }: Props) =>
             resultsPerPageOptions={pagination.pageSizeOptions}
             onChangePage={changePage}
             onChangeResultsPerPage={changeResultsPerPage}
+            data-test-selector="rfqMyQuotes_Pagination"
         />
     );
 };

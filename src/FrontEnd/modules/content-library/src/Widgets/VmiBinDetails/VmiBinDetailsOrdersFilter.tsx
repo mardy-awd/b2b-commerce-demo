@@ -165,7 +165,7 @@ const VmiBinDetailsOrdersFilter = ({
 
     const statusChangeHandler = (event?: React.FormEvent<HTMLSelectElement>) => {
         if (event && event.currentTarget.value) {
-            updateOrdersSearchFields({ status: event.currentTarget.value });
+            updateOrdersSearchFields({ status: event.currentTarget.value ? [event.currentTarget.value] : undefined });
         } else {
             updateOrdersSearchFields({ status: undefined });
         }
@@ -268,7 +268,8 @@ const VmiBinDetailsOrdersFilter = ({
         uniqueOptions.set(option.displayName, erpOrderStatuses);
     }
 
-    const value = getVmiOrdersParameter.status;
+    const value =
+        getVmiOrdersParameter.status && getVmiOrdersParameter.status.length ? getVmiOrdersParameter.status[0] : "";
 
     return (
         <>
@@ -307,7 +308,7 @@ const VmiBinDetailsOrdersFilter = ({
                     <Select
                         label={translate("Status")}
                         {...styles.selectStatus}
-                        value={value || ""}
+                        value={value}
                         onChange={statusChangeHandler}
                     >
                         <option value="">{translate("Select")}</option>

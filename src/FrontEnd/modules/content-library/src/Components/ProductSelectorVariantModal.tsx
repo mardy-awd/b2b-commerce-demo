@@ -147,6 +147,7 @@ const ProductSelectorVariantModal = ({
             headline={translate("Select options")}
             isOpen={variantModalIsOpen}
             handleClose={closeModalHandler}
+            data-test-selector="modal_ProductSelectorVariantModal"
         >
             <StyledWrapper {...styles.wrapper}>
                 {filteredVariantTraits.map(variantTrait => (
@@ -156,6 +157,7 @@ const ProductSelectorVariantModal = ({
                         label={variantTrait.nameDisplay}
                         value={variantSelection[variantTrait.id]}
                         onChange={event => variantChangeHandler(event.currentTarget.value, variantTrait.id)}
+                        data-test-selector={`productSelectorVariantModal_Dropdown_${variantTrait.nameDisplay}`}
                     >
                         <option value="">
                             {variantTrait.unselectedValue
@@ -180,6 +182,7 @@ const ProductSelectorVariantModal = ({
                 {...styles.selectButton}
                 disabled={!selectedVariant || !selectedVariant.id}
                 onClick={selectButtonClickHandler}
+                data-test-selector="productSelectorVariantModal_selectButton"
             >
                 {translate("Select")}
             </Button>
