@@ -31,7 +31,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2205.735" />
+    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2205.757" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Properties\AssemblyInfo.cs" />

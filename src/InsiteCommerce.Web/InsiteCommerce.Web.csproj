@@ -193,8 +193,8 @@
     <Content Include="App_Config\paypal.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Insite.Commerce.Private" Version="5.1.2205.735" />
-    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2205.735" />
+    <PackageReference Include="Insite.Commerce.Private" Version="5.1.2205.757" />
+    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2205.757" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj" />
