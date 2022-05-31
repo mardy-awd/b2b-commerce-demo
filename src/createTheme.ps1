@@ -174,7 +174,7 @@ $projectFile = "<Project Sdk=`"Microsoft.NET.Sdk.Web`">
     <TargetFramework>net48</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition=`"'$(Configuration)|$(Platform)' == 'Debug|AnyCPU' `">
+  <PropertyGroup Condition=`"'`$(Configuration)|`$(Platform)' == 'Debug|AnyCPU' `">
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
     <TypeScriptOutFile />
