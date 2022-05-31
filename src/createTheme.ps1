@@ -171,7 +171,7 @@ $projectFile = "<Project Sdk=`"Microsoft.NET.Sdk.Web`">
     <TypeScriptToolsVersion>3.7</TypeScriptToolsVersion>
     <OutputType>Library</OutputType>
     <OutputPath>bin\</OutputPath>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=`"'$(Configuration)|$(Platform)' == 'Debug|AnyCPU' `">

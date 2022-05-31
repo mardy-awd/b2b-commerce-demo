@@ -6,6 +6,7 @@
     <TypeScriptToolsVersion>3.7</TypeScriptToolsVersion>
     <AssemblyTitle>InsiteCommerce.Web</AssemblyTitle>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DeployDefaultTargetFrameworkVersion>net48</DeployDefaultTargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>TRACE;DEBUG;NOETAG</DefineConstants>
@@ -16,48 +17,6 @@
     <TypeScriptNoEmitOnError>false</TypeScriptNoEmitOnError>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
   </PropertyGroup>
-  <PropertyGroup>
-    <CopyAllFilesToSingleFolderForPackageDependsOn>
-      CustomCollectFiles;
-      $(CopyAllFilesToSingleFolderForPackageDependsOn);
-    </CopyAllFilesToSingleFolderForPackageDependsOn>
-    <CopyAllFilesToSingleFolderForMsdeployDependsOn>
-      CustomCollectFiles;
-      $(CopyAllFilesToSingleFolderForPackageDependsOn);
-    </CopyAllFilesToSingleFolderForMsdeployDependsOn>
-  </PropertyGroup>
-  <Target Name="CustomCollectFiles">
-    <ItemGroup>
-      <_CustomFilesBinXml Include="bin\xml\*" />
-      <FilesForPackagingFromProject Include="%(_CustomFilesBinXml.Identity)">
-        <DestinationRelativePath>bin\xml\%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-    <ItemGroup>
-      <_CustomFilesStylesCss Include="Styles\**\*.css" />
-      <FilesForPackagingFromProject Include="%(_CustomFilesStylesCss.Identity)">
-        <DestinationRelativePath>Styles\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-    <ItemGroup>
-      <_CustomFilesThemesCss Include="Themes\**\*.css" />
-      <FilesForPackagingFromProject Include="%(_CustomFilesThemesCss.Identity)">
-        <DestinationRelativePath>Themes\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-    <ItemGroup>
-      <_CustomFilesStylesScss Include="Themes\**\*.scss" />
-      <FilesForPackagingFromProject Include="%(_CustomFilesStylesScss.Identity)">
-        <DestinationRelativePath>Themes\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-    <ItemGroup>
-      <_CustomFilesScriptsTs Include="Scripts\**\*.ts" />
-      <FilesForPackagingFromProject Include="%(_CustomFilesScriptsTs.Identity)">
-        <DestinationRelativePath>Scripts\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-  </Target>
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
@@ -95,106 +54,50 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Update="QuickPing.aspx.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Content Include="Images\Default\card-types\amex.png" />
-    <Content Include="Images\Default\card-types\discover.png" />
-    <Content Include="Images\Default\card-types\mc.png" />
-    <Content Include="Images\Default\card-types\visa.png" />
+    <Content Include="Images\**\*" />
     <Content Include="Licensing\isc-licenses.json" />
     <Content Include="QuickPing.aspx" />
-    <Content Include="Scripts\App\readme.txt" />
     <Content Include="Scripts\_typelite\custom.models.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>custom.models.d.ts</LastGenOutput>
     </Content>
-    <Content Include="Scripts\Libraries\readme.txt" />
-    <Content Include="Scripts\Typings\readme.txt" />
-    <Content Include="Images\Default\security_code_sample.jpg" />
-    <Content Include="Images\email-header-with-insite-logo.png" />
-    <Content Include="Images\sample\content1.png" />
-    <Content Include="Images\sample\content2.png" />
-    <Content Include="ImportExport\SampleImports\SampleImport_AdminUserProfiles.xlsx" />
+    <Content Include="ImportExport\**\*" />
     <EmbeddedResource Include="AdminConsoleMenuExtensions.json" />
-    <Content Include="Excel\OrderUploadTemplate.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="crossdomain.xml" />
-    <Content Include="gruntfile.js" />
-    <Content Include="config\appSettings.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="ImportExport\SampleImports\SampleImport_Categories.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ImportExport\SampleImports\SampleImport_Customers.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ImportExport\SampleImports\SampleImport_ProductAttributes.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ImportExport\SampleImports\SampleImport_ProductRelatedProducts.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ImportExport\SampleImports\SampleImport_Products.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ImportExport\SampleImports\SampleImport_UserProfiles.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="package.json" />
+    <Content Include="config\*.config" />
     <Content Include="Global.asax" />
     <Content Include="Integration\Integration.svc" />
     <Content Include="SimplePing.aspx" />
-    <Content Include="tsconfig.json" />
-    <Content Include="UserFiles\Images\Logo.png" />
-    <Content Include="Images\list-notes-icon.png" />
-    <Content Include="UserFiles\Images\Products\LG_NotFound.jpg" />
-    <Content Include="UserFiles\Images\Products\MD_NotFound.jpg" />
-    <Content Include="UserFiles\Images\Products\SM_NotFound.jpg" />
-    <Content Include="validateLicenses.ps1" />
+    <Content Include="UserFiles\**\*" />
     <Content Include="_viewstart.cshtml" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Folder Include="App_Data\" />
+    <Content Include="Web.config" />
+    <Content Include="Excel\**\*" />
     <TypeScriptCompile Include="Scripts\_typelite\custom.models.d.ts">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>custom.models.tt</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="_SystemResources\**\*.ts" />
-    <Content Include="Themes\_ViewStart.cshtml" />
-    <Content Include="Excel\ListUploadTemplate.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Manager.ttinclude" />
-    <Content Include="ImportExport\SampleImports\SampleImport_Brands.xlsx" />
-    <Content Include="ImportExport\SampleImports\SampleImport_ProductLines.xlsx" />
-    <Content Include="ImportExport\SampleImports\SampleImport_WishlistProducts.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="config\customSmtpSettings.config" />
     <None Include="_SystemResources\**\*.css" />
     <None Include="_SystemResources\**\*.scss" />
     <None Include="_SystemResources\**\*.cshtml" />
     <None Include="_SystemResources\**\*.liquid" />
-    <Content Include="config\connectionStrings.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_Config\log4net.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_Config\unity.config" />
-    <Content Include="App_Config\paypal.config" />
+    <Content Include="App_Config\*.config" />
+    <Content Include="Themes\**\*.js" />
+    <Content Include="Themes\**\*.js.map" />
+    <Content Include="Themes\**\*.ts" />
+    <Content Include="Themes\**\*.liquid" />
+    <Content Include="Themes\**\*.cshtml" />
+    <Content Include="Themes\**\*.scss" />
+    <Content Include="Themes\**\*.css" />
+    <Content Include="Themes\**\*.json" />
+    <Content Remove="Themes\**\bin\**\*" />
+    <Content Remove="Themes\**\obj\**\*" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Insite.Commerce.Private" Version="5.1.2205.773" />
-    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2205.773" />
+    <PackageReference Include="Insite.Commerce.Private" Version="5.1.2205.789" />
+    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2205.789" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj" />
