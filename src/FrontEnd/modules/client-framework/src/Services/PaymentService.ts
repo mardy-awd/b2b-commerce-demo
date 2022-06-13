@@ -18,6 +18,15 @@ export interface AdyenPaymentDetailsModel {
     paymentMethod: string;
 }
 
+export interface AdyenRefundModel {
+    merchantAccount: string;
+    paymentPspReference: string;
+    pspReference: string;
+    reference: string;
+    status: string;
+    amount: { currency: string; value: number | null } | null;
+}
+
 const paymentAuthenticationUrl = "api/v1/paymentauthentication";
 
 export function getAdyenSessionData(
@@ -43,4 +52,22 @@ export function getAdyenPaymentDetails(redirectResult: string) {
     };
 
     return post<any, AdyenPaymentDetailsModel>(`${paymentAuthenticationUrl}/adyenpaymentdetails`, parameter);
+}
+
+export function postAdyenRefund(
+    pspReference: string,
+    webOrderNumber: string,
+    paymentAmountInMinorUnits: number,
+    currencyCode: string,
+) {
+    const parameter = {
+        pspReference,
+        amount: {
+            currency: currencyCode,
+            value: paymentAmountInMinorUnits,
+        },
+        orderNumber: webOrderNumber,
+    };
+
+    return post<any, AdyenRefundModel>(`${paymentAuthenticationUrl}/adyenrefund`, parameter);
 }

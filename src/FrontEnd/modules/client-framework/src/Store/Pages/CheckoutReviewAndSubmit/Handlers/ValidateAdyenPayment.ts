@@ -22,6 +22,8 @@ export interface ValidatAdyenPaymenteResult {
     success: boolean;
     adyenPspReference?: string;
     errorMessage?: string;
+    paymentAmount?: number;
+    currency?: string;
 }
 
 type HandlerType = HandlerWithResult<
@@ -90,7 +92,7 @@ export const ReloadCart: HandlerType = async props => {
     }
 };
 
-export const ValidateCustomer: HandlerType = ({ customerId, parameter: { onSuccess }, getState }) => {
+export const ValidateCustomer: HandlerType = ({ customerId, paymentAmount, parameter: { onSuccess }, getState }) => {
     if (!customerId) {
         return;
     }
@@ -99,7 +101,12 @@ export const ValidateCustomer: HandlerType = ({ customerId, parameter: { onSucce
     const { cartId } = state.pages.checkoutReviewAndSubmit;
     const cartState = cartId ? getCartState(state, cartId) : getCurrentCartState(state);
     if (customerId !== cartState.value!.billToId) {
-        onSuccess?.({ success: false, errorMessage: siteMessage("Adyen_CustomerIsDifferent") as string });
+        onSuccess?.({
+            success: false,
+            errorMessage: siteMessage("Adyen_CustomerIsDifferent") as string,
+            paymentAmount,
+            currency: state.context.session.currency!.currencyCode,
+        });
         return false;
     }
 };
@@ -116,14 +123,25 @@ export const ValidateAmount: HandlerType = props => {
     const cartState = cartId ? getCartState(state, cartId) : getCurrentCartState(state);
     const currencyCode = props.getState().context.session.currency!.currencyCode;
     if (paymentAmount && paymentAmount !== convertToMinorUnits(cartState.value!.orderGrandTotal, currencyCode)) {
-        onSuccess?.({ success: false, errorMessage: siteMessage("Adyen_AmountIsDifferent") as string });
+        onSuccess?.({
+            success: false,
+            errorMessage: siteMessage("Adyen_AmountIsDifferent") as string,
+            adyenPspReference: props.adyenPspReference,
+            paymentAmount,
+            currency: props.getState().context.session.currency!.currencyCode,
+        });
         return false;
     }
 };
 
 export const ExecuteOnSuccessCallback: HandlerType = props => {
     markSkipOnCompleteIfOnSuccessIsSet(props);
-    props.parameter.onSuccess?.({ success: true, adyenPspReference: props.adyenPspReference });
+    props.parameter.onSuccess?.({
+        success: true,
+        adyenPspReference: props.adyenPspReference,
+        paymentAmount: props.paymentAmount,
+        currency: props.getState().context.session.currency!.currencyCode,
+    });
 };
 
 export const chain = [

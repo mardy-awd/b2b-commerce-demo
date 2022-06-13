@@ -4,7 +4,7 @@ import parseQueryString from "@insite/client-framework/Common/Utilities/parseQue
 import validateCreditCard from "@insite/client-framework/Common/Utilities/validateCreditCard";
 import { makeHandlerChainAwaitable } from "@insite/client-framework/HandlerCreator";
 import logger from "@insite/client-framework/Logger";
-import { getAdyenSessionData } from "@insite/client-framework/Services/PaymentService";
+import { getAdyenSessionData, postAdyenRefund } from "@insite/client-framework/Services/PaymentService";
 import { TokenExConfig } from "@insite/client-framework/Services/SettingsService";
 import siteMessage from "@insite/client-framework/SiteMessage";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
@@ -94,7 +94,6 @@ const mapStateToProps = (state: ApplicationState) => {
         location: getLocation(state),
         usePaymetricGateway: settingsCollection.websiteSettings.usePaymetricGateway,
         adyenSettings: state.context.adyenSettings,
-        returnUrl: getPageLinkByPageType(state, "CheckoutReviewAndSubmitPage"),
         paymetricConfig: state.context.paymetricConfig,
         enableVat: settingsCollection.productSettings.enableVat,
         bypassCvvForSavedCards: settingsCollection.cartSettings.bypassCvvForSavedCards,
@@ -365,7 +364,6 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     paymetricConfig,
     loadPaymetricConfig,
     adyenSettings,
-    returnUrl,
     loadAdyenSettings,
     loadAdyenDropInConfig,
     usePaymetricGateway,
@@ -596,6 +594,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     const { useTokenExGateway, useECheckTokenExGateway, useAdyenDropIn } = websiteSettings;
     const [adyenSessionId, setAdyenSessionId] = useState("");
     const [adyenSessionData, setAdyenSessionData] = useState("");
+    const [adyenWebOrderNumber, setAdyenWebOrderNumber] = useState("");
     const [adyenRegion, setAdyenRegion] = useState("");
     const [adyenFormValid, setAdyenFormValid] = useState(false);
     const [adyenErrorMessage, setAdyenErrorMessage] = useState("");
@@ -629,8 +628,14 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     }
 
     const placeAdyenOrder = async (paymentResult: string) => {
-        const { success, adyenPspReference, errorMessage } = await validateAdyenPayment({ paymentResult });
+        const { success, adyenPspReference, errorMessage, paymentAmount, currency } = await validateAdyenPayment({
+            paymentResult,
+        });
         if (!success) {
+            if (adyenPspReference && paymentAmount && currency) {
+                postAdyenRefund(adyenPspReference, adyenWebOrderNumber, paymentAmount, currency);
+            }
+
             if (errorMessage) {
                 setAdyenErrorMessage(errorMessage);
             }
@@ -708,20 +713,27 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     };
 
     useEffect(() => {
-        if (useAdyenDropIn && paymentMethodDto?.isCreditCard && returnUrl && cartState.value && !adyenSessionData) {
+        if (
+            useAdyenDropIn &&
+            paymentMethodDto?.isCreditCard &&
+            checkoutReviewAndSubmitPageLink &&
+            cartState.value?.orderGrandTotal &&
+            !adyenSessionData
+        ) {
             loadAdyenSettings();
-            const url = !cartId
-                ? returnUrl.url
-                : returnUrl.url.includes("?")
-                ? `${returnUrl.url}&cartId=${cartId}`
-                : `${returnUrl.url}?cartId=${cartId}`;
-            getAdyenSessionData(cartState.value.orderGrandTotal, url, cartId).then(result => {
+            const returnUrl = !cartId
+                ? checkoutReviewAndSubmitPageLink.url
+                : checkoutReviewAndSubmitPageLink.url.includes("?")
+                ? `${checkoutReviewAndSubmitPageLink.url}&cartId=${cartId}`
+                : `${checkoutReviewAndSubmitPageLink.url}?cartId=${cartId}`;
+            getAdyenSessionData(cartState.value.orderGrandTotal, returnUrl, cartId).then(result => {
                 setAdyenSessionId(result.transactionId);
                 setAdyenSessionData(result.sessionData);
+                setAdyenWebOrderNumber(result.webOrderNumber);
                 setAdyenRegion(result.region);
             });
         }
-    }, [useAdyenDropIn, returnUrl, cartState, paymentMethodDto, adyenSessionData]);
+    }, [useAdyenDropIn, checkoutReviewAndSubmitPageLink, cartState, paymentMethodDto, adyenSessionData]);
 
     useEffect(() => {
         if (adyenSessionId && adyenSessionData && adyenRegion && adyenSettings?.clientKey && !adyenConfiguration) {
