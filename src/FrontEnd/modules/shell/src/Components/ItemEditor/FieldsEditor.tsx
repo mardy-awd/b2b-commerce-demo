@@ -40,7 +40,14 @@ export default class FieldsEditor extends React.Component<OwnProps, State> {
 
         props.updateHasValidationErrors(false);
         props.registerHasValidationErrors(() => {
-            const validationErrors = validateItem(props.fieldDefinitions, this.props.item);
+            const shouldDisplayAdvancedFeatures =
+                !!this.props.advancedFeaturesEnabled && !!this.props.advancedPermissions;
+
+            const validationErrors = validateItem(
+                props.fieldDefinitions,
+                this.props.item,
+                shouldDisplayAdvancedFeatures,
+            );
             const hasValidationErrors = Object.keys(validationErrors).length !== 0;
             const tabWithErrors = hasValidationErrors
                 ? props.fieldDefinitions.find(o => o.name === Object.keys(validationErrors)[0])?.tab?.displayName
@@ -83,7 +90,8 @@ export default class FieldsEditor extends React.Component<OwnProps, State> {
     };
 
     checkForValidationErrors = (fieldName: string) => {
-        const { fieldDefinitions, item } = this.props;
+        const { fieldDefinitions, item, advancedFeaturesEnabled, advancedPermissions } = this.props;
+        const shouldDisplayAdvacedFeatures = !!advancedFeaturesEnabled && !!advancedPermissions;
         const newValidationErrors = { ...this.state.validationErrors };
         let updateState = false;
 
@@ -103,7 +111,7 @@ export default class FieldsEditor extends React.Component<OwnProps, State> {
                 continue;
             }
 
-            const validationError = validateField(definitions[0], item);
+            const validationError = validateField(definitions[0], item, shouldDisplayAdvacedFeatures);
 
             updateState = true;
             if (!validationError) {
@@ -137,13 +145,13 @@ export default class FieldsEditor extends React.Component<OwnProps, State> {
 
     render() {
         const { fieldDefinitions, item, advancedFeaturesEnabled, advancedPermissions } = this.props;
-        const shouldDisplayAdvacedFeatures = !!advancedFeaturesEnabled && !!advancedPermissions;
+        const shouldDisplayAdvancedFeatures = !!advancedFeaturesEnabled && !!advancedPermissions;
         const fieldsByTab: Dictionary<typeof fieldDefinitions> = {};
         let tabs: TabDefinition[] = [];
 
         fieldDefinitions.forEach(fieldDefinition => {
             const tab = fieldDefinition.tab!;
-            if (fieldDefinition.isVisible && !fieldDefinition.isVisible(item, shouldDisplayAdvacedFeatures)) {
+            if (fieldDefinition.isVisible && !fieldDefinition.isVisible(item, shouldDisplayAdvancedFeatures)) {
                 return;
             }
             if (tabs.findIndex(o => o.displayName === tab.displayName) < 0) {
@@ -158,7 +166,7 @@ export default class FieldsEditor extends React.Component<OwnProps, State> {
 
         const renderFields = (tab: TabDefinition) => {
             return fieldsByTab[tab.displayName].map(fieldDefinition => {
-                if (fieldDefinition.isVisible && !fieldDefinition.isVisible(item, shouldDisplayAdvacedFeatures)) {
+                if (fieldDefinition.isVisible && !fieldDefinition.isVisible(item, shouldDisplayAdvancedFeatures)) {
                     if (this.state.validationErrors[fieldDefinition.name]) {
                         logger.warn(
                             "Field has validation error and hidden, use dependentFields to prevent such situations",

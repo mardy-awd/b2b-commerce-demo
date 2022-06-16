@@ -29,7 +29,8 @@ export function isOutOfStock(cartLine: CartLineModel) {
 
 export const isPunchOutOrder = (cart: Cart | undefined) => !!cart && !!cart.properties["isPunchout"];
 
-export const isCartEmpty = (cart: Cart | undefined) => cart && !!cart.cartLines && cart.cartLines.length === 0;
+export const isCartEmpty = (cart: Cart | undefined) =>
+    cart && (cart.lineCount === 0 || (!!cart.cartLines && cart.cartLines.length === 0));
 
 export const canCheckoutWithCart = (cart: Cart | undefined) =>
     cart && (cart.canCheckOut || hasRestrictedCartLines(cart) || hasProductsWithInvalidPrice(cart));

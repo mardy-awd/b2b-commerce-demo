@@ -22,7 +22,7 @@ describe("Image Widget", () => {
             },
         };
 
-        const styledWrapper = renderWidget().find(StyledWrapper);
+        const styledWrapper = renderWidget().find(StyledWrapper).at(1);
         const styleRule = /background:\s?magenta;/;
         elementHasStyle(styledWrapper, styleRule);
     });

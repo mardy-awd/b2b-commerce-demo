@@ -89,7 +89,7 @@ const ProductDetailsVariantSwatchDropdown = ({ variantSelection, updateVariantSe
                                           : traitValue.swatchColorValue
                                   }
                                   size={35}
-                                  caption={traitValue.valueDisplay}
+                                  caption={variantTrait.displayTextWithSwatch ? traitValue.valueDisplay : undefined}
                                   isDisabled={traitValue.isDisabled}
                                   isSelected={variantSelection[variantTrait.id] === traitValue.id}
                                   captionProps={styles.swatchCaptionProps}

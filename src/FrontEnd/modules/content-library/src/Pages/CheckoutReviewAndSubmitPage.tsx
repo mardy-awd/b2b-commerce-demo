@@ -34,7 +34,8 @@ const mapStateToProps = (state: ApplicationState) => {
     const promotionsDataView = getReviewAndPayPromotions(state);
 
     const isLoadDataNeeded =
-        ((!cartState.value || !cartState.value.cartLines) && !cartState.isLoading) ||
+        ((!cartState.value || (cartState.value.lineCount && !cartState.value.cartLines) || !cartState.value.carriers) &&
+            !cartState.isLoading) ||
         (!promotionsDataView.value && !promotionsDataView.isLoading);
 
     return {

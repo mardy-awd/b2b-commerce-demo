@@ -138,5 +138,8 @@ function returnMockModel(id: string, str: string): AccountModel {
         shipToId: null,
         vmiRole: str,
         userName: str,
+        availableRolesTranslated: null,
+        roleTranslated: str,
+        vmiRoleTranslated: str,
     };
 }

@@ -186,6 +186,7 @@ export interface ComponentThemeProps {
         isBorderLeft: boolean;
         isBorderTop: boolean;
         isBorderBottom: boolean;
+        padding: number;
     };
     icon: { defaultProps?: IconThemableProps };
     link: { defaultProps?: LinkPresentationProps };
@@ -466,6 +467,7 @@ const baseTheme: BaseTheme = {
         isBorderLeft: false,
         borderThickness: 0,
         borderColor: "#000",
+        padding: 0,
         isBorder: false,
     },
     formField: {

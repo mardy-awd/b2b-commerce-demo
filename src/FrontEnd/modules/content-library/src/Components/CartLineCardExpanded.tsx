@@ -291,7 +291,7 @@ const CartLineCardExpanded = ({
                                     </Typography>
                                 ))}
                             </GridItem>
-                            <GridItem {...styles.quantityGridItem}>
+                            <GridItem {...styles.quantityGridItem} data-test-selector="orderConformation_Quantity">
                                 <CartLineQuantity cart={cart} editable={editable} extendedStyles={styles.quantity} />
                             </GridItem>
                             <GridItem {...styles.extendedUnitNetPriceGridItem}>

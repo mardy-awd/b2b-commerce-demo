@@ -103,7 +103,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(VmiBinDetailsOrdersActions),
     definition: {
         group: "VMI Bin Details",
-        displayName: "Vmi Orders Actions",
+        displayName: "VMI Orders Actions",
         allowedContexts: ["VmiBinDetailsPage"],
     },
 };

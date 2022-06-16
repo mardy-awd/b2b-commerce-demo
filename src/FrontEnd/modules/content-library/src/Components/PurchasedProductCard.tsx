@@ -263,7 +263,7 @@ const PurchasedProductCard: React.FC<Props> = ({
     };
 
     return (
-        <ProductContext.Provider value={productContext}>
+        <ProductContext.Provider value={productContext} data-test-selector="widget_PurchasedProducts">
             <GridContainer {...styles.container} data-test-selector={`purchasedProductCard_${product.id}`}>
                 <GridItem {...styles.leftColumnGridItem}>
                     <ProductImage extendedStyles={styles.productImage} product={productContext} />

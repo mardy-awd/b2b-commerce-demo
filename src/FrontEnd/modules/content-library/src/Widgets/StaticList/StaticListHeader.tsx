@@ -269,7 +269,11 @@ const StaticListHeader = ({
                     </Typography>
                 </GridItem>
                 <GridItem {...styles.saveListGridItem}>
-                    <Button {...styles.saveListButton} onClick={saveListClickHandler}>
+                    <Button
+                        {...styles.saveListButton}
+                        onClick={saveListClickHandler}
+                        data-test-selector="staticListPage_SaveList"
+                    >
                         {translate("Save List")}
                     </Button>
                 </GridItem>
@@ -311,12 +315,17 @@ const StaticListHeader = ({
                             value={listName}
                             error={listNameError}
                             onChange={listNameChangeHandler}
+                            data-test-selector="staticListModal_ListName"
                         />
                         <StyledWrapper {...styles.buttonsWrapper}>
                             <Button {...styles.cancelButton} onClick={modalCloseHandler}>
                                 {translate("Cancel")}
                             </Button>
-                            <Button {...styles.saveButton} onClick={saveListButtonClickHandler}>
+                            <Button
+                                {...styles.saveButton}
+                                onClick={saveListButtonClickHandler}
+                                data-test-selector="staticListModal_SaveList"
+                            >
                                 {translate("Save List")}
                             </Button>
                         </StyledWrapper>

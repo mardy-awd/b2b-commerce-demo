@@ -251,7 +251,7 @@ const UserListUsersTable = ({
                                     data-test-selector="userListUsersTable_cell_role"
                                     data-test-key={account.id}
                                 >
-                                    {account.role}
+                                    {account.roleTranslated || account.role}
                                 </DataTableCell>
                                 <DataTableCell
                                     {...styles.lastSignInCells}

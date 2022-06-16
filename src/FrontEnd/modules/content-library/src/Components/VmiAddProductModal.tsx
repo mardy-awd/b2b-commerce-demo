@@ -264,7 +264,7 @@ const VmiAddProductModal = ({
                 onComplete: result => {
                     if (result.apiResult?.successful) {
                         toaster.addToast({
-                            body: translate("Vmi bin was updated"),
+                            body: translate("VMI bin was updated"),
                             messageType: "success",
                         });
 
@@ -290,7 +290,7 @@ const VmiAddProductModal = ({
             onComplete: result => {
                 if (result.apiResult?.successful) {
                     toaster.addToast({
-                        body: translate("Vmi bin added successfully"),
+                        body: translate("VMI bin added successfully"),
                         messageType: "success",
                     });
 

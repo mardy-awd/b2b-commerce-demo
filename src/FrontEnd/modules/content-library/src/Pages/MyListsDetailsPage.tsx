@@ -142,7 +142,7 @@ class MyListsDetailsPage extends React.Component<Props, State> {
             <Page>
                 {this.state.inviteIsNotAvailable || this.props.wishListState.errorStatusCode === 404 ? (
                     <StyledWrapper {...styles.inviteIsNotAvailableWrapper}>
-                        <Typography {...styles.inviteIsNotAvailableText}>
+                        <Typography {...styles.inviteIsNotAvailableText} data-test-selector="listNotAvailable">
                             {this.state.inviteIsNotAvailable
                                 ? siteMessage("Lists_InviteIsNotAvailable")
                                 : siteMessage("Lists_List_NotFound")}

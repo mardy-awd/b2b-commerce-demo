@@ -101,7 +101,11 @@ const WishListSharingStatus: FC<Props> = ({
             )}
             {!isSharedListInner && wishListSharesCountInner > 0 && (
                 <>
-                    <Link {...styles.statusText} onClick={() => manageShareListClickHandler()}>
+                    <Link
+                        {...styles.statusText}
+                        onClick={() => manageShareListClickHandler()}
+                        data-test-selector="shareWithOthers"
+                    >
                         <Icon {...styles.sharedIcon} />
                         {translate("Shared with")} {wishListSharesCountInner} {translate("others")}
                     </Link>

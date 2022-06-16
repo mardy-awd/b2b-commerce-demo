@@ -145,7 +145,7 @@ const RfqQuoteDetailsMessages = ({ quoteState, sendMessage }: Props) => {
             <Button {...styles.sendButton} disabled={!message.trim()} onClick={sendClickHandler}>
                 {translate("Send Message")}
             </Button>
-            <GridContainer {...styles.messagesContainer}>
+            <GridContainer {...styles.messagesContainer} data-test-selector="rfqConfirmation_buyerdetails">
                 {sortedMessages.map(message => (
                     <GridItem key={message.createdDate.toString()} {...styles.messageGridItem}>
                         <Typography {...styles.userNameText}>{message.displayName}</Typography>

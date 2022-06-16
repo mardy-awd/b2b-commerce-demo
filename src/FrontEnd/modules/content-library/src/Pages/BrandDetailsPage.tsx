@@ -114,7 +114,7 @@ class BrandDetailsPage extends React.Component<Props, State> {
             breadcrumbLinks,
         } = this.props;
 
-        if (shouldLoadBrand && brandPath) {
+        if (shouldLoadBrand && brandPath && !brandPath.toLowerCase().startsWith("/content/page/")) {
             loadBrandByPath({ path: brandPath });
         }
         if (brandState.value && shouldLoadBrandCategories) {

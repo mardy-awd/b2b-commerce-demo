@@ -25,6 +25,7 @@ export * from "./src/StartServer";
         path.resolve(__dirname, "../../modules/shell/Entry.ts"),
         `/* eslint-disable */${shellBlueprintImport}
 import "@insite/shell/LoadComponents";
+import "@insite/shell/LoadWidgets";
 import "../${blueprint}/src/Start";
 import "@insite/shell/ClientApp";
 `,

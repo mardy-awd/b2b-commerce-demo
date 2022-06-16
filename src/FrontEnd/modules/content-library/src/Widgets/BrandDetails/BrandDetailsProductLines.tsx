@@ -165,7 +165,7 @@ const BrandDetailsProductLines: FC<Props> = ({ fields }) => {
     useEffect(() => {
         setViewCount(maxToShow);
     }, [maxToShow]);
-    if (isLoading || (brandProductLines && brandProductLines!.length === 0)) {
+    if (isLoading || !brandProductLines || brandProductLines!.length === 0) {
         return null;
     }
 

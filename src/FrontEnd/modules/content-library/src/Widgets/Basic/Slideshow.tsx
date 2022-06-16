@@ -15,6 +15,7 @@ import Typography, { TypographyPresentationProps } from "@insite/mobius/Typograp
 import getColor from "@insite/mobius/utilities/getColor";
 import { useHistory } from "@insite/mobius/utilities/HistoryContext";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
+import * as cssLinter from "css";
 import { useEmblaCarousel } from "embla-carousel/react";
 import parse from "html-react-parser";
 import React, { FC, useCallback, useEffect, useState } from "react";
@@ -47,6 +48,7 @@ interface SlideModel {
             | "bottomRight";
         contentPadding: number;
         centerTextVertically: boolean;
+        customCSS: string;
     };
 }
 
@@ -66,6 +68,7 @@ const enum fields {
     h5FontSize = "h5FontSize",
     h6FontSize = "h6FontSize",
     normalFontSize = "normalFontSize",
+    customCSS = "customCSS",
 }
 
 interface OwnProps extends WidgetProps {
@@ -84,6 +87,7 @@ interface OwnProps extends WidgetProps {
         [fields.h5FontSize]: number;
         [fields.normalFontSize]: number;
         [fields.slides]: SlideModel[];
+        [fields.customCSS]: string;
     };
     extendedStyles?: SlideshowStyles;
 }
@@ -217,6 +221,40 @@ export const slideshowStyles: SlideshowStyles = {
     },
 };
 
+const defaultCustomCss = `.slideshow-wrapper {
+}
+
+.slideshow-carousel {
+}
+
+.slideshow-slide-container {
+}
+
+.slide-wrapper {
+}
+
+.slide-heading {
+}
+
+.slide-subheading {
+}
+
+.slide-button {
+}
+
+.slide-indicator {
+}
+
+.slide-dot-button {
+}
+
+.slide-arrow-wrapper {
+}
+
+.slide-arrow {
+}
+`;
+
 export const Slideshow: FC<OwnProps> = ({ fields, extendedStyles }) => {
     const history = useHistory();
     const buttonLinks = useGetLinks(fields.slides, o => o.fields.buttonLink);
@@ -284,141 +322,162 @@ export const Slideshow: FC<OwnProps> = ({ fields, extendedStyles }) => {
 
     const textAlignStyles = `text-align: ${fields.textAlignment};`;
 
+    const customCssWrapper = {
+        css: css`
+            ${fields.customCSS}
+        `,
+    };
+
     return (
-        <StyledWrapper {...styles.slideshowWrapper}>
-            {fields.showArrows && fields.slides.length > 1 && (
-                <StyledWrapper {...styles.prevArrowWrapper}>
-                    <Button {...styles.prevArrowButton} onClick={() => embla && embla.scrollPrev()}>
-                        <ButtonIcon {...styles.iconProps} src={ChevronLeft} />
-                    </Button>
-                </StyledWrapper>
-            )}
-            <StyledWrapper {...styles.carouselContainer} ref={emblaRef}>
-                <StyledWrapper {...styles.slideContainerWrapper}>
-                    {fields.slides.map((slide, index) => {
-                        const buttonLink = buttonLinks[index];
+        <StyledWrapper {...customCssWrapper}>
+            <StyledWrapper className="slideshow-wrapper" {...styles.slideshowWrapper}>
+                {fields.showArrows && fields.slides.length > 1 && (
+                    <StyledWrapper {...styles.prevArrowWrapper}>
+                        <Button {...styles.prevArrowButton} onClick={() => embla && embla.scrollPrev()}>
+                            <ButtonIcon {...styles.iconProps} src={ChevronLeft} />
+                        </Button>
+                    </StyledWrapper>
+                )}
+                <StyledWrapper className="slideshow-carousel" {...styles.carouselContainer} ref={emblaRef}>
+                    <StyledWrapper className="slideshow-slide-container" {...styles.slideContainerWrapper}>
+                        {fields.slides.map((slide, index) => {
+                            const buttonLink = buttonLinks[index];
 
-                        let responsiveImageBehaviorStyles;
-                        if (slide.fields.responsiveImageBehavior === "cover") {
-                            responsiveImageBehaviorStyles = "background-size: cover;";
-                        } else if (slide.fields.responsiveImageBehavior === "center") {
-                            responsiveImageBehaviorStyles = "background-size: contain;";
-                        } else if (slide.fields.responsiveImageBehavior === "prioritizeHeight") {
-                            responsiveImageBehaviorStyles = "background-size: auto 100%;";
-                        } else if (slide.fields.responsiveImageBehavior === "prioritizeWidth") {
-                            responsiveImageBehaviorStyles = "background-size: 100% auto;";
-                        }
+                            let responsiveImageBehaviorStyles;
+                            if (slide.fields.responsiveImageBehavior === "cover") {
+                                responsiveImageBehaviorStyles = "background-size: cover;";
+                            } else if (slide.fields.responsiveImageBehavior === "center") {
+                                responsiveImageBehaviorStyles = "background-size: contain;";
+                            } else if (slide.fields.responsiveImageBehavior === "prioritizeHeight") {
+                                responsiveImageBehaviorStyles = "background-size: auto 100%;";
+                            } else if (slide.fields.responsiveImageBehavior === "prioritizeWidth") {
+                                responsiveImageBehaviorStyles = "background-size: 100% auto;";
+                            }
 
-                        const backgroundStyles =
-                            slide.fields.background === "image"
-                                ? `background-image: url(${slide.fields.image});`
-                                : `background-color: ${slide.fields.backgroundColor};`;
-                        const focalPointStyles = getFocalPointStyles(slide.fields.focalPoint);
+                            const backgroundStyles =
+                                slide.fields.background === "image"
+                                    ? `background-image: url(${slide.fields.image});`
+                                    : `background-color: ${slide.fields.backgroundColor};`;
+                            const focalPointStyles = getFocalPointStyles(slide.fields.focalPoint);
 
-                        let overlayPositioningStyles;
-                        if (!slide.fields.partialOverlay) {
-                            overlayPositioningStyles = "align-items: stretch;";
-                        } else if (slide.fields.partialOverlayPositioning === "top") {
-                            overlayPositioningStyles = "align-items: flex-start;";
-                        } else if (slide.fields.partialOverlayPositioning === "middle") {
-                            overlayPositioningStyles = "align-items: center;";
-                        } else if (slide.fields.partialOverlayPositioning === "bottom") {
-                            overlayPositioningStyles = "align-items: flex-end;";
-                        }
+                            let overlayPositioningStyles;
+                            if (!slide.fields.partialOverlay) {
+                                overlayPositioningStyles = "align-items: stretch;";
+                            } else if (slide.fields.partialOverlayPositioning === "top") {
+                                overlayPositioningStyles = "align-items: flex-start;";
+                            } else if (slide.fields.partialOverlayPositioning === "middle") {
+                                overlayPositioningStyles = "align-items: center;";
+                            } else if (slide.fields.partialOverlayPositioning === "bottom") {
+                                overlayPositioningStyles = "align-items: flex-end;";
+                            }
 
-                        let fontSizeStyles;
-                        if (fields.responsiveFontSizes || fields.customFontSizes) {
-                            fontSizeStyles = responsiveStyleRules(
-                                fields.responsiveFontSizes,
-                                fields.customFontSizes ? fields : undefined,
-                            );
-                        }
+                            let fontSizeStyles;
+                            if (fields.responsiveFontSizes || fields.customFontSizes) {
+                                fontSizeStyles = responsiveStyleRules(
+                                    fields.responsiveFontSizes,
+                                    fields.customFontSizes ? fields : undefined,
+                                );
+                            }
 
-                        const slideWrapperStyles = {
-                            css: css`
-                                ${styles.slideContentWrapper?.css || ""}
-                                ${heightStyles}
-                                ${textAlignStyles}
-                                ${backgroundStyles}
-                                ${responsiveImageBehaviorStyles}
-                                ${focalPointStyles}
-                                ${overlayPositioningStyles}
-                                ${fontSizeStyles}
-                            `,
-                        };
-                        const slideOverlayWrapperStyles = {
-                            css: css`
-                                ${styles.slideOverlayWrapper?.css || ""}
-                                background-color: ${slide.fields.background === "image"
-                                    ? slide.fields.imageOverlay
-                                    : ""};
-                                padding: ${slide.fields.contentPadding}px;
-                                ${slide.fields.centerTextVertically &&
-                                `
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;`}
-                            `,
-                        };
-                        return (
-                            // eslint-disable-next-line react/no-array-index-key
-                            <StyledWrapper key={index} {...slideWrapperStyles}>
-                                <StyledWrapper {...slideOverlayWrapperStyles}>
-                                    <StyledWrapper {...styles.slideCenteringWrapperStyles}>
-                                        {slide.fields.heading && (
-                                            <Typography {...styles.headingText}>
-                                                {parse(slide.fields.heading, parserOptions)}
-                                            </Typography>
-                                        )}
-                                        {slide.fields.subheading && (
-                                            <Typography {...styles.subheadingText}>
-                                                {parse(slide.fields.subheading, parserOptions)}
-                                            </Typography>
-                                        )}
-                                        {(slide.fields.buttonLabel || slide.fields.buttonLink.value) && (
-                                            <Button
-                                                {...styles.slideButton}
-                                                variant={slide.fields.buttonVariant}
-                                                onClick={() => onClick(buttonLink?.url)}
-                                            >
-                                                {slide.fields.buttonLabel || buttonLink?.title || buttonLink?.url}
-                                            </Button>
-                                        )}
+                            const slideWrapperStyles = {
+                                css: css`
+                                    ${styles.slideContentWrapper?.css || ""}
+                                    ${heightStyles}
+                                    ${textAlignStyles}
+                                    ${backgroundStyles}
+                                    ${responsiveImageBehaviorStyles}
+                                    ${focalPointStyles}
+                                    ${overlayPositioningStyles}
+                                    ${fontSizeStyles}
+                                `,
+                            };
+                            const slideOverlayWrapperStyles = {
+                                css: css`
+                                    ${styles.slideOverlayWrapper?.css || ""}
+                                    background-color: ${slide.fields.background === "image"
+                                        ? slide.fields.imageOverlay
+                                        : ""};
+                                    padding: ${slide.fields.contentPadding}px;
+                                    ${slide.fields.centerTextVertically &&
+                                    `
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;`}
+                                `,
+                            };
+                            return (
+                                // eslint-disable-next-line react/no-array-index-key
+                                <StyledWrapper className="slide-wrapper" key={index} {...slideWrapperStyles}>
+                                    <StyledWrapper {...slideOverlayWrapperStyles}>
+                                        <StyledWrapper {...styles.slideCenteringWrapperStyles}>
+                                            {slide.fields.heading && (
+                                                <Typography className="slide-heading" {...styles.headingText}>
+                                                    {parse(slide.fields.heading, parserOptions)}
+                                                </Typography>
+                                            )}
+                                            {slide.fields.subheading && (
+                                                <Typography className="slide-subheading" {...styles.subheadingText}>
+                                                    {parse(slide.fields.subheading, parserOptions)}
+                                                </Typography>
+                                            )}
+                                            {(slide.fields.buttonLabel || slide.fields.buttonLink.value) && (
+                                                <Button
+                                                    className="slide-button"
+                                                    {...styles.slideButton}
+                                                    variant={slide.fields.buttonVariant}
+                                                    onClick={() => onClick(buttonLink?.url)}
+                                                >
+                                                    {slide.fields.buttonLabel || buttonLink?.title || buttonLink?.url}
+                                                </Button>
+                                            )}
+                                        </StyledWrapper>
                                     </StyledWrapper>
                                 </StyledWrapper>
-                            </StyledWrapper>
-                        );
-                    })}
+                            );
+                        })}
+                    </StyledWrapper>
                 </StyledWrapper>
+                {fields.slideIndicator && (
+                    <StyledWrapper className="slide-indicator" {...styles.dotsContainerWrapper}>
+                        {fields.slides.map((_, i) => {
+                            const dotColorStyles =
+                                i === selectedIndex
+                                    ? `
+                                        background: white;
+                                        &:hover { background: white; }
+                                    `
+                                    : "";
+                            const dotButtonStyles = {
+                                css: css`
+                                    ${styles.dotButton?.css || ""}
+                                    ${dotColorStyles}
+                                `,
+                            };
+
+                            return (
+                                <Button
+                                    className="slide-dot-button"
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    key={i}
+                                    {...dotButtonStyles}
+                                    onClick={() => embla && embla.scrollTo(i)}
+                                />
+                            );
+                        })}
+                    </StyledWrapper>
+                )}
+                {fields.showArrows && fields.slides.length > 1 && (
+                    <StyledWrapper className="slide-arrow-wrapper" {...styles.nextArrowWrapper}>
+                        <Button
+                            className="slide-arrow"
+                            {...styles.nextArrowButton}
+                            onClick={() => embla && embla.scrollNext()}
+                        >
+                            <ButtonIcon {...styles.iconProps} src={ChevronRight} />
+                        </Button>
+                    </StyledWrapper>
+                )}
             </StyledWrapper>
-            {fields.slideIndicator && (
-                <StyledWrapper {...styles.dotsContainerWrapper}>
-                    {fields.slides.map((_, i) => {
-                        const dotColorStyles =
-                            i === selectedIndex
-                                ? `
-                                    background: white;
-                                    &:hover { background: white; }
-                                `
-                                : "";
-                        const dotButtonStyles = {
-                            css: css`
-                                ${styles.dotButton?.css || ""}
-                                ${dotColorStyles}
-                            `,
-                        };
-                        // eslint-disable-next-line react/no-array-index-key
-                        return <Button key={i} {...dotButtonStyles} onClick={() => embla && embla.scrollTo(i)} />;
-                    })}
-                </StyledWrapper>
-            )}
-            {fields.showArrows && fields.slides.length > 1 && (
-                <StyledWrapper {...styles.nextArrowWrapper}>
-                    <Button {...styles.nextArrowButton} onClick={() => embla && embla.scrollNext()}>
-                        <ButtonIcon {...styles.iconProps} src={ChevronRight} />
-                    </Button>
-                </StyledWrapper>
-            )}
         </StyledWrapper>
     );
 };
@@ -431,6 +490,11 @@ const contentTab = {
 const settingsTab = {
     displayName: "Settings",
     sortOrder: 1,
+};
+
+const advancedTab = {
+    displayName: "Advanced",
+    sortOrder: 2,
 };
 
 const widgetModule: WidgetModule = {
@@ -713,6 +777,32 @@ const widgetModule: WidgetModule = {
                         defaultValue: false,
                     },
                 ],
+            },
+            {
+                name: fields.customCSS,
+                displayName: "Custom CSS",
+                editorTemplate: "CodeField",
+                fieldType: "General",
+                tab: advancedTab,
+                defaultValue: defaultCustomCss,
+                isVisible: (item, shouldDisplayAdvancedFeatures) => !!shouldDisplayAdvancedFeatures,
+                validate: value => {
+                    const result = cssLinter.parse(value, { silent: true });
+
+                    if (result?.stylesheet?.parsingErrors) {
+                        // the error output at this time only has room for one line so we just show the first error
+                        return result.stylesheet.parsingErrors.length <= 0
+                            ? ""
+                            : result.stylesheet.parsingErrors.map(error => `${error.reason} on line ${error.line}`)[0];
+                    }
+
+                    return "Unable to parse Css";
+                },
+                options: {
+                    mode: "css",
+                    lint: true,
+                    autoRefresh: true,
+                },
             },
         ],
     },

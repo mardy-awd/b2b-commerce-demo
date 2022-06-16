@@ -5,6 +5,7 @@ const path = require("path");
 const validClientImports = [
     "@adyen/adyen-web",
     "color",
+    "css",
     "csstype",
     "embla-carousel",
     "exenv",
@@ -51,6 +52,7 @@ const validServerImports = [
 const validShellImports = [
     "codemirror",
     "connected-react-router",
+    "css",
     "font-awesome",
     "froala-editor",
     "history",

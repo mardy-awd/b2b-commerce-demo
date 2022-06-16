@@ -157,7 +157,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withToaster(withHistory(VmiLocationDetailsTabbedTable))),
     definition: {
         group: "VMI Location Details",
-        displayName: "Vmi Location Tabbed Table",
+        displayName: "VMI Location Tabbed Table",
         allowedContexts: ["VmiLocationDetailsPage"],
     },
 };

@@ -271,10 +271,20 @@ const ManageShareListModal = ({
                 }}
                 {...styles.editingPermissionRadioGroup}
             >
-                <Radio value="true" {...styles.editingPermissionRadio} disabled={wishListState.isLoading}>
+                <Radio
+                    value="true"
+                    {...styles.editingPermissionRadio}
+                    disabled={wishListState.isLoading}
+                    data-test-selector="radio_allowEdit"
+                >
                     {translate("Allow Editing")}
                 </Radio>
-                <Radio value="false" {...styles.editingPermissionRadio} disabled={wishListState.isLoading}>
+                <Radio
+                    value="false"
+                    {...styles.editingPermissionRadio}
+                    disabled={wishListState.isLoading}
+                    data-test-selector="radio_ViewOnly"
+                >
                     {translate("View Only")}
                 </Radio>
             </RadioGroup>
@@ -286,7 +296,12 @@ const ManageShareListModal = ({
             {wishList && wishList.shareOption !== ShareOptions.AllCustomerUsers && (
                 <StyledWrapper {...styles.usersTableWrapper}>
                     <Typography {...styles.usersTableText}>{translate("Users Shared With")}</Typography>
-                    <Button {...styles.inviteButton} disabled={wishListState.isLoading} onClick={inviteClickHandler}>
+                    <Button
+                        {...styles.inviteButton}
+                        disabled={wishListState.isLoading}
+                        onClick={inviteClickHandler}
+                        data-test-selector="inviteUser"
+                    >
                         {translate("Invite User")}
                     </Button>
                 </StyledWrapper>
@@ -298,15 +313,18 @@ const ManageShareListModal = ({
                             <Typography {...styles.userTableHeaderText}>{translate("User")}</Typography>
                         </DataTableHeader>
                     </DataTableHead>
-                    <DataTableBody {...styles.userTableBody}>
+                    <DataTableBody {...styles.userTableBody} data-test-selector="manageShareList_TableDatas">
                         {wishList.sharedUsers?.map(({ id, displayName }) => (
                             <DataTableRow key={id}>
                                 <DataTableCell {...styles.userCell}>
-                                    <Typography {...styles.userNameText}>{displayName || id}</Typography>
+                                    <Typography {...styles.userNameText} data-test-selector="userName_Text">
+                                        {displayName || id}
+                                    </Typography>
                                     <Link
                                         {...styles.userRemoveLink}
                                         disabled={wishListState.isLoading}
                                         onClick={() => userRemoveHandler(id)}
+                                        data-test-selector={`removeUser_${displayName || id}`}
                                     >
                                         {translate("Remove")}
                                     </Link>
@@ -321,10 +339,16 @@ const ManageShareListModal = ({
                     {...styles.makePrivateButton}
                     disabled={wishListState.isLoading}
                     onClick={handleOpenMakeListPrivateClick}
+                    data-test-selector="makeListPrivate"
                 >
                     {translate("Make List Private")}
                 </Button>
-                <Button {...styles.closeButton} disabled={wishListState.isLoading} onClick={() => modalCloseHandler()}>
+                <Button
+                    {...styles.closeButton}
+                    disabled={wishListState.isLoading}
+                    onClick={() => modalCloseHandler()}
+                    data-test-selector="doneButton"
+                >
                     {translate("Done")}
                 </Button>
                 <TwoButtonModal
@@ -333,6 +357,7 @@ const ManageShareListModal = ({
                     messageText={siteMessage("Lists_Shared_Users_Will_No_Longer_Have_Access")}
                     cancelButtonText={translate("Cancel")}
                     submitButtonText={translate("Make List Private")}
+                    submitTestSelector="makeListPrivate_Button"
                     modalIsOpen={makeListPrivateModalVisible}
                     onCancel={() => setMakeListPrivateModalVisible(false)}
                     onSubmit={handleMakeListPrivateClick}

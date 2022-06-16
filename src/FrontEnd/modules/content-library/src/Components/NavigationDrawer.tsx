@@ -1,3 +1,4 @@
+import { setCookie } from "@insite/client-framework/Common/Cookies";
 import { getStyledWrapper } from "@insite/client-framework/Common/StyledWrapper";
 import { createWidgetElement } from "@insite/client-framework/Components/ContentItemStore";
 import { PageLinkModel } from "@insite/client-framework/Services/ContentService";
@@ -20,6 +21,7 @@ import { getWidgetsByPageId } from "@insite/client-framework/Store/Data/Widgets/
 import { getPageLinkByPageType, LinkModel, useGetLinks } from "@insite/client-framework/Store/Links/LinksSelectors";
 import translate from "@insite/client-framework/Translate";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
+import { NavigationModeCookieName } from "@insite/content-library/Components/NavigationModeMenu";
 import Button, { ButtonIcon, ButtonPresentationProps } from "@insite/mobius/Button";
 import Drawer, { DrawerPresentationProps } from "@insite/mobius/Drawer";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -59,6 +61,8 @@ const mapStateToProps = (state: ApplicationState) => {
         isGuest: state.context.session?.isGuest,
         myAccountPageLink: getPageLinkByPageType(state, "MyAccountPage"),
         signInUrl: getPageLinkByPageType(state, "SignInPage"),
+        vmiDashboardPageUrl: getPageLinkByPageType(state, "VmiDashboardPage")?.url,
+        homePageUrl: getPageLinkByPageType(state, "HomePage")?.url,
         headerLinkListLinkFields,
         showCustomerMenuItem: getSettingsCollection(state).accountSettings.enableWarehousePickup,
         fulfillmentLabel: getFulfillmentLabel(state),
@@ -82,6 +86,8 @@ interface OwnProps {
     quickOrderLink: PageLinkModel | undefined;
     displayVmiNavigation: boolean;
     vmiPageLinks: (PageLinkModel | undefined)[];
+    displayModeSwitch?: boolean;
+    currentMode?: string;
 }
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasHistory;
@@ -271,6 +277,15 @@ const NavigationDrawer: FC<Props> = props => {
         props.isPunchOutSession ? props.cancelPunchOut() : props.signOut();
     };
 
+    const navigationModeChangeHandler = (navigationMode: "Storefront" | "Vmi") => {
+        setCookie(NavigationModeCookieName, navigationMode);
+        if (navigationMode === "Vmi") {
+            props.vmiDashboardPageUrl && history.push(props.vmiDashboardPageUrl);
+        } else {
+            props.homePageUrl && history.push(props.homePageUrl);
+        }
+    };
+
     const {
         quickOrderLink,
         links,
@@ -293,6 +308,8 @@ const NavigationDrawer: FC<Props> = props => {
         headerLinkListLinkFields,
         history,
         displayVmiNavigation,
+        displayModeSwitch,
+        currentMode,
         vmiPageLinks,
     } = props;
 
@@ -527,6 +544,35 @@ const NavigationDrawer: FC<Props> = props => {
                                 </PanelRow>
                             )}
                         </PanelMenu>
+                    )}
+                    {displayModeSwitch && (
+                        <SelectorMenu
+                            options={[
+                                {
+                                    title: translate("Storefront"),
+                                    clickableProps: {
+                                        onClick: () => {
+                                            navigationModeChangeHandler("Storefront");
+                                            closeDrawer();
+                                        },
+                                    },
+                                },
+                                {
+                                    title: translate("Vendor Managed Inventory"),
+                                    clickableProps: {
+                                        onClick: () => {
+                                            navigationModeChangeHandler("Vmi");
+                                            closeDrawer();
+                                        },
+                                    },
+                                },
+                            ]}
+                            closeModal={closeDrawer}
+                            currentOption={
+                                currentMode === "Vmi" ? translate("Vendor Managed Inventory") : translate("Storefront")
+                            }
+                            currentOptionIcon={undefined}
+                        />
                     )}
                     {userName && !isGuest && (
                         <PanelRow onClick={onSignOutHandler} {...styles.signOutRow}>

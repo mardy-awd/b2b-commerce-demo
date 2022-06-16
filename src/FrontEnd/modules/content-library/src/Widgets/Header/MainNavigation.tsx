@@ -152,10 +152,16 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps) => {
             orderSettings.vmiEnabled &&
             isAuthenticated &&
             session.userRoles?.toLowerCase().indexOf("vmi_admin") !== -1,
+        displayModeSwitch:
+            isAuthenticated && orderSettings.vmiEnabled && session.userRoles?.toLowerCase().indexOf("vmi_admin") !== -1,
+        currentMode,
         vmiPageLinks: [
             getPageLinkByPageType(state, "VmiDashboardPage"),
             getPageLinkByPageType(state, "VmiLocationsPage"),
             getPageLinkByPageType(state, "VmiUsersPage"),
+            getPageLinkByPageType(state, "VmiBinsPage"),
+            getPageLinkByPageType(state, "VmiReportingPage"),
+            getPageLinkByPageType(state, "VmiOrderHistoryPage"),
         ],
     };
 };
@@ -557,6 +563,8 @@ export class MainNavigation extends React.Component<Props, State> {
             isCompactHeaderMainNavigation,
             vmiPageLinks,
             displayVmiNavigation,
+            displayModeSwitch,
+            currentMode,
         } = this.props;
         const { selectedLinkIndex } = this.state;
 
@@ -573,6 +581,8 @@ export class MainNavigation extends React.Component<Props, State> {
                         quickOrderLink={quickOrderLink}
                         displayVmiNavigation={displayVmiNavigation}
                         vmiPageLinks={vmiPageLinks}
+                        displayModeSwitch={displayModeSwitch}
+                        currentMode={currentMode}
                     />
                 </StyledWrapper>
             );
@@ -625,6 +635,8 @@ export class MainNavigation extends React.Component<Props, State> {
                             quickOrderLink={quickOrderLink}
                             displayVmiNavigation={displayVmiNavigation}
                             vmiPageLinks={vmiPageLinks}
+                            displayModeSwitch={displayModeSwitch}
+                            currentMode={currentMode}
                         />
                     </Hidden>
                     <Hidden above="sm" {...styles.mobileSearchWrapper}>

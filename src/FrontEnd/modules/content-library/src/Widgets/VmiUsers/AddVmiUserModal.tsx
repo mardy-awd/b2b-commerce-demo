@@ -312,8 +312,8 @@ const AddVmiUserModal = ({
                 if (result.apiResult?.successful) {
                     toaster.addToast({
                         body: editUserId
-                            ? translate("Vmi user updated successfully")
-                            : translate("Vmi user added successfully"),
+                            ? translate("VMI user updated successfully")
+                            : translate("VMI user added successfully"),
                         messageType: "success",
                     });
 
@@ -399,7 +399,7 @@ const AddVmiUserModal = ({
             onComplete: result => {
                 if (result.apiResult?.successful) {
                     toaster.addToast({
-                        body: translate("Vmi user removed successfully"),
+                        body: translate("VMI user removed successfully"),
                         messageType: "success",
                     });
                     onSuccess();

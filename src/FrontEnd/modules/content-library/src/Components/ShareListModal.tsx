@@ -662,7 +662,11 @@ const ShareListModal = ({
                             </GridItem>
                         )}
                         <GridItem {...styles.cancelButtonGridItem}>
-                            <Button {...styles.cancelButton} onClick={modalCloseHandler}>
+                            <Button
+                                {...styles.cancelButton}
+                                onClick={modalCloseHandler}
+                                data-test-selector="cancelButton"
+                            >
                                 {translate("Cancel")}
                             </Button>
                         </GridItem>

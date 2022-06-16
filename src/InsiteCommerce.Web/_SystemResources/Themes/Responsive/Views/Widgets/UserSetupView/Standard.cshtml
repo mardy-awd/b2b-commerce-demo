@@ -85,7 +85,7 @@
                     </div>
                     <select id="tst_userSetupView_role" class="sel" ng-model="vm.user.role" name="role">
                         <option value="">[% translate 'Select User Role' %]</option>
-                        <option ng-repeat="role in vm.user.availableRoles" value="{{role}}" ng-bind="role"></option>
+                        <option ng-repeat="role in vm.user.availableRoles" value="{{role}}" ng-bind="vm.user.availableRolesTranslated[role.toLowerCase()] || role"></option>
                     </select>
                 </div>
 

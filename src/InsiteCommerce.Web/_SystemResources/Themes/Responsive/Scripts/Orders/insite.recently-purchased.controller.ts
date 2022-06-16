@@ -7,6 +7,8 @@
         addingToCart = false;
         realTimePricing = false;
         failedToGetRealTimePrices = false;
+        realTimeInventory = false;
+        inventoryIncludedWithPricing = false;
 
         static $inject = ["settingsService", "productService", "cartService", "$scope"];
 
@@ -33,6 +35,8 @@
         protected getSettingsCompleted(settingsCollection: core.SettingsCollection): void {
             this.showOrders = settingsCollection.orderSettings.showOrders;
             this.realTimePricing = settingsCollection.productSettings.realTimePricing;
+            this.realTimeInventory = settingsCollection.productSettings.realTimeInventory;
+            this.inventoryIncludedWithPricing = settingsCollection.productSettings.inventoryIncludedWithPricing;
             if (this.showOrders) {
                 this.getRecentlyPurchasedItems();
             }
@@ -60,6 +64,10 @@
                     (realTimePricing: RealTimePricingModel) => this.getProductRealTimePricesCompleted(realTimePricing),
                     (error: any) => this.getProductRealTimePricesFailed(error));
             }
+
+            if (!this.inventoryIncludedWithPricing) {
+                this.getRealTimeInventory();
+            }
         }
 
         protected getRecentlyPurchasedItemsFailed(error: any): void {
@@ -70,6 +78,10 @@
                 const product = this.products.find((p: ProductDto) => p.id === productPrice.productId && p.unitOfMeasure === productPrice.unitOfMeasure);
                 product.pricing = productPrice;
             });
+
+            if (this.inventoryIncludedWithPricing) {
+                this.getRealTimeInventory();
+            }
         }
 
         protected getProductRealTimePricesFailed(error: any): void {
@@ -97,6 +109,20 @@
 
         protected addToCartFailed(error: any): void {
             this.addingToCart = false;
+        }
+
+        protected getRealTimeInventory(): void {
+            if (this.realTimeInventory) {
+                this.productService.getProductRealTimeInventory(this.products).then(
+                    (realTimeInventory: RealTimeInventoryModel) => this.getProductRealTimeInventoryCompleted(realTimeInventory),
+                    (error: any) => this.getProductRealTimeInventoryFailed(error));
+            }
+        }
+
+        protected getProductRealTimeInventoryCompleted(realTimeInventory: RealTimeInventoryModel): void {
+        }
+
+        protected getProductRealTimeInventoryFailed(error: any): void {
         }
     }
 

@@ -199,14 +199,18 @@ class NewsListView extends React.Component<Props> {
                 {sortedAndPagedPages.map((page: PageProps) => (
                     <StyledWrapper {...styles.newsWrapper} key={page.id}>
                         <Typography variant="h2" {...styles.titleText}>
-                            <Link href={links[page.nodeId]?.url}>{page.fields["title"]}</Link>
+                            <Link href={links[page.nodeId]?.url} data-test-selector="newslist_pagetitle">
+                                {page.fields["title"]}
+                            </Link>
                         </Typography>
                         <StyledWrapper {...styles.dateAndAuthorWrapper}>
                             {page.fields["author"] && (
-                                <Typography {...styles.authorText}>{page.fields["author"]}</Typography>
+                                <Typography {...styles.authorText} data-test-selector="newslist_author">
+                                    {page.fields["author"]}
+                                </Typography>
                             )}
                             {page.fields["publishDate"] && (
-                                <Typography {...styles.publishDateText}>
+                                <Typography {...styles.publishDateText} data-test-selector="newslist_publishdate">
                                     <LocalizedDateTime
                                         dateTime={new Date(page.fields["publishDate"])}
                                         options={{ year: "numeric", month: "numeric", day: "numeric" }}
@@ -215,14 +219,18 @@ class NewsListView extends React.Component<Props> {
                             )}
                         </StyledWrapper>
                         {(page.fields["newsSummary"] || page.fields["newsContent"]) && (
-                            <StyledWrapper {...styles.summaryWrapper}>
+                            <StyledWrapper {...styles.summaryWrapper} data-test-selector="newslist_content">
                                 {parse(
                                     page.fields["newsSummary"] || truncate(page.fields["newsContent"], { length: 500 }),
                                     parserOptions,
                                 )}
                             </StyledWrapper>
                         )}
-                        <Link href={links[page.nodeId]?.url} {...styles.readMoreLink}>
+                        <Link
+                            href={links[page.nodeId]?.url}
+                            {...styles.readMoreLink}
+                            data-test-selector={`newsList_ReadMore_${page.fields["title"]}`}
+                        >
                             {translate("Read More")}
                         </Link>
                     </StyledWrapper>

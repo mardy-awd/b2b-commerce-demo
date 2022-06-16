@@ -108,7 +108,7 @@ const RfqQuoteDetailsProposedDetailsGrid = ({ quoteState, enableVat, vatPriceDis
                 />
             ))}
             <StyledWrapper {...styles.footerWrapper}>
-                <Typography {...styles.totalValueText} as="p">
+                <Typography {...styles.totalValueText} as="p" data-test-selector="order_subTotal">
                     <Typography {...styles.totalLabelText}>{translate("Total")}:</Typography>
                     {enableVat && vatPriceDisplay !== "DisplayWithoutVat"
                         ? quote.orderGrandTotalDisplay

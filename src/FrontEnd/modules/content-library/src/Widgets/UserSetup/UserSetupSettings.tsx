@@ -79,7 +79,9 @@ const UserSetupSettings = ({ editingUser, setUserFields }: Props) => {
                         <option value="">{translate("Select User Role")}</option>
                         {editingUser.availableRoles?.map(role => (
                             <option key={role} value={role}>
-                                {role}
+                                {(editingUser.availableRolesTranslated &&
+                                    editingUser.availableRolesTranslated[role.toLowerCase()]) ||
+                                    role}
                             </option>
                         ))}
                     </Select>

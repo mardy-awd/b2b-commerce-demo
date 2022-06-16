@@ -1,3 +1,4 @@
+import { HasShellContext, withIsInShell } from "@insite/client-framework/Components/IsInShell";
 import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import reloadPageIfAuthenticated from "@insite/client-framework/Store/Pages/SignIn/Handlers/ReloadPageIfAuthenticated";
@@ -24,11 +25,14 @@ const mapDispatchToProps = {
     reloadPageIfAuthenticated,
 };
 
-type Props = PageProps & ResolveThunks<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
+type Props = PageProps &
+    ResolveThunks<typeof mapDispatchToProps> &
+    ReturnType<typeof mapStateToProps> &
+    HasShellContext;
 
-const SignInPage = ({ id, showLoadingOverlay, reloadPageIfAuthenticated }: Props) => {
+const SignInPage = ({ id, showLoadingOverlay, reloadPageIfAuthenticated, shellContext: { isInShell } }: Props) => {
     useEffect(() => {
-        if (!showLoadingOverlay) {
+        if (!showLoadingOverlay && !isInShell) {
             reloadPageIfAuthenticated();
         }
     }, []);
@@ -48,7 +52,7 @@ const SignInPage = ({ id, showLoadingOverlay, reloadPageIfAuthenticated }: Props
 };
 
 const pageModule: PageModule = {
-    component: connect(mapStateToProps, mapDispatchToProps)(SignInPage),
+    component: connect(mapStateToProps, mapDispatchToProps)(withIsInShell(SignInPage)),
     definition: {
         hasEditableUrlSegment: true,
         hasEditableTitle: true,

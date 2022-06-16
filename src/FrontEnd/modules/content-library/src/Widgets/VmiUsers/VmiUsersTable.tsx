@@ -225,7 +225,7 @@ const VmiUsersTable = ({ accountsDataView, parameter, displayEmail, updateSearch
                                     </DataTableCell>
                                 )}
                                 <DataTableCell {...styles.roleCells} data-test-key={account.id}>
-                                    {account.vmiRole}
+                                    {account.vmiRoleTranslated || account.vmiRole}
                                 </DataTableCell>
                                 <DataTableCell {...styles.actionsCells} data-test-key={account.id}>
                                     <Link onClick={() => editClickHandler(account.id)}>{translate("Edit")}</Link>

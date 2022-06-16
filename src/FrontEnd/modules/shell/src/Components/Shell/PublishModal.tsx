@@ -174,7 +174,7 @@ const PublishModal: React.FC = () => {
     const isSharedContent = isSharedContentOpened();
     const label = isSharedContent ? "Shared Content" : "Page";
 
-    const pagesToPublish = pagePublishInfosState?.value?.filter(o => o.isSharedContent === isSharedContent);
+    const pagesToPublish = pagePublishInfosState?.value;
 
     const nothingToPublish =
         pagesToPublish &&

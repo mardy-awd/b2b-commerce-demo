@@ -20,13 +20,16 @@ declare module Insite.Account.WebApi.V1.ApiModels {
 		firstName: string;
 		lastName: string;
 		role: string;
+		roleTranslated: string;
 		vmiRole: string;
+		vmiRoleTranslated: string;
 		approver: string;
 		isApproved: boolean;
 		activationStatus: string;
 		lastLoginOn: Date;
 		availableApprovers: string[];
 		availableRoles: string[];
+		availableRolesTranslated: {[key: string]:  string};
 		requiresActivation: boolean;
 		setDefaultCustomer: boolean;
 		defaultCustomerId: System.Guid;
@@ -85,6 +88,7 @@ declare module Insite.Account.WebApi.V1.ApiModels {
 		userProfileId: System.Guid;
 		userLabel: string;
 		userRoles: string;
+		userRolesTranslated: string;
 		email: string;
 		password: string;
 		newPassword: string;
@@ -2452,6 +2456,7 @@ declare module Insite.Payments.WebApi.V1.ApiModels {
 		expirationYear: number;
 		orderAmount: string;
 		operation: string;
+		isPaymentProfile: boolean;
 	}
 	interface PaymentAuthenticationModel {
 		transactionId: string;

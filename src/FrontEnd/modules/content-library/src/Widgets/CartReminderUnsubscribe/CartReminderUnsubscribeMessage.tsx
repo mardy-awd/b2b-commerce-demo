@@ -57,8 +57,13 @@ const CartReminderUnsubscribeMessage = ({ fields, websiteName, userEmail, unsubs
             {unsubscribeError && <Typography {...styles.errorText}>{unsubscribeError}</Typography>}
             {!unsubscribeError && userEmail && (
                 <>
-                    <Typography {...styles.unsubscribeMessageText}>{fields.unsubscribeMessage}</Typography>
-                    <Typography {...styles.unsubscribeDescriptionText}>
+                    <Typography {...styles.unsubscribeMessageText} data-test-selector="cartReminderUnsubscribe_Message">
+                        {fields.unsubscribeMessage}
+                    </Typography>
+                    <Typography
+                        {...styles.unsubscribeDescriptionText}
+                        data-test-selector="cartReminderUnsubscribe_Description"
+                    >
                         {fields.unsubscribeDescription.replace("{0}", websiteName).replace("{1}", userEmail)}
                     </Typography>
                 </>

@@ -1,3 +1,4 @@
+import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 /* eslint-disable spire/export-styles */
 import { PageLinkModel } from "@insite/client-framework/Services/ContentService";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
@@ -7,15 +8,17 @@ import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import Link from "@insite/mobius/Link";
+import * as cssLinter from "css";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const enum fields {
     depth = "depth",
     nodeId = "nodeId",
     leftMargin = "leftMargin",
     marginBottom = "marginBottom",
+    customCSS = "customCSS",
 }
 
 interface OwnProps extends WidgetProps {
@@ -24,6 +27,7 @@ interface OwnProps extends WidgetProps {
         [fields.nodeId]: LinkFieldValue;
         [fields.leftMargin]: number;
         [fields.marginBottom]: number;
+        [fields.customCSS]: string;
     };
 }
 
@@ -53,49 +57,80 @@ export const NavigationList = (props: Props) => {
         return null;
     }
 
-    const renderLinks = (pageLinks: PageLinkModel[], currentDepth: number) => {
+    const customCssWrapper = {
+        css: css`
+            ${props.fields.customCSS}
+        `,
+    };
+
+    const renderLink = (pageLink: PageLinkModel, currentDepth: number) => {
         if (currentDepth > props.fields.depth) {
+            return;
+        }
+
+        if (
+            pageLink.excludeFromNavigation ||
+            (pageLink.type === "ChangeCustomerPage" && !props.displayChangeCustomerLink)
+        ) {
             return;
         }
 
         const nextDepth = currentDepth + 1;
 
-        return pageLinks
-            .filter(pageLink => {
-                return (
-                    !pageLink.excludeFromNavigation &&
-                    !(pageLink.type === "ChangeCustomerPage" && !props.displayChangeCustomerLink)
-                );
-            })
-            .map(pageLink => {
-                return (
-                    <li key={pageLink.id}>
-                        <Link data-test-selector={`navigationList-${pageLink.title}`} href={pageLink.url}>
-                            {pageLink.title}
-                        </Link>
-                        {pageLink.children && pageLink.children.length > 0 && (
-                            <ListStyle
-                                marginBottom={props.fields.marginBottom}
-                                leftMargin={props.fields.leftMargin}
-                                key={pageLink.id}
-                            >
-                                {renderLinks(pageLink.children, nextDepth)}
-                            </ListStyle>
-                        )}
-                    </li>
-                );
-            });
+        return (
+            <li key={pageLink.id} className="navigation-list-item">
+                <Link
+                    className="navigation-list-link"
+                    data-test-selector={`navigationList-${pageLink.title}`}
+                    href={pageLink.url}
+                >
+                    {pageLink.title}
+                </Link>
+                {pageLink.children && pageLink.children.length > 0 && (
+                    <ListStyle
+                        marginBottom={props.fields.marginBottom}
+                        leftMargin={props.fields.leftMargin}
+                        key={pageLink.id}
+                    >
+                        {pageLink.children.map(link => renderLink(link, nextDepth))}
+                    </ListStyle>
+                )}
+            </li>
+        );
     };
 
     return (
-        <ListStyle
-            marginBottom={props.fields.marginBottom}
-            leftMargin={props.fields.leftMargin}
-            data-test-selector="navigationList"
-        >
-            {renderLinks(props.rootPageLink.children, 1)}
-        </ListStyle>
+        <StyledWrapper {...customCssWrapper}>
+            <ListStyle
+                className="navigation-list"
+                marginBottom={props.fields.marginBottom}
+                leftMargin={props.fields.leftMargin}
+                data-test-selector="navigationList"
+            >
+                {props.rootPageLink.children.map(link => renderLink(link, 1))}
+            </ListStyle>
+        </StyledWrapper>
     );
+};
+
+const defaultCustomCss = `.navigation-list{
+}
+
+.navigation-list-item {
+}
+
+.navigation-list-link {
+}
+`;
+
+const basicTab = {
+    displayName: "Basic",
+    sortOrder: 0,
+};
+
+const advancedTab = {
+    displayName: "Advanced",
+    sortOrder: 1,
 };
 
 const widgetModule: WidgetModule = {
@@ -110,6 +145,7 @@ const widgetModule: WidgetModule = {
                 editorTemplate: "IntegerField",
                 defaultValue: 2,
                 fieldType: "General",
+                tab: basicTab,
             },
             {
                 name: fields.nodeId,
@@ -122,6 +158,7 @@ const widgetModule: WidgetModule = {
                 fieldType: "General",
                 allowUrls: item => false,
                 allowCategories: item => false,
+                tab: basicTab,
             },
             {
                 name: fields.leftMargin,
@@ -131,6 +168,7 @@ const widgetModule: WidgetModule = {
                 fieldType: "General",
                 max: 100,
                 min: 0,
+                tab: basicTab,
             },
             {
                 name: fields.marginBottom,
@@ -140,6 +178,33 @@ const widgetModule: WidgetModule = {
                 fieldType: "General",
                 max: 100,
                 min: 0,
+                tab: basicTab,
+            },
+            {
+                name: fields.customCSS,
+                displayName: "Custom CSS",
+                editorTemplate: "CodeField",
+                fieldType: "General",
+                tab: advancedTab,
+                defaultValue: defaultCustomCss,
+                isVisible: (item, shouldDisplayAdvancedFeatures) => !!shouldDisplayAdvancedFeatures,
+                validate: value => {
+                    const result = cssLinter.parse(value, { silent: true });
+
+                    if (result?.stylesheet?.parsingErrors) {
+                        // the error output at this time only has room for one line so we just show the first error
+                        return result.stylesheet.parsingErrors.length <= 0
+                            ? ""
+                            : result.stylesheet.parsingErrors.map(error => `${error.reason} on line ${error.line}`)[0];
+                    }
+
+                    return "Unable to parse Css";
+                },
+                options: {
+                    mode: "css",
+                    lint: true,
+                    autoRefresh: true,
+                },
             },
         ],
     },

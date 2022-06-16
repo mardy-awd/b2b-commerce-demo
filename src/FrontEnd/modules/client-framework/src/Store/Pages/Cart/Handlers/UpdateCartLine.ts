@@ -16,6 +16,7 @@ interface UpdateCartLineParameter {
     onSuccess?: () => void;
     cartLine: CartLineModel;
     shouldNotReloadPromotions?: boolean;
+    shouldNotLoadFullCart?: boolean;
 }
 
 type HandlerType = ApiHandlerDiscreteParameter<UpdateCartLineParameter, UpdateCartLineApiParameter>;
@@ -38,7 +39,9 @@ export const UpdateCartLine: HandlerType = async props => {
 };
 
 export const LoadCart: HandlerType = props => {
-    props.dispatch(loadCurrentCart());
+    props.parameter.shouldNotLoadFullCart
+        ? props.dispatch(loadCurrentCart({ shouldLoadFullCart: false, getCartLines: true, getCostCodes: true }))
+        : props.dispatch(loadCurrentCart());
 };
 
 export const LoadPromotions: HandlerType = props => {

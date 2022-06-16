@@ -88,11 +88,14 @@ class RecentOrders extends React.Component<Props> {
                     padding-bottom: 50px;
                 `}
                 extendedStyles={styles.cardList}
+                data-test-selector="widget_RecentOrders"
             >
                 <CardListHeading heading={translate("Recent Orders")} viewAllUrl={orderHistoryUrl} />
                 {ordersDataView.value.length === 0 && (
                     <GridItem {...styles.noOrdersFoundGridItem}>
-                        <Typography {...styles.noOrdersFoundText}>{translate("No orders found")}</Typography>
+                        <Typography {...styles.noOrdersFoundText} data-test-selector="recentOrders_NoOrdersFound">
+                            {translate("No orders found")}
+                        </Typography>
                     </GridItem>
                 )}
                 {ordersDataView.value.map(

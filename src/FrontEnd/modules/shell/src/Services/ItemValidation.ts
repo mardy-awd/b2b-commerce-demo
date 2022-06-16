@@ -2,8 +2,12 @@ import { Dictionary } from "@insite/client-framework/Common/Types";
 import { HasFields } from "@insite/client-framework/Types/ContentItemModel";
 import { ChildFieldDefinition } from "@insite/client-framework/Types/FieldDefinition";
 
-export function validateField(fieldDefinition: ChildFieldDefinition, item: HasFields) {
-    if (fieldDefinition.isVisible && !fieldDefinition.isVisible(item)) {
+export function validateField(
+    fieldDefinition: ChildFieldDefinition,
+    item: HasFields,
+    advancedFeaturesEnabled: boolean,
+) {
+    if (fieldDefinition.isVisible && !fieldDefinition.isVisible(item, advancedFeaturesEnabled)) {
         return;
     }
 
@@ -29,11 +33,15 @@ export function validateField(fieldDefinition: ChildFieldDefinition, item: HasFi
     return validationError;
 }
 
-export function validateItem(fieldDefinitions: ChildFieldDefinition[], item: HasFields) {
+export function validateItem(
+    fieldDefinitions: ChildFieldDefinition[],
+    item: HasFields,
+    advancedFeaturesEnabled: boolean,
+) {
     const validationErrors: Dictionary<string> = {};
 
     for (const fieldDefinition of fieldDefinitions) {
-        const validationError = validateField(fieldDefinition, item);
+        const validationError = validateField(fieldDefinition, item, advancedFeaturesEnabled);
         if (validationError) {
             validationErrors[fieldDefinition.name] = validationError;
         }

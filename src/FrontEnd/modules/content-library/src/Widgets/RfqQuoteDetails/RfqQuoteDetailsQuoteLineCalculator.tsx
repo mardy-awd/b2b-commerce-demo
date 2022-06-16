@@ -356,7 +356,7 @@ const RfqQuoteDetailsQuoteLineCalculator = ({
                     </GridContainer>
                 </StyledWrapper>
             </GridItem>
-            <GridItem {...styles.priceBreaksGridItem}>
+            <GridItem {...styles.priceBreaksGridItem} data-test-selector="rfqConfirmation_quotedPricing">
                 <DataTable {...styles.priceBreaksTable}>
                     <DataTableHead {...styles.priceBreaksHead}>
                         <DataTableHeader {...styles.qtyHeader}>{translate("Quantity")}</DataTableHeader>
@@ -366,7 +366,7 @@ const RfqQuoteDetailsQuoteLineCalculator = ({
                             <DataTableHeader {...styles.calculatorHeader}></DataTableHeader>
                         )}
                     </DataTableHead>
-                    <DataTableBody {...styles.priceBreaksBody}>
+                    <DataTableBody {...styles.priceBreaksBody} data-test-selector="quoteModal_price">
                         {quoteLine.pricingRfq?.priceBreaks?.filter(shouldShowPriceBreak).map((priceBreak, index) => (
                             <RfqQuoteDetailsQuoteLineCalculatorRow
                                 key={index}
@@ -383,12 +383,18 @@ const RfqQuoteDetailsQuoteLineCalculator = ({
                 {!quote.isJobQuote &&
                     quoteLine.pricingRfq?.priceBreaks &&
                     quoteLine.pricingRfq.priceBreaks.length < MAX_PRICE_BREAKS && (
-                        <Link {...styles.addPriceBreakLink} onClick={addPriceBreakClickHandler}>
+                        <Link
+                            {...styles.addPriceBreakLink}
+                            onClick={addPriceBreakClickHandler}
+                            data-test-selector="quoteCaculator_quoteModal_addPriceBreak"
+                        >
                             {translate("Add Price Break")}
                         </Link>
                     )}
                 {priceBreakValidations.some(o => o.priceRequired) && (
-                    <Typography {...styles.errorText}>{siteMessage("Field_Required", translate("Price"))}</Typography>
+                    <Typography {...styles.errorText} data-test-selector="price">
+                        {siteMessage("Field_Required", translate("Price"))}
+                    </Typography>
                 )}
                 {priceBreakValidations.some(o => o.invalidPrice) && (
                     <Typography {...styles.errorText}>{siteMessage("Rfq_InvalidLinePrice")}</Typography>
@@ -404,7 +410,7 @@ const RfqQuoteDetailsQuoteLineCalculator = ({
                 <Button {...styles.resetButton} onClick={resetClickHandler}>
                     {translate("Reset")}
                 </Button>
-                <Button {...styles.applyButton} onClick={applyClickHandler}>
+                <Button {...styles.applyButton} onClick={applyClickHandler} data-test-selector="quoteModal_ApplyQuote">
                     {translate("Apply Quote")}
                 </Button>
             </GridItem>

@@ -53,6 +53,7 @@ const buttonDisplayProps = (
         css: baseCss,
         onClick: onChangePage && !isCurrent ? () => onChangePage(page) : null,
         href: createHref && !isCurrent ? createHref(page) : null,
+        "data-test-selector": `pageNumber_${page.toString()}`,
     };
     if (isCurrent) {
         // *Note*: any string for 'aria-current' will be interpreted as `true` by a screen reader. Passing `false` renders as 'false';
@@ -71,6 +72,7 @@ const buttonDisplayProps = (
             ${/* sc-block */ cssOverrides.currentButton}
         `;
         displayProps.tabIndex = -1;
+        displayProps["data-test-selector"] = `currentPageNumber_${page.toString()}`;
     }
     return displayProps;
 };

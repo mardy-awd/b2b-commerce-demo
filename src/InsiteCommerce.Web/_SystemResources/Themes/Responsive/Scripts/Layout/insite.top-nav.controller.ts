@@ -6,6 +6,7 @@
     export interface ITopNavControllerAttributes extends ng.IAttributes {
         dashboardUrl: string;
         vmiDashboardUrl: string;
+        homePageUrl?: string;
     }
 
     export class TopNavController {
@@ -14,6 +15,7 @@
         session: any;
         dashboardUrl: string;
         vmiDashboardUrl: string;
+        homePageUrl: string;
         accountSettings: AccountSettingsModel;
         orderSettings: OrderSettingsModel;
         displayModeSwitch: boolean;
@@ -37,6 +39,7 @@
         $onInit(): void {
             this.dashboardUrl = this.$attrs.dashboardUrl;
             this.vmiDashboardUrl = this.$attrs.vmiDashboardUrl;
+            this.homePageUrl = this.$attrs.homePageUrl;
             // TODO ISC-4406
             // TODO ISC-2937 SPA kill all of the things that depend on broadcast for session and convert them to this, assuming we can properly cache this call
             // otherwise determine some method for a child to say "I expect my parent to have a session, and I want to use it" broadcast will not work for that
@@ -168,7 +171,7 @@
             if (mode === "Vmi") {
                 this.$window.location.href = this.vmiDashboardUrl;
             } else {
-                this.$window.location.reload();
+                this.homePageUrl ? this.$window.location.href = this.homePageUrl : this.$window.location.reload();
             }
         }
 

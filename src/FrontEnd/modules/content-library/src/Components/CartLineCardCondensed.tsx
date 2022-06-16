@@ -167,7 +167,7 @@ const CartLineCardCondensed = ({
                             <GridItem {...styles.quantityGridItem}>
                                 <CartLineQuantity cart={cart} extendedStyles={styles.quantity} editable={editable} />
                             </GridItem>
-                            <GridItem {...styles.extendedUnitNetPriceGridItem}>
+                            <GridItem {...styles.extendedUnitNetPriceGridItem} data-test-selector="subtotal">
                                 {cartLine.pricing && (
                                     <SmallHeadingAndText
                                         heading={

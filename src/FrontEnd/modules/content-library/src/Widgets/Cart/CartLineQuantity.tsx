@@ -100,6 +100,7 @@ const CartLineQuantity: FC<Props> = ({
             {...styles.readOnlyQuantityText}
             heading={label || translate("QTY")}
             text={cartLine.qtyOrdered!}
+            data-test-selector="quoteDetail_cardLine_qty"
         />
     );
 };

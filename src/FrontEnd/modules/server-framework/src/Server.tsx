@@ -85,6 +85,7 @@ addRoute("/robots.txt", robots, false);
 addRoute("/.spire/content/getTemplatePaths", getTemplatePaths);
 addRoute("/.spire/content/getTemplate", getTemplate);
 addRoute(/^\/sitemap.*\.xml/i, relayRequest);
+addRoute(/^\/.*\.txt/i, relayRequest);
 for (const endpoint of getRelayEndpoints()) {
     addRoute(new RegExp(`^/${endpoint}(\\/|$)`, "i"), relayRequest);
 }

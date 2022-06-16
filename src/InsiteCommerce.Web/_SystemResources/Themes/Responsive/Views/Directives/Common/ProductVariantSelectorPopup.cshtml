@@ -1,0 +1,23 @@
+﻿<div id="product-variant-selector-popup" class="reveal-modal product-variant-selector-popup" data-reveal>
+    <div class="modal-wrap">
+        <div class="modalTitle">[% translate 'Select options' %]:</div>
+        <div class="pop-content">
+            <div class="row" ng-repeat="styleTrait in vm.styleTraitFiltered | orderBy: 'sortOrder'">
+                <span>{{styleTrait.nameDisplay}}:</span>
+                <div>
+                    <select ng-model="vm.styleSelection[$index]" ng-change="vm.styleChange(vm.styleSelection[$index], {{$index}})"
+                            ng-options="style.valueDisplay for style in styleTrait.styleValues | orderBy: 'sortOrder' track by style.styleTraitValueId">
+                        <option value=""> {{styleTrait.unselectedValue ? "" : "[% translate 'Select' %]"}} {{styleTrait.unselectedValue ? styleTrait.unselectedValue : styleTrait.nameDisplay}}</option>
+                    </select>
+                </div>
+            </div>
+            <a class="close-reveal-modal">&#215;</a>
+        </div>
+        <div class="price">
+            <isc-product-price product="vm.product"></isc-product-price>
+        </div>
+        <div>
+            <button class="btn primary" ng-click="vm.selectProduct()" ng-disabled="!vm.product.id">[% translate 'Select' %]</button>
+        </div>
+    </div>
+</div>

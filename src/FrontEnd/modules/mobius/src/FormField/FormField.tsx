@@ -339,6 +339,7 @@ const FormField: React.ComponentType<FormFieldProps> = ({
                         color: "text.accent",
                     },
                 })}
+                data-test-selector="characters_Left"
             >
                 {hint}
             </Typography>

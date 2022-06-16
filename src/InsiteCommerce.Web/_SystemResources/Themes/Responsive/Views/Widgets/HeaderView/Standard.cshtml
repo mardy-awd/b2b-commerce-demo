@@ -19,7 +19,10 @@
     insite.navAdjustments = [];
 </script>
 
-<div ng-controller="TopNavController as vm" class="top-nav-container" ng-cloak dashboard-url="[% urlForPage 'MyAccountPage' %]" vmi-dashboard-url="[% urlForPage 'VmiDashboardPage' %]">
+<div ng-controller="TopNavController as vm" class="top-nav-container" ng-cloak 
+     dashboard-url="[% urlForPage 'MyAccountPage' %]"
+     vmi-dashboard-url="[% urlForPage 'VmiDashboardPage' %]"
+     home-page-url="[% urlForPage 'HomePage' %]">
     <input type="hidden" id="tst_currentLanguage" value="{{::vm.session.language.id}}" />
     <div ng-if="vm.session.hasRfqUpdates" ng-cloak>
         <div class="head-msg">
@@ -77,7 +80,7 @@
                             <div class="user-button">
                                 <i class="social foundicon-torso"></i>
                                 <span class="cust-name" ng-bind="vm.session.userLabel"></span>
-                                <span class="user-role" ng-if="::vm.session.userRoles" ng-bind="::('(' + vm.session.userRoles + ')')"></span>
+                                <span class="user-role" ng-if="::(vm.session.userRolesTranslated || vm.session.userRoles)" ng-bind="::('(' + (vm.session.userRolesTranslated || vm.session.userRoles) + ')')"></span>
                             </div>
                             [[SignOutLink]]
                         </div>
@@ -127,7 +130,7 @@
                     <a href="#" class="user-button fastClick" id="tst_userNav_userName_button">
                         <i ng-cloak class="social foundicon-torso"></i>
                         <span class="cust-name" ng-bind="vm.session.userLabel"></span>
-                        <span class="user-role" ng-if="::vm.session.userRoles" ng-bind="::('(' + vm.session.userRoles + ')')"></span>
+                        <span class="user-role" ng-if="::(vm.session.userRolesTranslated || vm.session.userRoles)" ng-bind="::('(' + (vm.session.userRolesTranslated || vm.session.userRoles) + ')')"></span>
                     </a>
                     <a class="ex fastClick"><i class="foundicon-remove"></i></a>
                 </li>
@@ -258,6 +261,19 @@
         <input type="checkbox" name="nav" id="main-nav-check"/>
         <!-- Remove the class 'prevent-li-below-window' to stop insite.nav.js from modifying position of sub ULs -->
         <div class="isc-primary-nav prevent-li-below-window">
+            <div class="mode-switch" ng-controller="TopNavController as vm" ng-show="::(vm.displayModeSwitch)" dashboard-url="[% urlForPage 'MyAccountPage' %]" vmi-dashboard-url="[% urlForPage 'VmiDashboardPage' %]" home-page-url="[% urlForPage 'HomePage' %]">
+                <span class="nav-item-container">
+                    <a href="javascript:void(0)" onclick="$(this).next().click(); return false;">
+                        {{::(vm.currentNavigationMode === 'Vmi' ? '[% translate 'Vendor Managed Inventory' %]' : '[% translate 'Storefront' %]')}}
+                    </a>
+                    <label for="nav-mode" class="toggle-sub" onclick="insite.nav.goToModeSwitchSubnav()">&#9658;</label>
+                </span>
+                <input type="checkbox" name="nav" id="nav-mode" class="subnav-check"/>
+                <ul class="subnav sub-tier-panel">
+                    <li ng-click="vm.setMode('Storefront')" onclick="insite.nav.hideMenu();" class="sub-heading">[% translate 'Storefront' %]</li>
+                    <li ng-click="vm.setMode('Vmi')" onclick="insite.nav.hideMenu();" class="sub-heading">[% translate 'Vendor Managed Inventory' %]</li>
+                </ul>
+            </div>
             [% navigationMenu %]
             <div class="isc-primary-nav-top">
                 <!-- To Do 3.7.1 - change navigation back function to use below label element -->

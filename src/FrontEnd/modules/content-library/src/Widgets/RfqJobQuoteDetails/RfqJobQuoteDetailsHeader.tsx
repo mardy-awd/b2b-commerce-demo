@@ -143,6 +143,7 @@ const RfqJobQuoteDetailsHeader: React.FC<Props> = ({
                                 hasLineWithLimitExceeding()
                             }
                             onClick={generateOrderClickHandler}
+                            data-test-selector="rfqquote_generateorder"
                         >
                             {translate("Generate Order")}
                         </Button>

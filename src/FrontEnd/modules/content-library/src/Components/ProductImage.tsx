@@ -52,7 +52,6 @@ const ProductImage: FC<Props> = ({ product, extendedStyles }) => {
     if (!altText || altText === "") {
         altText = "product" in product ? product.product.productTitle : product.productName;
     }
-    altText += ` ${translate("redirect to product page")}`;
     const imagePath =
         "product" in product
             ? product.product.mediumImagePath || product.product.smallImagePath

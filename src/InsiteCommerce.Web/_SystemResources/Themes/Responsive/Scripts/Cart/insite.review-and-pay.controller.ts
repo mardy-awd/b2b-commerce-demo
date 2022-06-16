@@ -79,7 +79,8 @@ module insite.cart {
             "websiteService",
             "deliveryMethodPopupService",
             "selectPickUpLocationPopupService",
-            "paymentService"
+            "paymentService",
+            "tokenExIFrameService"
         ];
 
         constructor(
@@ -98,7 +99,8 @@ module insite.cart {
             protected websiteService: websites.IWebsiteService,
             protected deliveryMethodPopupService: account.IDeliveryMethodPopupService,
             protected selectPickUpLocationPopupService: account.ISelectPickUpLocationPopupService,
-            protected paymentService: IPaymentService) {
+            protected paymentService: IPaymentService,
+            protected tokenExIFrameService: insite.common.ITokenExIFrameService) {
         }
 
         $onInit(): void {
@@ -148,6 +150,10 @@ module insite.cart {
             jQuery.validator.addMethod("angularmin", (value, element, minValue) => {
                 const valueParts = value.split(":");
                 return valueParts.length === 2 && valueParts[1] > minValue;
+            });
+
+            this.$scope.$on("$locationChangeStart", () => {
+                this.tokenExIFrameService.removeScript();
             });
         }
 
@@ -215,6 +221,8 @@ module insite.cart {
             this.enableWarehousePickup = settingsCollection.accountSettings.enableWarehousePickup;
             this.bypassCvvForSavedCards = settingsCollection.cartSettings.bypassCvvForSavedCards;
             this.paymentGatewayRequiresAuthentication = settingsCollection.websiteSettings.paymentGatewayRequiresAuthentication;
+
+            this.tokenExIFrameService.addScript(settingsCollection.websiteSettings);
 
             this.sessionService.getSession().then(
                 (session: SessionModel) => { this.getSessionCompleted(session); },
@@ -545,11 +553,12 @@ module insite.cart {
                 const transactionId = guidHelper.generateGuid();
                 this.paymentService.authenticate({
                     transactionId: transactionId,
-                    cardNumber: this.cart.paymentOptions.creditCard.cardNumber,
+                    cardNumber: this.cart.paymentOptions.creditCard.cardNumber ?? this.cart.paymentMethod.name,
                     expirationMonth: this.cart.paymentOptions.creditCard.expirationMonth,
                     expirationYear: this.cart.paymentOptions.creditCard.expirationYear,
                     orderAmount: this.cart.orderGrandTotal.toString(),
-                    operation: 'authenticate'
+                    operation: 'authenticate',
+                    isPaymentProfile: this.cart.paymentMethod.isPaymentProfile,
                 }).then(
                     (result: PaymentAuthenticationModel) => {
                         if (result.redirectHtml) {

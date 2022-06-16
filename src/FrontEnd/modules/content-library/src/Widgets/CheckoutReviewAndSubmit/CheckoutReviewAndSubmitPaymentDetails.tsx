@@ -612,6 +612,10 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     const selectedCountry = countries?.find(country => country.id === countryId);
     let tokenName: string | undefined;
     const eCheckDetails = useRef<Validatable>(null);
+    const tokenExReinitTimeout = 500;
+    let lastTokenExReinitTime = 0;
+    const tokenExErrorsLimit = (20 * 1e3) / tokenExReinitTimeout;
+    let currentTokenExErrorCount = 0;
 
     if (useTokenExGateway) {
         if (isPaymentProfile) {
@@ -713,6 +717,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     };
 
     useEffect(() => {
+        let mounted = true;
         if (
             useAdyenDropIn &&
             paymentMethodDto?.isCreditCard &&
@@ -720,19 +725,27 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             cartState.value?.orderGrandTotal &&
             !adyenSessionData
         ) {
-            loadAdyenSettings();
+            if (!adyenSettings?.clientKey) {
+                loadAdyenSettings();
+            }
             const returnUrl = !cartId
                 ? checkoutReviewAndSubmitPageLink.url
                 : checkoutReviewAndSubmitPageLink.url.includes("?")
                 ? `${checkoutReviewAndSubmitPageLink.url}&cartId=${cartId}`
                 : `${checkoutReviewAndSubmitPageLink.url}?cartId=${cartId}`;
             getAdyenSessionData(cartState.value.orderGrandTotal, returnUrl, cartId).then(result => {
+                if (!mounted) {
+                    return;
+                }
                 setAdyenSessionId(result.transactionId);
                 setAdyenSessionData(result.sessionData);
                 setAdyenWebOrderNumber(result.webOrderNumber);
                 setAdyenRegion(result.region);
             });
         }
+        return () => {
+            mounted = false;
+        };
     }, [useAdyenDropIn, checkoutReviewAndSubmitPageLink, cartState, paymentMethodDto, adyenSessionData]);
 
     useEffect(() => {
@@ -782,6 +795,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             return;
         }
 
+        currentTokenExErrorCount = 0;
         if (isPaymentProfile && !isPaymentProfileExpired && !bypassCvvForSavedCards) {
             setUpTokenExIFrameCvvOnly(tokenExConfig);
         } else if (isCreditCard) {
@@ -848,7 +862,15 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         });
         tokenExIframe.on("error", data => {
             logger.error(data);
-            setUpTokenExIFrame(config);
+            if (
+                Date.now() - lastTokenExReinitTime > tokenExReinitTimeout &&
+                ++currentTokenExErrorCount <= tokenExErrorsLimit
+            ) {
+                lastTokenExReinitTime = Date.now();
+                setTimeout(() => {
+                    setUpTokenExIFrame(config);
+                }, tokenExReinitTimeout);
+            }
         });
     };
 
@@ -893,7 +915,15 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         });
         tokenExIframe.on("error", data => {
             logger.error(data);
-            setUpTokenExIFrameCvvOnly(config);
+            if (
+                Date.now() - lastTokenExReinitTime > tokenExReinitTimeout &&
+                ++currentTokenExErrorCount <= tokenExErrorsLimit
+            ) {
+                lastTokenExReinitTime = Date.now();
+                setTimeout(() => {
+                    setUpTokenExIFrameCvvOnly(config);
+                }, tokenExReinitTimeout);
+            }
         });
     };
 
@@ -1409,6 +1439,10 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             noValidate={true}
             data-test-selector="reviewAndSubmitPaymentForm"
         >
+            {/* This button should only be used to trigger the submit of the form. Should be on the top of the form. */}
+            <button id="reviewAndSubmitPaymentForm-submit" type="submit" style={{ display: "none" }}>
+                {translate("Place Order")}
+            </button>
             <StyledFieldSet {...styles.fieldset}>
                 <Typography {...styles.paymentDetailsHeading} as="h2">
                     {translate("Payment Details")}
@@ -1525,7 +1559,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                                     />
                                 </GridItem>
                             )}
-                        {paymentMethodDto?.isCreditCard && useAdyenDropIn && !adyenDropIn && (
+                        {paymentMethodDto?.isCreditCard && useAdyenDropIn && !adyenDropIn && !showPayPal && (
                             <LoadingSpinner {...styles.loadingSpinner} />
                         )}
                         {paymentMethodDto?.isCreditCard && useAdyenDropIn && (
@@ -1635,10 +1669,6 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                     </GridContainer>
                 )}
             </StyledFieldSet>
-            {/* This button should only be used to trigger the submit of the form, it is required for IE11 to function. */}
-            <button id="reviewAndSubmitPaymentForm-submit" type="submit" style={{ display: "none" }}>
-                {translate("Place Order")}
-            </button>
         </StyledForm>
     );
 };

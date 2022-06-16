@@ -2,6 +2,7 @@ import sleep from "@insite/client-framework/Common/Sleep";
 import { Dictionary } from "@insite/client-framework/Common/Types";
 import { loadMobileComponents } from "@insite/client-framework/Internal";
 import logger from "@insite/client-framework/Logger";
+import { getContentByVersionPath } from "@insite/client-framework/Services/ContentService";
 
 const Handshake = "Handshake";
 const HandshakeReply = "Handshake-Reply";
@@ -75,6 +76,7 @@ export const setupSiteHole = async function (
                 // needed so our AUI tests can know the frameHole is ready
                 (window as any).frameHoleIsReady = true;
             } else {
+                log(`Receiving message on shell - ${event.data.type}`);
                 const handler = handlers[event.data.type];
                 if (handler) {
                     handler(event.data.data);
@@ -111,7 +113,9 @@ export const setupSiteHole = async function (
 };
 
 export function canSetupShellHole(): boolean {
-    return !IS_SERVER_SIDE && !!window.parent;
+    // if we are on getContentByVersionPath then we are in the compare window, and we don't want to
+    // setup (or kill off) the shell hole
+    return !IS_SERVER_SIDE && !!window.parent && window.location.pathname !== getContentByVersionPath;
 }
 
 let shellHoleListener: (event: MessageEvent) => void;
@@ -138,7 +142,7 @@ export const setupShellHole = async function (handlers: Dictionary<(data: any) =
             if (event.data.type === HandshakeReply) {
                 completedHandshake = true;
             } else {
-                log(`Receiving message on site - ${event.data.type} data: ${JSON.stringify(event.data.data)}`);
+                log(`Receiving message on site - ${event.data.type}`);
                 const handler = handlers[event.data.type];
                 if (handler) {
                     handler(event.data.data);

@@ -16,6 +16,8 @@ type HandlerType = Handler<
         shouldLoadFullCart?: boolean;
         replaceCart?: boolean;
         getPromotions?: boolean;
+        getCartLines?: boolean;
+        getCostCodes?: boolean;
     } & HasOnSuccess,
     {
         apiParameter: GetCartApiParameter;
@@ -74,6 +76,14 @@ export const PopulateApiParameter: HandlerType = props => {
         if (pageType === "CartPage") {
             props.apiParameter.expand.push("hiddenproducts");
         }
+    }
+
+    if (props.parameter.getCartLines) {
+        props.apiParameter.expand?.push("cartLines");
+    }
+
+    if (props.parameter.getCostCodes) {
+        props.apiParameter.expand?.push("costCodes");
     }
 };
 

@@ -50,7 +50,7 @@ const SmallHeadingAndText: React.FunctionComponent<OwnProps> = ({ heading, text,
             <Typography as="p" {...styles.heading} data-test-selector="heading">
                 {heading}
             </Typography>
-            <Typography as="p" {...styles.text} data-test-selector="text">
+            <Typography as="p" {...styles.text} data-test-selector={`text_${heading}`}>
                 {text}
             </Typography>
         </StyledWrapper>

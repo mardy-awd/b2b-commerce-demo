@@ -106,7 +106,12 @@ const ProductListProductImage: FC<Props> = ({
         >
             {showImage && <ProductImage extendedStyles={styles.productImage} product={productContext} />}
             {showCompare && settingsCollection.productSettings.enableProductComparisons && (
-                <Checkbox {...styles.compareCheckbox} checked={productCompareChecked} onChange={handleChanged}>
+                <Checkbox
+                    {...styles.compareCheckbox}
+                    checked={productCompareChecked}
+                    onChange={handleChanged}
+                    data-test-selector="productList_CompareCheckbox"
+                >
                     {translate("Compare")}
                 </Checkbox>
             )}

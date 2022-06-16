@@ -278,7 +278,10 @@ function finishLoadPage(
     }
 
     for (const widgetItem of widgets) {
-        draft.widgetsById[widgetItem.id] = widgetItem;
+        draft.widgetsById[widgetItem.id] = {
+            ...widgetItem,
+            parentId: page.layoutPageId && widgetItem.parentId === page.id ? page.layoutPageId : widgetItem.parentId,
+        };
         draft.widgetIdsByPageId[page.id].push(widgetItem.id);
         const parentId = widgetItem.parentId;
         const zone = widgetItem.zone;

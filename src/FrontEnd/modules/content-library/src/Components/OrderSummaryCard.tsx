@@ -69,8 +69,8 @@ const OrderSummaryCard: FC<Props> = ({ language, order, orderSettings, extendedS
 
     return (
         <GridItem {...styles.orderSummaryCardGridItem}>
-            <GridContainer {...styles.container}>
-                <GridItem {...styles.pageTypeLinkGridItem}>
+            <GridContainer {...styles.container} data-test-selector={`orderSummaryCard_${orderNumber}`}>
+                <GridItem {...styles.pageTypeLinkGridItem} data-test-selector="orderSummaryCard_Date">
                     {orderNumber && <OrderDetailPageTypeLink title={orderDateDisplay} orderNumber={orderNumber} />}
                 </GridItem>
                 <GridItem {...styles.orderNumberGridItem}>

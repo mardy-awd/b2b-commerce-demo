@@ -5,6 +5,7 @@ import {
     PageVersionInfoModel,
     PublishedPageVersionsModel,
 } from "@insite/shell/Services/ContentAdminService";
+import { isSharedContentOpened } from "@insite/shell/Store/Data/Pages/PagesHelpers";
 import { PublishModalState } from "@insite/shell/Store/PublishModal/PublishModalState";
 import { Draft } from "immer";
 
@@ -64,12 +65,15 @@ const reducer = {
             failedPageIds?: Dictionary<boolean> | null;
         },
     ) => {
+        const isSharedContent = isSharedContentOpened();
+        const filteredPagePublishInfos = pagePublishInfos.filter(o => o.isSharedContent === isSharedContent);
+
         draft.pagePublishInfosState = {
             isLoading: false,
-            value: pagePublishInfos,
+            value: filteredPagePublishInfos,
         };
 
-        draft.pagePublishInfoIsSelected = pagePublishInfos.map(() => true);
+        draft.pagePublishInfoIsSelected = filteredPagePublishInfos.map(() => true);
 
         if (publishOn !== undefined) {
             draft.publishOn = publishOn ?? undefined;

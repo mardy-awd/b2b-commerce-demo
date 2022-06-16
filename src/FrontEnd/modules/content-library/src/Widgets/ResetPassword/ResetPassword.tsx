@@ -277,6 +277,7 @@ const ResetPassword = ({
                             }}
                             autoComplete="new-password"
                             required
+                            data-test-selector="resetPassword_NewPassword"
                         />
                     </GridItem>
                     <GridItem {...styles.confirmNewPasswordGridItem}>
@@ -296,6 +297,7 @@ const ResetPassword = ({
                             }}
                             autoComplete="new-password"
                             required
+                            data-test-selector="resetPassword_ConfirmNewPassword"
                         />
                     </GridItem>
                     <GridItem {...styles.submitGridItem}>
@@ -303,6 +305,7 @@ const ResetPassword = ({
                             {...styles.submitButton}
                             onClick={submitHandler}
                             disabled={isSubmitted && !isSubmitEnabled}
+                            data-test-selector="resetPassword_ResetButton"
                         >
                             {translate("Reset Password")}
                         </Button>

@@ -13,6 +13,7 @@ import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import Link from "@insite/mobius/Link";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
+import * as cssLinter from "css";
 import * as React from "react";
 import { FC } from "react";
 import { css } from "styled-components";
@@ -23,6 +24,7 @@ const enum fields {
     title = "title",
     titleLink = "titleLink",
     links = "links",
+    customCSS = "customCSS",
 }
 
 interface OwnProps extends WidgetProps {
@@ -32,6 +34,7 @@ interface OwnProps extends WidgetProps {
         [fields.title]: string;
         [fields.titleLink]: LinkFieldValue;
         [fields.links]: LinkModel[];
+        [fields.customCSS]: string;
     };
     extendedStyles?: LinkListStyles;
 }
@@ -62,44 +65,88 @@ export const linkListStyles: LinkListStyles = {
     },
 };
 
+const defaultCustomCss = `.list-wrapper {
+}
+
+.title-wrapper {
+}
+
+.list-title {
+}
+
+.links-wrapper {
+}
+
+.list-link {
+}
+`;
+
 export const LinkList: FC<OwnProps> = ({ fields, extendedStyles }) => {
     const links = useGetLinks(fields.links, o => o.fields.destination);
     const titleLink = useGetLink(fields.titleLink);
     const styles = useMergeStyles("linkList", linkListStyles, extendedStyles);
 
-    const alignmentStyles = css`
-        text-align: ${fields.alignment || "right"};
-        ${styles.linkListWrapper?.css}
-    `;
+    const alignmentStyles = {
+        css: css`
+            text-align: ${fields.alignment || "right"};
+            ${styles.linkListWrapper?.css}
+        `,
+    };
 
-    const directionStyles = css`
-        ${fields.direction === "horizontal" ? "display: inline-block;" : "padding: 1px 0 0 0;"};
-        ${styles.linkWrapper?.css}
-    `;
+    const directionStyles = {
+        css: css`
+            ${fields.direction === "horizontal" ? "display: inline-block;" : "padding: 1px 0 0 0;"};
+            ${styles.linkWrapper?.css}
+        `,
+    };
+
+    const customCssWrapper = {
+        css: css`
+            ${fields.customCSS}
+        `,
+    };
 
     return (
-        <StyledWrapper css={alignmentStyles}>
-            <StyledWrapper {...styles.titleWrapper}>
-                {titleLink ? (
-                    <Link href={titleLink.url}>{fields.title || titleLink.title}</Link>
-                ) : (
-                    <Typography as="h3" {...styles.title}>
-                        {fields.title}
-                    </Typography>
-                )}
-            </StyledWrapper>
-            {links.map((link, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <StyledWrapper key={index} css={directionStyles}>
-                    {link.url && (
-                        <Link href={link.url} target={fields.links[index].fields.openInNewWindow ? "_blank" : ""}>
-                            {fields.links[index].fields.overriddenTitle || link.title}
+        <StyledWrapper {...customCssWrapper}>
+            <StyledWrapper className="list-wrapper" {...alignmentStyles}>
+                <StyledWrapper className="title-wrapper" {...styles.titleWrapper}>
+                    {titleLink ? (
+                        <Link className="list-title" href={titleLink.url}>
+                            {fields.title || titleLink.title}
                         </Link>
+                    ) : (
+                        <Typography className="list-title" as="h3" {...styles.title}>
+                            {fields.title}
+                        </Typography>
                     )}
                 </StyledWrapper>
-            ))}
+                {links.map((link, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <StyledWrapper className="links-wrapper" key={index} {...directionStyles}>
+                        {link.url && (
+                            <Link
+                                className="list-link"
+                                href={link.url}
+                                target={fields.links[index].fields.openInNewWindow ? "_blank" : ""}
+                            >
+                                {fields.links[index].fields.overriddenTitle || link.title}
+                            </Link>
+                        )}
+                    </StyledWrapper>
+                ))}
+            </StyledWrapper>
         </StyledWrapper>
     );
+};
+
+const basicTab = {
+    displayName: "Basic",
+    sortOrder: 0,
+};
+
+const advancedTab = {
+    displayName: "Advanced",
+    sortOrder: 1,
 };
 
 const widgetModule: WidgetModule = {
@@ -124,6 +171,7 @@ const widgetModule: WidgetModule = {
                     },
                 ],
                 hideEmptyOption: true,
+                tab: basicTab,
             },
             {
                 name: fields.alignment,
@@ -145,12 +193,14 @@ const widgetModule: WidgetModule = {
                     },
                 ],
                 hideEmptyOption: true,
+                tab: basicTab,
             },
             {
                 name: fields.title,
                 editorTemplate: "TextField",
                 defaultValue: "",
                 fieldType: "Translatable",
+                tab: basicTab,
             },
             {
                 fieldType: "General",
@@ -158,6 +208,7 @@ const widgetModule: WidgetModule = {
                 displayName: "Title Link",
                 editorTemplate: "LinkField",
                 defaultValue: { type: "Page", value: "" },
+                tab: basicTab,
             },
             {
                 name: fields.links,
@@ -219,6 +270,33 @@ const widgetModule: WidgetModule = {
                         defaultValue: false,
                     },
                 ],
+                tab: basicTab,
+            },
+            {
+                name: fields.customCSS,
+                displayName: "Custom CSS",
+                editorTemplate: "CodeField",
+                fieldType: "General",
+                tab: advancedTab,
+                defaultValue: defaultCustomCss,
+                isVisible: (item, shouldDisplayAdvancedFeatures) => !!shouldDisplayAdvancedFeatures,
+                validate: value => {
+                    const result = cssLinter.parse(value, { silent: true });
+
+                    if (result?.stylesheet?.parsingErrors) {
+                        // the error output at this time only has room for one line so we just show the first error
+                        return result.stylesheet.parsingErrors.length <= 0
+                            ? ""
+                            : result.stylesheet.parsingErrors.map(error => `${error.reason} on line ${error.line}`)[0];
+                    }
+
+                    return "Unable to parse Css";
+                },
+                options: {
+                    mode: "css",
+                    lint: true,
+                    autoRefresh: true,
+                },
             },
         ],
     },

@@ -504,6 +504,7 @@ class OrderHistoryTable extends React.Component<Props> {
                                                     onClick={() =>
                                                         this.reorderClick(orderNumber, linkOrderNumber, isVmiOrder)
                                                     }
+                                                    data-test-selector="orderHistoryTable_Reorder"
                                                 >
                                                     {translate("Reorder")}
                                                 </Button>

@@ -22,6 +22,10 @@ export interface CodeSnippetFieldDefinition extends BaseFieldDefinition<"CodeSni
     placeholder?: string;
 }
 
+export interface CodeFieldDefinition extends BaseFieldDefinition<"CodeField"> {
+    options?: object;
+}
+
 export interface IntegerFieldDefinition extends BaseFieldDefinition<"IntegerField", number | null> {
     placeholder?: string;
     min?: number;
@@ -136,6 +140,7 @@ type FieldDefinition =
     | TextFieldDefinition
     | MultilineTextFieldDefinition
     | RichTextFieldDefinition
+    | CodeFieldDefinition
     | CodeSnippetFieldDefinition
     | IntegerFieldDefinition
     | DropDownFieldDefinition<string>
@@ -162,6 +167,7 @@ export type ChildFieldDefinition =  // Omit<FieldDefinition, "fieldType"> would 
     | Omit<TextFieldDefinition, "fieldType">
     | Omit<MultilineTextFieldDefinition, "fieldType">
     | Omit<RichTextFieldDefinition, "fieldType">
+    | Omit<CodeFieldDefinition, "fieldType">
     | Omit<CodeSnippetFieldDefinition, "fieldType">
     | Omit<IntegerFieldDefinition, "fieldType">
     | Omit<DropDownFieldDefinition<string>, "fieldType">

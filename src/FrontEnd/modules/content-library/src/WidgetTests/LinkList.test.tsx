@@ -16,7 +16,7 @@ describe("Link List Widget", () => {
     test("StylesProvider styles are being passed", () => {
         const styles = useStyles();
         styles.linkList = {
-            linkListWrapper: {
+            titleWrapper: {
                 css: css`
                     background: magenta;
                 `,
@@ -26,6 +26,6 @@ describe("Link List Widget", () => {
         const styledWrappers = renderWidget().find(StyledWrapper);
         const styleRule = /background:\s?magenta;/;
 
-        elementHasStyle(styledWrappers.at(0), styleRule);
+        elementHasStyle(styledWrappers.at(2), styleRule);
     });
 });

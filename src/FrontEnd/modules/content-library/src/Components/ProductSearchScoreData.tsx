@@ -66,7 +66,7 @@ const styles = productSearchScoreDataStyles;
 const ProductSearchScoreData: FC<Props> = ({ searchDataModeActive, product, product: { score, scoreExplanation } }) => {
     const [extraData, toggleExtraData] = React.useState<boolean>(false);
 
-    if (!searchDataModeActive || scoreExplanation == null || score === 0) {
+    if (!searchDataModeActive || score === 0) {
         return null;
     }
     return (
@@ -81,13 +81,15 @@ const ProductSearchScoreData: FC<Props> = ({ searchDataModeActive, product, prod
                         <Typography {...styles.dataNameTypography}>{translate("Score")}:</Typography>
                         <Typography {...styles.dataValueTypography}>{score}</Typography>
                     </GridItem>
-                    <GridItem {...styles.gridItem}>
-                        <Typography {...styles.dataNameTypography}>{translate("Matching Fields")}: </Typography>
-                        <Typography {...styles.dataValueTypography}>
-                            {scoreExplanation?.aggregateFieldScores?.map(s => s.name).join(", ")}
-                        </Typography>
-                    </GridItem>
-                    {extraData && (
+                    {scoreExplanation && (
+                        <GridItem {...styles.gridItem}>
+                            <Typography {...styles.dataNameTypography}>{translate("Matching Fields")}: </Typography>
+                            <Typography {...styles.dataValueTypography}>
+                                {scoreExplanation?.aggregateFieldScores?.map(s => s.name).join(", ")}
+                            </Typography>
+                        </GridItem>
+                    )}
+                    {extraData && scoreExplanation && (
                         <>
                             <GridItem {...styles.gridItem}>
                                 <Typography {...styles.dataNameTypography}>{translate("Total Boost")}:</Typography>
@@ -112,11 +114,13 @@ const ProductSearchScoreData: FC<Props> = ({ searchDataModeActive, product, prod
                             </GridItem>
                         </>
                     )}
-                    <GridItem {...styles.gridItem}>
-                        <Link {...styles.viewMoreLink} onClick={() => toggleExtraData(!extraData)}>
-                            {extraData ? "View Less" : "View More"}
-                        </Link>
-                    </GridItem>
+                    {scoreExplanation && (
+                        <GridItem {...styles.gridItem}>
+                            <Link {...styles.viewMoreLink} onClick={() => toggleExtraData(!extraData)}>
+                                {extraData ? "View Less" : "View More"}
+                            </Link>
+                        </GridItem>
+                    )}
                 </GridContainer>
             </ManagedAccordionSection>
         </Accordion>

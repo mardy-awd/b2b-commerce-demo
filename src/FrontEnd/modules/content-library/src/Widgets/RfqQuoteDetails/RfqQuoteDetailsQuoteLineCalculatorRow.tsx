@@ -283,6 +283,7 @@ const RfqQuoteDetailsQuoteLineCalculatorRow = ({
                             error={validation?.invalidQty}
                             onChange={startQtyChangeHandler}
                             onBlur={startQtyBlurHandler}
+                            data-test-selector="quoteModal_startQty"
                         />
                         <Typography {...styles.toLabelText}>{translate("To")}</Typography>
                         <TextField
@@ -306,6 +307,7 @@ const RfqQuoteDetailsQuoteLineCalculatorRow = ({
                     onChange={priceChangeHandler}
                     onFocus={priceFocusHandler}
                     onBlur={priceBlurHandler}
+                    data-test-selector="quoteModal_priceBreaks"
                 />
             </DataTableCell>
             <DataTableCell {...styles.buttonsCell}>
@@ -325,6 +327,7 @@ const RfqQuoteDetailsQuoteLineCalculatorRow = ({
                                 label={translate("Discount By")}
                                 value={calculationMethod?.name}
                                 onChange={calculationMethodChangeHandler}
+                                data-test-selector="quoteLineCalculator_QuoteModal_DiscountBy"
                             >
                                 {quoteLine.pricingRfq?.calculationMethods?.map(cm => (
                                     <option key={cm.name} value={cm.name}>
@@ -337,6 +340,7 @@ const RfqQuoteDetailsQuoteLineCalculatorRow = ({
                             <VisuallyHidden>{translate("Percent")}</VisuallyHidden>
                             <TextField
                                 {...styles.percentTextField}
+                                data-test-selector="quoteLineCalculator_QuoteModal_CalculationPercent"
                                 type="number"
                                 min={calculationMethod?.minimumMargin}
                                 max={
@@ -351,7 +355,11 @@ const RfqQuoteDetailsQuoteLineCalculatorRow = ({
                             <Icon {...styles.percentIcon} />
                         </GridItem>
                         <GridItem {...styles.buttonsGridItem}>
-                            <Link {...styles.applyDiscountLink} onClick={applyDiscountClickHandler}>
+                            <Link
+                                {...styles.applyDiscountLink}
+                                onClick={applyDiscountClickHandler}
+                                data-test-selector="quoteLineCalculator_apply"
+                            >
                                 <VisuallyHidden>{translate("Apply discount")}</VisuallyHidden>
                                 <Icon {...styles.applyDiscountIcon} />
                             </Link>

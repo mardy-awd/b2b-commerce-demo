@@ -4680,6 +4680,23 @@ nav ul:not(.side-nav) li {
     nav ul:not(.side-nav) li[role="multi-lang"], nav ul:not(.side-nav) li[role="currency"], nav ul:not(.side-nav) li[role="mode-switch"] {
         display: none;
     }
+
+    .mode-switch {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.08);
+
+        span a {
+            color: #fff;
+            padding: 1em;
+            display: block;
+        }
+
+        ul li.sub-heading {
+            text-transform: inherit;
+            font-size: 1em;
+            font-weight: inherit;
+        }
+    }
 }
 
 
@@ -4694,6 +4711,10 @@ nav ul:not(.side-nav) li {
 
     [role="primary-nav"] > .row > ul > li.top-category {
         display: inline-block;
+    }
+
+    .mode-switch {
+        display: none;
     }
 }
 
@@ -9717,5 +9738,38 @@ header label.toggle.burger:after {
             margin-bottom: 0;
             margin-right: 0.3em;
         }
+    }
+}
+
+.product-variant-selector-popup {
+    max-width: 400px;
+    text-align: left;
+
+    .modalTitle {
+        margin-bottom: 10px;
+    }
+
+    .row {
+        span {
+            display: inline-block;
+            width: 25%;
+            word-wrap: break-word;
+            vertical-align: middle;
+        }
+
+        div {
+            display: inline-block;
+            width: 70%;
+        }
+    }
+
+    .btn {
+        width: 100%;
+        margin: 0px;
+    }
+
+    .price {
+        height: 30px;
+        margin: 5px 0px;
     }
 }

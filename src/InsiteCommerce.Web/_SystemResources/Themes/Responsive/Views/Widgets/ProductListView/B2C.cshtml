@@ -91,7 +91,7 @@
                                             <div class="search-data" ng-if="vm.showSearchData && (vm.query || vm.searchWithinTerms.length > 0)">
                                                 <div>
                                                     <span class="search-data-field">[% translate 'Search Data' %]</span>
-                                                    <a ng-click="vm.toggleExpandedSearchData()">{{vm.showExpandedSearchData ? "[% translate 'Show Less' %]" : "[% translate 'View More' %]"}}</a>
+                                                    <a ng-if="product.scoreExplanation" ng-click="vm.toggleExpandedSearchData()">{{vm.showExpandedSearchData ? "[% translate 'Show Less' %]" : "[% translate 'View More' %]"}}</a>
                                                 </div>
                                                 <div>
                                                     <span class="search-data-field tst_search_data_score">[% translate 'Score' %]:</span><span>{{product.score}}</span>

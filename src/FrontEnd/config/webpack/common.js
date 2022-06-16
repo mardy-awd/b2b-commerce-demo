@@ -4,6 +4,7 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const BlueprintReplacementPlugin = require("./blueprintReplacementPlugin");
 const path = require("path");
 const setupEntryFiles = require("./setupEntryFiles");
+const setupBlueprintWidgetImport = require("./setupBlueprintWidgetImport");
 require("./setupTsconfigPathsFile");
 const webpack = require("webpack");
 const RemovePlugin = require("remove-files-webpack-plugin");
@@ -39,6 +40,7 @@ exports.setupCommonConfig = (isDevBuild, env, target = "ES2017") => {
     if (!hasBeenCalled) {
         createImportChunk(blueprint);
         createAllowedContext(blueprint);
+        setupBlueprintWidgetImport(isDevBuild, blueprint);
         setupEntryFiles(isDevBuild, blueprint);
         hasBeenCalled = true;
     }

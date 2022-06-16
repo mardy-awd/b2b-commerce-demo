@@ -322,10 +322,16 @@ const ProductAvailability = ({
                                                     {...styles.availabilityByWarehouseTableRow}
                                                     key={warehouse.name}
                                                 >
-                                                    <DataTableCell {...styles.availabilityByWarehouseTableCell}>
+                                                    <DataTableCell
+                                                        {...styles.availabilityByWarehouseTableCell}
+                                                        data-test-selector="warehouseAvailabilityModal_Description"
+                                                    >
                                                         {warehouse.description || warehouse.name}
                                                     </DataTableCell>
-                                                    <DataTableCell {...styles.availabilityByWarehouseTableCell}>
+                                                    <DataTableCell
+                                                        {...styles.availabilityByWarehouseTableCell}
+                                                        data-test-selector="warehouseAvailabilityModal_Quantity"
+                                                    >
                                                         {warehouse.qty}
                                                     </DataTableCell>
                                                 </DataTableRow>

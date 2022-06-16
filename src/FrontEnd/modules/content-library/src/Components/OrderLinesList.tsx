@@ -510,6 +510,7 @@ const OrderLineInfoProto = ({
                             <SmallHeadingAndText
                                 {...styles.productInfoQtyOrderedHeadingAndText}
                                 heading={translate("QTY Ordered")}
+                                data-test-selector="qty_Ordered"
                                 text={`${orderLine.qtyOrdered}`}
                             />
                         </GridItem>

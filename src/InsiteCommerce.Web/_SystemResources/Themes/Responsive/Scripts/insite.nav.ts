@@ -52,13 +52,28 @@
         $(".isc-primary-nav-back").removeClass("isc-hidden");
     };
 
+    that.goToModeSwitchSubnav = () => {
+        $(".isc-primary-nav ul").removeClass("active-nav");
+
+        const $subNav = $(".isc-primary-nav .mode-switch ul.subnav");
+        if (Modernizr.touch) {
+            $subNav.addClass("touch-active-nav");
+        }
+
+        $subNav.addClass("active-nav");
+
+        $(".isc-primary-nav-back").removeClass("isc-hidden");
+    };
+
     that.goBack = () => {
         const $activeNav = $(".isc-primary-nav ul.active-nav");
 
         $activeNav.closest("li").find(".subnav-check:first").click();
+        $activeNav.closest("div.mode-switch").find(".subnav-check:first").click();
 
         $activeNav.removeClass("active-nav");
         $activeNav.closest("li").closest("ul").addClass("active-nav");
+        $activeNav.closest("div.mode-switch").closest("ul").addClass("active-nav");
 
         if (!$(".isc-primary-nav ul.active-nav").hasClass("subnav")) {
             $(".isc-primary-nav-back").addClass("isc-hidden");

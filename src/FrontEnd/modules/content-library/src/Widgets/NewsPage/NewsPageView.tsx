@@ -56,9 +56,13 @@ const NewsPageView = ({ page }: Props) => {
     return (
         <StyledWrapper {...styles.newsWrapper} key={page.id}>
             <StyledWrapper {...styles.dateAndAuthorWrapper}>
-                {page.fields["author"] && <Typography {...styles.authorText}>{page.fields["author"]}</Typography>}
+                {page.fields["author"] && (
+                    <Typography {...styles.authorText} data-test-selector="newslist_author">
+                        {page.fields["author"]}
+                    </Typography>
+                )}
                 {page.fields["publishDate"] && (
-                    <Typography {...styles.publishDateText}>
+                    <Typography {...styles.publishDateText} data-test-selector="newslist_publishdate">
                         <LocalizedDateTime
                             dateTime={new Date(page.fields["publishDate"])}
                             options={{ year: "numeric", month: "numeric", day: "numeric" }}
@@ -67,7 +71,7 @@ const NewsPageView = ({ page }: Props) => {
                 )}
             </StyledWrapper>
             {(page.fields["newsSummary"] || page.fields["newsContent"]) && (
-                <StyledWrapper {...styles.contentWrapper}>
+                <StyledWrapper {...styles.contentWrapper} data-test-selector="newslist_content">
                     {parse(page.fields["newsContent"], parserOptions)}
                 </StyledWrapper>
             )}

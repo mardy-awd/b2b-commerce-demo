@@ -36,8 +36,7 @@ import TokenExFrame, { generateTokenExFrameStyleConfig } from "@insite/mobius/To
 import breakpointMediaQueries from "@insite/mobius/utilities/breakpointMediaQueries";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import range from "lodash/range";
-import * as React from "react";
-import { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled, { css, ThemeProps, withTheme } from "styled-components";
 
@@ -224,7 +223,7 @@ const CardNumberTokenExFrameWrapper = styled.div<InjectableCss>`
     ${({ css }) => css}
 `;
 
-const SavedPaymentsEditCardModal: React.FC<Props> = ({
+const SavedPaymentsEditCardModal = ({
     theme,
     editingPaymentProfile,
     modalIsOpen,
@@ -241,13 +240,17 @@ const SavedPaymentsEditCardModal: React.FC<Props> = ({
     paymetricConfig,
     loadPaymetricConfig,
     getPaymetricResponsePacket,
-}) => {
-    const paymentProfilesDataView = useContext(PaymentProfilesContext);
+}: Props) => {
     const usePaymentGateway = websiteSettings.useTokenExGateway || websiteSettings.usePaymetricGateway;
-
-    if (!usePaymentGateway || !countries || !paymentProfilesDataView.value) {
+    if (!usePaymentGateway || !countries) {
         return null;
     }
+
+    const paymentProfilesDataView = useContext(PaymentProfilesContext);
+    const tokenExReinitTimeout = 500;
+    let lastTokenExReinitTime = 0;
+    const tokenExErrorsLimit = (20 * 1e3) / tokenExReinitTimeout;
+    let currentTokenExErrorCount = 0;
 
     if (websiteSettings.useTokenExGateway) {
         useTokenExFrame(websiteSettings);
@@ -268,13 +271,13 @@ const SavedPaymentsEditCardModal: React.FC<Props> = ({
         paymetricIframe.onload();
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!billToState.value && !billToState.isLoading && billToState.id) {
             loadBillTo({ billToId: billToState!.id });
         }
-    });
+    }, [billToState]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (websiteSettings.useTokenExGateway) {
             loadTokenExConfig();
         }
@@ -288,7 +291,7 @@ const SavedPaymentsEditCardModal: React.FC<Props> = ({
         tokenExFrameStyleConfig = generateTokenExFrameStyleConfig({ theme });
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (editingPaymentProfile) {
             resetFields(editingPaymentProfile);
         }
@@ -298,6 +301,7 @@ const SavedPaymentsEditCardModal: React.FC<Props> = ({
         updateEditModal({ modalIsOpen: false });
     };
     const modalOnAfterOpenHandler = () => {
+        currentTokenExErrorCount = 0;
         !editingPaymentProfile && setUpTokenExIframe();
 
         if (usePaymetricGateway && !editingPaymentProfile) {
@@ -319,9 +323,10 @@ const SavedPaymentsEditCardModal: React.FC<Props> = ({
         resetFields();
     };
 
-    const [isTokenExIframeLoaded, setIsTokenExIframeLoaded] = React.useState(false);
+    const [isTokenExIframeLoaded, setIsTokenExIframeLoaded] = useState(false);
     const setUpTokenExIframe = () => {
-        if (!tokenExConfig) {
+        if (!tokenExConfig || !(window as any).TokenEx) {
+            setTimeout(() => setUpTokenExIframe(), 100); // wait until TokenEx loaded
             return;
         }
 
@@ -378,16 +383,24 @@ const SavedPaymentsEditCardModal: React.FC<Props> = ({
         });
         tokenExIframe.on("error", (data: any) => {
             logger.error(data);
-            setUpTokenExIframe();
+            if (
+                Date.now() - lastTokenExReinitTime > tokenExReinitTimeout &&
+                ++currentTokenExErrorCount <= tokenExErrorsLimit
+            ) {
+                lastTokenExReinitTime = Date.now();
+                setTimeout(() => {
+                    setUpTokenExIframe();
+                }, tokenExReinitTimeout);
+            }
         });
     };
 
-    const [makeDefaultCard, setMakeDefaultCard] = React.useState(false);
+    const [makeDefaultCard, setMakeDefaultCard] = useState(false);
     const makeDefaultCardChangeHandler: CheckboxProps["onChange"] = (_, value) => {
         setMakeDefaultCard(value);
     };
 
-    const [useBillToAddress, setUseBillToAddress] = React.useState(false);
+    const [useBillToAddress, setUseBillToAddress] = useState(false);
     const useBillToAddressChangeHandler: CheckboxProps["onChange"] = (_, value) => {
         setUseBillToAddress(value);
 
@@ -412,8 +425,8 @@ const SavedPaymentsEditCardModal: React.FC<Props> = ({
         setPostalCode(billTo.postalCode);
     };
 
-    const [cardNickname, setCardNickname] = React.useState("");
-    const [cardNicknameError, setCardNicknameError] = React.useState("");
+    const [cardNickname, setCardNickname] = useState("");
+    const [cardNicknameError, setCardNicknameError] = useState("");
     const cardNicknameChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCardNickname(event.target.value);
         setCardNicknameError(
@@ -424,30 +437,30 @@ const SavedPaymentsEditCardModal: React.FC<Props> = ({
         );
     };
 
-    const [cardNumber, setCardNumber] = React.useState("");
-    const [cardNumberError, setCardNumberError] = React.useState("");
-    const [cardType, setCardType] = React.useState("");
+    const [cardNumber, setCardNumber] = useState("");
+    const [cardNumberError, setCardNumberError] = useState("");
+    const [cardType, setCardType] = useState("");
 
-    const [nameOnCard, setNameOnCard] = React.useState("");
-    const [nameOnCardError, setNameOnCardError] = React.useState("");
+    const [nameOnCard, setNameOnCard] = useState("");
+    const [nameOnCardError, setNameOnCardError] = useState("");
     const nameOnCardChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNameOnCard(event.target.value);
         setNameOnCardError(!event.target.value.trim() ? translate("Name on card is required.") : "");
     };
 
-    const [minMonth, setMinMonth] = React.useState(new Date().getMonth() + 1);
-    const [expirationMonth, setExpirationMonth] = React.useState(minMonth);
+    const [minMonth, setMinMonth] = useState(new Date().getMonth() + 1);
+    const [expirationMonth, setExpirationMonth] = useState(minMonth);
     const expirationMonthChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setExpirationMonth(Number(event.target.value));
     };
 
     const expirationYears = range(new Date().getFullYear(), new Date().getFullYear() + 10);
-    const [expirationYear, setExpirationYear] = React.useState(expirationYears[0]);
+    const [expirationYear, setExpirationYear] = useState(expirationYears[0]);
     const expirationYearChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setExpirationYear(Number(event.target.value));
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         const newMinMonth = expirationYear === new Date().getFullYear() ? new Date().getMonth() + 1 : 1;
         setMinMonth(newMinMonth);
 
@@ -456,29 +469,29 @@ const SavedPaymentsEditCardModal: React.FC<Props> = ({
         }
     }, [expirationYear, expirationMonth]);
 
-    const [address1, setAddress1] = React.useState("");
-    const [address1Error, setAddress1Error] = React.useState("");
+    const [address1, setAddress1] = useState("");
+    const [address1Error, setAddress1Error] = useState("");
     const address1ChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAddress1(event.target.value);
         setAddress1Error(!event.target.value.trim() ? translate("Address Line 1 is required.") : "");
     };
 
-    const [address2, setAddress2] = React.useState("");
+    const [address2, setAddress2] = useState("");
     const address2ChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAddress2(event.target.value);
     };
 
-    const [address3, setAddress3] = React.useState("");
+    const [address3, setAddress3] = useState("");
     const address3ChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAddress3(event.target.value);
     };
 
-    const [address4, setAddress4] = React.useState("");
+    const [address4, setAddress4] = useState("");
     const address4ChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAddress4(event.target.value);
     };
 
-    const [country, setCountry] = React.useState(countries[0]);
+    const [country, setCountry] = useState(countries[0]);
     const countryChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedCountry = countries.find(o => o.abbreviation === event.target.value) || countries[0];
         setCountry(selectedCountry);
@@ -489,26 +502,26 @@ const SavedPaymentsEditCardModal: React.FC<Props> = ({
         }
     };
 
-    const [state, setState] = React.useState(country.states?.[0]);
+    const [state, setState] = useState(country.states?.[0]);
     const stateChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setState(country.states!.find(o => o.abbreviation === event.target.value));
     };
 
-    const [city, setCity] = React.useState("");
-    const [cityError, setCityError] = React.useState("");
+    const [city, setCity] = useState("");
+    const [cityError, setCityError] = useState("");
     const cityChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCity(event.target.value);
         setCityError(!event.target.value.trim() ? translate("City is required.") : "");
     };
 
-    const [postalCode, setPostalCode] = React.useState("");
-    const [postalCodeError, setPostalCodeError] = React.useState("");
+    const [postalCode, setPostalCode] = useState("");
+    const [postalCodeError, setPostalCodeError] = useState("");
     const postalCodeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPostalCode(event.target.value);
         setPostalCodeError(!event.target.value.trim() ? translate("Postal Code is required.") : "");
     };
 
-    const [saving, setSaving] = React.useState(false);
+    const [saving, setSaving] = useState(false);
 
     const resetFields = (paymentProfile?: AccountPaymentProfileModel) => {
         setSaving(false);
@@ -636,13 +649,13 @@ const SavedPaymentsEditCardModal: React.FC<Props> = ({
         }
     };
 
-    const [isCardNumberTokenized, setIsCardNumberTokenized] = React.useState(false);
-    React.useEffect(() => {
+    const [isCardNumberTokenized, setIsCardNumberTokenized] = useState(false);
+    useEffect(() => {
         if (isCardNumberTokenized) {
             continueSave();
         }
     }, [isCardNumberTokenized]);
-    const toasterContext = React.useContext(ToasterContext);
+    const toasterContext = useContext(ToasterContext);
 
     const continueSave = () => {
         const paymentProfileToSave = {

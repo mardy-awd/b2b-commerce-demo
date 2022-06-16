@@ -96,12 +96,12 @@ const RfqQuoteDetailsQuotedPricing = ({ quote, quoteLine, enableVat, vatPriceDis
 
     const renderRow = (qty: string, price: string, priceWithVat: string) => {
         return (
-            <DataTableRow key={qty} {...styles.row}>
-                <DataTableCell {...styles.quantityCell}>
+            <DataTableRow key={qty} {...styles.row} data-test-selector="rfqConfirmation_quotedPricing">
+                <DataTableCell {...styles.quantityCell} data-test-selector="rfqQuoteDetailsView_quantity">
                     <VisuallyHidden>{translate("QTY")}</VisuallyHidden>
                     <Typography {...styles.quantityText}>{qty}</Typography>
                 </DataTableCell>
-                <DataTableCell {...styles.priceCell}>
+                <DataTableCell {...styles.priceCell} data-test-selector="rfqQuoteDetailsView_price">
                     <VisuallyHidden>{translate("Price")}</VisuallyHidden>
                     <Typography {...styles.priceText}>
                         {enableVat && vatPriceDisplay !== "DisplayWithoutVat" ? priceWithVat : price}
@@ -115,7 +115,7 @@ const RfqQuoteDetailsQuotedPricing = ({ quote, quoteLine, enableVat, vatPriceDis
                     )}
                 </DataTableCell>
                 {enableVat && vatPriceDisplay === "DisplayWithAndWithoutVat" && (
-                    <DataTableCell {...styles.priceWithoutVatCell}>
+                    <DataTableCell {...styles.priceWithoutVatCell} data-test-selector="order_subTotal">
                         <VisuallyHidden>{`${translate("Price")} ${translate("Ex. VAT")}`}</VisuallyHidden>
                         <Typography {...styles.priceText}>{price}</Typography>
                         <Typography {...styles.vatLabelText}>{translate("Ex. VAT")}</Typography>

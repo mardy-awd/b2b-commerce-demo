@@ -156,7 +156,7 @@
             },
             "translatableFields": {
                 "logoImage": {
-                    "a26095ef-c714-e311-ba31-d43d7e4e88b2": "/images/victory_logo.svg"
+                    "a26095ef-c714-e311-ba31-d43d7e4e88b2": "/images/victory_logo.svg?width=212&height=150"
                 },
                 "mobileSpecificImage": {
                     "a26095ef-c714-e311-ba31-d43d7e4e88b2": ""

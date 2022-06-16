@@ -91,7 +91,7 @@
                     <td class="col-first-name" ng-bind="user.firstName"></td>
                     <td class="col-last-name" ng-bind="user.lastName"></td>
                     <td class="col-email" ng-if="vm.displayEmail" ng-bind="user.email"></td>
-                    <td class="col-role" ng-bind="user.vmiRole"></td>
+                    <td class="col-role" ng-bind="user.vmiRoleTranslated || user.vmiRole"></td>
                     <td class="col-actions">
                         <a href="javascript:void(0)" ng-click="vm.openAddVmiUserPopup(user)" class="btn-edit-user">[% translate 'Edit' %]</a>
                     </td>

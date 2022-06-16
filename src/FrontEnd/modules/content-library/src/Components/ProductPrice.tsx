@@ -47,6 +47,7 @@ export interface ProductPriceStyles {
     priceLabelText?: TypographyPresentationProps;
     quoteMessageWrapper?: InjectableCss;
     quoteMessage?: RequiresQuoteMessageStyle;
+    unitOfMeasure?: UnitOfMeasureStyles;
     priceWrapper?: InjectableCss;
     price?: PriceStyles;
     invalidPriceText?: TypographyPresentationProps;
@@ -68,9 +69,17 @@ interface PriceStyles {
     signInText?: TypographyPresentationProps;
     errorText?: TypographyPresentationProps;
     realTimeText?: TypographyPresentationProps;
+    unitOfMeasure?: UnitOfMeasureStyles;
+    /**
+     * @deprecated Use the `unitOfMeasure.unitOfMeasureText` property instead.
+     */
     unitOfMeasureText?: TypographyPresentationProps;
     qtyPerBaseUnitOfMeasureText?: TypographyPresentationProps;
     vatLabelText?: TypographyPresentationProps;
+}
+
+interface UnitOfMeasureStyles {
+    unitOfMeasureText?: TypographyPresentationProps;
 }
 
 export const productPriceStyles: ProductPriceStyles = {
@@ -115,10 +124,12 @@ export const productPriceStyles: ProductPriceStyles = {
                 }
             `,
         },
-        unitOfMeasureText: {
-            css: css`
-                white-space: nowrap;
-            `,
+        unitOfMeasure: {
+            unitOfMeasureText: {
+                css: css`
+                    white-space: nowrap;
+                `,
+            },
         },
         vatLabelText: {
             css: css`
@@ -161,10 +172,12 @@ export const productPriceStyles: ProductPriceStyles = {
                 }
             `,
         },
-        unitOfMeasureText: {
-            css: css`
-                white-space: nowrap;
-            `,
+        unitOfMeasure: {
+            unitOfMeasureText: {
+                css: css`
+                    white-space: nowrap;
+                `,
+            },
         },
         vatLabelText: {
             css: css`
@@ -279,6 +292,11 @@ const ProductPrice = ({
                         {translate("Requires Quote")}
                     </Typography>
                     <Tooltip {...quoteStyles.tooltip} text={siteMessage("Rfq_TooltipMessage").toString()} />
+                    <UnitOfMeasure
+                        unitOfMeasure={unitOfMeasure}
+                        showUnitOfMeasure={showUnitOfMeasure}
+                        styles={styles.unitOfMeasure}
+                    />
                 </StyledWrapper>
             </SectionWrapper>
         );
@@ -392,15 +410,15 @@ const Price = ({
                         : getUnitNetPrice(pricing, qtyOrdered || 1).priceDisplay}
                 </Typography>
             ) : (
-                <Typography {...styles.realTimeText} data-test-selector="productPrice_unitNetPrice">
+                <Typography {...styles.realTimeText} data-test-selector="productPrice_unitNetPrice_CurrencySymbol">
                     {currencySymbol}
                 </Typography>
             )}
-            {unitOfMeasure && showUnitOfMeasure && (
-                <Typography {...styles.unitOfMeasureText} data-test-selector="productPrice_unitOfMeasureLabel">
-                    &nbsp;/&nbsp;{unitOfMeasure}
-                </Typography>
-            )}
+            <UnitOfMeasure
+                unitOfMeasure={unitOfMeasure}
+                showUnitOfMeasure={showUnitOfMeasure}
+                styles={styles.unitOfMeasure}
+            />
             {pricing && enableVat && (
                 <Typography as="p" {...styles.vatLabelText}>
                     {displayWithVat ? `${translate("Inc. VAT")} (${pricing.vatRate}%)` : translate("Ex. VAT")}
@@ -408,6 +426,20 @@ const Price = ({
             )}
         </>
     );
+};
+
+interface UnitOfMeasureProps {
+    unitOfMeasure?: string;
+    showUnitOfMeasure?: boolean;
+    styles?: UnitOfMeasureStyles;
+}
+
+const UnitOfMeasure = ({ unitOfMeasure, showUnitOfMeasure = true, styles }: UnitOfMeasureProps) => {
+    return unitOfMeasure && showUnitOfMeasure ? (
+        <Typography {...styles?.unitOfMeasureText} data-test-selector="productPrice_unitOfMeasureLabel">
+            &nbsp;/&nbsp;{unitOfMeasure}
+        </Typography>
+    ) : null;
 };
 
 export default connect(mapStateToProps)(ProductPrice);

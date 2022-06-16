@@ -242,8 +242,7 @@ export const carouselStyles: CarouselStyles = {
     attributeLabelsGridContainer: {
         gap: 0,
         css: css`
-            box-shadow: 2px 2px 3px -1px black;
-            z-index: 999;
+            z-index: 0;
         `,
     },
     attributeLabelGridItem: {

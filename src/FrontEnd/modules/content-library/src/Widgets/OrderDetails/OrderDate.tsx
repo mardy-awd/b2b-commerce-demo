@@ -45,7 +45,7 @@ const OrderDate: FC = () => {
             <Typography {...styles.titleText} id="orderDate">
                 {translate("Order Date")}
             </Typography>
-            <Typography {...styles.orderDate} aria-labelledby="orderDate">
+            <Typography {...styles.orderDate} aria-labelledby="orderDate" data-test-selector="orderDate">
                 <LocalizedDateTime
                     dateTime={order.orderDate}
                     options={{ year: "numeric", month: "numeric", day: "numeric" }}

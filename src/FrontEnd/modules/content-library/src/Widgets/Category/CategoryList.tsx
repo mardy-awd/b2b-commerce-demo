@@ -34,10 +34,17 @@ interface OwnProps extends WidgetProps {
     };
 }
 
-const mapStateToProps = (state: ApplicationState) => ({
-    categoriesDataView: getCategoriesDataView(state),
-    topLevelCategoryIds: getSubCategoryIds(state, emptyGuid),
-});
+const mapStateToProps = (state: ApplicationState, props: OwnProps) => {
+    const getCategoriesParameter = {
+        maxDepth: props.fields.showOnlyTopLevelCategories ? 1 : 2,
+        includeStartCategory: false,
+    };
+    return {
+        categoriesDataView: getCategoriesDataView(state, getCategoriesParameter),
+        getCategoriesParameter,
+        topLevelCategoryIds: getSubCategoryIds(state, emptyGuid),
+    };
+};
 
 const mapDispatchToProps = {
     loadCategories,
@@ -130,9 +137,9 @@ class CategoryList extends React.Component<Props> {
     categoryItemStyles: GridItemProps = { ...styles.categoryItem };
 
     UNSAFE_componentWillMount(): void {
-        const { categoriesDataView, loadCategories } = this.props;
+        const { categoriesDataView, getCategoriesParameter, loadCategories } = this.props;
         if (!categoriesDataView.isLoading && !categoriesDataView.value) {
-            loadCategories();
+            loadCategories(getCategoriesParameter);
         }
     }
 

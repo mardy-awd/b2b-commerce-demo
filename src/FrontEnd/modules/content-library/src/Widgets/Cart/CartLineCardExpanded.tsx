@@ -261,6 +261,7 @@ const CartLineCardExpanded: FC<Props> = ({
                     ...cartLine,
                     costCode,
                 },
+                shouldNotLoadFullCart: true,
             });
         }
     };
@@ -273,6 +274,7 @@ const CartLineCardExpanded: FC<Props> = ({
                     notes,
                 },
                 shouldNotReloadPromotions: true,
+                shouldNotLoadFullCart: true,
                 onSuccess: () => {
                     toasterContext.addToast({
                         body: translate("Line Notes Updated"),

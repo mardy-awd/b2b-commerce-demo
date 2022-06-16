@@ -29,7 +29,11 @@ const mapStateToProps = (state: ApplicationState) => {
     const cartState = getCurrentCartState(state);
     const { isSavingOrder } = state.pages.cart;
     return {
-        isDisabled: cartState.isLoading || isSavingOrder || cartState.value?.cartLines?.length === 0,
+        isDisabled:
+            cartState.isLoading ||
+            isSavingOrder ||
+            cartState.value?.lineCount === 0 ||
+            cartState.value?.cartLines?.length === 0,
         canSaveOrder: cartState.value?.canSaveOrder,
         isSignedIn: cartState.value?.isAuthenticated && !cartState.value?.isGuestOrder,
         savedOrdersPageUrl: getPageLinkByPageType(state, "SavedOrderDetailsPage")?.url,

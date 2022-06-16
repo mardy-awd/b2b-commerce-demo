@@ -43,8 +43,8 @@ export const LoadData: HandlerType = props => {
         if (
             (!currentCartState.value ||
                 (props.parameter.cartLinesShouldBeExpanded &&
-                    currentCartState.value.lineCount &&
-                    !currentCartState.value.cartLines)) &&
+                    ((currentCartState.value.lineCount && !currentCartState.value.cartLines) ||
+                        !currentCartState.value.carriers))) &&
             !currentCartState.isLoading
         ) {
             props.dispatch(loadCurrentCart());

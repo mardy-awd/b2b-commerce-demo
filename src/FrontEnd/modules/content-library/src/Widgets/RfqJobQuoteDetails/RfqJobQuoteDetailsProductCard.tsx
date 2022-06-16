@@ -210,14 +210,14 @@ const RfqJobQuoteDetailsProductCard = ({
                     </GridItem>
                     <GridItem {...styles.quantitiesGridItem}>
                         <GridContainer {...styles.quantitiesContainer}>
-                            <GridItem {...styles.jobQuantityGridItem}>
+                            <GridItem {...styles.jobQuantityGridItem} data-test-selector="quantityOrdered">
                                 <SmallHeadingAndText
                                     heading={translate("Job QTY")}
                                     text={jobQuoteLine.qtyOrdered!}
                                     extendedStyles={styles.jobQuantityHeadingAndText}
                                 />
                             </GridItem>
-                            <GridItem {...styles.purchasedQuantityGridItem}>
+                            <GridItem {...styles.purchasedQuantityGridItem} data-test-selector="orderedPrice">
                                 <SmallHeadingAndText
                                     heading={translate("Purchased QTY")}
                                     text={jobQuoteLine.qtySold}

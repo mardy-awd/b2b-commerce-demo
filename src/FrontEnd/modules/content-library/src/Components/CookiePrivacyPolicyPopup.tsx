@@ -95,18 +95,28 @@ const CookiePrivacyPolicyPopup = () => {
     };
 
     return (
-        <Drawer isOpen={isOpen} {...styles.drawer}>
+        <Drawer isOpen={isOpen} {...styles.drawer} data-test-selector="drawer_CookiePolicy">
             <GridContainer {...styles.container}>
                 <GridItem {...styles.messageGridItem}>
-                    <Typography {...styles.messageText}>{siteMessage("Core_CookiePrivacyPolicy")}</Typography>
+                    <Typography {...styles.messageText} data-test-selector="cookiePolicy_PrivacyPolicy">
+                        {siteMessage("Core_CookiePrivacyPolicy")}
+                    </Typography>
                 </GridItem>
                 <GridItem {...styles.acceptGridItem}>
-                    <Button {...styles.acceptButton} onClick={acceptHandler}>
+                    <Button
+                        {...styles.acceptButton}
+                        onClick={acceptHandler}
+                        data-test-selector="cookiePolicy_AcceptCookies"
+                    >
                         {siteMessage("Core_CookiePrivacyPolicyAccept")}
                     </Button>
                 </GridItem>
                 <GridItem {...styles.closeGridItem}>
-                    <Button {...styles.closeButton} onClick={closeHandler}>
+                    <Button
+                        {...styles.closeButton}
+                        onClick={closeHandler}
+                        data-test-selector="cookiePolicy_ClosePolicy"
+                    >
                         <ButtonIcon src={X} />
                     </Button>
                 </GridItem>

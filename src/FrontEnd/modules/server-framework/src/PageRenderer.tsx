@@ -236,7 +236,9 @@ export async function pageRenderer(request: Request, response: Response) {
             <head>
                 {HeadStart(layoutSectionRenderingContext)}
                 {/* eslint-disable react/no-danger */}
-                {headTrackingScript && <script dangerouslySetInnerHTML={{ __html: headTrackingScript }}></script>}
+                {headTrackingScript && (
+                    <script id="headTrackingScript" dangerouslySetInnerHTML={{ __html: headTrackingScript }}></script>
+                )}
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
                 <title>{metadata?.title}</title>
@@ -290,7 +292,10 @@ export async function pageRenderer(request: Request, response: Response) {
             <body>
                 {BodyStart(layoutSectionRenderingContext)}
                 {noscriptTrackingScript && (
-                    <noscript dangerouslySetInnerHTML={{ __html: noscriptTrackingScript }}></noscript>
+                    <noscript
+                        id="noscriptTrackingScript"
+                        dangerouslySetInnerHTML={{ __html: noscriptTrackingScript }}
+                    ></noscript>
                 )}
                 <div id="react-app" dangerouslySetInnerHTML={{ __html: rawHtml }}></div>
                 <script

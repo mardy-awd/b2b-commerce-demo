@@ -70,7 +70,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(VmiBinDetailsOrdersPagination),
     definition: {
         group: "VMI Bin Details",
-        displayName: "Vmi Orders Pagination",
+        displayName: "VMI Orders Pagination",
         allowedContexts: ["VmiBinDetailsPage"],
     },
 };

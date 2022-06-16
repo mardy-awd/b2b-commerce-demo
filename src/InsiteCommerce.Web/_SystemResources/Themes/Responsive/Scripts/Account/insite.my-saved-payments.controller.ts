@@ -5,18 +5,41 @@
         savedPayments: AccountPaymentProfileModel[];
         savedPaymentForDelete: AccountPaymentProfileModel;
 
-        static $inject = ["coreService", "spinnerService", "accountService", "editSavedPaymentPopupService", "addSavedPaymentPopupService"];
+        static $inject = [
+            "coreService",
+            "spinnerService",
+            "accountService",
+            "editSavedPaymentPopupService",
+            "addSavedPaymentPopupService",
+            "$scope",
+            "settingsService",
+            "tokenExIFrameService"];
 
         constructor(
             protected coreService: core.ICoreService,
             protected spinnerService: core.ISpinnerService,
             protected accountService: IAccountService,
             protected editSavedPaymentPopupService: IEditSavedPaymentPopupService,
-            protected addSavedPaymentPopupService: IAddSavedPaymentPopupService) {
+            protected addSavedPaymentPopupService: IAddSavedPaymentPopupService,
+            protected $scope: ng.IScope,
+            protected settingsService: core.ISettingsService,
+            protected tokenExIFrameService: insite.common.ITokenExIFrameService) {
         }
 
         $onInit(): void {
             this.getPaymentProfiles();
+
+            this.settingsService.getSettings().then(
+                (settings: core.SettingsCollection) => {
+                    this.getSettingsCompleted(settings);
+                },
+                (error: any) => {
+                    this.getSettingsFailed(error);
+                });
+
+            this.$scope.$on("$locationChangeStart", () => {
+                this.tokenExIFrameService.removeScript();
+            });
         }
 
         protected getPaymentProfiles(): void {
@@ -31,6 +54,13 @@
         }
 
         protected getPaymentProfilesFailed(error: any): void {
+        }
+
+        protected getSettingsCompleted(settingsCollection: core.SettingsCollection): void {
+            this.tokenExIFrameService.addScript(settingsCollection.websiteSettings);
+        }
+
+        protected getSettingsFailed(error: any): void {
         }
 
         makeDefault(savedPayment: AccountPaymentProfileModel): void {

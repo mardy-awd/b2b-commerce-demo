@@ -1,6 +1,7 @@
 ﻿module insite.vmiBin {
     "use strict";
     import VmiBinModel = Insite.Catalog.WebApi.V1.ApiModels.VmiBinModel;
+    import IProductVariantSelectorPopupService = insite.common.IProductVariantSelectorPopupService;
 
     export class VmiBinModalController {
         vmiBinForm: any;
@@ -23,8 +24,9 @@
         broadcastCreateStr: string;
         broadcastEditStr: string;
         showImport: boolean;
+        selector = "#vmi-bin-modal";
 
-        static $inject = ["$scope", "$rootScope", "vmiBinService", "coreService", "$timeout", "vmiBinModalService", "searchService", "productService", "importVmiBinsModalService"];
+        static $inject = ["$scope", "$rootScope", "vmiBinService", "coreService", "$timeout", "vmiBinModalService", "searchService", "productService", "importVmiBinsModalService", "productVariantSelectorPopupService"];
 
         constructor(
             protected $scope: ng.IScope,
@@ -35,7 +37,8 @@
             protected vmiBinModalService: IVmiBinModalService,
             protected searchService: catalog.ISearchService,
             protected productService: catalog.IProductService,
-            protected importVmiBinsModalService: vmiBin.IImportVmiBinsModalService) {
+            protected importVmiBinsModalService: vmiBin.IImportVmiBinsModalService,
+            protected productVariantSelectorPopupService: IProductVariantSelectorPopupService) {
         }
 
         $onInit(): void {
@@ -44,7 +47,7 @@
         }
 
         protected closeModal(): void {
-            this.coreService.closeModal("#vmi-bin-modal");
+            this.coreService.closeModal(this.selector);
         }
 
         protected openImportModal(): void {
@@ -57,15 +60,13 @@
         }
 
         protected initModalEvents(): void {
-            const popup = angular.element("#vmi-bin-modal");
-
             this.vmiBinModalService.registerDisplayFunction(data => {
                 this.vmiBin = data.vmiBin;
                 this.broadcastCreateStr = data.broadcastCreateStr;
                 this.broadcastEditStr = data.broadcastEditStr;
                 this.showImport = data.showImport;
                 this.clearMessages();
-                
+
                 if (this.vmiBin.id) {
                     this.itemToAdd = this.vmiBin.product;
                     this.addingSearchTerm = this.itemToAdd.shortDescription;
@@ -76,8 +77,21 @@
                     this.clearForm();
                 }
 
-                this.coreService.displayModal(popup);
+                this.displayPopup();
             });
+
+            this.$scope.$on("productVariantSelected", (event, product: ProductDto) => {
+                this.itemToAdd = product;
+                this.addingSearchTerm = product.shortDescription;
+                this.errorMessage = "";
+                this.formErrorMessage = "";
+                this.showSuccessMessage = false;
+            });
+        }
+
+        displayPopup(): void {
+            const popup = angular.element(this.selector);
+            this.coreService.displayModal(popup);
         }
 
         validForm(): boolean {
@@ -184,8 +198,9 @@
 
         protected findProduct(erpNumber: string): ng.IPromise<ProductCollectionModel> {
             const parameters: catalog.IProductCollectionParameters = { extendedNames: [erpNumber] };
+            const expand = ["pricing", "styledproducts"];
 
-            return this.productService.getProducts(parameters);
+            return this.productService.getProducts(parameters, expand);
         }
 
         protected addProductCompleted(productCollection: ProductCollectionModel): void {
@@ -216,7 +231,10 @@
                 return false;
             }
             if (product.isStyleProductParent) {
-                this.setErrorMessage(this.cannotOrderStyledError);
+                this.productVariantSelectorPopupService.display({
+                    product: product,
+                    onClosed: () => this.displayPopup()
+                });
                 return false;
             }
 

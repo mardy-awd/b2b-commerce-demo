@@ -37,7 +37,7 @@
         <a href="#" class="user-button fastClick btn" id="tst_userNav_userName_button">
             <i ng-cloak class="social foundicon-torso"></i>
             <span class="cust-name" ng-bind="vm.session.userLabel"></span>
-            <span class="user-role" ng-if="::vm.session.userRoles" ng-bind="::('(' + vm.session.userRoles + ')')"></span>
+            <span class="user-role" ng-if="::(vm.session.userRolesTranslated || vm.session.userRoles)" ng-bind="::('(' + (vm.session.userRolesTranslated || vm.session.userRoles)s + ')')"></span>
         </a>
         <a class="ex fastClick">
             <i class="foundicon-remove"></i>
@@ -145,7 +145,7 @@
                             <div class="user-button">
                                 <i class="social foundicon-torso"></i>
                                 <span class="cust-name" ng-bind="vm.session.userLabel"></span>
-                                <span class="user-role" ng-if="::vm.session.userRoles" ng-bind="::('(' + vm.session.userRoles + ')')"></span>
+                                <span class="user-role" ng-if="::(vm.session.userRolesTranslated || vm.session.userRoles)" ng-bind="::('(' + (vm.session.userRolesTranslated || vm.session.userRoles) + ')')"></span>
                             </div>
                             [[SignOutLink]]
                         </div>
@@ -195,7 +195,7 @@
                     <a href="#" class="user-button fastClick" id="tst_userNav_userName_button">
                         <i ng-cloak class="social foundicon-torso"></i>
                         <span class="cust-name" ng-bind="vm.session.userLabel"></span>
-                        <span class="user-role" ng-if="::vm.session.userRoles" ng-bind="::('(' + vm.session.userRoles + ')')"></span>
+                        <span class="user-role" ng-if="::(vm.session.userRolesTranslated || vm.session.userRoles)" ng-bind="::('(' + (vm.session.userRolesTranslated || vm.session.userRoles) + ')')"></span>
                     </a>
                     <a class="ex fastClick"><i class="foundicon-remove"></i></a>
                 </li>

@@ -38,7 +38,7 @@ const tabCss = css`
 `;
 
 const CompactHeader = (props: any) => {
-    const { triggerPoint, borderThickness, isCompactHeader, isDropShadow, isBorder } =
+    const { triggerPoint, borderThickness, isCompactHeader, isDropShadow, isBorder, padding } =
         props?.presetHelpers?.theme?.header;
 
     return (
@@ -80,6 +80,26 @@ const CompactHeader = (props: any) => {
                                 });
                             }}
                             {...configHeaderFormFieldStylesExtraMargin}
+                        />
+                        <TextField
+                            label="Padding (px)"
+                            value={padding}
+                            onChange={(e: any) => {
+                                const { update } = props.presetHelpers;
+                                update((draft: any) => {
+                                    if (e.target.value === "") {
+                                        draft.header.padding = e.target.value;
+                                        return;
+                                    }
+                                    const newVal = parseInt(e.target.value, 10);
+                                    // eslint-disable-next-line no-restricted-globals
+                                    if (isNaN(newVal)) {
+                                        return;
+                                    }
+                                    draft.header.padding = newVal;
+                                });
+                            }}
+                            {...configHeaderFormFieldStyles}
                         />
                         <ColorPickerConfig
                             firstInput

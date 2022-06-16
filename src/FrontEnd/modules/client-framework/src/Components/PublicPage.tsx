@@ -14,6 +14,7 @@ import { sendToShell } from "@insite/client-framework/Components/ShellHole";
 import { getDisplayErrorPage, getErrorStatusCode, redirectTo } from "@insite/client-framework/ServerSideRendering";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { setMetadata } from "@insite/client-framework/Store/CommonHandlers/SetMetadata";
+import { setTracking } from "@insite/client-framework/Store/CommonHandlers/SetTracking";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 // eslint-disable-next-line spire/fenced-imports
@@ -36,6 +37,7 @@ const mapStateToProps = (state: ApplicationState) => {
 
 const mapDispatchToProps = {
     setMetadata,
+    setTracking,
 };
 
 type Props = ReturnType<typeof mapStateToProps> &
@@ -61,6 +63,7 @@ class PublicPage extends React.Component<Props> {
     UNSAFE_componentWillMount() {
         if (!this.props.wasSetMetadataCalled) {
             this.props.setMetadata();
+            this.props.setTracking();
         }
     }
 

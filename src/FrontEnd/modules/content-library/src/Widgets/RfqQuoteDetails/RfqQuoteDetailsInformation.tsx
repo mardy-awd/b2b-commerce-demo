@@ -211,7 +211,7 @@ const RfqQuoteDetailsInformation = ({
                     />
                 </GridItem>
             )}
-            <GridItem {...styles.shipToGridItem}>
+            <GridItem {...styles.shipToGridItem} data-test-selector="rfqConfirmation_shipTo">
                 <SmallHeadingAndText
                     heading={translate(quote.fulfillmentMethod === "PickUp" ? "Pick Up" : "Ship To")}
                     text={quote.shipToFullAddress}

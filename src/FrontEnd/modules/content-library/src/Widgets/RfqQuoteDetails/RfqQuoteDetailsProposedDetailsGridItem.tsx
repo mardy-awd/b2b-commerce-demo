@@ -341,6 +341,7 @@ const RfqQuoteDetailsProposedDetailsGridItem = ({
                                     onChange={qtyOrderedChangeHandler}
                                     onKeyDown={qtyOrderedKeyDownHandler}
                                     onBlur={qtyOrderedBlurHandler}
+                                    data-test-selector="quoteDetail_productQuantity"
                                 />
                             </GridItem>
                             <GridItem {...styles.subtotalGridItem}>

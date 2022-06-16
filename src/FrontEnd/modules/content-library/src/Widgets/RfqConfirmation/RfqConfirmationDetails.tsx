@@ -102,7 +102,7 @@ const RfqConfirmationDetails: FC<Props> = ({ quoteState }) => {
                             />
                         </GridItem>
                     )}
-                    <GridItem {...styles.salesRepGridItem}>
+                    <GridItem {...styles.salesRepGridItem} data-test-selector="rfqConfirmation_salesRep">
                         <SmallHeadingAndText
                             heading={translate("Sales Rep")}
                             text={quote.salespersonName}

@@ -225,7 +225,7 @@ const AddVmiLocationModal = ({
                 onComplete: result => {
                     if (result.apiResult?.successful) {
                         toaster.addToast({
-                            body: translate("Vmi location saved successfully"),
+                            body: translate("VMI location saved successfully"),
                             messageType: "success",
                         });
 
@@ -246,7 +246,7 @@ const AddVmiLocationModal = ({
                 onComplete: result => {
                     if (result.apiResult?.successful) {
                         toaster.addToast({
-                            body: translate("Vmi location added successfully"),
+                            body: translate("VMI location added successfully"),
                             messageType: "success",
                         });
 

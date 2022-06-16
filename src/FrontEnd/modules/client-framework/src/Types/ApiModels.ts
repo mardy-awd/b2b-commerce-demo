@@ -33,6 +33,7 @@ export interface AccountModel extends BaseModel {
     approver: string;
     availableApprovers: string[] | null;
     availableRoles: string[] | null;
+    availableRolesTranslated: { [key: string]: string } | null;
     billToId: string | null;
     canApproveOrders: boolean;
     canViewApprovalOrders: boolean;
@@ -51,10 +52,12 @@ export interface AccountModel extends BaseModel {
     password: string;
     requiresActivation: boolean | null;
     role: string;
+    roleTranslated: string;
     setDefaultCustomer: boolean;
     shipToId: string | null;
     userName: string;
     vmiRole: string;
+    vmiRoleTranslated: string;
 }
 
 export interface AccountPaymentProfileCollectionModel extends BaseModel {
@@ -157,6 +160,7 @@ export interface SessionModel extends BaseModel {
     userName: string;
     userProfileId: string | null;
     userRoles: string;
+    userRolesTranslated: string;
 }
 
 export interface ShipToModel extends BaseModel {

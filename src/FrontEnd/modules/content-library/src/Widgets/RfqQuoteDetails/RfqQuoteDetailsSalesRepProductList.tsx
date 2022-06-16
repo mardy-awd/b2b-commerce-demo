@@ -318,7 +318,11 @@ const RfqQuoteDetailsSalesRepProductList = ({
                     </GridItem>
                     <GridItem {...styles.quoteAllGridItem}>
                         {quote.isEditable && (
-                            <Button {...styles.quoteAllButton} onClick={quoteAllClickHandler}>
+                            <Button
+                                {...styles.quoteAllButton}
+                                onClick={quoteAllClickHandler}
+                                data-test-selector="quoteDetails_QuoteAll"
+                            >
                                 {translate("Quote All")}
                             </Button>
                         )}
@@ -380,7 +384,10 @@ const RfqQuoteDetailsSalesRepProductList = ({
                                             </>
                                         )}
                                     </GridItem>
-                                    <GridItem {...styles.quotedPricingGridItem}>
+                                    <GridItem
+                                        {...styles.quotedPricingGridItem}
+                                        data-test-selector="quoteAllCalculator_QuotedPricing"
+                                    >
                                         <Typography {...styles.quotedPricingText}>
                                             {translate("Quoted Pricing")}
                                         </Typography>
@@ -397,6 +404,7 @@ const RfqQuoteDetailsSalesRepProductList = ({
                                     <Button
                                         {...styles.quoteLineButton}
                                         onClick={() => quoteLineClickHandler(quoteLine)}
+                                        data-test-selector="quoteDetails_QuoteButton"
                                     >
                                         {translate("Quote")}
                                     </Button>
@@ -425,6 +433,7 @@ const RfqQuoteDetailsSalesRepProductList = ({
                             label={translate("Discount By")}
                             value={calculationMethod?.name}
                             onChange={calculationMethodChangeHandler}
+                            data-test-selector="quoteAllCalculator_QuoteModal_DiscountBy"
                         >
                             {quote.calculationMethods?.map(cm => (
                                 <option key={cm.name} value={cm.name}>
@@ -436,6 +445,7 @@ const RfqQuoteDetailsSalesRepProductList = ({
                     <GridItem {...styles.quoteCalculationPercentGridItem}>
                         <TextField
                             {...styles.quoteCalculationPercentTextField}
+                            data-test-selector="quoteAllCalculator_QuoteModal_CalculationPercent"
                             type="number"
                             min={calculationMethod?.minimumMargin}
                             max={
@@ -460,7 +470,11 @@ const RfqQuoteDetailsSalesRepProductList = ({
                         </Button>
                     </GridItem>
                     <GridItem {...styles.quoteCalculationApplyAllGridItem}>
-                        <Button {...styles.quoteCalculationApplyAllButton} onClick={applyAllClickHandler}>
+                        <Button
+                            {...styles.quoteCalculationApplyAllButton}
+                            onClick={applyAllClickHandler}
+                            data-test-selector="quoteAllCalculator_apply"
+                        >
                             {translate("Apply Quote")}
                         </Button>
                     </GridItem>

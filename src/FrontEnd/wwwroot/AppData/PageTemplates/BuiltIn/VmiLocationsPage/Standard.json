@@ -19,7 +19,7 @@
     },
     "translatableFields": {
         "title": {
-            "a26095ef-c714-e311-ba31-d43d7e4e88b2": "VMI Locations"
+            "a26095ef-c714-e311-ba31-d43d7e4e88b2": "Locations"
         },
         "urlSegment": {
             "a26095ef-c714-e311-ba31-d43d7e4e88b2": "VmiLocations"
@@ -44,11 +44,7 @@
             "isLayout": false,
             "id": "f33d99a4-19f2-4136-bb99-34d546d5b6db",
             "generalFields": {
-                "columns": [
-                    4,
-                    4,
-                    4
-                ],
+                "columns": [4, 4, 4],
                 "alignment": [],
                 "gap": 0,
                 "reflow": true

@@ -79,6 +79,11 @@ export const ExtractDataFromQueryString: HandlerType = async props => {
 };
 
 export const ReloadCart: HandlerType = async props => {
+    // if we have paymentResult, then we have already paid and reloaded cart before payment
+    if (props.parameter.paymentResult) {
+        return;
+    }
+
     // if we have redirectResult it means that we just loaded the page and the cart is fresh
     if (props.redirectResult) {
         return;

@@ -69,7 +69,7 @@ const ProductDetailsVariantOptions: React.FC<Props> = ({
         if (variantProductState.value && variantProductState.value.isVariantParent) {
             window.history.replaceState(null, "", newUrl);
         } else if (variantProductState.value && variantProductState.value.childTraitValues) {
-            newUrl = newUrl.concat("?option=", variantProductState.value.urlSegment);
+            newUrl = newUrl.concat("?option=", variantProductState.value.productNumber);
             window.history.replaceState(null, "", newUrl);
         }
     }, [selectedProductId]);

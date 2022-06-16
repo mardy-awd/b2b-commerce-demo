@@ -53,9 +53,7 @@
             "isLayout": false,
             "id": "aa2f0d39-2268-4ee7-b04a-9fe256e24bbc",
             "generalFields": {
-                "columns": [
-                    12
-                ],
+                "columns": [12],
                 "alignment": [],
                 "gap": 0,
                 "reflow": true

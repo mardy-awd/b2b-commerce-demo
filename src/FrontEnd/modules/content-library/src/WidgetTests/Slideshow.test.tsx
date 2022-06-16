@@ -26,7 +26,7 @@ describe("SlideShow Widget", () => {
         // this should probably default all the field values
         fields.slides = [{ fields: { buttonLink: {} } } as any];
 
-        const styledWrappers = renderWidget().find(StyledWrapper);
+        const styledWrappers = renderWidget().find(StyledWrapper).at(1);
         const styleRule = /background:\s?magenta;/;
 
         elementHasStyle(styledWrappers.at(0), styleRule);

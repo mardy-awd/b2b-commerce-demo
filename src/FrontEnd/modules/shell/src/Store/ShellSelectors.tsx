@@ -33,7 +33,13 @@ export function getStorablePage(
     for (const parentId in pageContent) {
         for (const zone in pageContent[parentId]) {
             for (const widgetId of pageContent[parentId][zone]) {
-                storablePage.widgets.push({ ...widgetsById[widgetId] });
+                storablePage.widgets.push({
+                    ...widgetsById[widgetId],
+                    parentId:
+                        storablePage.layoutPageId && widgetsById[widgetId].parentId === storablePage.layoutPageId
+                            ? storablePage.id
+                            : widgetsById[widgetId].parentId,
+                });
             }
         }
     }

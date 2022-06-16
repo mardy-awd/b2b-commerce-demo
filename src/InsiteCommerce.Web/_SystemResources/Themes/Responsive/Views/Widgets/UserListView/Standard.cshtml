@@ -49,7 +49,7 @@
                             <span ng-if="user.isApproved && user.activationStatus == '[[Model.ActivatedUserActivationStatus]]'">[% translate 'Active' %]</span>
                             <span ng-if="!user.isApproved">[% translate 'Deactivated' %]</span>
                         </td>
-                        <td class="col-role" ng-cloak>{{user.role}}</td>
+                        <td class="col-role" ng-cloak>{{user.roleTranslated || user.role}}</td>
                         <td class="col-loc" ng-cloak>{{user.lastLoginOn | date:'short'}}</td>
                     </tr>
                 </tbody>

@@ -102,7 +102,7 @@ const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(VmiBinDetailsCountsActions),
     definition: {
         group: "VMI Bin Details",
-        displayName: "Vmi Counts Actions",
+        displayName: "VMI Counts Actions",
         allowedContexts: ["VmiBinDetailsPage"],
     },
 };
