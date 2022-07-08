@@ -667,7 +667,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             postalCode,
             payPalToken,
             payPalPayerId,
-            isPending: paymentResult === "Pending" || paymentResult === "Received",
+            isPending: !adyenPspReference,
             isAdyenDropIn: true,
             adyenPspReference,
             accountHolderName,
