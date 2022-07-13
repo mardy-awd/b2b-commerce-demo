@@ -1,8 +1,8 @@
 # to use this you need to have an api token from github
 # the API token also needs access to partner repos, which requires SRE/CCS
 
-# docker build . -f bb.Dockerfile --build-arg GITHUB_TOKEN=[YOUR_API_TOKEN]
-# docker create --name get-output [tag]
+# docker build . -f bb.Dockerfile --build-arg GITHUB_TOKEN=[YOUR_API_TOKEN] --build-arg NUMBER_TO_BUILD=2 --tag bb
+# docker create --name get-output bb
 # docker cp get-output:/output .
 # docker rm get-output
 
@@ -40,11 +40,14 @@ COPY ./modules/ ./modules/
 
 WORKDIR /src/insite-commerce/blueprintBuilder
 
-COPY ./blueprintBuilder/index.js ./
+COPY ./blueprintBuilder/ ./
 
 RUN /root/.dotnet/tools/dotnet-beacon -- -d >> clientProjects.json
 
 RUN git config --global url."https://git:$GITHUB_TOKEN@github.com/".insteadOf "git@github-work-clients:"
+
+ARG NUMBER_TO_BUILD
+ENV NUMBER_TO_BUILD=$NUMBER_TO_BUILD
 
 RUN ["node", "index.js"]
 
