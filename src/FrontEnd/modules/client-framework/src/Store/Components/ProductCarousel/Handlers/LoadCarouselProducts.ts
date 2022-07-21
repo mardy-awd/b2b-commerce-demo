@@ -105,22 +105,17 @@ export const LoadCustomersAlsoPurchased: HandlerType = props => {
             return;
         }
 
-        if (seedWithManuallyAssigned) {
-            props.getProductCollectionParameter = {
-                pageSize: numberOfProductsToDisplay,
-                filter: "alsoPurchased",
-            };
+        props.getProductCollectionParameter = {
+            productId,
+            pageSize: numberOfProductsToDisplay,
+            type: "alsoPurchased",
+        };
 
+        if (seedWithManuallyAssigned) {
             props.extraProductCollectionParameter = {
                 productId,
                 pageSize: numberOfProductsToDisplay,
                 relationship: seedWithManuallyAssigned,
-            };
-        } else {
-            props.getProductCollectionParameter = {
-                productId,
-                pageSize: numberOfProductsToDisplay,
-                type: "alsoPurchased",
             };
         }
     } else {

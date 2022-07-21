@@ -95,7 +95,9 @@ module insite.account {
                 session: this.session,
                 updateSessionOnSelect: this.updateSessionOnChange,
                 selectedWarehouse: this.pickUpWarehouse,
-                onSelectWarehouse: (warehouse: WarehouseModel, onSessionUpdate?: Function) => this.updateSession(warehouse, onSessionUpdate)
+                onSelectWarehouse: (this?.updateSessionOnChange ?? false)
+                    ? (warehouse: WarehouseModel, onSessionUpdate?: Function) => this.updateSession(warehouse, onSessionUpdate)
+                    : (warehouse: WarehouseModel, callback?: Function) => { if (callback) { callback() } },
             });
         }
     }
@@ -113,7 +115,7 @@ module insite.account {
                 prefix: "@",
                 onChange: "&",
                 updateSessionOnChange: "=",
-                showPickUpTitle: "="
+                showPickUpTitle: "=",
             },
             templateUrl: "/PartialViews/Account-DeliveryMethod",
             controller: "DeliveryMethodController",

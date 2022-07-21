@@ -17,7 +17,7 @@ import Hidden from "@insite/mobius/Hidden";
 import OverflowMenu, { OverflowMenuPresentationProps } from "@insite/mobius/OverflowMenu";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
 import React, { Component } from "react";
-import { connect, ResolveThunks } from "react-redux";
+import { connect } from "react-redux";
 import { css } from "styled-components";
 
 const mapStateToProps = (state: ApplicationState) => {

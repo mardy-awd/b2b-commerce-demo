@@ -33,8 +33,11 @@ type Props = OwnProps &
     HasProductContext;
 
 const mapStateToProps = (state: ApplicationState, props: OwnProps & HasProductContext) => {
+    const {
+        productSettings: { showAddToCartConfirmationDialog },
+        cartSettings: { addToCartPopupTimeout },
+    } = getSettingsCollection(state);
     return {
-        productSettings: getSettingsCollection(state).productSettings,
         canAddToCart: canAddToCart(
             state,
             props.productContext.product,
@@ -43,12 +46,14 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps & HasProductCo
             props.variantSelectionCompleted,
         ),
         hasEnoughInventory: hasEnoughInventory(state, props.productContext),
-        addingProductToCart: state.context.addingProductToCart,
+        isUpdatingCart: state.context.isUpdatingCart,
+        showAddToCartConfirmationDialog,
+        addToCartPopupTimeout,
     };
 };
 
 const mapDispatchToProps = {
-    addToCart: makeHandlerChainAwaitable(addToCart),
+    addToCart: makeHandlerChainAwaitable<Parameters<typeof addToCart>[0], CartLineModel>(addToCart),
 };
 
 export const productAddToCartButtonStyles: ButtonPresentationProps = {};
@@ -58,9 +63,10 @@ const ProductAddToCartButton = ({
         product: { id: productId, allowZeroPricing, quoteRequired },
         productInfo: { qtyOrdered, unitOfMeasure, pricing },
     },
-    productSettings,
     hasEnoughInventory,
-    addingProductToCart,
+    isUpdatingCart,
+    showAddToCartConfirmationDialog,
+    addToCartPopupTimeout,
     addToCart,
     canAddToCart,
     labelOverride,
@@ -75,7 +81,7 @@ const ProductAddToCartButton = ({
     const toasterContext = useContext(ToasterContext);
     const [styles] = useState(() => mergeToNew(productAddToCartButtonStyles, extendedStyles));
 
-    if (!productSettings.canAddToCart || !hasEnoughInventory || !canAddToCart) {
+    if (!hasEnoughInventory || !canAddToCart) {
         return null;
     }
 
@@ -100,10 +106,11 @@ const ProductAddToCartButton = ({
             subscription,
         })) as CartLineModel;
 
-        if (productSettings.showAddToCartConfirmationDialog) {
+        if (showAddToCartConfirmationDialog) {
             toasterContext.addToast({
                 body: <ProductAddedToCartMessage isQtyAdjusted={cartline.isQtyAdjusted} multipleProducts={false} />,
                 messageType: "success",
+                timeoutLength: cartline.isQtyAdjusted ? 1000 * 60 * 60 * 24 * 365 : addToCartPopupTimeout,
             });
         }
     };
@@ -112,7 +119,7 @@ const ProductAddToCartButton = ({
         <Button
             {...styles}
             onClick={addToCartClickHandler}
-            disabled={qtyOrdered <= 0 || addingProductToCart}
+            disabled={qtyOrdered <= 0 || isUpdatingCart}
             {...otherProps}
         >
             {labelOverride ?? translate("Add to Cart")}

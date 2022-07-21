@@ -13,6 +13,7 @@ import { HasShellContext, withIsInShell } from "@insite/client-framework/Compone
 import { sendToShell } from "@insite/client-framework/Components/ShellHole";
 import { getDisplayErrorPage, getErrorStatusCode, redirectTo } from "@insite/client-framework/ServerSideRendering";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
+import { setFavicon } from "@insite/client-framework/Store/CommonHandlers/SetFavicon";
 import { setMetadata } from "@insite/client-framework/Store/CommonHandlers/SetMetadata";
 import { setTracking } from "@insite/client-framework/Store/CommonHandlers/SetTracking";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
@@ -38,6 +39,7 @@ const mapStateToProps = (state: ApplicationState) => {
 const mapDispatchToProps = {
     setMetadata,
     setTracking,
+    setFavicon,
 };
 
 type Props = ReturnType<typeof mapStateToProps> &
@@ -64,6 +66,7 @@ class PublicPage extends React.Component<Props> {
         if (!this.props.wasSetMetadataCalled) {
             this.props.setMetadata();
             this.props.setTracking();
+            this.props.setFavicon();
         }
     }
 
@@ -96,6 +99,7 @@ class PublicPage extends React.Component<Props> {
             case "CompactHeader":
             case "FlyoutNavigation":
             case "SharedContent":
+            case "MaintenancePage":
             case "VariantRootPage":
                 return <>{content}</>;
         }

@@ -175,14 +175,20 @@ const mapStateToProps = (state: ApplicationState) => {
             state.pages.checkoutReviewAndSubmit.isPreloadingData ||
             cartState.isLoading,
         isPlacingOrder: state.pages.checkoutReviewAndSubmit.isPlacingOrder,
+        isWaitingForThreeDs: state.pages.checkoutReviewAndSubmit.isWaitingForThreeDs,
     };
 };
 
 type Props = WidgetProps & ReturnType<typeof mapStateToProps>;
 
-const CheckoutReviewAndSubmitPageContainer: FC<Props> = ({ id, isPreloadingData, isPlacingOrder }) => {
+const CheckoutReviewAndSubmitPageContainer: FC<Props> = ({
+    id,
+    isPreloadingData,
+    isPlacingOrder,
+    isWaitingForThreeDs,
+}) => {
     return (
-        <LoadingOverlay {...styles.loadingOverlay} loading={isPreloadingData || isPlacingOrder}>
+        <LoadingOverlay {...styles.loadingOverlay} loading={isPreloadingData || isPlacingOrder || isWaitingForThreeDs}>
             <GridContainer {...styles.container}>
                 <GridItem {...styles.headerGridItem}>
                     <Zone zoneName="Content00" contentId={id} />

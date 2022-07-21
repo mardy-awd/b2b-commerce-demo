@@ -78,7 +78,7 @@ export const LoadSession: HandlerType = props => {
     const state = props.getState();
     const { cartId } = state.pages.checkoutShipping;
     if (!cartId && props.apiResult) {
-        props.dispatch(loadSession());
+        props.dispatch(loadSession({ isSessionUpdate: true }));
     }
 };
 

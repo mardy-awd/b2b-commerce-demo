@@ -11,6 +11,12 @@ import cloneDeep from "lodash/cloneDeep";
 
 type HandlerType = HandlerWithResult<HasOnSuccess<Cart>, Cart, { cartToUpdate: CartModel }>;
 
+export const DispatchBeginUpdatingCart: HandlerType = props => {
+    props.dispatch({
+        type: "Context/BeginUpdatingCart",
+    });
+};
+
 export const SetCartStatus: HandlerType = props => {
     const state = props.getState();
     const cart = getCurrentCartState(state).value;
@@ -29,6 +35,12 @@ export const UpdateCart: HandlerType = async props => {
     props.result = (await updateCart({ cart: props.cartToUpdate })).cart;
 };
 
+export const DispatchCompleteUpdatingCart: HandlerType = props => {
+    props.dispatch({
+        type: "Context/CompleteUpdatingCart",
+    });
+};
+
 export const LoadCart: HandlerType = props => {
     props.dispatch(loadCurrentCart());
 };
@@ -37,7 +49,14 @@ export const ExecuteOnSuccessCallback: HandlerType = props => {
     props.parameter.onSuccess?.(props.result);
 };
 
-export const chain = [SetCartStatus, UpdateCart, LoadCart, ExecuteOnSuccessCallback];
+export const chain = [
+    DispatchBeginUpdatingCart,
+    SetCartStatus,
+    UpdateCart,
+    DispatchCompleteUpdatingCart,
+    LoadCart,
+    ExecuteOnSuccessCallback,
+];
 
 const submitRequisition = createHandlerChainRunnerOptionalParameter(chain, {}, "SubmitRequisition");
 export default submitRequisition;

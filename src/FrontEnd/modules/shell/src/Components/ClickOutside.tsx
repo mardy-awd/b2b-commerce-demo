@@ -26,3 +26,31 @@ export default abstract class ClickOutside<T1, T2> extends React.Component<T1, T
 
     abstract onClickOutside(target: Node): void;
 }
+
+export class ClickOutsideWrapper extends React.Component<{ handleClick: () => void }> {
+    wrapperRef: React.RefObject<HTMLDivElement>;
+
+    constructor(props: any) {
+        super(props);
+        this.wrapperRef = React.createRef();
+        this.handleClickOutside = this.handleClickOutside.bind(this);
+    }
+
+    componentDidMount() {
+        document.addEventListener("mousedown", this.handleClickOutside);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("mousedown", this.handleClickOutside);
+    }
+
+    handleClickOutside(event: any) {
+        if (!this.wrapperRef?.current?.contains(event.target)) {
+            this.props.handleClick();
+        }
+    }
+
+    render() {
+        return <div ref={this.wrapperRef}>{this.props.children}</div>;
+    }
+}

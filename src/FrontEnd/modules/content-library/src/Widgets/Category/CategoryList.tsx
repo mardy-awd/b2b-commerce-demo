@@ -214,7 +214,11 @@ class CategoryList extends React.Component<Props> {
                                     <GridItem {...styles.categoryImageItem}>
                                         {category.path && (
                                             <Link href={category.path} {...styles.categoryImageLink}>
-                                                <LazyImage src={category.smallImagePath} {...styles.categoryImage} />
+                                                <LazyImage
+                                                    src={category.smallImagePath}
+                                                    {...styles.categoryImage}
+                                                    altText={category.imageAltText}
+                                                />
                                             </Link>
                                         )}
                                     </GridItem>

@@ -29,7 +29,7 @@ import { css } from "styled-components";
 const mapStateToProps = (state: ApplicationState) => ({
     language: state.context.session.language,
     allowEditingOfWishLists: getSettingsCollection(state).wishListSettings.allowEditingOfWishLists,
-    addingProductToCart: state.context.addingProductToCart,
+    isUpdatingCart: state.context.isUpdatingCart,
 });
 
 interface OwnProps {
@@ -157,7 +157,7 @@ export const wishListCardStyles: WishListCardStyles = {
 const WishListCard = ({
     language,
     allowEditingOfWishLists,
-    addingProductToCart,
+    isUpdatingCart,
     extendedStyles,
     wishList,
     addWishListToCart,
@@ -271,7 +271,7 @@ const WishListCard = ({
                     <OverflowMenu position="end" {...styles.actionOverflowMenu}>
                         <Clickable
                             {...styles.actionAddToCartClickable}
-                            disabled={!canAddToCart || addingProductToCart}
+                            disabled={!canAddToCart || isUpdatingCart}
                             onClick={clickAddToCartHandler}
                         >
                             {addToCartLabel}
@@ -294,7 +294,7 @@ const WishListCard = ({
                 <Hidden {...styles.actionGridMediumHidden} below="md">
                     <Button
                         {...styles.actionAddToCartButton}
-                        disabled={!canAddToCart || addingProductToCart}
+                        disabled={!canAddToCart || isUpdatingCart}
                         data-test-selector={`wishListAddToCartButton_${wishList.id}`}
                         onClick={clickAddToCartHandler}
                     >

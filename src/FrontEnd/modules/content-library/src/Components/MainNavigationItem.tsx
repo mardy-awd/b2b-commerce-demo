@@ -57,6 +57,7 @@ class MainNavigationItem extends React.Component<Props> {
         const isMega = hasChildren && link.childrenType === "MegaMenu";
         let menuLink = (
             <Link
+                className="menu-item"
                 typographyProps={styles.menuItemTypography}
                 color={styles.menuItemTypography?.color}
                 {...styles.menuItem}
@@ -70,6 +71,7 @@ class MainNavigationItem extends React.Component<Props> {
         if (isMega || link.url === "") {
             menuLink = (
                 <Link
+                    className="menu-item"
                     typographyProps={styles.menuItemTypography}
                     color={styles.menuItemTypography?.color}
                     {...styles.menuItem}
@@ -89,6 +91,7 @@ class MainNavigationItem extends React.Component<Props> {
             }
             menuItem = (
                 <Menu
+                    className="cascading-menu"
                     data-test-selector={`mainNavigationItem_${index}`}
                     isOpen={isOpen || undefined}
                     descriptionId={`${link.title}_${index}`}
@@ -104,6 +107,7 @@ class MainNavigationItem extends React.Component<Props> {
         if (isMega) {
             menuItem = (
                 <Popover
+                    className="mega-menu"
                     zIndexKey="menu"
                     {...styles.megaMenu}
                     contentBodyProps={{
@@ -141,6 +145,7 @@ class MainNavigationItem extends React.Component<Props> {
                     insideRefs={[this.element]}
                 >
                     <GridContainer
+                        className="mega-menu-grid-container"
                         data-test-selector={`mainNavigationItem_${index}`}
                         {...styles.megaMenuGridContainer}
                         offsetProps={{ ...styles.megaMenuGridContainer?.offsetProps, as: "ul" }}
@@ -149,13 +154,19 @@ class MainNavigationItem extends React.Component<Props> {
                             .children!.filter(child => !child.excludeFromNavigation)
                             .map((child, index) => (
                                 <GridItem
+                                    className="mega-menu-grid-item"
                                     width={(12 / link.numberOfColumns!) as GridWidths}
                                     // eslint-disable-next-line react/no-array-index-key
                                     key={index}
                                     {...styles.megaMenuGridItem}
                                     as="li"
                                 >
-                                    <Link {...styles.megaMenuHeading} href={child.url} onClick={this.closePopover}>
+                                    <Link
+                                        className="mega-menu-heading-link"
+                                        {...styles.megaMenuHeading}
+                                        href={child.url}
+                                        onClick={this.closePopover}
+                                    >
                                         {child.title}
                                     </Link>
                                     {child.children && (
@@ -177,6 +188,7 @@ class MainNavigationItem extends React.Component<Props> {
                                                     // eslint-disable-next-line react/no-array-index-key
                                                     <li key={index}>
                                                         <Link
+                                                            className="mega-menu-link"
                                                             {...styles.megaMenuLink}
                                                             onClick={this.closePopover}
                                                             href={grandChild.url}

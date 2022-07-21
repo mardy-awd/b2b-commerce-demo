@@ -4658,6 +4658,28 @@ nav ul:not(.side-nav) li[role="sign-in"] span {
     background: #052d42; /* Old browsers */
 }
 
+.header-sizing {
+    min-height: 164px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    .top-nav-container {
+        min-height: 42px;
+    }
+
+    nav[role="secondary-nav"] {
+        min-height: 40px;
+    }
+
+    .row.logo-row {
+        min-height: 74px;
+    }
+
+    .isc-nav-bar {
+        min-height: 48px;
+    }
+}
 
 nav ul:not(.side-nav) {
     margin-bottom: 0;

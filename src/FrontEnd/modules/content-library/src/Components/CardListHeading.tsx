@@ -27,7 +27,9 @@ const CardListHeading: React.FunctionComponent<OwnProps> = ({ heading, viewAllUr
                 `}
             >
                 <GridItem width={8}>
-                    <Typography variant="h5">{heading}</Typography>
+                    <Typography className="card-list-heading" variant="h5">
+                        {heading}
+                    </Typography>
                 </GridItem>
                 {viewAllUrl && (
                     <GridItem width={4}>
@@ -39,6 +41,7 @@ const CardListHeading: React.FunctionComponent<OwnProps> = ({ heading, viewAllUr
                                 margin-left: auto;
                                 margin-top: 5px;
                             `}
+                            className="view-all-link"
                             data-test-selector="cardListHeadingViewAllLink"
                         >
                             {translate("View All")}

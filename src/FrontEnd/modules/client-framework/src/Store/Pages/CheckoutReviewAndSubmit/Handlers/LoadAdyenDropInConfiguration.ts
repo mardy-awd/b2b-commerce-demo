@@ -4,6 +4,8 @@ import {
     HasOnSuccess,
     markSkipOnCompleteIfOnSuccessIsSet,
 } from "@insite/client-framework/HandlerCreator";
+import { getAdyenPaymentDetails, postAdyenPayment } from "@insite/client-framework/Services/PaymentService";
+import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import { Dispatch } from "react";
 
 type HandlerType = Handler<
@@ -12,6 +14,9 @@ type HandlerType = Handler<
         sessionData: string;
         region: string;
         clientKey: string;
+        cartId?: string;
+        webOrderNumber: string;
+        returnUrl: string;
         setAdyenFormValid: Dispatch<boolean>;
         setAdyenErrorMessage: Dispatch<string>;
         resetAdyenSession: Dispatch<void>;
@@ -34,7 +39,10 @@ export const CreateAdyenConfiguration: HandlerType = props => {
     };
 };
 
-export const SetOnPaymentCompleted: HandlerType = props => {
+/** @deprecated Not needed anymore */
+export const SetOnPaymentCompleted: HandlerType = props => {};
+
+export const SetOnSubmit: HandlerType = props => {
     const handleValidPaymentResponse = (resultCode: string) => {
         props.parameter.placeAdyenOrder(resultCode);
     };
@@ -45,11 +53,27 @@ export const SetOnPaymentCompleted: HandlerType = props => {
     };
 
     const handleRedirectPaymentAction = (adyenPaymentResult: any) => {
-        // Not implemented - should only be needed for nonstandard use cases
-        // Exists here as an example of how to handle redirect cases.
+        if (adyenPaymentResult.action.method === "GET") {
+            window.location.href = adyenPaymentResult.action.url;
+        } else if (adyenPaymentResult.action.method === "POST") {
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = adyenPaymentResult.action.url;
+
+            for (const key in adyenPaymentResult.action.data) {
+                const input = document.createElement("input");
+                input.name = key;
+                input.value = adyenPaymentResult.action.data[key];
+                form.appendChild(input);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
     };
 
-    props.adyenConfiguration.onPaymentCompleted = (result: any, component: any) => {
+    const handlePaymentResponse = (result: any) => {
         if (result?.action) {
             if (result.action.type === "redirect") {
                 handleRedirectPaymentAction(result);
@@ -74,6 +98,27 @@ export const SetOnPaymentCompleted: HandlerType = props => {
                     break;
             }
         }
+    };
+
+    props.adyenConfiguration.onSubmit = (state: any, component: any) => {
+        const cartState = props.parameter.cartId
+            ? getCartState(props.getState(), props.parameter.cartId)
+            : getCurrentCartState(props.getState());
+        postAdyenPayment(
+            props.parameter.webOrderNumber,
+            cartState.value!.orderGrandTotal,
+            props.getState().context.session.currency!.currencyCode,
+            props.parameter.returnUrl,
+            state.data,
+        ).then(result => {
+            handlePaymentResponse(result);
+        });
+    };
+
+    props.adyenConfiguration.onAdditionalDetails = (state: any, component: any) => {
+        getAdyenPaymentDetails(state.details.redirectResult).then(result => {
+            handlePaymentResponse(result);
+        });
     };
 };
 
@@ -109,7 +154,7 @@ export const ExecuteOnSuccessCallback: HandlerType = props => {
 
 export const chain = [
     CreateAdyenConfiguration,
-    SetOnPaymentCompleted,
+    SetOnSubmit,
     SetOnChange,
     SetPaymentMethodsConfig,
     ExecuteOnSuccessCallback,

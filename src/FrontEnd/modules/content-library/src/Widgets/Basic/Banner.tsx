@@ -12,6 +12,7 @@ import { LinkPresentationProps } from "@insite/mobius/Link";
 import Typography from "@insite/mobius/Typography";
 import { useHistory } from "@insite/mobius/utilities/HistoryContext";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
+import * as cssLinter from "css";
 import parse from "html-react-parser";
 import React, { FC } from "react";
 import { css } from "styled-components";
@@ -224,6 +225,22 @@ export const Banner: FC<OwnProps> = ({ fields, extendedStyles }) => {
         </StyledWrapper>
     );
 };
+
+const defaultCustomCss = `.banner-wrapper {
+}
+
+.banner-overlay-wrapper {
+}
+
+.banner-center-wrapper {
+}
+
+.banner-heading {
+}
+
+.banner-subheading {
+}
+`;
 
 const basicTab = {
     displayName: "Basic",
@@ -499,11 +516,31 @@ const banner: WidgetModule = {
             {
                 name: fields.customCSS,
                 displayName: "Custom CSS",
-                editorTemplate: "RichTextField",
+                editorTemplate: "CodeField",
                 fieldType: "General",
                 tab: advancedTab,
-                defaultValue: "",
-                isVisible: (item, shouldDisplayAdvacedFeatures) => !!shouldDisplayAdvacedFeatures,
+                defaultValue: defaultCustomCss,
+                isVisible: (item, shouldDisplayAdvancedFeatures) => !!shouldDisplayAdvancedFeatures,
+                validate: value => {
+                    if (value === undefined || value === null) {
+                        return "";
+                    }
+
+                    const result = cssLinter.parse(value, { silent: true });
+                    if (result?.stylesheet?.parsingErrors) {
+                        // the error output at this time only has room for one line so we just show the first error
+                        return result.stylesheet.parsingErrors.length <= 0
+                            ? ""
+                            : result.stylesheet.parsingErrors.map(error => `${error.reason} on line ${error.line}`)[0];
+                    }
+
+                    return "Unable to parse Css";
+                },
+                options: {
+                    mode: "css",
+                    lint: true,
+                    autoRefresh: true,
+                },
             },
         ],
     },

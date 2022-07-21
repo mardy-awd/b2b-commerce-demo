@@ -295,6 +295,7 @@ declare module Insite.Catalog.WebApi.V1.ApiModels {
 		openGraphTitle: string;
 		openGraphImage: string;
 		openGraphUrl: string;
+		enableStructuredPageData: boolean;
 	}
 	interface CategoryModel extends Insite.Core.WebApi.BaseModel {
 		id: System.Guid;
@@ -886,6 +887,8 @@ declare module Insite.Catalog.Services.Dtos {
 		quantity: number;
 	}
 	interface AvailabilityDto {
+		messageType: number;
+		requiresRealTimeInventory?: boolean;
 	}
 	interface StyleTraitDto {
 		styleTraitId: System.Guid;

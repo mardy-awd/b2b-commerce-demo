@@ -13,6 +13,22 @@ import { Dispatch } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import styled, { css } from "styled-components";
 
+export interface HasDepth {
+    depth: number;
+}
+
+export const ListFieldDepthContext = React.createContext(1);
+
+export function withListFieldDepth<P extends HasDepth>(Component: React.ComponentType<P>) {
+    return (props: Omit<P, keyof HasDepth>) => {
+        return (
+            <ListFieldDepthContext.Consumer>
+                {value => <Component {...(props as P)} depth={value} />}
+            </ListFieldDepthContext.Consumer>
+        );
+    };
+}
+
 interface State {
     hasValidationErrors: boolean;
 }
@@ -23,7 +39,7 @@ interface ItemProps {
     editingIndex: number;
     delete: (index: number) => void;
     onDragEnd: () => void;
-    onDragStart: (index: number) => void;
+    onDragStart: (index: number, depth: number) => void;
     fieldDefinition: ListFieldDefinition;
     editRow: (index: number) => void;
     onChange: (index: number, item: HasFields) => void;
@@ -49,6 +65,8 @@ const mapStateToProps = (state: ShellState, ownProps: ItemProps) => {
 type Props = ItemProps & HasSideBarForm & ReturnType<typeof mapStateToProps> & { dispatch: Dispatch };
 
 class ListFieldRow extends React.Component<Props, State> {
+    static contextType = ListFieldDepthContext;
+
     // this is required because firefox doesn't set clientY in the drag event that uses this below
     private clientY = 0;
     private readonly row: React.RefObject<HTMLDivElement>;
@@ -97,16 +115,18 @@ class ListFieldRow extends React.Component<Props, State> {
     };
 
     dragStart = (event: React.DragEvent<HTMLElement>) => {
+        event.stopPropagation();
         setTimeout(() => {
             this.row.current!.style.display = "none";
         });
 
-        this.props.onDragStart(this.props.index);
+        this.props.onDragStart(this.props.index, this.context);
 
         return undefined;
     };
 
-    dragEnd = () => {
+    dragEnd = (event: React.DragEvent<HTMLElement>) => {
+        event.stopPropagation();
         this.row.current!.setAttribute("draggable", "false");
         this.row.current!.style.display = "";
         this.props.onDragEnd();
@@ -141,6 +161,7 @@ class ListFieldRow extends React.Component<Props, State> {
 
     updateField = (fieldName: string, value: any) => {
         const { item, index, onChange } = this.props;
+
         item.fields[fieldName] = value;
         if (!this.hasValidationErrors()) {
             onChange(index, item);
@@ -177,42 +198,44 @@ class ListFieldRow extends React.Component<Props, State> {
         const somethingIsBeingEdited = editingIndex >= 0;
 
         return (
-            <ChildStyle ref={this.row} onDragStart={this.dragStart} onDragEnd={this.dragEnd} onDrag={this.drag}>
-                <ChildWrapper>
-                    <OverflowStyle onMouseDown={this.dragHandleMouseDown} disabled={somethingIsBeingEdited}>
-                        <Drag color1={somethingIsBeingEdited ? "#ddd" : "#4a4a4a"} />
-                    </OverflowStyle>
-                    <Content>{displayName}</Content>
-                    {!this.props.fieldDefinition.hideEdit && (
-                        <Button
-                            variant={isBeingEdited ? "primary" : "secondary"}
-                            sizeVariant="small"
-                            css={buttonStyles}
-                            disabled={somethingIsBeingEdited && !isBeingEdited}
-                            onClick={this.onClick}
-                            data-test-selector={`listFieldButton_${index}`}
-                        >
-                            {isBeingEdited ? "Done" : "Edit"}
-                        </Button>
+            <ListFieldDepthContext.Provider value={this.context + 1}>
+                <ChildStyle ref={this.row} onDragStart={this.dragStart} onDragEnd={this.dragEnd} onDrag={this.drag}>
+                    <ChildWrapper>
+                        <OverflowStyle onMouseDown={this.dragHandleMouseDown} disabled={somethingIsBeingEdited}>
+                            <Drag color1={somethingIsBeingEdited ? "#ddd" : "#4a4a4a"} />
+                        </OverflowStyle>
+                        <Content>{displayName}</Content>
+                        {!this.props.fieldDefinition.hideEdit && (
+                            <Button
+                                variant={isBeingEdited ? "primary" : "secondary"}
+                                sizeVariant="small"
+                                css={buttonStyles}
+                                disabled={somethingIsBeingEdited && !isBeingEdited}
+                                onClick={this.onClick}
+                                data-test-selector={`listFieldButton_${index}`}
+                            >
+                                {isBeingEdited ? "Done" : "Edit"}
+                            </Button>
+                        )}
+                        {!this.props.fieldDefinition.hideDelete && (
+                            <TrashStyle disabled={somethingIsBeingEdited} onClick={this.delete}>
+                                <Trash height={18} color1={somethingIsBeingEdited ? "#ddd" : "#4a4a4a"} />
+                            </TrashStyle>
+                        )}
+                    </ChildWrapper>
+                    {isBeingEdited && (
+                        <FieldsEditorStyle>
+                            <FieldsEditor
+                                fieldDefinitions={fieldDefinition.fieldDefinitions}
+                                item={item}
+                                updateField={this.updateField}
+                                registerHasValidationErrors={this.registerHasValidationErrors}
+                                updateHasValidationErrors={this.updateHasValidationErrors}
+                            />
+                        </FieldsEditorStyle>
                     )}
-                    {!this.props.fieldDefinition.hideDelete && (
-                        <TrashStyle disabled={somethingIsBeingEdited} onClick={this.delete}>
-                            <Trash height={18} color1={somethingIsBeingEdited ? "#ddd" : "#4a4a4a"} />
-                        </TrashStyle>
-                    )}
-                </ChildWrapper>
-                {isBeingEdited && (
-                    <FieldsEditorStyle>
-                        <FieldsEditor
-                            fieldDefinitions={fieldDefinition.fieldDefinitions}
-                            item={item}
-                            updateField={this.updateField}
-                            registerHasValidationErrors={this.registerHasValidationErrors}
-                            updateHasValidationErrors={this.updateHasValidationErrors}
-                        />
-                    </FieldsEditorStyle>
-                )}
-            </ChildStyle>
+                </ChildStyle>
+            </ListFieldDepthContext.Provider>
         );
     }
 }

@@ -1,4 +1,5 @@
 /* eslint-disable spire/export-styles */
+import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import Zone from "@insite/client-framework/Components/Zone";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
@@ -11,15 +12,26 @@ import getColor from "@insite/mobius/utilities/getColor";
 import getContrastColor from "@insite/mobius/utilities/getContrastColor";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import injectCss from "@insite/mobius/utilities/injectCss";
+import * as cssLinter from "css";
 import React, { FC } from "react";
 import { connect } from "react-redux";
 import styled, { css } from "styled-components";
+
+const enum fields {
+    customCSS = "customCSS",
+}
+
+interface OwnProps extends WidgetProps {
+    fields: {
+        [fields.customCSS]: string;
+    };
+}
 
 const mapStateToProps = (state: ApplicationState) => ({
     enableWarehousePickup: getSettingsCollection(state).accountSettings.enableWarehousePickup,
 });
 
-type Props = WidgetProps & ReturnType<typeof mapStateToProps>;
+type Props = OwnProps & ReturnType<typeof mapStateToProps>;
 
 const Navigation = styled.div`
     color: ${getContrastColor("common.accent")};
@@ -73,31 +85,57 @@ export const secondaryNavigationStyles: SecondaryNavigationStyles = {
     },
 };
 
-const SecondaryNavigation: FC<Props> = ({ id, enableWarehousePickup }) => {
+const defaultCustomCss = `.wrapper {
+}
+
+.navigation-mode-menu {
+}
+
+.currency-menu {
+}
+
+.language-menu {
+}
+
+.ship-to-address-menu {
+}
+
+.sign-in-link {
+}`;
+
+const SecondaryNavigation: FC<Props> = ({ id, enableWarehousePickup, fields }) => {
     const styles = useMergeStyles("secondaryNavigation", secondaryNavigationStyles);
 
+    const customCssWrapper = {
+        css: css`
+            ${fields.customCSS}
+        `,
+    };
+
     return (
-        <Hidden below="lg">
-            <Navigation {...styles.wrapper}>
-                <NavItem>
-                    <NavigationModeMenu extendedStyles={styles.navigationModeMenu} />
-                </NavItem>
-                <NavItem>
-                    <Zone zoneName="Currency" contentId={id} fixed />
-                </NavItem>
-                <NavItem {...styles.languageLink}>
-                    <Zone zoneName="Language" contentId={id} fixed />
-                </NavItem>
-                {enableWarehousePickup && (
-                    <NavItem {...styles.warehousePickupLink}>
-                        <Zone zoneName="ShipToAddress" contentId={id} fixed />
+        <StyledWrapper {...customCssWrapper}>
+            <Hidden below="lg">
+                <Navigation className="wrapper" {...styles.wrapper}>
+                    <NavItem className="navigation-mode-menu">
+                        <NavigationModeMenu extendedStyles={styles.navigationModeMenu} />
                     </NavItem>
-                )}
-                <NavItem {...styles.signInLink}>
-                    <Zone zoneName="SignIn" contentId={id} fixed />
-                </NavItem>
-            </Navigation>
-        </Hidden>
+                    <NavItem className="currency-menu">
+                        <Zone zoneName="Currency" contentId={id} fixed />
+                    </NavItem>
+                    <NavItem className="language-menu" {...styles.languageLink}>
+                        <Zone zoneName="Language" contentId={id} fixed />
+                    </NavItem>
+                    {enableWarehousePickup && (
+                        <NavItem className="ship-to-address-menu" {...styles.warehousePickupLink}>
+                            <Zone zoneName="ShipToAddress" contentId={id} fixed />
+                        </NavItem>
+                    )}
+                    <NavItem className="sign-in-link" {...styles.signInLink}>
+                        <Zone zoneName="SignIn" contentId={id} fixed />
+                    </NavItem>
+                </Navigation>
+            </Hidden>
+        </StyledWrapper>
     );
 };
 
@@ -106,6 +144,36 @@ const secondaryNavigation: WidgetModule = {
     definition: {
         group: "Common",
         icon: "link-simple",
+        fieldDefinitions: [
+            {
+                name: fields.customCSS,
+                displayName: "Custom CSS",
+                editorTemplate: "CodeField",
+                fieldType: "General",
+                defaultValue: defaultCustomCss,
+                isVisible: (item, shouldDisplayAdvancedFeatures) => !!shouldDisplayAdvancedFeatures,
+                validate: value => {
+                    if (value === undefined || value === null) {
+                        return "";
+                    }
+
+                    const result = cssLinter.parse(value, { silent: true });
+                    if (result?.stylesheet?.parsingErrors) {
+                        // the error output at this time only has room for one line so we just show the first error
+                        return result.stylesheet.parsingErrors.length <= 0
+                            ? ""
+                            : result.stylesheet.parsingErrors.map(error => `${error.reason} on line ${error.line}`)[0];
+                    }
+
+                    return "Unable to parse Css";
+                },
+                options: {
+                    mode: "css",
+                    lint: true,
+                    autoRefresh: true,
+                },
+            },
+        ],
     },
 };
 

@@ -11,15 +11,15 @@
         <%
             var siteName = ConfigurationManager.AppSettings["SiteIdentifier"] ?? "InsiteCommerce";
             var healthy = this.HealthCheckResults.Status == HealthCheckStatus.Healthy;
-            Response.Write(siteName + " QuickPing is " + (healthy ? "good" : "bad") + " <br/><br/>");
+            this.Response.Write(siteName + " QuickPing is " + (healthy ? "good" : "bad") + " <br/><br/>");
             foreach (var healthCheckResult in this.HealthCheckResults.Results)
             {
-                Response.Write((healthCheckResult.Name + " " + healthCheckResult).Replace(Environment.NewLine,"<br />") + " <br/><br/>");
+                this.Response.Write((healthCheckResult.Name + " " + healthCheckResult).Replace(Environment.NewLine,"<br />") + " <br/><br/>");
             }
-            Response.Write("QuickPing Duration: " + this.HealthCheckResults.Duration + " <br/><br/>");
+            this.Response.Write("QuickPing Duration: " + this.HealthCheckResults.Duration + " <br/><br/>");
             if (!healthy)
             {
-                Response.StatusCode = 500;
+                this.Response.StatusCode = 500;
             }
         %>
     </div>

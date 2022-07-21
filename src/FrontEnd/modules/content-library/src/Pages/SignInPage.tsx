@@ -35,7 +35,7 @@ const SignInPage = ({ id, showLoadingOverlay, reloadPageIfAuthenticated, shellCo
         if (!showLoadingOverlay && !isInShell) {
             reloadPageIfAuthenticated();
         }
-    }, []);
+    });
 
     return (
         <LoadingOverlay

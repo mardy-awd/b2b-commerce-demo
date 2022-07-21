@@ -71,6 +71,7 @@ const mapStateToProps = (state: ApplicationState) => {
     return {
         parameter: state.pages.orderHistory.getOrdersParameter,
         isReordering: state.pages.orderHistory.isReordering,
+        isUpdatingCart: state.context.isUpdatingCart,
         showAddToCartConfirmationDialog: getSettingsCollection(state).productSettings.showAddToCartConfirmationDialog,
         language: state.context.session.language,
         showPoNumber: getSettingsCollection(state).orderSettings.showPoNumber,
@@ -499,7 +500,10 @@ class OrderHistoryTable extends React.Component<Props> {
                                                 <LoadingSpinner {...styles.reorderButtonSpinner} />
                                             ) : (
                                                 <Button
-                                                    disabled={Object.keys(this.props.isReordering).length > 0}
+                                                    disabled={
+                                                        Object.keys(this.props.isReordering).length > 0 ||
+                                                        this.props.isUpdatingCart
+                                                    }
                                                     {...styles.reorderButton}
                                                     onClick={() =>
                                                         this.reorderClick(orderNumber, linkOrderNumber, isVmiOrder)

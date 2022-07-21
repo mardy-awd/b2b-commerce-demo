@@ -15,6 +15,9 @@ type HandlerType = ApiHandlerDiscreteParameter<
 
 export const DispatchBeginAddCartLineCollectionFromProducts: HandlerType = props => {
     props.dispatch({
+        type: "Context/BeginUpdatingCart",
+    });
+    props.dispatch({
         type: "Pages/OrderUpload/BeginAddCartLineCollectionFromProducts",
     });
 };
@@ -54,6 +57,9 @@ export const DispatchCompleteAddCartLineCollectionFromProducts: HandlerType = pr
     props.dispatch({
         type: "Pages/OrderUpload/CompleteAddCartLineCollectionFromProducts",
         result: props.apiResult,
+    });
+    props.dispatch({
+        type: "Context/CompleteUpdatingCart",
     });
 };
 

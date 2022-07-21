@@ -50,7 +50,7 @@ const InvoiceHistoryPage = ({
         firstLoad = true;
         const pageSizeCookie = getCookie("InvoiceHistory-PageSize");
         const pageSize = pageSizeCookie ? parseInt(pageSizeCookie, 10) : undefined;
-        if (location.search) {
+        if (location.search && location.search.indexOf("SwitchingLanguage") === 0) {
             const getInvoicesApiParameter = parseQueryString<GetInvoicesApiParameter>(location.search);
             if (pageSize) {
                 getInvoicesApiParameter.pageSize = pageSize;

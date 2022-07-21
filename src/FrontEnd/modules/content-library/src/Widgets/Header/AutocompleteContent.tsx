@@ -78,7 +78,11 @@ class AutocompleteContent extends React.Component<Props> {
         const styles = this.styles;
         return (
             <>
-                <Typography {...styles.headerText} data-test-selector="autocompleteContent_Header">
+                <Typography
+                    {...styles.headerText}
+                    data-test-selector="autocompleteContent_Header"
+                    className="autocomplete-content-header"
+                >
                     {translate("Content")}
                 </Typography>
                 {content.map(content => (
@@ -89,6 +93,7 @@ class AutocompleteContent extends React.Component<Props> {
                             this.props.goToUrl(content.url);
                         }}
                         data-test-selector="autocompleteContent_Result"
+                        className="autocomplete-content-link"
                     >
                         {content.displayTitle}
                     </Link>

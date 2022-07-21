@@ -3,7 +3,7 @@ import { emptyGuid } from "@insite/client-framework/Common/StringHelpers";
 import { Dictionary } from "@insite/client-framework/Common/Types";
 import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { AllowedContexts } from "@insite/client-framework/Types/AllowedContexts";
-import WidgetGroups, { WidgetGroup } from "@insite/client-framework/Types/WidgetGroups";
+import WidgetGroups, { WidgetGroup, WidgetGroupDisplayNames } from "@insite/client-framework/Types/WidgetGroups";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import Modal, { ModalPresentationProps } from "@insite/mobius/Modal";
 import Tab from "@insite/mobius/Tab";
@@ -39,7 +39,7 @@ const mapStateToProps = (state: ShellState) => {
     const widgetsByGroup: Dictionary<LoadedWidgetDefinition[]> = {};
 
     for (const widgetDefinition of getWidgetDefinitions()) {
-        if (widgetDefinition.isDeprecated) {
+        if (widgetDefinition.isDeprecated || widgetDefinition.type === "Basic/PageTypeLink") {
             continue;
         }
 
@@ -289,12 +289,14 @@ class AddWidgetModal extends React.Component<Props, State> {
                             />
                             <ListScroller>
                                 {groups.map(
-                                    displayName =>
-                                        displayedWidgetsByGroup[displayName] && (
-                                            <ListGroup key={displayName}>
-                                                <ListHeader>{displayName} elements</ListHeader>
+                                    groupName =>
+                                        displayedWidgetsByGroup[groupName] && (
+                                            <ListGroup key={groupName}>
+                                                <ListHeader>
+                                                    {WidgetGroupDisplayNames[groupName] ?? groupName} elements
+                                                </ListHeader>
                                                 <ListItems>
-                                                    {displayedWidgetsByGroup[displayName].map(widgetDefinition => (
+                                                    {displayedWidgetsByGroup[groupName].map(widgetDefinition => (
                                                         <ListItemStyle
                                                             key={widgetDefinition.type}
                                                             onClick={() => this.addWidget(widgetDefinition)}
@@ -419,7 +421,7 @@ const ListItemStyle = styled.div`
     text-align: center;
     padding: 2px 5px;
     cursor: pointer;
-    overflow: hidden;
+    overflow: visible;
     min-height: 36px;
     flex-direction: column;
 `;

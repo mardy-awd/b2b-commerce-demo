@@ -1,12 +1,15 @@
 /**
  * Contains the pre-defined widget groups in the order they're displayed in the Shell UI.
  */
+import { SafeDictionary } from "@insite/client-framework/Common/Types";
+
 const WidgetGroups = [
     "Testing",
     "Basic",
     "Common",
     "Contact Us",
     "Categories",
+    "Category Details",
     "Header",
     "Catalog",
     "Products",
@@ -74,6 +77,11 @@ const WidgetGroups = [
     "VMI Users",
     "Compact Header",
 ] as const;
+
+export const WidgetGroupDisplayNames: SafeDictionary<string> = {
+    BudgetManagement: "Budget Management",
+    "Order Confirmation": "Checkout - Order Confirmation",
+};
 
 export default WidgetGroups;
 

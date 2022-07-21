@@ -42,6 +42,7 @@ const mapStateToProps = (state: ApplicationState) => {
     const catalogPageState = getCatalogPageStateByPath(state, productPath);
     const variantProductState = getProductState(state, state.pages.productDetails.selectedProductId);
     const computedVariantProduct = getComputedVariantProduct(productState, variantProductState);
+    const settingsCollection = getSettingsCollection(state);
     return {
         productState: computedVariantProduct,
         catalogPageState,
@@ -56,7 +57,8 @@ const mapStateToProps = (state: ApplicationState) => {
         websiteName: state.context.website.name,
         page: getCurrentPage(state),
         location,
-        websiteSettings: getSettingsCollection(state).websiteSettings,
+        websiteSettings: settingsCollection.websiteSettings,
+        searchPath: settingsCollection.searchSettings.searchPath,
         selectedProductId: state.pages.productDetails.selectedProductId,
         isProductLoading: state.pages.productDetails.isProductLoading,
         metadataSetForId: state.pages.productDetails.metadataSetForId,
@@ -169,6 +171,7 @@ class ProductDetailsPage extends React.Component<Props> {
             lastProductPath,
             lastStyledOption,
             isProductLoading,
+            searchPath,
         } = this.props;
         const queryParams = parseQueryString<{ option?: string; criteria?: string }>(search.replace("?", ""));
         const styledOption = (
@@ -177,8 +180,9 @@ class ProductDetailsPage extends React.Component<Props> {
             ""
         ).toLocaleLowerCase();
         if (
-            productPath.toLowerCase() === lastProductPath?.toLowerCase() &&
-            styledOption === lastStyledOption?.toLowerCase()
+            (productPath.toLowerCase() === lastProductPath?.toLowerCase() &&
+                styledOption === lastStyledOption?.toLowerCase()) ||
+            productPath.toLowerCase() === `/${searchPath.toLowerCase()}`
         ) {
             return;
         }
@@ -191,7 +195,14 @@ class ProductDetailsPage extends React.Component<Props> {
     }
 
     render() {
-        if (!this.props.productState.value || !this.props.productInfo) {
+        if (
+            !this.props.productState.value ||
+            this.props.productState.isLoading ||
+            !this.props.productInfo ||
+            (this.props.productPath &&
+                this.props.lastProductPath &&
+                this.props.productPath.toLowerCase() !== this.props.lastProductPath.toLowerCase())
+        ) {
             return null;
         }
 

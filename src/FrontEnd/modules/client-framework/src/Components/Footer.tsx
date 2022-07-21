@@ -3,7 +3,7 @@ import { createPageElement } from "@insite/client-framework/Components/ContentIt
 import { HasShellContext, ShellContext, withIsInShell } from "@insite/client-framework/Components/IsInShell";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { loadPageByType } from "@insite/client-framework/Store/Data/Pages/PagesActionCreators";
-import { getFooter, getLocation, getPageStateByType } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
+import { getLocation, getPageStateByType } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import { nullPage } from "@insite/client-framework/Store/Data/Pages/PagesState";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";

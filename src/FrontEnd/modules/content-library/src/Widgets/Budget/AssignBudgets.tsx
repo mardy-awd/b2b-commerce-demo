@@ -524,7 +524,6 @@ const AssignBudgets = ({
                                                     </Typography>
                                                     <TextField
                                                         type="number"
-                                                        defaultValue="0"
                                                         value={budgetAmount}
                                                         {...styles.budgetAmountTextField}
                                                         data-test-selector={`budgetAmountField_${index}`}

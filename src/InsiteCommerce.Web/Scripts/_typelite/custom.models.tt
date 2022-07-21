@@ -8,7 +8,7 @@
 <#@output extension=".d.ts"#>
 
 <#@include file="..\..\Manager.ttinclude"#>
-<# var manager = Manager.Create(Host, GenerationEnvironment); #>
+<# var manager = Manager.Create(this.Host, this.GenerationEnvironment); #>
 
 <#
 var ts = TypeScript.Definitions()

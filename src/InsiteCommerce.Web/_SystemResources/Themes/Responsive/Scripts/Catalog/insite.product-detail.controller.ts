@@ -12,6 +12,7 @@ module insite.catalog {
         product: ProductDto;
         category: CategoryModel;
         breadCrumbs: BreadCrumbModel[];
+        enableStructuredPageData: boolean;
         settings: ProductSettingsModel;
         configurationSelection: ConfigSectionOptionDto[] = [];
         configurationCompleted = false;
@@ -108,6 +109,12 @@ module insite.catalog {
                     }
                 }
             });
+
+            this.$scope.$watch(() => this.product, (newValue) => {
+                if (newValue) {
+                    this.setStructuredPageData();
+                }
+            }, true);
         }
 
         protected getSettingsCompleted(settingsCollection: core.SettingsCollection): void {
@@ -157,6 +164,7 @@ module insite.catalog {
             const productId = catalogPage.productId; // this url is already known to map to a single product so productId should always be non null.
             this.category = catalogPage.category;
             this.breadCrumbs = catalogPage.breadCrumbs;
+            this.enableStructuredPageData = catalogPage.enableStructuredPageData;
             this.getProductData(productId.toString());
         }
 
@@ -666,6 +674,70 @@ module insite.catalog {
                     || (((this.styleSelectionCompleted || this.configurationCompleted)
                         && (this.settings.allowBackOrder || ((<any>this.product.availability) && (<any>this.product.availability).messageType !== 2)))
                         && !this.product.canConfigure));
+        }
+
+        protected setStructuredPageData() {
+            if (!this.enableStructuredPageData) {
+                return;
+            }
+
+            const data = {
+                "@context": "https://schema.org",
+                "@type": "Product",
+                productID: this.product.id,
+                name: this.product.shortDescription,
+                image: [this.product.smallImagePath, this.product.mediumImagePath, this.product.largeImagePath],
+                mpn: this.product.manufacturerItem,
+                sku: this.product.sku,
+                url: this.product.productDetailUrl,
+            } as any;
+
+            if (!this.product.pricing.requiresRealTimePrice && !this.product.availability.requiresRealTimeInventory) {
+                data.offers = {
+                    "@type": "Offer",
+                    availability:
+                        this.product.availability.messageType !== 2
+                            ? this.product.availability.messageType === 3
+                                ? "https://schema.org/LimitedAvailability"
+                                : "https://schema.org/InStock"
+                            : "https://schema.org/OutOfStock",
+                    price: this.product.pricing.unitNetPrice,
+                    priceCurrency: this.session.currency.currencyCode,
+                    url: this.product.productDetailUrl,
+                };
+            }
+
+            if (!data.offers) {
+                this.updateStructuredPageDataScript("");
+                return;
+            }
+
+            if (this.product.brand) {
+                data.brand = {
+                    "@type": "Brand",
+                    identifier: this.product.brand.id,
+                    name: this.product.brand.name,
+                    url: this.product.brand.detailPagePath,
+                };
+            }
+
+            if (this.category) {
+                data.category = this.category.path;
+            }
+
+            this.updateStructuredPageDataScript(JSON.stringify(data));
+        }
+
+        protected updateStructuredPageDataScript(structuredPageData: string) {
+            let jsonLdScript = document.querySelector('script[type="application/ld+json"]');
+            if (jsonLdScript) {
+                jsonLdScript.innerHTML = structuredPageData || "";
+            } else if (structuredPageData) {
+                jsonLdScript = document.createElement("script");
+                jsonLdScript.setAttribute("type", "application/ld+json");
+                jsonLdScript.innerHTML = structuredPageData;
+                document.head.appendChild(jsonLdScript);
+            }
         }
     }
 

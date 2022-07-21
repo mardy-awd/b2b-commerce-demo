@@ -175,6 +175,11 @@ export const DispatchCompleteLoadWishListLines: HandlerType = ({
         productInfosByWishListLineId,
     });
 
+    dispatch({
+        type: "Pages/MyListDetails/SetAllWishListLinesIsSelected",
+        isSelected: false,
+    });
+
     if (apiResult) {
         dispatch({
             type: "Data/WishListLines/CompleteLoadWishListLines",

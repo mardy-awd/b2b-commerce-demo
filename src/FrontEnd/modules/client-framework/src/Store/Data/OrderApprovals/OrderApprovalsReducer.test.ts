@@ -105,6 +105,7 @@ function returnCartModel(): CartModel {
     return {
         uri: "testURI",
         properties: {},
+        additionalEmails: "test",
         alsoPurchasedProducts: null,
         approverReason: "test",
         canBypassCheckoutAddress: false,

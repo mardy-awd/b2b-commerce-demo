@@ -270,9 +270,15 @@ export const addPage =
                 if (parameter.isVariant || isLayout) {
                     const finished = () => {
                         dispatch(
-                            savePage(parameter.isVariant, ({ duplicatesFound }) => {
+                            savePage(parameter.isVariant, ({ duplicatesFound, duplicateUrl }) => {
                                 if (duplicatesFound) {
-                                    dispatch(showErrorModal("A variant with this name already exists."));
+                                    dispatch(
+                                        showErrorModal(
+                                            duplicateUrl
+                                                ? "There is url duplicate collision."
+                                                : "A variant with this name already exists.",
+                                        ),
+                                    );
                                     return;
                                 }
 

@@ -72,7 +72,8 @@ module insite.common {
             }
 
             reCaptchaErrorElement.hide();
-            this.ipCookie("g-recaptcha-response", reCaptchaResponse, { path: "/" });
+            const isSecure = window.location.protocol.indexOf("https") > -1;
+            this.ipCookie("g-recaptcha-response", reCaptchaResponse, { path: "/", secure: isSecure });
             return true;
         }
     }

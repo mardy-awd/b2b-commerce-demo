@@ -115,7 +115,11 @@ class AutocompleteProducts extends React.Component<Props> {
         const styles = this.styles;
         return (
             <>
-                <Typography {...styles.headerText} data-test-selector="autocompleteProducts_Header">
+                <Typography
+                    {...styles.headerText}
+                    data-test-selector="autocompleteProducts_Header"
+                    className="autocomplete-products-header"
+                >
                     {translate("Products")}
                 </Typography>
                 {products.map(product => (
@@ -125,15 +129,24 @@ class AutocompleteProducts extends React.Component<Props> {
                         onClick={() => {
                             this.props.goToUrl(product.url);
                         }}
+                        className="autocomplete-products-container"
                     >
-                        <GridItem {...styles.imageGridItem}>
-                            <LazyImage {...styles.image} src={product.image} />
+                        <GridItem {...styles.imageGridItem} className="autocomplete-products-image-grid-item">
+                            <LazyImage {...styles.image} src={product.image} className="autocomplete-products-image" />
                         </GridItem>
-                        <GridItem {...styles.infoGridItem}>
-                            <Link {...styles.titleLink} data-test-selector={`productId_${product.id}`}>
+                        <GridItem {...styles.infoGridItem} className="autocomplete-products-info-grid-item">
+                            <Link
+                                {...styles.titleLink}
+                                data-test-selector={`productId_${product.id}`}
+                                className="autocomplete-products-link"
+                            >
                                 {product.displayTitle}
                             </Link>
-                            <Typography {...styles.erpNumberText} data-test-selector="autocompleteProducts_PartNumber">
+                            <Typography
+                                {...styles.erpNumberText}
+                                data-test-selector="autocompleteProducts_PartNumber"
+                                className="autocomplete-products-erp-number"
+                            >
                                 {product.isNameCustomerOverride ? (
                                     <>
                                         {translate("My Part #")}

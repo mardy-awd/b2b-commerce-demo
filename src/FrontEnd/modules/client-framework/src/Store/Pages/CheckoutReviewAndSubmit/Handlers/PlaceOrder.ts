@@ -13,6 +13,7 @@ import {
     UpdateCartApiParameter,
     updateCartWithResult,
 } from "@insite/client-framework/Services/CartService";
+import { ThreeDsModel } from "@insite/client-framework/Services/PaymentService";
 import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import loadCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCart";
 import loadCurrentCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCurrentCart";
@@ -47,6 +48,7 @@ interface PlaceOrderParameter {
     accountHolderName?: string;
     accountNumber?: string;
     routingNumber?: string;
+    threeDs?: ThreeDsModel;
 }
 
 type HandlerType = ApiHandlerDiscreteParameter<
@@ -103,6 +105,10 @@ export const SetPaymentMethod: HandlerType = props => {
         cartToUpdate.paymentOptions!.payPalPayerId = props.parameter.payPalPayerId;
         cartToUpdate.paymentMethod = null;
         return;
+    }
+
+    if (props.parameter.threeDs && cartToUpdate.paymentOptions) {
+        cartToUpdate.paymentOptions.threeDs = props.parameter.threeDs;
     }
 
     if (!cartToUpdate.paymentOptions?.paymentMethods?.length) {

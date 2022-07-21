@@ -136,7 +136,8 @@ const Clickable: React.FC<ClickableProps & HasDisablerContext> = withTheme(
                                 isRelativeLink &&
                                 !spaOptOut &&
                                 !href.startsWith("/RedirectTo/") &&
-                                !href.startsWith("/UserFiles/")
+                                !href.startsWith("/UserFiles/") &&
+                                !href.match(/^tel:/i)
                             ) {
                                 history.push(href);
                             } else {

@@ -172,7 +172,7 @@ const InvoiceDetailsTotal = ({ enableVat }: Props) => {
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(InvoiceDetailsTotal),
     definition: {
-        group: "Invoice History",
+        group: "Invoice Details",
         displayName: "Total",
         allowedContexts: ["InvoiceDetailsPage"],
     },

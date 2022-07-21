@@ -32,9 +32,10 @@ export const getPageStates = (filters: TreeFilterModel[]) =>
 
 export const getTreeFilters = (query: string) => get<TreeFilterCollectionModel>("treeFilters", { query });
 
-// TODO ISC-12644 - This limited response yields a poor UX.
 export type SavePageResponseModel = {
     duplicatesFound?: true;
+    duplicateName?: boolean;
+    duplicateUrl?: boolean;
 };
 
 export type DeletePageResponseModel = {

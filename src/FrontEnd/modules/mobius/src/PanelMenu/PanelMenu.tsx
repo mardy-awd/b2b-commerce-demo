@@ -154,6 +154,8 @@ class PanelMenu extends React.Component<PanelMenuPropsCompleted> {
         const { currentUrl } = this.props;
         const typographyProps = applyProp("childTypographyProps");
         const panelRowProps = applyProp("panelRowProps");
+
+        const currentUrlRegex = new RegExp(currentUrl!, "gi");
         return (
             <>
                 {childMenuItems
@@ -169,11 +171,14 @@ class PanelMenu extends React.Component<PanelMenuPropsCompleted> {
                         const menuItem = (
                             <PanelRow
                                 key={item.title}
-                                isCurrent={currentUrl === item.url}
+                                isCurrent={item.url?.match(currentUrlRegex) || item.title?.match(currentUrlRegex)}
                                 onClick={this.props.closeOverlay}
                                 color={applyProp("bodyColor")}
                                 hasChildren={renderChildren || false}
                                 tabIndex={this.state.layer === 0 ? 0 : -1}
+                                css={css`
+                                    width: 100%;
+                                `}
                                 {...clickableProps}
                                 {...panelRowProps}
                             >

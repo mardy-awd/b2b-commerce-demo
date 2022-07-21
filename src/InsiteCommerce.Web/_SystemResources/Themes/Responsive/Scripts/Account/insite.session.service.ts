@@ -236,38 +236,39 @@ module insite.account {
             }
 
             const isRememberedUser = !!this.ipCookie("SetRememberedUserId");
+            const isSecure = this.$location.protocol() === "https";
             if (context.billToId) {
-                this.ipCookie("CurrentBillToId", context.billToId, { path: "/", expires: isRememberedUser ? this.accountSettings.daysToRetainUser : null });
+                this.ipCookie("CurrentBillToId", context.billToId, { path: "/", secure: isSecure, expires: isRememberedUser ? this.accountSettings.daysToRetainUser : null });
             } else if (!isRememberedUser) {
                 this.ipCookie.remove("CurrentBillToId", { path: "/" });
             }
 
             if (context.shipToId) {
-                this.ipCookie("CurrentShipToId", context.shipToId, { path: "/", expires: isRememberedUser ? this.accountSettings.daysToRetainUser : null });
+                this.ipCookie("CurrentShipToId", context.shipToId, { path: "/", secure: isSecure, expires: isRememberedUser ? this.accountSettings.daysToRetainUser : null });
             } else if (!isRememberedUser) {
                 this.ipCookie.remove("CurrentShipToId", { path: "/" });
             }
 
             if (context.currencyId) {
-                this.ipCookie("CurrentCurrencyId", context.currencyId, { path: "/" });
+                this.ipCookie("CurrentCurrencyId", context.currencyId, { path: "/", secure: isSecure });
             } else {
                 this.ipCookie.remove("CurrentCurrencyId", { path: "/" });
             }
 
             if (context.languageId) {
-                this.ipCookie("CurrentLanguageId", context.languageId, { path: "/" });
+                this.ipCookie("CurrentLanguageId", context.languageId, { path: "/", secure: isSecure });
             } else {
                 this.ipCookie.remove("CurrentLanguageId", { path: "/" });
             }
 
             if (context.fulfillmentMethod) {
-                this.ipCookie("CurrentFulfillmentMethod", context.fulfillmentMethod, { path: "/", expires: isRememberedUser ? this.accountSettings.daysToRetainUser : null });
+                this.ipCookie("CurrentFulfillmentMethod", context.fulfillmentMethod, { path: "/", secure: isSecure, expires: isRememberedUser ? this.accountSettings.daysToRetainUser : null });
             } else if (!isRememberedUser) {
                 this.ipCookie.remove("CurrentFulfillmentMethod", { path: "/" });
             }
 
             if (context.pickUpWarehouseId) {
-                this.ipCookie("CurrentPickUpWarehouseId", context.pickUpWarehouseId, { path: "/", expires: isRememberedUser ? this.accountSettings.daysToRetainUser : null });
+                this.ipCookie("CurrentPickUpWarehouseId", context.pickUpWarehouseId, { path: "/", secure: isSecure, expires: isRememberedUser ? this.accountSettings.daysToRetainUser : null });
             } else if (!isRememberedUser) {
                 this.ipCookie.remove("CurrentPickUpWarehouseId", { path: "/" });
             }

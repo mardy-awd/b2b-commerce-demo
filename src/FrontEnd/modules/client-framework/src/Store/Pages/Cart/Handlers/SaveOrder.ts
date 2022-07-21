@@ -19,6 +19,9 @@ type HandlerType = ApiHandlerDiscreteParameter<SaveOrderParameter, UpdateCartApi
 
 export const DispatchBeginRemoveCart: HandlerType = props => {
     props.dispatch({
+        type: "Context/BeginUpdatingCart",
+    });
+    props.dispatch({
         type: "Pages/Cart/BeginSavingOrder",
     });
 };
@@ -46,6 +49,9 @@ export const UpdateCart: HandlerType = async props => {
         props.dispatch({
             type: "Pages/Cart/CompleteSavingOrder",
         });
+        props.dispatch({
+            type: "Context/CompleteUpdatingCart",
+        });
 
         props.parameter.onError?.(result.errorMessage);
         return false;
@@ -65,6 +71,9 @@ export const LoadCart: HandlerType = props => {
 export const DispatchCompleteSavingOrder: HandlerType = props => {
     props.dispatch({
         type: "Pages/Cart/CompleteSavingOrder",
+    });
+    props.dispatch({
+        type: "Context/CompleteUpdatingCart",
     });
 };
 

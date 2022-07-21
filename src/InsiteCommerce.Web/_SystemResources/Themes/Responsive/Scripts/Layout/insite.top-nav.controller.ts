@@ -167,7 +167,8 @@
         }
 
         setMode(mode: string): void {
-            this.ipCookie(this.NavigationModeCookieName, mode, { path: "/" });
+            const isSecure = window.location.protocol.indexOf("https") > -1;
+            this.ipCookie(this.NavigationModeCookieName, mode, { path: "/", secure: isSecure });
             if (mode === "Vmi") {
                 this.$window.location.href = this.vmiDashboardUrl;
             } else {

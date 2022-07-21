@@ -18,6 +18,9 @@ type HandlerType = Handler<
 
 export const DispatchBeginRemoveCart: HandlerType = props => {
     props.dispatch({
+        type: "Context/BeginUpdatingCart",
+    });
+    props.dispatch({
         type: "Pages/Cart/BeginClearCart",
     });
 };
@@ -34,6 +37,9 @@ export const LoadCart: HandlerType = props => {
     props.dispatch(
         loadCurrentCart({
             onSuccess: () => {
+                props.dispatch({
+                    type: "Context/CompleteUpdatingCart",
+                });
                 props.dispatch({
                     type: "Pages/Cart/CompleteClearCart",
                 });

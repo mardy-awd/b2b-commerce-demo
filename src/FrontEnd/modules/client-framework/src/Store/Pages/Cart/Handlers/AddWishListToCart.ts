@@ -28,7 +28,7 @@ export const PopulateApiParameter: HandlerType = props => {
 
 export const DispatchBeginAddingProductToCart: HandlerType = props => {
     props.dispatch({
-        type: "Context/BeginAddingProductToCart",
+        type: "Context/BeginUpdatingCart",
     });
 };
 
@@ -38,7 +38,7 @@ export const RequestDataFromApi: HandlerType = async props => {
 
 export const DispatchCompleteAddingProductToCart: HandlerType = props => {
     props.dispatch({
-        type: "Context/CompleteAddingProductToCart",
+        type: "Context/CompleteUpdatingCart",
     });
 };
 

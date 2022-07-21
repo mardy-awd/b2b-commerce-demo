@@ -38,7 +38,8 @@
         }
 
         accept(): void {
-            this.ipCookie("acceptCookies", true, { path: "/", expires: 365 });
+            const isSecure = window.location.protocol.indexOf("https") > -1;
+            this.ipCookie("acceptCookies", true, { path: "/", secure: isSecure, expires: 365 });
             this.showPopup = false;
         }
 

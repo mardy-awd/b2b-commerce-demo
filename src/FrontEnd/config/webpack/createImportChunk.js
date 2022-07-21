@@ -240,11 +240,11 @@ const searchFolder = (startFolder, folderName) => {
 
 const getExtensionImport = (file, dir, chunkName) => {
     let extensionPath = widgetExtensionsObj[`${file}Extension`];
-    if (extensionPath) {
+    if (extensionPath && extensionPath.indexOf(dir) > -1) {
         delete widgetExtensionsObj[`${file}Extension`];
     } else {
         extensionPath = widgetExtensionsObj[`${file}Extensions`];
-        if (extensionPath) {
+        if (extensionPath && extensionPath.indexOf(dir) > -1) {
             delete widgetExtensionsObj[`${file}Extensions`];
         } else {
             extensionPath = widgetExtensionsObj[`${dir}Extension`];

@@ -155,7 +155,8 @@
                                 <span ng-if="vm.useTokenExGateway">
                                     <input type="text" disabled ng-show="!vm.ppTokenExIframeIsLoaded" />
                                     <div id="ppTokenExSecurityCode" class="tokenex-iframe-block" ng-show="vm.ppTokenExIframeIsLoaded"></div>
-                                    <label ng-if="vm.ppIsInvalidSecurityCode" class="tokenex-error error">[% translate 'Security code is invalid.' %]</label>
+                                    <label ng-if="vm.ppIsRequiredSecurityCode" class="tokenex-error">[% translate 'Security code is required.' %]</label>
+                                    <label ng-if="vm.ppIsInvalidSecurityCode" class="tokenex-error">[% translate 'Security code is invalid.' %]</label>
                                 </span>
                                 <span ng-if="!vm.useTokenExGateway">
                                     <input id="ppSecurityCode" name="ppSecurityCode" type="text" minlength="3" maxlength="4"
@@ -199,7 +200,8 @@
                                 <label for="cardNumber">[% translate 'Card Number' %]</label>
                                 <span ng-if="vm.useTokenExGateway">
                                     <div id="tokenExCardNumber" class="tokenex-iframe-block"></div>
-                                    <label ng-if="vm.isInvalidCardNumber" class="tokenex-error error">[% translate 'Credit card number is invalid.' %]</label>
+                                    <label ng-if="vm.isRequiredCardNumber" class="tokenex-error">[% translate 'Credit card number is required.' %]</label>
+                                    <label ng-if="vm.isInvalidCardNumber" class="tokenex-error">[% translate 'Credit card number is invalid.' %]</label>
                                 </span>
                                 <span ng-if="!vm.useTokenExGateway">
                                     <input id="cardNumber" name="cardNumber" maxlength="16" type="text" style="display: block;"
@@ -213,7 +215,8 @@
                                 <label>[% translate 'Security Code' %]&nbsp;<a href="javascript:void(0);" data-reveal-id="whatsThisPopup">[% translate "What's This?" %]</a></label>
                                 <span ng-if="vm.useTokenExGateway">
                                     <div id="tokenExSecurityCode" class="tokenex-iframe-block"></div>
-                                    <label ng-if="vm.isInvalidSecurityCode" class="tokenex-error error">[% translate 'Security code is invalid.' %]</label>
+                                    <label ng-if="vm.isRequiredSecurityCode" class="tokenex-error">[% translate 'Security code is required.' %]</label>
+                                    <label ng-if="vm.isInvalidSecurityCode" class="tokenex-error">[% translate 'Security code is invalid.' %]</label>
                                 </span>
                                 <span ng-if="!vm.useTokenExGateway && !vm.bypassCvvForSavedCards">
                                     <input id="securityCode" name="securityCode" type="text" minlength="3" maxlength="4"

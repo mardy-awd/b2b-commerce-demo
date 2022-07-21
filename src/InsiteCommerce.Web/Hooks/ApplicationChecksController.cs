@@ -13,20 +13,20 @@ namespace InsiteCommerce.Web.Hooks
     [InternalAccessAuthentication]
     public class ApplicationChecksController : ApiController
     {
-        private readonly IIntegrationJobsActiveService IntegrationJobsActiveStatus;
+        private readonly IIntegrationJobsActiveService integrationJobsActiveStatus;
 
         public ApplicationChecksController(
             IIntegrationJobsActiveService integrationJobsActiveStatus
         )
         {
-            this.IntegrationJobsActiveStatus = integrationJobsActiveStatus;
+            this.integrationJobsActiveStatus = integrationJobsActiveStatus;
         }
 
         [HttpGet]
         [Route("PostStart")]
         public HttpResponseMessage PostStart()
         {
-            this.IntegrationJobsActiveStatus.EnableStartingOfJobs();
+            this.integrationJobsActiveStatus.EnableStartingOfJobs();
 
             var response = this.Request.CreateResponse();
             response.Content = new StringContent("success");
@@ -52,13 +52,13 @@ namespace InsiteCommerce.Web.Hooks
                     terminationGracePeriodSeconds = 60;
                 }
 
-                this.IntegrationJobsActiveStatus.DisableNewJobsFromStarting();
+                this.integrationJobsActiveStatus.DisableNewJobsFromStarting();
 
                 // Check for InProgress IntegrationJobs
                 var checkCount = 0;
                 // Wait for InProgress to finish (Delay 1/10 of terminationGracePeriodSeconds)
                 var checkDelay = (terminationGracePeriodSeconds / 10) * 1000;
-                var currentlyInProcessJobs = this.IntegrationJobsActiveStatus.GetInProcessJobs();
+                var currentlyInProcessJobs = this.integrationJobsActiveStatus.GetInProcessJobs();
                 if (currentlyInProcessJobs.Any())
                 {
                     // This way we will always check around 8 times and log any InProgress Jobs.
@@ -71,7 +71,7 @@ namespace InsiteCommerce.Web.Hooks
 
                         await Task.Delay(checkDelay);
                         currentlyInProcessJobs =
-                            this.IntegrationJobsActiveStatus.GetInProcessJobs();
+                            this.integrationJobsActiveStatus.GetInProcessJobs();
                         if (!currentlyInProcessJobs.Any())
                         {
                             break;
@@ -81,7 +81,7 @@ namespace InsiteCommerce.Web.Hooks
                     // If not finished and return a failed response
                     if (currentlyInProcessJobs.Any())
                     {
-                        this.IntegrationJobsActiveStatus.LogCaughtInPreStopCheck();
+                        this.integrationJobsActiveStatus.LogCaughtInPreStopCheck();
                         var errorResponse = this.Request.CreateResponse();
                         errorResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
                         errorResponse.Content = new StringContent(

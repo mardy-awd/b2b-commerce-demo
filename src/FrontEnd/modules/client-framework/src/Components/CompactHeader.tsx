@@ -9,12 +9,12 @@ import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
 
 const mapStateToProps = (state: ApplicationState) => {
-    const headerState = getPageStateByType(state, "CompactHeader");
+    const compactHeaderState = getPageStateByType(state, "CompactHeader");
     return {
         preventLoadingForIframeComparison: !!parseQueryString<{ skipHeaderFooter: string }>(getLocation(state).search)
             .skipHeaderFooter,
-        compactHeader: headerState.value || nullPage,
-        isLoading: headerState.isLoading,
+        compactHeader: compactHeaderState.value || nullPage,
+        isLoading: compactHeaderState.isLoading,
     };
 };
 
@@ -24,7 +24,7 @@ const mapDispatchToProps = {
 
 type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasShellContext;
 
-class Header extends React.Component<Props> {
+class CompactHeader extends React.Component<Props> {
     UNSAFE_componentWillMount() {
         const props = this.props;
         if (!props.preventLoadingForIframeComparison && !props.isLoading && props.compactHeader.id === "") {
@@ -49,4 +49,4 @@ class Header extends React.Component<Props> {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withIsInShell(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(withIsInShell(CompactHeader));

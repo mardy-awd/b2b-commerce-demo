@@ -22,14 +22,14 @@
             {
                 var unitOfWork = DependencyLocator.Current.GetInstance<IUnitOfWorkFactory>().GetUnitOfWork();
                 unitOfWork.GetRepository<Website>().GetTable().First();
-                Response.Write("Database Check: Passed <br/>");
+                this.Response.Write("Database Check: Passed <br/>");
             }
             catch (Exception)
             {
                 isGood = false;
-                Response.Write("Database Check: Failed <br/>");
+                this.Response.Write("Database Check: Failed <br/>");
 
-                if (Request.IsLocal)
+                if (this.Request.IsLocal)
                 {
                     throw;
                 }
@@ -45,20 +45,20 @@
                 if (searchResults.SortOptions == null)
                 {
                     isGood = false;
-                    Response.Write("Product Search Check: Failed <br/>");
+                    this.Response.Write("Product Search Check: Failed <br/>");
                 }
                 else
                 {
-                    Response.Write("Product Search Check: Passed <br/>");
+                    this.Response.Write("Product Search Check: Passed <br/>");
                 }
             }
             catch (Exception)
             {
                 isGood = false;
 
-                Response.Write("Product Search Check: Failed <br/>");
+                this.Response.Write("Product Search Check: Failed <br/>");
 
-                if (Request.IsLocal)
+                if (this.Request.IsLocal)
                 {
                     throw;
                 }
@@ -73,7 +73,8 @@
         <%
            else
            {%>
-            <% Response.StatusCode = 500; %>
+            <%
+                this.Response.StatusCode = 500; %>
             <%= ConfigurationManager.AppSettings["SiteIdentifier"] ?? "InsiteCommerce" %> SimplePing is bad
            <%} %>
 

@@ -3,6 +3,7 @@ import { getCookie, setCookie } from "@insite/client-framework/Common/Cookies";
 import { getValueCaseInsensitive, SafeDictionary } from "@insite/client-framework/Common/Types";
 import { checkIsWebCrawler, setIsWebCrawler } from "@insite/client-framework/Common/WebCrawler";
 import { ShellContext } from "@insite/client-framework/Components/IsInShell";
+import Maintenance from "@insite/client-framework/Components/Maintenance";
 import PreviewLogin from "@insite/client-framework/Components/PreviewLogin";
 import SessionLoader from "@insite/client-framework/Components/SessionLoader";
 import SpireRouter from "@insite/client-framework/Components/SpireRouter";
@@ -104,9 +105,11 @@ async function renderApp(renderer: Renderer = render) {
             <WrappingContext>
                 <ThemeProvider theme={theme} createGlobalStyle={true} createChildGlobals={false} translate={translate}>
                     <SessionLoader location={{ pathname: window.location.pathname, search: window.location.search }}>
-                        <PreviewLogin>
-                            <SpireRouter />
-                        </PreviewLogin>
+                        <Maintenance>
+                            <PreviewLogin>
+                                <SpireRouter />
+                            </PreviewLogin>
+                        </Maintenance>
                     </SessionLoader>
                 </ThemeProvider>
             </WrappingContext>

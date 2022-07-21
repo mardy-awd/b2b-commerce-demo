@@ -162,7 +162,7 @@ const SubCategoryLink = connect(mapStateToProps)(SubCategoryLinkView);
 const widgetModule: WidgetModule = {
     component: withCategory(CategoryDetailSubCategories),
     definition: {
-        group: "Categories",
+        group: "Category Details",
         icon: "list-ul",
         fieldDefinitions: [
             {

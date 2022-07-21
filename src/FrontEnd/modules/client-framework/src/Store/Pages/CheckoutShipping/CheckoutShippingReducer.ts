@@ -55,6 +55,12 @@ const reducer = {
     "Pages/CheckoutShipping/SetNotes": (draft: Draft<CheckoutShippingState>, action: { notes: string }) => {
         draft.editedCartNotes = action.notes;
     },
+    "Pages/CheckoutShipping/SetAdditionalEmails": (
+        draft: Draft<CheckoutShippingState>,
+        action: { additionalEmails: string },
+    ) => {
+        draft.additionalEmails = action.additionalEmails;
+    },
     "Pages/CheckoutShipping/BeginUpdateCart": (draft: Draft<CheckoutShippingState>) => {
         draft.isUpdatingCart = true;
     },

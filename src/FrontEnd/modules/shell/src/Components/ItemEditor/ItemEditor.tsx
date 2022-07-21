@@ -280,6 +280,7 @@ class ItemEditor extends React.Component<Props, State> {
                 "Footer",
                 "Layout",
                 "CompactHeader",
+                "MaintenancePage",
                 "RobotsTxtPage",
                 "ProductListPage",
                 "ProductDetailsPage",

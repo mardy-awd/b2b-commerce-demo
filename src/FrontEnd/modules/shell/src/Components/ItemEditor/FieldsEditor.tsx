@@ -33,9 +33,11 @@ export default class FieldsEditor extends React.Component<OwnProps, State> {
     constructor(props: OwnProps) {
         super(props);
 
+        const tabs = props.fieldDefinitions.map(o => o.tab);
+        const sortedTabs = sortBy(tabs, ["sortOrder", "displayName"]);
         this.state = {
             validationErrors: {},
-            currentTab: "Basic",
+            currentTab: sortedTabs[0]?.displayName || "Basic",
         };
 
         props.updateHasValidationErrors(false);

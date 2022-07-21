@@ -5,6 +5,7 @@ import { loadAndParseFontCss } from "@insite/client-framework/Common/Utilities/f
 import { getHeadTrackingScript, getNoscriptTrackingScript } from "@insite/client-framework/Common/Utilities/tracking";
 import { getIsWebCrawler } from "@insite/client-framework/Common/WebCrawler";
 import { ShellContext } from "@insite/client-framework/Components/IsInShell";
+import Maintenance from "@insite/client-framework/Components/Maintenance";
 import PreviewLogin from "@insite/client-framework/Components/PreviewLogin";
 import SessionLoader from "@insite/client-framework/Components/SessionLoader";
 import SpireRouter, { convertToLocation } from "@insite/client-framework/Components/SpireRouter";
@@ -195,9 +196,11 @@ export async function pageRenderer(request: Request, response: Response) {
                             translate={translate}
                         >
                             <SessionLoader location={convertToLocation(request.url)}>
-                                <PreviewLogin>
-                                    <SpireRouter />
-                                </PreviewLogin>
+                                <Maintenance>
+                                    <PreviewLogin>
+                                        <SpireRouter />
+                                    </PreviewLogin>
+                                </Maintenance>
                             </SessionLoader>
                         </ThemeProvider>
                     </ShellContext.Provider>
@@ -261,7 +264,7 @@ export async function pageRenderer(request: Request, response: Response) {
                         <link key={key} rel="alternate" hrefLang={key} href={value} />
                     ))}
                 <base href="/" />
-                <link href={fontFamilyImportUrl} rel="stylesheet" type="text/css" />
+                <link href={fontFamilyImportUrl} rel="preload" as="style" type="text/css" />
                 {sheet?.getStyleElement()}
                 <script
                     dangerouslySetInnerHTML={{

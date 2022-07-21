@@ -28,9 +28,9 @@ const CategoryDetailBanner = ({ category }: Props) => {
 const widgetModule: WidgetModule = {
     component: withCategory(CategoryDetailBanner),
     definition: {
-        group: "Categories",
+        group: "Category Details",
         icon: "image-landscape",
-        allowedContexts: ["CategoryDetailsPage"],
+        allowedContexts: ["CategoryDetailsPage", "ProductListPage"],
     },
 };
 

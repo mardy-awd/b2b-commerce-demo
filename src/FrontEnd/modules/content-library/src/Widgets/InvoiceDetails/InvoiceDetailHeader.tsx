@@ -123,7 +123,7 @@ const widgetModule: WidgetModule = {
     definition: {
         displayName: "Page Header",
         allowedContexts: ["InvoiceDetailsPage"],
-        group: "Invoice History",
+        group: "Invoice Details",
         fieldDefinitions: [
             {
                 name: fields.generateEmailAttachmentFromWebpage,

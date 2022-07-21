@@ -1,6 +1,5 @@
 import useAppSelector from "@insite/client-framework/Common/Hooks/useAppSelector";
 import { HasProductContext, withProductContext } from "@insite/client-framework/Components/ProductContext";
-import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import {
     canAddToCart as canAddToCartSelector,
     hasEnoughInventory as hasEnoughInventorySelector,
@@ -37,7 +36,6 @@ const ProductDetailsDeliveryScheduleButton = (props: Props) => {
         productContext: { product, productInfo },
     } = props;
 
-    const productSettings = useAppSelector(state => getSettingsCollection(state).productSettings);
     const canAddToCart = useAppSelector(state =>
         canAddToCartSelector(
             state,
@@ -51,13 +49,7 @@ const ProductDetailsDeliveryScheduleButton = (props: Props) => {
     const subscription = useAppSelector(state => state.pages.productDetails.subscription);
     const dispatch = useDispatch();
 
-    if (
-        !product.detail?.isSubscription ||
-        !product.detail?.subscription ||
-        !productSettings.canAddToCart ||
-        !hasEnoughInventory ||
-        !canAddToCart
-    ) {
+    if (!product.detail?.isSubscription || !product.detail?.subscription || !hasEnoughInventory || !canAddToCart) {
         return null;
     }
 

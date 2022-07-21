@@ -429,11 +429,11 @@ class SearchInput extends React.Component<Props, State> {
         const { categories, brands, content, products } = this.state.autoCompleteModel;
 
         return (
-            <StyledWrapper {...this.styles.autocompleteWrapper}>
+            <StyledWrapper {...this.styles.autocompleteWrapper} className="autocomplete-wrapper">
                 {((categories && categories.length > 0) ||
                     (brands && brands.length > 0) ||
                     (content && content.length > 0)) && (
-                    <StyledWrapper {...this.styles.autocompleteColumnWrapper}>
+                    <StyledWrapper {...this.styles.autocompleteColumnWrapper} className="autocomplete-column-wrapper">
                         <AutocompleteCategories
                             categories={categories}
                             focusedItem={this.state.focusedAutocompleteItem}
@@ -455,7 +455,7 @@ class SearchInput extends React.Component<Props, State> {
                     </StyledWrapper>
                 )}
                 {products && products.length > 0 && (
-                    <StyledWrapper {...this.styles.autocompleteColumnWrapper}>
+                    <StyledWrapper {...this.styles.autocompleteColumnWrapper} className="autocomplete-column-wrapper">
                         <AutocompleteProducts
                             products={products}
                             focusedItem={this.state.focusedAutocompleteItem}
@@ -485,6 +485,7 @@ class SearchInput extends React.Component<Props, State> {
                 clickableText={translate("submit search")}
                 id={searchId}
                 data-test-selector="headerSearchInputTextField"
+                className="search-input"
             />
         );
 
@@ -509,6 +510,7 @@ class SearchInput extends React.Component<Props, State> {
                     }
                     handleKeyDown={this.handlePopoverKeyDown}
                     onClose={this.handlePopoverClose}
+                    className="popover"
                 >
                     {!this.state.query && this.showAutocomplete && (
                         <SearchHistory

@@ -71,6 +71,7 @@ const mapStateToProps = (state: ApplicationState) => {
         canReorderItems: settingsCollection.orderSettings.canReorderItems,
         showAddToCartConfirmationDialog: settingsCollection.productSettings.showAddToCartConfirmationDialog,
         isReordering: state.pages.orderDetails.isReordering,
+        isUpdatingCart: state.context.isUpdatingCart,
         isVmiOrderDetailsPage: state.pages.orderDetails.isVmiOrderDetailsPage,
     };
 };
@@ -195,6 +196,7 @@ const OrderDetailsButtonSet: React.FC<Props> = ({
     canReorderItems,
     showAddToCartConfirmationDialog,
     isReordering,
+    isUpdatingCart,
     history,
     isVmiOrderDetailsPage,
 }) => {
@@ -268,7 +270,7 @@ const OrderDetailsButtonSet: React.FC<Props> = ({
                         <Button
                             {...styles.reorderButton}
                             onClick={onClickReorder}
-                            disabled={isReordering}
+                            disabled={isUpdatingCart}
                             data-test-selector="orderDetails_reorderButton"
                         >
                             {translate("Reorder")}
@@ -280,7 +282,7 @@ const OrderDetailsButtonSet: React.FC<Props> = ({
             clickable: (
                 <>
                     {!isReordering && (
-                        <Clickable {...styles.reorderClickable} onClick={onClickReorder} disabled={isReordering}>
+                        <Clickable {...styles.reorderClickable} onClick={onClickReorder} disabled={isUpdatingCart}>
                             {translate("Reorder")}
                         </Clickable>
                     )}

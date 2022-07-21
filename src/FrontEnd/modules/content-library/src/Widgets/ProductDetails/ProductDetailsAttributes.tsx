@@ -39,7 +39,10 @@ const ProductDetailsAttributes: React.FC<Props> = ({ product: { brand, attribute
         return null;
     }
 
-    const limitedAttributeTypes = (attributeTypes ?? []).slice(0, 5);
+    const limitedAttributeTypes = (attributeTypes?.filter(attributeType => attributeType.includeOnProduct) ?? []).slice(
+        0,
+        5,
+    );
 
     return (
         <StyledWrapper {...styles.wrapper} data-test-selector="productDetails_attributes">

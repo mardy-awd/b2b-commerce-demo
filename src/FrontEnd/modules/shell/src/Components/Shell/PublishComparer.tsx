@@ -266,6 +266,7 @@ class PublishComparer extends React.Component<Props, State> {
             pageType === "Footer" ||
             pageType === "SharedContent" ||
             pageType === "CompactHeader" ||
+            pageType === "MaintenancePage" ||
             mobileCmsModeActive
                 ? "&skipHeaderFooter=true"
                 : "";

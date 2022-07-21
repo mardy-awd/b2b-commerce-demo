@@ -28,10 +28,12 @@ const mapDispatchToProps = {
 const mapStateToProps = (state: ApplicationState) => {
     const cartState = getCurrentCartState(state);
     const { isSavingOrder } = state.pages.cart;
+    const { isUpdatingCart } = state.context;
     return {
         isDisabled:
             cartState.isLoading ||
             isSavingOrder ||
+            isUpdatingCart ||
             cartState.value?.lineCount === 0 ||
             cartState.value?.cartLines?.length === 0,
         canSaveOrder: cartState.value?.canSaveOrder,

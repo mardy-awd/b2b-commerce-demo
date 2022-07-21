@@ -99,7 +99,7 @@ const Header = ({ id, siteName, session, toaster, history, myAccountPageUrl, dis
     };
 
     useEffect(() => {
-        if (session.hasRfqUpdates) {
+        if (session.hasRfqUpdates && myAccountPageUrl) {
             toaster.addToast({
                 body: (
                     <>
@@ -114,7 +114,7 @@ const Header = ({ id, siteName, session, toaster, history, myAccountPageUrl, dis
                 },
             });
         }
-    }, []);
+    }, [myAccountPageUrl]);
 
     const afterHeader = React.createRef<HTMLSpanElement>();
     return (

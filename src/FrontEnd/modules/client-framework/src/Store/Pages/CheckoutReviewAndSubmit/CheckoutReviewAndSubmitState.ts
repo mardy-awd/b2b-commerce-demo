@@ -13,4 +13,5 @@ export default interface CheckoutReviewAndSubmitState {
     placeOrderErrorMessage?: string;
     isPreloadingData: boolean;
     payPalCheckoutErrorMessage?: string;
+    isWaitingForThreeDs?: boolean;
 }

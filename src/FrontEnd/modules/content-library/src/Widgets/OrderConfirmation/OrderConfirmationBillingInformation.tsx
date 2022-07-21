@@ -91,7 +91,10 @@ const OrderConfirmationBillingInformation: FC<Props> = ({ cart, extendedStyles, 
             <GridItem {...styles.billingInformationTitleGridItem}>
                 <Typography {...styles.billingInformationTitle}>{translate("Billing Information")}</Typography>
             </GridItem>
-            <GridItem {...styles.billingInformationBillingAddressGridItem}>
+            <GridItem
+                {...styles.billingInformationBillingAddressGridItem}
+                data-test-selector="orderConfirmationBillingInformation"
+            >
                 <Typography {...styles.billingAddressTitle}>{translate("Billing Address")}</Typography>
                 <AddressInfoDisplay
                     companyName={billTo.companyName}

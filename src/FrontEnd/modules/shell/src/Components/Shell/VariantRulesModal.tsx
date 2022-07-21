@@ -76,6 +76,7 @@ const VariantRulesModal: React.FC<Props> = ({ variantRulesForPageId, visible, is
                     {showSkip === true ? "Skip for now" : showSkip === false ? "Close" : "Cancel"}
                 </CancelButton>
                 <Button
+                    data-test-selector="VariantRulesModal_Save"
                     disabled={saveDisabled}
                     variant="primary"
                     onClick={() => {

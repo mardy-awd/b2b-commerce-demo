@@ -12,11 +12,33 @@
     <DefineConstants>TRACE;DEBUG;NOETAG</DefineConstants>
     <DebugType>full</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptNoEmitOnError>false</TypeScriptNoEmitOnError>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
   </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+      IF NOT EXIST "$(MSBuildProjectDirectory)\config\connectionStrings.config" (
+        IF EXIST "$(MSBuildProjectDirectory)\config\connectionStrings.default.config" copy "$(MSBuildProjectDirectory)\config\connectionStrings.default.config" "$(MSBuildProjectDirectory)\config\connectionStrings.config"
+      )
+
+      IF NOT EXIST "$(MSBuildProjectDirectory)\config\appSettings.config" (
+        IF EXIST "$(MSBuildProjectDirectory)\config\appSettings.default.config" copy "$(MSBuildProjectDirectory)\config\appSettings.default.config" "$(MSBuildProjectDirectory)\config\appSettings.config"
+      )
+    </PreBuildEvent>
+  </PropertyGroup>
+  <Target Name="AfterBuildMigrated" Condition="'$(Configuration)' == 'Debug' And Exists('$(SolutionDir)warmCommerce.bat')">
+    <!-- the only way I could determine to fire and forgot powershell involved this command + a batch script -->
+    <Exec Command="powershell start-process $(SolutionDir)warmCommerce.bat -WindowStyle hidden" />
+  </Target>
+  <Target Name="BeforeBuildMigrated" Condition="'$(GenerateLicenseFile)' == 'true'" BeforeTargets="PreBuildEvent">
+    <!-- to run this command dot net core sdk needs to be installed such that 'dotnet tool update -g dotnet-project-licenses' can be run from powershell -->
+    <Exec Command="powershell.exe -executionpolicy bypass -NoLogo -NonInteractive -file &quot;$(MSBuildProjectDirectory)\validateLicenses.ps1&quot;" />
+  </Target>
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
@@ -54,6 +76,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\**\*.cshtml" />
     <Content Include="Images\**\*" />
     <Content Include="Licensing\isc-licenses.json" />
     <Content Include="QuickPing.aspx" />
@@ -84,20 +107,13 @@
     <None Include="_SystemResources\**\*.cshtml" />
     <None Include="_SystemResources\**\*.liquid" />
     <Content Include="App_Config\*.config" />
-    <Content Include="Themes\**\*.js" />
-    <Content Include="Themes\**\*.js.map" />
-    <Content Include="Themes\**\*.ts" />
-    <Content Include="Themes\**\*.liquid" />
-    <Content Include="Themes\**\*.cshtml" />
-    <Content Include="Themes\**\*.scss" />
-    <Content Include="Themes\**\*.css" />
-    <Content Include="Themes\**\*.json" />
+    <Content Include="Themes\**\*" />
     <Content Remove="Themes\**\bin\**\*" />
     <Content Remove="Themes\**\obj\**\*" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Insite.Commerce.Private" Version="5.1.2206.2483" />
-    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2206.2483" />
+    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2207.3073" />
+    <PackageReference Include="Insite.Commerce.Private" Version="5.1.2207.3073" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj" />

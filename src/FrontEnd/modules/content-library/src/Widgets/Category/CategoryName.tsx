@@ -32,7 +32,7 @@ const CategoryName = ({ category, currentPage }: Props) => {
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(withCategory(CategoryName)),
     definition: {
-        group: "Categories",
+        group: "Category Details",
         icon: "folder-bookmark",
         allowedContexts: ["CategoryDetailsPage", "ProductDetailsPage", "ProductListPage"],
     },

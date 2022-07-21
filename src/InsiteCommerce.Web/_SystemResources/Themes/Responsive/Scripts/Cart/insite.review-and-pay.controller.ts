@@ -46,7 +46,9 @@ module insite.cart {
         usePaymetricGateway: boolean;
         paymetricIframe: any;
         paymetricDto: PaymetricDto;
+        isRequiredCardNumber: boolean;
         isInvalidCardNumber: boolean;
+        isRequiredSecurityCode: boolean;
         isInvalidSecurityCode: boolean;
         isInvalidAccountNumber: boolean;
         isInvalidRoutingNumber: boolean;
@@ -57,6 +59,7 @@ module insite.cart {
         canUpdateShipToAddress: boolean;
         ppTokenExIframe: any;
         ppTokenExIframeIsLoaded: boolean;
+        ppIsRequiredSecurityCode: boolean;
         ppIsInvalidSecurityCode: boolean;
         hasInvalidPrice = false;
         bypassCvvForSavedCards: boolean;
@@ -737,6 +740,16 @@ module insite.cart {
         protected validateReviewAndPayForm(): boolean {
             const valid = jQuery("#reviewAndPayForm").validate().form();
             if (!valid) {
+                if (this.useTokenExGateway &&
+                    this.cart.showCreditCard &&
+                    this.cart.paymentMethod.isCreditCard &&
+                    !this.cart.paymentOptions.isPayPal &&
+                    this.cart.paymentMethod &&
+                    !this.cart.paymentMethod.isECheck &&
+                    this.tokenExIframe
+                ) {
+                    this.tokenExIframe.validate();
+                }
                 this.scrollToTopOfForm();
                 return false;
             }
@@ -811,27 +824,27 @@ module insite.cart {
 
             this.tokenExIframe.on("validate", (data) => {
                 this.$scope.$apply(() => {
-                    if (data.isValid) {
-                        this.isInvalidCardNumber = false;
-                    } else {
-                        if (this.submitting) {
-                            this.isInvalidCardNumber = true;
-                        } else if (data.validator && data.validator !== "required") {
+                    this.isRequiredCardNumber = false;
+                    this.isInvalidCardNumber = false;
+                    if (!data.isValid && data.validator) {
+                        if (data.validator === "required") {
+                            this.isRequiredCardNumber = true;
+                        } else {
                             this.isInvalidCardNumber = true;
                         }
                     }
 
-                    if (data.isCvvValid) {
-                        this.isInvalidSecurityCode = false;
-                    } else {
-                        if (this.submitting) {
-                            this.isInvalidSecurityCode = true;
-                        } else if (data.cvvValidator && data.cvvValidator !== "required") {
+                    this.isRequiredSecurityCode = false;
+                    this.isInvalidSecurityCode = false;
+                    if (!data.isCvvValid && data.cvvValidator) {
+                        if (data.cvvValidator === "required") {
+                            this.isRequiredSecurityCode = true;
+                        } else {
                             this.isInvalidSecurityCode = true;
                         }
                     }
 
-                    if (this.submitting && (this.isInvalidCardNumber || this.isInvalidSecurityCode)) {
+                    if (this.submitting && (!data.isValid || !data.isCvvValid)) {
                         this.submitting = false;
                         this.spinnerService.hide();
                     }
@@ -999,17 +1012,17 @@ module insite.cart {
 
             this.ppTokenExIframe.on("validate", (data) => {
                 this.$scope.$apply(() => {
-                    if (data.isValid) {
-                        this.ppIsInvalidSecurityCode = false;
-                    } else {
-                        if (this.submitting) {
-                            this.ppIsInvalidSecurityCode = true;
-                        } else if (data.validator && data.validator !== "required") {
+                    this.ppIsRequiredSecurityCode = false;
+                    this.ppIsInvalidSecurityCode = false;
+                    if (!data.isValid && data.validator) {
+                        if (data.validator === "required") {
+                            this.ppIsRequiredSecurityCode = true;
+                        } else {
                             this.ppIsInvalidSecurityCode = true;
                         }
                     }
 
-                    if (this.submitting && this.ppIsInvalidSecurityCode) {
+                    if (this.submitting && !data.isValid) {
                         this.submitting = false;
                         this.spinnerService.hide();
                     }

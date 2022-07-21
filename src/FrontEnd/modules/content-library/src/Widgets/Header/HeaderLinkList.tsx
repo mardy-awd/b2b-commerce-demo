@@ -7,15 +7,20 @@ import { useMergeStyles } from "@insite/content-library/additionalStyles";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import getColor from "@insite/mobius/utilities/getColor";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
+import * as cssLinter from "css";
 import * as React from "react";
 import { css } from "styled-components";
 
 const enum fields {
     links = "links",
+    customCSS = "customCSS",
 }
 
 interface OwnProps extends WidgetProps {
-    fields: { [fields.links]: LinkModel[] };
+    fields: {
+        [fields.links]: LinkModel[];
+        [fields.customCSS]: string;
+    };
     extendedStyles?: HeaderLinkListStyles;
 }
 
@@ -46,6 +51,13 @@ export const headerLinkListStyles: HeaderLinkListStyles = {
     },
 };
 
+const defaultCustomCss = `.list-wrapper {
+}
+
+.list-link {
+}
+`;
+
 export const HeaderLinkList: React.FC<OwnProps> = ({ fields, extendedStyles }) => {
     const links = useGetLinks(fields.links, o => o.fields.destination);
 
@@ -55,23 +67,42 @@ export const HeaderLinkList: React.FC<OwnProps> = ({ fields, extendedStyles }) =
         return null;
     }
 
+    const customCssWrapper = {
+        css: css`
+            ${fields.customCSS}
+        `,
+    };
+
     return (
-        <StyledWrapper {...styles.headerLinkListWrapper}>
-            {links.map(
-                (link, index) =>
-                    link.url && (
-                        <Link
-                            key={`${link.url}.${link.title}`}
-                            href={link.url}
-                            target={fields.links[index].fields.openInNewWindow ? "_blank" : ""}
-                            {...styles.link}
-                        >
-                            {link.title}
-                        </Link>
-                    ),
-            )}
+        <StyledWrapper {...customCssWrapper}>
+            <StyledWrapper className="list-wrapper" {...styles.headerLinkListWrapper}>
+                {links.map(
+                    (link, index) =>
+                        link.url && (
+                            <Link
+                                className="list-link"
+                                key={`${link.url}.${link.title}`}
+                                href={link.url}
+                                target={fields.links[index].fields.openInNewWindow ? "_blank" : ""}
+                                {...styles.link}
+                            >
+                                {link.title}
+                            </Link>
+                        ),
+                )}
+            </StyledWrapper>
         </StyledWrapper>
     );
+};
+
+const basicTab = {
+    displayName: "Basic",
+    sortOrder: 0,
+};
+
+const advancedTab = {
+    displayName: "Advanced",
+    sortOrder: 1,
 };
 
 const widgetModule: WidgetModule = {
@@ -134,6 +165,36 @@ const widgetModule: WidgetModule = {
                         defaultValue: false,
                     },
                 ],
+                tab: basicTab,
+            },
+            {
+                name: fields.customCSS,
+                displayName: "Custom CSS",
+                editorTemplate: "CodeField",
+                fieldType: "General",
+                tab: advancedTab,
+                defaultValue: defaultCustomCss,
+                isVisible: (item, shouldDisplayAdvancedFeatures) => !!shouldDisplayAdvancedFeatures,
+                validate: value => {
+                    if (value === undefined || value === null) {
+                        return "";
+                    }
+
+                    const result = cssLinter.parse(value, { silent: true });
+                    if (result?.stylesheet?.parsingErrors) {
+                        // the error output at this time only has room for one line so we just show the first error
+                        return result.stylesheet.parsingErrors.length <= 0
+                            ? ""
+                            : result.stylesheet.parsingErrors.map(error => `${error.reason} on line ${error.line}`)[0];
+                    }
+
+                    return "Unable to parse Css";
+                },
+                options: {
+                    mode: "css",
+                    lint: true,
+                    autoRefresh: true,
+                },
             },
         ],
     },

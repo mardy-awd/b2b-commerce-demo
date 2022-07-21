@@ -1,0 +1,13 @@
+{
+  "name": "blueprintbuilder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "jest": "^28.1.1",
+    "prettier": "^2.7.1"
+  }
+}

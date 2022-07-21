@@ -97,7 +97,11 @@ class AutocompleteBrands extends React.Component<Props> {
         const styles = this.styles;
         return (
             <>
-                <Typography {...styles.headerText} data-test-selector="autocompleteBrands_Header">
+                <Typography
+                    {...styles.headerText}
+                    data-test-selector="autocompleteBrands_Header"
+                    className="autocomplete-brands-header"
+                >
                     {translate("Brands")}
                 </Typography>
                 {brands.map(brand => (
@@ -111,8 +115,11 @@ class AutocompleteBrands extends React.Component<Props> {
                                     this.props.goToUrl(brand.url);
                                 }}
                                 data-test-selector={`productLineId_${brand.productLineId}`}
+                                className="autocomplete-brands-item-text"
                             >
-                                <Link {...styles.link}>{brand.displayProductLineName}</Link>
+                                <Link {...styles.link} className="autocomplete-brands-item-link">
+                                    {brand.displayProductLineName}
+                                </Link>
                                 <>{` ${translate("in")}`}</> {brand.displayTitle}
                             </Typography>
                         )}
@@ -123,6 +130,7 @@ class AutocompleteBrands extends React.Component<Props> {
                                     this.props.goToUrl(brand.url);
                                 }}
                                 data-test-selector={`brandId_${brand.id}`}
+                                className="autocomplete-brands-link"
                             >
                                 {brand.displayTitle}
                             </Link>

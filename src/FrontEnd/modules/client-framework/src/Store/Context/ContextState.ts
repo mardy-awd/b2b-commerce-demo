@@ -30,7 +30,9 @@ export default interface ContextState {
     isUnauthorizedError?: boolean;
     canChangePage?: boolean;
     accessToken?: string;
+    /** @deprecated Use isUpdatingCart instead. */
     addingProductToCart?: boolean;
+    isUpdatingCart?: boolean;
     isSearchDataModeActive: boolean;
     paymetricConfig?: PaymetricConfig;
     adyenSettings?: AdyenSettings;

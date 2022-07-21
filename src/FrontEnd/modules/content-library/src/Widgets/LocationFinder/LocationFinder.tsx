@@ -20,6 +20,7 @@ import {
     getDealersDefaultLocation,
 } from "@insite/client-framework/Store/Data/Dealers/DealersSelectors";
 import loadDealers from "@insite/client-framework/Store/Data/Dealers/Handlers/LoadDealers";
+import resetDealers from "@insite/client-framework/Store/Data/Dealers/Handlers/ResetDealers";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import setParameter from "@insite/client-framework/Store/Pages/LocationFinder/Handlers/SetParameter";
 import translate from "@insite/client-framework/Translate";
@@ -53,6 +54,7 @@ interface OwnProps extends WidgetProps {
 const mapDispatchToProps = {
     loadDealers,
     setParameter,
+    resetDealers,
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
@@ -161,6 +163,7 @@ const LocationFinder: FC<Props> = ({
     dealersDefaultLocation,
     getDealersParameter,
     loadDealers,
+    resetDealers,
     setParameter,
     history,
     dealerDetailsUrl,
@@ -191,6 +194,7 @@ const LocationFinder: FC<Props> = ({
         if (getDealersParameter) {
             loadDealers(getDealersParameter);
         }
+        return () => resetDealers();
     }, [getDealersParameter]);
 
     // Manage Google Maps State
@@ -464,7 +468,7 @@ const LocationFinder: FC<Props> = ({
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(withHistory(withDynamicGoogleMaps(LocationFinder))),
     definition: {
-        allowedContexts: ["CreateAccountPage"],
+        allowedContexts: ["CreateAccountPage", "LocationFinderPage"],
         group: "Location Finder",
     },
 };

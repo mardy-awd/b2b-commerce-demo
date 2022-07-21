@@ -1,4 +1,5 @@
 import { parserOptions } from "@insite/client-framework/Common/BasicSelectors";
+import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import siteMessage from "@insite/client-framework/SiteMessage";
 import subscribe from "@insite/client-framework/Store/CommonHandlers/Subscribe";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
@@ -10,6 +11,7 @@ import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import TextField, { TextFieldPresentationProps } from "@insite/mobius/TextField";
 import ToasterContext from "@insite/mobius/Toast/ToasterContext";
 import Typography, { TypographyPresentationProps } from "@insite/mobius/Typography";
+import * as cssLinter from "css";
 import parse from "html-react-parser";
 import React, { useContext, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -22,6 +24,7 @@ const enum fields {
     placeholder = "placeholder",
     disclaimer = "disclaimer",
     alignment = "alignment",
+    customCSS = "customCSS",
 }
 
 interface OwnProps extends WidgetProps {
@@ -32,6 +35,7 @@ interface OwnProps extends WidgetProps {
         [fields.placeholder]: string;
         [fields.disclaimer]: string;
         [fields.alignment]: string;
+        [fields.customCSS]: string;
     };
 }
 
@@ -105,6 +109,36 @@ export const subscribeStyles: SubscribeStyles = {
     },
 };
 
+const defaultCustomCss = `.main-grid-container{
+}
+
+.title-grid-item{
+}
+
+.title{
+}
+
+.description-grid-item{
+}
+
+.description-text{
+}
+
+.email-grid-item{
+}
+
+.email-text-field{
+}
+
+.email-button{
+}
+
+.disclaimer-grid-item{
+}
+
+.disclaimer-text{
+}`;
+
 const emailRegexp = new RegExp("\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
 
 export const CmsSubscribe = ({ fields, subscribe, id }: Props) => {
@@ -157,32 +191,70 @@ export const CmsSubscribe = ({ fields, subscribe, id }: Props) => {
         `;
     };
 
+    const customCssWrapper = {
+        css: css`
+            ${fields.customCSS}
+        `,
+    };
+
     return (
-        <GridContainer {...styles.mainGridContainer}>
-            <GridItem {...styles.titleGridItem} css={gridItemCss(styles.titleGridItem)}>
-                <Typography {...styles.titleLabel}>{fields.title}</Typography>
-            </GridItem>
-            <GridItem {...styles.descriptionGridItem} css={gridItemCss(styles.descriptionGridItem)}>
-                <Typography {...styles.descriptionText}>{parse(fields.description, parserOptions)}</Typography>
-            </GridItem>
-            <GridItem {...styles.emailGridItem} css={gridItemCss(styles.emailGridItem)}>
-                <TextField
-                    {...styles.emailTextField}
-                    id={id}
-                    placeholder={fields.placeholder}
-                    value={email}
-                    onChange={e => emailChangeHandler(e.currentTarget.value)}
-                    error={isSubmitted && emailError}
-                />
-                <Button {...styles.emailButton} onClick={onSubscribeClick} disabled={isSubmitted && !!emailError}>
-                    {fields.label}
-                </Button>
-            </GridItem>
-            <GridItem {...styles.disclaimerGridItem} css={gridItemCss(styles.disclaimerGridItem)}>
-                <Typography {...styles.disclaimerText}>{parse(fields.disclaimer, parserOptions)}</Typography>
-            </GridItem>
-        </GridContainer>
+        <StyledWrapper {...customCssWrapper}>
+            <GridContainer className="main-grid-container" {...styles.mainGridContainer}>
+                <GridItem className="title-grid-item" {...styles.titleGridItem} css={gridItemCss(styles.titleGridItem)}>
+                    <Typography className="title" {...styles.titleLabel}>
+                        {fields.title}
+                    </Typography>
+                </GridItem>
+                <GridItem
+                    className="description-grid-item"
+                    {...styles.descriptionGridItem}
+                    css={gridItemCss(styles.descriptionGridItem)}
+                >
+                    <Typography className="description-text" {...styles.descriptionText}>
+                        {parse(fields.description, parserOptions)}
+                    </Typography>
+                </GridItem>
+                <GridItem className="email-grid-item" {...styles.emailGridItem} css={gridItemCss(styles.emailGridItem)}>
+                    <TextField
+                        className="email-text-field"
+                        {...styles.emailTextField}
+                        id={id}
+                        placeholder={fields.placeholder}
+                        value={email}
+                        onChange={e => emailChangeHandler(e.currentTarget.value)}
+                        error={isSubmitted && emailError}
+                    />
+                    <Button
+                        className="email-button"
+                        {...styles.emailButton}
+                        onClick={onSubscribeClick}
+                        disabled={isSubmitted && !!emailError}
+                    >
+                        {fields.label}
+                    </Button>
+                </GridItem>
+                <GridItem
+                    className="disclaimer-grid-item"
+                    {...styles.disclaimerGridItem}
+                    css={gridItemCss(styles.disclaimerGridItem)}
+                >
+                    <Typography className="disclaimer-text" {...styles.disclaimerText}>
+                        {parse(fields.disclaimer, parserOptions)}
+                    </Typography>
+                </GridItem>
+            </GridContainer>
+        </StyledWrapper>
     );
+};
+
+const basicTab = {
+    displayName: "Basic",
+    sortOrder: 0,
+};
+
+const advancedTab = {
+    displayName: "Advanced",
+    sortOrder: 1,
 };
 
 const widgetModule: WidgetModule = {
@@ -202,6 +274,7 @@ const widgetModule: WidgetModule = {
                 ],
                 defaultValue: "center",
                 fieldType: "Translatable",
+                tab: basicTab,
             },
             {
                 name: fields.title,
@@ -209,6 +282,7 @@ const widgetModule: WidgetModule = {
                 editorTemplate: "TextField",
                 defaultValue: "Subscribe",
                 fieldType: "Translatable",
+                tab: basicTab,
             },
             {
                 name: fields.description,
@@ -216,6 +290,7 @@ const widgetModule: WidgetModule = {
                 editorTemplate: "RichTextField",
                 defaultValue: "<p>Keep up-to-date on product news and the latest offers.</p>",
                 fieldType: "Translatable",
+                tab: basicTab,
             },
             {
                 name: fields.placeholder,
@@ -223,6 +298,7 @@ const widgetModule: WidgetModule = {
                 editorTemplate: "TextField",
                 defaultValue: "Enter email address",
                 fieldType: "Translatable",
+                tab: basicTab,
             },
             {
                 name: fields.disclaimer,
@@ -230,6 +306,7 @@ const widgetModule: WidgetModule = {
                 editorTemplate: "RichTextField",
                 defaultValue: "",
                 fieldType: "Translatable",
+                tab: basicTab,
             },
             {
                 name: fields.label,
@@ -237,6 +314,36 @@ const widgetModule: WidgetModule = {
                 editorTemplate: "TextField",
                 defaultValue: "Subscribe",
                 fieldType: "Translatable",
+                tab: basicTab,
+            },
+            {
+                name: fields.customCSS,
+                displayName: "Custom CSS",
+                editorTemplate: "CodeField",
+                fieldType: "General",
+                tab: advancedTab,
+                defaultValue: defaultCustomCss,
+                isVisible: (item, shouldDisplayAdvancedFeatures) => !!shouldDisplayAdvancedFeatures,
+                validate: value => {
+                    if (value === undefined || value === null) {
+                        return "";
+                    }
+
+                    const result = cssLinter.parse(value, { silent: true });
+                    if (result?.stylesheet?.parsingErrors) {
+                        // the error output at this time only has room for one line so we just show the first error
+                        return result.stylesheet.parsingErrors.length <= 0
+                            ? ""
+                            : result.stylesheet.parsingErrors.map(error => `${error.reason} on line ${error.line}`)[0];
+                    }
+
+                    return "Unable to parse Css";
+                },
+                options: {
+                    mode: "css",
+                    lint: true,
+                    autoRefresh: true,
+                },
             },
         ],
     },

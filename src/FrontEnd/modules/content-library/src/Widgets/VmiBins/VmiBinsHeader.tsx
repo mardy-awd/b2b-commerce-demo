@@ -194,6 +194,7 @@ class VmiBinsHeader extends Component<Props, { isAddProductModalOpen: boolean }>
                                 value={currentLocation?.id ?? ""}
                                 hasLabel
                             >
+                                <option value="">{translate("Select Location")}</option>
                                 {vmiLocations.value.map(c => (
                                     <option value={c.id} key={c.id}>
                                         {c.name}

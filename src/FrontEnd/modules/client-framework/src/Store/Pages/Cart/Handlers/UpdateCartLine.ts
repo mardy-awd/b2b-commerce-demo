@@ -23,6 +23,9 @@ type HandlerType = ApiHandlerDiscreteParameter<UpdateCartLineParameter, UpdateCa
 
 export const DispatchBeginUpdateCartLine: HandlerType = props => {
     props.dispatch({
+        type: "Context/BeginUpdatingCart",
+    });
+    props.dispatch({
         type: "Pages/Cart/BeginUpdateCartLine",
     });
 };
@@ -53,6 +56,9 @@ export const LoadPromotions: HandlerType = props => {
 export const DispatchCompleteUpdateCartLine: HandlerType = props => {
     props.dispatch({
         type: "Pages/Cart/CompleteUpdateCartLine",
+    });
+    props.dispatch({
+        type: "Context/CompleteUpdatingCart",
     });
 };
 

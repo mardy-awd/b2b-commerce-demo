@@ -29,6 +29,9 @@ export const DispatchBeginPlaceOrder: HandlerType = props => {
     props.dispatch({
         type: "Pages/SavedOrderDetails/BeginPlaceOrder",
     });
+    props.dispatch({
+        type: "Context/BeginUpdatingCart",
+    });
 };
 
 export const PopulateAddLineCollectionApiParameter: HandlerType = props => {
@@ -114,6 +117,9 @@ export const DeleteSavedOrder: HandlerType = props => {
 export const DispatchCompletePlaceOrder: HandlerType = props => {
     props.dispatch({
         type: "Pages/SavedOrderDetails/CompletePlaceOrder",
+    });
+    props.dispatch({
+        type: "Context/CompleteUpdatingCart",
     });
 };
 

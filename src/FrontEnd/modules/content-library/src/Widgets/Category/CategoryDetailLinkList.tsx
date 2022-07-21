@@ -75,7 +75,7 @@ const SubCategoryLink = connect(mapStateToProps)(SubCategoryLinkView);
 const widgetModule: WidgetModule = {
     component: withCategory(CategoryDetailLinkList),
     definition: {
-        group: "Categories",
+        group: "Category Details",
         icon: "list-ul",
         allowedContexts: ["CategoryDetailsPage"],
     },

@@ -188,9 +188,6 @@ const VmiBinsImportModal = ({
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
     const { value: vmiLocation } = useContext(VmiLocationStateContext);
     const vmiLocationId = vmiLocation?.id || parsedQuery?.locationId;
-    if (!vmiLocationId) {
-        return null;
-    }
 
     useEffect(() => batchGetProducts(), [parsedItems]);
 
@@ -282,6 +279,9 @@ const VmiBinsImportModal = ({
     }, [productsProcessed, parsedItems, products, rowErrors]);
 
     const importProducts = () => {
+        if (!vmiLocationId) {
+            return;
+        }
         const erpNumberToIdMap: SafeDictionary<string> = {};
         for (const product of products) {
             erpNumberToIdMap[product.erpNumber.toLowerCase()] = product.id;
@@ -310,6 +310,10 @@ const VmiBinsImportModal = ({
             },
         });
     };
+
+    if (!vmiLocationId) {
+        return null;
+    }
 
     return (
         <Modal

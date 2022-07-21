@@ -117,7 +117,7 @@ const InvoiceDetailsSummaryTable = () => {
 const widgetModule: WidgetModule = {
     component: InvoiceDetailsSummaryTable,
     definition: {
-        group: "Invoice History",
+        group: "Invoice Details",
         displayName: "Summary Table",
         allowedContexts: ["InvoiceDetailsPage"],
     },

@@ -23,6 +23,9 @@ type HandlerType = ApiHandlerDiscreteParameter<ReorderParameter, CartLineCollect
 
 export const DispatchBeginReorder: HandlerType = props => {
     props.dispatch({
+        type: "Context/BeginUpdatingCart",
+    });
+    props.dispatch({
         type: "Pages/OrderHistory/BeginReorder",
         orderNumber: props.parameter.orderNumber,
     });
@@ -66,6 +69,9 @@ export const DispatchCompleteReorder: HandlerType = props => {
     props.dispatch({
         type: "Pages/OrderHistory/CompleteReorder",
         orderNumber: props.parameter.orderNumber,
+    });
+    props.dispatch({
+        type: "Context/CompleteUpdatingCart",
     });
 };
 

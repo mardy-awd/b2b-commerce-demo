@@ -11,7 +11,7 @@ import TextField from "@insite/mobius/TextField";
 import StandardControl from "@insite/shell-public/Components/StandardControl";
 import { EditorTemplateProps } from "@insite/shell-public/EditorTemplateProps";
 import { isValidUrl } from "@insite/shell/Common/IsValidUrl";
-import ClickOutside from "@insite/shell/Components/ClickOutside";
+import { ClickOutsideWrapper } from "@insite/shell/Components/ClickOutside";
 import AxiomIcon from "@insite/shell/Components/Icons/AxiomIcon";
 import NeverPublishedModal from "@insite/shell/Components/Modals/NeverPublishedModal";
 import shellTheme, { ShellThemeProps } from "@insite/shell/ShellTheme";
@@ -28,6 +28,7 @@ interface State {
     url: string;
     isValidUrl: boolean;
     triedToSaveUrl: boolean;
+    currentTab?: string;
 }
 
 type OwnProps = EditorTemplateProps<LinkFieldValue, LinkFieldDefinition>;
@@ -89,7 +90,7 @@ type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeo
 const StandardIconPropsSource: React.FC = () => <AxiomIcon src="link" color={shellTheme.colors.text.main} />;
 const ClearIconPropsSource: React.FC = () => <AxiomIcon color="#000" src="times" />;
 
-class LinkField extends ClickOutside<Props, State> {
+class LinkField extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
@@ -99,6 +100,7 @@ class LinkField extends ClickOutside<Props, State> {
             url: props.fieldValue.type === "Url" ? props.fieldValue.value : "",
             isValidUrl: true,
             triedToSaveUrl: false,
+            currentTab: this.returnInitialTab(),
         };
     }
 
@@ -108,11 +110,12 @@ class LinkField extends ClickOutside<Props, State> {
         }
     }
 
-    onClickOutside(): void {
+    onClickOutside = () => {
         this.setState({
             linkSelectorIsOpen: false,
+            currentTab: this.returnInitialTab(),
         });
-    }
+    };
 
     clickLinkField = (event: React.FormEvent<HTMLInputElement>) => {
         this.setState({
@@ -281,14 +284,23 @@ class LinkField extends ClickOutside<Props, State> {
         });
     };
 
-    render() {
+    returnInitialTab = () => {
         const {
-            fieldValue: { type, value },
+            fieldValue: { type },
             fieldDefinition,
         } = this.props;
         const allowUrls = !fieldDefinition.allowUrls || fieldDefinition.allowUrls(this.props.item);
         const allowCategories = !fieldDefinition.allowCategories || fieldDefinition.allowCategories(this.props.item);
-        const currentTab = (type === "Url" && !allowUrls) || (type === "Category" && !allowCategories) ? "Page" : type;
+        return (type === "Url" && !allowUrls) || (type === "Category" && !allowCategories) ? "Page" : type;
+    };
+
+    render() {
+        const {
+            fieldValue: { value },
+            fieldDefinition,
+        } = this.props;
+        const allowUrls = !fieldDefinition.allowUrls || fieldDefinition.allowUrls(this.props.item);
+        const allowCategories = !fieldDefinition.allowCategories || fieldDefinition.allowCategories(this.props.item);
 
         const tabs = [
             <Tab data-test-selector="tab_Pages" headline="Pages" key="Page" tabKey="Page" css={tabCss}>
@@ -354,13 +366,19 @@ class LinkField extends ClickOutside<Props, State> {
                     iconClickableProps={value ? { onClick: this.clearFieldValue } : undefined}
                     clickableText={value ? translate("clear link field") : undefined}
                 />
-                {this.state.linkSelectorIsOpen && (
-                    <LinkSelectorStyle ref={this.setWrapperRef}>
-                        <TabGroup cssOverrides={{ tabContent, tabGroup, wrapper }} current={currentTab}>
-                            {tabs}
-                        </TabGroup>
-                    </LinkSelectorStyle>
-                )}
+                <ClickOutsideWrapper handleClick={this.onClickOutside}>
+                    {this.state.linkSelectorIsOpen && (
+                        <LinkSelectorStyle>
+                            <TabGroup
+                                onTabChange={(_, currentTab) => this.setState({ currentTab })}
+                                cssOverrides={{ tabContent, tabGroup, wrapper }}
+                                current={this.state.currentTab}
+                            >
+                                {tabs}
+                            </TabGroup>
+                        </LinkSelectorStyle>
+                    )}
+                </ClickOutsideWrapper>
                 <NeverPublishedModal updateField={this.props.updateField} />
             </StandardControl>
         );

@@ -18,6 +18,7 @@ import Video from "@insite/mobius/Icons/Video";
 import Youtube from "@insite/mobius/Icons/Youtube";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
+import * as cssLinter from "css";
 import * as React from "react";
 import { FC } from "react";
 import { css } from "styled-components";
@@ -33,6 +34,7 @@ const enum fields {
     iconColor = "iconColor",
     backgroundColor = "backgroundColor",
     linksPerRow = "linksPerRow",
+    customCSS = "customCSS",
 }
 
 const enum icons {
@@ -66,6 +68,7 @@ interface OwnProps extends WidgetProps {
         [fields.backgroundColor]: string;
         [fields.titleLink]: LinkFieldValue;
         [fields.links]: LinkModel[];
+        [fields.customCSS]: string;
     };
 }
 
@@ -145,6 +148,11 @@ export const SocialLinks: FC<OwnProps> = ({ fields }) => {
 
     const styles = useMergeStyles("socialLinks", linkListStyles);
 
+    const customCssWrapper = {
+        css: css`
+            ${fields.customCSS}
+        `,
+    };
     const socialLinkListStyle = css`
         ${fields.direction === "horizontal" ? "flex-direction: row;" : "flex-direction: column;"}
         ${fields.backgroundColor && `background-color: ${fields.backgroundColor};`}
@@ -162,36 +170,52 @@ export const SocialLinks: FC<OwnProps> = ({ fields }) => {
         fields.visibilityState === visibilityState.both || fields.visibilityState === visibilityState.label;
 
     return (
-        <StyledWrapper css={socialLinkListStyle}>
-            {links.map((link, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <StyledWrapper css={linkWrapperStyle} key={index}>
-                    {link.url && (
-                        <Link
-                            {...styles.link}
-                            href={link.url}
-                            target={fields.links[index].fields.openInNewWindow ? "_blank" : ""}
-                            icon={{
-                                iconProps: {
-                                    size: fields.iconSize,
-                                    color: fields.iconColor,
-                                    css: css`
-                                        margin: 5px;
-                                    `,
-                                    src: showIcon ? GetIcon(fields.links[index].fields.icon) : undefined,
-                                    title: fields.links[index].fields.title,
-                                },
-                                position: fields.alignment,
-                            }}
-                        >
-                            {showLabel && fields.links[index].fields.title}
-                        </Link>
-                    )}
-                </StyledWrapper>
-            ))}
+        <StyledWrapper {...customCssWrapper}>
+            <StyledWrapper className="social-links" css={socialLinkListStyle}>
+                {links.map((link, index) => (
+                    <StyledWrapper
+                        className="link-wrapper"
+                        css={linkWrapperStyle}
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={index}
+                    >
+                        {link.url && (
+                            <Link
+                                className="social-link"
+                                {...styles.link}
+                                href={link.url}
+                                target={fields.links[index].fields.openInNewWindow ? "_blank" : ""}
+                                icon={{
+                                    iconProps: {
+                                        size: fields.iconSize,
+                                        color: fields.iconColor,
+                                        css: css`
+                                            margin: 5px;
+                                        `,
+                                        src: showIcon ? GetIcon(fields.links[index].fields.icon) : undefined,
+                                        title: fields.links[index].fields.title,
+                                    },
+                                    position: fields.alignment,
+                                }}
+                            >
+                                {showLabel && fields.links[index].fields.title}
+                            </Link>
+                        )}
+                    </StyledWrapper>
+                ))}
+            </StyledWrapper>
         </StyledWrapper>
     );
 };
+
+const defaultCustomCss = `.social-links{
+}
+
+.link-wrapper{
+}
+
+.social-link{
+}`;
 
 const contentTab = {
     displayName: "Content",
@@ -200,6 +224,11 @@ const contentTab = {
 const settingsTab = {
     displayName: "Settings",
     sortOrder: 2,
+};
+
+const advancedTab = {
+    displayName: "Advanced",
+    sortOrder: 3,
 };
 
 const definition: WidgetDefinition = {
@@ -366,6 +395,35 @@ const definition: WidgetDefinition = {
             fieldType: "General",
             sortOrder: 6,
             tab: settingsTab,
+        },
+        {
+            name: fields.customCSS,
+            displayName: "Custom CSS",
+            editorTemplate: "CodeField",
+            fieldType: "General",
+            tab: advancedTab,
+            defaultValue: defaultCustomCss,
+            isVisible: (item, shouldDisplayAdvancedFeatures) => !!shouldDisplayAdvancedFeatures,
+            validate: value => {
+                if (value === undefined || value === null) {
+                    return "";
+                }
+
+                const result = cssLinter.parse(value, { silent: true });
+                if (result?.stylesheet?.parsingErrors) {
+                    // the error output at this time only has room for one line so we just show the first error
+                    return result.stylesheet.parsingErrors.length <= 0
+                        ? ""
+                        : result.stylesheet.parsingErrors.map(error => `${error.reason} on line ${error.line}`)[0];
+                }
+
+                return "Unable to parse Css";
+            },
+            options: {
+                mode: "css",
+                lint: true,
+                autoRefresh: true,
+            },
         },
     ],
 };

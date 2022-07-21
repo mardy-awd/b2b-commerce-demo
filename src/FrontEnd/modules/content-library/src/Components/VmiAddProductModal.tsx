@@ -175,10 +175,6 @@ const VmiAddProductModal = ({
 
     const { value: vmiLocation } = useContext(VmiLocationStateContext);
     const vmiLocationId = vmiLocation?.id || parsedQuery?.locationId;
-    if (!vmiLocationId) {
-        return null;
-    }
-
     const vmiBin = vmiBinState?.value;
 
     useEffect(() => {
@@ -254,7 +250,7 @@ const VmiAddProductModal = ({
     const formSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!validateForm() || (!product && !vmiBin)) {
+        if (!vmiLocationId || !validateForm() || (!product && !vmiBin)) {
             return false;
         }
 
@@ -355,6 +351,10 @@ const VmiAddProductModal = ({
         setVmiBinsImportModalIsOpen({ modalIsOpen: true });
         closeModalHandler();
     };
+
+    if (!vmiLocationId) {
+        return null;
+    }
 
     return (
         <Modal

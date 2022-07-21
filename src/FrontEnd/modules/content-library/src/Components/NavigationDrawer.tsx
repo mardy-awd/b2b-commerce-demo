@@ -317,11 +317,17 @@ const NavigationDrawer: FC<Props> = props => {
 
     return (
         <>
-            <Button onClick={openDrawer} {...styles.menuTriggerButton} data-test-selector="expandMobileMenu">
-                <ButtonIcon src={Menu} />
+            <Button
+                className="menu-trigger-button"
+                onClick={openDrawer}
+                {...styles.menuTriggerButton}
+                data-test-selector="expandMobileMenu"
+            >
+                <ButtonIcon className="menu-trigger-button-icon" src={Menu} />
                 <VisuallyHidden>{translate("menu")}</VisuallyHidden>
             </Button>
             <Drawer
+                className="drawer"
                 draggable
                 position="left"
                 {...styles.drawer}
@@ -329,15 +335,18 @@ const NavigationDrawer: FC<Props> = props => {
                 handleClose={closeDrawer}
                 contentLabel="menu drawer"
             >
-                <StyledSection {...styles.drawerSectionWrapper}>
+                <StyledSection className="drawer-section-wrapper" {...styles.drawerSectionWrapper}>
                     {userName && !isGuest && !isPunchOutSession ? (
                         <PanelMenu
+                            className="panel-menu"
                             currentUrl={currentPageUrl}
                             panelTrigger={
-                                <PanelRow hasChildren {...styles.mainNavigationRow}>
-                                    <StyledSpan {...styles.panelSectionWrapper}>
-                                        <Icon {...styles.mainNavigationRowIcon} />
-                                        <Typography {...styles.userRowTypography}>{userName}</Typography>
+                                <PanelRow className="main-navigation-row" hasChildren {...styles.mainNavigationRow}>
+                                    <StyledSpan className="panel-section-wrapper" {...styles.panelSectionWrapper}>
+                                        <Icon className="main-navigation-row-icon" {...styles.mainNavigationRowIcon} />
+                                        <Typography className="user-row-text" {...styles.userRowTypography}>
+                                            {userName}
+                                        </Typography>
                                     </StyledSpan>
                                 </PanelRow>
                             }
@@ -348,14 +357,17 @@ const NavigationDrawer: FC<Props> = props => {
                             {...styles.panelMenu}
                         />
                     ) : isPunchOutSession ? (
-                        <PanelRow {...styles.mainNavigationRow}>
-                            <StyledSpan {...styles.panelSectionWrapper}>
-                                <Icon {...styles.punchOutNavigationRowIcon} />
-                                <Typography {...styles.punchOutUserRowText}>{userName}</Typography>
+                        <PanelRow className="main-navigation-row" {...styles.mainNavigationRow}>
+                            <StyledSpan className="panel-section-wrapper" {...styles.panelSectionWrapper}>
+                                <Icon className="punch-out-navigation-row-icon" {...styles.punchOutNavigationRowIcon} />
+                                <Typography className="punch-out-user-row-text" {...styles.punchOutUserRowText}>
+                                    {userName}
+                                </Typography>
                             </StyledSpan>
                         </PanelRow>
                     ) : (
                         <PanelRow
+                            className="main-navigation-row"
                             {...styles.mainNavigationRow}
                             isCurrent={currentPageUrl === signInUrl?.url}
                             onClick={closeDrawer}
@@ -368,9 +380,11 @@ const NavigationDrawer: FC<Props> = props => {
                             }}
                             href={signInUrl?.url}
                         >
-                            <StyledSpan {...styles.panelSectionWrapper}>
-                                <Icon {...styles.mainNavigationRowIcon} />
-                                <Typography {...styles.userRowTypography}>{translate("Sign In")}</Typography>
+                            <StyledSpan className="panel-section-wrapper" {...styles.panelSectionWrapper}>
+                                <Icon className="main-navigation-row-icon" {...styles.mainNavigationRowIcon} />
+                                <Typography className="user-row-text" {...styles.userRowTypography}>
+                                    {translate("Sign In")}
+                                </Typography>
                             </StyledSpan>
                         </PanelRow>
                     )}
@@ -380,13 +394,21 @@ const NavigationDrawer: FC<Props> = props => {
                             if (link.children && link.children.length > 0) {
                                 return (
                                     <PanelMenu
+                                        className="panel-menu"
                                         // eslint-disable-next-line react/no-array-index-key
                                         key={index}
                                         currentUrl={currentPageUrl}
                                         closeOverlay={closeDrawer}
                                         panelTrigger={
-                                            <PanelRow hasChildren {...styles.mainNavigationRow}>
-                                                <Typography {...styles.mainNavigationRowTypography}>
+                                            <PanelRow
+                                                className="main-navigation-row"
+                                                hasChildren
+                                                {...styles.mainNavigationRow}
+                                            >
+                                                <Typography
+                                                    className="main-navigation-row-text"
+                                                    {...styles.mainNavigationRowTypography}
+                                                >
                                                     {link.title}
                                                 </Typography>
                                             </PanelRow>
@@ -404,20 +426,29 @@ const NavigationDrawer: FC<Props> = props => {
                                     key={index}
                                     href={link.url}
                                     target={link.openInNewWindow ? "_blank" : ""}
+                                    className="main-navigation-row"
                                     {...styles.mainNavigationRow}
                                 >
-                                    <Typography {...styles.mainNavigationRowTypography}>{link.title}</Typography>
+                                    <Typography
+                                        className="main-navigation-row-text"
+                                        {...styles.mainNavigationRowTypography}
+                                    >
+                                        {link.title}
+                                    </Typography>
                                 </PanelRow>
                             );
                         })}
                     {!displayVmiNavigation && showQuickOrder && quickOrderLink && (
                         <PanelRow
+                            className="main-navigation-row"
                             isCurrent={currentPageUrl === quickOrderLink.url}
                             onClick={closeDrawer}
                             href={quickOrderLink.url}
                             {...styles.mainNavigationRow}
                         >
-                            <Typography {...styles.mainNavigationRowTypography}>{quickOrderLink.title}</Typography>
+                            <Typography className="main-navigation-row-text" {...styles.mainNavigationRowTypography}>
+                                {quickOrderLink.title}
+                            </Typography>
                         </PanelRow>
                     )}
                     {displayVmiNavigation &&
@@ -425,21 +456,28 @@ const NavigationDrawer: FC<Props> = props => {
                             link =>
                                 link && (
                                     <PanelRow
+                                        className="main-navigation-row"
                                         key={link.id}
                                         isCurrent={currentPageUrl === link.url}
                                         onClick={closeDrawer}
                                         href={link.url}
                                         {...styles.mainNavigationRow}
                                     >
-                                        <Typography {...styles.mainNavigationRowTypography}>{link.title}</Typography>
+                                        <Typography
+                                            className="main-navigation-row-text"
+                                            {...styles.mainNavigationRowTypography}
+                                        >
+                                            {link.title}
+                                        </Typography>
                                     </PanelRow>
                                 ),
                         )}
                 </StyledSection>
                 {headerLinkListLinks.length > 0 && (
-                    <StyledSection {...styles.drawerSectionWrapper}>
+                    <StyledSection className="drawer-section-wrapper" {...styles.drawerSectionWrapper}>
                         {headerLinkListLinks.map((link, index) => (
                             <PanelRow
+                                className="logo-links-row"
                                 key={link.title + String(index)}
                                 {...(styles.logoLinks && omitSingle(styles.logoLinks, "typographyProps"))}
                                 isCurrent={currentPageUrl === link.url}
@@ -454,12 +492,14 @@ const NavigationDrawer: FC<Props> = props => {
                                 href={link.url}
                                 target={headerLinkListLinkFields[index].fields.openInNewWindow ? "_blank" : ""}
                             >
-                                <Typography {...styles.logoLinks?.typographyProps}>{link.title}</Typography>
+                                <Typography className="logo-link-title" {...styles.logoLinks?.typographyProps}>
+                                    {link.title}
+                                </Typography>
                             </PanelRow>
                         ))}
                     </StyledSection>
                 )}
-                <StyledSection {...styles.drawerSectionWrapper}>
+                <StyledSection className="drawer-section-wrapper" {...styles.drawerSectionWrapper}>
                     <SelectorMenu
                         options={currencies?.map(c => {
                             return {
@@ -493,19 +533,25 @@ const NavigationDrawer: FC<Props> = props => {
                         closeModal={closeDrawer}
                         currentOptionIcon={
                             currentLanguage?.imageFilePath ? (
-                                <LogoImage src={currentLanguage.imageFilePath} alt="" />
+                                <LogoImage className="language-image" src={currentLanguage.imageFilePath} alt="" />
                             ) : (
-                                <Icon src={Globe} {...styles.menuRowIcon} />
+                                <Icon className="menu-row-icon" src={Globe} {...styles.menuRowIcon} />
                             )
                         }
                     />
                     {showCustomerMenuItem && (
                         <PanelMenu
+                            className="panel-menu"
                             {...styles.panelMenu}
                             panelTrigger={
-                                <PanelRow hasChildren {...styles.logoLinks} color="common.accent">
-                                    <Typography {...styles.logoLinks?.typographyProps}>
-                                        <Icon src={MapPin} {...styles.menuRowIcon} />
+                                <PanelRow
+                                    hasChildren
+                                    className="logo-links-row"
+                                    {...styles.logoLinks}
+                                    color="common.accent"
+                                >
+                                    <Typography className="logo-link-title" {...styles.logoLinks?.typographyProps}>
+                                        <Icon src={MapPin} className="menu-row-icon" {...styles.menuRowIcon} />
                                         {fulfillmentLabel}
                                     </Typography>
                                 </PanelRow>
@@ -514,30 +560,39 @@ const NavigationDrawer: FC<Props> = props => {
                             closeOverlay={closeDrawer}
                         >
                             {isPunchOutSession ? (
-                                <PanelRow tabIndex={-1} {...styles.changeCustomerRow}>
+                                <PanelRow tabIndex={-1} className="change-customer-row" {...styles.changeCustomerRow}>
                                     {createWidgetElement("Header/AddressDrawerPunchOutCustomer", {
                                         fields: {},
                                     })}
                                 </PanelRow>
                             ) : (
-                                <PanelRow tabIndex={-1} {...styles.changeCustomerRow}>
-                                    <GridContainer {...styles.changeCustomerRowContainer}>
-                                        <GridItem {...styles.fulfillmentMethodGridItem}>
+                                <PanelRow tabIndex={-1} className="change-customer-row" {...styles.changeCustomerRow}>
+                                    <GridContainer
+                                        className="change-customer-row-container"
+                                        {...styles.changeCustomerRowContainer}
+                                    >
+                                        <GridItem
+                                            className="fulfillment-method-grid-item"
+                                            {...styles.fulfillmentMethodGridItem}
+                                        >
                                             {createWidgetElement("Header/AddressDrawerFulfillmentMethodSelector", {
                                                 fields: {},
                                             })}
                                         </GridItem>
-                                        <GridItem {...styles.addressesGridItem}>
+                                        <GridItem className="addresses-grid-item" {...styles.addressesGridItem}>
                                             {createWidgetElement("Header/AddressDrawerSelectCustomer", {
                                                 fields: {},
                                             })}
                                         </GridItem>
-                                        <GridItem {...styles.pickUpAddressGridItem}>
+                                        <GridItem
+                                            className="pick-up-address-grid-item"
+                                            {...styles.pickUpAddressGridItem}
+                                        >
                                             {createWidgetElement("Header/AddressDrawerPickUpLocationSelector", {
                                                 fields: {},
                                             })}
                                         </GridItem>
-                                        <GridItem {...styles.applyButtonGridItem}>
+                                        <GridItem className="apply-button-grid-item" {...styles.applyButtonGridItem}>
                                             {createWidgetElement("Header/AddressDrawerApplyButton", { fields: {} })}
                                         </GridItem>
                                     </GridContainer>
@@ -571,12 +626,11 @@ const NavigationDrawer: FC<Props> = props => {
                             currentOption={
                                 currentMode === "Vmi" ? translate("Vendor Managed Inventory") : translate("Storefront")
                             }
-                            currentOptionIcon={undefined}
                         />
                     )}
                     {userName && !isGuest && (
-                        <PanelRow onClick={onSignOutHandler} {...styles.signOutRow}>
-                            <Typography {...styles.signOutRowText}>
+                        <PanelRow className="sign-out-row" onClick={onSignOutHandler} {...styles.signOutRow}>
+                            <Typography className="sign-out-row-text" {...styles.signOutRowText}>
                                 {isPunchOutSession ? translate("Cancel PunchOut") : translate("Sign Out")}
                             </Typography>
                         </PanelRow>
@@ -595,8 +649,8 @@ const LogoImage = styled.img`
 interface SelectorMenuProps {
     options?: MappedLink[];
     closeModal?: () => void;
-    currentOption: React.ReactNode;
-    currentOptionIcon: React.ReactNode;
+    currentOption?: string;
+    currentOptionIcon?: React.ReactNode;
     dataTestSelector?: string;
 }
 
@@ -612,10 +666,11 @@ const SelectorMenu: React.FC<SelectorMenuProps> = ({
     }
 
     const trigger = (
-        <PanelRow hasChildren {...styles.logoLinks}>
-            <StyledSpan {...styles.panelSectionWrapper}>
+        <PanelRow hasChildren className="logo-links-row" {...styles.logoLinks}>
+            <StyledSpan className="panel-section-wrapper" {...styles.panelSectionWrapper}>
                 {currentOptionIcon}
                 <Typography
+                    className="logo-link-title"
                     data-test-selector={`${dataTestSelector}_currentOption`}
                     {...styles.logoLinks?.typographyProps}
                 >
@@ -627,6 +682,8 @@ const SelectorMenu: React.FC<SelectorMenuProps> = ({
 
     return (
         <PanelMenu
+            className="panel-menu"
+            currentUrl={currentOption}
             data-test-selector={dataTestSelector}
             closeOverlay={closeModal}
             panelTrigger={trigger}

@@ -42,6 +42,7 @@ import { resolveColor } from "@insite/mobius/utilities";
 import getColor from "@insite/mobius/utilities/getColor";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
+import * as cssLinter from "css";
 import isEqual from "lodash/isEqual";
 import * as React from "react";
 import { connect, ResolveThunks } from "react-redux";
@@ -50,15 +51,19 @@ import { css } from "styled-components";
 const enum fields {
     links = "links",
     showQuickOrder = "showQuickOrder",
+    customCSS = "customCSS",
 }
 
 interface OwnProps extends WidgetProps {
     fields: {
         [fields.links]: LinkModel[];
         [fields.showQuickOrder]: boolean;
+        [fields.customCSS]: string;
     };
     isCompactHeaderFlyoutMenu: boolean;
+    flyoutCustomCSS?: string;
     isCompactHeaderMainNavigation: boolean;
+    сompactHeaderMainNavigationCustomCSS?: string;
 }
 
 interface LinkModel {
@@ -116,7 +121,14 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps) => {
                 }
             }
         } else if (type === "Category") {
-            mappedLink = setupCategoryLink(state, value, categoryIdsToLoad, depthToLoad, overrideTitle);
+            mappedLink = setupCategoryLink(
+                state,
+                value,
+                categoryIdsToLoad,
+                depthToLoad,
+                overrideTitle,
+                state.data.categories.categoryIdsCalled,
+            );
         }
 
         if (!mappedLink) {
@@ -178,6 +190,7 @@ const setupCategoryLink = (
     categoryIdsToLoad: Dictionary<number>,
     maxDepth: number,
     overrideTitle: string,
+    categoryIdsCalled: string[],
 ) => {
     let mappedLink: MappedLink | undefined;
 
@@ -188,7 +201,7 @@ const setupCategoryLink = (
     const depthLoaded = getCategoryDepthLoaded(state, value);
     const subCategoryIds = getSubCategoryIds(state, value);
     if (
-        (depthLoaded < maxDepth || !subCategoryIds) &&
+        (depthLoaded < maxDepth || (!subCategoryIds && !categoryIdsCalled?.includes(value))) &&
         !getCategoriesDataView(state, getParameter(value, maxDepth)).isLoading
     ) {
         categoryIdsToLoad[value] = maxDepth;
@@ -474,6 +487,132 @@ export const mainNavigationStyles: MainNavigationStyles = {
     },
 };
 
+const defaultCustomCss = `.mobile-wrapper {
+}
+
+.mobile-menu-wrapper {
+}
+
+.menu-trigger-button {
+}
+
+.menu-trigger-button-icon {
+}
+
+.drawer {
+}
+
+.drawer-section-wrapper {
+}
+
+.panel-menu {
+}
+
+.main-navigation-row {
+}
+
+.panel-section-wrapper {
+}
+
+.main-navigation-row-icon {
+}
+
+.user-row-text {
+}
+
+.punch-out-navigation-row-icon {
+}
+
+.punch-out-user-row-text {
+}
+
+.main-navigation-row-text {
+}
+
+.logo-links-row {
+}
+
+.logo-link-title {
+}
+
+.language-image {
+}
+
+.menu-row-icon {
+}
+
+.change-customer-row {
+}
+
+.change-customer-row-container {
+}
+
+.fulfillment-method-grid-item {
+}
+
+.addresses-grid-item {
+}
+
+.pick-up-address-grid-item {
+}
+
+.apply-button-grid-item {
+}
+
+.sign-out-row {
+}
+
+.sign-out-row-text {
+}
+
+.mobile-search-wrapper {
+}
+
+.mobile-search-button {
+}
+
+.mobile-search-button-icon {
+}
+
+.container {
+}
+
+.item-wrapper {
+}
+
+.cascading-menu {
+}
+
+.menu-item {
+}
+
+.mega-menu {
+}
+
+.mega-menu-grid-container {
+}
+
+.mega-menu-grid-item {
+}
+
+.mega-menu-heading-link {
+}
+
+.mega-menu-link {
+}
+
+.quick-order-item-wrapper {
+}
+
+.quick-order-link {
+}
+
+.vmi-page-link {
+}
+
+.mobile-search-modal {
+}`;
+
 export class MainNavigation extends React.Component<Props, State> {
     container = React.createRef<HTMLDivElement>();
     mobileSearchInput = React.createRef<HTMLInputElement>();
@@ -556,11 +695,13 @@ export class MainNavigation extends React.Component<Props, State> {
         const {
             links,
             quickOrderLink,
-            fields: { showQuickOrder },
+            fields: { showQuickOrder, customCSS },
             id,
             allowQuickOrder,
             isCompactHeaderFlyoutMenu,
+            flyoutCustomCSS,
             isCompactHeaderMainNavigation,
+            сompactHeaderMainNavigationCustomCSS,
             vmiPageLinks,
             displayVmiNavigation,
             displayModeSwitch,
@@ -573,62 +714,85 @@ export class MainNavigation extends React.Component<Props, State> {
         const styles = mergeToNew(mainNavigationStyles, mainNavContextStyles);
 
         if (isCompactHeaderFlyoutMenu) {
+            const flyoutCustomCssWrapper = {
+                css: css`
+                    ${flyoutCustomCSS}
+                `,
+            };
+
             return (
-                <StyledWrapper {...styles.compactFlyoutMenu}>
-                    <NavigationDrawer
-                        links={links}
-                        showQuickOrder={showQuickOrderLink}
-                        quickOrderLink={quickOrderLink}
-                        displayVmiNavigation={displayVmiNavigation}
-                        vmiPageLinks={vmiPageLinks}
-                        displayModeSwitch={displayModeSwitch}
-                        currentMode={currentMode}
-                    />
+                <StyledWrapper {...flyoutCustomCssWrapper}>
+                    <StyledWrapper className="flyout-menu-wrapper" {...styles.compactFlyoutMenu}>
+                        <NavigationDrawer
+                            links={links}
+                            showQuickOrder={showQuickOrderLink}
+                            quickOrderLink={quickOrderLink}
+                            displayVmiNavigation={displayVmiNavigation}
+                            vmiPageLinks={vmiPageLinks}
+                            displayModeSwitch={displayModeSwitch}
+                            currentMode={currentMode}
+                        />
+                    </StyledWrapper>
                 </StyledWrapper>
             );
         }
 
         if (isCompactHeaderMainNavigation) {
+            const mainNavigationCustomCSSWrapper = {
+                css: css`
+                    ${сompactHeaderMainNavigationCustomCSS}
+                `,
+            };
+
             return (
-                <StyledWrapper {...styles.container} ref={this.container}>
-                    {links.map((link, index) => {
-                        return (
-                            // eslint-disable-next-line react/no-array-index-key
-                            <StyledWrapper {...styles.itemWrapper} key={index}>
-                                <MainNavigationItem
-                                    index={index}
-                                    link={link}
-                                    styles={styles}
-                                    container={this.container}
-                                    isOpen={index === selectedLinkIndex}
-                                    displayChangeCustomerLink={this.props.displayChangeCustomerLink}
-                                />
+                <StyledWrapper {...mainNavigationCustomCSSWrapper}>
+                    <StyledWrapper className="container" {...styles.container} ref={this.container}>
+                        {links.map((link, index) => {
+                            return (
+                                // eslint-disable-next-line react/no-array-index-key
+                                <StyledWrapper className="item-wrapper" {...styles.itemWrapper} key={index}>
+                                    <MainNavigationItem
+                                        index={index}
+                                        link={link}
+                                        styles={styles}
+                                        container={this.container}
+                                        isOpen={index === selectedLinkIndex}
+                                        displayChangeCustomerLink={this.props.displayChangeCustomerLink}
+                                    />
+                                </StyledWrapper>
+                            );
+                        })}
+                        {showQuickOrderLink && quickOrderLink && (
+                            <StyledWrapper className="item-wrapper" {...styles.itemWrapper}>
+                                <StyledWrapper className="quick-order-item-wrapper" {...styles.quickOrderItemWrapper}>
+                                    <Link
+                                        className="quick-order-link"
+                                        typographyProps={styles.menuItemTypography}
+                                        color={styles.menuItemTypography?.color}
+                                        {...styles.menuItem}
+                                        id="quickOrder"
+                                        href={quickOrderLink.url}
+                                    >
+                                        {quickOrderLink.title}
+                                    </Link>
+                                </StyledWrapper>
                             </StyledWrapper>
-                        );
-                    })}
-                    {showQuickOrderLink && quickOrderLink && (
-                        <StyledWrapper {...styles.itemWrapper}>
-                            <StyledWrapper {...styles.quickOrderItemWrapper}>
-                                <Link
-                                    typographyProps={styles.menuItemTypography}
-                                    color={styles.menuItemTypography?.color}
-                                    {...styles.menuItem}
-                                    id="quickOrder"
-                                    href={quickOrderLink.url}
-                                >
-                                    {quickOrderLink.title}
-                                </Link>
-                            </StyledWrapper>
-                        </StyledWrapper>
-                    )}
+                        )}
+                    </StyledWrapper>
                 </StyledWrapper>
             );
         }
 
+        const customCssWrapper = {
+            css: css`
+                ${customCSS}
+            `,
+        };
+
         return (
-            <>
-                <StyledWrapper {...styles.mobileWrapper}>
-                    <Hidden above="md" {...styles.mobileMenuWrapper}>
+            <StyledWrapper {...customCssWrapper}>
+                <StyledWrapper className="mobile-wrapper" {...styles.mobileWrapper}>
+                    <Hidden className="mobile-menu-wrapper" above="md" {...styles.mobileMenuWrapper}>
                         <NavigationDrawer
                             links={links}
                             showQuickOrder={showQuickOrderLink}
@@ -639,20 +803,24 @@ export class MainNavigation extends React.Component<Props, State> {
                             currentMode={currentMode}
                         />
                     </Hidden>
-                    <Hidden above="sm" {...styles.mobileSearchWrapper}>
-                        <Button {...styles.mobileSearchButton} onClick={this.mobileSearchButtonClickHandler}>
-                            <ButtonIcon src={Search} />
+                    <Hidden className="mobile-search-wrapper" above="sm" {...styles.mobileSearchWrapper}>
+                        <Button
+                            className="mobile-search-button"
+                            {...styles.mobileSearchButton}
+                            onClick={this.mobileSearchButtonClickHandler}
+                        >
+                            <ButtonIcon className="mobile-search-button-icon" src={Search} />
                             <VisuallyHidden>{translate("Search")}</VisuallyHidden>
                         </Button>
                     </Hidden>
                 </StyledWrapper>
                 <Hidden below="lg">
                     {!displayVmiNavigation && (
-                        <StyledWrapper {...styles.container} ref={this.container}>
+                        <StyledWrapper className="container" {...styles.container} ref={this.container}>
                             {links.map((link, index) => {
                                 return (
                                     // eslint-disable-next-line react/no-array-index-key
-                                    <StyledWrapper {...styles.itemWrapper} key={index}>
+                                    <StyledWrapper className="item-wrapper" {...styles.itemWrapper} key={index}>
                                         <MainNavigationItem
                                             index={index}
                                             link={link}
@@ -665,9 +833,13 @@ export class MainNavigation extends React.Component<Props, State> {
                                 );
                             })}
                             {showQuickOrderLink && quickOrderLink && (
-                                <StyledWrapper {...styles.itemWrapper}>
-                                    <StyledWrapper {...styles.quickOrderItemWrapper}>
+                                <StyledWrapper className="item-wrapper" {...styles.itemWrapper}>
+                                    <StyledWrapper
+                                        className="quick-order-item-wrapper"
+                                        {...styles.quickOrderItemWrapper}
+                                    >
                                         <Link
+                                            className="quick-order-link"
                                             typographyProps={styles.menuItemTypography}
                                             color={styles.menuItemTypography?.color}
                                             {...styles.menuItem}
@@ -682,12 +854,13 @@ export class MainNavigation extends React.Component<Props, State> {
                         </StyledWrapper>
                     )}
                     {displayVmiNavigation && (
-                        <StyledWrapper {...styles.container} ref={this.container}>
-                            <StyledWrapper {...styles.itemWrapper}>
+                        <StyledWrapper className="container" {...styles.container} ref={this.container}>
+                            <StyledWrapper className="item-wrapper" {...styles.itemWrapper}>
                                 {vmiPageLinks.map(
                                     link =>
                                         link && (
                                             <Link
+                                                className="vmi-page-link"
                                                 key={link.id}
                                                 typographyProps={styles.menuItemTypography}
                                                 color={styles.menuItemTypography?.color}
@@ -704,6 +877,7 @@ export class MainNavigation extends React.Component<Props, State> {
                     )}
                 </Hidden>
                 <Modal
+                    className="mobile-search-modal"
                     {...styles.mobileSearchModal}
                     isOpen={this.state.mobileSearchModalIsOpen}
                     closeOnEsc={true}
@@ -718,12 +892,22 @@ export class MainNavigation extends React.Component<Props, State> {
                         />
                     }
                 />
-            </>
+            </StyledWrapper>
         );
     }
 }
 
 MainNavigation.contextType = StylesContext;
+
+const basicTab = {
+    displayName: "Basic",
+    sortOrder: 0,
+};
+
+const advancedTab = {
+    displayName: "Advanced",
+    sortOrder: 1,
+};
 
 const mainNavigation: WidgetModule = {
     component: connect(mapStateToProps, mapDispatchToProps)(MainNavigation),
@@ -855,12 +1039,43 @@ const mainNavigation: WidgetModule = {
                         isVisible: (item: HasFields) => item.fields.linkType === "Link",
                     },
                 ],
+                tab: basicTab,
             },
             {
                 name: fields.showQuickOrder,
                 editorTemplate: "CheckboxField",
                 defaultValue: true,
                 fieldType: "General",
+                tab: basicTab,
+            },
+            {
+                name: fields.customCSS,
+                displayName: "Custom CSS",
+                editorTemplate: "CodeField",
+                fieldType: "General",
+                tab: advancedTab,
+                defaultValue: defaultCustomCss,
+                isVisible: (item, shouldDisplayAdvancedFeatures) => !!shouldDisplayAdvancedFeatures,
+                validate: value => {
+                    if (value === undefined || value === null) {
+                        return "";
+                    }
+
+                    const result = cssLinter.parse(value, { silent: true });
+                    if (result?.stylesheet?.parsingErrors) {
+                        // the error output at this time only has room for one line so we just show the first error
+                        return result.stylesheet.parsingErrors.length <= 0
+                            ? ""
+                            : result.stylesheet.parsingErrors.map(error => `${error.reason} on line ${error.line}`)[0];
+                    }
+
+                    return "Unable to parse Css";
+                },
+                options: {
+                    mode: "css",
+                    lint: true,
+                    autoRefresh: true,
+                },
             },
         ],
     },

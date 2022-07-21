@@ -41,12 +41,13 @@ export function canAddToCart(
         return false;
     }
 
-    const { allowBackOrder } = getSettingsCollection(state).productSettings;
+    const { canAddToCart, allowBackOrder } = getSettingsCollection(state).productSettings;
     const availability =
         productInfo?.inventory?.inventoryAvailabilityDtos?.find(
             o => o.unitOfMeasure.toLowerCase() === (productInfo?.unitOfMeasure?.toLowerCase() || ""),
         )?.availability || undefined;
     return (
+        canAddToCart &&
         !product.cantBuy &&
         (product.canAddToCart ||
             ((configurationCompleted || variantSelectionCompleted) &&

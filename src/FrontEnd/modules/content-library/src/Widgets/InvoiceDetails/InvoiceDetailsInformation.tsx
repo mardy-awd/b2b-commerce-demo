@@ -208,7 +208,7 @@ const InvoiceDetailsInformation = ({ language }: Props) => {
 const widgetModule: WidgetModule = {
     component: connect(mapStateToProps)(InvoiceDetailsInformation),
     definition: {
-        group: "Invoice History",
+        group: "Invoice Details",
         displayName: "Information",
         allowedContexts: ["InvoiceDetailsPage"],
     },

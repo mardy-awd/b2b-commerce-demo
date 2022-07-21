@@ -58,7 +58,7 @@ const OrderHistoryPage = ({
         firstLoad = true;
         const pageSizeCookie = getCookie("OrderHistory-PageSize");
         const pageSize = pageSizeCookie ? parseInt(pageSizeCookie, 10) : undefined;
-        if (location.search) {
+        if (location.search && location.search.indexOf("SwitchingLanguage") === 0) {
             const getOrdersApiParameter = parseQueryString<GetOrdersApiParameter>(location.search);
             if (pageSize) {
                 getOrdersApiParameter.pageSize = pageSize;

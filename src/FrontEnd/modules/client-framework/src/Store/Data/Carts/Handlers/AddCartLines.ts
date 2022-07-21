@@ -20,6 +20,12 @@ type Props = {
 
 type HandlerType = Handler<Parameter, Props>;
 
+export const DispatchBeginUpdatingCart: HandlerType = props => {
+    props.dispatch({
+        type: "Context/BeginUpdatingCart",
+    });
+};
+
 export const PopulateApiParameter: HandlerType = props => {
     const cartLineCollection: CartLineModel[] = [];
     props.parameter.productInfos.forEach(o => {
@@ -47,12 +53,24 @@ export const SendDataToApi: HandlerType = async props => {
     props.apiResult = await addLineCollection(props.apiParameter);
 };
 
+export const DispatchCompleteUpdatingCart: HandlerType = props => {
+    props.dispatch({
+        type: "Context/CompleteUpdatingCart",
+    });
+};
+
 export const ExecuteOnSuccessCallback: HandlerType = props => {
     markSkipOnCompleteIfOnSuccessIsSet(props);
     props.parameter.onSuccess?.(props.apiResult);
 };
 
-export const chain = [PopulateApiParameter, SendDataToApi, ExecuteOnSuccessCallback];
+export const chain = [
+    DispatchBeginUpdatingCart,
+    PopulateApiParameter,
+    SendDataToApi,
+    DispatchCompleteUpdatingCart,
+    ExecuteOnSuccessCallback,
+];
 
 const addCartLines = createHandlerChainRunner(chain, "AddCartLines");
 export default addCartLines;

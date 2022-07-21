@@ -6,7 +6,7 @@ import {
     HasOnSuccess,
     markSkipOnCompleteIfOnSuccessIsSet,
 } from "@insite/client-framework/HandlerCreator";
-import { getAdyenPaymentDetails } from "@insite/client-framework/Services/PaymentService";
+import { convertToMinorUnits, getAdyenPaymentDetails } from "@insite/client-framework/Services/PaymentService";
 import siteMessage from "@insite/client-framework/SiteMessage";
 import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import loadCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCart";
@@ -161,40 +161,3 @@ export const chain = [
 
 const validateAdyenPayment = createHandlerChainRunner(chain, "ValidateAdyenPayment");
 export default validateAdyenPayment;
-
-function convertToMinorUnits(value: number, currencyCode: string) {
-    let valueInMinorUnits: number;
-    switch (currencyCode) {
-        case "CVE":
-        case "DJF":
-        case "GNF":
-        case "IDR":
-        case "JPY":
-        case "KMF":
-        case "KRW":
-        case "PYG":
-        case "RWF":
-        case "UGX":
-        case "VND":
-        case "VUV":
-        case "XAF":
-        case "XOF":
-        case "XPF":
-            valueInMinorUnits = value;
-            break;
-        case "BHD":
-        case "IQD":
-        case "JOD":
-        case "KWD":
-        case "LYD":
-        case "OMR":
-        case "TND":
-            valueInMinorUnits = value * 1000;
-            break;
-        default:
-            valueInMinorUnits = value * 100;
-            break;
-    }
-
-    return Math.round(valueInMinorUnits);
-}

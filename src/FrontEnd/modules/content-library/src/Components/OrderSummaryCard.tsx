@@ -68,12 +68,20 @@ const OrderSummaryCard: FC<Props> = ({ language, order, orderSettings, extendedS
     const orderNumber = order.erpOrderNumber || order.webOrderNumber;
 
     return (
-        <GridItem {...styles.orderSummaryCardGridItem}>
-            <GridContainer {...styles.container} data-test-selector={`orderSummaryCard_${orderNumber}`}>
-                <GridItem {...styles.pageTypeLinkGridItem} data-test-selector="orderSummaryCard_Date">
+        <GridItem className="order-summary-card-grid-item" {...styles.orderSummaryCardGridItem}>
+            <GridContainer
+                className="order-summary-card-container"
+                {...styles.container}
+                data-test-selector={`orderSummaryCard_${orderNumber}`}
+            >
+                <GridItem
+                    className="page-type-link-grid-item"
+                    {...styles.pageTypeLinkGridItem}
+                    data-test-selector="orderSummaryCard_Date"
+                >
                     {orderNumber && <OrderDetailPageTypeLink title={orderDateDisplay} orderNumber={orderNumber} />}
                 </GridItem>
-                <GridItem {...styles.orderNumberGridItem}>
+                <GridItem className="order-number-grid-item" {...styles.orderNumberGridItem}>
                     {order.erpOrderNumber && (
                         <SmallHeadingAndText
                             heading={translate("Order #")}
@@ -82,7 +90,7 @@ const OrderSummaryCard: FC<Props> = ({ language, order, orderSettings, extendedS
                         />
                     )}
                 </GridItem>
-                <GridItem {...styles.statusGridItem}>
+                <GridItem className="status-grid-item" {...styles.statusGridItem}>
                     {order.statusDisplay && (
                         <SmallHeadingAndText
                             heading={translate("Status")}
@@ -92,7 +100,7 @@ const OrderSummaryCard: FC<Props> = ({ language, order, orderSettings, extendedS
                     )}
                 </GridItem>
                 {orderSettings.showWebOrderNumber && order.webOrderNumber && (
-                    <GridItem {...styles.webOrderNumberGridItem}>
+                    <GridItem className="web-order-number-grid-item" {...styles.webOrderNumberGridItem}>
                         <SmallHeadingAndText
                             heading={translate("Web Order #")}
                             text={order.webOrderNumber}
@@ -100,7 +108,7 @@ const OrderSummaryCard: FC<Props> = ({ language, order, orderSettings, extendedS
                         />
                     </GridItem>
                 )}
-                <GridItem {...styles.totalGridItem}>
+                <GridItem className="total-grid-item" {...styles.totalGridItem}>
                     {order.orderGrandTotalDisplay && (
                         <SmallHeadingAndText
                             heading={translate("Total")}

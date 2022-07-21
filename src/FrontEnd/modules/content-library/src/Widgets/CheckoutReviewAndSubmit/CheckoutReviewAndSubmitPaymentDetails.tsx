@@ -1,10 +1,18 @@
 import { useTokenExFrame } from "@insite/client-framework/Common/Hooks/useTokenExFrame";
+import { newGuid } from "@insite/client-framework/Common/StringHelpers";
 import StyledWrapper, { getStyledWrapper } from "@insite/client-framework/Common/StyledWrapper";
 import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import validateCreditCard from "@insite/client-framework/Common/Utilities/validateCreditCard";
 import { makeHandlerChainAwaitable } from "@insite/client-framework/HandlerCreator";
 import logger from "@insite/client-framework/Logger";
-import { getAdyenSessionData, postAdyenRefund } from "@insite/client-framework/Services/PaymentService";
+import {
+    authenticate,
+    getAdyenSessionData,
+    getAuthenticationStatus,
+    PaymentAuthenticationModel,
+    postAdyenRefund,
+    ThreeDsModel,
+} from "@insite/client-framework/Services/PaymentService";
 import { TokenExConfig } from "@insite/client-framework/Services/SettingsService";
 import siteMessage from "@insite/client-framework/SiteMessage";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
@@ -25,6 +33,8 @@ import getPaymetricResponsePacket from "@insite/client-framework/Store/Pages/Che
 import loadAdyenDropInConfig from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/LoadAdyenDropInConfiguration";
 import placeOrder from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/PlaceOrder";
 import setCheckoutPaymentMethod from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/SetCheckoutPaymentMethod";
+import setIsWaitingForThreeDs from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/SetIsWaitingForThreeDs";
+import setPlaceOrderErrorMessage from "@insite/client-framework/Store/Pages/CheckoutReviewAndSubmit/Handlers/SetPlaceOrderErrorMessage";
 import validateAdyenPayment, {
     ValidatAdyenPaymenteResult,
     ValidateAdyenPaymentParameter,
@@ -48,11 +58,13 @@ import PayPalButton, { PayPalButtonStyles } from "@insite/content-library/Widget
 import SavedPaymentProfileEntry, {
     SavedPaymentProfileEntryStyles,
 } from "@insite/content-library/Widgets/CheckoutReviewAndSubmit/SavedPaymentProfileEntry";
+import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
+import Modal, { ModalPresentationProps } from "@insite/mobius/Modal";
 import Select, { SelectPresentationProps } from "@insite/mobius/Select";
 import TextField, { TextFieldPresentationProps } from "@insite/mobius/TextField";
 import ToasterContext, { HasToasterContext, withToaster } from "@insite/mobius/Toast/ToasterContext";
@@ -119,6 +131,8 @@ const mapDispatchToProps = {
     validateAdyenPayment: makeHandlerChainAwaitable<ValidateAdyenPaymentParameter, ValidatAdyenPaymenteResult>(
         validateAdyenPayment,
     ),
+    setPlaceOrderErrorMessage,
+    setIsWaitingForThreeDs,
 };
 
 type Props = ReturnType<typeof mapStateToProps> &
@@ -157,6 +171,9 @@ export interface CheckoutReviewAndSubmitPaymentDetailsStyles {
     paypalCheckoutErrorWrapper?: InjectableCss;
     paypalCheckoutErrorText?: TypographyPresentationProps;
     loadingSpinner?: LoadingSpinnerProps;
+    threeDsModal?: ModalPresentationProps;
+    threeDsButtonsWrapper?: InjectableCss;
+    threeDsCancelButton?: ButtonPresentationProps;
 }
 
 export const checkoutReviewAndSubmitPaymentDetailsStyles: CheckoutReviewAndSubmitPaymentDetailsStyles = {
@@ -217,6 +234,13 @@ export const checkoutReviewAndSubmitPaymentDetailsStyles: CheckoutReviewAndSubmi
         `,
     },
     adyenDropInGridItem: { width: 12 },
+    threeDsButtonsWrapper: {
+        css: css`
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        `,
+    },
 };
 
 // TokenEx doesn't provide an npm package or type definitions for using the iframe solution.
@@ -284,6 +308,8 @@ let tokenExFrameStyleConfig: TokenExIframeStyles;
 
 declare function $XIFrame(options: any): any;
 let paymetricIframe: any;
+
+let cancelCheckForThreeDsResult = false;
 
 const isNonEmptyString = (value: string | undefined) => value !== undefined && value.trim() !== "";
 
@@ -378,6 +404,8 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     requestedDeliveryDateDisabled,
     requestedPickUpDateDisabled,
     validateAdyenPayment,
+    setPlaceOrderErrorMessage,
+    setIsWaitingForThreeDs,
 }: Props) => {
     const [paymentMethod, setPaymentMethod] = useState("");
     const [poNumber, setPONumber] = useState("");
@@ -418,6 +446,8 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     const [accountHolderName, setAccountHolderName] = useState("");
     const [accountNumber, setAccountNumber] = useState("");
     const [routingNumber, setRoutingNumber] = useState("");
+    const [threeDsModalIsOpen, setThreeDsModalIsOpen] = useState(false);
+    const [threeDsRedirectHtml, setThreeDsRedirectHtml] = useState("");
 
     // Used in deciding which form element to focus on in the case the form is submitted with errors
     const paymentMethodRef = useRef<HTMLSelectElement>(null);
@@ -483,61 +513,155 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
 
     useEffect(() => {
         if (isCardNumberTokenized || isECheckTokenized) {
-            placeOrder({
-                paymentMethod,
-                poNumber,
-                vatNumber,
-                saveCard,
-                cardHolderName,
-                cardNumber,
-                cardType,
-                expirationMonth,
-                expirationYear,
-                securityCode,
-                useBillingAddress,
-                address1,
-                countryId,
-                stateId,
-                city,
-                postalCode,
-                payPalToken,
-                payPalPayerId,
-                accountHolderName,
-                accountNumber,
-                routingNumber,
-                onSuccess: (cartId: string) => {
-                    if (!orderConfirmationPageLink) {
-                        return;
-                    }
-
-                    if (cart?.isAwaitingApproval) {
-                        resetCurrentCartId({});
-                        toaster.addToast({
-                            body: siteMessage("OrderApproval_OrderPlaced"),
-                            messageType: "success",
-                        });
-                    }
-
-                    history.push(`${orderConfirmationPageLink.url}?cartId=${cartId}`);
-                },
-                onError: () => {
-                    setIsCardNumberTokenized(false);
-                    tokenExIframe?.reset();
-                },
-                onComplete(resultProps) {
-                    if (resultProps.apiResult?.cart) {
-                        // "this" is targeting the object being created, not the parent SFC
-                        // eslint-disable-next-line react/no-this-in-sfc
-                        this.onSuccess?.(resultProps.apiResult.cart.id);
-                    } else {
-                        // "this" is targeting the object being created, not the parent SFC
-                        // eslint-disable-next-line react/no-this-in-sfc
-                        this.onError?.();
-                    }
-                },
-            });
+            submitCart();
         }
     }, [isCardNumberTokenized, isECheckTokenized]);
+
+    const submitCart = (additionalData?: Partial<Parameters<typeof placeOrder>[0]>) => {
+        if (!paymentGatewayRequiresAuthentication) {
+            finishSubmittingCart(additionalData);
+            return;
+        }
+
+        setIsWaitingForThreeDs(true);
+        const threeDsPromise = new Promise<ThreeDsModel | undefined>((resolve, reject) => {
+            const transactionId = newGuid();
+            authenticate(
+                transactionId,
+                cardNumber || tokenName!,
+                expirationMonth,
+                expirationYear,
+                cart!.orderGrandTotal,
+                isPaymentProfile,
+            ).then(
+                ({ redirectHtml, threeDs }: PaymentAuthenticationModel) => {
+                    if (redirectHtml) {
+                        if (redirectHtml.includes("threedsFrictionLessRedirect")) {
+                            resolve(threeDs);
+                        } else {
+                            setThreeDsModalIsOpen(true);
+                            setThreeDsRedirectHtml(redirectHtml.replace("100vh", "60vh"));
+                            checkForThreeDsResult(transactionId, resolve, reject);
+                        }
+                    } else {
+                        resolve(undefined);
+                    }
+                },
+                (error: any) => {
+                    reject(error);
+                },
+            );
+        });
+        threeDsPromise.then(
+            (threeDs: ThreeDsModel | undefined) => {
+                finishSubmittingCart({ ...additionalData, threeDs });
+                setIsWaitingForThreeDs(false);
+            },
+            (error: any) => {
+                setPlaceOrderErrorMessage(error);
+                setIsCardNumberTokenized(false);
+                setIsWaitingForThreeDs(false);
+            },
+        );
+    };
+
+    const checkForThreeDsResult = (
+        transactionId: string,
+        resolve: (value: ThreeDsModel | undefined) => void,
+        reject: (error: any) => void,
+    ) => {
+        try {
+            const runScript = document.getElementById("authenticate-payer-script") as HTMLScriptElement;
+            if (runScript) {
+                // eslint-disable-next-line no-eval
+                eval(runScript.text);
+                runScript.remove();
+            }
+            // eslint-disable-next-line no-empty
+        } catch {}
+
+        getAuthenticationStatus(transactionId).then(
+            ({ action, threeDs }: PaymentAuthenticationModel) => {
+                if (action === "PENDING") {
+                    setTimeout(() => {
+                        if (cancelCheckForThreeDsResult) {
+                            cancelCheckForThreeDsResult = false;
+                            return;
+                        }
+                        checkForThreeDsResult(transactionId, resolve, reject);
+                    }, 250);
+                } else {
+                    setThreeDsModalIsOpen(false);
+                    if (action === "SUCCESS") {
+                        resolve(threeDs);
+                    } else {
+                        reject({ errorMessage: "" });
+                    }
+                }
+            },
+            (error: any) => {
+                setThreeDsModalIsOpen(false);
+                reject(error);
+            },
+        );
+    };
+
+    const finishSubmittingCart = (additionalData?: Partial<Parameters<typeof placeOrder>[0]>) => {
+        placeOrder({
+            paymentMethod,
+            poNumber: window.localStorage.getItem("order-po-number") ?? poNumber,
+            vatNumber,
+            saveCard,
+            cardHolderName,
+            cardNumber,
+            cardType,
+            expirationMonth,
+            expirationYear,
+            securityCode,
+            useBillingAddress,
+            address1,
+            countryId,
+            stateId,
+            city,
+            postalCode,
+            payPalToken,
+            payPalPayerId,
+            accountHolderName,
+            accountNumber,
+            routingNumber,
+            onSuccess: (cartId: string) => {
+                preloadOrderConfirmationData({
+                    cartId,
+                    onSuccess: () => {
+                        if (cart?.isAwaitingApproval) {
+                            resetCurrentCartId({});
+                            toaster.addToast({
+                                body: siteMessage("OrderApproval_OrderPlaced"),
+                                messageType: "success",
+                            });
+                        }
+                        history.push(`${orderConfirmationPageLink!.url}?cartId=${cartId}`);
+                    },
+                });
+            },
+            onError: () => {
+                setIsCardNumberTokenized(false);
+                tokenExIframe?.reset();
+            },
+            onComplete(resultProps) {
+                if (resultProps.apiResult?.cart) {
+                    // "this" is targeting the object being created, not the parent SFC
+                    // eslint-disable-next-line react/no-this-in-sfc
+                    this.onSuccess?.(resultProps.apiResult.cart.id);
+                } else {
+                    // "this" is targeting the object being created, not the parent SFC
+                    // eslint-disable-next-line react/no-this-in-sfc
+                    this.onError?.();
+                }
+            },
+            ...additionalData,
+        });
+    };
 
     useEffect(() => {
         if (!cartState.isLoading && cartState.value && cartState.value.paymentMethod && paymentMethod === "") {
@@ -591,7 +715,8 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
 
     const { value: cart } = cartState;
 
-    const { useTokenExGateway, useECheckTokenExGateway, useAdyenDropIn } = websiteSettings;
+    const { useTokenExGateway, useECheckTokenExGateway, useAdyenDropIn, paymentGatewayRequiresAuthentication } =
+        websiteSettings;
     const [adyenSessionId, setAdyenSessionId] = useState("");
     const [adyenSessionData, setAdyenSessionData] = useState("");
     const [adyenWebOrderNumber, setAdyenWebOrderNumber] = useState("");
@@ -648,54 +773,10 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             return;
         }
 
-        placeOrder({
-            paymentMethod: "",
-            poNumber: window.localStorage.getItem("order-po-number") ?? poNumber,
-            vatNumber,
-            saveCard,
-            cardHolderName,
-            cardNumber,
-            cardType,
-            expirationMonth,
-            expirationYear,
-            securityCode,
-            useBillingAddress,
-            address1,
-            countryId,
-            stateId,
-            city,
-            postalCode,
-            payPalToken,
-            payPalPayerId,
-            isPending: !adyenPspReference,
+        submitCart({
+            isPending: true,
             isAdyenDropIn: true,
             adyenPspReference,
-            accountHolderName,
-            accountNumber,
-            routingNumber,
-            onSuccess: (cartId: string) => {
-                preloadOrderConfirmationData({
-                    cartId,
-                    onSuccess: () => {
-                        if (cart?.isAwaitingApproval) {
-                            resetCurrentCartId({});
-                            toaster.addToast({
-                                body: siteMessage("OrderApproval_OrderPlaced"),
-                                messageType: "success",
-                            });
-                        }
-                        history.push(`${orderConfirmationPageLink!.url}?cartId=${cartId}`);
-                    },
-                });
-            },
-            onComplete(resultProps) {
-                if (!resultProps.apiResult?.cart) {
-                    return;
-                }
-                // "this" is targeting the object being created, not the parent SFC
-                // eslint-disable-next-line react/no-this-in-sfc
-                this.onSuccess?.(resultProps.apiResult.cart.id);
-            },
         });
     };
 
@@ -755,6 +836,13 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                 sessionData: adyenSessionData,
                 region: adyenRegion,
                 clientKey: adyenSettings.clientKey,
+                cartId,
+                webOrderNumber: adyenWebOrderNumber,
+                returnUrl: !cartId
+                    ? checkoutReviewAndSubmitPageLink!.url
+                    : checkoutReviewAndSubmitPageLink!.url.includes("?")
+                    ? `${checkoutReviewAndSubmitPageLink!.url}&cartId=${cartId}`
+                    : `${checkoutReviewAndSubmitPageLink!.url}?cartId=${cartId}`,
                 setAdyenFormValid,
                 setAdyenErrorMessage,
                 resetAdyenSession,
@@ -771,7 +859,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         setAdyenSessionData("");
         setAdyenRegion("");
         setAdyenConfiguration(null);
-    }, [cartState.value?.orderGrandTotal, cartState.value?.billToId]);
+    }, [cartState.value?.billToId]);
 
     useEffect(() => {
         if (typeof tokenName !== "undefined") {
@@ -1359,52 +1447,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         } else if (useECheckTokenExGateway && !isPayPal && isECheck) {
             tokenExAccountNumberIframe?.tokenize();
         } else {
-            placeOrder({
-                paymentMethod,
-                poNumber,
-                vatNumber,
-                saveCard,
-                cardHolderName,
-                cardNumber,
-                cardType,
-                expirationMonth,
-                expirationYear,
-                securityCode,
-                useBillingAddress,
-                address1,
-                countryId,
-                stateId,
-                city,
-                postalCode,
-                payPalToken,
-                payPalPayerId,
-                accountHolderName,
-                accountNumber,
-                routingNumber,
-                onSuccess: (cartId: string) => {
-                    preloadOrderConfirmationData({
-                        cartId,
-                        onSuccess: () => {
-                            if (cart?.isAwaitingApproval) {
-                                resetCurrentCartId({});
-                                toaster.addToast({
-                                    body: siteMessage("OrderApproval_OrderPlaced"),
-                                    messageType: "success",
-                                });
-                            }
-                            history.push(`${orderConfirmationPageLink!.url}?cartId=${cartId}`);
-                        },
-                    });
-                },
-                onComplete(resultProps) {
-                    if (!resultProps.apiResult?.cart) {
-                        return;
-                    }
-                    // "this" is targeting the object being created, not the parent SFC
-                    // eslint-disable-next-line react/no-this-in-sfc
-                    this.onSuccess?.(resultProps.apiResult.cart.id);
-                },
-            });
+            submitCart();
         }
 
         return false;
@@ -1421,6 +1464,16 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         setPaymentMethod("");
         setRunSubmitPayPal(true);
         setIsPayPal(true);
+    };
+
+    const threeDsModalAfterOpenHandler = () => {
+        setIsWaitingForThreeDs(false);
+    };
+
+    const cancelThreeDsModalButtonClickHandler = () => {
+        setThreeDsModalIsOpen(false);
+        cancelCheckForThreeDsResult = true;
+        setIsCardNumberTokenized(false);
     };
 
     if (!tokenExFrameStyleConfig) {
@@ -1669,6 +1722,21 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                     </GridContainer>
                 )}
             </StyledFieldSet>
+            <Modal
+                {...styles.threeDsModal}
+                headline={translate("Confirm Credit Card")}
+                isOpen={threeDsModalIsOpen}
+                isCloseable={false}
+                onAfterOpen={threeDsModalAfterOpenHandler}
+            >
+                {/* eslint-disable react/no-danger */}
+                <div id="redirect-html" dangerouslySetInnerHTML={{ __html: threeDsRedirectHtml }}></div>
+                <StyledWrapper {...styles.threeDsButtonsWrapper}>
+                    <Button {...styles.threeDsCancelButton} onClick={cancelThreeDsModalButtonClickHandler}>
+                        {translate("Cancel")}
+                    </Button>
+                </StyledWrapper>
+            </Modal>
         </StyledForm>
     );
 };

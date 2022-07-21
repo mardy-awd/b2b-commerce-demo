@@ -97,7 +97,11 @@ class AutocompleteCategories extends React.Component<Props> {
         const styles = this.styles;
         return (
             <>
-                <Typography {...styles.headerText} data-test-selector="autocompleteCategories_Header">
+                <Typography
+                    {...styles.headerText}
+                    data-test-selector="autocompleteCategories_Header"
+                    className="autocomplete-categories-header"
+                >
                     {translate("Categories")}
                 </Typography>
                 {categories.map(category => (
@@ -110,8 +114,11 @@ class AutocompleteCategories extends React.Component<Props> {
                                 onClick={() => {
                                     this.props.goToUrl(category.url);
                                 }}
+                                className="autocomplete-categories-item-text"
                             >
-                                <Link {...styles.link}>{category.displayTitle}</Link>
+                                <Link {...styles.link} className="autocomplete-categories-item-link">
+                                    {category.displayTitle}
+                                </Link>
                                 <>{` ${translate("in")}`}</> {category.displaySubtitle}
                             </Typography>
                         )}
@@ -121,6 +128,7 @@ class AutocompleteCategories extends React.Component<Props> {
                                 onClick={() => {
                                     this.props.goToUrl(category.url);
                                 }}
+                                className="autocomplete-categories-link"
                             >
                                 {category.displayTitle}
                             </Link>

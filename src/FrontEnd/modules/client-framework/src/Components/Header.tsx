@@ -1,5 +1,6 @@
 import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
 import { createPageElement } from "@insite/client-framework/Components/ContentItemStore";
+import DelayedSpinner from "@insite/client-framework/Components/DelayedSpinner";
 import { HasShellContext, ShellContext, withIsInShell } from "@insite/client-framework/Components/IsInShell";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { loadPageByType } from "@insite/client-framework/Store/Data/Pages/PagesActionCreators";
@@ -37,7 +38,7 @@ class Header extends React.Component<Props> {
             shellContext: { isInShell },
         } = this.props;
         if (header.id === "") {
-            return null;
+            return <DelayedSpinner customHeight="250px" />;
         }
 
         return (

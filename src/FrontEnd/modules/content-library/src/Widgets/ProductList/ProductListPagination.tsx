@@ -4,7 +4,7 @@ import { getProductListDataViewProperty } from "@insite/client-framework/Store/P
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import Pagination, { PaginationPresentationProps } from "@insite/mobius/Pagination";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 
 const mapStateToProps = (state: ApplicationState) => ({
@@ -26,8 +26,17 @@ export const paginationStyles: ProductListPaginationStyles = {};
 const styles = paginationStyles;
 
 const ProductListPagination = ({ addProductFilters, pagination }: Props) => {
+    const [shouldScrollToTop, setShouldScrollToTop] = useState(false);
+    useEffect(() => {
+        if (shouldScrollToTop) {
+            window.scrollTo(0, 0);
+            setShouldScrollToTop(false);
+        }
+    }, [pagination?.page]);
+
     const changePage = (newPageIndex: number) => {
         addProductFilters({ page: newPageIndex });
+        setShouldScrollToTop(true);
     };
 
     const changeResultsPerPage = (event: React.ChangeEvent<HTMLSelectElement>) => {

@@ -12,7 +12,7 @@ const DelayAppearance = keyframes`
     }
 `;
 
-function DelayedSpinner(props: { isWidget: boolean }) {
+function DelayedSpinner(props: { isWidget?: boolean; customHeight?: string }) {
     return (
         <StyledWrapper
             css={css`
@@ -24,7 +24,11 @@ function DelayedSpinner(props: { isWidget: boolean }) {
         >
             <LoadingSpinner
                 css={css`
-                    height: ${props.isWidget ? "400px" : "calc(100vh - 300px)"};
+                    height: ${props.customHeight
+                        ? props.customHeight
+                        : props.isWidget
+                        ? "400px"
+                        : "calc(100vh - 300px)"};
                     margin: 20px auto;
                     display: block;
                 `}

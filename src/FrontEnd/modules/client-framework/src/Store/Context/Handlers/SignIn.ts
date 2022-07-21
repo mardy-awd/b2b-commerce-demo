@@ -167,6 +167,17 @@ export const RedirectToChangeCustomer: HandlerType = props => {
         return;
     }
 
+    // bypass Change Customer page when user open invite link from Share List email
+    const myListsDetailsPageUrl = getPageLinkByPageType(props.getState(), "MyListsDetailsPage")?.url;
+    if (
+        props.parameter.returnUrl &&
+        myListsDetailsPageUrl &&
+        props.parameter.returnUrl.toLowerCase().indexOf(myListsDetailsPageUrl.toLowerCase()) > -1 &&
+        props.parameter.returnUrl.toLowerCase().indexOf("invite=") > -1
+    ) {
+        return;
+    }
+
     const currentMode = getCookie("NavigationMode") || "Storefront";
     const session = getSession(props.getState());
     const settings = getSettingsCollection(props.getState());

@@ -15,6 +15,9 @@ export const DispatchBeginReorder: HandlerType = props => {
     throwErrorIfTesting();
 
     props.dispatch({
+        type: "Context/BeginUpdatingCart",
+    });
+    props.dispatch({
         type: "Pages/OrderStatus/BeginReorder",
     });
 };
@@ -48,6 +51,9 @@ export const DispatchCompleteReorder: HandlerType = props => {
     props.dispatch({
         type: "Pages/OrderStatus/CompleteReorder",
         cartLineCollection: props.apiResult,
+    });
+    props.dispatch({
+        type: "Context/CompleteUpdatingCart",
     });
 };
 

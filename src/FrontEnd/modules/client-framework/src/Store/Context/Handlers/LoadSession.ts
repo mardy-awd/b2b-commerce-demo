@@ -10,7 +10,7 @@ import loadCurrentShipTo from "@insite/client-framework/Store/Data/ShipTos/Handl
 import { getCurrentShipToState } from "@insite/client-framework/Store/Data/ShipTos/ShipTosSelectors";
 
 type HandlerType = ApiHandlerDiscreteParameter<
-    GetSessionApiParameter & HasOnComplete<{ apiResult: Session }>,
+    GetSessionApiParameter & HasOnComplete<{ apiResult: Session }> & { isSessionUpdate?: true },
     GetSessionApiParameter,
     Session
 >;
@@ -18,6 +18,7 @@ type HandlerType = ApiHandlerDiscreteParameter<
 export const DispatchBeginLoadSession: HandlerType = props => {
     props.dispatch({
         type: "Context/BeginLoadSession",
+        isSessionUpdate: props.parameter.isSessionUpdate,
     });
 };
 

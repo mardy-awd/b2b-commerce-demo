@@ -61,7 +61,7 @@ const PanelRowStyle = styled(Clickable)<any>`
         background: ${resolveColor("primary.main", theme)};
         color: ${resolveColor("primary.contrast", theme)};
         margin: 0;
-        ${isCurrentCss}
+        ${isCurrentCss ?? ""}
     `}
 `;
 

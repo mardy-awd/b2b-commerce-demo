@@ -137,8 +137,11 @@ const widgetModule: WidgetModule = {
                 defaultValue: defaultCustomCss,
                 isVisible: (item, shouldDisplayAdvancedFeatures) => !!shouldDisplayAdvancedFeatures,
                 validate: value => {
-                    const result = cssLinter.parse(value, { silent: true });
+                    if (value === undefined || value === null) {
+                        return "";
+                    }
 
+                    const result = cssLinter.parse(value, { silent: true });
                     if (result?.stylesheet?.parsingErrors) {
                         // the error output at this time only has room for one line so we just show the first error
                         return result.stylesheet.parsingErrors.length <= 0

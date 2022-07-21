@@ -46,12 +46,13 @@ export function canAddChildPage(
         treeNode.type !== "Header" &&
         treeNode.type !== "CompactHeader" &&
         treeNode.type !== "Footer" &&
+        treeNode.type !== "MaintenancePage" &&
         !treeNode.isVariant
     );
 }
 
 export function canAddVariant(pageDefinition: LoadedPageDefinition, permissions: PermissionsModel) {
-    return pageDefinition && permissions.canCreateVariant;
+    return pageDefinition && permissions.canCreateVariant && pageDefinition.type !== "MaintenancePage";
 }
 
 export function canCopyPage(
@@ -63,9 +64,6 @@ export function canCopyPage(
         permissions.canCopyPage &&
         !treeNode.isVariant &&
         !treeNode.isRootVariant &&
-        treeNode.displayName !== "Header" &&
-        treeNode.displayName !== "Compact Header" &&
-        treeNode.displayName !== "Footer" &&
         pageDefinition?.pageType === "Content"
     );
 }

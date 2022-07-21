@@ -45,6 +45,7 @@ const mapStateToProps = (state: ApplicationState) => {
     return {
         order: state.pages.orderStatus.order,
         isReordering: state.pages.orderStatus.isReordering,
+        isUpdatingCart: state.context.isUpdatingCart,
         showAddToCartConfirmationDialog: getSettingsCollection(state).productSettings.showAddToCartConfirmationDialog,
         stEmail: parsedQuery.stEmail ?? parsedQuery.stemail ?? "",
         stPostalCode: parsedQuery.stPostalCode ?? parsedQuery.stpostalcode ?? "",
@@ -137,6 +138,7 @@ const OrderStatusHeader = ({
     fields,
     order,
     isReordering,
+    isUpdatingCart,
     showAddToCartConfirmationDialog,
     stEmail,
     stPostalCode,
@@ -211,7 +213,7 @@ const OrderStatusHeader = ({
                                 <Clickable
                                     {...styles.reorderClickable}
                                     onClick={onClickReorder}
-                                    disabled={isReordering}
+                                    disabled={isUpdatingCart}
                                 >
                                     {translate("Reorder")}
                                 </Clickable>
@@ -225,7 +227,7 @@ const OrderStatusHeader = ({
                         <Button
                             {...styles.reorderButton}
                             onClick={onClickReorder}
-                            disabled={isReordering}
+                            disabled={isUpdatingCart}
                             data-test-selector="orderStatusHeader_reorder"
                         >
                             {translate("Reorder")}

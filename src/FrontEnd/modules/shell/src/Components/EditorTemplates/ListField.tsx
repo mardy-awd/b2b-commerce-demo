@@ -3,23 +3,32 @@ import { ListFieldDefinition } from "@insite/client-framework/Types/FieldDefinit
 import Button from "@insite/mobius/Button";
 import StandardControl from "@insite/shell-public/Components/StandardControl";
 import { EditorTemplateProps } from "@insite/shell-public/EditorTemplateProps";
-import ListFieldRow from "@insite/shell/Components/EditorTemplates/ListFieldRow";
+import ListFieldRow, { HasDepth, withListFieldDepth } from "@insite/shell/Components/EditorTemplates/ListFieldRow";
 import cloneDeep from "lodash/cloneDeep";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import styled from "styled-components";
 
+type DraggingDepthContext = {
+    draggingDepth: number;
+    setDraggingDepth: (draggingDepth: number) => void;
+};
+
+export const ListFieldDraggingDepthContext = React.createContext<DraggingDepthContext | undefined>(undefined);
+
 interface State {
     editingIndex: number;
+    draggingDepth: number;
 }
 
-type Props = EditorTemplateProps<readonly HasFields[], ListFieldDefinition> & { dispatch: Dispatch };
+type Props = EditorTemplateProps<readonly HasFields[], ListFieldDefinition> & { dispatch: Dispatch } & HasDepth;
 
 class ListField extends React.Component<Props, State> {
     private readonly listContainer: React.RefObject<HTMLDivElement>;
     private placeholder: HTMLElement | undefined;
     private draggingIndex = -1;
+    static contextType = ListFieldDraggingDepthContext;
 
     constructor(props: Props) {
         super(props);
@@ -27,6 +36,7 @@ class ListField extends React.Component<Props, State> {
         this.listContainer = React.createRef();
         this.state = {
             editingIndex: -1,
+            draggingDepth: 0,
         };
     }
 
@@ -72,6 +82,9 @@ class ListField extends React.Component<Props, State> {
     dragOver = (event: React.DragEvent<HTMLElement>) => {
         event.preventDefault();
         event.stopPropagation();
+        if (!this.isDepthCorrect()) {
+            return;
+        }
 
         if (typeof this.placeholder === "undefined") {
             this.placeholder = document.createElement("div");
@@ -113,6 +126,10 @@ class ListField extends React.Component<Props, State> {
     };
 
     drop = (event: React.DragEvent<HTMLElement>) => {
+        if (!this.isDepthCorrect()) {
+            return;
+        }
+
         let newIndex = 0;
         let found = false;
         this.listContainer.current!.childNodes.forEach(childElement => {
@@ -123,7 +140,7 @@ class ListField extends React.Component<Props, State> {
                 found = true;
                 return;
             }
-            if ((childElement as HTMLElement).style.display === "none") {
+            if ((childElement as HTMLElement)?.style?.display === "none") {
                 return;
             }
 
@@ -135,11 +152,21 @@ class ListField extends React.Component<Props, State> {
         value.splice(newIndex, 0, removed[0]);
         this.props.updateField(this.props.fieldDefinition.name, value);
 
-        this.placeholder!.style.display = "none";
+        if (this.placeholder) {
+            this.placeholder.style.display = "none";
+        }
     };
 
-    onDragStart = (index: number) => {
+    onDragStart = (index: number, depth: number) => {
         this.draggingIndex = index;
+
+        if (this.context) {
+            this.context.setDraggingDepth(depth);
+        } else {
+            this.setState({
+                draggingDepth: depth,
+            });
+        }
     };
 
     editRow = (index: number) => {
@@ -154,8 +181,33 @@ class ListField extends React.Component<Props, State> {
         });
     };
 
-    render() {
+    isDepthCorrect = () => {
+        return (this.context?.draggingDepth ?? this.state.draggingDepth) === this.props.depth;
+    };
+
+    wrapContent = (content: any) => {
+        if (this.context) {
+            return <>{content}</>;
+        }
+
         return (
+            <ListFieldDraggingDepthContext.Provider
+                value={{
+                    draggingDepth: this.state.draggingDepth,
+                    setDraggingDepth: draggingDepth => {
+                        this.setState({
+                            draggingDepth,
+                        });
+                    },
+                }}
+            >
+                {content}
+            </ListFieldDraggingDepthContext.Provider>
+        );
+    };
+
+    render() {
+        return this.wrapContent(
             <StandardControl fieldDefinition={this.props.fieldDefinition}>
                 <ChildListStyles ref={this.listContainer} onDragOver={this.dragOver} onDrop={this.drop}>
                     {this.props?.fieldValue.map((child, index) => (
@@ -181,12 +233,12 @@ class ListField extends React.Component<Props, State> {
                         </Button>
                     </AddStyle>
                 )}
-            </StandardControl>
+            </StandardControl>,
         );
     }
 }
 
-export default connect()(ListField);
+export default connect()(withListFieldDepth(ListField));
 
 const AddStyle = styled.div`
     border-top: 1px dashed black;

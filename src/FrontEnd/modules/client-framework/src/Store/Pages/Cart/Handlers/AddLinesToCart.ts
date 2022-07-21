@@ -17,12 +17,24 @@ type HandlerType = ApiHandlerDiscreteParameter<
     CartLineCollectionModel
 >;
 
+export const DispatchBeginUpdatingCart: HandlerType = props => {
+    props.dispatch({
+        type: "Context/BeginUpdatingCart",
+    });
+};
+
 export const PopulateApiParameter: HandlerType = props => {
     props.apiParameter = props.parameter.apiParameter;
 };
 
 export const RequestDataFromApi: HandlerType = async props => {
     props.apiResult = await addLineCollection(props.apiParameter);
+};
+
+export const DispatchCompleteUpdatingCart: HandlerType = props => {
+    props.dispatch({
+        type: "Context/CompleteUpdatingCart",
+    });
 };
 
 export const LoadCart: HandlerType = props => {
@@ -38,7 +50,15 @@ export const ExecuteOnSuccessCallback: HandlerType = props => {
     props.parameter.onSuccess?.();
 };
 
-export const chain = [PopulateApiParameter, RequestDataFromApi, LoadCart, LoadPromotions, ExecuteOnSuccessCallback];
+export const chain = [
+    DispatchBeginUpdatingCart,
+    PopulateApiParameter,
+    RequestDataFromApi,
+    DispatchCompleteUpdatingCart,
+    LoadCart,
+    LoadPromotions,
+    ExecuteOnSuccessCallback,
+];
 
 export const addLinesToCart = createHandlerChainRunner(chain, "AddLinesToCart");
 export default addLinesToCart;

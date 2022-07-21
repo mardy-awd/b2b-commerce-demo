@@ -23,7 +23,7 @@ const CategoryImage = ({ category }: Props) => {
 const widgetModule: WidgetModule = {
     component: withCategory(CategoryImage),
     definition: {
-        group: "Categories",
+        group: "Category Details",
         icon: "image",
         allowedContexts: ["CategoryDetailsPage", "ProductDetailsPage", "ProductListPage"],
     },

@@ -55,8 +55,10 @@ const reducer = {
         draft.isWebsiteLoaded = true;
         draft.isWebsiteLoading = false;
     },
-    "Context/BeginLoadSession": (draft: Draft<ContextState>) => {
-        draft.isSessionLoaded = false;
+    "Context/BeginLoadSession": (draft: Draft<ContextState>, action: { isSessionUpdate?: true }) => {
+        if (!action.isSessionUpdate) {
+            draft.isSessionLoaded = false;
+        }
         draft.isSessionLoading = true;
     },
     "Context/CompleteLoadSession": (draft: Draft<ContextState>, action: { session: Session }) => {
@@ -119,11 +121,15 @@ const reducer = {
         draft.isErrorModalOpen = action.isErrorModalOpen;
         draft.isUnauthorizedError = action.isUnauthorizedError;
     },
-    "Context/BeginAddingProductToCart": (draft: Draft<ContextState>) => {
-        draft.addingProductToCart = true;
+    /** @deprecated Use BeginUpdatingCart instead. */
+    "Context/BeginAddingProductToCart": (draft: Draft<ContextState>) => {},
+    /** @deprecated Use CompleteUpdatingCart instead. */
+    "Context/CompleteAddingProductToCart": (draft: Draft<ContextState>) => {},
+    "Context/BeginUpdatingCart": (draft: Draft<ContextState>) => {
+        draft.isUpdatingCart = true;
     },
-    "Context/CompleteAddingProductToCart": (draft: Draft<ContextState>) => {
-        draft.addingProductToCart = false;
+    "Context/CompleteUpdatingCart": (draft: Draft<ContextState>) => {
+        draft.isUpdatingCart = false;
     },
     "Context/SetIsPunchOutSessionId": (draft: Draft<ContextState>, action: { punchOutSessionId?: string }) => {
         draft.punchOutSessionId = action.punchOutSessionId;

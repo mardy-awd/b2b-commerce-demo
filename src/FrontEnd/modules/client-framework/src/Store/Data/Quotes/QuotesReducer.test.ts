@@ -127,6 +127,7 @@ function returnQuoteModel(): QuoteModel {
     return {
         uri: "testURI",
         properties: {},
+        additionalEmails: "test",
         alsoPurchasedProducts: null,
         approverReason: "test",
         calculationMethods: null,

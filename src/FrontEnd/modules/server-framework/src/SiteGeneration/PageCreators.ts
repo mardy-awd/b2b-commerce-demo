@@ -114,6 +114,7 @@ export async function loadPageCreators(pageCreatorsPath: string, pageCreatorsByP
             pageCreator.type !== "Header" &&
             pageCreator.type !== "Footer" &&
             pageCreator.type !== "CompactHeader" &&
+            pageCreator.type !== "MaintenancePage" &&
             !pageCreator.type.startsWith("Mobile/") &&
             pageCreator.type !== "RobotsTxtPage"
         ) {

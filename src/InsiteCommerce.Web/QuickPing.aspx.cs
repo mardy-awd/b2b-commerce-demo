@@ -15,7 +15,9 @@ public partial class QuickPing : Page
                 {
                     var healthCheckManager =
                         DependencyLocator.Current.GetInstance<IHealthCheckManager>();
-                    this.HealthCheckResults = await healthCheckManager.CheckHealth();
+                    this.HealthCheckResults = await healthCheckManager
+                        .CheckHealth()
+                        .ConfigureAwait(false);
                 }
             )
         );

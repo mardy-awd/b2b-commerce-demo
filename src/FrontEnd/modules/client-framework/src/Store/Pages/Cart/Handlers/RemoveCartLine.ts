@@ -16,6 +16,9 @@ type HandlerType = ApiHandlerDiscreteParameter<
 
 export const DispatchBeginRemoveCartLine: HandlerType = props => {
     props.dispatch({
+        type: "Context/BeginUpdatingCart",
+    });
+    props.dispatch({
         type: "Pages/Cart/BeginRemoveCartLine",
         cartLineId: props.parameter.cartLineId,
     });
@@ -44,6 +47,9 @@ export const DispatchCompleteRemoveCartLine: HandlerType = props => {
     props.dispatch({
         type: "Pages/Cart/CompleteRemoveCartLine",
         cartLineId: props.parameter.cartLineId,
+    });
+    props.dispatch({
+        type: "Context/CompleteUpdatingCart",
     });
 };
 

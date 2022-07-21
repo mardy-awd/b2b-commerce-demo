@@ -213,6 +213,8 @@ function cleanupPageDefinition(pageDefinition: LoadedPageDefinition) {
         pageDefinition.type !== "Header" &&
         pageDefinition.type !== "Footer" &&
         pageDefinition.type !== "SharedContent" &&
+        pageDefinition.type !== "MaintenancePage" &&
+        pageDefinition.type !== "RobotsTxtPage" &&
         pageDefinition.type !== "CompactHeader"
     ) {
         fieldDefinitions.push({

@@ -917,6 +917,7 @@ export interface CartLineModel extends BaseModel {
 }
 
 export interface CartModel extends BaseModel {
+    additionalEmails: string;
     alsoPurchasedProducts: ProductDto[] | null;
     approverReason: string;
     billTo?: BillToModel | null;
@@ -1038,6 +1039,14 @@ export interface PaymentOptionsDto {
     payPalPaymentUrl: string;
     payPalToken: string;
     storePaymentProfile: boolean;
+    threeDs: ThreeDsDto | null;
+}
+
+export interface ThreeDsDto {
+    acsEci: string;
+    authenticationToken: string;
+    authenticationVersion: string;
+    dsTransactionId: string;
 }
 
 export interface ECheckDto {
@@ -2040,6 +2049,7 @@ export interface JobQuoteLineModel extends BaseModel {
 }
 
 export interface JobQuoteModel extends BaseModel {
+    additionalEmails: string;
     alsoPurchasedProducts: ProductDto[] | null;
     approverReason: string;
     billTo?: BillToModel | null;
@@ -2679,6 +2689,7 @@ export interface QuoteLineModel extends BaseModel {
 }
 
 export interface QuoteModel extends BaseModel {
+    additionalEmails: string;
     alsoPurchasedProducts: ProductDto[] | null;
     approverReason: string;
     billTo?: BillToModel | null;
@@ -2876,8 +2887,10 @@ export interface WebsiteSettingsModel extends BaseModel {
     googleTrackingAccountId: string;
     googleTrackingTypeComputed: string;
     includeSiteNameInPageTitle: boolean;
+    maintenanceModeEnabled: boolean;
     mobileAppEnabled: boolean;
     pageTitleDelimiter: string;
+    paymentGatewayRequiresAuthentication: boolean;
     previewLoginEnabled: boolean;
     reCaptchaEnabledForContactUs: boolean;
     reCaptchaEnabledForCreateAccount: boolean;

@@ -3,7 +3,6 @@ import mergeToNew from "@insite/client-framework/Common/mergeToNew";
 import { HasProductContext, withProductContext } from "@insite/client-framework/Components/ProductContext";
 import logger from "@insite/client-framework/Logger";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { canAddToCart, hasEnoughInventory } from "@insite/client-framework/Store/Data/Products/ProductsSelectors";
 import translate from "@insite/client-framework/Translate";
 import TextField, { TextFieldPresentationProps, TextFieldProps } from "@insite/mobius/TextField";
@@ -23,7 +22,6 @@ const mapStateToProps = (
     props: { configurationCompleted?: boolean; variantSelectionCompleted?: boolean } & HasProductContext,
 ) => {
     return {
-        productSettings: getSettingsCollection(state).productSettings,
         canAddToCart: canAddToCart(
             state,
             props.productContext.product,
@@ -57,7 +55,6 @@ export const productQuantityOrderedStyles: TextFieldPresentationProps = {
 };
 
 const ProductQuantityOrdered = ({
-    productSettings,
     hasEnoughInventory,
     productContext: {
         product: { id: productId },
@@ -81,7 +78,7 @@ const ProductQuantityOrdered = ({
         setProductQty(`${qtyOrdered || ""}`);
     }, [qtyOrdered]);
 
-    if (!productSettings.canAddToCart || !hasEnoughInventory || !canAddToCart) {
+    if (!hasEnoughInventory || !canAddToCart) {
         return null;
     }
 

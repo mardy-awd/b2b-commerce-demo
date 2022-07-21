@@ -8,6 +8,7 @@ const initialState: CheckoutReviewAndSubmitState = {
     isCheckingOutWithPayPay: false,
     isPreloadingData: false,
     requestedDeliveryDate: null,
+    isWaitingForThreeDs: false,
 };
 
 const reducer = {
@@ -27,6 +28,12 @@ const reducer = {
         draft.isApplyingPromotion = false;
         draft.promotionErrorMessage = action.errorMessage;
         draft.promotionSuccessMessage = action.successMessage;
+    },
+    "Pages/CheckoutReviewAndSubmit/SetIsWaitingForThreeDs": (
+        draft: Draft<CheckoutReviewAndSubmitState>,
+        action: { isWaitingForThreeDs: boolean },
+    ) => {
+        draft.isWaitingForThreeDs = action.isWaitingForThreeDs;
     },
     "Pages/CheckoutReviewAndSubmit/BeginPlaceOrder": (draft: Draft<CheckoutReviewAndSubmitState>) => {
         draft.isPlacingOrder = true;

@@ -3,12 +3,12 @@
     <div id="nwrap">
         <div class="off-canvas panelwrap" role="panel-wrap">
             [% comment %] when using the cms shell, if we are viewing header/footer they are rendered as the body and don't want to render them here [% endcomment %]
-            [% if IsHeader == false and IsFooter == false and IsMobileApp == false %]
-            <div ng-hide="vm.hideHeader()">
+            [% if ShowHeaderAndFooter %]
+            <div class="header-sizing"  ng-hide="vm.hideHeader()">
                 [[Header]]
             </div>
             [% endif %]
-            <div class="container [% if IsHeader or IsFooter or IsMobileApp %] container-wide [% endif %]" role="main">
+            <div class="container [% if ShowHeaderAndFooter == false %] container-wide [% endif %]" role="main">
                 <div class="ui-lock"></div>
                 [% comment %] cms-rearrangeable is required by the cms shell [% endcomment %]
                 <div class="cms-rearrangeable" ui-view></div>
@@ -18,7 +18,7 @@
                 </div>
                 <isc-spinner show="false" name="mainLayout"></isc-spinner>
             </div>
-            [% if IsHeader == false and IsFooter == false and IsMobileApp == false %]
+            [% if ShowHeaderAndFooter %]
             <div ng-hide="vm.hideFooter()">
                 [[Footer]]
             </div>

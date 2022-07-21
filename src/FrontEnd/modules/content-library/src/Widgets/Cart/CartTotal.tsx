@@ -54,6 +54,7 @@ const mapStateToProps = (state: ApplicationState) => {
     const cartState = getCurrentCartState(state);
     const cart = cartState.value;
     const isCartLoading = cartState.isLoading;
+    const { isUpdatingCart } = state.context;
 
     return {
         isLoading: isCartLoading,
@@ -65,7 +66,7 @@ const mapStateToProps = (state: ApplicationState) => {
         checkoutShippingPageUrl: getPageLinkByPageType(state, "CheckoutShippingPage")?.url,
         checkoutReviewAndSubmitPageUrl: getPageLinkByPageType(state, "CheckoutReviewAndSubmitPage")?.url,
         canCheckoutWithCart: canCheckoutWithCart(cart),
-        isCartCheckoutDisabled: isCartLoading || !cart || isCartCheckoutDisabled(cart),
+        isCartCheckoutDisabled: isCartLoading || !cart || isCartCheckoutDisabled(cart) || isUpdatingCart,
         isCartEmpty: isCartEmpty(cart),
         hasOnlyQuoteRequiredProducts: hasOnlyQuoteRequiredProducts(cart),
         hasQuoteRequiredProducts: hasQuoteRequiredProducts(cart),
@@ -74,8 +75,8 @@ const mapStateToProps = (state: ApplicationState) => {
         isPunchOutOrder: isPunchOutOrder(cart),
         canSubmitRequisition: canSubmitRequisition(cart),
         requisitionConfirmationPageUrl: getPageLinkByPageType(state, "RequisitionConfirmationPage")?.url,
-        isPunchoutButtonDisabled: isCartLoading,
-        isSubmitForQuoteButtonDisabled: isCartLoading,
+        isPunchoutButtonDisabled: isCartLoading || isUpdatingCart,
+        isSubmitForQuoteButtonDisabled: isCartLoading || isUpdatingCart,
     };
 };
 

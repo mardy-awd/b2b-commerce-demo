@@ -61,7 +61,7 @@ export const DispatchBeginUpdateCart: HandlerType = props => {
 
 export const PopulateCart: HandlerType = props => {
     const state = props.getState();
-    const { cartId, editedCartNotes } = state.pages.checkoutShipping;
+    const { cartId, editedCartNotes, additionalEmails } = state.pages.checkoutShipping;
     const cart = cartId ? getCartState(state, cartId).value : getCurrentCartState(state).value;
     if (!cart) {
         throw new Error("There was no current cart available while trying to update the current cart.");
@@ -72,6 +72,7 @@ export const PopulateCart: HandlerType = props => {
     props.cart = {
         ...cart,
         notes,
+        additionalEmails: additionalEmails === undefined ? cart.additionalEmails : additionalEmails,
     };
 };
 
