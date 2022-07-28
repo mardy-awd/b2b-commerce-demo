@@ -5,7 +5,7 @@ import { ChildFieldDefinition } from "@insite/client-framework/Types/FieldDefini
 export function validateField(
     fieldDefinition: ChildFieldDefinition,
     item: HasFields,
-    advancedFeaturesEnabled: boolean,
+    advancedFeaturesEnabled?: boolean,
 ) {
     if (fieldDefinition.isVisible && !fieldDefinition.isVisible(item, advancedFeaturesEnabled)) {
         return;
@@ -36,7 +36,7 @@ export function validateField(
 export function validateItem(
     fieldDefinitions: ChildFieldDefinition[],
     item: HasFields,
-    advancedFeaturesEnabled: boolean,
+    advancedFeaturesEnabled?: boolean,
 ) {
     const validationErrors: Dictionary<string> = {};
 

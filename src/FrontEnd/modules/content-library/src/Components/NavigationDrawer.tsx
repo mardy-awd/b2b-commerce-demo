@@ -84,8 +84,8 @@ interface OwnProps {
     links: MappedLink[];
     showQuickOrder: boolean;
     quickOrderLink: PageLinkModel | undefined;
-    displayVmiNavigation: boolean;
-    vmiPageLinks: (PageLinkModel | undefined)[];
+    displayVmiNavigation?: boolean;
+    vmiPageLinks?: (PageLinkModel | undefined)[];
     displayModeSwitch?: boolean;
     currentMode?: string;
 }
@@ -452,6 +452,7 @@ const NavigationDrawer: FC<Props> = props => {
                         </PanelRow>
                     )}
                     {displayVmiNavigation &&
+                        vmiPageLinks &&
                         vmiPageLinks.map(
                             link =>
                                 link && (
