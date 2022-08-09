@@ -112,8 +112,8 @@
     <Content Remove="Themes\**\obj\**\*" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2207.3086" />
-    <PackageReference Include="Insite.Commerce.Private" Version="5.1.2207.3086" />
+    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2207.3109" />
+    <PackageReference Include="Insite.Commerce.Private" Version="5.1.2207.3109" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj" />

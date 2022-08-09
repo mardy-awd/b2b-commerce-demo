@@ -3,8 +3,10 @@ const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 const { generateFromFile } = require("./generate");
+const { compareErrors } = require("./compare");
 
 function buildBlueprints(numberToBuild) {
+    console.log(`##teamcity[blockOpened name='Build Blueprints'`);
     try {
         if (!fs.existsSync("output")) {
             fs.mkdirSync("output");
@@ -22,17 +24,20 @@ function buildBlueprints(numberToBuild) {
         }
 
         for (let i = 0; i < numberToBuild; i++) {
+            console.log(`##teamcity[blockOpened name='${clientProjects[i].Name}'`);
             console.log(`Working on ${clientProjects[i].Name}`);
-            const output = buildBlueprint(clientProjects[i].Name, clientProjects[i].GitUrl)
+            const output = buildBlueprint(clientProjects[i].Name, clientProjects[i].GitUrl);
             if (output) {
                 reports.push(output);
             }
+            console.log(`##teamcity[blockClosed name='${clientProjects[i].Name}'`);
         }
 
         fs.writeFileSync("./output/blueprintBuilderOutput.json", JSON.stringify(reports), "utf-8");
     } catch (err) {
         console.error(err);
     }
+    console.log(`##teamcity[blockClosed name='Build Blueprints'`);
 }
 
 function getProjects() {
@@ -70,7 +75,7 @@ function buildBlueprint(name, gitUrl) {
     const mainBlueprintsPath = "../modules/blueprints";
     const mainBlueprintsShellPath = "../modules/blueprints-shell";
 
-    console.log("Cleaning build location and copying blueprints")
+    console.log("Cleaning build location and copying blueprints");
     fs.rmdirSync(mainBlueprintsPath, { recursive: true });
     fs.rmdirSync(mainBlueprintsShellPath, { recursive: true });
 
@@ -87,28 +92,47 @@ function buildBlueprint(name, gitUrl) {
     const blueprints = fs.readdirSync(clientBlueprintsPath).filter(str => !str.match(/dockerfile/gi));
     console.log("found blueprints " + blueprints);
 
+    let fastBuild = "0";
+
     for (const blueprint of blueprints) {
         if (blueprint === "example" || blueprint === "gsd") {
             continue;
         }
+        console.log(`##teamcity[blockOpened name='${blueprint}'`);
         const cmd = `npm run build ${blueprint}`;
 
         try {
             console.log(`Exec ${name} command ${cmd}`);
-            execSync(cmd, { stdio: "pipe", cwd: path.join(__dirname, "..") });
+            execSync(cmd, { env: { FAST_BUILD: fastBuild }, stdio: "pipe", cwd: path.join(__dirname, "..") });
             passed.push(blueprint);
         } catch (error) {
             failed[blueprint] = error.output.filter(o => !!o).join("\n");
         }
+
+        fastBuild = "1";
+        console.log(`##teamcity[blockClosed name='${blueprint}'`);
     }
 
     return { name, passed, failed };
 }
 
-function generateMetadata() {
-    const metadata = generateFromFile("./output/blueprintBuilderOutput.json");
+function generateErrors() {
+    const errors = generateFromFile("./output/blueprintBuilderOutput.json");
 
-    fs.writeFileSync("./output/metadata.json", JSON.stringify(metadata, null, "  "), "utf-8");
+    fs.writeFileSync("./output/errors.json", JSON.stringify(errors, null, "  "), "utf-8");
+}
+
+function generateComparison() {
+    const errors = require("./output/errors.json");
+    if (!fs.existsSync("./previous")) {
+        return;
+    }
+    const files = fs.readdirSync("./previous");
+    for (const file of files) {
+        const previousErrors = require("./previous/" + file);
+        const newErrors = compareErrors(errors, previousErrors);
+        fs.writeFileSync("./output/comparedTo-" + file, JSON.stringify(newErrors, null, "  "), "utf-8");
+    }
 }
 
 function copyFolderRecursiveSync(source, destination) {
@@ -145,8 +169,12 @@ if (process.env.NUMBER_TO_BUILD) {
     numberToBuild = process.env.NUMBER_TO_BUILD;
 }
 
-if (type !== "generate") {
+if (type === "generate") {
+    generateErrors();
+} else if (type === "compare") {
+    generateComparison();
+} else {
     buildBlueprints(numberToBuild);
+    generateErrors();
+    generateComparison();
 }
-
-generateMetadata()
