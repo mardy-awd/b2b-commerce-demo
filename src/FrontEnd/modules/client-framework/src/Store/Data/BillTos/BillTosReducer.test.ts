@@ -39,7 +39,7 @@ describe("BillTosReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = BillTosReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(BillTosReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toEqual(true);
@@ -59,7 +59,7 @@ describe("BillTosReducer", () => {
             .getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = BillTosReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(BillTosReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState).toEqual(expectedState);

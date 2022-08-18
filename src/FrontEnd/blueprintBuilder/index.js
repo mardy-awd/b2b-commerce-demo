@@ -6,7 +6,7 @@ const { generateFromFile } = require("./generate");
 const { compareErrors } = require("./compare");
 
 function buildBlueprints(numberToBuild) {
-    console.log(`##teamcity[blockOpened name='Build Blueprints'`);
+    console.log(`##teamcity[blockOpened name='Build Blueprints']`);
     try {
         if (!fs.existsSync("output")) {
             fs.mkdirSync("output");
@@ -24,20 +24,20 @@ function buildBlueprints(numberToBuild) {
         }
 
         for (let i = 0; i < numberToBuild; i++) {
-            console.log(`##teamcity[blockOpened name='${clientProjects[i].Name}'`);
+            console.log(`##teamcity[blockOpened name='${clientProjects[i].Name}']`);
             console.log(`Working on ${clientProjects[i].Name}`);
             const output = buildBlueprint(clientProjects[i].Name, clientProjects[i].GitUrl);
             if (output) {
                 reports.push(output);
             }
-            console.log(`##teamcity[blockClosed name='${clientProjects[i].Name}'`);
+            console.log(`##teamcity[blockClosed name='${clientProjects[i].Name}']`);
         }
 
         fs.writeFileSync("./output/blueprintBuilderOutput.json", JSON.stringify(reports), "utf-8");
     } catch (err) {
         console.error(err);
     }
-    console.log(`##teamcity[blockClosed name='Build Blueprints'`);
+    console.log(`##teamcity[blockClosed name='Build Blueprints']`);
 }
 
 function getProjects() {
@@ -98,19 +98,21 @@ function buildBlueprint(name, gitUrl) {
         if (blueprint === "example" || blueprint === "gsd") {
             continue;
         }
-        console.log(`##teamcity[blockOpened name='${blueprint}'`);
+        console.log(`##teamcity[blockOpened name='${blueprint}']`);
         const cmd = `npm run build ${blueprint}`;
 
         try {
             console.log(`Exec ${name} command ${cmd}`);
-            execSync(cmd, { env: { FAST_BUILD: fastBuild }, stdio: "pipe", cwd: path.join(__dirname, "..") });
+            const env = { ...process.env };
+            env.FAST_BUILD = fastBuild;
+            execSync(cmd, { env, stdio: "pipe", cwd: path.join(__dirname, "..") });
             passed.push(blueprint);
         } catch (error) {
             failed[blueprint] = error.output.filter(o => !!o).join("\n");
         }
 
         fastBuild = "1";
-        console.log(`##teamcity[blockClosed name='${blueprint}'`);
+        console.log(`##teamcity[blockClosed name='${blueprint}']`);
     }
 
     return { name, passed, failed };
@@ -125,10 +127,12 @@ function generateErrors() {
 function generateComparison() {
     const errors = require("./output/errors.json");
     if (!fs.existsSync("./previous")) {
+        console.log("No previous folder.")
         return;
     }
     const files = fs.readdirSync("./previous");
     for (const file of files) {
+        console.log("Comparing " + file);
         const previousErrors = require("./previous/" + file);
         const newErrors = compareErrors(errors, previousErrors);
         fs.writeFileSync("./output/comparedTo-" + file, JSON.stringify(newErrors, null, "  "), "utf-8");

@@ -42,7 +42,7 @@ describe("OrdersReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = OrdersReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(OrdersReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toBe(true);
@@ -57,13 +57,17 @@ describe("OrdersReducer", () => {
             collection,
         } as any;
 
-        const expectedState = new ExpectedState(initialState)
-            .setStateDataViewLoaded(parameter, collection, "orders")
-            .setState("idByOrderNumber", value)
-            .getState();
+        const expectedState = JSON.parse(
+            JSON.stringify(
+                new ExpectedState(initialState)
+                    .setStateDataViewLoaded(parameter, collection, "orders")
+                    .setState("idByOrderNumber", value)
+                    .getState(),
+            ),
+        );
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = OrdersReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(OrdersReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews).toBeTruthy();

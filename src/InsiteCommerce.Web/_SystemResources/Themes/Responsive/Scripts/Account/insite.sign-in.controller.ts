@@ -49,6 +49,7 @@
         listId: string;
         isFromCheckoutAddress: boolean;
         session: SessionModel;
+        isChangingPassword: boolean;
 
         static $inject = ["$scope",
             "$window",
@@ -238,6 +239,7 @@
 
         protected generateAccessTokenOnSignInCompleted(accessTokenDto: common.IAccessTokenDto): void {
             this.accessTokenString = accessTokenDto.accessToken;
+            this.isChangingPassword = false;
             this.signUserIn();
         }
 
@@ -349,6 +351,7 @@
 
         protected changePasswordCompleted(session: SessionModel): void {
             this.password = this.newPassword;
+            this.isChangingPassword = true;
             this.signUserIn();
         }
 
@@ -388,6 +391,10 @@
         }
 
         protected signInCompleted(session: SessionModel): void {
+            if (this.isChangingPassword) {
+                this.accessToken.remove();
+            }
+
             this.sessionService.setContextFromSession(session);
             if (session.isRestrictedProductExistInCart) {
                 this.$localStorage.set("hasRestrictedProducts", true.toString());

@@ -14,7 +14,6 @@ import {
 
 export interface GetTokenExConfigApiParameter extends ApiParameter {
     token?: string;
-    origin?: string;
     isEcheck?: boolean;
 }
 
@@ -52,7 +51,6 @@ export function getSettings(parameter: GetSettingsApiParameter) {
 }
 
 export function getTokenExConfig(parameter: GetTokenExConfigApiParameter = {}) {
-    parameter.origin = parameter.origin ?? window.location.origin;
     return get<TokenExConfig>("/api/v1/tokenexconfig", parameter);
 }
 

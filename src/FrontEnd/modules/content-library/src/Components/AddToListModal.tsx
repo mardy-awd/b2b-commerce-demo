@@ -249,6 +249,8 @@ const AddToListModal = ({
         });
     };
 
+    const returnUrl = location.pathname + location.search;
+
     return (
         <Modal
             {...styles.modal}
@@ -261,7 +263,7 @@ const AddToListModal = ({
                     <Typography data-test-selector="productAddToListModal_requireSignIn" {...styles.signInMessageText}>
                         {siteMessage(
                             "Lists_Must_Sign_In_Spire",
-                            `${signInUrl}?returnUrl=${encodeURIComponent(location.pathname + location.search)}`,
+                            `${signInUrl}?returnUrl=${encodeURIComponent(returnUrl)}&clientRedirect=true`,
                         )}
                     </Typography>
                 )}

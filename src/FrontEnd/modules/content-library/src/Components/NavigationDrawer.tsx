@@ -3,6 +3,7 @@ import { getStyledWrapper } from "@insite/client-framework/Common/StyledWrapper"
 import { createWidgetElement } from "@insite/client-framework/Components/ContentItemStore";
 import { PageLinkModel } from "@insite/client-framework/Services/ContentService";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
+import setFlyoutDrawerIsOpen from "@insite/client-framework/Store/Components/AddressDrawer/Handlers/SetFlyoutDrawerIsOpen";
 import setInitialValues from "@insite/client-framework/Store/Components/AddressDrawer/Handlers/SetInitialValues";
 import setNavDrawerIsOpen from "@insite/client-framework/Store/Components/AddressDrawer/Handlers/SetNavDrawerIsOpen";
 import {
@@ -39,7 +40,7 @@ import { HasHistory, withHistory } from "@insite/mobius/utilities/HistoryContext
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import omitSingle from "@insite/mobius/utilities/omitSingle";
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
-import React, { FC } from "react";
+import React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled, { css } from "styled-components";
 
@@ -56,7 +57,6 @@ const mapStateToProps = (state: ApplicationState) => {
         languages: getLanguages(state),
         currentLanguage: state.context.session.language,
         currentLocation: getLocation(state),
-        isSigningIn: state.context.isSigningIn,
         userName: state.context.session?.userName,
         isGuest: state.context.session?.isGuest,
         myAccountPageLink: getPageLinkByPageType(state, "MyAccountPage"),
@@ -66,7 +66,8 @@ const mapStateToProps = (state: ApplicationState) => {
         headerLinkListLinkFields,
         showCustomerMenuItem: getSettingsCollection(state).accountSettings.enableWarehousePickup,
         fulfillmentLabel: getFulfillmentLabel(state),
-        drawerIsOpen: state.components.addressDrawer.navDrawerIsOpen,
+        navDrawerIsOpen: state.components.addressDrawer.navDrawerIsOpen,
+        flyoutDrawerIsOpen: state.components.addressDrawer.flyoutDrawerIsOpen,
         isPunchOutSession: getIsPunchOutSession(state),
     };
 };
@@ -78,6 +79,7 @@ const mapDispatchToProps = {
     cancelPunchOut,
     setInitialValues,
     setNavDrawerIsOpen,
+    setFlyoutDrawerIsOpen,
 };
 
 interface OwnProps {
@@ -88,6 +90,7 @@ interface OwnProps {
     vmiPageLinks?: (PageLinkModel | undefined)[];
     displayModeSwitch?: boolean;
     currentMode?: string;
+    isCompactHeaderFlyout?: boolean;
 }
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasHistory;
@@ -260,60 +263,75 @@ export const navigationDrawerStyles: NavigationDrawerStyles = {
 
 const styles = navigationDrawerStyles;
 
-const NavigationDrawer: FC<Props> = props => {
-    const headerLinkListLinks = useGetLinks(props.headerLinkListLinkFields, o => o.fields.destination);
+const NavigationDrawer = ({
+    links,
+    showQuickOrder,
+    quickOrderLink,
+    displayVmiNavigation,
+    vmiPageLinks,
+    displayModeSwitch,
+    currentMode,
+    isCompactHeaderFlyout,
+    currencies,
+    currentCurrencyId,
+    currentCurrencySymbol,
+    languages,
+    currentLanguage,
+    currentLocation,
+    userName,
+    isGuest,
+    myAccountPageLink,
+    signInUrl,
+    vmiDashboardPageUrl,
+    homePageUrl,
+    headerLinkListLinkFields,
+    showCustomerMenuItem,
+    fulfillmentLabel,
+    navDrawerIsOpen,
+    flyoutDrawerIsOpen,
+    isPunchOutSession,
+    history,
+    setCurrency,
+    setLanguage,
+    signOut,
+    cancelPunchOut,
+    setInitialValues,
+    setNavDrawerIsOpen,
+    setFlyoutDrawerIsOpen,
+}: Props) => {
+    const headerLinkListLinks = useGetLinks(headerLinkListLinkFields, o => o.fields.destination);
     const openDrawer = () => {
-        props.setNavDrawerIsOpen({ navDrawerIsOpen: true });
-        props.setInitialValues({});
+        isCompactHeaderFlyout ? setFlyoutDrawerIsOpen({ isOpen: true }) : setNavDrawerIsOpen({ navDrawerIsOpen: true });
+        setInitialValues({});
     };
 
     const closeDrawer = () => {
-        props.setNavDrawerIsOpen({ navDrawerIsOpen: false });
-        setTimeout(() => props.setNavDrawerIsOpen({ navDrawerIsOpen: undefined }), 300);
+        if (isCompactHeaderFlyout) {
+            setFlyoutDrawerIsOpen({ isOpen: false });
+            setTimeout(() => setFlyoutDrawerIsOpen({ isOpen: undefined }), 300);
+            return;
+        }
+
+        setNavDrawerIsOpen({ navDrawerIsOpen: false });
+        setTimeout(() => setNavDrawerIsOpen({ navDrawerIsOpen: undefined }), 300);
     };
 
     const onSignOutHandler = () => {
-        props.setNavDrawerIsOpen({ navDrawerIsOpen: false });
-        props.isPunchOutSession ? props.cancelPunchOut() : props.signOut();
+        setNavDrawerIsOpen({ navDrawerIsOpen: false });
+        isPunchOutSession ? cancelPunchOut() : signOut();
     };
 
     const navigationModeChangeHandler = (navigationMode: "Storefront" | "Vmi") => {
         setCookie(NavigationModeCookieName, navigationMode);
         if (navigationMode === "Vmi") {
-            props.vmiDashboardPageUrl && history.push(props.vmiDashboardPageUrl);
+            vmiDashboardPageUrl && history.push(vmiDashboardPageUrl);
         } else {
-            props.homePageUrl && history.push(props.homePageUrl);
+            homePageUrl && history.push(homePageUrl);
         }
     };
 
-    const {
-        quickOrderLink,
-        links,
-        showQuickOrder,
-        currencies,
-        currentCurrencyId,
-        currentCurrencySymbol,
-        languages,
-        currentLanguage,
-        setLanguage,
-        setCurrency,
-        userName,
-        isGuest,
-        myAccountPageLink,
-        signInUrl,
-        currentLocation,
-        showCustomerMenuItem,
-        fulfillmentLabel,
-        isPunchOutSession,
-        headerLinkListLinkFields,
-        history,
-        displayVmiNavigation,
-        displayModeSwitch,
-        currentMode,
-        vmiPageLinks,
-    } = props;
-
     const currentPageUrl = currentLocation.pathname;
+    const isOpen = isCompactHeaderFlyout ? flyoutDrawerIsOpen : navDrawerIsOpen;
 
     return (
         <>
@@ -331,7 +349,7 @@ const NavigationDrawer: FC<Props> = props => {
                 draggable
                 position="left"
                 {...styles.drawer}
-                isOpen={props.drawerIsOpen}
+                isOpen={isOpen}
                 handleClose={closeDrawer}
                 contentLabel="menu drawer"
             >
@@ -427,6 +445,7 @@ const NavigationDrawer: FC<Props> = props => {
                                     href={link.url}
                                     target={link.openInNewWindow ? "_blank" : ""}
                                     className="main-navigation-row"
+                                    onClick={closeDrawer}
                                     {...styles.mainNavigationRow}
                                 >
                                     <Typography

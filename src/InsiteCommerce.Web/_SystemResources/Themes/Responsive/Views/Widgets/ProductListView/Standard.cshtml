@@ -6,7 +6,7 @@
              'vm-grid': !vm.isCategoryPage() && vm.view == 'grid',
              'vm-table': !vm.isCategoryPage() && vm.view == 'table'
          }"
-         ng-controller="ProductListController as vm" ng-show="vm.ready" ng-cloak>
+         ng-controller="ProductListController as vm" ng-cloak>
 
         <div class="large-12 columns">
             <div class="cm">
@@ -32,7 +32,7 @@
                             <div class="cat-list">
                                 <div ng-repeat="subCategory in vm.category.subCategories" class="cat-block">
                                     <div>
-                                        <a ng-href="{{subCategory.path}}"><img ng-src="{{subCategory.smallImagePath}}" alt="{{subCategory.imageAltText}}" /></a>
+                                        <a ng-href="{{subCategory.path}}"><img loading="lazy" ng-src="{{subCategory.smallImagePath}}" alt="{{subCategory.imageAltText}}" /></a>
                                     </div>
                                     <span><a id="tst_productList_subCategoryBlock_{{subCategory.id}}_descriptionLink" ng-href="{{subCategory.path}}">{{subCategory.shortDescription}}</a></span>
                                 </div>
@@ -45,9 +45,10 @@
                     <isc-catalog-breadcrumb breadcrumbs="vm.breadCrumbs" search-query="vm.query"></isc-catalog-breadcrumb>
 
                     <div ng-if="vm.category != null && vm.category.largeImagePath" class="pl4-cm">
-                        <img ng-src="{{vm.category.largeImagePath}}" alt="{{vm.category.imageAltText}}" title="{{vm.category.shortDescription}}" />
+                        <img loading="lazy" ng-src="{{vm.category.largeImagePath}}" alt="{{vm.category.imageAltText}}" title="{{vm.category.shortDescription}}" />
                     </div>
-                    <isc-category-left-nav ng-if="vm.ready" ready="vm.ready" products="vm.products" attribute-value-ids="vm.attributeValueIds" filter-category="vm.filterCategory"
+                    <div ng-if="vm.category.htmlContent" ng-bind-html="vm.category.htmlContent|trusted" class="cm cat-cm"></div>
+                    <isc-category-left-nav ng-if="vm.ready" products="vm.products" attribute-value-ids="vm.attributeValueIds" filter-category="vm.filterCategory"
                                            price-filter-minimums="vm.priceFilterMinimums" bread-crumbs="vm.breadCrumbs"
                                            brand-ids="vm.brandIds" product-line-ids="vm.productLineIds" show-brands="!vm.pageBrandId" show-product-lines="!vm.pageProductLineId"
                                            search-within-terms="vm.searchWithinTerms" category="vm.category" previously-purchased-products="vm.previouslyPurchasedProducts"
@@ -85,7 +86,7 @@
 
                                     <div class="item-thumb">
                                         <a ng-href="{{product.productDetailUrl}}">
-                                            <img ng-src="{{product.mediumImagePath}}" alt="{{product.altText}}" increment-images-loaded />
+                                            <img ng-src="{{product.mediumImagePath}}" alt="{{product.altText}}" loading="lazy" increment-images-loaded />
                                         </a>
                                         <div ng-if="vm.settings.enableProductComparisons" class="product-compare-add">
                                             <a href="javascript:void(0);" data-id="{{product.id}}" class="compare-link" ng-class="{ 'compare-active': product.isBeingCompared }" ng-click="vm.compareProduct(product);">[% translate 'Compare' %]</a>
@@ -202,7 +203,7 @@
                                         <td>
                                             <div class="item-thumb">
                                                 <a ng-href="{{product.productDetailUrl}}">
-                                                    <img ng-src="{{product.mediumImagePath}}" alt="{{product.altText}}" />
+                                                    <img loading="lazy" ng-src="{{product.mediumImagePath}}" alt="{{product.altText}}" />
                                                 </a>
                                             </div>
                                             <div class="item-description">
@@ -313,7 +314,7 @@
     <div class="compare-hopper" ng-show="vm.canShowCompareHopper()">
         <div class="compare-container">
             <div class="compare-item" ng-repeat="product in vm.productsToCompare">
-                <a href="javascript:void(0);" class="compare-remove" ng-click="vm.clickRemove(product)">[% translate 'Remove' %]</a><img ng-src="{{product.smallImagePath}}" alt="product.altText" />
+                <a href="javascript:void(0);" class="compare-remove" ng-click="vm.clickRemove(product)">[% translate 'Remove' %]</a><img loading="lazy" ng-src="{{product.smallImagePath}}" alt="product.altText" />
                 <div class="item-name">
                     <a data-id="product.id" href="javascript:void(0);">{{product.shortDescription}}</a>
                 </div>

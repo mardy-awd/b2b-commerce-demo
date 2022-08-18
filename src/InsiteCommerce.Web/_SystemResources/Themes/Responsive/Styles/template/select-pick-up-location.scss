@@ -18,17 +18,28 @@
         }
 
         .search-container {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+
             input {
-                width: 85%;
-                display: inline-block;
                 height: 2.5em;
             }
 
+            .search-location {
+                width: 60%;
+            }
+
+            .search-radius {
+                width: 25%;
+            }
+
             button.location-search {
-                margin-left: .5em;
+                margin: 0 0 0.7rem 0;
                 padding: 0 0.75em 0 0;
                 color: #555555;
                 background: none;
+                height: 2.5em;
 
                 span {
                     display: none;
@@ -404,12 +415,20 @@
             border: none;
 
             .search-container {
-                input {
+                flex-direction: column;
+                gap: 0;
+                width: 100%;
+
+                .search-location, .search-radius {
                     width: 100%;
+
+                    input {
+                        margin: 0;
+                    }
                 }
 
                 button.location-search {
-                    margin-left: 0;
+                    margin: 1.25rem 0;
                     padding: 0.55em 1em;
                     color: #ffffff;
                     background-color: #555555;
@@ -430,6 +449,10 @@
         .warehouses-map-container {
             display: flex;
             flex-direction: column-reverse;
+
+            .map-container {
+                width: 100%;
+            }
         }
     }
 }

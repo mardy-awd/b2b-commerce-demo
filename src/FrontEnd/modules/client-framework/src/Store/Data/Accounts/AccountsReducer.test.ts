@@ -69,7 +69,7 @@ describe("AccountsReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = AccountsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(AccountsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toBe(true);
@@ -89,7 +89,7 @@ describe("AccountsReducer", () => {
             .getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = AccountsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(AccountsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState).toEqual(expectedState);

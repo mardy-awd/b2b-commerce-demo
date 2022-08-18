@@ -5,6 +5,7 @@ import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelec
 import { getVmiLocationsDataView } from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsSelectors";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import toggleFiltersOpen from "@insite/client-framework/Store/Pages/VmiReporting/Handlers/ToggleFiltersOpen";
+import updateSearchFields from "@insite/client-framework/Store/Pages/VmiReporting/Handlers/UpdateSearchFields";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
@@ -37,12 +38,14 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps) => {
     return {
         vmiLocationsDataView: getVmiLocationsDataView(state, getVmiLocationsParameter),
         vmiReportingPageUrl: getPageLinkByPageType(state, "VmiReportingPage")?.url,
+        vmiLocationId: state.pages.vmiReporting.getVmiBinsParameter.vmiLocationId,
         parsedQuery,
     };
 };
 
 const mapDispatchToProps = {
     toggleFiltersOpen,
+    updateSearchFields,
 };
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasHistory;
@@ -111,14 +114,19 @@ const styles = headerStyles;
 
 const VmiReportingHeader = ({
     vmiLocationsDataView,
+    vmiLocationId,
     parsedQuery,
     vmiReportingPageUrl,
     toggleFiltersOpen,
+    updateSearchFields,
     history,
 }: Props) => {
-    const setLocation = (selection: string) => {
-        if (selection && vmiReportingPageUrl) {
-            history.push(`${vmiReportingPageUrl}?locationId=${selection}`);
+    const setLocation = (locationId: string) => {
+        if (vmiReportingPageUrl) {
+            history.push(`${vmiReportingPageUrl}${locationId ? `?locationId=${locationId}` : ""}`);
+            if (!locationId) {
+                updateSearchFields({ vmiLocationId: undefined });
+            }
         }
     };
 
@@ -133,9 +141,10 @@ const VmiReportingHeader = ({
     const vmiLocations = vmiLocationsDataView;
     let currentLocation = null;
     if (vmiLocations?.value && vmiLocations.value.length > 0) {
-        currentLocation = vmiLocations.value.find(
-            (location: any) => location.id?.toLowerCase() === parsedQuery?.locationid?.toLowerCase(),
-        );
+        const locationId = parsedQuery?.locationid?.toLowerCase() || vmiLocationId;
+        currentLocation = locationId
+            ? vmiLocations.value.find((location: any) => location.id?.toLowerCase() === locationId)
+            : null;
     }
 
     return (

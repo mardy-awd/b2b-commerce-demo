@@ -108,7 +108,13 @@ class VmiBinsMetricFilter extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            metric: "All Products",
+            metric: props.getVmiBinsParameter.isBelowMinimum
+                ? "Below Minimum"
+                : props.getVmiBinsParameter.numberOfPreviousOrders !== undefined
+                ? "Slow Moving"
+                : props.getVmiBinsParameter.numberOfTimesMinQtyReached !== undefined
+                ? "Fast Moving"
+                : "All Products",
             numberOfPreviousOrders: this.getValue(props, "numberOfPreviousOrders"),
             numberOfTimesMinQtyReached: this.getValue(props, "numberOfTimesMinQtyReached"),
             numberOfVisits: this.getValue(props, "numberOfVisits"),

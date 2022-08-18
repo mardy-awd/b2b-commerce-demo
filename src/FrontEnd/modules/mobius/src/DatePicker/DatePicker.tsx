@@ -367,6 +367,8 @@ const DateTimePickerStyle = styled.div<DateTimePickerStyleProps>`
  * Input component for selecting a single date from an input field and calendar interface.
  */
 class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, DatePickerState> {
+    static displayName = "DatePicker";
+
     private readonly datePickerRef = React.createRef<HTMLDivElement>();
     private readonly datePickerStyleRef = React.createRef<HTMLDivElement>();
     private readonly calendarWidth: number;
@@ -634,6 +636,8 @@ class DatePicker extends React.Component<DatePickerProps & HasDisablerContext, D
     }
 }
 
+DatePicker.displayName = "DatePicker";
+/** @component */
 export default withDisabler(withTheme(DatePicker));
 
 export { DatePickerIcon };

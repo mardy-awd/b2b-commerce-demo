@@ -142,6 +142,7 @@ const Radio: React.FC<RadioProps & HasDisablerContext> = props => {
     );
 };
 
+Radio.displayName = "Radio";
 /** @component */
 export default withDisabler(withTheme(Radio));
 

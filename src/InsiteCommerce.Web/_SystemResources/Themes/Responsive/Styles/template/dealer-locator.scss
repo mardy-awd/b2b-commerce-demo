@@ -434,8 +434,18 @@
             margin-top: 0;
         }
 
-        .dealer-search button.dealer-search {
-            width: 100%;
+        .dealer-search {
+            .dealer-search-name {
+                width: 100%;
+            }
+
+            .dealer-search-radius {
+                width: 100%;
+
+                button.dealer-search {
+                    width: 100%;
+                }
+            }
         }
 
         .dealer-search button.dealer-search i:before,
@@ -451,17 +461,12 @@
             cursor: default;
         }
 
-        .dealer-search .dealer-search-loc {
-            width: 55%;
-        }
-
         .dealer-search .dealer-search-name {
-            width: 45%;
             float: left !important;
         }
 
-        .dealer-search .dealer-search-name input {
-            width: 70%;
+        .dealer-search .dealer-search-radius input {
+            width: 60%;
             display: inline-block;
             float: left;
         }
@@ -490,9 +495,19 @@
             padding-right: 1em;
         }
 
-        .dealer-search .dealer-search-loc {
-            width: 45%;
-        }
+        .dealer-search {
+            .dealer-search-loc {
+                width: 45%;
+            }
+
+            .dealer-search-name {
+                width: 35%;
+            }
+
+            .dealer-search-radius {
+                width: 20%;
+            }
+        } 
     }
 }
 

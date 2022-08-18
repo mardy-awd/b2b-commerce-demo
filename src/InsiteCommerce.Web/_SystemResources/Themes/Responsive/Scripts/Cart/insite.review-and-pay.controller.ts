@@ -552,7 +552,7 @@ module insite.cart {
         }
 
         protected submitCart(): void {
-            if (this.paymentGatewayRequiresAuthentication) {
+            if (this.paymentGatewayRequiresAuthentication && !this.cart.requiresApproval && !this.cart.paymentOptions.isPayPal) {
                 const transactionId = guidHelper.generateGuid();
                 this.paymentService.authenticate({
                     transactionId: transactionId,

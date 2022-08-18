@@ -58,6 +58,10 @@ module insite.catalog {
                 });
                 this.isRelatedProductsLoaded = true;
             });
+
+            this.$scope.$watch(() => this.imagesLoaded, () => {
+                this.equalizeCarouselDimensions();
+            });
         }
 
         protected getSettingsCompleted(settingsCollection: core.SettingsCollection): void {
@@ -178,7 +182,7 @@ module insite.catalog {
         }
 
         protected isCarouselDomReadyAndImagesLoaded(): boolean {
-            return $(`.csCarousel_${this.relatedProductType}`, this.carouselElement).length > 0 && this.imagesLoaded >= this.relatedProducts.length;
+            return $(`.csCarousel_${this.relatedProductType}`, this.carouselElement).length > 0;
         }
 
         protected initializeCarousel(): void {

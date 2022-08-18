@@ -264,5 +264,6 @@ const TextField: React.FC<TextFieldProps & HasDisablerContext> = React.forwardRe
 
 TextField.defaultProps = {};
 
+TextField.displayName = "TextField";
 /** @component */
 export default withDisabler(TextField);

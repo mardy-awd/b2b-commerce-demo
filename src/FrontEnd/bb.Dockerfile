@@ -49,7 +49,8 @@ RUN git config --global url."https://git:$GITHUB_TOKEN@github.com/".insteadOf "g
 ARG NUMBER_TO_BUILD
 ENV NUMBER_TO_BUILD=$NUMBER_TO_BUILD
 
-RUN ["node", "index.js", "1"]
+ARG CACHE_BUST=0
+RUN ["node", "index.js"]
 
 FROM "alpine" AS output
 

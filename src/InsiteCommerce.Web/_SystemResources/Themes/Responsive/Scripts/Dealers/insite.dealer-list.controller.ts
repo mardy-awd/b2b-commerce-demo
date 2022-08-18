@@ -28,6 +28,7 @@
         locationKnown = true;
         pagination: PaginationModel;
         storeName: string;
+        searchRadius: number;
 
         static $inject = ["$scope", "$q", "dealerService", "$compile"];
 
@@ -109,6 +110,7 @@
         protected getDealerCollectionCompleted(dealerCollection: DealerCollectionModel): void {
             this.dealers = dealerCollection.dealers;
             this.pagination = dealerCollection.pagination;
+            this.searchRadius = dealerCollection.defaultRadius;
             if (typeof (this.distanceUnitOfMeasure) === "undefined") {
                 this.distanceUnitOfMeasure = dealerCollection.distanceUnitOfMeasure === "Metric" ? 1 : 0;
             }
@@ -140,6 +142,7 @@
 
             const filter: IDealerFilter = {
                 name: this.storeName,
+                radius: this.searchRadius,
                 latitude: coords.lat(),
                 longitude: coords.lng()
             };

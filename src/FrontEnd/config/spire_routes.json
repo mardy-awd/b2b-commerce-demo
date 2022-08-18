@@ -4,8 +4,8 @@
   "comment3": "This file exists in 3 places. Change them all or talk to Jonathan.",
   "files": [
     "https://github.com/InsiteSoftware/insite-commerce-config/edit/master/kubernetes/spire_routes.json",
-    "https://github.com/InsiteSoftware/insite-commerce/blob/dev/FrontEnd/config/spire_routes.json",
-    "https://github.com/InsiteSoftware/insite-commerce/blob/dev/Legacy/Core/Spire/Insite.Spire/spire_routes.json"
+    "https://github.com/InsiteSoftware/insite-commerce/blob/dev/Src/Spire/config/spire_routes.json",
+    "https://github.com/InsiteSoftware/insite-commerce/blob/dev/Src/Backend/Core/Spire/Insite.Spire/spire_routes.json"
   ],
   "commerce_routes": [
     "admin",

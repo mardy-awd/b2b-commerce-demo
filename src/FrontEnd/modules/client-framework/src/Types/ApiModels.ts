@@ -111,6 +111,7 @@ export interface AccountSettingsModel extends BaseModel {
     allowSubscribeToNewsLetter: boolean;
     daysToRetainUser: number;
     enableWarehousePickup: boolean;
+    logOutUserAfterPasswordChange: boolean;
     passwordMinimumLength: number;
     passwordMinimumRequiredLength: number;
     passwordRequiresDigit: boolean;

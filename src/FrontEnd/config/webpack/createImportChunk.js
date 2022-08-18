@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require("fs");
 const appRoot = require("app-root-path");
 const glob = require("glob");
@@ -49,7 +51,7 @@ const loadBlueprintExtensions = blueprint => {
     const blueprintName = blueprint.split("/")[1];
     console.log(`Loading blueprint widget extensions`);
 
-    const blueprintRoot = `${appRoot}/modules/blueprints/${blueprintName}/src`.replace(/\\/g, "/");
+    const blueprintRoot = `${appRoot}/modules/${blueprint}/src`.replace(/\\/g, "/");
     const widgetExtensionsFolder = searchFolder(blueprintRoot, "WidgetExtensions");
     if (!widgetExtensionsFolder) {
         console.log("Blueprint widget extensions folder is not found");
@@ -99,16 +101,13 @@ const addBlueprintWidgetImports = blueprint => {
     const blueprintName = blueprint.split("/")[1];
     console.log(`Adding blueprint widgets`);
 
-    const widgetsFolder = searchFolder(`${appRoot}/modules/blueprints/${blueprintName}/src`, "Widgets");
+    const widgetsFolder = searchFolder(`${appRoot}/modules/${blueprint}/src`, "Widgets");
     if (!widgetsFolder) {
         console.log("Blueprint widgets folder is not found");
         return;
     }
 
-    const shortWidgetsFolderPath = widgetsFolder.replace(
-        `${appRoot}/modules/blueprints/${blueprintName}/src/`,
-        `@${blueprintName}/`,
-    );
+    const shortWidgetsFolderPath = widgetsFolder.replace(`${appRoot}/modules/${blueprint}/src/`, `@${blueprintName}/`);
     const directories = fs.readdirSync(widgetsFolder, { withFileTypes: true });
     for (let i = 0; i < directories.length; i++) {
         if (!directories[i].isDirectory()) {

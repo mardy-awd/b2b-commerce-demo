@@ -11,6 +11,7 @@ export interface BrandsState extends DataViewState<BrandModel> {
     readonly idByPath: Dictionary<string>;
     readonly brandCategoryDataView: Dictionary<DateViewCollection<BrandCategoryModel>>;
     readonly brandProductLineDataView: Dictionary<DateViewCollection<BrandProductLineModel>>;
+    readonly pathNotFound: Dictionary<boolean>;
 }
 
 export interface DateViewCollection<T> {

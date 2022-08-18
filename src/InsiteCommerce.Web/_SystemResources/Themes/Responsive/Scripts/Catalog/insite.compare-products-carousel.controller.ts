@@ -24,6 +24,10 @@
         $onInit(): void {
             this.imagesLoaded = 0;
             this.waitForDom(this.maxTries);
+
+            this.$scope.$watch(() => this.imagesLoaded, () => {
+                this.equalizeCarouselDimensions();
+            });
         }
 
         changeUnitOfMeasure(product: ProductDto): void {
@@ -72,8 +76,7 @@
         }
 
         protected isCarouselDomReadyAndImagesLoaded(): boolean {
-            return $(".isc-carousel").length > 0
-                && this.imagesLoaded === this.productsToCompare.length;
+            return $(".isc-carousel").length > 0;
         }
 
         protected getItemsNumber(): number {

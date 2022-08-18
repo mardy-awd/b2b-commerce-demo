@@ -149,6 +149,8 @@ class Checkbox extends React.Component<Props & HasDisablerContext, State> {
         uid: this.props.uid || uniqueId(),
     };
 
+    static displayName = "Checkbox";
+
     static getDerivedStateFromProps({ checked, onChange }: Props, prevState: State) {
         let nextChecked = prevState.checked || false;
         if (onChange && checked !== prevState.checked) {
@@ -318,6 +320,7 @@ class Checkbox extends React.Component<Props & HasDisablerContext, State> {
     }
 }
 
+Checkbox.displayName = "Checkbox";
 // withTheme is currently incompatible with getDerivedStateFromProps, as unknown as FunctionComponent needed to get typescript to understand that this can have children
 /** @component */
 export default withDisabler(withTheme(Checkbox as unknown as React.FunctionComponent<Props & HasDisablerContext>));

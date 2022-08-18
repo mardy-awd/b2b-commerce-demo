@@ -6,17 +6,21 @@ const PackageInformation = require("./packageInformation").PackageInformation;
 const allowedLicenses = require("./allowedLicenseTypes");
 const path = require("path");
 
-module.exports = {
-    mode: "production",
-    plugins: [
-        // ForkTsCheckerWebpackPlugin requires "sync" mode when used with webpack-dev-server, too slow for development.
-        // In async mode, webpack-dev-server doesn't report errors.
-        // The IDE should still report any errors in open files and the production build checks everything.
+const plugins = [];
+
+// ForkTsCheckerWebpackPlugin requires "sync" mode when used with webpack-dev-server, too slow for development.
+// In async mode, webpack-dev-server doesn't report errors.
+// The IDE should still report any errors in open files and the production build checks everything.
+if (process.env.FAST_BUILD !== "1") {
+    plugins.push(
         new ForkTsCheckerWebpackPlugin({
             checkSyntacticErrors: true,
             tsconfig: "tsconfig.base.json",
             useTypescriptIncrementalApi: false,
         }),
+    );
+
+    plugins.push(
         new LicenseWebpackPlugin({
             perChunkOutput: false,
             // to stop all the missing license text warnings....
@@ -42,6 +46,11 @@ module.exports = {
                 return JSON.stringify(mapped);
             },
         }),
-    ],
+    );
+}
+
+module.exports = {
+    mode: "production",
+    plugins,
     devtool: "source-map",
 };

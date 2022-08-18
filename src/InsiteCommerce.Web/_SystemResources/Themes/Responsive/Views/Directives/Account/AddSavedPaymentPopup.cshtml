@@ -24,6 +24,7 @@
                                 <div id="addTokenExCardNumber" class="tokenex-iframe-block" ng-show="vm.tokenExIframeIsLoaded"></div>
                                 <label ng-if="vm.isInvalidCardNumber" class="tokenex-error error">[% translate 'Credit card number is invalid.' %]</label>
                                 <label ng-if="vm.isCardAlreadyExists" class="tokenex-error error">[% translate 'This card already exists.' %]</label>
+                                <label ng-if="vm.errorMessage" class="tokenex-error error">{{vm.errorMessage}}</label>
                             </div>
                             <div>
                                 <label>[% translate 'Expiration' %] <span class="redTxt">*</span></label>

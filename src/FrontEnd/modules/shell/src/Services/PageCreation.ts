@@ -88,7 +88,7 @@ export function setupPageModel(
                 logger.warn(`There was no WidgetDefinition found for the type ${widget.type}`);
             }
         }
-        setDefaultFieldValues(widget, widgetDefinition.fieldDefinitions, language.id, contextualId);
+        setDefaultFieldValues(widget, widgetDefinition?.fieldDefinitions ?? [], language.id, contextualId);
     }
 
     if (isVariant) {

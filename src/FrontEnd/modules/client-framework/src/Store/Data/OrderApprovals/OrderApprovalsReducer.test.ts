@@ -35,7 +35,7 @@ describe("OrderApprovalsReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = OrderApprovalsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(OrderApprovalsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toBe(true);
@@ -54,7 +54,7 @@ describe("OrderApprovalsReducer", () => {
             .getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = OrderApprovalsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(OrderApprovalsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews).toBeTruthy();

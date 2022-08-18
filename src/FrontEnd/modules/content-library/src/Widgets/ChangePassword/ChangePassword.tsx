@@ -16,7 +16,7 @@ import Hidden, { HiddenProps } from "@insite/mobius/Hidden/Hidden";
 import { LinkPresentationProps } from "@insite/mobius/Link/Link";
 import { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner/LoadingSpinner";
 import TextField from "@insite/mobius/TextField";
-import Typography, { TypographyProps } from "@insite/mobius/Typography";
+import Typography, { TypographyPresentationProps, TypographyProps } from "@insite/mobius/Typography";
 import breakpointMediaQueries from "@insite/mobius/utilities/breakpointMediaQueries";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import React, { ReactNode, useEffect, useState } from "react";
@@ -39,6 +39,7 @@ export interface ChangePasswordStyles {
     passwordRequirementsGridItem: GridItemProps;
     passwordRequirementsGridContainer: GridContainerProps;
     passwordGridContainer: GridContainerProps;
+    signOutWarningText: TypographyPresentationProps;
     userInformationTitle: TypographyProps;
     userInformationGridItem?: GridItemProps;
     showPasswordsGridItem?: GridItemProps;
@@ -93,6 +94,12 @@ export const changePasswordStyles: ChangePasswordStyles = {
             margin-left: 10px;
         `,
     },
+    signOutWarningText: {
+        css: css`
+            padding-bottom: 10px;
+            display: block;
+        `,
+    },
     userInformationTitle: {
         variant: "h4",
         as: "h2",
@@ -134,6 +141,7 @@ const ChangePasswordView = ({ accountSettings, pageTitle, validatePassword }: Pr
         passwordRequiresSpecialCharacter,
         passwordRequiresLowercase,
         passwordRequiresDigit,
+        logOutUserAfterPasswordChange,
     } = accountSettings;
 
     const currentPasswordChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
@@ -173,6 +181,11 @@ const ChangePasswordView = ({ accountSettings, pageTitle, validatePassword }: Pr
                 showValidation={showValidation}
                 setShowValidation={setShowValidation}
             ></ChangePasswordHeader>
+            {logOutUserAfterPasswordChange && (
+                <Typography {...styles.signOutWarningText}>
+                    {siteMessage("Account_Automatic_SignOut_Warning")}
+                </Typography>
+            )}
             <Typography {...styles.userInformationTitle}>{translate("Password Requirements")}</Typography>
             <GridContainer {...styles.passwordRequirementsGridContainer}>
                 <GridItem {...styles.passwordRequirementsGridItem}>

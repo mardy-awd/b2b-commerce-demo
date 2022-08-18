@@ -3,6 +3,7 @@ import { FulfillmentMethod } from "@insite/client-framework/Services/SessionServ
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import changeFulfillmentMethod from "@insite/client-framework/Store/Components/AddressDrawer/Handlers/ChangeFulfillmentMethod";
 import setDrawerIsOpen from "@insite/client-framework/Store/Components/AddressDrawer/Handlers/SetDrawerIsOpen";
+import setFlyoutDrawerIsOpen from "@insite/client-framework/Store/Components/AddressDrawer/Handlers/SetFlyoutDrawerIsOpen";
 import setNavDrawerIsOpen from "@insite/client-framework/Store/Components/AddressDrawer/Handlers/SetNavDrawerIsOpen";
 import { getSession, getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
@@ -41,6 +42,7 @@ const mapDispatchToProps = {
     changeFulfillmentMethod,
     setDrawerIsOpen,
     setNavDrawerIsOpen,
+    setFlyoutDrawerIsOpen,
 };
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasHistory;
@@ -72,6 +74,7 @@ const AddressDrawerFulfillmentMethodSelector = ({
     changeFulfillmentMethod,
     setDrawerIsOpen,
     setNavDrawerIsOpen,
+    setFlyoutDrawerIsOpen,
 }: Props) => {
     const handleChangeFulfillmentMethod: RadioGroupComponentProps["onChangeHandler"] = event => {
         changeFulfillmentMethod({ fulfillmentMethod: event.target.value });
@@ -84,8 +87,10 @@ const AddressDrawerFulfillmentMethodSelector = ({
 
         setDrawerIsOpen({ isOpen: false });
         setNavDrawerIsOpen({ navDrawerIsOpen: false });
+        setFlyoutDrawerIsOpen({ isOpen: false });
         history.push(signInPageLink);
         setNavDrawerIsOpen({ navDrawerIsOpen: undefined });
+        setFlyoutDrawerIsOpen({ isOpen: undefined });
     };
 
     return (

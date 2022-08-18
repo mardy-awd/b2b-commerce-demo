@@ -10,10 +10,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>TRACE;DEBUG;NOETAG</DefineConstants>
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
@@ -31,9 +27,9 @@
       )
     </PreBuildEvent>
   </PropertyGroup>
-  <Target Name="AfterBuildMigrated" Condition="'$(Configuration)' == 'Debug' And Exists('$(SolutionDir)warmCommerce.bat')">
+  <Target Name="AfterBuildMigrated" Condition="'$(Configuration)' == 'Debug' And Exists('$(SolutionDir)\Src\Backend\warmCommerce.bat')">
     <!-- the only way I could determine to fire and forgot powershell involved this command + a batch script -->
-    <Exec Command="powershell start-process $(SolutionDir)warmCommerce.bat -WindowStyle hidden" />
+    <Exec Command="powershell start-process $(SolutionDir)\Src\Backend\warmCommerce.bat -WindowStyle hidden" />
   </Target>
   <Target Name="BeforeBuildMigrated" Condition="'$(GenerateLicenseFile)' == 'true'" BeforeTargets="PreBuildEvent">
     <!-- to run this command dot net core sdk needs to be installed such that 'dotnet tool update -g dotnet-project-licenses' can be run from powershell -->
@@ -112,8 +108,8 @@
     <Content Remove="Themes\**\obj\**\*" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2207.3109" />
-    <PackageReference Include="Insite.Commerce.Private" Version="5.1.2207.3109" />
+    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2208.1813" />
+    <PackageReference Include="Insite.Commerce.Private" Version="5.1.2208.1813" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj" />

@@ -90,7 +90,7 @@ const BreadcrumbsClickableMergedStylesExample = () => {
 const widgetModule: WidgetModule = {
     component: BreadcrumbsClickableMergedStylesExample,
     definition: {
-        group: "Testing Extensions" as any,
+        group: "Custom" as any,
     },
 };
 

@@ -1,13 +1,17 @@
 ﻿<div ng-controller="DealerCollectionController as vm" ng-cloak>
     <form name="dealerSearchForm" ng-submit="vm.getDealers()" novalidate>
         <div class="row dealer-search">
-            <div class="medium-6 large-6 columns dealer-search-loc">
+            <div class="small-12 medium-12 large-6 columns dealer-search-loc">
                 <h4>[% siteMessage 'DealerLocator_LocationSearchLabel' %]</h4>
                 <input type="text" name="addressSearchField" class="addressSearchField" ng-model="vm.addressSearchField" required />
             </div>
-            <div class="medium-6 large-6 columns dealer-search-name">
+            <div class="small-12 medium-7 large-3 columns dealer-search-name">
                 <h4>[% siteMessage 'DealerLocator_NameSearchLabel' %]</h4>
                 <input type="text" name="name" class="nameSearchField" ng-model="vm.storeName" />
+            </div>
+            <div class="small-12 medium-5 large-3 columns dealer-search-radius">
+                <h4>[% translate 'Search Radius' %]</h4>
+                <input type="number" min="0" name="radius" class="radiusSearchField" ng-model="vm.searchRadius" />
                 <button type="submit" class="btn primary fastClick dealer-search">
                     <i id="tst_dealerLocatorPage_searchIcon" class="foundicon-search"></i><span>[% translate 'Search' %]</span>
                 </button>

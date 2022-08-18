@@ -164,7 +164,7 @@ const SignInExistingAccount = ({ signIn, fields, accountSettings, externalError 
         }
 
         const queryParams = parseQueryString<{ returnUrl?: string }>(window.location.search);
-        const returnUrl = removeAbsoluteUrl(queryParams.returnUrl?.toString());
+        const returnUrl = removeAbsoluteUrl(queryParams.returnUrl);
 
         setErrorMessage("");
 

@@ -33,7 +33,7 @@ describe("ShipTosReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = ShipTosReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(ShipTosReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toBe(true);
@@ -52,7 +52,7 @@ describe("ShipTosReducer", () => {
             .getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = ShipTosReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(ShipTosReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews).toBeTruthy();

@@ -16,6 +16,7 @@ import Typography, { TypographyPresentationProps } from "@insite/mobius/Typograp
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import VisuallyHidden from "@insite/mobius/VisuallyHidden";
 import * as React from "react";
+import { useEffect } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import { css } from "styled-components";
 
@@ -152,17 +153,27 @@ const SavedOrderListFilter = ({ isFilterOpen, getCartsApiParameter, updateSearch
     const [orderSubtotal, setOrderSubtotal] = React.useState("");
     const [orderSubtotalOperator, setOrderSubtotalOperator] = React.useState("");
 
+    useEffect(() => {
+        if (
+            !orderSubtotal &&
+            !orderSubtotalOperator &&
+            getCartsApiParameter.orderSubtotal &&
+            getCartsApiParameter.orderSubtotalOperator
+        ) {
+            setOrderSubtotal(getCartsApiParameter.orderSubtotal);
+            setOrderSubtotalOperator(getCartsApiParameter.orderSubtotalOperator);
+        }
+    }, []);
+
     const orderSubtotalChangeHandler = (totalValue: string, totalOperator: string) => {
         if ((totalValue === "" && totalOperator !== "") || (totalValue !== "" && totalOperator === "")) {
             return;
         }
 
-        updateTimeoutId = setTimeout(() => {
-            updateSearchFields({
-                orderSubtotal: totalValue,
-                orderSubtotalOperator: totalOperator,
-            });
-        }, 250);
+        updateSearchFields({
+            orderSubtotal: totalValue,
+            orderSubtotalOperator: totalOperator,
+        });
     };
 
     const fromDateChangeHandler = ({ selectedDay }: Pick<DatePickerState, "selectedDay">) => {
@@ -187,7 +198,7 @@ const SavedOrderListFilter = ({ isFilterOpen, getCartsApiParameter, updateSearch
 
         updateTimeoutId = setTimeout(() => {
             orderSubtotalChangeHandler(total, orderSubtotalOperator);
-        }, 250);
+        }, 350);
     };
 
     const orderSubtotalOperatorChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -205,6 +216,7 @@ const SavedOrderListFilter = ({ isFilterOpen, getCartsApiParameter, updateSearch
     const clearFiltersClickHandler = () => {
         clearSearch();
         setOrderSubtotal("");
+        setOrderSubtotalOperator("");
     };
 
     if (!isFilterOpen) {

@@ -34,7 +34,7 @@ describe("MessagesReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = MessagesReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(MessagesReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toBe(true);
@@ -48,12 +48,14 @@ describe("MessagesReducer", () => {
             parameter,
             collection,
         } as any;
-        const expectedState = new ExpectedState(initialState)
-            .setStateDataViewLoaded(parameter, collection, "messages")
-            .getState();
+        const expectedState = JSON.parse(
+            JSON.stringify(
+                new ExpectedState(initialState).setStateDataViewLoaded(parameter, collection, "messages").getState(),
+            ),
+        );
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = MessagesReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(MessagesReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews).toBeTruthy();

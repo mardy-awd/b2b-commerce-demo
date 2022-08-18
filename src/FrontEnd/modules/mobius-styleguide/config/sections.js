@@ -27,6 +27,7 @@ module.exports = {
         "Radio",
         "RadioGroup",
         "Select",
+        "Swatch",
         "TabGroup",
         "Tab",
         "Tag",

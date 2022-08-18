@@ -9,3 +9,5 @@ node index.js 2
 ```
 
 Should probably figure out a way with docker to run both of these, to avoid screwing up the file system too
+
+actually I think you can now run everything with docker with the build.ps1, running it from the root of Spire and with a github token that has access to client repos, ask SRE for one.

@@ -32,8 +32,14 @@
                         </div>
                     </div>
                     <div class="medium-7 large-7 columns search-container">
-                        <h4>[% translate 'Search Locations' %]</h4>
-                        <input data-test-selector="tst_pickupLocationPopup_searchLocation" type="text" ng-model="vm.searchLocation" isc-enter="vm.getWarehouses()" />
+                        <div class="search-location">
+                            <h4>[% translate 'Search Locations' %]</h4>
+                            <input data-test-selector="tst_pickupLocationPopup_searchLocation" type="text" ng-model="vm.searchLocation" isc-enter="vm.getWarehouses()"/>
+                        </div>
+                        <div class="search-radius">
+                            <h4>[% translate 'Search Radius' %]</h4>
+                            <input type="number" min="0" ng-model="vm.searchRadius" isc-enter="vm.getWarehouses()"/>
+                        </div>
                         <button data-test-selector="tst_pickupLocationPopup_searchBtn" type="button" class="btn primary fastClick location-search" ng-click="vm.getWarehouses()">
                             <i class="foundicon-search"></i><span>[% translate 'Search' %]</span>
                         </button>

@@ -102,5 +102,6 @@ TextArea.defaultProps = {
     rows: 4,
 };
 
+TextArea.displayName = "TextArea";
 /** @component */
 export default withDisabler(TextArea);

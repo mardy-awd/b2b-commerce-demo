@@ -30,6 +30,7 @@
         updateSessionOnSelect: boolean;
         onSelectWarehouse: Function;
         showSelectedWarehouseMarker: boolean;
+        searchRadius: number;
 
         static $inject = ["coreService", "$scope", "$rootScope", "$q", "warehouseService", "dealerService", "$compile", "selectPickUpLocationPopupService"];
 
@@ -159,6 +160,7 @@
         protected getWarehouseCollectionCompleted(warehouseCollection: WarehouseCollectionModel, filter: IWarehouseFilter): void {
             this.warehouses = warehouseCollection.warehouses;
             this.pagination = warehouseCollection.pagination;
+            this.searchRadius = warehouseCollection.defaultRadius;
             if (typeof (this.distanceUnitOfMeasure) === "undefined") {
                 this.distanceUnitOfMeasure = warehouseCollection.distanceUnitOfMeasure === "Metric" ? 1 : 0;
             }
@@ -194,6 +196,7 @@
 
             const filter: IWarehouseFilter = {
                 search: this.searchLocation,
+                radius: this.searchRadius,
                 latitude: coords.lat() ? coords.lat() : this.selectedWarehouse.latitude,
                 longitude: coords.lng() ? coords.lng() : this.selectedWarehouse.longitude,
                 onlyPickupWarehouses: true,

@@ -86,7 +86,7 @@ const mapStateToProps = (state: ShellState) => {
         defaultPersonaId: state.shellContext.defaultPersonaId,
         addWidgetData: state.pageEditor.addWidgetData,
         widgetsByGroup,
-        groups: sortBy(groups, [o => WidgetGroups.indexOf(o)]),
+        groups: sortBy(groups, [o => (WidgetGroups.indexOf(o) > -1 ? WidgetGroups.indexOf(o) : 100), o => o]),
         sharedContents: state.pageTree.sharedContentTreeNodesByParentId[emptyGuid] || [],
         mobileCmsModeActive: state.shellContext.mobileCmsModeActive,
     };

@@ -37,7 +37,7 @@ describe("AddressFieldsReducer", () => {
         const expectedState = new ExpectedState(initialState).addDataViewIsLoading(parameter).getState();
         delete expectedState.dataViews[key].pagination;
 
-        const actualState = AddressFieldsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(AddressFieldsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toEqual(true);
@@ -57,7 +57,7 @@ describe("AddressFieldsReducer", () => {
             .getState();
         delete expectedState.dataViews[key].pagination;
 
-        const actualState = AddressFieldsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(AddressFieldsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(Object.keys(actualState.dataViews[key])).toEqual(Object.keys(expectedState.dataViews[key]));

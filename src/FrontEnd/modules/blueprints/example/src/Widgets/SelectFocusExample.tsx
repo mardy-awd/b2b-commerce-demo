@@ -72,7 +72,7 @@ const selectFocusWidget: WidgetModule = {
     component: SelectFocusWidget,
     definition: {
         fieldDefinitions: [],
-        group: "Testing Extensions" as any,
+        group: "Zebra" as any,
     },
 };
 

@@ -350,7 +350,7 @@ const StaticListProductListLine = ({
                 )}
                 <GridItem {...styles.buttonsGridItem}>
                     <ProductAddToCartButton extendedStyles={styles.addToCartButton} data-test-selector="addToCart" />
-                    <ProductAddToListLink extendedStyles={styles.addToListLink} />
+                    <ProductAddToListLink extendedStyles={styles.addToListLink} data-test-selector="addToList" />
                 </GridItem>
             </GridContainer>
         </ProductContext.Provider>

@@ -103,7 +103,17 @@ class SpireRouter extends React.Component<Props> {
             return;
         }
 
-        window.scrollTo(0, scrollPositions[this.props.location.pathname]);
+        this.waitForRenderAndScroll(scrollPositions);
+    };
+
+    waitForRenderAndScroll = (scrollPositions: { [key: string]: number }) => {
+        if (document.body.scrollHeight < scrollPositions[this.props.location.pathname]) {
+            setTimeout(() => {
+                this.waitForRenderAndScroll(scrollPositions);
+            }, 100);
+        } else {
+            window.scrollTo(0, scrollPositions[this.props.location.pathname]);
+        }
     };
 
     updateLocation = (url: string, state: unknown, action: (state: unknown, title: string, url: string) => void) => {

@@ -5,6 +5,7 @@ import { getLocation } from "@insite/client-framework/Store/Data/Pages/PageSelec
 import { getVmiLocationsDataView } from "@insite/client-framework/Store/Data/VmiLocations/VmiLocationsSelectors";
 import { getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import toggleFiltersOpen from "@insite/client-framework/Store/Pages/VmiBins/Handlers/ToggleFiltersOpen";
+import updateSearchFields from "@insite/client-framework/Store/Pages/VmiBins/Handlers/UpdateSearchFields";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
@@ -43,12 +44,14 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps) => {
     return {
         vmiLocationsDataView: getVmiLocationsDataView(state, getVmiLocationsParameter),
         vmiBinsPageUrl: getPageLinkByPageType(state, "VmiBinsPage")?.url,
+        vmiLocationId: state.pages.vmiBins.getVmiBinsParameter.vmiLocationId,
         parsedQuery,
     };
 };
 
 const mapDispatchToProps = {
     toggleFiltersOpen,
+    updateSearchFields,
 };
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasHistory;
@@ -141,8 +144,11 @@ class VmiBinsHeader extends Component<Props, { isAddProductModalOpen: boolean }>
     };
 
     setLocation = (locationId: string) => {
-        if (locationId && this.props.vmiBinsPageUrl) {
-            this.props.history.push(`${this.props.vmiBinsPageUrl}?locationId=${locationId}`);
+        if (this.props.vmiBinsPageUrl) {
+            this.props.history.push(`${this.props.vmiBinsPageUrl}${locationId ? `?locationId=${locationId}` : ""}`);
+            if (!locationId) {
+                this.props.updateSearchFields({ vmiLocationId: undefined });
+            }
         }
     };
 
@@ -158,9 +164,10 @@ class VmiBinsHeader extends Component<Props, { isAddProductModalOpen: boolean }>
         const vmiLocations = this.props.vmiLocationsDataView;
         let currentLocation = null;
         if (vmiLocations?.value && vmiLocations.value.length > 0) {
-            currentLocation = vmiLocations.value.find(
-                location => location.id?.toLowerCase() === this.props.parsedQuery?.locationid?.toLowerCase(),
-            );
+            const locationId = this.props.parsedQuery?.locationid?.toLowerCase() || this.props.vmiLocationId;
+            currentLocation = locationId
+                ? vmiLocations.value.find(location => location.id?.toLowerCase() === locationId)
+                : null;
         }
 
         return (

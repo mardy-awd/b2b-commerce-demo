@@ -304,6 +304,7 @@ const VmiAddProductModal = ({
         setMinValue("0");
         setMaxValue("0");
         setOptions([]);
+        setSelectedProductId("");
         setErrorMessage("");
         setQtyErrorMessage("");
     };

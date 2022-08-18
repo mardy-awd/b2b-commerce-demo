@@ -96,6 +96,7 @@ COPY ./modules/blueprints ./modules/blueprints/
 
 # Create the JS bundles for the application.
 ARG BLUEPRINT=content-library
+ARG FAST_BUILD=0
 RUN npm run build || exit 1
 
 ARG BLUEPRINT_NAME=content-library

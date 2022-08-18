@@ -73,7 +73,7 @@ class DealerDetailsPage extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props) {
-        const { dealerState } = this.props;
+        const { dealerId, displayDealer, dealerState } = this.props;
 
         if (prevProps && dealerState.value && dealerState.value?.id !== prevProps.dealerState?.value?.id) {
             this.setPageBreadcrumbs();
@@ -81,6 +81,10 @@ class DealerDetailsPage extends React.Component<Props, State> {
 
         if (dealerState.value && dealerState.value.id !== this.state.metadataUpdatedForId) {
             this.setMetadata(true);
+        }
+
+        if (dealerId && !dealerState.value) {
+            displayDealer({ dealerId });
         }
     }
 

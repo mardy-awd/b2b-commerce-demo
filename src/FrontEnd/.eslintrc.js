@@ -185,4 +185,3 @@ module.exports = {
 
 // https://github.com/typescript-eslint/typescript-eslint/issues/389
 // figure out how to run prettier separately
-

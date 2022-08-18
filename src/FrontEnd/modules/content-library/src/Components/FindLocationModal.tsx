@@ -27,7 +27,6 @@ import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import { IconMemo, IconPresentationProps } from "@insite/mobius/Icon";
 import MapPin from "@insite/mobius/Icons/MapPin";
 import Phone from "@insite/mobius/Icons/Phone";
-import Search from "@insite/mobius/Icons/Search";
 import Link, { LinkPresentationProps } from "@insite/mobius/Link";
 import LoadingSpinner, { LoadingSpinnerProps } from "@insite/mobius/LoadingSpinner";
 import Modal, { ModalPresentationProps } from "@insite/mobius/Modal";
@@ -73,6 +72,10 @@ export interface FindLocationModalStyles {
     searchGridContainer?: GridContainerProps;
     searchTextFieldGridItem?: GridItemProps;
     searchTextField?: TextFieldPresentationProps;
+    searchRadiusGridItem?: GridItemProps;
+    searchRadiusText?: TextFieldPresentationProps;
+    searchButtonGridItem?: GridItemProps;
+    searchButton?: ButtonPresentationProps;
     searchResultsTextGridItem?: GridItemProps;
     searchResultsText?: TypographyPresentationProps;
     distanceUnitOfMeasureGridItem?: GridItemProps;
@@ -173,6 +176,21 @@ export const findLocationModalStyles: FindLocationModalStyles = {
     },
     searchTextFieldGridItem: {
         width: 12,
+    },
+    searchRadiusGridItem: {
+        width: [12, 12, 12, 8, 8],
+        css: css`
+            padding-top: 10px;
+        `,
+    },
+    searchButtonGridItem: {
+        width: [12, 12, 12, 4, 4],
+        css: css`
+            padding-top: 10px;
+            display: inline-block;
+            text-align: right;
+            align-self: flex-end;
+        `,
     },
     searchResultsTextGridItem: {
         width: 4,
@@ -430,17 +448,24 @@ const FindLocationModal = ({
     const [warehousesPagination, setWarehousesPagination] = useState<PaginationModel | undefined>();
 
     // Manage Loading Warehouses on State Changes
-    const { doSearch, warehouseSearchFilter, setWarehouseSearchFilter, setPage, setPageSize } =
-        useWarehouseFilterSearch({
-            loadWarehouses,
-            currentLocation,
-            setCurrentLocation,
-            setLocationKnown,
-            defaultRadius,
-            selectedWarehouse,
-            setSelectedWarehouse,
-            setShowSelectedWarehouse,
-        });
+    const {
+        doSearch,
+        warehouseSearchFilter,
+        setWarehouseSearchFilter,
+        radiusSearchFilter,
+        setRadiusSearchFilter,
+        setPage,
+        setPageSize,
+    } = useWarehouseFilterSearch({
+        loadWarehouses,
+        currentLocation,
+        setCurrentLocation,
+        setLocationKnown,
+        defaultRadius,
+        selectedWarehouse,
+        setSelectedWarehouse,
+        setShowSelectedWarehouse,
+    });
 
     // Manage Bounds of Map
     useEffect(() => {
@@ -479,15 +504,19 @@ const FindLocationModal = ({
                 defaultLongitude,
             } = warehousesDataView;
             // Find default location
-            getGeoCodeFromLatLng(defaultLatitude, defaultLongitude).then(result => {
-                setWarehouseSearchFilter(result[0].formatted_address);
-                setWarehousesPagination(pagination || undefined);
-                setResultCount(pagination?.totalItemCount || 0);
-                setDefaultRadius(defaultRadius);
-                setMapCenter(new google.maps.LatLng(defaultLatitude, defaultLongitude));
-                setWarehouses(warehouses || []);
-                setIsLoading(false);
-            });
+            getGeoCodeFromLatLng(defaultLatitude, defaultLongitude)
+                .then(result => {
+                    setWarehouseSearchFilter(result[0].formatted_address);
+                })
+                .finally(() => {
+                    setWarehousesPagination(pagination || undefined);
+                    setResultCount(pagination?.totalItemCount || 0);
+                    setDefaultRadius(defaultRadius);
+                    setRadiusSearchFilter(defaultRadius);
+                    setMapCenter(new google.maps.LatLng(defaultLatitude, defaultLongitude));
+                    setWarehouses(warehouses || []);
+                    setIsLoading(false);
+                });
         } else {
             setIsLoading(true);
         }
@@ -592,9 +621,12 @@ const FindLocationModal = ({
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         event.stopPropagation();
+        if (!isLoading) {
+            doSearch(warehouseSearchFilter);
+        }
     };
-    const textFieldSearch = (filter: string) => {
-        doSearch(filter);
+    const handleSearchRadiusChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRadiusSearchFilter(Number(event.target.value));
     };
 
     return (
@@ -611,9 +643,29 @@ const FindLocationModal = ({
                             <GridItem {...styles.searchTextFieldGridItem}>
                                 <SearchLocationsTextField
                                     styles={styles.searchTextField}
-                                    doSearch={textFieldSearch}
                                     warehouseSearchFilter={warehouseSearchFilter}
+                                    setWarehouseSearchFilter={setWarehouseSearchFilter}
                                 />
+                            </GridItem>
+                            <GridItem {...styles.searchRadiusGridItem}>
+                                <TextField
+                                    {...styles.searchRadiusText}
+                                    label={translate("Search Radius")}
+                                    value={radiusSearchFilter}
+                                    onChange={handleSearchRadiusChanged}
+                                    type="number"
+                                    min={0}
+                                    placeholder={translate("Search Radius")}
+                                />
+                            </GridItem>
+                            <GridItem {...styles.searchButtonGridItem}>
+                                <Button
+                                    {...styles.searchButton}
+                                    type="submit"
+                                    data-test-selector="findLocationModal_searchButton"
+                                >
+                                    {translate("Search")}
+                                </Button>
                             </GridItem>
                             <GridItem {...styles.searchResultsTextGridItem}>
                                 <Typography {...styles.searchResultsText}>
@@ -866,31 +918,24 @@ const FindLocationModal = ({
 
 interface SearchLocationsTextFieldProps {
     styles?: TextFieldPresentationProps;
-    doSearch: (filter: string) => void;
     warehouseSearchFilter: string;
+    setWarehouseSearchFilter: (filter: string) => void;
 }
 
-const SearchLocationsTextField = ({ styles, doSearch, warehouseSearchFilter }: SearchLocationsTextFieldProps) => {
-    const [searchLocationFilter, setSearchLocationFilter] = useState(warehouseSearchFilter);
-
-    const iconOnClick = (event: React.MouseEvent) => {
-        event.preventDefault();
-        doSearch(searchLocationFilter);
-    };
+const SearchLocationsTextField = ({
+    styles,
+    warehouseSearchFilter,
+    setWarehouseSearchFilter,
+}: SearchLocationsTextFieldProps) => {
     const handleSearchLocationsChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchLocationFilter(event.target.value);
+        setWarehouseSearchFilter(event.target.value);
     };
-    useEffect(() => {
-        setSearchLocationFilter(warehouseSearchFilter);
-    }, [warehouseSearchFilter]);
 
     return (
         <TextField
             {...styles}
             label={translate("Search Locations")}
-            iconProps={{ src: Search }}
-            iconClickableProps={{ onClick: iconOnClick }}
-            value={searchLocationFilter}
+            value={warehouseSearchFilter}
             onChange={handleSearchLocationsChanged}
             placeholder={translate("Search by location name, city, state, or zip")}
             data-test-selector="findLocationModal_locationSearch"

@@ -16,8 +16,15 @@ export const DispatchBeginLoadBrand: HandlerType = props => {
 };
 
 export const RequestDataFromApi: HandlerType = async props => {
-    const brand = await getBrandByPath(props.parameter);
-    props.apiResult = brand;
+    try {
+        const brand = await getBrandByPath(props.parameter);
+        props.apiResult = brand;
+    } catch (error) {
+        if (error?.status === 404) {
+            return;
+        }
+        throw error;
+    }
 };
 
 export const DispatchCompleteLoadBrand: HandlerType = props => {

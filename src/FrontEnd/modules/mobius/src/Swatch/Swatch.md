@@ -1,6 +1,4 @@
-### Swatch
-
-## Example
+### Example
 
 ```jsx
 const swatchesList = [
@@ -25,13 +23,13 @@ const swatchesList = [
     },
 ];
 
-<div style={{ display: "flex", justifyContent: "center"}}>
+<div style={{ display: "flex", justifyContent: "center" }}>
     {swatchesList.map((swatch, idx) => {
         return (
             <div key={idx} style={{ display: "flex", alignItems: "center" }}>
-                <SwatchComponent {...swatch} />
+                <Swatch {...swatch} />
             </div>
         );
     })}
-<div/>;
+</div>;
 ```

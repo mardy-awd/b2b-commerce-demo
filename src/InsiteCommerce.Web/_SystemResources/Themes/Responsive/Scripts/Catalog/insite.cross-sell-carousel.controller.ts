@@ -48,6 +48,10 @@
                 this.imagesLoaded = 0;
                 this.getCrossSells();
             });
+
+            this.$scope.$watch(() => this.imagesLoaded, () => {
+                this.equalizeCarouselDimensions();
+            });
         }
 
         protected getSettingsCompleted(settingsCollection: core.SettingsCollection): void {
@@ -220,7 +224,7 @@
         }
 
         protected isCarouselDomReadyAndImagesLoaded(): boolean {
-            return $(".cs-carousel", this.carouselElement).length > 0 && this.imagesLoaded >= this.productsWithImages;
+            return $(".cs-carousel", this.carouselElement).length > 0;
         }
 
         protected isProductLoaded(): boolean {

@@ -1,14 +1,14 @@
 import * as React from "react";
 
 interface Props<M extends LocationModel, P extends GetLocationsApiParameter> {
-    onSearch: (searchFilter: string) => void;
+    onSearch: (searchFilter: string, searchRadius?: number) => void;
     loadLocations: (parameters: P) => void;
     currentLocation?: google.maps.LatLng;
     defaultRadius: number;
     selectedLocation?: M;
     setSelectedLocation: (location: M) => void;
     setShowSelectedLocation: (show: boolean) => void;
-    createFilter: (coords: google.maps.LatLng, searchFilter: string) => P;
+    createFilter: (coords: google.maps.LatLng, searchFilter: string, searchRadius?: number) => P;
 }
 
 export interface LocationModel {
@@ -48,6 +48,7 @@ const useLocationFilterSearch = <M extends LocationModel, P extends GetLocations
 }: Props<M, P>) => {
     const [filter, setFilter] = React.useState<P | undefined>(undefined);
     const [locationSearchFilter, setLocationSearchFilter] = React.useState<string>("");
+    const [radiusSearchFilter, setRadiusSearchFilter] = React.useState<number | undefined>(defaultRadius);
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number | undefined>(undefined);
 
@@ -64,7 +65,7 @@ const useLocationFilterSearch = <M extends LocationModel, P extends GetLocations
         if (!currentLocation) {
             return;
         }
-        setFilter(createFilter(currentLocation, locationSearchFilter.trim()));
+        setFilter(createFilter(currentLocation, locationSearchFilter.trim(), radiusSearchFilter));
     }, [currentLocation, page, pageSize]);
 
     // Re-evaluate the Selected Location distance and show details.
@@ -89,10 +90,10 @@ const useLocationFilterSearch = <M extends LocationModel, P extends GetLocations
     }, [filter, selectedLocation, defaultRadius]);
 
     // Search for known Location data
-    const doSearch = (searchFilter: string) => {
-        onSearch(searchFilter);
+    const doSearch = (searchFilter: string, searchRadius?: number) => {
+        onSearch(searchFilter, searchRadius);
         if (currentLocation) {
-            setFilter(createFilter(currentLocation, searchFilter.trim()));
+            setFilter(createFilter(currentLocation, searchFilter.trim(), searchRadius));
         }
     };
 
@@ -100,6 +101,8 @@ const useLocationFilterSearch = <M extends LocationModel, P extends GetLocations
         doSearch,
         locationSearchFilter,
         setLocationSearchFilter,
+        radiusSearchFilter,
+        setRadiusSearchFilter,
         page,
         setPage,
         pageSize,

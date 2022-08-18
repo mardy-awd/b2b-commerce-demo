@@ -668,6 +668,13 @@ module insite.catalog {
             }
         }
 
+        protected isQuantityVisible() {
+            return this.product && ((this.product.canEnterQuantity && (!this.settings.realTimeInventory || this.realTimeInventoryWasLoaded))
+                || (((this.styleSelectionCompleted || this.configurationCompleted)
+                        && (this.settings.allowBackOrder || ((<any>this.product.availability) && (<any>this.product.availability).messageType !== 2)))
+                    && !this.product.canConfigure));
+        }
+
         protected isAddToCartVisible() {
             return this.product && this.product.allowedAddToCart && !this.product.cantBuy &&
                 ((this.product.canAddToCart && (!this.settings.realTimeInventory || this.realTimeInventoryWasLoaded))

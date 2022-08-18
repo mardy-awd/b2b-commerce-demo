@@ -4,8 +4,8 @@ if ($lastExitCode -ne 0) {
   Exit 1
 }
 
-$iscBasePath = "..\"
-$licensingToolsPath = "$iscBasePath\Tools\Licensing"
+$iscBasePath = "../../../"
+$licensingToolsPath = "$iscBasePath/Src/Backend/Tools/Licensing"
 
 $output = dotnet-project-licenses -j -i $iscBasePath\InsiteCommerce.sln -u `
             --outfile Licensing\isc-licenses.json `

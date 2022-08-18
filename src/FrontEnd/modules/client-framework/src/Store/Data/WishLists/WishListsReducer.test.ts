@@ -42,7 +42,7 @@ describe("WishListsReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = WishListsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(WishListsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toBe(true);
@@ -56,12 +56,16 @@ describe("WishListsReducer", () => {
             parameter,
             result: collection,
         } as any;
-        const expectedState = new ExpectedState(initialState)
-            .setStateDataViewLoaded(parameter, collection, "wishListCollection")
-            .getState();
+        const expectedState = JSON.parse(
+            JSON.stringify(
+                new ExpectedState(initialState)
+                    .setStateDataViewLoaded(parameter, collection, "wishListCollection")
+                    .getState(),
+            ),
+        );
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = WishListsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(WishListsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews).toBeTruthy();

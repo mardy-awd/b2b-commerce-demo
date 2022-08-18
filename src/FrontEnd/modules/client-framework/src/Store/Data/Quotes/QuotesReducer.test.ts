@@ -40,7 +40,7 @@ describe("QuotesReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = QuotesReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(QuotesReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toBe(true);
@@ -59,7 +59,7 @@ describe("QuotesReducer", () => {
             .getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = QuotesReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(QuotesReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews).toBeTruthy();

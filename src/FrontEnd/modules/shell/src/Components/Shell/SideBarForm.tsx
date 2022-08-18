@@ -90,7 +90,7 @@ const Buttons = styled.div`
     button {
         margin-left: 10px;
     }
-    z-index: 5;
+    z-index: 5000;
 `;
 
 export const OverlayStyle = styled.div`

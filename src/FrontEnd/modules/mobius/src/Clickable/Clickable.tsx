@@ -174,5 +174,6 @@ const Clickable: React.FC<ClickableProps & HasDisablerContext> = withTheme(
     ),
 );
 
+Clickable.displayName = "Clickable";
 /** @component */
 export default withDisabler(Clickable);

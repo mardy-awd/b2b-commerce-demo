@@ -10,6 +10,7 @@ import Img, { ImgProps } from "@insite/mobius/Img";
 import { LazyImageProps } from "@insite/mobius/LazyImage";
 import Link from "@insite/mobius/Link";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
+import * as cssLinter from "css";
 import * as React from "react";
 import { connect } from "react-redux";
 import { css } from "styled-components";
@@ -22,6 +23,7 @@ const enum fields {
     logoImage = "logoImage",
     isMobileSpecific = "isMobileSpecific",
     mobileSpecificImage = "mobileSpecificImage",
+    customCSS = "customCSS",
 }
 
 interface OwnProps extends WidgetProps {
@@ -29,8 +31,10 @@ interface OwnProps extends WidgetProps {
         [fields.logoImage]: string;
         [fields.isMobileSpecific]: boolean;
         [fields.mobileSpecificImage]: string;
+        [fields.customCSS]: string;
     };
     extendedStyles?: LogoStyles;
+    externalCustomCSS?: string;
 }
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps>;
@@ -63,22 +67,56 @@ export const logoStyles: LogoStyles = {
     },
 };
 
-export const Logo: React.FunctionComponent<Props> = ({ fields, extendedStyles, homePageLink }: Props) => {
+export const Logo: React.FunctionComponent<Props> = ({
+    fields,
+    extendedStyles,
+    homePageLink,
+    externalCustomCSS,
+}: Props) => {
     const styles = useMergeStyles("logo", logoStyles, extendedStyles);
     const isEager = useEagerLogoLoading();
 
+    const customCssWrapper = {
+        css: css`
+            ${externalCustomCSS || fields.customCSS}
+        `,
+    };
+
     return (
-        <StyledWrapper {...styles.wrapper}>
-            <Link href={homePageLink}>
-                <Img
-                    src={fields.logoImage}
-                    loading={isEager ? "eager" : "lazy"}
-                    altText={translate("Home")}
-                    {...styles.img}
-                />
-            </Link>
+        <StyledWrapper {...customCssWrapper}>
+            <StyledWrapper {...styles.wrapper} className="wrapper">
+                <Link href={homePageLink} className="home-page-link">
+                    <Img
+                        src={fields.logoImage}
+                        loading={isEager ? "eager" : "lazy"}
+                        altText={translate("Home")}
+                        {...styles.img}
+                        className="img"
+                    />
+                </Link>
+            </StyledWrapper>
         </StyledWrapper>
     );
+};
+
+const defaultCustomCss = `.wrapper {
+}
+
+.home-page-link {
+}
+
+.img {
+}
+`;
+
+const basicTab = {
+    displayName: "Basic",
+    sortOrder: 0,
+};
+
+const advancedTab = {
+    displayName: "Advanced",
+    sortOrder: 1,
 };
 
 const widgetModule: WidgetModule = {
@@ -93,6 +131,7 @@ const widgetModule: WidgetModule = {
                 editorTemplate: "ImagePickerField",
                 defaultValue: "",
                 fieldType: "Translatable",
+                tab: basicTab,
             },
             {
                 name: fields.isMobileSpecific,
@@ -102,6 +141,7 @@ const widgetModule: WidgetModule = {
                 fieldType: "General",
                 isRequired: true,
                 variant: "toggle",
+                tab: basicTab,
             },
             {
                 name: fields.mobileSpecificImage,
@@ -110,6 +150,36 @@ const widgetModule: WidgetModule = {
                 defaultValue: "",
                 fieldType: "Translatable",
                 isVisible: widget => widget.fields.isMobileSpecific,
+                tab: basicTab,
+            },
+            {
+                name: fields.customCSS,
+                displayName: "Custom CSS",
+                editorTemplate: "CodeField",
+                fieldType: "General",
+                tab: advancedTab,
+                defaultValue: defaultCustomCss,
+                isVisible: (item, shouldDisplayAdvancedFeatures) => !!shouldDisplayAdvancedFeatures,
+                validate: value => {
+                    if (value === undefined || value === null) {
+                        return "";
+                    }
+
+                    const result = cssLinter.parse(value, { silent: true });
+                    if (result?.stylesheet?.parsingErrors) {
+                        // the error output at this time only has room for one line so we just show the first error
+                        return result.stylesheet.parsingErrors.length <= 0
+                            ? ""
+                            : result.stylesheet.parsingErrors.map(error => `${error.reason} on line ${error.line}`)[0];
+                    }
+
+                    return "Unable to parse Css";
+                },
+                options: {
+                    mode: "css",
+                    lint: true,
+                    autoRefresh: true,
+                },
             },
         ],
     },

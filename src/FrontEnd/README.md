@@ -6,10 +6,10 @@ This document describes how to set up and run Spire for development.
 
 1. Have an available running instance of B2B Commerce Cloud by Insite with the exact same version as Spire.
    - It doesn't have to be on your local OS; it can be a remote server or a virtual machine, as long as it's reachable from the OS hosting Spire.
-   - During development, the URL for B2B Commerce Cloud by Insite can be configured via /FrontEnd/config/settings.js (created as a copy of settings-base.js).
+   - During development, the URL for B2B Commerce Cloud by Insite can be configured via ./config/settings.js (created as a copy of settings-base.js).
 2. [Install node/npm](https://nodejs.org/en/) version 12 or higher.
    - If you're running B2B Commerce Cloud by Insite locally, this may already be done.
-3. Run `npm install` from /FrontEnd.
+3. Run `npm install`.
 
 Follow the instructions further down for use with [Visual Studio Code](#visual-studio-code) and [Rider/WebStorm](#riderwebstorm).
 
@@ -17,7 +17,7 @@ Follow the instructions further down for use with [Visual Studio Code](#visual-s
 
 ### Visual Studio Code
 
-1. Open the /FrontEnd directory. A launch configuration is already present so no additional steps are required to start the application.
+1. Open the Spire directory. A launch configuration is already present so no additional steps are required to start the application.
 2. (Recommended) [Install the ESLint extension from Microsoft](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) to see ESLint errors in the editor for auto-fix-on-save capability.
 3. (Recommended) Set the TypeScript version to the workspace version to improve performance and align errors shown in the UI with those from the build.
    - Open a .ts/.tsx file and click the TypeScript version in the lower right of the screen.<br />
@@ -29,7 +29,7 @@ Follow the instructions further down for use with [Visual Studio Code](#visual-s
 
 ### Rider/WebStorm
 
-1. Open the /FrontEnd directory. A launch configuration is already present. Ctrl + F5 to start the base site.
+1. Open the Spire directory. A launch configuration is already present. Ctrl + F5 to start the base site.
 2. (Recommended) Enable eslint file watchers for .ts and .tsx files
 
 ## Launch Spire
@@ -49,17 +49,17 @@ Using the "start" option is equivalent to running the `npm run start` command vi
 
 ### From the Command Line
 
-1. Run `npm run start` from /FrontEnd. This launches Spire with the default blueprint and port. NOTE: This step is already setup in Visual Studio Code and Rider as a launch configuration.
+1. Run `npm run start`. This launches Spire with the default blueprint and port. NOTE: This step is already setup in Visual Studio Code and Rider as a launch configuration.
 2. Navigate to http://localhost:3000.
 
-By default, API requests are forwarded to http://localhost:3010. You can change this URL in the /FrontEnd/config/settings.js file.
+By default, API requests are forwarded to http://localhost:3010. You can change this URL in the ./config/settings.js file.
 
 ### Launch Spire with a Custom Blueprint
 
 In addition to launching Spire with the base blueprint, you can create a custom blueprint and launch spire using that blueprint. The steps to do that are below:
 
 1. [Create a blueprint](https://support.insitesoft.com/hc/en-us/articles/360039410011-Create-a-New-Blueprint-in-Spire).
-2. Run `npm run start {customBlueprintName}` from /FrontEnd.
+2. Run `npm run start {customBlueprintName}`.
    - With VS Code, you can edit `launch.json` to add an IDE startup profile for custom blueprints. Other IDEs should have something similar.
 3. Navigate to http://localhost:3000.
 

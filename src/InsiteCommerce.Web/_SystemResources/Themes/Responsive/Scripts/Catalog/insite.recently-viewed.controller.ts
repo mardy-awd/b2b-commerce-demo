@@ -52,6 +52,10 @@
             this.$scope.$on("productLoaded", (event: ng.IAngularEvent, product: ProductDto) => {
                 this.product = product;
             });
+
+            this.$scope.$watch(() => this.imagesLoaded, () => {
+                this.equalizeCarouselDimensions();
+            });
         }
 
         protected getSettingsCompleted(settingsCollection: core.SettingsCollection): void {
@@ -196,7 +200,7 @@
         }
 
         protected isCarouselDomReadyAndImagesLoaded(): boolean {
-            return $(`.csCarousel_recentlyViewed`, this.carouselElement).length > 0 && this.imagesLoaded >= this.products.length;
+            return $(`.csCarousel_recentlyViewed`, this.carouselElement).length > 0;
         }
 
         protected initializeCarousel(): void {

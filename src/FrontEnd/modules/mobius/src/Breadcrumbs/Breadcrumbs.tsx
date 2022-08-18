@@ -84,5 +84,6 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = withTheme(({ links, mergeCss, ..
     );
 });
 
+Breadcrumbs.displayName = "Breadcrumbs";
 /** @component */
 export default Breadcrumbs;

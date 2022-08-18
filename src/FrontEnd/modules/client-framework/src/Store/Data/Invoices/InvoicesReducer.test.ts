@@ -39,7 +39,7 @@ describe("InvoicesReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = InvoicesReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(InvoicesReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toBe(true);
@@ -54,14 +54,18 @@ describe("InvoicesReducer", () => {
             collection,
         } as any;
         const value = { [mockInvoiceModel.invoiceNumber]: mockInvoiceModel.id };
-        const expectedState = new ExpectedState(initialState)
-            .setStateDataViewLoaded(parameter, collection, "invoices")
-            .setState("idByInvoiceNumber", value)
-            .getState();
+        const expectedState = JSON.parse(
+            JSON.stringify(
+                new ExpectedState(initialState)
+                    .setStateDataViewLoaded(parameter, collection, "invoices")
+                    .setState("idByInvoiceNumber", value)
+                    .getState(),
+            ),
+        );
 
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = InvoicesReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(InvoicesReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews).toBeTruthy();

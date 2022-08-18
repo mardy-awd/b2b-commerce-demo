@@ -41,7 +41,7 @@ describe("CategoriesReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = CategoriesReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(CategoriesReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toEqual(true);
@@ -61,15 +61,19 @@ describe("CategoriesReducer", () => {
             pagination: undefined,
             properties: {},
         };
-        const expectedState = new ExpectedState(initialState)
-            .addById(mockCategoryModel)
-            .setStateWithParameter("dataViews", parameter, value)
-            .getState();
+        const expectedState = JSON.parse(
+            JSON.stringify(
+                new ExpectedState(initialState)
+                    .addById(mockCategoryModel)
+                    .setStateWithParameter("dataViews", parameter, value)
+                    .getState(),
+            ),
+        );
 
-        const actualState = CategoriesReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(CategoriesReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
-        expect(actualState.byId["testID-1"]).toEqual(mockCategoryModel);
+        expect(actualState.byId["testID-1"]).toEqual(JSON.parse(JSON.stringify(mockCategoryModel)));
         expect(actualState).toEqual(expectedState);
     });
 

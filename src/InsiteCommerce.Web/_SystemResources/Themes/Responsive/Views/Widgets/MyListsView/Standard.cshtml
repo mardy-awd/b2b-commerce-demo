@@ -38,7 +38,7 @@
                     <div class="images-block">
                         <div class="item-images">
                             <a ng-repeat="line in wishList.wishListLineCollection | limitTo: 3" ng-href="{{line.productUri}}" title="{{line.shortDescription}}">
-                                <img ng-src="{{line.smallImagePath}}" alt="{{line.altText}}" />
+                                <img loading="lazy" ng-src="{{line.smallImagePath}}" alt="{{line.altText}}" />
                             </a>
                         </div>
                     </div>

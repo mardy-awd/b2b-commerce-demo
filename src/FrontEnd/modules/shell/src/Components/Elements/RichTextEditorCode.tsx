@@ -376,6 +376,8 @@ class RichTextEditor extends React.Component<Props, State> {
                 htmlRemoveTags: ["script"],
                 htmlExecuteScripts: false,
                 htmlUntouched: true,
+                zIndex: this.state.theme.zIndex.modal,
+                linkEditButtons: ["linkOpen", "linkEdit", "linkRemove"],
             };
             const config = this.props.extendedConfig
                 ? this.extendConfig(baseConfig, this.props.extendedConfig)

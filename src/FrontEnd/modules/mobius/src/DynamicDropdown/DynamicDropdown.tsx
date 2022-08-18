@@ -235,6 +235,7 @@ const listCssBuilder = (
  * A searchable dropdown.
  */
 class DynamicDropdown extends React.Component<DynamicDropdownProps & HasDisablerContext, DynamicDropdownState> {
+    static displayName = "DynamicDropdown";
     private spreadProps: Function;
     private applyStyledProp: Function;
     private sizeVariant: FormFieldSizeVariant;
@@ -694,6 +695,7 @@ class DynamicDropdown extends React.Component<DynamicDropdownProps & HasDisabler
     };
 }
 
+DynamicDropdown.displayName = "DynamicDropdown";
 /** @component */
 export default withDisabler(withTheme(DynamicDropdown));
 

@@ -33,6 +33,7 @@ const useWarehouseFilterSearch = ({
 }: Props) => {
     const [filter, setFilter] = React.useState<GetWarehousesApiParameter | undefined>(undefined);
     const [warehouseSearchFilter, setWarehouseSearchFilter] = React.useState<string>("");
+    const [radiusSearchFilter, setRadiusSearchFilter] = React.useState<number | undefined>(defaultRadius);
     const [page, setPage] = React.useState<number>(1);
     const [pageSize, setPageSize] = React.useState<number | undefined>(undefined);
 
@@ -87,6 +88,7 @@ const useWarehouseFilterSearch = ({
 
     const createFilter = (coords: google.maps.LatLng): GetWarehousesApiParameter => ({
         search: warehouseSearchFilter,
+        radius: radiusSearchFilter,
         latitude: coords?.lat() ? coords.lat() : selectedWarehouse!.latitude,
         longitude: coords?.lng() ? coords.lng() : selectedWarehouse!.longitude,
         onlyPickupWarehouses: true,
@@ -123,6 +125,8 @@ const useWarehouseFilterSearch = ({
         doSearch,
         warehouseSearchFilter,
         setWarehouseSearchFilter,
+        radiusSearchFilter,
+        setRadiusSearchFilter,
         setPage,
         setPageSize,
     };

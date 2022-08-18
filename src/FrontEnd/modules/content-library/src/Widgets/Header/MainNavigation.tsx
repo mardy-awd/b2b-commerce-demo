@@ -731,6 +731,7 @@ export class MainNavigation extends React.Component<Props, State> {
                             vmiPageLinks={vmiPageLinks}
                             displayModeSwitch={displayModeSwitch}
                             currentMode={currentMode}
+                            isCompactHeaderFlyout={true}
                         />
                     </StyledWrapper>
                 </StyledWrapper>

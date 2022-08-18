@@ -47,6 +47,7 @@ describe("BrandsReducer", () => {
             dataViews: {},
             brandCategoryDataView: {},
             brandProductLineDataView: {},
+            pathNotFound: {},
         };
     });
 
@@ -59,7 +60,7 @@ describe("BrandsReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = BrandsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(BrandsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toEqual(true);
@@ -78,7 +79,7 @@ describe("BrandsReducer", () => {
             .getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = BrandsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(BrandsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.byId["testID"]).toEqual(expectedState.byId["testID"]);
@@ -123,7 +124,7 @@ describe("BrandsReducer", () => {
             .setStateWithParameter(propertyName, parameter, value)
             .getState();
 
-        const actualState = BrandsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(BrandsReducer(undefined, action) as any));
         delete actualState.brandCategoryDataView[key].fetchedDate;
 
         expect(actualState.brandCategoryDataView[key].value).toEqual(brandCategoryCollection.brandCategories);
@@ -168,7 +169,7 @@ describe("BrandsReducer", () => {
             .setStateWithParameter(propertyName, parameter, value)
             .getState();
 
-        const actualState = BrandsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(BrandsReducer(undefined, action) as any));
         delete actualState.brandProductLineDataView[key].fetchedDate;
 
         expect(actualState.brandProductLineDataView[key].value).toEqual(brandProductLineCollection.productLines);

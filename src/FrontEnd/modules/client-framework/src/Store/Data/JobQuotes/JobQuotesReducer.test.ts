@@ -35,7 +35,7 @@ describe("JobQuotesReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = JobQuotesReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(JobQuotesReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toBe(true);
@@ -49,12 +49,14 @@ describe("JobQuotesReducer", () => {
             parameter,
             collection,
         } as any;
-        const expectedState = new ExpectedState(initialState)
-            .setStateDataViewLoaded(parameter, collection, "jobQuotes")
-            .getState();
+        const expectedState = JSON.parse(
+            JSON.stringify(
+                new ExpectedState(initialState).setStateDataViewLoaded(parameter, collection, "jobQuotes").getState(),
+            ),
+        );
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = JobQuotesReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(JobQuotesReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews).toBeTruthy();

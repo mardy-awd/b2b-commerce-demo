@@ -32,7 +32,7 @@ describe("BudgetCalendarsReducer", () => {
         const expectedState = new ExpectedState(initialState).addDataViewIsLoading(parameter).getState();
         delete expectedState.dataViews[key].pagination;
 
-        const actualState = BudgetCalendarsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(BudgetCalendarsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toEqual(true);
@@ -52,7 +52,7 @@ describe("BudgetCalendarsReducer", () => {
             .getState();
         delete expectedState.dataViews[key].pagination;
 
-        const actualState = BudgetCalendarsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(BudgetCalendarsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].value).toEqual(collection.budgetCalendarCollection);

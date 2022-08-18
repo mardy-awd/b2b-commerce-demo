@@ -112,7 +112,7 @@ describe("CartsReducer", () => {
         const expectedState = new ExpectedState(initialState).setStateDataViewLoading(parameter).getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = CartsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(CartsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toBe(true);
@@ -131,7 +131,7 @@ describe("CartsReducer", () => {
             .getState();
         delete expectedState.dataViews[key].fetchedDate;
 
-        const actualState = CartsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(CartsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews).toEqual(expectedState.dataViews);

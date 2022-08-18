@@ -127,6 +127,10 @@
                     this.getCrossSells();
                 }
             });
+
+            this.$scope.$watch(() => this.imagesLoaded, () => {
+                this.equalizeCarouselDimensions();
+            });
         }
 
         protected getSettingsCompleted(settingsCollection: core.SettingsCollection): void {
@@ -382,7 +386,7 @@
 
             if (tries > 0) {
                 this.$timeout(() => {
-                    if ($(".cs-carousel", this.productCarouselElement).length > 0 && this.imagesLoaded >= this.productsWithImages) {
+                    if ($(".cs-carousel", this.productCarouselElement).length > 0) {
                         this.initializeCarousel();
                         this.$scope.$apply();
                     } else {

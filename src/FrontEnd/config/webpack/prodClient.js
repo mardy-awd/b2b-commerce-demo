@@ -10,34 +10,41 @@ const RemovePlugin = require("remove-files-webpack-plugin");
 module.exports = env => {
     const commonConfig = setupCommonConfig(false, env);
 
-    const clientConfig = merge(commonConfig, commonClientConfig, commonProdConfig, {
-        entry: {
-            shell: "./modules/shell/Entry.ts",
-            public: "./modules/client-framework/Entry.ts",
-        },
-        plugins: [
-            new RemovePlugin({
-                before: {
-                    root: ".",
-                    test: [
-                        {
-                            folder: "./wwwroot/dist",
-                            method: () => true,
-                            recursive: true,
-                        },
-                    ],
-                },
-            }),
-            new webpack.DefinePlugin({
-                IS_PRODUCTION: true,
-                IS_SERVER_SIDE: false,
-            }),
+    const plugins = [
+        new RemovePlugin({
+            before: {
+                root: ".",
+                test: [
+                    {
+                        folder: "./wwwroot/dist",
+                        method: () => true,
+                        recursive: true,
+                    },
+                ],
+            },
+        }),
+        new webpack.DefinePlugin({
+            IS_PRODUCTION: true,
+            IS_SERVER_SIDE: false,
+        }),
+    ];
+
+    if (process.env.FAST_BUILD !== "1") {
+        plugins.push(
             new BundleAnalyzerPlugin({
                 analyzerMode: "static",
                 openAnalyzer: false,
                 reportFilename: "webpack-bundle-analyzer.html",
             }),
-        ],
+        );
+    }
+
+    const clientConfig = merge(commonConfig, commonClientConfig, commonProdConfig, {
+        entry: {
+            shell: "./modules/shell/Entry.ts",
+            public: "./modules/client-framework/Entry.ts",
+        },
+        plugins,
     });
 
     return clientConfig;

@@ -110,11 +110,16 @@ class ProductListPage extends React.Component<Props> {
         if (!productsDataView.value && !productsDataView.isLoading) {
             this.loadProducts();
         } else if (!IS_SERVER_SIDE && productsDataView.value) {
-            const { searchTermRedirectUrl } = productsDataView;
-
             // Check that the request is not a redirection to where we are currently
-            if (searchTermRedirectUrl && window?.location?.toString() !== searchTermRedirectUrl) {
-                if (searchTermRedirectUrl.lastIndexOf("http", 0) === 0) {
+            const { searchTermRedirectUrl } = productsDataView;
+            const startsWithProtocol = searchTermRedirectUrl?.lastIndexOf("http", 0) === 0;
+            if (
+                searchTermRedirectUrl &&
+                (startsWithProtocol
+                    ? window?.location?.toString()
+                    : window?.location?.pathname + window?.location?.search) !== searchTermRedirectUrl
+            ) {
+                if (startsWithProtocol) {
                     window.location.replace(searchTermRedirectUrl);
                 } else {
                     this.props.history.replace(searchTermRedirectUrl);
@@ -170,8 +175,14 @@ class ProductListPage extends React.Component<Props> {
         if (!isLoading && this.props.productsDataView.value && pathname === prevProps.location.pathname) {
             // Check that the request is not a redirection to where we are currently
             const { searchTermRedirectUrl } = this.props.productsDataView;
-            if (searchTermRedirectUrl && window?.location?.toString() !== searchTermRedirectUrl) {
-                if (searchTermRedirectUrl.lastIndexOf("http", 0) === 0) {
+            const startsWithProtocol = searchTermRedirectUrl?.lastIndexOf("http", 0) === 0;
+            if (
+                searchTermRedirectUrl &&
+                (startsWithProtocol
+                    ? window?.location?.toString()
+                    : window?.location?.pathname + window?.location?.search) !== searchTermRedirectUrl
+            ) {
+                if (startsWithProtocol) {
                     window.location.replace(searchTermRedirectUrl);
                 } else {
                     this.props.history.replace(searchTermRedirectUrl);

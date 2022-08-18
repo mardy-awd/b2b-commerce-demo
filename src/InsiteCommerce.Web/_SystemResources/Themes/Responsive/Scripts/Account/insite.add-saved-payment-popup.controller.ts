@@ -29,6 +29,7 @@
         country: CountryModel;
         isDefault: boolean;
         isDescriptionAlreadyExists: boolean;
+        errorMessage: string;
 
         useTokenExGateway: boolean;
         tokenExIframe: any;
@@ -230,6 +231,7 @@
                 return;
             }
 
+            this.errorMessage = "";
             this.saving = true;
             if (this.useTokenExGateway) {
                 this.tokenExIframe.tokenize();
@@ -281,6 +283,7 @@
         }
 
         protected addPaymentProfileFailed(error: any): void {
+            this.errorMessage = error;
         }
 
         setUpTokenExGateway(): void {
@@ -324,7 +327,9 @@
                     if (data.isValid) {
                         this.isInvalidCardNumber = false;
                         this.isCardAlreadyExists = this.savedPayments.some(
-                            o => o.maskedCardNumber.substring(o.maskedCardNumber.length - 4) === data.lastFour && o.cardType === this.convertTokenExCardType(data.cardType));
+                            o => o.maskedCardNumber.substring(o.maskedCardNumber.length - 4) === data.lastFour &&
+                                 o.cardType === this.convertTokenExCardType(data.cardType) &&
+                                 o.cardIdentifier.substring(0, 6) === data.firstSix);
                     } else {
                         if (this.saving) {
                             this.isInvalidCardNumber = true;

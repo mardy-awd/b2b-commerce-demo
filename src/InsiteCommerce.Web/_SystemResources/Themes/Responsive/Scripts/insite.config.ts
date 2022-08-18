@@ -61,7 +61,7 @@
             // all pages are the same state and make requests for the partials on the server
             $stateProvider
                 .state("content", {
-                    url: "*path?stateChange&bypassFilters&experimentMode&page",
+                    url: `*path?stateChange&bypassFilters&experimentMode${this.isSearchCrawler() ? "&page" : ""}`,
                     templateUrl: (stateParams: IContentPageStateParams) => {
                         let url = stateParams.path;
                         if (typeof (stateParams.bypassFilters) !== "undefined") {
@@ -70,7 +70,7 @@
                         if (typeof (stateParams.experimentMode) !== "undefined") {
                             url += (url.indexOf("?") >= 0 ? "&" : "?") + `experimentMode=${stateParams.experimentMode}`;
                         }
-                        if (typeof (stateParams.page) !== "undefined") {
+                        if (typeof (stateParams.page) !== "undefined" && this.isSearchCrawler()) {
                             url += (url.indexOf("?") >= 0 ? "&" : "?") + `page=${stateParams.page}`;
                         }
                         return url;
@@ -90,7 +90,7 @@
         setupResourceWhitelist($httpProvider: ng.IHttpProvider, $sceDelegateProvider: ng.ISCEDelegateProvider) {
             const baseUri = $("body").attr("data-webApiRoot");
             const uriHostsForResourceWhitelist = (core as any).uriHostsForResourceWhitelist;
-            const finalizedResourceWhitelist: (string|RegExp)[] = ["self"];
+            const finalizedResourceWhitelist: (string | RegExp)[] = ["self"];
             const uriWithZeroSubdomainsRegexp = new RegExp("^[a-zA-Z0-9][a-zA-Z0-9-_]*\.[a-zA-Z0-9]+$");
             const uriWithAtLeastOneSubdomainsRegexp = new RegExp("^(?:[a-zA-Z0-9][a-zA-Z0-9-_]*\.){2}[a-zA-Z0-9]+$");
 
@@ -113,6 +113,10 @@
             }
 
             $sceDelegateProvider.resourceUrlWhitelist(finalizedResourceWhitelist);
+        }
+
+        private isSearchCrawler(): boolean {
+            return new RegExp("bot|crawler|baiduspider|80legs|ia_archiver|voyager|curl|wget|yahoo! slurp|mediapartners-google").test(navigator.userAgent || "");
         }
     }
 

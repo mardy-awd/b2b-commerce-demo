@@ -22,6 +22,7 @@ const initialState: BrandsState = {
     dataViews: {},
     brandCategoryDataView: {},
     brandProductLineDataView: {},
+    pathNotFound: {},
 };
 
 const reducer = {
@@ -89,6 +90,7 @@ const reducer = {
     ) => {
         delete draft.isLoading[action.path];
         if (!action.brand) {
+            draft.pathNotFound[action.path] = true;
             return;
         }
         delete draft.isLoading[action.brand.id];

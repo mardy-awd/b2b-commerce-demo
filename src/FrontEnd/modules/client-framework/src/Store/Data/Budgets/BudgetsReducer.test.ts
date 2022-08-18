@@ -27,7 +27,7 @@ describe("BudgetReducer", () => {
         const expectedState = new ExpectedState(initialState).addDataViewIsLoading(parameter).getState();
         delete expectedState.dataViews[key].pagination;
 
-        const actualState = BudgetsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(BudgetsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].isLoading).toEqual(true);
@@ -47,7 +47,7 @@ describe("BudgetReducer", () => {
             .getState();
         delete expectedState.dataViews[key].pagination;
 
-        const actualState = BudgetsReducer(undefined, action) as any;
+        const actualState = JSON.parse(JSON.stringify(BudgetsReducer(undefined, action) as any));
         delete actualState.dataViews[key].fetchedDate;
 
         expect(actualState.dataViews[key].value).toEqual(mockBudgetModel);

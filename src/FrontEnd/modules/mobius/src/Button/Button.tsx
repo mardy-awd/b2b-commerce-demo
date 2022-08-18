@@ -232,6 +232,7 @@ Button.defaultProps = {
     variant: "primary",
 };
 
+Button.displayName = "Button";
 /** @component */
 export default withDisabler(withTheme(Button));
 

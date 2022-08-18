@@ -46,8 +46,7 @@ module insite.catalog {
         }
 
         protected isCarouselDomReadyAndImagesLoaded(): boolean {
-            return $(`#${this.prefix}-img-carousel`).length > 0 && this.productImages
-                && this.imagesLoaded >= this.productImages.length;
+            return $(`#${this.prefix}-img-carousel`).length > 0 && !!this.productImages;
         }
 
         protected initializeCarousel(): void {

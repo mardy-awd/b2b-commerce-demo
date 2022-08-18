@@ -1,4 +1,5 @@
 /* eslint-disable spire/export-styles */
+import StyledWrapper from "@insite/client-framework/Common/StyledWrapper";
 import { useShellContext } from "@insite/client-framework/Components/IsInShell";
 import { useGetLink } from "@insite/client-framework/Store/Links/LinksSelectors";
 import { LinkFieldValue } from "@insite/client-framework/Types/FieldDefinition";
@@ -9,15 +10,17 @@ import Button from "@insite/mobius/Button";
 import { useHistory } from "@insite/mobius/utilities/HistoryContext";
 import InjectableCss from "@insite/mobius/utilities/InjectableCss";
 import injectCss from "@insite/mobius/utilities/injectCss";
+import * as cssLinter from "css";
 import * as React from "react";
 import { FC } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const enum fields {
     variant = "variant",
     label = "label",
     link = "link",
     alignment = "alignment",
+    customCSS = "customCSS",
 }
 
 interface OwnProps extends WidgetProps {
@@ -26,6 +29,7 @@ interface OwnProps extends WidgetProps {
         [fields.label]: string;
         [fields.link]: LinkFieldValue;
         [fields.alignment]: string;
+        [fields.customCSS]: string;
     };
 }
 
@@ -58,13 +62,38 @@ export const CmsButton: FC<OwnProps> = ({ fields }) => {
 
     const styles = useMergeStyles("button", { wrapperStyles });
 
+    const customCssWrapper = {
+        css: css`
+            ${fields.customCSS}
+        `,
+    };
+
     return (
-        <ContentWrapper alignment={fields.alignment} {...styles?.wrapperStyles}>
-            <Button variant={fields.variant} onClick={onClick}>
-                {fields.label}
-            </Button>
-        </ContentWrapper>
+        <StyledWrapper {...customCssWrapper}>
+            <ContentWrapper alignment={fields.alignment} {...styles?.wrapperStyles} className="wrapper">
+                <Button variant={fields.variant} onClick={onClick} className="button">
+                    {fields.label}
+                </Button>
+            </ContentWrapper>
+        </StyledWrapper>
     );
+};
+
+const defaultCustomCss = `.wrapper {
+}
+
+.button {
+}
+`;
+
+const basicTab = {
+    displayName: "Basic",
+    sortOrder: 0,
+};
+
+const advancedTab = {
+    displayName: "Advanced",
+    sortOrder: 1,
 };
 
 export const ContentWrapper = styled.div<InjectableCss & { alignment: string }>`
@@ -91,6 +120,7 @@ const widgetModule: WidgetModule = {
                 ],
                 defaultValue: "primary",
                 fieldType: "General",
+                tab: basicTab,
             },
             {
                 name: fields.label,
@@ -98,6 +128,7 @@ const widgetModule: WidgetModule = {
                 editorTemplate: "TextField",
                 defaultValue: "",
                 fieldType: "Translatable",
+                tab: basicTab,
             },
             {
                 name: fields.link,
@@ -108,6 +139,7 @@ const widgetModule: WidgetModule = {
                     type: "Page",
                 },
                 fieldType: "General",
+                tab: basicTab,
             },
             {
                 name: fields.alignment,
@@ -120,6 +152,36 @@ const widgetModule: WidgetModule = {
                 ],
                 defaultValue: "primary",
                 fieldType: "General",
+                tab: basicTab,
+            },
+            {
+                name: fields.customCSS,
+                displayName: "Custom CSS",
+                editorTemplate: "CodeField",
+                fieldType: "General",
+                tab: advancedTab,
+                defaultValue: defaultCustomCss,
+                isVisible: (item, shouldDisplayAdvancedFeatures) => !!shouldDisplayAdvancedFeatures,
+                validate: value => {
+                    if (value === undefined || value === null) {
+                        return "";
+                    }
+
+                    const result = cssLinter.parse(value, { silent: true });
+                    if (result?.stylesheet?.parsingErrors) {
+                        // the error output at this time only has room for one line so we just show the first error
+                        return result.stylesheet.parsingErrors.length <= 0
+                            ? ""
+                            : result.stylesheet.parsingErrors.map(error => `${error.reason} on line ${error.line}`)[0];
+                    }
+
+                    return "Unable to parse Css";
+                },
+                options: {
+                    mode: "css",
+                    lint: true,
+                    autoRefresh: true,
+                },
             },
         ],
     },

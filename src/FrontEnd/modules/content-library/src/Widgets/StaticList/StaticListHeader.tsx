@@ -256,6 +256,7 @@ const StaticListHeader = ({
     const allQtysIsValid = wishList.wishListLineCollection?.every(
         o => !!productInfosByWishListLineId[o.id] && productInfosByWishListLineId[o.id]!.qtyOrdered > 0,
     );
+    const returnUrl = location.pathname + location.search;
 
     return (
         <>
@@ -283,6 +284,7 @@ const StaticListHeader = ({
                             {...styles.addListToCartButton}
                             disabled={!allQtysIsValid}
                             onClick={addListToCartClickHandler}
+                            data-test-selector="staticListModal_AddListToCartButton"
                         >
                             {translate("Add List to Cart")}
                         </Button>
@@ -299,7 +301,7 @@ const StaticListHeader = ({
                     <Typography {...styles.signInMessageText}>
                         {siteMessage(
                             "Lists_SignIn_Required_To_Save_List_In_Spire",
-                            `${signInUrl}?returnUrl=${encodeURIComponent(location.pathname + location.search)}`,
+                            `${signInUrl}?returnUrl=${encodeURIComponent(returnUrl)}&clientRedirect=true`,
                         )}
                     </Typography>
                 )}

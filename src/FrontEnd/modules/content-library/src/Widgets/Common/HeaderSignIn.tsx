@@ -127,7 +127,7 @@ export const HeaderSignIn = ({
                 if (returnUrl === "/") {
                     history.push(`${signInUrl}`);
                 } else {
-                    history.push(`${signInUrl}?returnUrl=${encodeURIComponent(returnUrl)}`);
+                    history.push(`${signInUrl}?returnUrl=${encodeURIComponent(returnUrl)}&clientRedirect=true`);
                 }
             }
             e.preventDefault();

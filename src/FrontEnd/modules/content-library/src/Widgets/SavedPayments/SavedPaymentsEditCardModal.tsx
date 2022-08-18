@@ -366,7 +366,8 @@ const SavedPaymentsEditCardModal = ({
                 paymentProfilesDataView.value.some(
                     o =>
                         o.maskedCardNumber.substring(o.maskedCardNumber.length - 4) === data.lastFour &&
-                        o.cardType === convertTokenExCardType(data.cardType),
+                        o.cardType === convertTokenExCardType(data.cardType) &&
+                        o.cardIdentifier.substring(0, 6) === data.firstSix,
                 );
 
             if (isCardNumberRequired || isInvalidCardNumber) {
@@ -685,6 +686,14 @@ const SavedPaymentsEditCardModal = ({
             });
         };
 
+        const onErrorSave = (errorMessage: string) => {
+            setSaving(false);
+            setCardNumberError(errorMessage);
+            setCardNumber("");
+            setCardType("");
+            setIsCardNumberTokenized(false);
+        };
+
         if (editingPaymentProfile) {
             updatePaymentProfile({
                 paymentProfile: paymentProfileToSave,
@@ -701,6 +710,7 @@ const SavedPaymentsEditCardModal = ({
             addPaymentProfile({
                 paymentProfile: paymentProfileToSave,
                 onSuccess: onSuccessSave,
+                onError: onErrorSave,
                 onComplete(resultProps) {
                     if (resultProps.apiResult) {
                         // "this" is targeting the object being created, not the parent SFC

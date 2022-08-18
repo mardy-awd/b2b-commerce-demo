@@ -15,9 +15,7 @@
         }
     }
 
-#pragma warning disable SA1402 // File may only contain a single class
     public class CustomSiteStartup : SiteStartup
-#pragma warning restore SA1402 // File may only contain a single class
     {
         protected override void PreStartup()
         {

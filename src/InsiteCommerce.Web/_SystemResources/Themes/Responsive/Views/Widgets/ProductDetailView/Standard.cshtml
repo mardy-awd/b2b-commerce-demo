@@ -117,7 +117,7 @@
                     <isc-unit-of-measure-select-list product="vm.product" alternate-units-of-measure="{{vm.settings.alternateUnitsOfMeasure}}"
                                                      display-pack="true" change-unit-of-measure="vm.changeUnitOfMeasure(vm.product)"></isc-unit-of-measure-select-list>
                 </div>
-                <div class="small-12 fc-qty" ng-if="vm.product.canEnterQuantity || vm.configurationCompleted || vm.styleSelectionCompleted && !vm.product.canConfigure">
+                <div class="small-12 fc-qty" ng-show="vm.isQuantityVisible()">
                     <label class="small-12">[% translate 'QTY_quantity' %]</label>
                     <input id="tst_productDetail_qtyOrdered" type="text" value="1" class="small-12 numerictextbox" ng-model="vm.product.qtyOrdered">
                 </div>

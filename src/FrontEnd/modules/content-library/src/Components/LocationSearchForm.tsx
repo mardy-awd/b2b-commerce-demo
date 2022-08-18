@@ -31,7 +31,7 @@ import { css } from "styled-components";
 
 interface OwnProps {
     extendedStyles?: LocationSearchFormStyles;
-    onSearch: (searchGeoLocationFilter: string, searchLocationFilter: string) => void;
+    onSearch: (searchGeoLocationFilter: string, searchLocationFilter: string, radiusSearch?: number) => void;
     onLocationSelected: (location: LocationModel) => void;
     locationKnown: boolean;
     showSelectedLocation: boolean;
@@ -39,6 +39,7 @@ interface OwnProps {
     openLocationContentDisplay: (location: LocationModel) => void;
     resultCount: number;
     locationSearchFilter: string;
+    radiusSearchFilter?: number;
     geoLocationSearchText: string;
     showGeoLocationErrorMessage: boolean;
     geoLocationErrorMessage: React.ReactNode;
@@ -72,6 +73,8 @@ export interface LocationSearchFormStyles {
     searchGeoLocationText?: TextFieldPresentationProps;
     searchLocationsGridItem?: GridItemProps;
     searchLocationsText?: TextFieldPresentationProps;
+    searchRadiusGridItem?: GridItemProps;
+    searchRadiusText?: TextFieldPresentationProps;
     searchButtonGridItem?: GridItemProps;
     searchButton?: ButtonPresentationProps;
     searchResultsTextGridItem?: GridItemProps;
@@ -140,19 +143,23 @@ export const locationSearchFormStyles: LocationSearchFormStyles = {
         gap: 10,
     },
     searchGeoLocationGridItem: {
-        width: [12, 12, 12, 12, 8],
+        width: [12, 12, 12, 12, 12],
     },
     searchLocationsGridItem: {
+        width: [12, 12, 12, 12, 5],
+    },
+    searchRadiusGridItem: {
         width: [12, 12, 12, 12, 4],
     },
     searchButtonGridItem: {
-        width: 12,
+        width: [12, 12, 12, 12, 3],
         css: css`
             padding-top: 10px;
             display: inline-block;
             width: 100%;
             flex-direction: row;
             text-align: right;
+            align-self: flex-end;
             & > div {
                 display: inline-flex;
             }
@@ -317,6 +324,7 @@ const LocationSearchForm: React.FC<Props> = ({
     openLocationContentDisplay,
     resultCount,
     locationSearchFilter,
+    radiusSearchFilter,
     geoLocationSearchText,
     showGeoLocationErrorMessage,
     geoLocationErrorMessage,
@@ -331,10 +339,14 @@ const LocationSearchForm: React.FC<Props> = ({
 }) => {
     const [styles] = React.useState(() => mergeToNew(locationSearchFormStyles, extendedStyles));
     const [searchLocationFilter, setSearchLocationFilter] = React.useState(locationSearchFilter);
+    const [searchRadiusFilter, setSearchRadiusFilter] = React.useState(radiusSearchFilter);
     const [searchGeoLocationFilter, setSearchGeoLocationFilter] = React.useState(geoLocationSearchText);
     React.useEffect(() => {
         setSearchLocationFilter(locationSearchFilter);
     }, [locationSearchFilter]);
+    React.useEffect(() => {
+        setSearchRadiusFilter(radiusSearchFilter);
+    }, [radiusSearchFilter]);
     React.useEffect(() => {
         setSearchGeoLocationFilter(geoLocationSearchText);
     }, [geoLocationSearchText]);
@@ -365,7 +377,7 @@ const LocationSearchForm: React.FC<Props> = ({
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (!isLoading) {
-            onSearch(searchGeoLocationFilter, searchLocationFilter);
+            onSearch(searchGeoLocationFilter, searchLocationFilter, searchRadiusFilter);
         }
     };
     const handleSearchGeoLocationChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -373,6 +385,9 @@ const LocationSearchForm: React.FC<Props> = ({
     };
     const handleSearchLocationsChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchLocationFilter(event.target.value);
+    };
+    const handleSearchRadiusChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchRadiusFilter(Number(event.target.value));
     };
 
     return (
@@ -402,6 +417,18 @@ const LocationSearchForm: React.FC<Props> = ({
                                 onChange={handleSearchLocationsChanged}
                                 placeholder={translate("Search for Location")}
                                 data-test-selector="locationSearchForm_searchLocations"
+                            />
+                        </GridItem>
+                        <GridItem {...styles.searchRadiusGridItem}>
+                            <TextField
+                                id="searchRadius"
+                                {...styles.searchRadiusText}
+                                label={translate("Search Radius")}
+                                value={searchRadiusFilter}
+                                onChange={handleSearchRadiusChanged}
+                                type="number"
+                                min={0}
+                                placeholder={translate("Search Radius")}
                             />
                         </GridItem>
                         <GridItem {...styles.searchButtonGridItem}>

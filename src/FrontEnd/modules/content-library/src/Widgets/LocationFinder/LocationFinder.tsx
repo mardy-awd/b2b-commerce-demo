@@ -225,11 +225,16 @@ const LocationFinder: FC<Props> = ({
     const [locationsPagination, setLocationsPagination] = React.useState<PaginationModel | undefined>();
 
     // Manage Loading Dealers on State Changes
-    const onSearch = (searchFilter: string) => {
+    const onSearch = (searchFilter: string, searchRadius?: number) => {
         setLocationSearchFilter(searchFilter);
+        setRadiusSearchFilter(searchRadius);
     };
 
-    const createFilter = (coords: google.maps.LatLng | undefined, searchFilter: string): GetDealersApiParameter => {
+    const createFilter = (
+        coords: google.maps.LatLng | undefined,
+        searchFilter: string,
+        searchRadius?: number,
+    ): GetDealersApiParameter => {
         // Default center Point
         let centerPoint = { latitude: 0, longitude: 0 };
         // Passed in coords
@@ -259,22 +264,32 @@ const LocationFinder: FC<Props> = ({
             name: searchFilter,
             latitude: centerPoint.latitude,
             longitude: centerPoint.longitude,
+            radius: searchRadius,
             page,
             pageSize,
         };
     };
 
-    const { doSearch, locationSearchFilter, setLocationSearchFilter, page, setPage, pageSize, setPageSize } =
-        useLocationFilterSearch<DealerModel, GetDealersApiParameter>({
-            onSearch,
-            loadLocations: handleLoadLocations,
-            currentLocation,
-            defaultRadius,
-            selectedLocation: selectedDealer,
-            setSelectedLocation: location => setSelectedDealer(location),
-            setShowSelectedLocation: setShowSelectedDealer,
-            createFilter,
-        });
+    const {
+        doSearch,
+        locationSearchFilter,
+        setLocationSearchFilter,
+        radiusSearchFilter,
+        setRadiusSearchFilter,
+        page,
+        setPage,
+        pageSize,
+        setPageSize,
+    } = useLocationFilterSearch<DealerModel, GetDealersApiParameter>({
+        onSearch,
+        loadLocations: handleLoadLocations,
+        currentLocation,
+        defaultRadius,
+        selectedLocation: selectedDealer,
+        setSelectedLocation: location => setSelectedDealer(location),
+        setShowSelectedLocation: setShowSelectedDealer,
+        createFilter,
+    });
     React.useEffect(() => {
         if (!isGoogleMapsScriptsLoaded) {
             return;
@@ -286,6 +301,7 @@ const LocationFinder: FC<Props> = ({
             setLocationsPagination(pagination || undefined);
             setResultCount(pagination?.totalItemCount || 0);
             setDefaultRadius(defaultRadius);
+            setRadiusSearchFilter(defaultRadius);
             setMapCenter(new google.maps.LatLng(defaultLatitude, defaultLongitude));
             setDealers(dealers || []);
             setIsLoading(false);
@@ -367,7 +383,7 @@ const LocationFinder: FC<Props> = ({
             });
     };
 
-    const handleSearch = (geoLocationSearch: string, locationSearch: string) => {
+    const handleSearch = (geoLocationSearch: string, locationSearch: string, radiusSearch?: number) => {
         if (!geoLocationSearch) {
             setShowGeoLocationErrorMessage(true);
             return;
@@ -375,10 +391,11 @@ const LocationFinder: FC<Props> = ({
         setShowGeoLocationErrorMessage(false);
         if (geoLocationSearchText !== geoLocationSearch) {
             setLocationSearchFilter(locationSearch);
+            setRadiusSearchFilter(radiusSearch);
             handleGeoLocationSearch(geoLocationSearch);
             return;
         }
-        doSearch(locationSearch);
+        doSearch(locationSearch, radiusSearch);
     };
 
     // Set the GeoLocation Search Text
@@ -422,6 +439,7 @@ const LocationFinder: FC<Props> = ({
                         openLocationContentDisplay={handleOpenContentModal}
                         resultCount={resultCount}
                         locationSearchFilter={locationSearchFilter}
+                        radiusSearchFilter={radiusSearchFilter}
                         geoLocationSearchText={geoLocationSearchText}
                         showGeoLocationErrorMessage={showGeoLocationErrorMessage}
                         geoLocationErrorMessage={siteMessage("DealerLocator_GeocodeErrorMessage")}

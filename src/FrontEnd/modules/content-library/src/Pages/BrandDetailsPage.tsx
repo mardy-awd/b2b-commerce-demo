@@ -68,7 +68,7 @@ const mapStateToProps = (state: ApplicationState) => {
         homePageUrl,
         parentNodeId: page.parentId,
         links: state.links,
-        shouldLoadBrand: !brandState.isLoading && !brandState.value,
+        shouldLoadBrand: !brandState.isLoading && !brandState.value && !state.data.brands.pathNotFound[brandPath],
         breadcrumbLinks: state.components.breadcrumbs.links,
         shouldLoadBrandCategories,
         shouldLoadBrandProductLine,

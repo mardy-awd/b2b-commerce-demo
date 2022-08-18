@@ -161,7 +161,7 @@ const MyListsDetailsHeader = ({
                 />
                 {wishListTotal !== undefined && (
                     <>
-                        <Typography {...styles.totalText}>
+                        <Typography {...styles.totalText} data-test-selector="listTotal">
                             {translate("List Total")}:{" "}
                             <LocalizedCurrency
                                 amount={
