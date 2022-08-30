@@ -115,6 +115,8 @@ function buildBlueprint(name, gitUrl) {
         console.log(`##teamcity[blockClosed name='${blueprint}']`);
     }
 
+    fs.rmdirSync(rootClientPath, { recursive: true });
+    
     return { name, passed, failed };
 }
 

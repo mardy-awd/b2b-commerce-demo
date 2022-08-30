@@ -264,7 +264,12 @@ export async function pageRenderer(request: Request, response: Response) {
                         <link key={key} rel="alternate" hrefLang={key} href={value} />
                     ))}
                 <base href="/" />
-                <link href={fontFamilyImportUrl} rel="preload" as="style" type="text/css" />
+                {fontFamilyImportUrl ? (
+                    <>
+                        <link href={fontFamilyImportUrl} rel="preload" as="style" type="text/css" />
+                        <link href={fontFamilyImportUrl} rel="stylesheet" type="text/css" />
+                    </>
+                ) : null}
                 {sheet?.getStyleElement()}
                 <script
                     dangerouslySetInnerHTML={{
