@@ -2899,11 +2899,15 @@ export interface WebsiteSettingsModel extends BaseModel {
     reCaptchaEnabledForShareProduct: boolean;
     reCaptchaSiteKey: string;
     siteNameAfterTitle: boolean;
+    squareApplicationId: string;
+    squareLive: boolean;
+    squareLocationId: string;
     tokenExTestMode: boolean;
+    useAdyenDropIn: boolean;
     useECheckTokenExGateway: boolean;
     usePaymetricGateway: boolean;
+    useSquareGateway: boolean;
     useTokenExGateway: boolean;
-    useAdyenDropIn: boolean;
 }
 
 export interface TranslationDictionaryModel {

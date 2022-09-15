@@ -362,6 +362,7 @@ const mapWishListLineToProduct = (wishListLine: WishListLineModel) => {
     product.id = wishListLine.productId;
     product.productNumber = wishListLine.erpNumber;
     product.productTitle = wishListLine.shortDescription;
+    product.customerProductNumber = wishListLine.customerName;
     product.unitOfMeasures =
         wishListLine?.productUnitOfMeasures?.map(u => ({
             id: u.productUnitOfMeasureId,

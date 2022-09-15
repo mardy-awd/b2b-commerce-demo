@@ -25,7 +25,7 @@ const mapDispatchToProps = {
 type Props = ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps> & HasShellContext;
 
 class CompactHeader extends React.Component<Props> {
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         const props = this.props;
         if (!props.preventLoadingForIframeComparison && !props.isLoading && props.compactHeader.id === "") {
             props.loadPageByType("CompactHeader");

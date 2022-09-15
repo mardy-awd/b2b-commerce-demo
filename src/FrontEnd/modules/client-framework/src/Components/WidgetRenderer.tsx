@@ -161,7 +161,8 @@ class WidgetRenderer extends React.PureComponent<Props, State> {
         clearInterval(this.scrollIfNeededId);
     };
 
-    drag = () => {
+    drag = (event: React.DragEvent<HTMLElement>) => {
+        this.clientY = this.clientY || event.clientY;
         const top = this.clientY;
         const bottom = document.documentElement.clientHeight - this.clientY;
         const fastStep = 30;
@@ -240,8 +241,10 @@ class WidgetRenderer extends React.PureComponent<Props, State> {
             if (isInShell) {
                 return (
                     <ErrorWithWidgetStyle>
-                        There was an unhandled exception that occurred while trying to render the widget:{" "}
-                        {this.state.error}. See the console for more details.
+                        <>
+                            There was an unhandled exception that occurred while trying to render the widget:{" "}
+                            {this.state.error}. See the console for more details.
+                        </>
                     </ErrorWithWidgetStyle>
                 );
             }

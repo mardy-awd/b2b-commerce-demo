@@ -1,5 +1,5 @@
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
-import updateSearchFields from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/UpdateSearchFields";
+import updateTemporarySearchFields from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/UpdateTemporarySearchFields";
 import translate from "@insite/client-framework/Translate";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
@@ -14,12 +14,12 @@ interface OwnProps extends WidgetProps {}
 
 const mapStateToProps = (state: ApplicationState) => {
     return {
-        parameter: state.pages.orderHistory.getOrdersParameter,
+        parameter: state.pages.orderHistory.incompleteGetOrdersParameter,
     };
 };
 
 const mapDispatchToProps = {
-    updateSearchFields,
+    updateTemporarySearchFields,
 };
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
@@ -36,11 +36,11 @@ class OrderHistorySearchFieldOrderTotalOperator extends React.Component<Props> {
     orderTotalOperators = ["Greater Than", "Less Than", "Equal To"];
 
     handleChange = (event: React.FormEvent<HTMLSelectElement>): void => {
-        this.props.updateSearchFields({ orderTotalOperator: event.currentTarget.value });
+        this.props.updateTemporarySearchFields({ orderTotalOperator: event.currentTarget.value });
     };
 
     render() {
-        const value = this.props.parameter.orderTotalOperator || "";
+        const value = this.props.parameter?.orderTotalOperator || "";
 
         return (
             <SearchFieldWrapper extendedStyles={styles.wrapper}>

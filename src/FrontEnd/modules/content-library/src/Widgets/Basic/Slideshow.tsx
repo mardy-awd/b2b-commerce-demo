@@ -635,7 +635,7 @@ const widgetModule: WidgetModule = {
                 tab: contentTab,
                 getDisplay: ({ fields: { slideTitle } }) => slideTitle || "Slide",
                 defaultValue: [],
-                fieldType: "Translatable",
+                fieldType: "Contextual",
                 fieldDefinitions: [
                     {
                         name: "slideTitle",

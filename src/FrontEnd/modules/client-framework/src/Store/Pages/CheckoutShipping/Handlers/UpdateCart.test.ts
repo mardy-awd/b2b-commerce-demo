@@ -1,18 +1,18 @@
 import { testHandler } from "@insite/client-framework/HandlerTestHelpers";
 import { WriteableState } from "@insite/client-framework/Store/ApplicationState";
-import { withDataByIdState } from "@insite/client-framework/Store/Data/DataStateTestHelpers";
+import { WithDataByIdState } from "@insite/client-framework/Store/Data/DataStateTestHelpers";
 import { PopulateCart } from "@insite/client-framework/Store/Pages/CheckoutShipping/Handlers/UpdateCart";
-import { withPagesState } from "@insite/client-framework/Store/Pages/PagesStateTestHelpers";
+import { WithPagesState } from "@insite/client-framework/Store/Pages/PagesStateTestHelpers";
 import { CartModel } from "@insite/client-framework/Types/ApiModels";
 import RecursivePartial from "@insite/mobius/utilities/RecursivePartial";
 
 describe("Populate Cart", () => {
     const withCurrentCart = (useState: () => WriteableState, value: RecursivePartial<CartModel> = {}) => {
-        withDataByIdState(useState, "carts", "current", value);
+        WithDataByIdState(useState, "carts", "current", value);
     };
 
     const withEditedCartNotes = (useState: () => WriteableState, value: string | undefined) => {
-        withPagesState(useState, "checkoutShipping", {
+        WithPagesState(useState, "checkoutShipping", {
             editedCartNotes: value,
         });
     };

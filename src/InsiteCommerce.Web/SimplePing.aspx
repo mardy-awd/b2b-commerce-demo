@@ -68,14 +68,14 @@
         <br/>
         <% if (isGood)
            { %>
-            <%= ConfigurationManager.AppSettings["SiteIdentifier"] ?? "InsiteCommerce" %> SimplePing is good
+            <%= ConfigurationManager.AppSettings["SiteIdentifier"] ?? "B2B Commerce" %> SimplePing is good
         <% } %>
         <%
            else
            {%>
             <%
                 this.Response.StatusCode = 500; %>
-            <%= ConfigurationManager.AppSettings["SiteIdentifier"] ?? "InsiteCommerce" %> SimplePing is bad
+            <%= ConfigurationManager.AppSettings["SiteIdentifier"] ?? "B2B Commerce" %> SimplePing is bad
            <%} %>
 
     </div>

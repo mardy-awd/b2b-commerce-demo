@@ -616,6 +616,7 @@ const defaultCustomCss = `.mobile-wrapper {
 export class MainNavigation extends React.Component<Props, State> {
     container = React.createRef<HTMLDivElement>();
     mobileSearchInput = React.createRef<HTMLInputElement>();
+    declare context: React.ContextType<typeof StylesContext>;
 
     constructor(props: Props) {
         super(props);

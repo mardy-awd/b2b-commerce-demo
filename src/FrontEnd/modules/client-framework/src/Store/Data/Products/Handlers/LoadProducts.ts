@@ -16,6 +16,9 @@ import {
     GetRelatedProductCollectionApiV2Parameter,
     getRelatedProductsCollectionV2,
 } from "@insite/client-framework/Services/ProductServiceV2";
+import { StorefrontAccess } from "@insite/client-framework/Services/SettingsService";
+import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
+import { getCurrentPage } from "@insite/client-framework/Store/Data/Pages/PageSelectors";
 import sortProductCollections from "@insite/client-framework/Store/Data/Products/Handlers/SortProductCollections";
 import { ProductCollectionModel, ProductModel } from "@insite/client-framework/Types/ApiModels";
 import sortBy from "lodash/sortBy";
@@ -51,6 +54,17 @@ export const PopulateApiParameter: HandlerType = props => {
 
 export const RequestDataFromApi: HandlerType = async props => {
     try {
+        const state = props.getState();
+        const currentPage = getCurrentPage(state);
+        const settings = getSettingsCollection(state);
+        if (
+            settings.productSettings.storefrontAccess === StorefrontAccess.SignInRequiredToBrowse &&
+            !state.context.session.isAuthenticated &&
+            currentPage.fields.excludeFromSignInRequired
+        ) {
+            return false;
+        }
+
         if ("relationship" in props.apiParameter) {
             props.apiResult = await getRelatedProductsCollectionV2(props.apiParameter);
         } else if ("productId" in props.apiParameter && props.apiParameter?.type === "alsoPurchased") {

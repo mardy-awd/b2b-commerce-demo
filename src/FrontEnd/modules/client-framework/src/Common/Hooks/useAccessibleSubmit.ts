@@ -8,21 +8,30 @@ const useAccessibleSubmit = (value: string, onSubmit: (value: string) => void, c
         setValue(event.currentTarget.value);
     };
 
+    const [isOnSubmitCalled, setIsOnSubmitCalled] = useState(false);
+    const callOnSubmitSafety = (value: string) => {
+        if (!isOnSubmitCalled) {
+            setIsOnSubmitCalled(true);
+            onSubmit(value);
+        }
+    };
+
     const keyDownHandler = (event: any) => {
         if (event.keyCode === enterKey) {
             event.stopPropagation();
-            onSubmit(stateValue);
+            callOnSubmitSafety(stateValue);
         }
     };
 
     const blurHandler = () => {
         if (value !== String(stateValue)) {
-            onSubmit(stateValue);
+            callOnSubmitSafety(stateValue);
         }
     };
 
     useEffect(() => {
         setValue(value);
+        setIsOnSubmitCalled(false);
     }, [value, cartLoadedTime]);
 
     return {

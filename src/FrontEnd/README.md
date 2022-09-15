@@ -64,7 +64,7 @@ In addition to launching Spire with the base blueprint, you can create a custom 
 3. Navigate to http://localhost:3000.
 
 ## Site Generation
-The pages for a site will automatically generate the first time a request is made to the server, if there are no pages present. You can force the regeneration of the site by running the following SQL statement in your InsiteCommerce database:
+The pages for a site will automatically generate the first time a request is made to the server, if there are no pages present. You can force the regeneration of the site by running the following SQL statement in your B2B Commerce database:
 ```sql
 DELETE FROM content.Node
 ```

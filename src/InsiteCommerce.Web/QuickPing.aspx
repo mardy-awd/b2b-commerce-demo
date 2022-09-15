@@ -9,7 +9,7 @@
 <form id="form1" runat="server">
     <div>
         <%
-            var siteName = ConfigurationManager.AppSettings["SiteIdentifier"] ?? "InsiteCommerce";
+            var siteName = ConfigurationManager.AppSettings["SiteIdentifier"] ?? "B2B Commerce";
             var healthy = this.HealthCheckResults.Status == HealthCheckStatus.Healthy;
             this.Response.Write(siteName + " QuickPing is " + (healthy ? "good" : "bad") + " <br/><br/>");
             foreach (var healthCheckResult in this.HealthCheckResults.Results)

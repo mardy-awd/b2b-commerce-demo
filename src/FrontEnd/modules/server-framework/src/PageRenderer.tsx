@@ -253,11 +253,9 @@ export async function pageRenderer(request: Request, response: Response) {
                 {metadata?.openGraphImage && (
                     <meta id="ogImage" property="og:image" content={metadata?.openGraphImage} />
                 )}
-
                 {metadata?.openGraphUrl && <meta id="ogUrl" property="og:url" content={metadata?.openGraphUrl} />}
                 {metadata?.metaKeywords && <meta name="keywords" content={metadata?.metaKeywords} />}
                 {metadata?.metaDescription && <meta name="description" content={metadata?.metaDescription} />}
-
                 {metadata?.canonicalUrl && <link rel="canonical" href={metadata?.canonicalUrl} />}
                 {metadata?.alternateLanguageUrls &&
                     Object.entries(metadata.alternateLanguageUrls).map(([key, value]) => (
@@ -472,12 +470,14 @@ async function loadPageAndSetInitialCookies(request: Request, response: Response
             existingCookies[cookieName] = encodeCookie(existingCookies[cookieName]!);
         });
 
-        // getAll does exist and is needed to get more than a single set-cookie value
-        const responseCookies = setCookie.parse((pageByUrlResponse.headers as any).getAll("set-cookie"));
         const xFrameOptions = pageByUrlResponse.headers.get("X-Frame-Options");
         if (xFrameOptions) {
             response.header("X-Frame-Options", xFrameOptions);
         }
+
+        // see https://github.com/node-fetch/node-fetch/issues/251 for why we have to use .raw() instead of .get("set-cookie")?.split(",")
+        // set-cookie can include , in the expires
+        const responseCookies = setCookie.parse((pageByUrlResponse.headers as any).raw()["set-cookie"] ?? "");
         for (const cookie of responseCookies) {
             const options = {
                 path: cookie.path,

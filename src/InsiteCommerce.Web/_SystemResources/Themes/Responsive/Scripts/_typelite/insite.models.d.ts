@@ -604,6 +604,7 @@ declare module Insite.Websites.WebApi.V1.ApiModels {
 		useECheckTokenExGateway: boolean;
 		tokenExTestMode: boolean;
 		usePaymetricGateway: boolean;
+		useSquareGateway: boolean;
 		paymentGatewayRequiresAuthentication: boolean;
 		defaultPageSize: number;
 		enableCookiePrivacyPolicyPopup: boolean;
@@ -623,6 +624,8 @@ declare module Insite.Websites.WebApi.V1.ApiModels {
 		advancedSpireCmsFeatures: boolean;
 		previewLoginEnabled: boolean;
 		useAdyenDropIn: boolean;
+		squareLocationId: string;
+		squareApplicationId: string;
 	}
 	interface AddressFieldCollectionModel extends Insite.Core.WebApi.BaseModel {
 		billToAddressFields: Insite.Websites.WebApi.V1.ApiModels.AddressFieldDisplayCollectionModel;

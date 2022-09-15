@@ -100,6 +100,17 @@ const ShareEntityButton = ({
     generateAttachmentFromWebpage,
     extraProperties,
 }: Props) => {
+    const toasterContext = useContext(ToasterContext);
+    const [styles] = useState(() => mergeToNew(shareEntityButtonStyles, extendedStyles));
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [emailTo, setEmailTo] = useState("");
+    const [emailToError, setEmailToError] = useState("");
+    const [emailFrom, setEmailFrom] = useState("");
+    const [emailFromError, setEmailFromError] = useState("");
+    const [subject, setSubject] = useState("");
+    const [message, setMessage] = useState("");
+    const [isSending, setIsSending] = useState(false);
+
     if (!entityId) {
         return null;
     }
@@ -111,17 +122,6 @@ const ShareEntityButton = ({
     } else if (entityName === "Invoice") {
         url = invoiceUrl;
     }
-
-    const toasterContext = useContext(ToasterContext);
-    const [styles] = useState(() => mergeToNew(shareEntityButtonStyles, extendedStyles));
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [emailTo, setEmailTo] = useState("");
-    const [emailToError, setEmailToError] = useState("");
-    const [emailFrom, setEmailFrom] = useState("");
-    const [emailFromError, setEmailFromError] = useState("");
-    const [subject, setSubject] = useState("");
-    const [message, setMessage] = useState("");
-    const [isSending, setIsSending] = useState(false);
 
     const requiredFieldMessage = translate("This is a required field");
     const emailFieldMessage = translate("Enter a valid email address");

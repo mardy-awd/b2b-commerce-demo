@@ -2,6 +2,7 @@
 import { GetOrdersApiParameter } from "@insite/client-framework/Services/OrderService";
 import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import updateSearchFields from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/UpdateSearchFields";
+import updateTemporarySearchFields from "@insite/client-framework/Store/Pages/OrderHistory/Handlers/UpdateTemporarySearchFields";
 import SearchFieldWrapper, {
     SearchFieldWrapperStyles,
 } from "@insite/content-library/Widgets/OrderHistory/SearchFieldWrapper";
@@ -23,14 +24,20 @@ interface OwnProps {
     testSelector?: string;
 }
 
-const mapStateToProps = (state: ApplicationState) => {
+const mapStateToProps = (state: ApplicationState, props: OwnProps) => {
+    const useIncompleteParameter = props.parameterField === "orderTotal";
+
     return {
-        parameter: state.pages.orderHistory.getOrdersParameter,
+        parameter: useIncompleteParameter
+            ? state.pages.orderHistory.incompleteGetOrdersParameter
+            : state.pages.orderHistory.getOrdersParameter,
+        useIncompleteParameter,
     };
 };
 
 const mapDispatchToProps = {
     updateSearchFields,
+    updateTemporarySearchFields,
 };
 
 type Props = OwnProps & ReturnType<typeof mapStateToProps> & ResolveThunks<typeof mapDispatchToProps>;
@@ -51,7 +58,7 @@ class SearchTextField extends React.Component<Props, State> {
     updateTimeoutId: number | undefined;
 
     getValue = (props: Props): string => {
-        let value = props.parameter[props.parameterField] as string;
+        let value = props.parameter ? (props.parameter[props.parameterField] as string) : "";
         if (!value) {
             value = "";
         }
@@ -79,7 +86,9 @@ class SearchTextField extends React.Component<Props, State> {
         }
 
         this.updateTimeoutId = setTimeout(() => {
-            this.props.updateSearchFields({ [this.props.parameterField]: this.state.value });
+            this.props.useIncompleteParameter
+                ? this.props.updateTemporarySearchFields({ [this.props.parameterField]: this.state.value })
+                : this.props.updateSearchFields({ [this.props.parameterField]: this.state.value });
         }, 250);
     };
 

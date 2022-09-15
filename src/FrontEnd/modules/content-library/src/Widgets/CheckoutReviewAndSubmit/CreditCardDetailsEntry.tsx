@@ -19,7 +19,7 @@ interface OwnProps {
     canSaveCard?: boolean;
     /** @deprecated Specify the "TokenEx" value for the `iframe` property instead. */
     useTokenExGateway?: boolean;
-    iframe?: "TokenEx" | "Paymetric";
+    iframe?: "TokenEx" | "Paymetric" | "Square";
     paymetricFrameRef?: React.Ref<HTMLIFrameElement>;
     isTokenExIframeLoaded?: boolean;
     saveCard: boolean;
@@ -86,6 +86,8 @@ export interface CreditCardDetailsEntryStyles {
     securityCodeHelpImage?: LazyImageProps;
     paymetricGridItem?: GridItemProps;
     paymetricIframe?: InjectableCss;
+    squareGridItem?: GridItemProps;
+    squareContainer?: InjectableCss;
 }
 
 export const creditCardDetailsEntryStyles: CreditCardDetailsEntryStyles = {
@@ -131,6 +133,14 @@ export const creditCardDetailsEntryStyles: CreditCardDetailsEntryStyles = {
             width: 100%;
         `,
     },
+    squareGridItem: {
+        width: 12,
+    },
+    squareContainer: {
+        css: css`
+            width: 100%;
+        `,
+    },
 };
 
 const CardNumberTokenExFrameWrapper = styled.div<InjectableCss>`
@@ -144,6 +154,10 @@ const SecurityCodeImageWrapper = styled.div<InjectableCss>`
 `;
 
 const PaymetricIframe = styled.iframe<InjectableCss>`
+    ${({ css }) => css}
+`;
+
+const SquareContainer = styled.div<InjectableCss>`
     ${({ css }) => css}
 `;
 
@@ -218,6 +232,10 @@ const CreditCardDetailsEntry = ({
             {iframe === "Paymetric" ? (
                 <GridItem {...styles.paymetricGridItem}>
                     <PaymetricIframe id="paymetricIframe" ref={paymetricFrameRef} {...styles.paymetricIframe} />
+                </GridItem>
+            ) : iframe === "Square" ? (
+                <GridItem {...styles.squareGridItem}>
+                    <SquareContainer id="square-container" {...styles.squareContainer} />
                 </GridItem>
             ) : (
                 <>

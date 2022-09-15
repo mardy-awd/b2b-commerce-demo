@@ -7,6 +7,7 @@ import { Draft } from "immer";
 const initialState: InvoiceHistoryState = {
     getInvoicesParameter: {
         customerSequence: "-1",
+        sort: "invoiceDate DESC",
     },
     filtersOpen: false,
 };

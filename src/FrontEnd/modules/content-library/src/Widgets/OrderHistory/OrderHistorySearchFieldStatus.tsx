@@ -57,7 +57,9 @@ class OrderHistorySearchFieldStatus extends React.Component<Props> {
         }
 
         const value =
-            this.props.parameter.status && this.props.parameter.status.length > 0 ? this.props.parameter.status[0] : "";
+            this.props.parameter.status && this.props.parameter.status.length > 0
+                ? this.props.parameter.status.join(",")
+                : "";
 
         return (
             <SearchFieldWrapper extendedStyles={styles.wrapper}>

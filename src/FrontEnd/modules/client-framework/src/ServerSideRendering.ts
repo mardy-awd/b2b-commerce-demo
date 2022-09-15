@@ -2,8 +2,7 @@ import { getValueCaseInsensitive, SafeDictionary } from "@insite/client-framewor
 import { PreparedMetadata } from "@insite/client-framework/Common/Utilities/setPageMetadata";
 import logger from "@insite/client-framework/Logger";
 import { RetrievePageResult } from "@insite/client-framework/Services/ContentService";
-import "isomorphic-fetch";
-// 'isomorphic-fetch' makes node and client-side have a similar 'fetch', but causes an 'iconv-loader' warning...
+import "cross-fetch/polyfill";
 
 /**
  * A reference to the `domain` module of Node.

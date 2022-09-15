@@ -110,12 +110,25 @@ const addBlueprintWidgetImports = blueprint => {
     const shortWidgetsFolderPath = widgetsFolder.replace(`${appRoot}/modules/${blueprint}/src/`, `@${blueprintName}/`);
     const directories = fs.readdirSync(widgetsFolder, { withFileTypes: true });
     for (let i = 0; i < directories.length; i++) {
-        if (!directories[i].isDirectory()) {
+        const dir = directories[i].name;
+        if (skippedWidgetDirectories.includes(dir)) {
             continue;
         }
 
-        const dir = directories[i].name;
-        if (skippedWidgetDirectories.includes(dir)) {
+        if (!directories[i].isDirectory()) {
+            if (directories[i].isFile() && directories[i].name.endsWith(".tsx")) {
+                // this is a valid widget that we need to process
+                const file = directories[i].name.replace(".tsx", "");
+                const chunkName = blueprintName + consolidateChunks(file);
+                const extensionImportString = getExtensionImport(file, shortWidgetsFolderPath, chunkName);
+                const importString = `	"${file}": () => {${extensionImportString}
+                    return import(
+                        /* webpackChunkName: "${chunkName}Chunk" */ "${shortWidgetsFolderPath}/${file}"
+                    );
+                },\n`;
+                addFileContents(importString);
+            }
+
             continue;
         }
 
@@ -125,7 +138,7 @@ const addBlueprintWidgetImports = blueprint => {
                 continue;
             }
             const file = files[j].replace(".tsx", "");
-            const chunkName = consolidateChunks(dir.toLowerCase());
+            const chunkName = blueprintName + consolidateChunks(dir.toLowerCase());
             const extensionImportString = getExtensionImport(file, dir, chunkName);
             const importString = `	"${dir}/${file}": () => {${extensionImportString}
         return import(

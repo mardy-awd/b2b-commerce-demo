@@ -200,6 +200,10 @@ const MyListsDetailsProductList: React.FC<Props> = ({
     deleteWishListLine,
     setQuantityAdjustmentModalIsOpen,
 }) => {
+    const [wishListLineToAction, setWishListLineToAction] = React.useState<WishListLineModel | null>(null);
+    const [deleteLineModalIsOpen, setDeleteLineModalIsOpen] = React.useState(false);
+    const [editNotesModalIsOpen, setEditNotesModalIsOpen] = React.useState(false);
+
     if (
         !wishListDataView.value ||
         !wishListLinesDataView.value ||
@@ -216,8 +220,6 @@ const MyListsDetailsProductList: React.FC<Props> = ({
     const wishList = wishListDataView.value;
     const wishListLines = wishListLinesDataView.value;
 
-    const [wishListLineToAction, setWishListLineToAction] = React.useState<WishListLineModel | null>(null);
-    const [deleteLineModalIsOpen, setDeleteLineModalIsOpen] = React.useState(false);
     const deleteCancelHandler = () => {
         setDeleteLineModalIsOpen(false);
     };
@@ -246,7 +248,6 @@ const MyListsDetailsProductList: React.FC<Props> = ({
         setDeleteLineModalIsOpen(true);
     };
 
-    const [editNotesModalIsOpen, setEditNotesModalIsOpen] = React.useState(false);
     const editNotesModalCancelHandler = () => {
         setEditNotesModalIsOpen(false);
     };
@@ -342,7 +343,8 @@ const MyListsDetailsProductList: React.FC<Props> = ({
                 wishList={wishList}
                 wishListLines={wishListLines}
                 productInfosByWishListLineId={productInfosByWishListLineId}
-                editingSortOrder={editingSortOrder}
+                editingSortOrder={editingSortOrder && !loadWishListLinesParameter.query}
+                canDrag={wishListLinesDataView.pagination.numberOfPages === 1}
                 updateSortOrder={updateSortOrder}
                 onDeleteClick={deleteClickHandler}
                 onEditNotesClick={editNotesClickHandler}
@@ -390,24 +392,28 @@ const MyListsDetailsProductList: React.FC<Props> = ({
     );
 };
 
-const DragHandle = SortableHandle(() => <Icon {...styles.dragHandleIcon} />);
+const DragHandle = SortableHandle(() => (
+    <Icon {...styles.dragHandleIcon} data-test-selector="myListDetailPage_DragSortOrder" />
+));
 
 interface LineItemProps {
     wishList: WishListModel;
     wishListLine: WishListLineModel;
     productInfo: ProductInfo;
     editingSortOrder: boolean;
+    canDrag: boolean;
     updateSortOrder: (wishListLine: WishListLineModel, value: number | string) => void;
     onDeleteClick: (wishListLine: WishListLineModel) => void;
     onEditNotesClick: (wishListLine: WishListLineModel) => void;
 }
 
-const LineItem = SortableElement(
+const LineItem = SortableElement<LineItemProps>(
     ({
         wishList,
         wishListLine,
         productInfo,
         editingSortOrder,
+        canDrag,
         updateSortOrder,
         onDeleteClick,
         onEditNotesClick,
@@ -426,7 +432,7 @@ const LineItem = SortableElement(
             <GridItem {...styles.lineGridItem} data-test-selector="myListDetails_line">
                 {editingSortOrder && (
                     <StyledWrapper {...styles.sortOrderWrapper}>
-                        <DragHandle />
+                        {canDrag && <DragHandle />}
                         <TextField
                             {...styles.sortOrderTextField}
                             label={translate("Sort Order")}
@@ -456,17 +462,19 @@ interface LinesContainerProps {
     wishListLines: WishListLineModel[];
     productInfosByWishListLineId: SafeDictionary<ProductInfo>;
     editingSortOrder: boolean;
+    canDrag: boolean;
     updateSortOrder: (wishListLine: WishListLineModel, value: number | string) => void;
     onDeleteClick: (wishListLine: WishListLineModel) => void;
     onEditNotesClick: (wishListLine: WishListLineModel) => void;
 }
 
-const LinesContainer = SortableContainer(
+const LinesContainer = SortableContainer<LinesContainerProps>(
     ({
         wishList,
         wishListLines,
         productInfosByWishListLineId,
         editingSortOrder,
+        canDrag,
         updateSortOrder,
         onDeleteClick,
         onEditNotesClick,
@@ -482,6 +490,7 @@ const LinesContainer = SortableContainer(
                         wishListLine={wishListLine}
                         productInfo={productInfosByWishListLineId[wishListLine.id]!}
                         editingSortOrder={editingSortOrder}
+                        canDrag={canDrag}
                         updateSortOrder={updateSortOrder}
                         onDeleteClick={onDeleteClick}
                         onEditNotesClick={onEditNotesClick}

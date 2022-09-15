@@ -23,7 +23,7 @@ type Props = ThemeProps<BaseTheme> & OwnProps;
 
 class MainNavigationItem extends React.Component<Props> {
     element = React.createRef<HTMLElement>();
-    popover = React.createRef<HTMLUListElement>();
+    popover = React.createRef<any>();
 
     componentDidUpdate(prevProps: Readonly<Props>) {
         if (this.props.isOpen && !prevProps.isOpen) {

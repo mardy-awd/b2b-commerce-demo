@@ -31,6 +31,7 @@ export const LoadProducts: HandlerType = props => {
         loadProductInfoList({
             id: props.parameter.id,
             getProductCollectionParameter: props.apiParameter,
+            forceLoad: true,
         }),
     );
 };

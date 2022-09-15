@@ -117,7 +117,9 @@ const ProductPartNumbers: FC<Props> = ({
                             <Typography {...styles.customerNameLabelText}>{translate("My Part #")}</Typography>
                         </VisuallyHidden>
                     )}
-                    <Typography {...styles.customerNameValueText}>{customerProductNumber}</Typography>
+                    <Typography {...styles.customerNameValueText} data-test-selector="customerProductNumber">
+                        {customerProductNumber}
+                    </Typography>
                 </GridItem>
             )}
             {displayManufacturerNumber && (
@@ -128,7 +130,9 @@ const ProductPartNumbers: FC<Props> = ({
                             <Typography {...styles.manufacturerItemLabelText}>{translate("MFG #")} </Typography>
                         </VisuallyHidden>
                     )}
-                    <Typography {...styles.manufacturerItemValueText}>{manufacturerItem}</Typography>
+                    <Typography {...styles.manufacturerItemValueText} data-test-selector="manufacturerItem">
+                        {manufacturerItem}
+                    </Typography>
                 </GridItem>
             )}
         </GridContainer>

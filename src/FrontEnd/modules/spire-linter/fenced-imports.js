@@ -5,14 +5,16 @@ const path = require("path");
 const validClientImports = [
     "@adyen/adyen-web",
     "color",
+    "cross-fetch",
     "css",
     "csstype",
     "embla-carousel",
     "exenv",
     "html-react-parser",
     "immer",
-    "isomorphic-fetch",
+    "ismobilejs",
     "js-cookie",
+    "jsdom",
     "lodash",
     "@matt-block/react-recaptcha-v2",
     "react",
@@ -26,8 +28,6 @@ const validClientImports = [
     "tiny-warning",
     "qs",
     "xlsx",
-    "ismobilejs",
-    "jsdom",
 ];
 const validMobiusImports = [...validClientImports, "enzyme", "jest-styled-components"];
 const validServerImports = [

@@ -119,11 +119,11 @@ const WarehouseGoogleMap: React.FC<Props> = ({
     InfoWindow,
     Marker,
 }) => {
+    const [styles] = React.useState(() => mergeToNew(warehouseGoogleMapStyles, extendedStyles));
+
     if (!currentLocation) {
         return null;
     }
-
-    const [styles] = React.useState(() => mergeToNew(warehouseGoogleMapStyles, extendedStyles));
 
     const handleLoad = (map: google.maps.Map) => {
         setGoogleMap(map);
@@ -142,11 +142,11 @@ const WarehouseGoogleMap: React.FC<Props> = ({
         >
             {mapMarkerElements.map(marker => (
                 <Fragment key={marker.key}>
-                    {marker.type === "WAREHOUSE" && <Marker key={marker.key} {...marker} {...styles.warehouseMarker} />}
+                    {marker.type === "WAREHOUSE" && <Marker {...marker} key={marker.key} {...styles.warehouseMarker} />}
                     {marker.type === "CURRENT_LOCATION" && (
-                        <Marker key={marker.key} {...marker} {...styles.currentLocationMarker} />
+                        <Marker {...marker} key={marker.key} {...styles.currentLocationMarker} />
                     )}
-                    {marker.type === "SELECTED" && <Marker key={marker.key} {...marker} {...styles.selectedMarker} />}
+                    {marker.type === "SELECTED" && <Marker {...marker} key={marker.key} {...styles.selectedMarker} />}
                 </Fragment>
             ))}
             {warehouseInfoWindow && (

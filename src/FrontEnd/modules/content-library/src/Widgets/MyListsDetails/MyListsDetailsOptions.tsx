@@ -393,7 +393,11 @@ const MyListsDetailsOptions = ({
                             <ProductSelectorVariantModal skipInventoryValidation={true} />
                         </GridItem>
                         <GridItem {...styles.uploadItemsGridItem}>
-                            <Link {...styles.uploadItemsLink} onClick={uploadItemsClickHandler}>
+                            <Link
+                                {...styles.uploadItemsLink}
+                                onClick={uploadItemsClickHandler}
+                                data-test-selector="myListDetails_uploadItems"
+                            >
                                 {translate("Upload Items")}
                             </Link>
                             <Modal
@@ -401,6 +405,7 @@ const MyListsDetailsOptions = ({
                                 headline={translate("Upload Items To List")}
                                 isOpen={uploadItemsModalIsOpen}
                                 handleClose={uploadItemsModalCloseHandler}
+                                data-test-selector="myListDetails_uploadItemsToListModal"
                             >
                                 <GridContainer>
                                     <GridItem width={[12, 12, 6, 6, 6]}>
@@ -436,7 +441,7 @@ const MyListsDetailsOptions = ({
                     </GridContainer>
                 )}
             </StyledWrapper>
-            <StyledWrapper {...styles.rightColumnWrapper}>
+            <StyledWrapper {...styles.rightColumnWrapper} data-test-selector="myListDetailPage_ProductsSortBy">
                 {!addItemsToListIsOpen && (
                     <OverflowMenu position="end" {...styles.sortByOverflowMenu}>
                         {wishListLinesDataView.value &&

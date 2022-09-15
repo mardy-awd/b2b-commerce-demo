@@ -5,7 +5,12 @@ import clearAllProductFilters from "@insite/client-framework/Store/Pages/Product
 import removeProductFilters from "@insite/client-framework/Store/Pages/ProductList/Handlers/RemoveProductFilters";
 import { getProductListDataView } from "@insite/client-framework/Store/Pages/ProductList/ProductListSelectors";
 import translate from "@insite/client-framework/Translate";
-import { AttributeTypeFacetModel } from "@insite/client-framework/Types/ApiModels";
+import {
+    AttributeTypeFacetModel,
+    CategoryFacetModel,
+    FacetModel,
+    PriceFacetModel,
+} from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import SkipNav, { SkipNavStyles } from "@insite/content-library/Components/SkipNav";
@@ -57,8 +62,8 @@ const mapStateToProps = (state: ApplicationState) => {
 
         return {
             loaded: true,
-            stockedItemsOnly: productFilters.stockedItemsOnly,
-            previouslyPurchasedProducts: productFilters.previouslyPurchasedProducts,
+            stockedItemsOnly: productFilters.stockedItemsOnly ?? false,
+            previouslyPurchasedProducts: productFilters.previouslyPurchasedProducts ?? false,
             brandFacets: unfilteredProductCollection?.brandFacets || filteredProductCollection?.brandFacets,
             productLineFacets:
                 unfilteredProductCollection?.productLineFacets || filteredProductCollection?.productLineFacets,
@@ -79,7 +84,23 @@ const mapStateToProps = (state: ApplicationState) => {
             currency,
         };
     }
-    return {};
+    return {
+        loaded: false,
+        stockedItemsOnly: false,
+        previouslyPurchasedProducts: false,
+        brandFacets: [] as FacetModel[],
+        productLineFacets: [] as FacetModel[],
+        categoryFacets: [] as CategoryFacetModel[],
+        priceFacets: [] as PriceFacetModel[],
+        attributeTypeFacets: [] as AttributeTypeFacetModel[],
+        searchWithinQueries: [] as string[],
+        selectedBrandIds: [] as string[],
+        selectedProductLineIds: [] as string[],
+        selectedPriceFilters: [] as string[],
+        selectedAttributeValuesIds: [] as string[],
+        selectedCategoryId: "",
+        currency: null,
+    };
 };
 
 const mapDispatchToProps = {

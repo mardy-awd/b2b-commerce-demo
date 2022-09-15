@@ -99,7 +99,7 @@ async function getAccessToken() {
     if (response.status !== 200) {
         throw new Error(
             JSON.stringify(
-                `Spire was not able to authenticate itself with InsiteCommerce. This is could indicate a problem with mismatched SpireClientSecrets. \n Response: ${JSON.stringify(
+                `Spire was not able to authenticate itself with B2B Commerce. This is could indicate a problem with mismatched SpireClientSecrets. \n Response: ${JSON.stringify(
                     response,
                 )}`,
             ),

@@ -44,6 +44,9 @@ module insite.cart {
         tokenExAccountNumberIframe: any;
         tokenExRoutingNumberIframe: any;
         usePaymetricGateway: boolean;
+        useSquareGateway: boolean;
+        squareLocationId: string;
+        squareApplicationId: string;
         paymetricIframe: any;
         paymetricDto: PaymetricDto;
         isRequiredCardNumber: boolean;
@@ -65,6 +68,7 @@ module insite.cart {
         bypassCvvForSavedCards: boolean;
         paymentGatewayRequiresAuthentication: boolean;
         threeDs: ThreeDsModel;
+        squareCard: any;
 
         static $inject = [
             "$http",
@@ -123,6 +127,9 @@ module insite.cart {
                 }
                 if (paymentMethod && paymentMethod.isCreditCard && this.usePaymetricGateway) {
                     this.setUpPaymetricGateway();
+                }
+                if (paymentMethod && paymentMethod.isCreditCard && this.useSquareGateway) {
+                    this.setUpSquareGateway();
                 }
             });
             this.$scope.$watch("vm.cart.paymentOptions.creditCard.expirationYear", (year: number) => {
@@ -221,6 +228,9 @@ module insite.cart {
             this.useTokenExGateway = settingsCollection.websiteSettings.useTokenExGateway;
             this.useECheckTokenExGateway = settingsCollection.websiteSettings.useECheckTokenExGateway;
             this.usePaymetricGateway = settingsCollection.websiteSettings.usePaymetricGateway;
+            this.useSquareGateway = settingsCollection.websiteSettings.useSquareGateway;
+            this.squareLocationId = settingsCollection.websiteSettings.squareLocationId;
+            this.squareApplicationId = settingsCollection.websiteSettings.squareApplicationId;
             this.enableWarehousePickup = settingsCollection.accountSettings.enableWarehousePickup;
             this.bypassCvvForSavedCards = settingsCollection.cartSettings.bypassCvvForSavedCards;
             this.paymentGatewayRequiresAuthentication = settingsCollection.websiteSettings.paymentGatewayRequiresAuthentication;
@@ -509,6 +519,13 @@ module insite.cart {
         protected tokenizeCardInfoIfNeeded(submitSuccessUri: string) {
             this.submitSuccessUri = submitSuccessUri;
 
+            if (this.useSquareGateway && this.cart.showCreditCard && !this.cart.paymentOptions.isPayPal && !this.cart.requiresApproval) {
+                if (this.cart.paymentMethod.isCreditCard) {
+                    this.submitSquare();
+                    return;
+                }
+            }
+
             if (this.useTokenExGateway && this.cart.showCreditCard && !this.cart.paymentOptions.isPayPal && this.cart.paymentMethod && !this.cart.paymentMethod.isECheck && !this.cart.requiresApproval) {
                 if (this.cart.paymentMethod.isCreditCard) {
                     if (typeof this.isInvalidCardNumber !== 'undefined') {
@@ -546,7 +563,7 @@ module insite.cart {
                     this.submitPaymetric();
                     return;
                 }
-            }
+            }            
 
             this.submitCart();
         }
@@ -1313,6 +1330,66 @@ module insite.cart {
         protected isOpenedFromCmsShell() {
             let url = window.location !== window.parent.location ? document.referrer : document.location.href;
             return url.toLowerCase().indexOf("/contentadmin") !== -1;
+        }
+
+        /**
+         * Setup Square Gateway
+         * */
+        setUpSquareGateway(): void {
+            if (!this.useSquareGateway || !this.cart.paymentMethod || !this.cart.paymentMethod.isCreditCard) {
+                return;
+            }
+
+            if (!this.$window.Square) {
+                throw new Error('Square.js failed to load properly');
+            }
+
+            $("#square-container").html("");
+
+            let payments = this.$window.Square.payments(this.squareApplicationId, this.squareLocationId);
+            payments.card().then(
+                (card: any) => { this.setUpSquareGatewayCompleted(card) },
+                (error: any) => { this.setUpSquareGatewayFailed(error); }
+            );
+        }
+
+        protected setUpSquareGatewayCompleted(card: any) {
+            this.squareCard = card;
+            card.attach("#square-container");
+        }
+
+        protected setUpSquareGatewayFailed(error: any): void {
+        }
+
+        protected submitSquare() {
+            if (!this.squareCard) {
+                return;
+            }
+
+            this.squareCard.tokenize().then(
+                (result: any) => { this.tokenizationCompleted(result); },
+                (error: any) => { this.tokenizationFailed(error); }
+            );
+        }
+
+        protected tokenizationCompleted(tokenResult: any) {
+            if (tokenResult.status === "OK") {
+                const token = tokenResult.token;
+                // Set result with CC details 
+                this.cart.paymentOptions.creditCard.cardType = tokenResult.details.card.brand;
+                this.cart.paymentOptions.creditCard.expirationMonth = tokenResult.details.card.expMonth;
+                this.cart.paymentOptions.creditCard.expirationYear = tokenResult.details.card.expYear;
+                this.cart.paymentOptions.creditCard.cardNumber = token;
+                this.submitCart();
+
+            } else {
+                this.spinnerService.hide();
+                this.scrollToTopOfForm();
+                this.submitting = false;
+            }
+        }
+
+        protected tokenizationFailed(error: any): void {
         }
     }
 

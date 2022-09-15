@@ -1,13 +1,13 @@
-import mergeToNew from "@insite/client-framework/Common/mergeToNew";
-import logger from "@insite/client-framework/Logger";
-import { TokenExConfig } from "@insite/client-framework/Services/SettingsService";
-import translate from "@insite/client-framework/Translate";
 import {
     IFrame,
     TokenEx as TokenExType,
     TokenExIframeConfig,
     TokenExIframeStyles,
-} from "@insite/content-library/Widgets/CheckoutReviewAndSubmit/CheckoutReviewAndSubmitPaymentDetails";
+} from "@insite/client-framework/Common/Hooks/useTokenExFrame";
+import mergeToNew from "@insite/client-framework/Common/mergeToNew";
+import logger from "@insite/client-framework/Logger";
+import { TokenExConfig } from "@insite/client-framework/Services/SettingsService";
+import translate from "@insite/client-framework/Translate";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
 import GridItem, { GridItemProps } from "@insite/mobius/GridItem";
 import TextField, { TextFieldPresentationProps } from "@insite/mobius/TextField";
@@ -79,6 +79,7 @@ const AccountNumberTokenExFrameWrapper = styled.div<InjectableCss>`
 const RoutingNumberTokenExFrameWrapper = styled.div<InjectableCss>`
     ${({ css }) => css}
 `;
+
 declare const TokenEx: TokenExType;
 let tokenExAccountNumberIframe: IFrame | undefined;
 let tokenExRoutingNumberIframe: IFrame | undefined;
@@ -100,7 +101,7 @@ const ECheckDetailsEntry = (
     }: OwnProps,
     ref: Ref<Validatable>,
 ) => {
-    const [styles] = React.useState(() => mergeToNew(eCheckDetailsEntryStyles, extendedStyles));
+    const [styles] = useState(() => mergeToNew(eCheckDetailsEntryStyles, extendedStyles));
 
     const [accountHolderName, setAccountHolderName] = useState("");
     const [accountNumber, setAccountNumber] = useState("");

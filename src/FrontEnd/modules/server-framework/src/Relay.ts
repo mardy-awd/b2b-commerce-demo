@@ -58,12 +58,17 @@ export async function relayRequest(request: Request, response: Response) {
     const url = `${ISC_API_URL}${request.originalUrl}`;
     logger.info(`Relaying ${request.method} ${request.originalUrl} to ${url}.`);
 
-    const result = await fetch(url, {
+    const init: RequestInit = {
         method: request.method,
-        body: request.body,
         headers,
         redirect: "manual", // needed to allow punchout sessionrequest in 302 to work correctly
-    });
+    };
+
+    if (request.method !== "GET" && request.method !== "HEAD") {
+        init.body = request.body;
+    }
+
+    const result = await fetch(url, init);
 
     const body = await (result as any).buffer(); // Buffer is part of node-fetch but not standard fetch.
 
@@ -95,11 +100,10 @@ export async function relayRequest(request: Request, response: Response) {
                 return;
         }
 
-        if (typeof headersCollection[key] === "undefined") {
-            headersCollection[key] = [];
-        }
-
-        headersCollection[key].push(value);
+        // see https://github.com/node-fetch/node-fetch/issues/251 for why we have to use .raw()
+        // the value above can't be split on , because set-cookie can include , in the expires
+        const actualValue = (result.headers as any).raw()[key];
+        headersCollection[key] = actualValue;
     });
 
     for (const key in headersCollection) {

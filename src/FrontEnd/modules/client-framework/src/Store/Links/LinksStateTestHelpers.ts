@@ -2,7 +2,7 @@ import { PageLinkModel } from "@insite/client-framework/Services/ContentService"
 import { WriteableState } from "@insite/client-framework/Store/ApplicationState";
 import RecursivePartial from "@insite/mobius/utilities/RecursivePartial";
 
-export const withPageLinks = (
+export const WithPageLinks = (
     useApplicationState: () => WriteableState,
     pageLinks: RecursivePartial<PageLinkModel>[],
 ) => {

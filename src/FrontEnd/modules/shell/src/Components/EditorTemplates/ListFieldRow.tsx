@@ -66,6 +66,7 @@ type Props = ItemProps & HasSideBarForm & ReturnType<typeof mapStateToProps> & {
 
 class ListFieldRow extends React.Component<Props, State> {
     static contextType = ListFieldDepthContext;
+    declare context: React.ContextType<typeof ListFieldDepthContext>;
 
     // this is required because firefox doesn't set clientY in the drag event that uses this below
     private clientY = 0;

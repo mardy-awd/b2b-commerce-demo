@@ -4,6 +4,7 @@ import { GetVmiLocationsApiParameter } from "@insite/client-framework/Services/V
 
 export default interface OrderHistoryState {
     getOrdersParameter: GetOrdersApiParameter;
+    incompleteGetOrdersParameter?: GetOrdersApiParameter;
     getVmiLocationsParameter: GetVmiLocationsApiParameter;
     isReordering: SafeDictionary<true>;
     filtersOpen: boolean;

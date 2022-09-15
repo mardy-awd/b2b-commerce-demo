@@ -17,7 +17,7 @@ type HandlerType = Handler<
         cartId?: string;
         webOrderNumber: string;
         returnUrl: string;
-        setAdyenFormValid: Dispatch<boolean>;
+        setAdyenFormValid?: Dispatch<boolean>;
         setAdyenErrorMessage: Dispatch<string>;
         resetAdyenSession: Dispatch<void>;
         placeAdyenOrder: (paymentResult: string) => void;
@@ -122,15 +122,8 @@ export const SetOnSubmit: HandlerType = props => {
     };
 };
 
-export const SetOnChange: HandlerType = props => {
-    props.adyenConfiguration.onChange = (data: any, component: any) => {
-        if (data.isValid) {
-            props.parameter.setAdyenFormValid(true);
-        } else {
-            props.parameter.setAdyenFormValid(false);
-        }
-    };
-};
+/** @deprecated Not needed anymore */
+export const SetOnChange: HandlerType = () => {};
 
 export const SetPaymentMethodsConfig: HandlerType = props => {
     // Any payment method specific configuration. Find the configuration specific to each payment method:  https://docs.adyen.com/payment-methods

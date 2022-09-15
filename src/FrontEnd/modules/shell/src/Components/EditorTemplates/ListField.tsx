@@ -29,6 +29,7 @@ class ListField extends React.Component<Props, State> {
     private placeholder: HTMLElement | undefined;
     private draggingIndex = -1;
     static contextType = ListFieldDraggingDepthContext;
+    declare context: React.ContextType<typeof ListFieldDraggingDepthContext>;
 
     constructor(props: Props) {
         super(props);

@@ -7,7 +7,7 @@ import { Draft } from "immer";
 const initialState: SavedOrderListState = {
     isFilterOpen: true,
     getCartsApiParameter: {
-        sort: "OrderDate DESC",
+        sort: "orderDate DESC",
         status: "Saved",
     },
 };

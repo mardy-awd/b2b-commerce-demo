@@ -107,7 +107,7 @@ type State = {
  */
 class OverflowMenu extends React.Component<Props, State> {
     element = React.createRef<HTMLElement>();
-    popover = React.createRef<HTMLUListElement>();
+    popover = React.createRef<any>();
 
     constructor(props: Props) {
         super(props);

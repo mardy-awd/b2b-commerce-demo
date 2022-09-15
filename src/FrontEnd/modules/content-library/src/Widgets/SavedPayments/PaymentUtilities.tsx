@@ -26,3 +26,16 @@ export const convertTokenExCardType = (cardType: string) => {
 
     return cardType.toUpperCase();
 };
+
+export const convertApiDataToTokenExCardType = (cardType: string) => {
+    const loweredCardType = cardType.toLowerCase();
+
+    if (loweredCardType === "mastercard") {
+        return "masterCard";
+    }
+    if (loweredCardType === "american express") {
+        return "americanExpress";
+    }
+
+    return loweredCardType;
+};

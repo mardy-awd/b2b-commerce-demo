@@ -28,6 +28,7 @@ import { css } from "styled-components";
 interface State {
     orderNumber: string;
     orderTotal: string;
+    orderTotalOperator: string;
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
@@ -163,12 +164,13 @@ class OrderApprovalListFilter extends React.Component<Props, State> {
         this.state = {
             orderNumber: this.getValue(props, "orderNumber"),
             orderTotal: this.getValue(props, "orderTotal"),
+            orderTotalOperator: this.getValue(props, "orderTotalOperator"),
         };
     }
 
     updateTimeoutId: number | undefined;
 
-    getValue = (props: Props, key: "orderNumber" | "orderTotal"): string => {
+    getValue = (props: Props, key: "orderNumber" | "orderTotal" | "orderTotalOperator"): string => {
         let value = props.getOrderApprovalsParameter[key] as string;
         if (!value) {
             value = "";
@@ -187,15 +189,26 @@ class OrderApprovalListFilter extends React.Component<Props, State> {
         const currentOrderNumber = this.getValue(this.props, "orderNumber");
         const previousOrderTotal = this.getValue(prevProps, "orderTotal");
         const currentOrderTotal = this.getValue(this.props, "orderTotal");
+        const previousOrderTotalOperator = this.getValue(prevProps, "orderTotalOperator");
+        const currentOrderTotalOperator = this.getValue(this.props, "orderTotalOperator");
 
-        if (
-            (previousOrderNumber !== currentOrderNumber && currentOrderNumber !== this.state.orderNumber) ||
-            (previousOrderTotal !== currentOrderTotal && currentOrderTotal !== this.state.orderTotal)
-        ) {
+        if (previousOrderNumber !== currentOrderNumber && currentOrderNumber !== this.state.orderNumber) {
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
                 orderNumber: currentOrderNumber,
+            });
+        }
+
+        if (
+            previousOrderTotal !== currentOrderTotal &&
+            currentOrderTotal !== this.state.orderTotal &&
+            previousOrderTotalOperator !== currentOrderTotalOperator &&
+            currentOrderTotalOperator !== this.state.orderTotalOperator
+        ) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({
                 orderTotal: currentOrderTotal,
+                orderTotalOperator: currentOrderTotalOperator,
             });
         }
     }
@@ -206,9 +219,11 @@ class OrderApprovalListFilter extends React.Component<Props, State> {
         }
 
         this.updateTimeoutId = setTimeout(() => {
+            const setOrderTotalFilter = this.state.orderTotal && this.state.orderTotalOperator;
             this.props.updateSearchFields({
                 orderNumber: this.state.orderNumber,
-                orderTotal: this.state.orderTotal,
+                orderTotal: setOrderTotalFilter ? this.state.orderTotal : "",
+                orderTotalOperator: setOrderTotalFilter ? this.state.orderTotalOperator : "",
             });
         }, 250);
     };
@@ -235,7 +250,8 @@ class OrderApprovalListFilter extends React.Component<Props, State> {
     };
 
     orderTotalOperatorChangeHandler = (operator: string) => {
-        this.props.updateSearchFields({ orderTotalOperator: operator });
+        this.setState({ orderTotalOperator: operator });
+        this.updateParameterAfterTimeout();
     };
 
     orderTotalChangeHandler = (orderTotal: string) => {
@@ -244,73 +260,77 @@ class OrderApprovalListFilter extends React.Component<Props, State> {
     };
 
     clearFiltersClickHandler = () => {
+        this.setState({ orderTotalOperator: "" });
+        this.setState({ orderTotal: "" });
         this.props.clearSearch();
     };
 
     render() {
+        const currentShipTos = this.props.currentShipTosDataView.value || [];
+        const { shipToId, orderNumber, fromDate, toDate, orderTotalOperator, orderTotal } =
+            this.props.getOrderApprovalsParameter;
+
         if (!this.props.filtersOpen) {
+            const selectedShipTo = currentShipTos.find(o => o.id === shipToId);
             return (
                 <StyledWrapper {...styles.appliedFiltersContainer}>
-                    {this.props.getOrderApprovalsParameter.shipToId && (
+                    {selectedShipTo && (
                         <Tag
                             {...styles.appliedFilterTag}
                             onDelete={() => {
                                 this.shipToChangeHandler("");
                             }}
                         >
-                            {`${translate("Ship to Address")}: ${this.props.getOrderApprovalsParameter.shipToId}`}
+                            {`${translate("Ship to Address")}: ${selectedShipTo.label}`}
                         </Tag>
                     )}
-                    {this.props.getOrderApprovalsParameter.orderNumber && (
+                    {orderNumber && (
                         <Tag
                             {...styles.appliedFilterTag}
                             onDelete={() => {
                                 this.orderNumberChangeHandler("");
                             }}
                         >
-                            {`${translate("Order #")}: ${this.props.getOrderApprovalsParameter.orderNumber}`}
+                            {`${translate("Order #")}: ${orderNumber}`}
                         </Tag>
                     )}
-                    {this.props.getOrderApprovalsParameter.fromDate && (
+                    {fromDate && (
                         <Tag
                             {...styles.appliedFilterTag}
                             onDelete={() => {
                                 this.fromDateChangeHandler({});
                             }}
                         >
-                            {`${translate("From")}: ${this.props.getOrderApprovalsParameter.fromDate}`}
+                            {`${translate("From")}: ${fromDate}`}
                         </Tag>
                     )}
-                    {this.props.getOrderApprovalsParameter.toDate && (
+                    {toDate && (
                         <Tag
                             {...styles.appliedFilterTag}
                             onDelete={() => {
                                 this.toDateChangeHandler({});
                             }}
                         >
-                            {`${translate("To")}: ${this.props.getOrderApprovalsParameter.toDate}`}
+                            {`${translate("To")}: ${toDate}`}
                         </Tag>
                     )}
-                    {this.props.getOrderApprovalsParameter.orderTotalOperator &&
-                        this.props.getOrderApprovalsParameter.orderTotal && (
-                            <Tag
-                                {...styles.appliedFilterTag}
-                                onDelete={() => {
-                                    this.toDateChangeHandler({});
-                                }}
-                            >
-                                {`${translate("Order Total")}: ${
-                                    this.props.getOrderApprovalsParameter.orderTotalOperator
-                                } ${this.props.getOrderApprovalsParameter.orderTotal}`}
-                            </Tag>
-                        )}
+                    {orderTotalOperator && orderTotal && (
+                        <Tag
+                            {...styles.appliedFilterTag}
+                            onDelete={() => {
+                                this.orderTotalOperatorChangeHandler("");
+                                this.orderTotalChangeHandler("");
+                            }}
+                        >
+                            {`${translate("Order Total")}: ${orderTotalOperator} ${orderTotal}`}
+                        </Tag>
+                    )}
                 </StyledWrapper>
             );
         }
 
-        const shipToOptions = this.props.currentShipTosDataView.value || [];
-        const fromDate = convertDateOnlyStringToDate(this.props.getOrderApprovalsParameter.fromDate);
-        const toDate = convertDateOnlyStringToDate(this.props.getOrderApprovalsParameter.toDate);
+        const fromDateObj = convertDateOnlyStringToDate(fromDate);
+        const toDateObj = convertDateOnlyStringToDate(toDate);
 
         return (
             <GridContainer {...styles.container}>
@@ -323,10 +343,10 @@ class OrderApprovalListFilter extends React.Component<Props, State> {
                     <Select
                         {...styles.shipToSelect}
                         label={translate("Ship to Address")}
-                        value={this.props.getOrderApprovalsParameter.shipToId || ""}
+                        value={shipToId || ""}
                         onChange={event => this.shipToChangeHandler(event.target.value)}
                     >
-                        {shipToOptions.map(shipTo => (
+                        {currentShipTos.map(shipTo => (
                             <option key={shipTo.id} value={shipTo.id}>
                                 {shipTo.label}
                             </option>
@@ -350,11 +370,11 @@ class OrderApprovalListFilter extends React.Component<Props, State> {
                                 <DatePicker
                                     {...styles.fromDate}
                                     label={translate("From")}
-                                    selectedDay={fromDate}
+                                    selectedDay={fromDateObj}
                                     onDayChange={this.fromDateChangeHandler}
                                     dateTimePickerProps={{
                                         clearIcon: null,
-                                        maxDate: toDate,
+                                        maxDate: toDateObj,
                                         ...styles.fromDate?.dateTimePickerProps,
                                     }}
                                 />
@@ -363,11 +383,11 @@ class OrderApprovalListFilter extends React.Component<Props, State> {
                                 <DatePicker
                                     {...styles.toDate}
                                     label={translate("To")}
-                                    selectedDay={toDate}
+                                    selectedDay={toDateObj}
                                     onDayChange={this.toDateChangeHandler}
                                     dateTimePickerProps={{
                                         clearIcon: null,
-                                        minDate: fromDate,
+                                        minDate: fromDateObj,
                                         ...styles.toDate?.dateTimePickerProps,
                                     }}
                                 />
@@ -383,7 +403,7 @@ class OrderApprovalListFilter extends React.Component<Props, State> {
                                 <Select
                                     {...styles.orderTotalOperatorSelect}
                                     label={translate("Order Total")}
-                                    value={this.props.getOrderApprovalsParameter.orderTotalOperator || ""}
+                                    value={this.state.orderTotalOperator || ""}
                                     data-test-selector="orderApproval_comparisonMethod"
                                     onChange={event => this.orderTotalOperatorChangeHandler(event.target.value)}
                                 >

@@ -59,6 +59,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     isClearingCart: state.pages.cart.isClearingCart,
     isUpdatingCartLine: state.pages.cart.isUpdatingCartLine,
     isLoading: state.data.carts.isLoading,
+    isRemovingCartLine: Object.getOwnPropertyNames(state.pages.cart.isRemovingCartLine).length > 0,
 });
 
 const mapDispatchToProps = {
@@ -202,6 +203,7 @@ const CartLines: FC<Props> = ({
     isLoading,
     updateCartLine,
     removeCartLine,
+    isRemovingCartLine,
 }) => {
     const [isCondensed, setIsCondensed] = useState(false);
 
@@ -276,7 +278,7 @@ const CartLines: FC<Props> = ({
         <StyledSection {...styles.wrapper}>
             <LoadingOverlay
                 {...styles.loadingOverlay}
-                loading={isLoadingCart || isUpdatingCartLine || !promotionsDataView.value}
+                loading={isLoadingCart || isUpdatingCartLine || !promotionsDataView.value || isRemovingCartLine}
             >
                 <CartLinesHeader
                     totalItemCount={cartLines.length}

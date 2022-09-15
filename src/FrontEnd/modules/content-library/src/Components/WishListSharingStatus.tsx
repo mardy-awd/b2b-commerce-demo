@@ -112,7 +112,7 @@ const WishListSharingStatus: FC<Props> = ({
                 </>
             )}
             {isSharedListInner && sharedByDisplayNameInner && (
-                <Typography {...styles.statusText}>
+                <Typography {...styles.statusText} data-test-selector="myLists_listSharedBy">
                     <Icon {...styles.sharedIcon} />
                     {translate("Shared by")} {sharedByDisplayNameInner}
                     {!wishList?.allowEdit && showNoPermissionsTooltip && (

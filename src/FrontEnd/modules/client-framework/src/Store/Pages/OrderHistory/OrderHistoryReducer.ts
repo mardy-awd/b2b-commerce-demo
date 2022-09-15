@@ -8,7 +8,9 @@ const initialState: OrderHistoryState = {
     isReordering: {},
     getOrdersParameter: {
         customerSequence: "-1",
+        sort: "orderDate DESC",
     },
+    incompleteGetOrdersParameter: {},
     getVmiLocationsParameter: {
         page: 1,
         pageSize: 9999,
@@ -30,11 +32,18 @@ const reducer = {
             draft.getOrdersParameter = action.parameter;
         } else if (type === "Initialize") {
             draft.getOrdersParameter = { ...initialState.getOrdersParameter, ...action.parameter };
+            draft.incompleteGetOrdersParameter = {};
         } else {
             draft.getOrdersParameter = { ...draft.getOrdersParameter, ...action.parameter };
 
+            const skipProperties: (keyof GetOrdersApiParameter)[] = ["orderTotalOperator", "orderTotal"];
+            const skipPropertiesSet = new Set(skipProperties.map(o => o.toString()));
             for (const key in draft.getOrdersParameter) {
                 const value = (<any>draft.getOrdersParameter)[key];
+
+                if (skipPropertiesSet.has(key)) {
+                    continue;
+                }
 
                 // remove empty parameters
                 if (value === "" || value === undefined) {
@@ -55,12 +64,29 @@ const reducer = {
             }
         }
     },
+    "Pages/OrderHistory/UpdateTemporarySearchFields": (
+        draft: Draft<OrderHistoryState>,
+        action: { parameter: GetOrdersApiParameter & UpdateSearchFieldsType },
+    ) => {
+        draft.incompleteGetOrdersParameter = { ...draft.incompleteGetOrdersParameter, ...action.parameter };
+        if (
+            draft.incompleteGetOrdersParameter.orderTotalOperator &&
+            (draft.incompleteGetOrdersParameter.orderTotal || draft.incompleteGetOrdersParameter.orderTotal === 0)
+        ) {
+            draft.getOrdersParameter.orderTotalOperator = draft.incompleteGetOrdersParameter.orderTotalOperator;
+            draft.getOrdersParameter.orderTotal = draft.incompleteGetOrdersParameter.orderTotal;
+        } else {
+            delete draft.getOrdersParameter.orderTotalOperator;
+            delete draft.getOrdersParameter.orderTotal;
+        }
+    },
     "Pages/OrderHistory/ClearParameter": (draft: Draft<OrderHistoryState>) => {
         draft.getOrdersParameter = {
             ...initialState.getOrdersParameter,
             pageSize: draft.getOrdersParameter.pageSize,
             vmiOrdersOnly: draft.getOrdersParameter.vmiOrdersOnly,
         };
+        draft.incompleteGetOrdersParameter = {};
     },
     "Pages/OrderHistory/BeginReorder": (draft: Draft<OrderHistoryState>, action: { orderNumber: string }) => {
         draft.isReordering[action.orderNumber] = true;

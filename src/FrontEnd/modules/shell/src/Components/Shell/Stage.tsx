@@ -3,7 +3,6 @@ import getProp from "@insite/mobius/utilities/getProp";
 import DeviceMobile from "@insite/shell/Components/Icons/DeviceMobile";
 import DeviceTablet from "@insite/shell/Components/Icons/DeviceTablet";
 import * as React from "react";
-import { connect } from "react-redux";
 import styled, { css } from "styled-components";
 
 type Props = { className?: string; stageMode: DeviceType };

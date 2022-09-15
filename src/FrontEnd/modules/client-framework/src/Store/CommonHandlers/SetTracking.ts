@@ -34,6 +34,15 @@ export const SetHeadTrackingScript: HandlerType = ({ session, settings }) => {
     if (headTrackingScript) {
         let script = document.getElementById("headTrackingScript");
         if (!script) {
+            const { googleTrackingTypeComputed, googleTrackingAccountId } = settings.settingsCollection.websiteSettings;
+
+            if (googleTrackingTypeComputed === "GoogleAnalytics4") {
+                const GA4Script = document.createElement("script");
+                GA4Script.setAttribute("id", "GA4Tracking");
+                GA4Script.setAttribute("src", `https://www.googletagmanager.com/gtag/js?id=${googleTrackingAccountId}`);
+                document.head.appendChild(GA4Script);
+            }
+
             script = document.createElement("script");
             script.setAttribute("id", "headTrackingScript");
             script.innerHTML = headTrackingScript;

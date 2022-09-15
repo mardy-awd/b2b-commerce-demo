@@ -15,7 +15,7 @@ import ShellState from "@insite/shell/Store/ShellState";
 import { ConnectedRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import * as React from "react";
-import { hydrate, render, Renderer } from "react-dom";
+import { createRoot, hydrateRoot, Root } from "react-dom/client";
 import { Provider } from "react-redux";
 import { css } from "styled-components";
 
@@ -35,16 +35,16 @@ const history = createBrowserHistory({ basename: baseUrl });
 // Get the application-wide store instance, prepopulating with state from the server where available.
 const initialState = (window as any).initialReduxState as ShellState;
 const store = configureStore(history, initialState);
+const container = document.getElementById("react-app") as Element;
 
 const loadingCss = css`
     display: block;
     height: 100vh;
 `;
 
-function renderApp(renderer: Renderer = render) {
+function renderApp(root: Root = createRoot(container)) {
     // This code starts up the React app when it runs in a browser. It sets up the routing configuration
     // and injects the app into a DOM element.
-
     const token = parseAdminTokenFromLocalStorage();
     let shell: JSX.Element;
     if (!token) {
@@ -64,16 +64,15 @@ function renderApp(renderer: Renderer = render) {
 
     setReduxDispatcher(store.dispatch);
 
-    renderer(
+    root.render(
         <ThemeProvider theme={theme} createGlobalStyle={true} createChildGlobals={false} translate={translate}>
             <BrandStyles />
             {shell}
         </ThemeProvider>,
-        document.getElementById("react-app"),
     );
 }
 
-renderApp(initialState ? hydrate : render);
+renderApp(initialState ? hydrateRoot(container, <></>) : createRoot(container));
 
 if (module.hot) {
     module.hot.accept(pages.id, () =>

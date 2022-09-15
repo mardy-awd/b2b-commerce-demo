@@ -19,7 +19,7 @@ import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import ThemeProvider from "@insite/mobius/ThemeProvider";
 import merge from "lodash/merge";
 import * as React from "react";
-import { hydrate, render, Renderer } from "react-dom";
+import { createRoot, hydrateRoot, Root } from "react-dom/client";
 import { Provider } from "react-redux";
 
 /**
@@ -49,9 +49,10 @@ setTranslationResolver(keyword => getValueCaseInsensitive(theWindow.translationD
 // Get the application-wide store instance, prepopulating with state from the server where available.
 const initialState = theWindow.initialReduxState;
 const store = configureStore(initialState);
+const container = document.getElementById("react-app") as Element;
 
-async function renderApp(renderer: Renderer = render) {
-    let WrappingContext: React.FC = ({ children }) => <>{children}</>;
+async function renderApp(root: Root = createRoot(container)) {
+    let WrappingContext: React.FC<{}> = ({ children }) => <>{children}</>;
     let isInShell = false;
     try {
         isInShell =
@@ -91,7 +92,7 @@ async function renderApp(renderer: Renderer = render) {
         } else {
             window.location.href = `/ContentAdmin/Page/SwitchTo${window.location.pathname}${window.location.search}`;
         }
-        renderer(<></>, document.getElementById("react-app"));
+        root.render(<></>);
     } else {
         setIsWebCrawler(checkIsWebCrawler(navigator.userAgent));
     }
@@ -100,7 +101,7 @@ async function renderApp(renderer: Renderer = render) {
     // This code starts up the React app when it runs in a browser. It sets up the routing configuration
     // and injects the app into a DOM element.
     // Changes here must be mirrored to the storefront section in Server.tsx so the render output matches.
-    renderer(
+    root.render(
         <Provider store={store}>
             <WrappingContext>
                 <ThemeProvider theme={theme} createGlobalStyle={true} createChildGlobals={false} translate={translate}>
@@ -114,11 +115,10 @@ async function renderApp(renderer: Renderer = render) {
                 </ThemeProvider>
             </WrappingContext>
         </Provider>,
-        document.getElementById("react-app"),
     );
 }
 
-renderApp(initialState ? hydrate : render);
+renderApp(initialState ? hydrateRoot(container, <></>) : createRoot(container));
 
 /**
  * The theme object must be put together on the frontend because running JSON.stringify() serverside was ignoring components passed to iconSrcByMessage,

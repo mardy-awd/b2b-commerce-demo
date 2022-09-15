@@ -180,7 +180,7 @@ class SearchInput extends React.Component<Props, State> {
     }
 
     list = React.createRef<HTMLUListElement>();
-    popover = React.createRef<HTMLUListElement>();
+    popover = React.createRef<any>();
     showAutocomplete = true;
 
     componentDidUpdate(prevProps: Props, prevState: State) {

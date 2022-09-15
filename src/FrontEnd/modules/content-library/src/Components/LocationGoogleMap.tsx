@@ -140,7 +140,7 @@ const LocationGoogleMap: React.FC<Props> = ({
     return (
         <GoogleMap {...styles.googleMap} center={currentLocation} onLoad={handleLoad} onUnmount={handleUnmount}>
             {mapMarkerElements.map(marker => (
-                <Marker key={marker.key} {...marker} {...getMarkerStyles(marker.type)} />
+                <Marker {...marker} key={marker.key} {...getMarkerStyles(marker.type)} />
             ))}
             {locationInfoWindow && (
                 <InfoWindow {...styles.locationInfoWindow} key={newGuid()} position={locationInfoWindow?.position}>

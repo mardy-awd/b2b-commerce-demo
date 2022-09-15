@@ -87,6 +87,8 @@ const OrderHistoryPage = ({
         // if this is undefined it means someone changed the filters and we haven't loaded the new collection yet
         if (!ordersDataView.value && !ordersDataView.isLoading) {
             loadOrders(getOrdersParameter);
+        } else if (!ordersDataView.isLoading && ordersDataView.value?.length === 0 && getOrdersParameter.page) {
+            updateSearchFields({ page: getOrdersParameter.page - 1 });
         }
     });
 

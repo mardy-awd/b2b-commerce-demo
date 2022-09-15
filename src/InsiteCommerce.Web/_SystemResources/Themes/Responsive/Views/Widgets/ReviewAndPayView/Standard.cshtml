@@ -149,7 +149,7 @@
                                    ng-model="vm.cart.poNumber">
                             <span class="field-validation-valid" data-valmsg-for="poNumber" data-valmsg-replace="true"></span>
                         </div>
-                        <div ng-show="vm.cart.showCreditCard && vm.cart.paymentMethod.isPaymentProfile && !vm.cart.paymentMethod.isPaymentProfileExpired && !vm.bypassCvvForSavedCards">
+                        <div ng-show="vm.cart.showCreditCard && vm.cart.paymentMethod.isPaymentProfile && !vm.cart.paymentMethod.isPaymentProfileExpired && !vm.bypassCvvForSavedCards && !vm.usePaymetricGateway">
                             <div class="security-code">
                                 <label>[% translate 'Security Code' %]&nbsp;<a href="javascript:void(0);" data-reveal-id="ppWhatsThisPopup">[% translate "What's This?" %]</a></label>
                                 <span ng-if="vm.useTokenExGateway">
@@ -176,7 +176,10 @@
                         <div ng-show="vm.cart.showCreditCard && vm.cart.paymentMethod.isCreditCard && vm.usePaymetricGateway">
                             <iframe id="paymetricIframe" class="paymetric-iframe-block" style="width:100%;"></iframe>
                         </div>
-                        <div ng-show="vm.cart.showCreditCard && vm.cart.paymentMethod.isCreditCard && !vm.usePaymetricGateway">
+                        <div ng-show="vm.cart.showCreditCard && vm.cart.paymentMethod.isCreditCard && vm.useSquareGateway">
+                            <div id="square-container" style="width:100%;"></div>
+                        </div>
+                        <div ng-show="vm.cart.showCreditCard && vm.cart.paymentMethod.isCreditCard && !vm.usePaymetricGateway && !vm.useSquareGateway">
                             <div class="card-type">
                                 <label for="cardType">[% translate 'Card Type' %]</label>
                                 <select id="cardType" name="cardType"

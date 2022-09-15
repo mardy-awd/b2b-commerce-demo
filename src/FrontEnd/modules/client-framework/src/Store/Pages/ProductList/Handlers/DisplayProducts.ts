@@ -186,7 +186,7 @@ export const PopulateApiParameter: HandlerType = props => {
 
 export const HandleSortOrderDefault: HandlerType = props => {
     if (!props.apiParameter.sort) {
-        props.apiParameter.sort = getCookie(productListSortTypeCookie) ?? "1";
+        props.apiParameter.sort = getCookie(productListSortTypeCookie);
     } else {
         setCookie(productListSortTypeCookie, props.apiParameter.sort);
     }
@@ -231,8 +231,8 @@ export const ResetSortTypeIfNeeded: HandlerType = props => {
         return;
     }
 
-    if (props.apiParameter.sort !== productsDataView.pagination.sortType) {
-        setCookie(productListSortTypeCookie, "1");
+    if (props.apiParameter.sort && props.apiParameter.sort !== productsDataView.pagination.sortType) {
+        setCookie(productListSortTypeCookie, productsDataView.pagination.sortType);
         const parsedQuery = parseQueryString<any>(props.parameter.queryString);
         delete parsedQuery.sort;
         const parateter = { ...props.parameter, queryString: qs.stringify(parsedQuery) };

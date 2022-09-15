@@ -112,7 +112,7 @@
 - Meaningful re-write of theme shadows and colors to provide a more semantic-based theming API. When used consistently, colors now allow for robust theming, as demonstrated in the [Second ThemeProvider Demo](https://insitesoftware.github.io/insite-commerce/#!/ThemeProvider/3).
 - Upgraded Styleguidist to version 9.
 - Meaningful changes to the `Pagination` component, including:
-    - 1-based numbering rather than 0-based, to allow for consistency with InsiteCommerce APIs.
+    - 1-based numbering rather than 0-based, to allow for consistency with B2B Commerce APIs.
     - Styling changes for consistency and improved customizability.
 - `Pagination`, `DatePicker`, `TextField`, `Select` and `TokenExFrame` accept `iconProps` instead of `iconSrc`.
 - `ThemeProvider` component no longer defaults to providing global default styles, but accepts two props, `createGlobalStyle` and `createChildGlobals` to govern creation of global styles and child styles for typography and css resets. This allows for multiple themes to coexist while providing a mechanism to explicitly apply styles to the `body`.

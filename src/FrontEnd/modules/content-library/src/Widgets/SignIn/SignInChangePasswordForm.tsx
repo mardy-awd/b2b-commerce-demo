@@ -157,6 +157,8 @@ const SignInChangePasswordForm = ({
 
     const savePasswordClickHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        event.stopPropagation();
+
         if (error || newPasswordErrorMessage) {
             setShowValidation(true);
             return;

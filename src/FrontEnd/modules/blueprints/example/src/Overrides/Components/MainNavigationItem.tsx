@@ -19,7 +19,7 @@ interface MainNavigationItemProps {
 
 class MainNavigationItem extends React.Component<ThemeProps<BaseTheme> & MainNavigationItemProps> {
     element = React.createRef<HTMLElement>();
-    popover = React.createRef<HTMLUListElement>();
+    popover = React.createRef<any>();
 
     closePopover = () => {
         this.popover.current && (this.popover.current! as any).closePopover();

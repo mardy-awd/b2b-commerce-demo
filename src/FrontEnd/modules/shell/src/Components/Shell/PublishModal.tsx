@@ -58,6 +58,10 @@ const styles: PublishModalStyles = {
                 span {
                     background-color: transparent;
                 }
+
+                .react-datetime-picker__calendar {
+                    top: -286px !important;
+                }
             `,
         },
         calendarIconProps: {
@@ -589,8 +593,8 @@ const PublishableContextTable = styled.table`
 `;
 
 const PublishableContextTableWrapper = styled.div`
-    margin-bottom: 30px;
-    max-height: 450px;
+    margin-bottom: 15px;
+    max-height: calc(40vh);
     overflow-y: auto;
 `;
 

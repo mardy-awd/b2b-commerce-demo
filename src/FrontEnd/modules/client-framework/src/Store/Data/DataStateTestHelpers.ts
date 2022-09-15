@@ -2,7 +2,7 @@ import { WriteableState } from "@insite/client-framework/Store/ApplicationState"
 import DataState from "@insite/client-framework/Store/Data/DataState";
 import RecursivePartial from "@insite/mobius/utilities/RecursivePartial";
 
-export const withDataByIdState = <T>(
+export const WithDataByIdState = <T>(
     useState: () => WriteableState,
     key: keyof Omit<DataState, "accountShipTos" | "addressFields" | "budgets" | "budgetCalendars">,
     id: string,

@@ -3,6 +3,7 @@ import ApplicationState from "@insite/client-framework/Store/ApplicationState";
 import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { getProductListDataView } from "@insite/client-framework/Store/Pages/ProductList/ProductListSelectors";
 import translate from "@insite/client-framework/Translate";
+import { SuggestionModel } from "@insite/client-framework/Types/ApiModels";
 import WidgetModule from "@insite/client-framework/Types/WidgetModule";
 import WidgetProps from "@insite/client-framework/Types/WidgetProps";
 import Link from "@insite/mobius/Link";
@@ -15,13 +16,20 @@ const mapStateToProps = (state: ApplicationState) => {
     const productsDataView = getProductListDataView(state);
     if (productsDataView.value) {
         return {
+            loaded: true,
             searchPath: getSettingsCollection(state).searchSettings.searchPath,
             didYouMeanSuggestions: productsDataView.didYouMeanSuggestions,
             correctedQuery: productsDataView.correctedQuery,
             originalQuery: productsDataView.originalQuery,
         };
     }
-    return {};
+    return {
+        loaded: false,
+        searchPath: "",
+        didYouMeanSuggestions: [] as SuggestionModel[],
+        correctedQuery: "",
+        originalQuery: "",
+    };
 };
 
 type Props = WidgetProps & ReturnType<typeof mapStateToProps>;
@@ -34,7 +42,10 @@ export const suggestionStyles: ProductListSuggestionStyles = {};
 
 const styles = suggestionStyles;
 
-const ProductListSuggestion = ({ searchPath, didYouMeanSuggestions, originalQuery, correctedQuery }: Props) => {
+const ProductListSuggestion = ({ loaded, searchPath, didYouMeanSuggestions, originalQuery, correctedQuery }: Props) => {
+    if (!loaded) {
+        return null;
+    }
     return (
         <StyledWrapper {...styles.wrapper}>
             {didYouMeanSuggestions && didYouMeanSuggestions.length > 0 && (

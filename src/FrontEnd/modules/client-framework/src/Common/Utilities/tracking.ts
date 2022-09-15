@@ -38,6 +38,16 @@ export function getHeadTrackingScript(settings?: SettingsModel, session?: Sessio
             `;
     }
 
+    if (googleTrackingTypeComputed === "GoogleAnalytics4") {
+        return `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '${googleTrackingAccountId}');
+        `;
+    }
+
     return null;
 }
 

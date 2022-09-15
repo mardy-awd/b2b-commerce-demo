@@ -255,6 +255,7 @@ const WishListCard = ({
                                                 {...styles.productImage}
                                                 src={line.smallImagePath}
                                                 altText={line.altText}
+                                                title={line.altText}
                                             />
                                         </Link>
                                     ))}

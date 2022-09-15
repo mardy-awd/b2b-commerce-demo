@@ -52,7 +52,7 @@ const consoleReceiver = (function createConsoleLogReceiver(): LogReceiver {
     }
 
     return {
-        debug: IS_PRODUCTION ? () => {} : createLoggerForLevel("debug"),
+        debug: createLoggerForLevel("debug"),
         error: createLoggerForLevel("error"),
         log: createLoggerForLevel("log"),
         info: createLoggerForLevel("info"),

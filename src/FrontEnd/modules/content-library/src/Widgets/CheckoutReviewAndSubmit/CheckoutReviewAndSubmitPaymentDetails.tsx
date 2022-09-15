@@ -1,4 +1,13 @@
-import { useTokenExFrame } from "@insite/client-framework/Common/Hooks/useTokenExFrame";
+import { usePaymetricFrame } from "@insite/client-framework/Common/Hooks/usePaymetricFrame";
+import { useSquareFrame } from "@insite/client-framework/Common/Hooks/useSquareFrame";
+import {
+    IFrame,
+    TokenEx as TokenExType,
+    TokenExCvvOnlyIframeConfig,
+    TokenExIframeStyles,
+    TokenExPCIIframeConfig,
+    useTokenExFrame,
+} from "@insite/client-framework/Common/Hooks/useTokenExFrame";
 import { newGuid } from "@insite/client-framework/Common/StringHelpers";
 import StyledWrapper, { getStyledWrapper } from "@insite/client-framework/Common/StyledWrapper";
 import parseQueryString from "@insite/client-framework/Common/Utilities/parseQueryString";
@@ -58,6 +67,11 @@ import PayPalButton, { PayPalButtonStyles } from "@insite/content-library/Widget
 import SavedPaymentProfileEntry, {
     SavedPaymentProfileEntryStyles,
 } from "@insite/content-library/Widgets/CheckoutReviewAndSubmit/SavedPaymentProfileEntry";
+import {
+    convertApiDataToTokenExCardType,
+    convertPaymetricCardType,
+    convertTokenExCardType,
+} from "@insite/content-library/Widgets/SavedPayments/PaymentUtilities";
 import Button, { ButtonPresentationProps } from "@insite/mobius/Button";
 import { BaseTheme } from "@insite/mobius/globals/baseTheme";
 import GridContainer, { GridContainerProps } from "@insite/mobius/GridContainer";
@@ -104,7 +118,6 @@ const mapStateToProps = (state: ApplicationState) => {
         payPalRedirectUri,
         payPalCheckoutErrorMessage,
         location: getLocation(state),
-        usePaymetricGateway: settingsCollection.websiteSettings.usePaymetricGateway,
         adyenSettings: state.context.adyenSettings,
         paymetricConfig: state.context.paymetricConfig,
         enableVat: settingsCollection.productSettings.enableVat,
@@ -243,71 +256,10 @@ export const checkoutReviewAndSubmitPaymentDetailsStyles: CheckoutReviewAndSubmi
     },
 };
 
-// TokenEx doesn't provide an npm package or type definitions for using the iframe solution.
-// This is just enough types to avoid the build warnings and make using TokenEx a bit easier.
-export type TokenExIframeStyles = {
-    base?: string;
-    focus?: string;
-    error?: string;
-    cvv?: TokenExIframeStyles;
-};
-
-export type TokenExIframeConfig = {
-    tokenExID: string;
-    tokenScheme: string;
-    authenticationKey: string;
-    timestamp: string;
-    origin: string;
-    styles?: TokenExIframeStyles;
-    pci?: boolean;
-    enableValidateOnBlur?: boolean;
-    inputType?: "number" | "tel" | "text";
-    debug?: boolean;
-    cvv?: boolean;
-    cvvOnly?: boolean;
-    cvvContainerID?: string;
-    cvvInputType?: "number" | "tel" | "text";
-    enableAriaRequired?: boolean;
-    customDataLabel?: string;
-    title?: string;
-};
-
-type TokenExPCIIframeConfig = TokenExIframeConfig & {
-    pci: true;
-    enablePrettyFormat?: boolean;
-};
-
-type TokenExCvvOnlyIframeConfig = TokenExIframeConfig & {
-    cvvOnly: true;
-    token?: string;
-    cardType?: string;
-};
-
-export type IFrame = {
-    new (containerId: string, config: TokenExIframeConfig): IFrame;
-    load: () => void;
-    on: (
-        eventName: "load" | "validate" | "tokenize" | "error" | "cardTypeChange",
-        callback: (data: any) => void,
-    ) => void;
-    remove: () => void;
-    validate: () => void;
-    tokenize: () => void;
-    reset: () => void;
-};
-
-export type TokenEx = {
-    Iframe: IFrame;
-};
-
-declare const TokenEx: TokenEx;
+declare const TokenEx: TokenExType;
 let tokenExIframe: IFrame | undefined;
 let tokenExAccountNumberIframe: IFrame | undefined;
-
 let tokenExFrameStyleConfig: TokenExIframeStyles;
-
-declare function $XIFrame(options: any): any;
-let paymetricIframe: any;
 
 let cancelCheckForThreeDsResult = false;
 
@@ -318,48 +270,6 @@ const isMonthAndYearBeforeToday = (month: number, year: number) => {
     const currentMonth = today.getMonth();
     const currentYear = today.getFullYear();
     return year < currentYear || (year === currentYear && month < currentMonth + 1);
-};
-
-const convertTokenExCardTypeToApiData = (cardType: string) => {
-    if (cardType.includes("american")) {
-        return "AMERICAN EXPRESS";
-    }
-
-    return cardType.toUpperCase();
-};
-
-const convertApiDataToTokenExCardType = (cardType: string) => {
-    const loweredCardType = cardType.toLowerCase();
-
-    if (loweredCardType === "mastercard") {
-        return "masterCard";
-    }
-    if (loweredCardType === "american express") {
-        return "americanExpress";
-    }
-
-    return loweredCardType;
-};
-
-const convertPaymetricCardType = (cardType: string) => {
-    switch (cardType.toLowerCase()) {
-        case "vi":
-            return "Visa";
-        case "mc":
-            return "MasterCard";
-        case "ax":
-            return "American Express";
-        case "dc":
-            return "Diner's";
-        case "di":
-            return "Discover";
-        case "jc":
-            return "JCB";
-        case "sw":
-            return "Maestro";
-        default:
-            return "unknown";
-    }
 };
 
 const styles = checkoutReviewAndSubmitPaymentDetailsStyles;
@@ -392,7 +302,6 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     adyenSettings,
     loadAdyenSettings,
     loadAdyenDropInConfig,
-    usePaymetricGateway,
     getPaymetricResponsePacket,
     resetCurrentCartId,
     enableVat,
@@ -474,13 +383,11 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     const {
         PayerID: payPalPayerId,
         token: payPalToken,
-        sessionId: adyenRedirectSessionId,
         redirectResult: adyenRedirectResult,
         cartId,
     } = parseQueryString<{
         PayerID?: string;
         token?: string;
-        sessionId?: string;
         redirectResult?: string;
         cartId?: string;
     }>(location.search);
@@ -665,7 +572,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
 
     useEffect(() => {
         if (!cartState.isLoading && cartState.value && cartState.value.paymentMethod && paymentMethod === "") {
-            if (adyenRedirectSessionId && adyenRedirectResult) {
+            if (useAdyenDropIn && adyenRedirectResult) {
                 // force set credit card payment method if we returned from Adyen
                 setPaymentMethod(cartState.value.paymentOptions?.paymentMethods?.find(o => o.isCreditCard)?.name || "");
             } else {
@@ -715,13 +622,18 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
 
     const { value: cart } = cartState;
 
-    const { useTokenExGateway, useECheckTokenExGateway, useAdyenDropIn, paymentGatewayRequiresAuthentication } =
-        websiteSettings;
+    const {
+        useTokenExGateway,
+        useECheckTokenExGateway,
+        usePaymetricGateway,
+        useSquareGateway,
+        useAdyenDropIn,
+        paymentGatewayRequiresAuthentication,
+    } = websiteSettings;
     const [adyenSessionId, setAdyenSessionId] = useState("");
     const [adyenSessionData, setAdyenSessionData] = useState("");
     const [adyenWebOrderNumber, setAdyenWebOrderNumber] = useState("");
     const [adyenRegion, setAdyenRegion] = useState("");
-    const [adyenFormValid, setAdyenFormValid] = useState(false);
     const [adyenErrorMessage, setAdyenErrorMessage] = useState("");
     const [adyenConfiguration, setAdyenConfiguration] = useState<any>(null);
     const [adyenDropIn, setAdyenDropIn] = useState<any>(null);
@@ -843,7 +755,6 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                     : checkoutReviewAndSubmitPageLink!.url.includes("?")
                     ? `${checkoutReviewAndSubmitPageLink!.url}&cartId=${cartId}`
                     : `${checkoutReviewAndSubmitPageLink!.url}?cartId=${cartId}`,
-                setAdyenFormValid,
                 setAdyenErrorMessage,
                 resetAdyenSession,
                 placeAdyenOrder,
@@ -920,7 +831,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         tokenExIframe.on("tokenize", data => {
             setCardNumber(data.token);
             setSecurityCode("CVV");
-            setCardType(convertTokenExCardTypeToApiData(data.cardType));
+            setCardType(convertTokenExCardType(data.cardType));
             setIsCardNumberTokenized(true);
         });
         tokenExIframe.on("cardTypeChange", data => setPossibleCardType(data.possibleCardType));
@@ -1015,41 +926,27 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
         });
     };
 
-    const paymetricFrameRef = useRef<HTMLIFrameElement>(null);
-    const setupPaymetricIframe = () => {
-        if (!paymetricConfig) {
-            return;
-        }
-        paymetricIframe = $XIFrame({
-            iFrameId: "paymetricIframe",
-            targetUrl: paymetricConfig?.message,
-            autosizewidth: false,
-            autosizeheight: true,
-        });
-        paymetricIframe.onload();
-    };
-    useEffect(() => {
-        if (usePaymetricGateway && isCreditCard) {
-            loadPaymetricConfig();
-        }
-    }, [usePaymetricGateway, paymentMethod]);
-    useEffect(() => {
-        if (paymetricConfig?.success && paymetricFrameRef.current) {
-            const paymetricScript = document.createElement("script");
-            paymetricScript.src = paymetricConfig.javaScriptUrl;
-            paymetricScript.onload = () => {
-                if (paymetricFrameRef.current) {
-                    paymetricFrameRef.current.setAttribute("src", paymetricConfig.message);
-                    paymetricFrameRef.current.addEventListener("load", setupPaymetricIframe);
-                }
-            };
-            document.body.appendChild(paymetricScript);
-        }
+    const [paymetricFrameRef, paymetricIframe] = usePaymetricFrame(
+        usePaymetricGateway,
+        paymentMethod,
+        isCreditCard,
+        paymetricConfig,
+        loadPaymetricConfig,
+    );
 
-        return () => {
-            paymetricFrameRef.current?.removeEventListener("load", setupPaymetricIframe);
-        };
-    }, [paymetricConfig, paymetricFrameRef]);
+    const [squareCard] = useSquareFrame(websiteSettings, paymentMethod, isCreditCard);
+
+    const tokenizeSquareCard = () => {
+        squareCard?.tokenize().then((tokenResult: any) => {
+            if (tokenResult.status === "OK") {
+                setCardType(tokenResult.details.card.brand);
+                setExpirationMonth(tokenResult.details.card.expMonth);
+                setExpirationYear(tokenResult.details.card.expYear);
+                setCardNumber(tokenResult.token);
+                setIsCardNumberTokenized(true);
+            }
+        });
+    };
 
     const toasterContext = React.useContext(ToasterContext);
     useEffect(() => {
@@ -1331,6 +1228,18 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             }
         }
 
+        if (useSquareGateway && cart && cart.showCreditCard && !cart.requiresApproval) {
+            const isFormValidForSquarePayment = paymentMethodValid && poNumberValid;
+            if (!isFormValidForSquarePayment) {
+                return false;
+            }
+            if (isCreditCard && squareCard) {
+                tokenizeSquareCard();
+            } else if (isPaymentProfile) {
+                return true;
+            }
+        }
+
         const cardHolderNameValid = validateCardHolderName(cardHolderName);
         const cardNumberResult = validateCardNumber(cardNumber);
         const cardTypeValid = validateCardType(cardType);
@@ -1412,8 +1321,13 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
             return false;
         }
 
-        if (useAdyenDropIn && paymentMethodDto?.isCreditCard && !isPayPal) {
-            if (adyenDropIn && validateForm()) {
+        if (!validateForm()) {
+            setShowFormErrors(true);
+            return false;
+        }
+
+        if (useAdyenDropIn && isCreditCard && !isPayPal) {
+            if (adyenDropIn) {
                 const { success, errorMessage } = await validateAdyenPayment({
                     customerId: cartState.value?.billToId,
                     paymentAmount: cartState.value?.orderGrandTotal,
@@ -1424,25 +1338,8 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                 } else if (errorMessage) {
                     setAdyenErrorMessage(errorMessage);
                 }
-            } else if (adyenDropIn && !validateForm() && !adyenFormValid) {
-                adyenDropIn.submit();
-                setShowFormErrors(true);
-            } else if (!validateForm()) {
-                // in this case the adyen form is likely valid and we do not want to submit it
-                // without clearing the rest of our validation for the page
-                setShowFormErrors(true);
             }
-
-            // AdyenDropIn will handle result of the submission
-            return false;
-        }
-
-        if (!validateForm()) {
-            setShowFormErrors(true);
-            return false;
-        }
-
-        if (useTokenExGateway && ((isPaymentProfile && !bypassCvvForSavedCards) || isCreditCard) && !isPayPal) {
+        } else if (useTokenExGateway && ((isPaymentProfile && !bypassCvvForSavedCards) || isCreditCard) && !isPayPal) {
             tokenExIframe?.tokenize();
         } else if (useECheckTokenExGateway && !isPayPal && isECheck) {
             tokenExAccountNumberIframe?.tokenize();
@@ -1483,6 +1380,14 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
     if (!cart || cart.requiresApproval || !paymentOptions || !orderConfirmationPageLink) {
         return null;
     }
+
+    const iframeName = useTokenExGateway
+        ? "TokenEx"
+        : usePaymetricGateway
+        ? "Paymetric"
+        : useSquareGateway
+        ? "Square"
+        : undefined;
 
     return (
         <StyledForm
@@ -1597,13 +1502,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                             !bypassCvvForSavedCards && (
                                 <GridItem width={6}>
                                     <SavedPaymentProfileEntry
-                                        iframe={
-                                            useTokenExGateway
-                                                ? "TokenEx"
-                                                : usePaymetricGateway
-                                                ? "Paymetric"
-                                                : undefined
-                                        }
+                                        iframe={iframeName}
                                         isTokenExIframeLoaded={isTokenExIframeLoaded}
                                         securityCode={securityCode}
                                         onSecurityCodeChange={handleSecurityCodeChange}
@@ -1629,9 +1528,7 @@ const CheckoutReviewAndSubmitPaymentDetails = ({
                             <GridItem {...styles.creditCardDetailsGridItem}>
                                 <CreditCardDetailsEntry
                                     canSaveCard={paymentOptions.canStorePaymentProfile}
-                                    iframe={
-                                        useTokenExGateway ? "TokenEx" : usePaymetricGateway ? "Paymetric" : undefined
-                                    }
+                                    iframe={iframeName}
                                     paymetricFrameRef={paymetricFrameRef}
                                     isTokenExIframeLoaded={isTokenExIframeLoaded}
                                     saveCard={saveCard}

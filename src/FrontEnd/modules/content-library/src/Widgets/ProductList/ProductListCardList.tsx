@@ -134,6 +134,10 @@ export const listStyles: ProductListCardListStyles = {
 const styles = listStyles;
 
 const ProductListCardList: FC<Props> = ({ isLoading, productsDataView, view, fields, setView, id, isSearchPage }) => {
+    React.useEffect(() => {
+        setView({ view });
+    }, []);
+
     if (isLoading && !productsDataView.value) {
         return (
             <StyledWrapper {...styles.centeringWrapper}>
@@ -141,10 +145,6 @@ const ProductListCardList: FC<Props> = ({ isLoading, productsDataView, view, fie
             </StyledWrapper>
         );
     }
-
-    React.useEffect(() => {
-        setView({ view });
-    }, []);
 
     if (!productsDataView.value) {
         return null;

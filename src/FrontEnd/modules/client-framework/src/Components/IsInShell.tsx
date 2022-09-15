@@ -24,7 +24,7 @@ export function withIsInShell<P extends HasShellContext>(Component: React.Compon
     return function IsInShellComponent(props: Omit<P, keyof HasShellContext>) {
         return (
             <ShellContext.Consumer>
-                {shellContext => <Component {...(props as P)} shellContext={shellContext} />}
+                {(shellContext: any) => <Component {...(props as P)} shellContext={shellContext} />}
             </ShellContext.Consumer>
         );
     };

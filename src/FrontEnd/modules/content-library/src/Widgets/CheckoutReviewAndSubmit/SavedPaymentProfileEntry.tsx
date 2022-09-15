@@ -12,7 +12,7 @@ import styled, { css } from "styled-components";
 interface OwnProps {
     /** @deprecated Specify the "TokenEx" value for the `iframe` property instead. */
     useTokenExGateway?: boolean;
-    iframe?: "TokenEx" | "Paymetric";
+    iframe?: "TokenEx" | "Paymetric" | "Square";
     isTokenExIframeLoaded?: boolean;
     securityCode: string;
     onSecurityCodeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;

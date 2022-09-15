@@ -168,8 +168,8 @@ class ProductListPage extends React.Component<Props> {
             const newUrl = filterQuery ? `${pathname}?${filterQuery}` : pathname;
             if (newUrl !== currentUrl) {
                 this.props.history.push(newUrl);
+                return;
             }
-            return;
         }
 
         if (!isLoading && this.props.productsDataView.value && pathname === prevProps.location.pathname) {
