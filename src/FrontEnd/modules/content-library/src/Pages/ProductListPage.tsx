@@ -147,8 +147,11 @@ class ProductListPage extends React.Component<Props> {
     }
 
     componentWillUnmount(): void {
-        this.props.clearProducts();
-        this.props.setBreadcrumbs({ links: undefined });
+        const { productsDataView } = this.props;
+        if (!productsDataView.isLoading) {
+            this.props.clearProducts();
+            this.props.setBreadcrumbs({ links: undefined });
+        }
     }
 
     componentDidUpdate(prevProps: Props): void {

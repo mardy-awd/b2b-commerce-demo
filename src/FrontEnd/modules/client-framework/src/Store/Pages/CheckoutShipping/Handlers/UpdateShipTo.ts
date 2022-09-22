@@ -8,6 +8,7 @@ import {
 import { updateCart as updateCartApi } from "@insite/client-framework/Services/CartService";
 import { createShipTo, updateShipTo as updateShipToApi } from "@insite/client-framework/Services/CustomersService";
 import { updateSession } from "@insite/client-framework/Services/SessionService";
+import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import loadSession from "@insite/client-framework/Store/Context/Handlers/LoadSession";
 import { getCartState, getCurrentCartState } from "@insite/client-framework/Store/Data/Carts/CartsSelector";
 import loadCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCart";
@@ -56,6 +57,7 @@ export const UpdateContext: HandlerType = props => {
         updateContext({
             billToId: props.parameter.billToId,
             shipToId: props.apiResult.id,
+            settings: getSettingsCollection(props.getState()),
         });
     }
 };

@@ -6,6 +6,7 @@ import {
     makeHandlerChainAwaitable,
 } from "@insite/client-framework/HandlerCreator";
 import { Session, updateSession, UpdateSessionApiParameter } from "@insite/client-framework/Services/SessionService";
+import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import loadCurrentCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCurrentCart";
 
 type HandlerType = ApiHandlerDiscreteParameter<
@@ -27,6 +28,7 @@ export const PopulateApiParameter: HandlerType = props => {
 export const UpdateContext: HandlerType = props => {
     updateContext({
         fulfillmentMethod: props.parameter.fulfillmentMethod,
+        settings: getSettingsCollection(props.getState()),
     });
 };
 

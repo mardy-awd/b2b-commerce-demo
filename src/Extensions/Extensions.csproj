@@ -33,7 +33,7 @@
     <Reference Include="Microsoft.VisualBasic" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2209.2289" />
+    <PackageReference Include="Insite.Commerce.Public" Version="5.1.2209.2311" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Properties\AssemblyInfo.cs" />

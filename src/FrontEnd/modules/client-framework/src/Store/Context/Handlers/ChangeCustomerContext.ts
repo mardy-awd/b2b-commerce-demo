@@ -17,7 +17,7 @@ import {
     updateSessionWithResult,
     UpdateSessionWithResultApiParameter,
 } from "@insite/client-framework/Services/SessionService";
-import { getSession } from "@insite/client-framework/Store/Context/ContextSelectors";
+import { getSession, getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import { getHomePageUrl, getPageLinkByPageType } from "@insite/client-framework/Store/Links/LinksSelectors";
 import { BillToModel, ShipToModel, WarehouseModel } from "@insite/client-framework/Types/ApiModels";
 
@@ -80,6 +80,7 @@ export const UpdateContext: HandlerType = props => {
     updateContext({
         shipToId: props.parameter.shipToId,
         billToId: props.parameter.billToId,
+        settings: getSettingsCollection(props.getState()),
     });
 };
 

@@ -1,8 +1,9 @@
-import { removeCookie, setCookie } from "@insite/client-framework/Common/Cookies";
+import { getCookie, removeCookie, setCookie } from "@insite/client-framework/Common/Cookies";
 import {
     stopWatchingForOtherTabSessionChange,
     watchForOtherTabSessionChange,
 } from "@insite/client-framework/Services/SessionService";
+import { SettingsCollectionModel } from "@insite/client-framework/Services/SettingsService";
 
 export interface UpdateContextModel {
     languageId?: string | null;
@@ -10,16 +11,25 @@ export interface UpdateContextModel {
     fulfillmentMethod?: string | null;
     billToId?: string | null;
     shipToId?: string | null;
+    settings?: SettingsCollectionModel;
 }
 
 export function updateContext(context: UpdateContextModel) {
+    if (IS_SERVER_SIDE) {
+        return;
+    }
+
     stopWatchingForOtherTabSessionChange(); // Prevent reload from the changes we're doing here.
+
+    const secure = window.location.protocol === "https";
+    const isRememberedUser = !!getCookie("SetRememberedUserId");
+    const expires = isRememberedUser ? context.settings?.accountSettings.daysToRetainUser || 30 : undefined;
 
     if (typeof context.languageId !== "undefined") {
         if (context.languageId === null) {
             removeCookie("CurrentLanguageId");
         } else {
-            setCookie("CurrentLanguageId", context.languageId, { path: "/" });
+            setCookie("CurrentLanguageId", context.languageId, { path: "/", secure });
         }
     }
 
@@ -27,7 +37,7 @@ export function updateContext(context: UpdateContextModel) {
         if (context.currencyId === null) {
             removeCookie("CurrentCurrencyId");
         } else {
-            setCookie("CurrentCurrencyId", context.currencyId, { path: "/" });
+            setCookie("CurrentCurrencyId", context.currencyId, { path: "/", secure });
         }
     }
 
@@ -35,7 +45,7 @@ export function updateContext(context: UpdateContextModel) {
         if (context.fulfillmentMethod === null) {
             removeCookie("CurrentFulfillmentMethod");
         } else {
-            setCookie("CurrentFulfillmentMethod", context.fulfillmentMethod, { path: "/" });
+            setCookie("CurrentFulfillmentMethod", context.fulfillmentMethod, { path: "/", secure, expires });
         }
     }
 
@@ -43,7 +53,7 @@ export function updateContext(context: UpdateContextModel) {
         if (context.billToId === null) {
             removeCookie("CurrentBillToId");
         } else {
-            setCookie("CurrentBillToId", context.billToId.toString(), { path: "/" });
+            setCookie("CurrentBillToId", context.billToId.toString(), { path: "/", secure, expires });
         }
     }
 
@@ -51,7 +61,7 @@ export function updateContext(context: UpdateContextModel) {
         if (context.shipToId === null) {
             removeCookie("CurrentShipToId");
         } else {
-            setCookie("CurrentShipToId", context.shipToId.toString(), { path: "/" });
+            setCookie("CurrentShipToId", context.shipToId.toString(), { path: "/", secure, expires });
         }
     }
 

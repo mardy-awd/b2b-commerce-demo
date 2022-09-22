@@ -11,6 +11,7 @@ import {
     updateSession,
     UpdateSessionApiParameter,
 } from "@insite/client-framework/Services/SessionService";
+import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import loadCurrentCart from "@insite/client-framework/Store/Data/Carts/Handlers/LoadCurrentCart";
 import loadCurrentShipTo from "@insite/client-framework/Store/Data/ShipTos/Handlers/LoadCurrentShipTo";
 
@@ -34,6 +35,7 @@ export const UpdateSession: HandlerType = async props => {
 export const UpdateContext: HandlerType = props => {
     updateContext({
         shipToId: props.parameter.shipToId,
+        settings: getSettingsCollection(props.getState()),
     });
 };
 

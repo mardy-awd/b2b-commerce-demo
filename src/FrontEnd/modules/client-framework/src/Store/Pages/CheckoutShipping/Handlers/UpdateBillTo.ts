@@ -7,6 +7,7 @@ import {
 } from "@insite/client-framework/HandlerCreator";
 import { GetShipTosApiParameter } from "@insite/client-framework/Services/CustomersService";
 import { Session, updateSession } from "@insite/client-framework/Services/SessionService";
+import { getSettingsCollection } from "@insite/client-framework/Store/Context/ContextSelectors";
 import loadSession from "@insite/client-framework/Store/Context/Handlers/LoadSession";
 import { getBillToState } from "@insite/client-framework/Store/Data/BillTos/BillTosSelectors";
 import loadBillTo from "@insite/client-framework/Store/Data/BillTos/Handlers/LoadBillTo";
@@ -82,6 +83,7 @@ export const UpdateContext: HandlerType = props => {
     updateContext({
         billToId: props.parameter.billTo.id,
         shipToId: props.defaultShipTo.id,
+        settings: getSettingsCollection(props.getState()),
     });
 };
 
